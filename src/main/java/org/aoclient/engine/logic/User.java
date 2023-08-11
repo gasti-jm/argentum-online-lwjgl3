@@ -5,20 +5,44 @@ import org.aoclient.engine.utils.GameData;
 import org.aoclient.engine.utils.Position;
 import org.aoclient.engine.utils.filedata.*;
 
+import static org.aoclient.engine.scenes.Camera.*;
 import static org.aoclient.engine.utils.GameData.*;
 import static org.aoclient.engine.utils.GameData.fxData;
 
 public class User {
-    public boolean UserMoving;
-
-    public Position userPos;
-    public Position addToUserPos;
+    private boolean UserMoving;
+    private Position userPos;
+    private Position addToUserPos;
 
     public User () {
         this.UserMoving = false;
 
         userPos = new Position();
         addToUserPos = new Position();
+    }
+
+    public boolean isUserMoving() {
+        return UserMoving;
+    }
+
+    public void setUserMoving(boolean userMoving) {
+        UserMoving = userMoving;
+    }
+
+    public Position getUserPos() {
+        return userPos;
+    }
+
+    public void setUserPos(Position userPos) {
+        this.userPos = userPos;
+    }
+
+    public Position getAddToUserPos() {
+        return addToUserPos;
+    }
+
+    public void setAddToUserPos(Position addToUserPos) {
+        this.addToUserPos = addToUserPos;
     }
 
     public int makeChar(int charIndex, int body, E_Heading heading, int x, int y) {
@@ -42,7 +66,7 @@ public class User {
         charList.get(charIndex).setShield(new ShieldData(shieldData[1]));
         charList.get(charIndex).setHelmet(new HeadData(helmetsData[3]));
         charList.get(charIndex).setHeading(heading);
-        charList.get(charIndex).setMoving((byte) 0);
+        charList.get(charIndex).setMoving(false);
         charList.get(charIndex).setMoveOffsetX(0);
         charList.get(charIndex).setMoveOffsetY(0);
         charList.get(charIndex).getPos().setX(x);
@@ -107,15 +131,15 @@ public class User {
         final int nX = x + addX;
         final int nY = y + addY;
 
-        mapData[x][y].setCharIndex((short) 0);
-        mapData[nX][nY].setCharIndex((short) charIndex);
+        mapData[x][y].setCharIndex(0);
+        mapData[nX][nY].setCharIndex( charIndex);
         charList.get(charIndex).getPos().setX(nX);
         charList.get(charIndex).getPos().setY(nY);
 
         charList.get(charIndex).setMoveOffsetX(-1 * (Camera.TILE_PIXEL_SIZE * addX));
         charList.get(charIndex).setMoveOffsetY(-1 * (Camera.TILE_PIXEL_SIZE * addY));
 
-        charList.get(charIndex).setMoving((byte) 1);
+        charList.get(charIndex).setMoving(true);
 
         charList.get(charIndex).setScrollDirectionX((short) addX);
         charList.get(charIndex).setScrollDirectionY((short)addY);
@@ -133,8 +157,8 @@ public class User {
     }
 
     private boolean inMapBounds(int x, int y) {
-        return (x < Camera.TileBufferSize || x > Camera.XMaxMapSize - Camera.TileBufferSize ||
-                y < Camera.TileBufferSize || y > Camera.YMaxMapSize - Camera.TileBufferSize);
+        return (x < TILE_BUFFER_SIZE || x > XMaxMapSize - TILE_BUFFER_SIZE ||
+                y < TILE_BUFFER_SIZE || y > YMaxMapSize - TILE_BUFFER_SIZE);
     }
 
     private boolean moveToLegalPos(int x, int y) {

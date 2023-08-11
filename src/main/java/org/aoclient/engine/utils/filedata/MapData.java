@@ -34,8 +34,8 @@ public class MapData {
         return charIndex;
     }
 
-    public void setCharIndex(short charIndex) {
-        this.charIndex = charIndex;
+    public void setCharIndex(int charIndex) {
+        this.charIndex = (short) charIndex;
     }
 
     public GrhInfo getObjGrh() {
@@ -82,7 +82,7 @@ public class MapData {
         return trigger;
     }
 
-    public void setTrigger(short trigger) {
-        this.trigger = trigger;
+    public void setTrigger(int trigger) {
+        this.trigger = (short) trigger;
     }
 }

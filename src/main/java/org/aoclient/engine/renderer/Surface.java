@@ -43,6 +43,10 @@ public class Surface {
         this.textures = new HashMap<>();
     }
 
+    public void deleteAllTextures() {
+        this.textures.clear();
+    }
+
     public TextureOGL getTexture(int fileNum) {
         if (textures.containsKey(fileNum)) {
             return textures.get(fileNum);

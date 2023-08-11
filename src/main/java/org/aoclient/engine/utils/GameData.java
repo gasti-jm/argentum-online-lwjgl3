@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.aoclient.engine.logic.Character;
+import org.aoclient.engine.renderer.Surface;
 import org.aoclient.engine.utils.filedata.*;
 
 public class GameData {
@@ -380,32 +381,34 @@ public class GameData {
                         mapData[x][y].setLayer(1, initGrh(mapData[x][y].getLayer(1), mapData[x][y].getLayer(1).getGrhIndex(), true));
 
                     } else {
-                        mapData[x][y].getLayer(1).setGrhIndex((short) 0);
+                        mapData[x][y].getLayer(1).setGrhIndex(0);
                     }
 
                     if ((byte)(byflags & 4) != 0) {
                         mapData[x][y].getLayer(2).setGrhIndex( bigToLittle_Short(f.readShort()) );
                         mapData[x][y].setLayer(2, initGrh(mapData[x][y].getLayer(2), mapData[x][y].getLayer(2).getGrhIndex(), true));
                     } else {
-                        mapData[x][y].getLayer(2).setGrhIndex((short) 0);
+                        mapData[x][y].getLayer(2).setGrhIndex(0);
                     }
 
                     if ((byte)(byflags & 8) != 0) {
                         mapData[x][y].getLayer(3).setGrhIndex( bigToLittle_Short(f.readShort()) );
                         mapData[x][y].setLayer(3, initGrh(mapData[x][y].getLayer(3), mapData[x][y].getLayer(3).getGrhIndex(), true));
                     } else {
-                        mapData[x][y].getLayer(3).setGrhIndex((short) 0);
+                        mapData[x][y].getLayer(3).setGrhIndex(0);
                     }
 
                     if ((byte)(byflags & 16) != 0) {
                         mapData[x][y].setTrigger( bigToLittle_Short(f.readShort()) );
                     } else {
-                        mapData[x][y].setTrigger((short) 0);
+                        mapData[x][y].setTrigger(0);
                     }
 
                     if (mapData[x][y].getCharIndex() > 0) {
                         //EraseChar;
                     }
+
+                    Surface.getInstance().deleteAllTextures(); // para liberar memoria
 
                     mapData[x][y].getObjGrh().setGrhIndex((short) 0);
                 }

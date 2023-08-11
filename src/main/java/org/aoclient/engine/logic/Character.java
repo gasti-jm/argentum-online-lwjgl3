@@ -19,6 +19,8 @@ public class Character {
     private ShieldData shield;
     private boolean usingArm;
 
+    private int walkingSpeed;
+
     private GrhInfo fX;
     private int fxIndex;
 
@@ -31,7 +33,7 @@ public class Character {
     private short scrollDirectionX;
     private short scrollDirectionY;
 
-    private byte moving;
+    private boolean moving;
     private float moveOffsetX;
     private float moveOffsetY;
 
@@ -44,6 +46,15 @@ public class Character {
         this.pos = new Position();
         this.heading = SOUTH;
         this.active = 0;
+        this.walkingSpeed = 8;
+    }
+
+    public int getWalkingSpeed() {
+        return walkingSpeed;
+    }
+
+    public void setWalkingSpeed(int walkingSpeed) {
+        this.walkingSpeed = walkingSpeed;
     }
 
     public byte getActive() {
@@ -198,12 +209,12 @@ public class Character {
         this.scrollDirectionY = (short) scrollDirectionY;
     }
 
-    public byte getMoving() {
+    public boolean getMoving() {
         return moving;
     }
 
-    public void setMoving(int moving) {
-        this.moving = (byte) moving;
+    public void setMoving(boolean moving) {
+        this.moving = moving;
     }
 
     public float getMoveOffsetX() {

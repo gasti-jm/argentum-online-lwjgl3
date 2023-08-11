@@ -30,8 +30,8 @@ public class GrhInfo {
         return grhIndex;
     }
 
-    public void setGrhIndex(short grhIndex) {
-        this.grhIndex = grhIndex;
+    public void setGrhIndex(int grhIndex) {
+        this.grhIndex = (short) grhIndex;
     }
 
     public float getFrameCounter() {

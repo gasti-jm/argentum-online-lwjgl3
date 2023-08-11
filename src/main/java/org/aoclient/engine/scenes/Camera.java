@@ -2,7 +2,7 @@ package org.aoclient.engine.scenes;
 
 public class Camera {
     public static final int TILE_PIXEL_SIZE = 32;
-    public static final int TileBufferSize = 9;
+    public static final int TILE_BUFFER_SIZE = 9;
 
     public static final int XMaxMapSize = 99;
     public static final int XMinMapSize = 0;
@@ -13,7 +13,6 @@ public class Camera {
     private int halfWindowTileWidth;
     private int halfWindowTileHeight;
 
-    // tiles a dibujar fuera de la pantalla
 
 
     public Camera() {

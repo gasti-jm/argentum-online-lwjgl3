@@ -2,7 +2,7 @@ package org.aoclient.engine;
 
 import org.aoclient.engine.listeners.KeyListener;
 import org.aoclient.engine.renderer.Surface;
-import org.aoclient.engine.scenes.MainScene;
+import org.aoclient.engine.scenes.GameScene;
 import org.aoclient.engine.scenes.Scene;
 import org.aoclient.engine.utils.GameData;
 import org.aoclient.engine.utils.Time;
@@ -29,7 +29,7 @@ public class Engine {
         surface.initialize();
         GameData.initialize();
 
-        currentScene = new MainScene();
+        currentScene = new GameScene();
         currentScene.init();
 
         loop();
