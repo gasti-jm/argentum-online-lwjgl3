@@ -1,0 +1,88 @@
+package org.aoclient.engine.utils.filedata;
+
+
+import org.aoclient.engine.utils.Obj;
+import org.aoclient.engine.utils.WorldPos;
+
+public class MapData {
+    private GrhInfo[] layer = new GrhInfo[4];
+    private short charIndex;
+    private GrhInfo objGrh;
+    private short npcIndex;
+    private Obj objInfo;
+    private WorldPos tileExit;
+    private byte blocked;
+    private short trigger;
+
+    public MapData() {
+        layer[0] = new GrhInfo();
+        layer[1] = new GrhInfo();
+        layer[2] = new GrhInfo();
+        layer[3] = new GrhInfo();
+        objGrh = new GrhInfo();
+    }
+
+    public GrhInfo getLayer(int index) {
+        return layer[index];
+    }
+
+    public void setLayer(int index, GrhInfo layer) {
+        this.layer[index] = layer;
+    }
+
+    public short getCharIndex() {
+        return charIndex;
+    }
+
+    public void setCharIndex(short charIndex) {
+        this.charIndex = charIndex;
+    }
+
+    public GrhInfo getObjGrh() {
+        return objGrh;
+    }
+
+    public void setObjGrh(GrhInfo objGrh) {
+        this.objGrh = objGrh;
+    }
+
+    public short getNpcIndex() {
+        return npcIndex;
+    }
+
+    public void setNpcIndex(short npcIndex) {
+        this.npcIndex = npcIndex;
+    }
+
+    public Obj getObjInfo() {
+        return objInfo;
+    }
+
+    public void setObjInfo(Obj objInfo) {
+        this.objInfo = objInfo;
+    }
+
+    public WorldPos getTileExit() {
+        return tileExit;
+    }
+
+    public void setTileExit(WorldPos tileExit) {
+        this.tileExit = tileExit;
+    }
+
+    public byte getBlocked() {
+        return blocked;
+    }
+
+    public void setBlocked(byte blocked) {
+        this.blocked = blocked;
+    }
+
+    public short getTrigger() {
+        return trigger;
+    }
+
+    public void setTrigger(short trigger) {
+        this.trigger = trigger;
+    }
+}
