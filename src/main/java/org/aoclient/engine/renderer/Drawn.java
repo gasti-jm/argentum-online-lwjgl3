@@ -1,16 +1,19 @@
 package org.aoclient.engine.renderer;
 
-import org.aoclient.engine.Engine;
 import org.aoclient.engine.scenes.Camera;
 import org.aoclient.engine.utils.filedata.GrhInfo;
 
 import static org.aoclient.engine.utils.GameData.fontTypes;
 import static org.aoclient.engine.utils.GameData.grhData;
-import static org.aoclient.engine.utils.Time.timerElapsedTime;
+import static org.aoclient.engine.utils.Time.deltaTime;
 import static org.lwjgl.opengl.GL11.*;
 
 public class Drawn {
-    public static void geometryBoxRender(int grh_index, int x, int y, int src_width, int src_height, int sX, int sY, boolean blend, RGBColor color) {
+    /**
+     *
+     * @desc: Se encargara de guardar la textura en la grafica y prepararla para su dibujado (en pocas palabras).
+     */
+    public static void geometryBoxRender(int grh_index, int x, int y, int src_width, int src_height, int sX, int sY, boolean blend, float alpha, RGBColor color) {
         if (blend)
             glBlendFunc(GL_SRC_ALPHA, GL_ONE);
 
@@ -35,7 +38,7 @@ public class Drawn {
             x_cor = dest_left;
             y_cor = dest_bottom;
 
-            glColor4f(color.getRed(), color.getGreen(), color.getBlue(), 1.0f);
+            glColor4f(color.getRed(), color.getGreen(), color.getBlue(), alpha);
             glTexCoord2f (src_left / texture.tex_width, (src_bottom) / texture.tex_height);
             glVertex2d(x_cor, y_cor);
 
@@ -43,7 +46,7 @@ public class Drawn {
             x_cor = dest_left;
             y_cor = dest_top;
 
-            glColor4f(color.getRed(), color.getGreen(), color.getBlue(), 1.0f);
+            glColor4f(color.getRed(), color.getGreen(), color.getBlue(), alpha);
             glTexCoord2f(src_left / texture.tex_width, src_top / texture.tex_height);
             glVertex2d(x_cor, y_cor);
 
@@ -51,7 +54,7 @@ public class Drawn {
             x_cor = dest_right;
             y_cor = dest_top;
 
-            glColor4f(color.getRed(), color.getGreen(), color.getBlue(), 1.0f);
+            glColor4f(color.getRed(), color.getGreen(), color.getBlue(), alpha);
             glTexCoord2f((src_right) / texture.tex_width, src_top / texture.tex_height);
             glVertex2d(x_cor, y_cor);
 
@@ -59,7 +62,7 @@ public class Drawn {
             x_cor = dest_right;
             y_cor = dest_bottom;
 
-            glColor4f(color.getRed(), color.getGreen(), color.getBlue(), 1.0f);
+            glColor4f(color.getRed(), color.getGreen(), color.getBlue(), alpha);
             glTexCoord2f((src_right) / texture.tex_width, (src_bottom) / texture.tex_height);
             glVertex2d(x_cor, y_cor);
         }
@@ -74,12 +77,14 @@ public class Drawn {
      *
      * @desc: Dibuja un grafico en la pantalla
      */
-    public static void draw(GrhInfo grh, int x, int y, boolean center, boolean animate, boolean alpha, RGBColor color) {
+    public static void draw(GrhInfo grh, int x, int y, boolean center, boolean animate, boolean blend, float alpha, RGBColor color) {
         if (grh.getGrhIndex() == 0 || grhData[grh.getGrhIndex()].getNumFrames() == 0)
             return;
 
         if (animate && grh.isStarted()) {
-            grh.setFrameCounter(grh.getFrameCounter() + (timerElapsedTime * grhData[grh.getGrhIndex()].getNumFrames() / grh.getSpeed()));
+            //grh.setFrameCounter(grh.getFrameCounter() + (deltaTime * grhData[grh.getGrhIndex()].getNumFrames() / (grh.getSpeed() * 0.002f)));
+            grh.setFrameCounter(grh.getFrameCounter() + (deltaTime * grhData[grh.getGrhIndex()].getNumFrames() / grh.getSpeed()));
+
             if (grh.getFrameCounter() > grhData[grh.getGrhIndex()].getNumFrames()) {
                 grh.setFrameCounter((grh.getFrameCounter() % grhData[grh.getGrhIndex()].getNumFrames()) + 1);
                 if (grh.getLoops() != -1) {
@@ -111,7 +116,7 @@ public class Drawn {
                 grhData[currentGrhIndex].getPixelWidth(),
                 grhData[currentGrhIndex].getPixelHeight(),
                 grhData[currentGrhIndex].getsX(),
-                grhData[currentGrhIndex].getsY(), alpha, color);
+                grhData[currentGrhIndex].getsY(), blend, alpha, color);
     }
 
     /**
@@ -123,7 +128,7 @@ public class Drawn {
                 grhData[grhIndex].getPixelWidth(),
                 grhData[grhIndex].getPixelHeight(),
                 grhData[grhIndex].getsX(),
-                grhData[grhIndex].getsY(), false, color);
+                grhData[grhIndex].getsY(), false, 1.0f, color);
     }
 
     /**
@@ -140,7 +145,7 @@ public class Drawn {
 
             if (b != 32) {
                 if (fontTypes[font_index].getAscii_code(b) != 0) {
-                    //mega sombra O-matica
+                    // sombra
                     drawGrhIndex(fontTypes[font_index].getAscii_code(b) + 100, (x + d) + 1, y + 1, color);
 
                     drawGrhIndex(fontTypes[font_index].getAscii_code(b), (x + d) + 1, y, color);
@@ -175,4 +180,5 @@ public class Drawn {
 
         return totalSize;
     }
+
 }

@@ -1,12 +1,18 @@
 package org.aoclient.engine.logic;
 
+import org.aoclient.engine.renderer.RGBColor;
 import org.aoclient.engine.utils.Position;
 import org.aoclient.engine.utils.filedata.*;
 
 import static org.aoclient.engine.logic.E_Heading.SOUTH;
+import static org.aoclient.engine.renderer.Drawn.*;
+import static org.aoclient.engine.renderer.Drawn.draw;
+import static org.aoclient.engine.utils.GameData.charList;
+import static org.aoclient.engine.utils.GameData.fxData;
+import static org.aoclient.engine.utils.Time.timerTicksPerFrame;
 
 public class Character {
-    private byte active;
+    private boolean active;
     private E_Heading heading;
     private Position pos;
 
@@ -21,12 +27,14 @@ public class Character {
 
     private int walkingSpeed;
 
+    // FX
     private GrhInfo fX;
     private int fxIndex;
 
     private byte criminal;
     private boolean attackable;
 
+    // Nicknames
     private String name;
     private String clanName;
 
@@ -45,7 +53,7 @@ public class Character {
     public Character() {
         this.pos = new Position();
         this.heading = SOUTH;
-        this.active = 0;
+        this.active = false;
         this.walkingSpeed = 8;
     }
 
@@ -57,11 +65,11 @@ public class Character {
         this.walkingSpeed = walkingSpeed;
     }
 
-    public byte getActive() {
+    public boolean getActive() {
         return active;
     }
 
-    public void setActive(byte active) {
+    public void setActive(boolean active) {
         this.active = active;
     }
 
@@ -263,5 +271,144 @@ public class Character {
 
     public void setPriv(byte priv) {
         this.priv = priv;
+    }
+
+    public static void charRender(int charIndex, int PixelOffsetX, int PixelOffsetY, RGBColor ambientcolor) {
+        boolean moved = false;
+        RGBColor color = new RGBColor();
+
+        if (charList.get(charIndex).getMoving()) {
+            if (charList.get(charIndex).getScrollDirectionX() != 0) {
+
+                charList.get(charIndex).setMoveOffsetX(charList.get(charIndex).getMoveOffsetX() +
+                        charList.get(charIndex).getWalkingSpeed() * sgn(charList.get(charIndex).getScrollDirectionX()) * timerTicksPerFrame);
+
+                if (charList.get(charIndex).getBody().getWalk(charList.get(charIndex).getHeading().ordinal()).getSpeed() > 0.0f) {
+                    charList.get(charIndex).getBody().getWalk(charList.get(charIndex).getHeading().ordinal()).setStarted(true);
+                }
+
+                charList.get(charIndex).getWeapon().getWeaponWalk(charList.get(charIndex).getHeading().ordinal()).setStarted(true);
+                charList.get(charIndex).getShield().getShieldWalk(charList.get(charIndex).getHeading().ordinal()).setStarted(true);
+
+                moved = true;
+
+                if ((sgn(charList.get(charIndex).getScrollDirectionX()) == 1 && charList.get(charIndex).getMoveOffsetX() >= 0) ||
+                        (sgn(charList.get(charIndex).getScrollDirectionX()) == -1 && charList.get(charIndex).getMoveOffsetX() <= 0)) {
+
+                    charList.get(charIndex).setMoveOffsetX(0);
+                    charList.get(charIndex).setScrollDirectionX(0);
+                }
+            }
+
+            if (charList.get(charIndex).getScrollDirectionY() != 0) {
+                charList.get(charIndex).setMoveOffsetY(charList.get(charIndex).getMoveOffsetY()
+                        + charList.get(charIndex).getWalkingSpeed() * sgn(charList.get(charIndex).getScrollDirectionY()) * timerTicksPerFrame);
+
+
+                if (charList.get(charIndex).getBody().getWalk(charList.get(charIndex).getHeading().ordinal()).getSpeed() > 0.0f) {
+                    charList.get(charIndex).getBody().getWalk(charList.get(charIndex).getHeading().ordinal()).setStarted(true);
+                }
+
+                charList.get(charIndex).getWeapon().getWeaponWalk(charList.get(charIndex).getHeading().ordinal()).setStarted(true);
+                charList.get(charIndex).getShield().getShieldWalk(charList.get(charIndex).getHeading().ordinal()).setStarted(true);
+
+                moved = true;
+
+                if ((sgn(charList.get(charIndex).getScrollDirectionY()) == 1 && charList.get(charIndex).getMoveOffsetY() >= 0)
+                        || (sgn(charList.get(charIndex).getScrollDirectionY()) == -1 && charList.get(charIndex).getMoveOffsetY() <= 0)) {
+                    charList.get(charIndex).setMoveOffsetY(0);
+                    charList.get(charIndex).setScrollDirectionY(0);
+                }
+            }
+        }
+
+        if (!moved) {
+            charList.get(charIndex).getBody().getWalk(charList.get(charIndex).getHeading().ordinal()).setStarted(false);
+            charList.get(charIndex).getBody().getWalk(charList.get(charIndex).getHeading().ordinal()).setFrameCounter(1);
+
+            charList.get(charIndex).getWeapon().getWeaponWalk(charList.get(charIndex).getHeading().ordinal()).setStarted(false);
+            charList.get(charIndex).getWeapon().getWeaponWalk(charList.get(charIndex).getHeading().ordinal()).setFrameCounter(1);
+
+            charList.get(charIndex).getShield().getShieldWalk(charList.get(charIndex).getHeading().ordinal()).setStarted(false);
+            charList.get(charIndex).getShield().getShieldWalk(charList.get(charIndex).getHeading().ordinal()).setFrameCounter(1);
+
+            charList.get(charIndex).setMoving(false);
+        }
+
+        PixelOffsetX += (int) charList.get(charIndex).getMoveOffsetX();
+        PixelOffsetY += (int) charList.get(charIndex).getMoveOffsetY();
+
+        if (charList.get(charIndex).getHead().getHead(charList.get(charIndex).getHeading().ordinal()).getGrhIndex() != 0) {
+            if (!charList.get(charIndex).isInvisible()) {
+
+                if (charList.get(charIndex).getBody().getWalk(charList.get(charIndex).getHeading().ordinal()).getGrhIndex() > 0) {
+                    draw(charList.get(charIndex).getBody().getWalk(charList.get(charIndex).getHeading().ordinal()),
+                            PixelOffsetX, PixelOffsetY, true, true, false, 1.0f, ambientcolor);
+                }
+
+                if (charList.get(charIndex).getHead().getHead(charList.get(charIndex).getHeading().ordinal()).getGrhIndex() != 0) {
+                    draw(charList.get(charIndex).getHead().getHead(charList.get(charIndex).getHeading().ordinal()),
+                            PixelOffsetX + charList.get(charIndex).getBody().getHeadOffset().getX(),
+                            PixelOffsetY + charList.get(charIndex).getBody().getHeadOffset().getY(),
+                            true, false, false, 1.0f, ambientcolor);
+
+                    if (charList.get(charIndex).getHelmet().getHead(charList.get(charIndex).getHeading().ordinal()).getGrhIndex() != 0) {
+                        draw(charList.get(charIndex).getHelmet().getHead(charList.get(charIndex).getHeading().ordinal()),
+                                PixelOffsetX + charList.get(charIndex).getBody().getHeadOffset().getX(),
+                                PixelOffsetY + charList.get(charIndex).getBody().getHeadOffset().getY() -34,
+                                true, false, false, 1.0f, ambientcolor);
+                    }
+
+                    if (charList.get(charIndex).getWeapon().getWeaponWalk(charList.get(charIndex).getHeading().ordinal()).getGrhIndex() != 0) {
+                        draw(charList.get(charIndex).getWeapon().getWeaponWalk(charList.get(charIndex).getHeading().ordinal()),
+                                PixelOffsetX, PixelOffsetY, true, true, false, 1.0f, ambientcolor);
+                    }
+
+                    if (charList.get(charIndex).getShield().getShieldWalk(charList.get(charIndex).getHeading().ordinal()).getGrhIndex() != 0) {
+                        draw(charList.get(charIndex).getShield().getShieldWalk(charList.get(charIndex).getHeading().ordinal()),
+                                PixelOffsetX, PixelOffsetY, true, true, false, 1.0f, ambientcolor);
+                    }
+
+                    if (charList.get(charIndex).getName().length() > 0) {
+                        if (charList.get(charIndex).getPriv() == 0) {
+                            color.setRed(0.0f);
+                            color.setGreen(0.5f);
+                            color.setBlue(1.0f);
+                        }
+
+                        String line = charList.get(charIndex).getName();
+                        drawText(line, PixelOffsetX - (getSizeText(line) / 2) + 15, PixelOffsetY + 30, color, 0);
+
+                        line = charList.get(charIndex).getClanName();
+                        drawText(line, PixelOffsetX - (getSizeText(line) / 2) + 15, PixelOffsetY + 43, color, 0);
+                    }
+
+                }
+            }
+
+            // Draw FX
+            if (charList.get(charIndex).getFxIndex() != 0) {
+                draw(charList.get(charIndex).getfX(),
+                        PixelOffsetX + fxData[charList.get(charIndex).getFxIndex()].getOffsetX(),
+                        PixelOffsetY + fxData[charList.get(charIndex).getFxIndex()].getOffsetY(),
+                        true, true, true,1.0f, ambientcolor);
+
+                // Check if animation is over
+                if (!charList.get(charIndex).getfX().isStarted())
+                    charList.get(charIndex).setFxIndex(0);
+            }
+
+        } else {
+            if (charList.get(charIndex).getBody().getWalk(charList.get(charIndex).getHeading().ordinal()).getGrhIndex() > 0) {
+                draw(charList.get(charIndex).getBody().getWalk(charList.get(charIndex).getHeading().ordinal()),
+                        PixelOffsetX, PixelOffsetY, true, true, false, 1.0f, ambientcolor);
+            }
+
+        }
+    }
+
+    public static int sgn(short number) {
+        if (number == 0) return 0;
+        return (number / Math.abs(number));
     }
 }

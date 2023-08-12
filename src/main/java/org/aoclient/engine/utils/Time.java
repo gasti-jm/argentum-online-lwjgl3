@@ -1,41 +1,51 @@
 package org.aoclient.engine.utils;
 
+import static org.lwjgl.glfw.GLFW.glfwGetTime;
+
 public class Time {
-    private static long end_time = 0;
-    public static final float engineBaseSpeed = 0.018f;
+    //timers de AO
+    private static final int ENGINE_BASE_SPEED = 18; // int en float
 
-    // Frames per second
-    private static long frameTimer;
-    private static long contFPS;
-    public static long FPS;
+    private static float timerFPS = 1.0f; // 1 seg
+    private static int contFPS = 0;
 
-    public static long timerElapsedTime;
+    // my timers
+    public static float beginTime;
+    public static float endTime;
+    public static float deltaTime;
     public static float timerTicksPerFrame;
 
-    public static long getTime() {
-        return System.nanoTime() / 1000000; //glfwGetTime();
+    // Frames per second
+    public static long FPS;
+
+    public static void initTimers() {
+        beginTime = (float) glfwGetTime();
+        deltaTime = -1.0f;
     }
 
-    public static long getElapsedTime() {
-        long start_time = getTime();
-        long ms = (start_time - end_time);
-        end_time = getTime();
-        return ms;
-    }
-
-    /**
-     * Actualizamos deltaTime, FPS y la velocidad del engine.
-     */
-    public static void updateTimers() {
-        // update fps and times
-        if (getTime() >= frameTimer + 1000) {
-            frameTimer = getTime();
+    private static void updateFPS() {
+        // paso 1 seg?
+        if (timerFPS <= 0) {
+            timerFPS = 1.0f;
             FPS = contFPS;
             contFPS = 0;
         }
 
         contFPS++;
-        timerElapsedTime = getElapsedTime();
-        timerTicksPerFrame = (timerElapsedTime * engineBaseSpeed);
+        timerFPS -= deltaTime;
+    }
+
+
+    /**
+     * Actualizamos deltaTime
+     */
+    public static void updateTimers() {
+        updateFPS();
+
+        endTime = (float) glfwGetTime();
+        deltaTime = endTime - beginTime;
+        beginTime = endTime;
+
+        timerTicksPerFrame = (deltaTime * ENGINE_BASE_SPEED);
     }
 }

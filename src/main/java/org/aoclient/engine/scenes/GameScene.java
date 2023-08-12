@@ -4,23 +4,22 @@ import org.aoclient.engine.Window;
 import org.aoclient.engine.listeners.KeyListener;
 import org.aoclient.engine.logic.User;
 import org.aoclient.engine.renderer.RGBColor;
-import org.aoclient.engine.renderer.Renderer;
 import org.aoclient.engine.utils.GameData;
 
+import static org.aoclient.engine.logic.Character.charRender;
 import static org.aoclient.engine.logic.E_Heading.*;
 import static org.aoclient.engine.renderer.Drawn.*;
 import static org.aoclient.engine.scenes.Camera.*;
 import static org.aoclient.engine.utils.GameData.*;
-import static org.aoclient.engine.utils.Time.FPS;
-import static org.aoclient.engine.utils.Time.timerTicksPerFrame;
+import static org.aoclient.engine.utils.Time.*;
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_S;
 
 public class GameScene extends Scene {
     private User user;
 
-    private float OffsetCounterX = 0;
-    private float OffsetCounterY = 0;
+    private float offSetCounterX = 0;
+    private float offSetCounterY = 0;
 
     RGBColor ambientcolor;
 
@@ -28,12 +27,11 @@ public class GameScene extends Scene {
     public void init() {
         super.init();
 
-        this.renderer = new Renderer(Window.getInstance().getWidth(), Window.getInstance().getHeight(), 0, 0);
-        this.renderer.initialize();
+        canChangeTo = SceneNames.MAIN_SCENE;
 
         this.user = new User();
 
-        GameData.loadMap(34);
+        GameData.loadMap(1);
         mapData[50][50].setCharIndex( (short) user.makeChar(1, 127, SOUTH, 50, 50) );
 
         user.refreshAllChars();
@@ -67,6 +65,7 @@ public class GameScene extends Scene {
     }
 
     private void renderScreen(int tilex, int tiley, int PixelOffsetX, int PixelOffsetY) {
+        // esto hay que agregarlo a la clase Camera.
         int screenminY, screenmaxY;
         int screenminX, screenmaxX;
         int minY, maxY;
@@ -124,13 +123,13 @@ public class GameScene extends Scene {
                 if (mapData[x][y].getLayer(0).getGrhIndex() != 0) {
                     draw(mapData[x][y].getLayer(0),
                             (ScreenX - 1) * TILE_PIXEL_SIZE + PixelOffsetX,
-                            (ScreenY - 1) * TILE_PIXEL_SIZE + PixelOffsetY, true, true, false, ambientcolor);
+                            (ScreenY - 1) * TILE_PIXEL_SIZE + PixelOffsetY, true, true, false,1.0f, ambientcolor);
                 }
 
                 if (mapData[x][y].getLayer(1).getGrhIndex() != 0) {
                     draw(mapData[x][y].getLayer(1),
                             (ScreenX - 1) * TILE_PIXEL_SIZE + PixelOffsetX,
-                            (ScreenY - 1) * TILE_PIXEL_SIZE + PixelOffsetY, true, true, false, ambientcolor);
+                            (ScreenY - 1) * TILE_PIXEL_SIZE + PixelOffsetY, true, true, false,1.0f, ambientcolor);
                 }
                 ScreenX++;
             }
@@ -144,16 +143,16 @@ public class GameScene extends Scene {
             for(int x = minX; x <= maxX; x++) {
 
                 if (mapData[x][y].getObjGrh().getGrhIndex() != 0) {
-                    draw(mapData[x][y].getObjGrh(), ScreenX * 32 + PixelOffsetX, ScreenY * 32 + PixelOffsetY, true, true, false, ambientcolor);
+                    draw(mapData[x][y].getObjGrh(), ScreenX * 32 + PixelOffsetX, ScreenY * 32 + PixelOffsetY, true, true, false,1.0f, ambientcolor);
                 }
 
                 if (mapData[x][y].getCharIndex() > 0) {
-                    charRender(mapData[x][y].getCharIndex(), ScreenX * 32 + PixelOffsetX, ScreenY * 32 + PixelOffsetY);
+                    charRender(mapData[x][y].getCharIndex(), ScreenX * 32 + PixelOffsetX, ScreenY * 32 + PixelOffsetY, ambientcolor);
                 }
 
                 if (mapData[x][y].getLayer(2).getGrhIndex() != 0) {
                     draw(mapData[x][y].getLayer(2), ScreenX * 32 + PixelOffsetX,
-                            ScreenY * 32 + PixelOffsetY, true, true, false, ambientcolor);
+                            ScreenY * 32 + PixelOffsetY, true, true, false, 1.0f, ambientcolor);
                 }
 
                 ScreenX++;
@@ -167,171 +166,38 @@ public class GameScene extends Scene {
             for(int x = minX; x <= maxX; x++) {
                 if (mapData[x][y].getLayer(3).getGrhIndex() > 0) {
                     draw(mapData[x][y].getLayer(3), ScreenX * 32 + PixelOffsetX,
-                            ScreenY * 32 + PixelOffsetY, true, true, false, ambientcolor);
+                            ScreenY * 32 + PixelOffsetY, true, true, false,1.0f, ambientcolor);
                 }
                 ScreenX++;
             }
             ScreenY++;
         }
 
+        drawFPS();
+    }
+
+    private void drawFPS() {
         final String txtFPS = FPS + " FPS";
         drawText(txtFPS, Window.getInstance().getWidth() - getSizeText(txtFPS) - 10, 8, ambientcolor, 0);
     }
 
-    private void charRender(int charIndex, int PixelOffsetX, int PixelOffsetY) {
-        boolean moved = false;
-        RGBColor color = new RGBColor();
-
-        if (charList.get(charIndex).getMoving()) {
-            if (charList.get(charIndex).getScrollDirectionX() != 0) {
-
-                charList.get(charIndex).setMoveOffsetX(charList.get(charIndex).getMoveOffsetX() +
-                        charList.get(charIndex).getWalkingSpeed() * sgn(charList.get(charIndex).getScrollDirectionX()) * timerTicksPerFrame);
-
-                if (charList.get(charIndex).getBody().getWalk(charList.get(charIndex).getHeading().ordinal()).getSpeed() > 0.0f) {
-                    charList.get(charIndex).getBody().getWalk(charList.get(charIndex).getHeading().ordinal()).setStarted(true);
-                }
-
-                charList.get(charIndex).getWeapon().getWeaponWalk(charList.get(charIndex).getHeading().ordinal()).setStarted(true);
-                charList.get(charIndex).getShield().getShieldWalk(charList.get(charIndex).getHeading().ordinal()).setStarted(true);
-
-                moved = true;
-
-                if ((sgn(charList.get(charIndex).getScrollDirectionX()) == 1 && charList.get(charIndex).getMoveOffsetX() >= 0) ||
-                        (sgn(charList.get(charIndex).getScrollDirectionX()) == -1 && charList.get(charIndex).getMoveOffsetX() <= 0)) {
-
-                    charList.get(charIndex).setMoveOffsetX(0);
-                    charList.get(charIndex).setScrollDirectionX(0);
-                }
-            }
-
-            if (charList.get(charIndex).getScrollDirectionY() != 0) {
-                charList.get(charIndex).setMoveOffsetY(charList.get(charIndex).getMoveOffsetY()
-                        + charList.get(charIndex).getWalkingSpeed() * sgn(charList.get(charIndex).getScrollDirectionY()) * timerTicksPerFrame);
-
-
-                if (charList.get(charIndex).getBody().getWalk(charList.get(charIndex).getHeading().ordinal()).getSpeed() > 0.0f) {
-                    charList.get(charIndex).getBody().getWalk(charList.get(charIndex).getHeading().ordinal()).setStarted(true);
-                }
-
-                charList.get(charIndex).getWeapon().getWeaponWalk(charList.get(charIndex).getHeading().ordinal()).setStarted(true);
-                charList.get(charIndex).getShield().getShieldWalk(charList.get(charIndex).getHeading().ordinal()).setStarted(true);
-
-                moved = true;
-
-                if ((sgn(charList.get(charIndex).getScrollDirectionY()) == 1 && charList.get(charIndex).getMoveOffsetY() >= 0)
-                        || (sgn(charList.get(charIndex).getScrollDirectionY()) == -1 && charList.get(charIndex).getMoveOffsetY() <= 0)) {
-                    charList.get(charIndex).setMoveOffsetY(0);
-                    charList.get(charIndex).setScrollDirectionY(0);
-                }
-            }
-        }
-
-        if (!moved) {
-            charList.get(charIndex).getBody().getWalk(charList.get(charIndex).getHeading().ordinal()).setStarted(false);
-            charList.get(charIndex).getBody().getWalk(charList.get(charIndex).getHeading().ordinal()).setFrameCounter(1);
-
-            charList.get(charIndex).getWeapon().getWeaponWalk(charList.get(charIndex).getHeading().ordinal()).setStarted(false);
-            charList.get(charIndex).getWeapon().getWeaponWalk(charList.get(charIndex).getHeading().ordinal()).setFrameCounter(1);
-
-            charList.get(charIndex).getShield().getShieldWalk(charList.get(charIndex).getHeading().ordinal()).setStarted(false);
-            charList.get(charIndex).getShield().getShieldWalk(charList.get(charIndex).getHeading().ordinal()).setFrameCounter(1);
-
-            charList.get(charIndex).setMoving(false);
-        }
-
-        PixelOffsetX += (int) charList.get(charIndex).getMoveOffsetX();
-        PixelOffsetY += (int) charList.get(charIndex).getMoveOffsetY();
-
-        if (charList.get(charIndex).getHead().getHead(charList.get(charIndex).getHeading().ordinal()).getGrhIndex() != 0) {
-            if (!charList.get(charIndex).isInvisible()) {
-
-                if (charList.get(charIndex).getBody().getWalk(charList.get(charIndex).getHeading().ordinal()).getGrhIndex() > 0) {
-                    draw(charList.get(charIndex).getBody().getWalk(charList.get(charIndex).getHeading().ordinal()),
-                            PixelOffsetX, PixelOffsetY, true, true, false, ambientcolor);
-                }
-
-                if (charList.get(charIndex).getHead().getHead(charList.get(charIndex).getHeading().ordinal()).getGrhIndex() != 0) {
-                    draw(charList.get(charIndex).getHead().getHead(charList.get(charIndex).getHeading().ordinal()),
-                            PixelOffsetX + charList.get(charIndex).getBody().getHeadOffset().getX(),
-                            PixelOffsetY + charList.get(charIndex).getBody().getHeadOffset().getY(),
-                            true, false, false, ambientcolor);
-
-                    if (charList.get(charIndex).getHelmet().getHead(charList.get(charIndex).getHeading().ordinal()).getGrhIndex() != 0) {
-                        draw(charList.get(charIndex).getHelmet().getHead(charList.get(charIndex).getHeading().ordinal()),
-                                PixelOffsetX + charList.get(charIndex).getBody().getHeadOffset().getX(),
-                                PixelOffsetY + charList.get(charIndex).getBody().getHeadOffset().getY() -34,
-                                true, false, false, ambientcolor);
-                    }
-
-                    if (charList.get(charIndex).getWeapon().getWeaponWalk(charList.get(charIndex).getHeading().ordinal()).getGrhIndex() != 0) {
-                        draw(charList.get(charIndex).getWeapon().getWeaponWalk(charList.get(charIndex).getHeading().ordinal()),
-                                PixelOffsetX, PixelOffsetY, true, true, false, ambientcolor);
-                    }
-
-                    if (charList.get(charIndex).getShield().getShieldWalk(charList.get(charIndex).getHeading().ordinal()).getGrhIndex() != 0) {
-                        draw(charList.get(charIndex).getShield().getShieldWalk(charList.get(charIndex).getHeading().ordinal()),
-                                PixelOffsetX, PixelOffsetY, true, true, false, ambientcolor);
-                    }
-
-                    if (charList.get(charIndex).getName().length() > 0) {
-                        if (charList.get(charIndex).getPriv() == 0) {
-                            color.setRed(0.0f);
-                            color.setGreen(0.5f);
-                            color.setBlue(1.0f);
-                        }
-
-                        String line = charList.get(charIndex).getName();
-                        drawText(line, PixelOffsetX - (getSizeText(line) / 2) + 15, PixelOffsetY + 30, color, 0);
-
-                        line = charList.get(charIndex).getClanName();
-                        drawText(line, PixelOffsetX - (getSizeText(line) / 2) + 15, PixelOffsetY + 43, color, 0);
-                    }
-                }
-            }
-
-            // Draw FX
-            if (charList.get(charIndex).getFxIndex() != 0) {
-                draw(charList.get(charIndex).getfX(),
-                        PixelOffsetX + fxData[charList.get(charIndex).getFxIndex()].getOffsetX(),
-                        PixelOffsetY + fxData[charList.get(charIndex).getFxIndex()].getOffsetY(),
-                        true, true, true, ambientcolor);
-
-                // Check if animation is over
-                if (!charList.get(charIndex).getfX().isStarted())
-                    charList.get(charIndex).setFxIndex(0);
-            }
-
-        } else {
-            if (charList.get(charIndex).getBody().getWalk(charList.get(charIndex).getHeading().ordinal()).getGrhIndex() > 0) {
-                draw(charList.get(charIndex).getBody().getWalk(charList.get(charIndex).getHeading().ordinal()),
-                        PixelOffsetX, PixelOffsetY, true, true, false, ambientcolor);
-            }
-
-        }
-    }
-
-    private int sgn(short number) {
-        if (number == 0) return 0;
-        return (number / Math.abs(number));
-    }
-
     @Override
     public void render() {
+
         if (user.isUserMoving()) {
             if (user.getAddToUserPos().getX() != 0) {
-                OffsetCounterX -= charList.get(1).getWalkingSpeed() * user.getAddToUserPos().getX() * timerTicksPerFrame;
-                if (Math.abs(OffsetCounterX) >= Math.abs(TILE_PIXEL_SIZE * user.getAddToUserPos().getX())) {
-                    OffsetCounterX = 0;
+                offSetCounterX -= charList.get(1).getWalkingSpeed() * user.getAddToUserPos().getX() * timerTicksPerFrame;
+                if (Math.abs(offSetCounterX) >= Math.abs(TILE_PIXEL_SIZE * user.getAddToUserPos().getX())) {
+                    offSetCounterX = 0;
                     user.getAddToUserPos().setX(0);
                     user.setUserMoving(false);
                 }
             }
 
             if (user.getAddToUserPos().getY() != 0) {
-                OffsetCounterY -= charList.get(1).getWalkingSpeed() * user.getAddToUserPos().getY() * timerTicksPerFrame;
-                if (Math.abs(OffsetCounterY) >= Math.abs(TILE_PIXEL_SIZE * user.getAddToUserPos().getY())) {
-                    OffsetCounterY = 0;
+                offSetCounterY -= charList.get(1).getWalkingSpeed() * user.getAddToUserPos().getY() * timerTicksPerFrame;
+                if (Math.abs(offSetCounterY) >= Math.abs(TILE_PIXEL_SIZE * user.getAddToUserPos().getY())) {
+                    offSetCounterY = 0;
                     user.getAddToUserPos().setY(0);
                     user.setUserMoving(false);
                 }
@@ -339,7 +205,7 @@ public class GameScene extends Scene {
         }
 
         renderScreen(user.getUserPos().getX() - user.getAddToUserPos().getX(),
-                user.getUserPos().getY() - user.getAddToUserPos().getY(),
-                (int)(OffsetCounterX), (int)(OffsetCounterY));
+                     user.getUserPos().getY() - user.getAddToUserPos().getY(),
+                          (int)(offSetCounterX), (int)(offSetCounterY));
     }
 }

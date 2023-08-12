@@ -11,7 +11,7 @@ public class MapData {
     private short npcIndex;
     private Obj objInfo;
     private WorldPos tileExit;
-    private byte blocked;
+    private boolean blocked;
     private short trigger;
 
     public MapData() {
@@ -70,11 +70,11 @@ public class MapData {
         this.tileExit = tileExit;
     }
 
-    public byte getBlocked() {
+    public boolean getBlocked() {
         return blocked;
     }
 
-    public void setBlocked(byte blocked) {
+    public void setBlocked(boolean blocked) {
         this.blocked = blocked;
     }
 

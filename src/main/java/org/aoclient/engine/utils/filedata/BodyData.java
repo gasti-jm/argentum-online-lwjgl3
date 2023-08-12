@@ -15,6 +15,10 @@ public class BodyData {
         headOffset = new Position();
     }
 
+    /**
+     *
+     * @desc: Sirve para asignar a un personaje su body ya inicializado.
+     */
     public BodyData(BodyData other) {
         walk[0] = new GrhInfo(other.walk[0]);
         walk[1] = new GrhInfo(other.walk[1]);

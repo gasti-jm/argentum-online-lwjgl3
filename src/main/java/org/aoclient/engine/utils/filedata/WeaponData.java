@@ -1,7 +1,5 @@
 package org.aoclient.engine.utils.filedata;
 
-import org.aoclient.engine.utils.GameData;
-
 public class WeaponData {
     private GrhInfo[] WeaponWalk = new GrhInfo[4];
 
@@ -18,7 +16,6 @@ public class WeaponData {
         WeaponWalk[2] = new GrhInfo(other.WeaponWalk[2]);
         WeaponWalk[3] = new GrhInfo(other.WeaponWalk[3]);
     }
-
 
     public GrhInfo getWeaponWalk(int index) {
         return WeaponWalk[index];

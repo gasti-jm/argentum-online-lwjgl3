@@ -1,7 +1,6 @@
 package org.aoclient.engine.logic;
 
 import org.aoclient.engine.scenes.Camera;
-import org.aoclient.engine.utils.GameData;
 import org.aoclient.engine.utils.Position;
 import org.aoclient.engine.utils.filedata.*;
 
@@ -13,6 +12,7 @@ public class User {
     private boolean UserMoving;
     private Position userPos;
     private Position addToUserPos;
+    public int lastChar = 0;
 
     public User () {
         this.UserMoving = false;
@@ -50,10 +50,10 @@ public class User {
             charList.put(charIndex, new Character());
         }
 
-        if (charIndex > GameData.lastChar)
-            GameData.lastChar = charIndex;
+        if (charIndex > lastChar)
+            lastChar = charIndex;
 
-        if (charList.get(charIndex).getActive() > 0)
+        if (charList.get(charIndex).getActive())
             return 0;
 
         charList.get(charIndex).setName("Saurus");
@@ -71,7 +71,7 @@ public class User {
         charList.get(charIndex).setMoveOffsetY(0);
         charList.get(charIndex).getPos().setX(x);
         charList.get(charIndex).getPos().setY(y);
-        charList.get(charIndex).setActive((byte) 1);
+        charList.get(charIndex).setActive(true);
         charList.get(charIndex).setfX(new GrhInfo());
 
         return charIndex;
@@ -80,7 +80,7 @@ public class User {
     public void refreshAllChars() {
         for (short LoopC = 1; LoopC <= lastChar; LoopC++) {
             if(charList.containsKey(LoopC)){
-                if (charList.get(LoopC).getActive() == 1) {
+                if (charList.get(LoopC).getActive()) {
                     mapData[charList.get(LoopC).getPos().getX()][charList.get(LoopC).getPos().getY()].setCharIndex(LoopC);
                 }
             }
@@ -169,13 +169,13 @@ public class User {
             return false;
 
         /** Tile Bloqueado? */
-        if (mapData[x][y].getBlocked() == 1) {
+        if (mapData[x][y].getBlocked()) {
             return false;
         }
 
         /** ¿Hay un personaje? */
         if (charIndex > 0) {
-            if (mapData[userPos.getX()][userPos.getY()].getBlocked() == 1) {
+            if (mapData[userPos.getX()][userPos.getY()].getBlocked()) {
                 return false;
             }
         }

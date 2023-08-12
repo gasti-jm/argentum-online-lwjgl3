@@ -1,6 +1,5 @@
 package org.aoclient.engine.utils;
 
-
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
@@ -22,9 +21,8 @@ public class GameData {
     public static GrhData[] grhData;
     public static MapData[][] mapData;
     public static FontData[] fontTypes = new FontData[2];
-    public static Map<Integer, Character> charList;
 
-    public static int lastChar = 0;
+    public static Map<Integer, Character> charList;
 
     public static void initialize() {
         charList = new HashMap<>();
@@ -341,7 +339,7 @@ public class GameData {
     }
 
     /**
-     * @desc: Cargamos el mapa del juego.
+     * @desc: Cargamos el mapa.
      */
     public static void loadMap(int map) {
         try (RandomAccessFile f = new RandomAccessFile("resources/maps/mapa" + map + ".map", "rw")) {
@@ -370,7 +368,7 @@ public class GameData {
 
                     byflags = bigToLittle_Byte(f.readByte());
                     bloq = (byte)(byflags & 1);
-                    mapData[x][y].setBlocked(bloq);
+                    mapData[x][y].setBlocked(bloq == 1);
 
                     mapData[x][y].getLayer(0).setGrhIndex( bigToLittle_Short(f.readShort()) );
 
@@ -419,6 +417,9 @@ public class GameData {
         }
     }
 
+    /**
+     * @desc: Cargamos los indices de animaciones FXs del archivo "fxs.ind"
+     */
     private static void LoadFXs() {
         try (RandomAccessFile f = new RandomAccessFile("resources/inits/fxs.ind", "rw")) {
             f.seek(0);
@@ -558,23 +559,26 @@ public class GameData {
         fontTypes[1].setAscii_code(42,24092);
     }
 
+    /**
+     *
+     * @desc: Inicializa los graficos, ya sean animaciones o no.
+     */
     public static GrhInfo initGrh(GrhInfo grh, short grhIndex, boolean started) {
         grh.setGrhIndex(grhIndex);
+        grh.setStarted(false);
+        grh.setLoops(0);
 
         if (started) {
-                grh.setStarted(grhData[grh.getGrhIndex()].getNumFrames() > 1);
-        } else {
-            grh.setStarted(false);
+            grh.setStarted(grhData[grh.getGrhIndex()].getNumFrames() > 1);
         }
 
         if (grh.isStarted()) {
             grh.setLoops(-1);
-        } else {
-            grh.setLoops(0);
         }
 
         grh.setFrameCounter(1);
-        grh.setSpeed( grhData[grhIndex].getSpeed() );
+        //grh.setSpeed( grhData[grhIndex].getSpeed() );
+        grh.setSpeed(0.4f);
 
         return grh;
     }
