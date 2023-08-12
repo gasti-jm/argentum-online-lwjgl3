@@ -1,4 +1,4 @@
-package org.aoclient.engine.logic.models;
+package org.aoclient.engine.game.models;
 
 public class Obj {
     private int objIndex;

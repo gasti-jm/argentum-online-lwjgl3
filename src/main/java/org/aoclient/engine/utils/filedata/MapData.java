@@ -1,8 +1,8 @@
 package org.aoclient.engine.utils.filedata;
 
 
-import org.aoclient.engine.logic.models.Obj;
-import org.aoclient.engine.logic.models.WorldPos;
+import org.aoclient.engine.game.models.Obj;
+import org.aoclient.engine.game.models.WorldPos;
 
 public class MapData {
     private GrhInfo[] layer = new GrhInfo[4];

@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.aoclient.engine.Sound;
-import org.aoclient.engine.logic.models.Character;
+import org.aoclient.engine.game.models.Character;
 import org.aoclient.engine.renderer.Surface;
 import org.aoclient.engine.utils.filedata.*;
 

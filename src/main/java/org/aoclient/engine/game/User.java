@@ -1,9 +1,9 @@
-package org.aoclient.engine.logic;
+package org.aoclient.engine.game;
 
-import org.aoclient.engine.logic.models.Character;
-import org.aoclient.engine.logic.models.E_Heading;
+import org.aoclient.engine.game.models.Character;
+import org.aoclient.engine.game.models.E_Heading;
 import org.aoclient.engine.scenes.Camera;
-import org.aoclient.engine.logic.models.Position;
+import org.aoclient.engine.game.models.Position;
 import org.aoclient.engine.utils.filedata.*;
 
 import static org.aoclient.engine.scenes.Camera.*;

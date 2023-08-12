@@ -1,9 +1,9 @@
-package org.aoclient.engine.logic.models;
+package org.aoclient.engine.game.models;
 
 import org.aoclient.engine.renderer.RGBColor;
 import org.aoclient.engine.utils.filedata.*;
 
-import static org.aoclient.engine.logic.models.E_Heading.SOUTH;
+import static org.aoclient.engine.game.models.E_Heading.SOUTH;
 import static org.aoclient.engine.renderer.Drawn.*;
 import static org.aoclient.engine.renderer.Drawn.draw;
 import static org.aoclient.engine.utils.GameData.charList;
