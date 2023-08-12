@@ -4,6 +4,10 @@ import org.aoclient.engine.listeners.KeyListener;
 import org.aoclient.engine.listeners.MouseListener;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.glfw.GLFWVidMode;
+import org.lwjgl.openal.AL;
+import org.lwjgl.openal.ALC;
+import org.lwjgl.openal.ALCCapabilities;
+import org.lwjgl.openal.ALCapabilities;
 import org.lwjgl.opengl.GL;
 import org.lwjgl.system.MemoryStack;
 
@@ -11,6 +15,8 @@ import java.nio.IntBuffer;
 
 import static org.lwjgl.glfw.Callbacks.glfwFreeCallbacks;
 import static org.lwjgl.glfw.GLFW.*;
+import static org.lwjgl.openal.ALC10.*;
+import static org.lwjgl.openal.ALC10.alcMakeContextCurrent;
 import static org.lwjgl.system.MemoryStack.stackPush;
 import static org.lwjgl.system.MemoryUtil.NULL;
 
@@ -18,6 +24,9 @@ public final class Window {
     private static Window instance;
 
     private long window;
+
+    private long audioContext;
+    private long audioDevice;
 
     private final String title;
     private final int width, height;
@@ -36,7 +45,7 @@ public final class Window {
         return instance;
     }
 
-    public void initializate() {
+    public void initialize() {
         // Setup an error callback
         GLFWErrorCallback.createPrint(System.err).set();
 
@@ -93,10 +102,29 @@ public final class Window {
         // Make the window visible
         glfwShowWindow(window);
 
+        // Initialize the audio device
+        String defaultDeviceName = alcGetString(0, ALC_DEFAULT_DEVICE_SPECIFIER);
+        audioDevice = alcOpenDevice(defaultDeviceName);
+
+        int[] attributes = {0};
+        audioContext = alcCreateContext(audioDevice, attributes);
+        alcMakeContextCurrent(audioContext);
+
+        ALCCapabilities alcCapabilities = ALC.createCapabilities(audioDevice);
+        ALCapabilities alCapabilities = AL.createCapabilities(alcCapabilities);
+
+        if (!alCapabilities.OpenAL10) {
+            throw new IllegalStateException("Audio library not supported.");
+        }
+
         GL.createCapabilities();
     }
 
     public void close() {
+        // Destroy the audio context
+        alcDestroyContext(audioContext);
+        alcCloseDevice(audioDevice);
+
         // Free the window callbacks and destroy the window
         glfwFreeCallbacks(window);
         glfwDestroyWindow(window);

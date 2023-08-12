@@ -22,7 +22,7 @@ public final class MainScene extends Scene {
         // Interface
         loginInterface = new ImageGUI();
         loginInterface.init();
-        loginInterface.loadTextures("login.png");
+        loginInterface.loadTextures("VentanaConectar.png");
 
         loginInterface.setX(0);
         loginInterface.setX(0);
@@ -36,14 +36,11 @@ public final class MainScene extends Scene {
         camera.setHalfWindowTileHeight(((Window.getInstance().getHeight() / 32) / 2));
     }
 
-    private void loadInterfaces() {
-
-    }
-
     @Override
     public void keyEvents() {
         if(KeyListener.isKeyPressed(GLFW_KEY_ENTER)) {
             this.visible = false;
+            loginInterface.clear();
         }
     }
 

@@ -7,7 +7,7 @@ import org.aoclient.engine.renderer.TextureOGL;
 import java.util.List;
 
 public abstract class ElementGUI {
-    public static final String pathGUI = "";
+    protected float alphaTexture = 1.0f;
 
     protected int x;
     protected int y;
@@ -58,5 +58,13 @@ public abstract class ElementGUI {
 
     public void setHeight(int height) {
         this.height = height;
+    }
+
+    public float getAlphaTexture() {
+        return alphaTexture;
+    }
+
+    public void setAlphaTexture(float alphaTexture) {
+        this.alphaTexture = alphaTexture;
     }
 }

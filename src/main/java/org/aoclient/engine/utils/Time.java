@@ -37,7 +37,7 @@ public final class Time {
 
 
     /**
-     * Actualizamos deltaTime
+     * Actualizamos deltaTime y los FPS
      */
     public static void updateTimers() {
         updateFPS();

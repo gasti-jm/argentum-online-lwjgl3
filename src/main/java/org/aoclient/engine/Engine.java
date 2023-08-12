@@ -21,7 +21,7 @@ public final class Engine {
         System.out.println("Hello LWJGL " + Version.getVersion() + "!");
 
         window = Window.getInstance();
-        window.initializate();
+        window.initialize();
 
         surface = Surface.getInstance();
 
@@ -97,15 +97,13 @@ public final class Engine {
             this.prgRun = false;
         }
 
-        checkChangeScene();
-        currentScene.keyEvents();
-        currentScene.render();
-    }
-
-    private void checkChangeScene() {
+        // Check change screen
         if (!currentScene.isVisible()) {
             changeScene(currentScene.getChangeScene());
         }
+
+        currentScene.keyEvents();
+        currentScene.render();
     }
 
 }

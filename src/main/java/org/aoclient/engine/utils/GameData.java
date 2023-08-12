@@ -1,12 +1,15 @@
 package org.aoclient.engine.utils;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.aoclient.engine.Sound;
 import org.aoclient.engine.logic.models.Character;
 import org.aoclient.engine.renderer.Surface;
 import org.aoclient.engine.utils.filedata.*;
@@ -23,9 +26,11 @@ public final class GameData {
     public static FontData[] fontTypes = new FontData[2];
 
     public static Map<Integer, Character> charList;
+    public static Map<String, Sound> sounds;
 
     public static void initialize() {
         charList = new HashMap<>();
+        sounds = new HashMap<>();
 
         loadGrhData();
         loadHeads();
@@ -35,6 +40,9 @@ public final class GameData {
         loadShields();
         loadFonts();
         LoadFXs();
+
+        addSound("resources/MP3/intro.ogg", false);
+        getSound("resources/MP3/intro.ogg").play();
     }
 
     private static int bigToLittle_Int(int bigendian) {
@@ -581,5 +589,31 @@ public final class GameData {
         grh.setSpeed(0.4f);
 
         return grh;
+    }
+
+    public static Collection<Sound> getAllSounds() {
+        return sounds.values();
+    }
+
+    public static Sound getSound(String soundFile) {
+        File file = new File(soundFile);
+        if (sounds.containsKey(file.getAbsolutePath())) {
+            return sounds.get(file.getAbsolutePath());
+        } else {
+            assert false : "Sound file not added '" + soundFile + "'";
+        }
+
+        return null;
+    }
+
+    public static Sound addSound(String soundFile, boolean loops) {
+        File file = new File(soundFile);
+        if (sounds.containsKey(file.getAbsolutePath())) {
+            return sounds.get(file.getAbsolutePath());
+        } else {
+            Sound sound = new Sound(file.getAbsolutePath(), loops);
+            sounds.put(file.getAbsolutePath(), sound);
+            return sound;
+        }
     }
 }

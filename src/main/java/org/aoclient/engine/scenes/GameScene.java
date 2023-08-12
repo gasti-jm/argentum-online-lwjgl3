@@ -194,6 +194,7 @@ public final class GameScene extends Scene {
 
     @Override
     public void render() {
+        if(!visible) return;
 
         if (user.isUserMoving()) {
             if (user.getAddToUserPos().getX() != 0) {
