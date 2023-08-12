@@ -11,12 +11,11 @@ import static org.aoclient.engine.utils.Time.deltaTime;
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.*;
 
-public class Engine {
+public final class Engine {
     private boolean prgRun = true;
     private Window window;
     private Surface surface;
     private Scene currentScene;
-
 
     public void start() {
         System.out.println("Hello LWJGL " + Version.getVersion() + "!");
@@ -32,10 +31,10 @@ public class Engine {
         changeScene(SceneNames.INTRO_SCENE);
 
         glEnable(GL_TEXTURE_2D);
-        glClearColor(1.0f, 0.0f, 0.0f, 1.0f);
+        glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
         glViewport(0, 0, window.getWidth(), window.getHeight());
-        glOrtho(0, window.getWidth(), window.getHeight(), 0, 1, -1);
+        glOrtho(0, window.getWidth(), window.getHeight(), 0, 1, -1); // con este estiramos a la pantalla
 
         glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
         glEnable(GL_ALPHA);

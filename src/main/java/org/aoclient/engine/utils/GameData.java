@@ -7,11 +7,11 @@ import java.nio.ByteOrder;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.aoclient.engine.logic.Character;
+import org.aoclient.engine.logic.models.Character;
 import org.aoclient.engine.renderer.Surface;
 import org.aoclient.engine.utils.filedata.*;
 
-public class GameData {
+public final class GameData {
     public static BodyData[] bodyData;
     public static HeadData[] headData;
     public static HeadData[] helmetsData;

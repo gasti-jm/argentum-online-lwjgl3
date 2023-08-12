@@ -1,6 +1,6 @@
 package org.aoclient.engine.scenes;
 
-public class Camera {
+public final class Camera {
     public static final int TILE_PIXEL_SIZE = 32;
     public static final int TILE_BUFFER_SIZE = 9;
 
@@ -14,7 +14,18 @@ public class Camera {
     private int halfWindowTileWidth;
     private int halfWindowTileHeight;
 
+    int screenminY, screenmaxY;
+    int screenminX, screenmaxX;
+    int minY, maxY;
+    int minX, maxX;
+    int ScreenX = 0, ScreenY = 0;
+    int minXOffset = 0, minYOffset = 0;
+
     public Camera() {
+
+    }
+
+    public void update() {
 
     }
 

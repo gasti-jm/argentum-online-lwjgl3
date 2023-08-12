@@ -8,7 +8,7 @@ import static org.aoclient.engine.utils.GameData.grhData;
 import static org.aoclient.engine.utils.Time.deltaTime;
 import static org.lwjgl.opengl.GL11.*;
 
-public class Drawn {
+public final class Drawn {
     /**
      *
      * @desc: Se encargara de guardar la textura en la grafica y prepararla para su dibujado (en pocas palabras).
@@ -17,7 +17,7 @@ public class Drawn {
         if (blend)
             glBlendFunc(GL_SRC_ALPHA, GL_ONE);
 
-        Surface.TextureOGL texture = Surface.getInstance().getTexture(grhData[grh_index].getFileNum());
+        TextureOGL texture = Surface.getInstance().getTexture(grhData[grh_index].getFileNum());
 
         final float src_left = sX;
         final float src_top = sY;
@@ -34,7 +34,9 @@ public class Drawn {
         glBegin(GL_QUADS);
 
         {
-            //0
+            //  0----0
+            //  |    |
+            //  1----0
             x_cor = dest_left;
             y_cor = dest_bottom;
 
@@ -42,7 +44,9 @@ public class Drawn {
             glTexCoord2f (src_left / texture.tex_width, (src_bottom) / texture.tex_height);
             glVertex2d(x_cor, y_cor);
 
-            //1
+            //  1----0
+            //  |    |
+            //  0----0
             x_cor = dest_left;
             y_cor = dest_top;
 
@@ -50,7 +54,9 @@ public class Drawn {
             glTexCoord2f(src_left / texture.tex_width, src_top / texture.tex_height);
             glVertex2d(x_cor, y_cor);
 
-            //3
+            //  0----1
+            //  |    |
+            //  0----0
             x_cor = dest_right;
             y_cor = dest_top;
 
@@ -58,11 +64,84 @@ public class Drawn {
             glTexCoord2f((src_right) / texture.tex_width, src_top / texture.tex_height);
             glVertex2d(x_cor, y_cor);
 
-            //2
+            //  0----0
+            //  |    |
+            //  0----1
             x_cor = dest_right;
             y_cor = dest_bottom;
 
             glColor4f(color.getRed(), color.getGreen(), color.getBlue(), alpha);
+            glTexCoord2f((src_right) / texture.tex_width, (src_bottom) / texture.tex_height);
+            glVertex2d(x_cor, y_cor);
+        }
+
+        glEnd();
+
+        if (blend)
+            glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    }
+
+    /**
+     *
+     * @desc: Lo mismo pero para interfaces de usuario.
+     */
+    public static void geometryBoxRenderGUI(TextureOGL texture, int x, int y, int src_width, int src_height, int sX, int sY, boolean blend, float alpha) {
+        if (blend)
+            glBlendFunc(GL_SRC_ALPHA, GL_ONE);
+
+
+        final float src_left = sX;
+        final float src_top = sY;
+        final float src_right = src_left + src_width;
+        final float src_bottom = src_top + (src_height);
+
+        final float dest_left = x;
+        final float dest_top = y;
+        final float dest_right = x + (src_right - src_left);
+        final float dest_bottom = y + (src_bottom - src_top);
+
+        float x_cor, y_cor;
+        glBindTexture(GL_TEXTURE_2D, texture.id);
+        glBegin(GL_QUADS);
+
+        {
+            //  0----0
+            //  |    |
+            //  1----0
+            x_cor = dest_left;
+            y_cor = dest_bottom;
+
+            glColor4f(1.0f, 1.0f, 1.0f, alpha);
+            glTexCoord2f (src_left / texture.tex_width, (src_bottom) / texture.tex_height);
+            glVertex2d(x_cor, y_cor);
+
+            //  1----0
+            //  |    |
+            //  0----0
+            x_cor = dest_left;
+            y_cor = dest_top;
+
+            glColor4f(1.0f, 1.0f, 1.0f, alpha);
+            glTexCoord2f(src_left / texture.tex_width, src_top / texture.tex_height);
+            glVertex2d(x_cor, y_cor);
+
+            //  0----1
+            //  |    |
+            //  0----0
+            x_cor = dest_right;
+            y_cor = dest_top;
+
+            glColor4f(1.0f, 1.0f, 1.0f, alpha);
+            glTexCoord2f((src_right) / texture.tex_width, src_top / texture.tex_height);
+            glVertex2d(x_cor, y_cor);
+
+            //  0----0
+            //  |    |
+            //  0----1
+            x_cor = dest_right;
+            y_cor = dest_bottom;
+
+            glColor4f(1.0f, 1.0f, 1.0f, alpha);
             glTexCoord2f((src_right) / texture.tex_width, (src_bottom) / texture.tex_height);
             glVertex2d(x_cor, y_cor);
         }
@@ -156,6 +235,8 @@ public class Drawn {
             }
         }
     }
+
+
 
     /**
      *

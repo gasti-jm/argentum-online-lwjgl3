@@ -1,6 +1,6 @@
 package org.aoclient.engine.utils.filedata;
 
-import org.aoclient.engine.utils.Position;
+import org.aoclient.engine.logic.models.Position;
 
 public class BodyData {
     private GrhInfo[] walk = new GrhInfo[4];

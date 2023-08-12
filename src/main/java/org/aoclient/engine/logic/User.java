@@ -1,14 +1,16 @@
 package org.aoclient.engine.logic;
 
+import org.aoclient.engine.logic.models.Character;
+import org.aoclient.engine.logic.models.E_Heading;
 import org.aoclient.engine.scenes.Camera;
-import org.aoclient.engine.utils.Position;
+import org.aoclient.engine.logic.models.Position;
 import org.aoclient.engine.utils.filedata.*;
 
 import static org.aoclient.engine.scenes.Camera.*;
 import static org.aoclient.engine.utils.GameData.*;
 import static org.aoclient.engine.utils.GameData.fxData;
 
-public class User {
+public final class User {
     private boolean UserMoving;
     private Position userPos;
     private Position addToUserPos;
@@ -16,7 +18,6 @@ public class User {
 
     public User () {
         this.UserMoving = false;
-
         userPos = new Position();
         addToUserPos = new Position();
     }
@@ -78,7 +79,7 @@ public class User {
     }
 
     public void refreshAllChars() {
-        for (short LoopC = 1; LoopC <= lastChar; LoopC++) {
+        for (int LoopC = 1; LoopC <= lastChar; LoopC++) {
             if(charList.containsKey(LoopC)){
                 if (charList.get(LoopC).getActive()) {
                     mapData[charList.get(LoopC).getPos().getX()][charList.get(LoopC).getPos().getY()].setCharIndex(LoopC);
@@ -164,16 +165,16 @@ public class User {
     private boolean moveToLegalPos(int x, int y) {
         final int charIndex = mapData[x][y].getCharIndex();
 
-        /** Limite del mapa */
+        // Limite del mapa
         if (inMapBounds(x, y))
             return false;
 
-        /** Tile Bloqueado? */
+        // Tile Bloqueado?
         if (mapData[x][y].getBlocked()) {
             return false;
         }
 
-        /** ¿Hay un personaje? */
+        // ¿Hay un personaje?
         if (charIndex > 0) {
             if (mapData[userPos.getX()][userPos.getY()].getBlocked()) {
                 return false;
@@ -215,9 +216,9 @@ public class User {
 
         if (legalOk){
             moveScreen(direction);
-            moveCharbyHead(1, direction);
+            moveCharbyHead(lastChar, direction);
         }
 
-        charList.get(1).setHeading(direction);
+        charList.get(lastChar).setHeading(direction);
     }
 }

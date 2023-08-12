@@ -5,15 +5,15 @@ import org.aoclient.engine.listeners.KeyListener;
 import static org.aoclient.engine.utils.Time.*;
 import static org.lwjgl.glfw.GLFW.*;
 
-public class IntroScene extends Scene {
-    private static float timeScene = 15.0f; // 10 segundos de intro.
+public final class IntroScene extends Scene {
+    private static float timeScene = 15.0f; // 15 segundos de intro.
     private float alphaBackground;
 
     @Override
     public void init() {
         super.init();
         this.alphaBackground = 0.0f;
-        this.canChangeTo = SceneNames.GAME_SCENE;
+        this.canChangeTo = SceneNames.MAIN_SCENE;
     }
 
     @Override

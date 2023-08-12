@@ -1,4 +1,4 @@
-package org.aoclient.engine.utils;
+package org.aoclient.engine.logic.models;
 
 public class Obj {
     private int objIndex;

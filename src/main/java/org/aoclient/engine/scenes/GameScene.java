@@ -6,16 +6,15 @@ import org.aoclient.engine.logic.User;
 import org.aoclient.engine.renderer.RGBColor;
 import org.aoclient.engine.utils.GameData;
 
-import static org.aoclient.engine.logic.Character.charRender;
-import static org.aoclient.engine.logic.E_Heading.*;
+import static org.aoclient.engine.logic.models.Character.charRender;
+import static org.aoclient.engine.logic.models.E_Heading.*;
 import static org.aoclient.engine.renderer.Drawn.*;
 import static org.aoclient.engine.scenes.Camera.*;
 import static org.aoclient.engine.utils.GameData.*;
 import static org.aoclient.engine.utils.Time.*;
 import static org.lwjgl.glfw.GLFW.*;
-import static org.lwjgl.glfw.GLFW.GLFW_KEY_S;
 
-public class GameScene extends Scene {
+public final class GameScene extends Scene {
     private User user;
 
     private float offSetCounterX = 0;
@@ -41,8 +40,8 @@ public class GameScene extends Scene {
 
         ambientcolor = new RGBColor(1.0f, 1.0f, 1.0f);
 
-        this.camera.setHalfWindowTileWidth(((Window.getInstance().getWidth() / 32) / 2));
-        this.camera.setHalfWindowTileHeight(((Window.getInstance().getHeight() / 32) / 2));
+        camera.setHalfWindowTileWidth(((Window.getInstance().getWidth() / 32) / 2));
+        camera.setHalfWindowTileHeight(((Window.getInstance().getHeight() / 32) / 2));
     }
 
     @Override
@@ -126,16 +125,28 @@ public class GameScene extends Scene {
                             (ScreenY - 1) * TILE_PIXEL_SIZE + PixelOffsetY, true, true, false,1.0f, ambientcolor);
                 }
 
-                if (mapData[x][y].getLayer(1).getGrhIndex() != 0) {
-                    draw(mapData[x][y].getLayer(1),
-                            (ScreenX - 1) * TILE_PIXEL_SIZE + PixelOffsetX,
-                            (ScreenY - 1) * TILE_PIXEL_SIZE + PixelOffsetY, true, true, false,1.0f, ambientcolor);
-                }
                 ScreenX++;
             }
             ScreenX = ScreenX - x + screenminX;
             ScreenY++;
         }
+
+        ScreenY = minYOffset - TILE_BUFFER_SIZE;
+        for (int y = minY; y <= maxY; y++) {
+            ScreenX = minXOffset - TILE_BUFFER_SIZE;
+            for(int x = minX; x <= maxX; x++) {
+
+                if (mapData[x][y].getLayer(1).getGrhIndex() != 0) {
+                    draw(mapData[x][y].getLayer(1),
+                            ScreenX * TILE_PIXEL_SIZE + PixelOffsetX,
+                            ScreenY * TILE_PIXEL_SIZE + PixelOffsetY, true, true, false,1.0f, ambientcolor);
+                }
+
+                ScreenX++;
+            }
+            ScreenY++;
+        }
+
 
         ScreenY = minYOffset - TILE_BUFFER_SIZE;
         for (int y = minY; y <= maxY; y++) {
@@ -173,10 +184,10 @@ public class GameScene extends Scene {
             ScreenY++;
         }
 
-        drawFPS();
+        showFPS();
     }
 
-    private void drawFPS() {
+    private void showFPS() {
         final String txtFPS = FPS + " FPS";
         drawText(txtFPS, Window.getInstance().getWidth() - getSizeText(txtFPS) - 10, 8, ambientcolor, 0);
     }

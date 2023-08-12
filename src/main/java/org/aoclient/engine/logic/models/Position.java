@@ -1,17 +1,8 @@
-package org.aoclient.engine.utils;
+package org.aoclient.engine.logic.models;
 
-public class WorldPos {
-    private int map;
+public class Position {
     private int x;
     private int y;
-
-    public int getMap() {
-        return map;
-    }
-
-    public void setMap(int map) {
-        this.map = map;
-    }
 
     public int getX() {
         return x;

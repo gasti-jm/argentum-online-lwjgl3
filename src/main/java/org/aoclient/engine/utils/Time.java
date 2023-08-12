@@ -2,7 +2,7 @@ package org.aoclient.engine.utils;
 
 import static org.lwjgl.glfw.GLFW.glfwGetTime;
 
-public class Time {
+public final class Time {
     //timers de AO
     private static final int ENGINE_BASE_SPEED = 18; // int en float
 

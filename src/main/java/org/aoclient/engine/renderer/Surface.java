@@ -16,12 +16,6 @@ import static org.lwjgl.opengl.GL11.*;
 public class Surface {
     private static Surface instance;
 
-    public class TextureOGL {
-        int id;
-        int tex_width;
-        int tex_height;
-    }
-
     private ByteBuffer pixels;
     private int textureWidth, textureHeight;
     private Map<Integer, TextureOGL> textures;
@@ -55,6 +49,10 @@ public class Surface {
         return createTexture(fileNum);
     }
 
+    /**
+     *
+     * @desc: Crea una textura y lo guarda en nuestro mapa de texturas con su id (en este caso el numero del archivo).
+     */
     private TextureOGL createTexture(int fileNum) {
         TextureOGL texture = new TextureOGL();
 
@@ -63,6 +61,20 @@ public class Surface {
         texture.tex_height = textureHeight;
 
         textures.put(fileNum, texture);
+
+        return texture;
+    }
+
+    /**
+     *
+     * @desc: Crea y retorna una textura (en este caso una interfaz de usuario).
+     */
+    public TextureOGL createTexture(String file) {
+        TextureOGL texture = new TextureOGL();
+
+        texture.id = loadTexture("resources/gui/" + file);
+        texture.tex_width = textureWidth;
+        texture.tex_height = textureHeight;
 
         return texture;
     }
