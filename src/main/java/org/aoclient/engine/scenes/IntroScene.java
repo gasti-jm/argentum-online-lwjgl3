@@ -33,8 +33,6 @@ public final class IntroScene extends Scene {
 
             images.get(i).init();
 
-            images.get(i).setX(0);
-            images.get(i).setX(0);
         }
 
         // le cargamos las texturas
@@ -46,7 +44,7 @@ public final class IntroScene extends Scene {
 
     @Override
     public void keyEvents() {
-        if (KeyListener.isKeyPressed(GLFW_KEY_ENTER) || KeyListener.isKeyPressed(GLFW_KEY_SPACE)) {
+        if (KeyListener.isKeyReadyForAction(GLFW_KEY_ENTER) || KeyListener.isKeyPressed(GLFW_KEY_SPACE)) {
             this.visible = false;
             images.forEach(elementGUI -> elementGUI.clear());
         }

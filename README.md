@@ -19,7 +19,7 @@
 </p>
 
 # Image
-![Screenshot 2023-08-11 192355](https://github.com/gasti-jm/argentum-online-lwjgl3/assets/82490615/0b3996dd-f92b-4e5f-a85e-d0abee9128c8)
+![Screenshot 2023-08-12 230220](https://github.com/gasti-jm/argentum-online-lwjgl3/assets/82490615/09757d58-a0db-43a0-a7b6-270e74425047)
 
 <h1>Thanks to:</h1>
 <br/>

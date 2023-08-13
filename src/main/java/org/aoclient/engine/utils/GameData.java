@@ -28,9 +28,12 @@ public final class GameData {
     public static Map<Integer, Character> charList;
     public static Map<String, Sound> sounds;
 
+    /**
+     * @desc: Inicializamos todos los datos almacenados en archivos.
+     */
     public static void initialize() {
-        charList = new HashMap<>();
-        sounds = new HashMap<>();
+        charList    = new HashMap<>();
+        sounds      = new HashMap<>();
 
         loadGrhData();
         loadHeads();
@@ -41,10 +44,13 @@ public final class GameData {
         loadFonts();
         LoadFXs();
 
-        addSound("resources/MP3/intro.ogg", false);
-        getSound("resources/MP3/intro.ogg").play();
+        addSound("resources/MP3/intro.ogg", false).play();
     }
 
+    /**
+     * @desc: Permite migrar un Integer de mas cantidad de bytes a uno mas chico por que en
+     *        VB6 las variables son de distinta cantidad de bytes
+     */
     private static int bigToLittle_Int(int bigendian) {
         ByteBuffer buf = ByteBuffer.allocate(4);
 
@@ -55,6 +61,10 @@ public final class GameData {
         return buf.getInt(0);
     }
 
+    /**
+     * @desc: Permite migrar un Float de mas cantidad de bytes a uno mas chico por que en
+     *        VB6 las variables son de distinta cantidad de bytes
+     */
     private static float bigToLittle_Float(float bigendian) {
         ByteBuffer buf = ByteBuffer.allocate(4);
 
@@ -65,6 +75,10 @@ public final class GameData {
         return buf.getFloat(0);
     }
 
+    /**
+     * @desc: Permite migrar un Short de mas cantidad de bytes a uno mas chico por que en
+     *        VB6 las variables son de distinta cantidad de bytes
+     */
     private static short bigToLittle_Short(short bigendian) {
         ByteBuffer buf = ByteBuffer.allocate(2);
 
@@ -75,6 +89,10 @@ public final class GameData {
         return buf.getShort(0);
     }
 
+    /**
+     * @desc: Permite migrar un Byte de mas cantidad de bytes a uno mas chico por que en
+     *        VB6 las variables son de distinta cantidad de bytes
+     */
     private static byte bigToLittle_Byte(byte bigendian) {
         ByteBuffer buf = ByteBuffer.allocate(1);
 
@@ -451,7 +469,7 @@ public final class GameData {
     }
 
     /**
-     * @desc: Cargamos el indice de graficos de la fuente de letras
+     * @desc: Cargamos el indice de graficos de la fuente de letras (ESTA HARDCODEADO, HAY QUE ARMAR UN ARCHIVO!)
      */
     private static void loadFonts() {
         fontTypes[0] = new FontData();
@@ -591,21 +609,33 @@ public final class GameData {
         return grh;
     }
 
+    /**
+     *
+     * @desc: Devuelve todos los sonidos
+     */
     public static Collection<Sound> getAllSounds() {
         return sounds.values();
     }
 
+    /**
+     *
+     * @desc: Nos devuelve un sonido cargado a nuestro mapa.
+     */
     public static Sound getSound(String soundFile) {
         File file = new File(soundFile);
         if (sounds.containsKey(file.getAbsolutePath())) {
             return sounds.get(file.getAbsolutePath());
         } else {
-            assert false : "Sound file not added '" + soundFile + "'";
+            System.out.println("Sound file not added '" + soundFile + "'");
         }
 
         return null;
     }
 
+    /**
+     *
+     * @desc: Agregamos un sonido a nuestro mapa.
+     */
     public static Sound addSound(String soundFile, boolean loops) {
         File file = new File(soundFile);
         if (sounds.containsKey(file.getAbsolutePath())) {

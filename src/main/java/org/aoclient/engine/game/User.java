@@ -214,11 +214,11 @@ public final class User {
                 break;
         }
 
+        charList.get(lastChar).setHeading(direction);
+
         if (legalOk){
             moveScreen(direction);
             moveCharbyHead(lastChar, direction);
         }
-
-        charList.get(lastChar).setHeading(direction);
     }
 }

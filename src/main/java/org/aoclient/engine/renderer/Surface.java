@@ -56,7 +56,7 @@ public class Surface {
     private TextureOGL createTexture(int fileNum) {
         TextureOGL texture = new TextureOGL();
 
-        texture.id = loadTexture("resources/graphics/" + fileNum + ".png");
+        texture.id = loadTexture("resources/graphics/" + fileNum + ".png", false);
         texture.tex_width = textureWidth;
         texture.tex_height = textureHeight;
 
@@ -72,14 +72,14 @@ public class Surface {
     public TextureOGL createTexture(String file) {
         TextureOGL texture = new TextureOGL();
 
-        texture.id = loadTexture("resources/gui/" + file);
+        texture.id = loadTexture("resources/gui/" + file, true);
         texture.tex_width = textureWidth;
         texture.tex_height = textureHeight;
 
         return texture;
     }
 
-    public int loadTexture(String file) {
+    public int loadTexture(String file, boolean isGUI) {
         pixels = BufferUtils.createByteBuffer(1);
         BufferedImage bi;
         int id = 0;
@@ -100,14 +100,16 @@ public class Surface {
             byte[] data = new byte[4 * textureWidth * textureHeight];
             bi.getRaster().getDataElements(0, 0, textureWidth, textureHeight, data);
 
-            for (int j = 0; j < textureWidth * textureHeight; j++) {
-                if (data[j*4] == 0 && data[j*4 + 1] == 0 && data[j*4 + 2] == 0) {
-                    data[j*4] = -1;
-                    data[j*4+1] = -1;
-                    data[j*4+2] = -1;
-                    data[j*4+3] = 0;
-                } else {
-                    data[j*4+3] = -1;
+            if(!isGUI) {
+                for (int j = 0; j < textureWidth * textureHeight; j++) {
+                    if (data[j * 4] == 0 && data[j * 4 + 1] == 0 && data[j * 4 + 2] == 0) {
+                        data[j * 4] = -1;
+                        data[j * 4 + 1] = -1;
+                        data[j * 4 + 2] = -1;
+                        data[j * 4 + 3] = 0;
+                    } else {
+                        data[j * 4 + 3] = -1;
+                    }
                 }
             }
 

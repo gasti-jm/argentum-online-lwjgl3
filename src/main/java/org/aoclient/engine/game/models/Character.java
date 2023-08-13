@@ -376,10 +376,10 @@ public class Character {
                         }
 
                         String line = charList.get(charIndex).getName();
-                        drawText(line, PixelOffsetX - (getSizeText(line) / 2) + 15, PixelOffsetY + 30, color, 0);
+                        drawText(line, PixelOffsetX - (getSizeText(line) / 2) + 15, PixelOffsetY + 30, color, 0, true);
 
                         line = charList.get(charIndex).getClanName();
-                        drawText(line, PixelOffsetX - (getSizeText(line) / 2) + 15, PixelOffsetY + 43, color, 0);
+                        drawText(line, PixelOffsetX - (getSizeText(line) / 2) + 15, PixelOffsetY + 43, color, 0, true);
                     }
 
                 }

@@ -7,6 +7,7 @@ import org.aoclient.engine.utils.GameData;
 import org.aoclient.engine.utils.Time;
 import org.lwjgl.Version;
 
+import static org.aoclient.engine.scenes.SceneNames.INTRO_SCENE;
 import static org.aoclient.engine.utils.Time.deltaTime;
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.*;
@@ -28,7 +29,7 @@ public final class Engine {
         surface.initialize();
         GameData.initialize();
 
-        changeScene(SceneNames.INTRO_SCENE);
+        changeScene(INTRO_SCENE);
 
         glEnable(GL_TEXTURE_2D);
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);

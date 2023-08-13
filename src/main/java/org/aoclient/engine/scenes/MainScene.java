@@ -29,9 +29,6 @@ public final class MainScene extends Scene {
         loginInterface.init();
         loginInterface.loadTextures("VentanaConectar.png");
 
-        loginInterface.setX(0);
-        loginInterface.setX(0);
-
         ambientColor = new RGBColor(1.0f, 1.0f, 1.0f);
 
 
@@ -43,7 +40,7 @@ public final class MainScene extends Scene {
 
     @Override
     public void keyEvents() {
-        if (KeyListener.isKeyPressed(GLFW_KEY_ENTER)) {
+        if (KeyListener.isKeyReadyForAction(GLFW_KEY_ENTER)) {
             this.visible = false;
             loginInterface.clear();
         }
@@ -54,7 +51,6 @@ public final class MainScene extends Scene {
         if (!visible) return;
 
         renderMap();
-
         loginInterface.render();
     }
 

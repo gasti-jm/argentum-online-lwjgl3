@@ -1,10 +1,19 @@
 package org.aoclient.engine.scenes;
 
 import org.aoclient.engine.Window;
+import org.aoclient.engine.gui.ElementGUI;
+import org.aoclient.engine.gui.elements.ImageGUI;
 import org.aoclient.engine.listeners.KeyListener;
 import org.aoclient.engine.game.User;
 import org.aoclient.engine.renderer.RGBColor;
 import org.aoclient.engine.utils.GameData;
+import org.aoclient.engine.utils.filedata.GrhInfo;
+import org.aoclient.engine.utils.filedata.MapData;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import static org.aoclient.engine.game.models.Character.charRender;
 import static org.aoclient.engine.game.models.E_Heading.*;
@@ -16,11 +25,13 @@ import static org.lwjgl.glfw.GLFW.*;
 
 public final class GameScene extends Scene {
     private User user;
-
     private float offSetCounterX = 0;
     private float offSetCounterY = 0;
-
     RGBColor ambientColor;
+    private boolean autoMove = false;
+
+    private ElementGUI main;
+
 
     @Override
     public void init() {
@@ -40,26 +51,76 @@ public final class GameScene extends Scene {
 
         ambientColor = new RGBColor(1.0f, 1.0f, 1.0f);
 
-        camera.setHalfWindowTileWidth(((Window.getInstance().getWidth() / 32) / 2));
-        camera.setHalfWindowTileHeight(((Window.getInstance().getHeight() / 32) / 2));
+        camera.setHalfWindowTileWidth   (( (SCREEN_SIZE_X / TILE_PIXEL_SIZE) / 2 ));
+        camera.setHalfWindowTileHeight  (( (SCREEN_SIZE_Y / TILE_PIXEL_SIZE) / 2 ));
+
+
+        // Interface
+        main = new ImageGUI();
+        main.init();
+        main.loadTextures("VentanaPrincipal.png");
     }
 
     @Override
     public void keyEvents() {
+
         if (KeyListener.isKeyPressed(GLFW_KEY_F5)) {
-            user.setCharacterFx(1, 2, -1);
+            user.setCharacterFx(1, 7, -1);
+        }
+
+        if (KeyListener.isKeyPressed(GLFW_KEY_TAB)) {
+            autoMove = !autoMove;
         }
 
         if(!user.isUserMoving()) {
-            if (KeyListener.isKeyPressed(GLFW_KEY_D)) {
-                user.moveTo(EAST);
-            } else if (KeyListener.isKeyPressed(GLFW_KEY_A)) {
-                user.moveTo(WEST);
-            } else if (KeyListener.isKeyPressed(GLFW_KEY_W)) {
-                user.moveTo(NORTH);
-            } else if (KeyListener.isKeyPressed(GLFW_KEY_S)) {
-                user.moveTo(SOUTH);
+            if(!autoMove){
+                if (!KeyListener.lastKeysPressed.isEmpty()) {
+                    switch (KeyListener.lastKeysPressed.get(KeyListener.lastKeysPressed.size() - 1)) {
+                        case GLFW_KEY_W:
+                            if (KeyListener.isKeyPressed(GLFW_KEY_W)) user.moveTo(NORTH);
+                            break;
+
+                        case GLFW_KEY_S:
+                            if (KeyListener.isKeyPressed(GLFW_KEY_S)) user.moveTo(SOUTH);
+                            break;
+
+                        case GLFW_KEY_A:
+                            if (KeyListener.isKeyPressed(GLFW_KEY_A)) user.moveTo(WEST);
+                            break;
+
+                        case GLFW_KEY_D:
+                            if (KeyListener.isKeyPressed(GLFW_KEY_D)) user.moveTo(EAST);
+                            break;
+                    }
+                }
+
+            } else {
+                autoWalk();
             }
+
+        }
+    }
+
+    /**
+     * Permite que si caminar automaticamente si el usuario activa la opcion de "autoMove"
+     */
+    private void autoWalk() {
+        switch(KeyListener.getLastKeyPressed()) {
+            case GLFW_KEY_W:
+                user.moveTo(NORTH);
+                break;
+
+            case GLFW_KEY_S:
+                user.moveTo(SOUTH);
+                break;
+
+            case GLFW_KEY_A:
+                user.moveTo(WEST);
+                break;
+
+            case GLFW_KEY_D:
+                user.moveTo(EAST);
+                break;
         }
     }
 
@@ -72,8 +133,9 @@ public final class GameScene extends Scene {
 
                 if (mapData[x][y].getLayer(0).getGrhIndex() != 0) {
                     draw(mapData[x][y].getLayer(0),
-                            (camera.getScreenX() - 1) * TILE_PIXEL_SIZE + PixelOffsetX,
-                            (camera.getScreenY() - 1) * TILE_PIXEL_SIZE + PixelOffsetY, true, true, false,1.0f, ambientColor);
+                            POS_SCREEN_X + (camera.getScreenX() - 1) * TILE_PIXEL_SIZE + PixelOffsetX,
+                            POS_SCREEN_Y + (camera.getScreenY() - 1) * TILE_PIXEL_SIZE + PixelOffsetY,
+                            true, true, false,1.0f, ambientColor);
                 }
 
                 camera.incrementScreenX();
@@ -89,8 +151,9 @@ public final class GameScene extends Scene {
 
                 if (mapData[x][y].getLayer(1).getGrhIndex() != 0) {
                     draw(mapData[x][y].getLayer(1),
-                            camera.getScreenX() * TILE_PIXEL_SIZE + PixelOffsetX,
-                            camera.getScreenY() * TILE_PIXEL_SIZE + PixelOffsetY, true, true, false,1.0f, ambientColor);
+                            POS_SCREEN_X + camera.getScreenX() * TILE_PIXEL_SIZE + PixelOffsetX,
+                            POS_SCREEN_Y + camera.getScreenY() * TILE_PIXEL_SIZE + PixelOffsetY,
+                            true, true, false,1.0f, ambientColor);
                 }
 
                 camera.incrementScreenX();
@@ -106,21 +169,21 @@ public final class GameScene extends Scene {
 
                 if (mapData[x][y].getObjGrh().getGrhIndex() != 0) {
                     draw(mapData[x][y].getObjGrh(),
-                            camera.getScreenX() * TILE_PIXEL_SIZE + PixelOffsetX,
-                            camera.getScreenY() * TILE_PIXEL_SIZE + PixelOffsetY,
+                            POS_SCREEN_X + camera.getScreenX() * TILE_PIXEL_SIZE + PixelOffsetX,
+                            POS_SCREEN_Y + camera.getScreenY() * TILE_PIXEL_SIZE + PixelOffsetY,
                             true, true, false,1.0f, ambientColor);
                 }
 
                 if (mapData[x][y].getCharIndex() > 0) {
                     charRender(mapData[x][y].getCharIndex(),
-                            camera.getScreenX() * TILE_PIXEL_SIZE + PixelOffsetX,
-                            camera.getScreenY() * TILE_PIXEL_SIZE + PixelOffsetY, ambientColor);
+                            POS_SCREEN_X + camera.getScreenX() * TILE_PIXEL_SIZE + PixelOffsetX,
+                            POS_SCREEN_Y + camera.getScreenY() * TILE_PIXEL_SIZE + PixelOffsetY, ambientColor);
                 }
 
                 if (mapData[x][y].getLayer(2).getGrhIndex() != 0) {
                     draw(mapData[x][y].getLayer(2),
-                            camera.getScreenX() * TILE_PIXEL_SIZE + PixelOffsetX,
-                            camera.getScreenY() * TILE_PIXEL_SIZE + PixelOffsetY,
+                            POS_SCREEN_X + camera.getScreenX() * TILE_PIXEL_SIZE + PixelOffsetX,
+                            POS_SCREEN_Y + camera.getScreenY() * TILE_PIXEL_SIZE + PixelOffsetY,
                             true, true, false, 1.0f, ambientColor);
                 }
 
@@ -136,8 +199,8 @@ public final class GameScene extends Scene {
 
                 if (mapData[x][y].getLayer(3).getGrhIndex() > 0) {
                     draw(mapData[x][y].getLayer(3),
-                            camera.getScreenX() * TILE_PIXEL_SIZE + PixelOffsetX,
-                            camera.getScreenY() * TILE_PIXEL_SIZE + PixelOffsetY,
+                            POS_SCREEN_X + camera.getScreenX() * TILE_PIXEL_SIZE + PixelOffsetX,
+                            POS_SCREEN_Y + camera.getScreenY() * TILE_PIXEL_SIZE + PixelOffsetY,
                             true, true, false,1.0f, ambientColor);
                 }
 
@@ -146,12 +209,14 @@ public final class GameScene extends Scene {
             camera.incrementScreenY();
         }
 
+        main.render();
+
         showFPS();
     }
 
     private void showFPS() {
-        final String txtFPS = FPS + " FPS";
-        drawText(txtFPS, Window.getInstance().getWidth() - getSizeText(txtFPS) - 10, 8, ambientColor, 0);
+        final String txtFPS = String.valueOf(FPS);
+        drawText(txtFPS, (SCREEN_SIZE_X - getSizeText(txtFPS) / 2) - 90, 3, ambientColor, 0, false);
     }
 
     @Override

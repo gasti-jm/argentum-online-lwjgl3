@@ -15,11 +15,11 @@ public class MapData {
     private short trigger;
 
     public MapData() {
-        layer[0] = new GrhInfo();
-        layer[1] = new GrhInfo();
-        layer[2] = new GrhInfo();
-        layer[3] = new GrhInfo();
-        objGrh = new GrhInfo();
+        layer[0]    = new GrhInfo();
+        layer[1]    = new GrhInfo();
+        layer[2]    = new GrhInfo();
+        layer[3]    = new GrhInfo();
+        objGrh      = new GrhInfo();
     }
 
     public GrhInfo getLayer(int index) {

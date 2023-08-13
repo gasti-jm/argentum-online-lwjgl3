@@ -214,7 +214,7 @@ public final class Drawn {
      *
      * @desc: Dibuja texto en la pantlla
      */
-    public static void drawText(String text, int x, int y, RGBColor color, int font_index) {
+    public static void drawText(String text, int x, int y, RGBColor color, int font_index, boolean shadow) {
         if (text.length() == 0) return;
 
         int d = 0;
@@ -224,8 +224,11 @@ public final class Drawn {
 
             if (b != 32) {
                 if (fontTypes[font_index].getAscii_code(b) != 0) {
+
                     // sombra
-                    drawGrhIndex(fontTypes[font_index].getAscii_code(b) + 100, (x + d) + 1, y + 1, color);
+                    if (shadow) {
+                        drawGrhIndex(fontTypes[font_index].getAscii_code(b) + 100, (x + d) + 1, y + 1, color);
+                    }
 
                     drawGrhIndex(fontTypes[font_index].getAscii_code(b), (x + d) + 1, y, color);
                     d = d + grhData[grhData[fontTypes[font_index].getAscii_code(b)].getFrame(1)].getPixelWidth();
