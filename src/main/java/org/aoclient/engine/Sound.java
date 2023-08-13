@@ -1,7 +1,12 @@
 package org.aoclient.engine;
 
+import javax.sound.midi.*;
+import java.io.File;
+import java.io.IOException;
 import java.nio.IntBuffer;
 import java.nio.ShortBuffer;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.lwjgl.openal.AL10.*;
 import static org.lwjgl.stb.STBVorbis.stb_vorbis_decode_filename;
@@ -23,7 +28,7 @@ public final class Sound {
         } else if (filepath.endsWith(".mp3")) {
             //loadMP3(filepath);
         } else if (filepath.endsWith(".midi") || filepath.endsWith(".mid")) {
-            //loadMIDI(filepath);
+            loadMIDI(filepath, loops);
         }
     }
 
@@ -73,6 +78,10 @@ public final class Sound {
 
         // Free stb raw audio buffer
         free(rawAudioBuffer);
+    }
+
+    private void loadMIDI(String filepath, boolean loops) {
+
     }
 
     public void delete() {

@@ -67,6 +67,7 @@ public final class GameScene extends Scene {
         }
 
         if (KeyListener.isKeyReadyForAction(GLFW_KEY_TAB)) {
+            KeyListener.setLastKeyPressed(0);
             autoMove = !autoMove;
         }
 

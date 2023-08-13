@@ -74,5 +74,9 @@ public class KeyListener {
     public static int getLastKeyPressed () {
         return get().lastKeyPressed;
     }
+
+    public static void setLastKeyPressed(int value) {
+        get().lastKeyPressed = value;
+    }
 }
 

@@ -1,5 +1,6 @@
 package org.aoclient.engine;
 
+import org.aoclient.connection.SocketConnection;
 import org.aoclient.engine.listeners.KeyListener;
 import org.aoclient.engine.renderer.Surface;
 import org.aoclient.engine.scenes.*;
@@ -23,6 +24,8 @@ public final class Engine {
 
         window = Window.getInstance();
         window.initialize();
+
+        SocketConnection.getInstance().initialize();
 
         surface = Surface.getInstance();
 

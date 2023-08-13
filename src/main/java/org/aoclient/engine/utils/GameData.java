@@ -45,6 +45,7 @@ public final class GameData {
         LoadFXs();
 
         addSound("resources/MP3/intro.ogg", false).play();
+        //addSound("resources/MIDI/7.mid", true).play();
     }
 
     /**
