@@ -24,6 +24,9 @@ public class KeyListener {
         return KeyListener.instance;
     }
 
+    /**
+     * @desc: Funcion callBack para gestionar el listener de teclas de nuestra ventana GLFW
+     */
     public static void keyCallback(long window, int key, int scancode, int action, int mods) {
         if (action == GLFW_PRESS) {
             get().keyPressed[key] = true;
@@ -43,6 +46,9 @@ public class KeyListener {
         }
     }
 
+    /**
+     * @desc: Devuelve true si la tecla esta siendo presionada, caso contrario false.
+     */
     public static boolean isKeyPressed(int keyCode) {
         return get().keyPressed[keyCode];
     }
@@ -62,6 +68,9 @@ public class KeyListener {
         return retVal;
     }
 
+    /**
+     * @desc: Devulve la ultima tecla presionada por el usuario.
+     */
     public static int getLastKeyPressed () {
         return get().lastKeyPressed;
     }

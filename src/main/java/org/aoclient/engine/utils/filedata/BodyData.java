@@ -2,7 +2,7 @@ package org.aoclient.engine.utils.filedata;
 
 import org.aoclient.engine.game.models.Position;
 
-public class BodyData {
+public final class BodyData {
     private GrhInfo[] walk = new GrhInfo[4];
     private Position headOffset;
 

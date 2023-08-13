@@ -1,6 +1,6 @@
 package org.aoclient.engine.utils.filedata;
 
-public class WeaponData {
+public final class WeaponData {
     private GrhInfo[] WeaponWalk = new GrhInfo[4];
 
     public WeaponData() {

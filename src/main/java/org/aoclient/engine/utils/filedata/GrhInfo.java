@@ -1,6 +1,6 @@
 package org.aoclient.engine.utils.filedata;
 
-public class GrhInfo {
+public final class GrhInfo {
     private short grhIndex;
     private float frameCounter;
     private float speed;

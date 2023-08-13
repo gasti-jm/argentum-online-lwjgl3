@@ -1,6 +1,6 @@
 package org.aoclient.engine.utils.filedata;
 
-public class FontData {
+public final class FontData {
     private int font_size;
     private int[] ascii_code = new int[256];
 

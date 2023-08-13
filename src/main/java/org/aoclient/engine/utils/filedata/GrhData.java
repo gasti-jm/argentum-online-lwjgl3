@@ -1,6 +1,6 @@
 package org.aoclient.engine.utils.filedata;
 
-public class GrhData {
+public final class GrhData {
     private short sX;
     private short sY;
 

@@ -36,7 +36,6 @@ public final class GameScene extends Scene {
     @Override
     public void init() {
         super.init();
-
         canChangeTo = SceneNames.MAIN_SCENE;
 
         this.user = new User();
@@ -63,12 +62,11 @@ public final class GameScene extends Scene {
 
     @Override
     public void keyEvents() {
-
-        if (KeyListener.isKeyPressed(GLFW_KEY_F5)) {
+        if (KeyListener.isKeyReadyForAction(GLFW_KEY_F5)) {
             user.setCharacterFx(1, 7, -1);
         }
 
-        if (KeyListener.isKeyPressed(GLFW_KEY_TAB)) {
+        if (KeyListener.isKeyReadyForAction(GLFW_KEY_TAB)) {
             autoMove = !autoMove;
         }
 

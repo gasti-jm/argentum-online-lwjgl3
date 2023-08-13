@@ -1,6 +1,6 @@
 package org.aoclient.engine.utils.filedata;
 
-public class FxData {
+public final class FxData {
     private short Animacion;
     private short OffsetX;
     private short OffsetY;

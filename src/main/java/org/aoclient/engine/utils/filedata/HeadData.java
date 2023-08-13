@@ -1,6 +1,6 @@
 package org.aoclient.engine.utils.filedata;
 
-public class HeadData {
+public final class HeadData {
     private GrhInfo[] head = new GrhInfo[4];
 
     public HeadData() {

@@ -1,6 +1,6 @@
 package org.aoclient.engine.utils.filedata;
 
-public class ShieldData {
+public final class ShieldData {
     private GrhInfo[] shieldWalk = new GrhInfo[4];
 
     public ShieldData() {

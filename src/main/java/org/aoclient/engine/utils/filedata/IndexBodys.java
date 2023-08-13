@@ -1,6 +1,6 @@
 package org.aoclient.engine.utils.filedata;
 
-public class IndexBodys {
+public final class IndexBodys {
     private short body[] = new short [4];
     private short headOffsetX;
     private short headOffsetY;

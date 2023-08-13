@@ -1,6 +1,6 @@
 package org.aoclient.engine.utils.filedata;
 
-public class IndexHeads {
+public final class IndexHeads {
     private short[] head = new short[4];
 
     public short getHead(int index) {

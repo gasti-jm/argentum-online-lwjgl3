@@ -32,7 +32,6 @@ public class Surface {
         return instance;
     }
 
-
     public void initialize() {
         this.textures = new HashMap<>();
     }
@@ -55,8 +54,14 @@ public class Surface {
      */
     private TextureOGL createTexture(int fileNum) {
         TextureOGL texture = new TextureOGL();
+        File file = new File("resources/graphics/" + fileNum + ".bmp");
 
-        texture.id = loadTexture("resources/graphics/" + fileNum + ".png", false);
+        if (file.exists()) {
+            texture.id = loadTexture("resources/graphics/" + fileNum + ".bmp", false);
+        } else {
+            texture.id = loadTexture("resources/graphics/" + fileNum + ".png", false);
+        }
+
         texture.tex_width = textureWidth;
         texture.tex_height = textureHeight;
 
@@ -79,6 +84,9 @@ public class Surface {
         return texture;
     }
 
+    /**
+     * @desc: Carga una textura y lo guarda en la GPU, retorna su id.
+     */
     public int loadTexture(String file, boolean isGUI) {
         pixels = BufferUtils.createByteBuffer(1);
         BufferedImage bi;

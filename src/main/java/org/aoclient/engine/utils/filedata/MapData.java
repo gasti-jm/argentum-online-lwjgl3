@@ -4,7 +4,7 @@ package org.aoclient.engine.utils.filedata;
 import org.aoclient.engine.game.models.Obj;
 import org.aoclient.engine.game.models.WorldPos;
 
-public class MapData {
+public final class MapData {
     private GrhInfo[] layer = new GrhInfo[4];
     private short charIndex;
     private GrhInfo objGrh;
