@@ -1,8 +1,12 @@
 package org.aoclient.connection;
 
 import org.aoclient.connection.packets.ClientPacketID;
+import org.aoclient.connection.packets.E_Messages;
 import org.aoclient.connection.packets.ServerPacketID;
 import org.aoclient.engine.game.User;
+
+import static org.aoclient.connection.Messages.*;
+import static org.aoclient.engine.utils.GameData.charList;
 
 public class Protocol {
     static ByteQueue incomingData = new ByteQueue();
@@ -17,10 +21,9 @@ public class Protocol {
     public static void handleIncomingData(){
         byte p = incomingData.peekByte();
 
-        if (p > ServerPacketID.values().length) return;
-
+        if (p > ServerPacketID.values().length) return; // Faltan los mssages packages xd
         ServerPacketID packet = ServerPacketID.values()[p];
-        System.out.println("Numero de paquete: " + p);
+        System.out.println(packet + " #" + p);
         //System.out.println(packet + " " + packet.ordinal());
 
 
@@ -153,8 +156,237 @@ public class Protocol {
     }
 
     private static void handleMultiMessage() {
+        byte bodyPart;
+        short damage;
+
         // Remove packet ID
         incomingData.readByte();
+
+        byte m = incomingData.readByte();
+
+        if (m > E_Messages.values().length) return;
+        E_Messages msg = E_Messages.values()[m];
+
+
+        switch (msg) {
+            case DontSeeAnything:
+                System.out.println(MENSAJE_NO_VES_NADA_INTERESANTE);
+                break;
+
+            case NPCSwing:
+                System.out.println(MENSAJE_CRIATURA_FALLA_GOLPE);
+                break;
+
+            case NPCKillUser:
+                System.out.println(MENSAJE_CRIATURA_MATADO);
+                break;
+
+            case BlockedWithShieldUser:
+                System.out.println(MENSAJE_RECHAZO_ATAQUE_ESCUDO);
+                break;
+
+            case BlockedWithShieldOther:
+                System.out.println(MENSAJE_USUARIO_RECHAZO_ATAQUE_ESCUDO);
+                break;
+
+            case UserSwing:
+                System.out.println(MENSAJE_FALLADO_GOLPE);
+                break;
+
+            case SafeModeOn:
+                System.out.println("MODO SEGURO ACTIVADO - frmMain");
+                break;
+
+            case SafeModeOff:
+                System.out.println("MODO SEGURO DESACTIVADO - frmMain");
+                break;
+
+            case ResuscitationSafeOff:
+                System.out.println("MODO RESURECCION ACTIVADO - frmMain");
+                break;
+
+            case ResuscitationSafeOn:
+                System.out.println("MODO RESURECCION DESACTIVADO - frmMain");
+                break;
+
+            case NobilityLost:
+                System.out.println(MENSAJE_PIERDE_NOBLEZA);
+                break;
+
+            case CantUseWhileMeditating:
+                System.out.println(MENSAJE_USAR_MEDITANDO);
+                break;
+
+            case NPCHitUser:
+                switch (incomingData.readByte()) {
+                    case 1: // bCabeza
+                        System.out.println(MENSAJE_GOLPE_CABEZA + " " + incomingData.readInteger());
+                        break;
+
+                    case 2: // bBrazoIzquierdo
+                        System.out.println(MENSAJE_GOLPE_BRAZO_IZQ + " " + incomingData.readInteger());
+                        break;
+
+                    case 3: // bBrazoDerecho
+                        System.out.println(MENSAJE_GOLPE_BRAZO_DER + " " + incomingData.readInteger());
+                        break;
+
+                    case 4: // bPiernaIzquierda
+                        System.out.println(MENSAJE_GOLPE_PIERNA_IZQ + " " + incomingData.readInteger());
+                        break;
+
+                    case 5: // bPiernaDerecha
+                        System.out.println(MENSAJE_GOLPE_PIERNA_DER + " " + incomingData.readInteger());
+                        break;
+
+                    case 6: // bTorso
+                        System.out.println(MENSAJE_GOLPE_TORSO + " " + incomingData.readInteger());
+                        break;
+                }
+                break;
+
+            case UserHitNPC:
+                System.out.println(MENSAJE_GOLPE_CRIATURA_1 + " " + incomingData.readLong());
+                break;
+
+            case UserAttackedSwing:
+                System.out.println(MENSAJE_1 + " " + charList.get(incomingData.readInteger()).getName() +  MENSAJE_ATAQUE_FALLO);
+                break;
+
+            case UserHittedByUser:
+                String attackerName = "<" + charList.get(incomingData.readInteger()).getName() + ">";
+                 bodyPart = incomingData.readByte();
+                 damage = incomingData.readInteger();
+
+                switch (bodyPart) {
+                    case 1: // bCabeza
+                        System.out.println(MENSAJE_1 + attackerName  + MENSAJE_RECIVE_IMPACTO_CABEZA + damage + MENSAJE_2);
+                        break;
+
+                    case 2: // bBrazoIzquierdo
+                        System.out.println(MENSAJE_1 + attackerName  + MENSAJE_RECIVE_IMPACTO_BRAZO_IZQ + damage + MENSAJE_2);
+                        break;
+
+                    case 3: // bBrazoDerecho
+                        System.out.println(MENSAJE_1 + attackerName  + MENSAJE_RECIVE_IMPACTO_BRAZO_DER + damage + MENSAJE_2);
+                        break;
+
+                    case 4: // bPiernaIzquierda
+                        System.out.println(MENSAJE_1 + attackerName  + MENSAJE_RECIVE_IMPACTO_PIERNA_IZQ + damage + MENSAJE_2);
+                        break;
+
+                    case 5: // bPiernaDerecha
+                        System.out.println(MENSAJE_1 + attackerName  + MENSAJE_RECIVE_IMPACTO_PIERNA_DER + damage + MENSAJE_2);
+                        break;
+
+                    case 6: // bTorso
+                        System.out.println(MENSAJE_1 + attackerName  + MENSAJE_RECIVE_IMPACTO_TORSO + damage + MENSAJE_2);
+                        break;
+                }
+                break;
+
+            case UserHittedUser:
+                String victimName = "<" + charList.get(incomingData.readInteger()).getName() + ">";
+                bodyPart = incomingData.readByte();
+                damage = incomingData.readInteger();
+
+                switch (bodyPart) {
+                    case 1: // bCabeza
+                        System.out.println(MENSAJE_PRODUCE_IMPACTO_1 + victimName  + MENSAJE_PRODUCE_IMPACTO_CABEZA + damage + MENSAJE_2);
+                        break;
+
+                    case 2: // bBrazoIzquierdo
+                        System.out.println(MENSAJE_PRODUCE_IMPACTO_1 + victimName  + MENSAJE_PRODUCE_IMPACTO_BRAZO_IZQ + damage + MENSAJE_2);
+                        break;
+
+                    case 3: // bBrazoDerecho
+                        System.out.println(MENSAJE_PRODUCE_IMPACTO_1 + victimName  + MENSAJE_RECIVE_IMPACTO_BRAZO_DER + damage + MENSAJE_2);
+                        break;
+
+                    case 4: // bPiernaIzquierda
+                        System.out.println(MENSAJE_PRODUCE_IMPACTO_1 + victimName  + MENSAJE_RECIVE_IMPACTO_PIERNA_IZQ + damage + MENSAJE_2);
+                        break;
+
+                    case 5: // bPiernaDerecha
+                        System.out.println(MENSAJE_PRODUCE_IMPACTO_1 + victimName  + MENSAJE_RECIVE_IMPACTO_PIERNA_DER + damage + MENSAJE_2);
+                        break;
+
+                    case 6: // bTorso
+                        System.out.println(MENSAJE_PRODUCE_IMPACTO_1 + victimName  + MENSAJE_RECIVE_IMPACTO_TORSO + damage + MENSAJE_2);
+                        break;
+                }
+                break;
+
+            case WorkRequestTarget:
+                short usingSkill = incomingData.readByte();
+
+                // frmmain.mousepointer = 2
+
+                switch (usingSkill) {
+                    case 0: // magia
+                        System.out.println(MENSAJE_TRABAJO_MAGIA);
+                        break;
+
+                    case 1:
+                        System.out.println(MENSAJE_TRABAJO_PESCA);
+                        break;
+
+                    case 2:
+                        System.out.println(MENSAJE_TRABAJO_ROBAR);
+                        break;
+
+                    case 3:
+                        System.out.println(MENSAJE_TRABAJO_TALAR);
+                        break;
+
+                    case 4:
+                        System.out.println(MENSAJE_TRABAJO_MINERIA);
+                        break;
+
+                    case 5:
+                        System.out.println(MENSAJE_TRABAJO_FUNDIRMETAL);
+                        break;
+
+                    case 6:
+                        System.out.println(MENSAJE_TRABAJO_PROYECTILES);
+                        break;
+                }
+                break;
+
+            case HaveKilledUser:
+                System.out.println(MENSAJE_HAS_MATADO_A + charList.get(incomingData.readInteger()).getName() + MENSAJE_22);
+                int level = incomingData.readLong();
+                System.out.println(MENSAJE_HAS_GANADO_EXPE_1 + level + MENSAJE_HAS_GANADO_EXPE_2);
+                // sistema de captura al matar.
+                break;
+
+            case UserKill:
+                System.out.println(charList.get(incomingData.readInteger()).getName() + MENSAJE_TE_HA_MATADO);
+                break;
+
+            case EarnExp:
+                System.out.println(MENSAJE_HAS_GANADO_EXPE_1 + incomingData.readLong() + MENSAJE_HAS_GANADO_EXPE_2);
+                break;
+
+            case GoHome:
+                byte distance = incomingData.readByte();
+                short time = incomingData.readInteger();
+                String hogar = incomingData.readASCIIString();
+                System.out.println("Estas a " + distance + " mapas de distancia de " + hogar + ", este viaje durara " + time + " segundos.");
+                break;
+
+            case FinishHome:
+                System.out.println(MENSAJE_HOGAR);
+                break;
+
+            case CancelGoHome:
+                System.out.println(MENSAJE_HOGAR_CANCEL);
+                break;
+
+        }
+
+
+
     }
 
     private static void handleAddSlots() {
@@ -423,8 +655,69 @@ public class Protocol {
     }
 
     private static void handleChangeInventorySlot() {
+        if (incomingData.length() < 22) {
+            System.out.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handleChangeInventorySlot");
+        }
+
+        ByteQueue buffer = new ByteQueue();
+        buffer.copyBuffer(incomingData);
+
         // Remove packet ID
-        incomingData.readByte();
+        buffer.readByte();
+
+        byte slot = buffer.readByte();
+        short objIndex = buffer.readInteger();
+        String name = buffer.readASCIIString();
+        short amount = buffer.readInteger();
+        boolean equipped = buffer.readBoolean();
+        short grhIndex = buffer.readInteger();
+        byte objType = buffer.readByte();
+        short maxHit = buffer.readInteger();
+        short minHit = buffer.readInteger();
+        short maxDef = buffer.readInteger();
+        short minDef = buffer.readInteger();
+        float value = buffer.readSingle();
+
+
+        /*
+        If Equipped Then
+        Select Case OBJType
+            Case eObjType.otWeapon
+                frmMain.lblWeapon = MinHit & "/" & MaxHit
+                UserWeaponEqpSlot = slot
+            Case eObjType.otArmadura
+                frmMain.lblArmor = MinDef & "/" & MaxDef
+                UserArmourEqpSlot = slot
+            Case eObjType.otescudo
+                frmMain.lblShielder = MinDef & "/" & MaxDef
+                UserHelmEqpSlot = slot
+            Case eObjType.otcasco
+                frmMain.lblHelm = MinDef & "/" & MaxDef
+                UserShieldEqpSlot = slot
+        End Select
+    Else
+        Select Case slot
+            Case UserWeaponEqpSlot
+                frmMain.lblWeapon = "0/0"
+                UserWeaponEqpSlot = 0
+            Case UserArmourEqpSlot
+                frmMain.lblArmor = "0/0"
+                UserArmourEqpSlot = 0
+            Case UserHelmEqpSlot
+                frmMain.lblShielder = "0/0"
+                UserHelmEqpSlot = 0
+            Case UserShieldEqpSlot
+                frmMain.lblHelm = "0/0"
+                UserShieldEqpSlot = 0
+        End Select
+    End If
+
+    Call Inventario.SetItem(slot, OBJIndex, Amount, Equipped, GrhIndex, OBJType, MaxHit, MinHit, MaxDef, MinDef, value, Name)
+
+         */
+
+        incomingData.copyBuffer(buffer);
+        buffer = null;
     }
 
     private static void handleWorkRequestTarget() {

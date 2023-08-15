@@ -4,6 +4,7 @@ import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 
 public class ByteQueue {
+    // codigos de error
     private static final int NOT_ENOUGH_DATA = 10000;
     private static final int NOT_ENOUGH_SPACE = 10001;
     private static final int DATA_BUFFER = 10240;
@@ -17,6 +18,24 @@ public class ByteQueue {
         queueCapacity = DATA_BUFFER;
     }
 
+    private void copyMemory(Object destination, Object source, int length) {
+        if (destination instanceof byte[] && source instanceof byte[]) {
+            byte[] destArray = (byte[]) destination;
+            byte[] srcArray = (byte[]) source;
+
+
+            //System.arraycopy(buf, 0, data, queueLength, dataLength);
+
+
+            System.arraycopy(srcArray, 0, destArray, 0, length);
+        } else {
+            throw new IllegalArgumentException("Both destination and source must be byte arrays");
+        }
+    }
+
+    /**
+     * Crea una copia de este mismo objeto.
+     */
     public void copyBuffer(ByteQueue source) {
         if (source.length() == 0) {
             // Clear the list and exit
@@ -24,7 +43,6 @@ public class ByteQueue {
             return;
         }
 
-        // Set capacity and resize array - make sure all data is lost
         queueCapacity = source.getCapacity();
         data = new byte[queueCapacity];
 
@@ -38,8 +56,15 @@ public class ByteQueue {
         writeBlock(buf, source.length());
     }
 
+    /**
+     * Recupera el valor minimo entre 2 numeros
+     */
     private int min(int val1, int val2) {
-        return Math.min(val1, val2);
+        if(val1 < val2) {
+            return val1;
+        } else {
+            return val2;
+        }
     }
 
     private int writeData(byte[] buf, int dataLength) {
@@ -47,6 +72,7 @@ public class ByteQueue {
             throw new RuntimeException("Not enough space");
         }
 
+        //copyMemory(data, buf, dataLength);
         System.arraycopy(buf, 0, data, queueLength, dataLength);
 
         queueLength += dataLength;
@@ -153,12 +179,13 @@ public class ByteQueue {
     public byte readByte() {
         byte[] buf = new byte[1];
         removeData(readData(buf, 1));
-        return buf[0];
+        return ByteBuffer.wrap(buf).get();
     }
 
     public short readInteger() {
-        byte[] buf = new byte[2];
-        removeData(readData(buf, 2));
+        byte[] buf = new byte[3];
+        removeData(readData(buf, 3));
+
         return ByteBuffer.wrap(buf).getShort();
     }
 
@@ -216,11 +243,12 @@ public class ByteQueue {
 
     public String readASCIIString() {
         byte[] buf = new byte[2];
-        int length;
+        short length = 0;
 
         if (queueLength > 1) {
             removeData(readData(buf, 2));
-            length = ByteBuffer.wrap(buf).getShort();
+            length = buf[0];
+            //length = ByteBuffer.wrap(buf).getShort();
 
             if (queueLength >= length + 2) {
                 removeData(2);
