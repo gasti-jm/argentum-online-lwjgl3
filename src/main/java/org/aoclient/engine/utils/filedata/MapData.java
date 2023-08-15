@@ -5,7 +5,7 @@ import org.aoclient.engine.game.models.Obj;
 import org.aoclient.engine.game.models.WorldPos;
 
 public final class MapData {
-    private GrhInfo[] layer = new GrhInfo[4];
+    private GrhInfo[] layer = new GrhInfo[5];
     private short charIndex;
     private GrhInfo objGrh;
     private short npcIndex;
@@ -15,10 +15,10 @@ public final class MapData {
     private short trigger;
 
     public MapData() {
-        layer[0]    = new GrhInfo();
         layer[1]    = new GrhInfo();
         layer[2]    = new GrhInfo();
         layer[3]    = new GrhInfo();
+        layer[4]    = new GrhInfo();
         objGrh      = new GrhInfo();
     }
 

@@ -4,9 +4,14 @@ import org.aoclient.connection.packets.ClientPacketID;
 import org.aoclient.connection.packets.E_Messages;
 import org.aoclient.connection.packets.ServerPacketID;
 import org.aoclient.engine.game.User;
+import org.aoclient.engine.game.models.E_Heading;
+import org.aoclient.engine.utils.GameData;
+import org.aoclient.engine.utils.filedata.GrhInfo;
 
 import static org.aoclient.connection.Messages.*;
-import static org.aoclient.engine.utils.GameData.charList;
+import static org.aoclient.engine.game.models.Character.makeChar;
+import static org.aoclient.engine.game.models.Character.refreshAllChars;
+import static org.aoclient.engine.utils.GameData.*;
 
 public class Protocol {
     static ByteQueue incomingData = new ByteQueue();
@@ -21,11 +26,9 @@ public class Protocol {
     public static void handleIncomingData(){
         byte p = incomingData.peekByte();
 
-        if (p > ServerPacketID.values().length) return; // Faltan los mssages packages xd
+        if (p > ServerPacketID.values().length) return;
         ServerPacketID packet = ServerPacketID.values()[p];
         System.out.println(packet + " #" + p);
-        //System.out.println(packet + " " + packet.ordinal());
-
 
         switch (packet) {
             case logged: handleLogged(); break;
@@ -250,11 +253,11 @@ public class Protocol {
                 break;
 
             case UserAttackedSwing:
-                System.out.println(MENSAJE_1 + " " + charList.get(incomingData.readInteger()).getName() +  MENSAJE_ATAQUE_FALLO);
+                System.out.println(MENSAJE_1 + " " + charList[incomingData.readInteger()].getName() +  MENSAJE_ATAQUE_FALLO);
                 break;
 
             case UserHittedByUser:
-                String attackerName = "<" + charList.get(incomingData.readInteger()).getName() + ">";
+                String attackerName = "<" + charList[incomingData.readInteger()].getName() + ">";
                  bodyPart = incomingData.readByte();
                  damage = incomingData.readInteger();
 
@@ -286,7 +289,7 @@ public class Protocol {
                 break;
 
             case UserHittedUser:
-                String victimName = "<" + charList.get(incomingData.readInteger()).getName() + ">";
+                String victimName = "<" + charList[incomingData.readInteger()].getName() + ">";
                 bodyPart = incomingData.readByte();
                 damage = incomingData.readInteger();
 
@@ -354,14 +357,14 @@ public class Protocol {
                 break;
 
             case HaveKilledUser:
-                System.out.println(MENSAJE_HAS_MATADO_A + charList.get(incomingData.readInteger()).getName() + MENSAJE_22);
+                System.out.println(MENSAJE_HAS_MATADO_A + charList[incomingData.readInteger()].getName() + MENSAJE_22);
                 int level = incomingData.readLong();
                 System.out.println(MENSAJE_HAS_GANADO_EXPE_1 + level + MENSAJE_HAS_GANADO_EXPE_2);
                 // sistema de captura al matar.
                 break;
 
             case UserKill:
-                System.out.println(charList.get(incomingData.readInteger()).getName() + MENSAJE_TE_HA_MATADO);
+                System.out.println(charList[incomingData.readInteger()].getName() + MENSAJE_TE_HA_MATADO);
                 break;
 
             case EarnExp:
@@ -405,8 +408,18 @@ public class Protocol {
     }
 
     private static void handleUpdateStrenghtAndDexterity() {
+        if (incomingData.length() < 3) {
+            System.out.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handleUpdateStrenghtAndDexterity");
+            return;
+        }
+
         // Remove packet ID
         incomingData.readByte();
+
+        byte userFuerza = incomingData.readByte();
+        byte userAgilidad = incomingData.readByte();
+
+        System.out.println("handleUpdateStrenghtAndDexterity CARGADO - FALTA TERMINAR");
     }
 
     private static void handleShowPartyForm() {
@@ -535,18 +548,42 @@ public class Protocol {
     }
 
     private static void handleSendSkills() {
+        if (incomingData.length() < 2 + 20 * 2) {
+            System.out.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handleSendSkills");
+            return;
+        }
+
         // Remove packet ID
         incomingData.readByte();
+
+        // variables globales
+        short userClase = incomingData.readByte();
+        byte userSkills[] = new byte[20];
+        byte porcentajeSkills[] = new byte[20];
+
+
+        for(int i = 0; i < 20; i++) {
+            userSkills[i] = incomingData.readByte();
+            porcentajeSkills[i] = incomingData.readByte();
+        }
+
+        // LlegaronSkills = true;
+
+        System.out.println("handleSendSkills Cargado! - FALTA TERMINAR!");
     }
 
     private static void handleDumbNoMore() {
         // Remove packet ID
         incomingData.readByte();
+
+        // userEstupido = false;
+        System.out.println("handleDumbNoMore Cargado! - FALTA TERMINAR!");
     }
 
     private static void handleBlindNoMore() {
         // Remove packet ID
         incomingData.readByte();
+
     }
 
     private static void handleMeditateToggle() {
@@ -575,8 +612,20 @@ public class Protocol {
     }
 
     private static void handleLevelUp() {
+        if (incomingData.length() < 3) {
+            System.out.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handleLevelUp");
+            return;
+        }
+
         // Remove packet ID
         incomingData.readByte();
+
+        //  variable global:
+        // skillPoints += incomingData.readInteger();
+        short skillPoints = incomingData.readInteger();
+
+        // frmmain.lightskillstar
+        System.out.println("handleLevelUp Cargado! - FALTA TERMINAR!");
     }
 
     private static void handleMiniStats() {
@@ -590,8 +639,19 @@ public class Protocol {
     }
 
     private static void handleUpdateHungerAndThirst() {
+        if (incomingData.length() < 5) {
+            System.out.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handleUpdateHungerAndThirst");
+            return;
+        }
+
         // Remove packet ID
         incomingData.readByte();
+
+        byte userMaxAGU = incomingData.readByte();
+        byte userMinAGU = incomingData.readByte();
+        byte userMaxHAM = incomingData.readByte();
+        byte userMinHAM = incomingData.readByte();
+        System.out.println("handleUpdateHungerAndThirst, cargado... - FALTA TERMINAR!");
     }
 
     private static void handleChangeNPCInventorySlot() {
@@ -645,8 +705,23 @@ public class Protocol {
     }
 
     private static void handleChangeSpellSlot() {
+        if (incomingData.length() < 6) {
+            System.out.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handleChangeSpellSlot");
+            return;
+        }
+
+        ByteQueue buffer = new ByteQueue();
+        buffer.copyBuffer(incomingData);
+
         // Remove packet ID
-        incomingData.readByte();
+        buffer.readByte();
+
+        byte slot = buffer.readByte();
+        short hechizoNum = buffer.readInteger();
+        String hechizoName = buffer.readASCIIString();
+
+        incomingData.copyBuffer(buffer);
+        System.out.println("ChangeSpellSlot Cargado! - FALTA TERMINAR!");
     }
 
     private static void handleChangeBankSlot() {
@@ -657,6 +732,7 @@ public class Protocol {
     private static void handleChangeInventorySlot() {
         if (incomingData.length() < 22) {
             System.out.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handleChangeInventorySlot");
+            return;
         }
 
         ByteQueue buffer = new ByteQueue();
@@ -667,7 +743,7 @@ public class Protocol {
 
         byte slot = buffer.readByte();
         short objIndex = buffer.readInteger();
-        String name = buffer.readASCIIString();
+        String name = buffer.readASCIIString(); //(Hay que arreglar a este puto)
         short amount = buffer.readInteger();
         boolean equipped = buffer.readBoolean();
         short grhIndex = buffer.readInteger();
@@ -676,7 +752,7 @@ public class Protocol {
         short minHit = buffer.readInteger();
         short maxDef = buffer.readInteger();
         short minDef = buffer.readInteger();
-        float value = buffer.readSingle();
+        float value = buffer.readFloat();
 
 
         /*
@@ -717,7 +793,7 @@ public class Protocol {
          */
 
         incomingData.copyBuffer(buffer);
-        buffer = null;
+        System.out.println("ChangeInventorySlot Cargado! - FALTA TERMINAR!");
     }
 
     private static void handleWorkRequestTarget() {
@@ -726,13 +802,43 @@ public class Protocol {
     }
 
     private static void handleUpdateUserStats() {
+        if (incomingData.length() < 26) {
+            System.out.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handleUpdateUserStats");
+            return;
+        }
+
         // Remove packet ID
         incomingData.readByte();
+
+        short userMaxHP = incomingData.readInteger();
+        short userMinHP = incomingData.readInteger();
+        short userMaxMAN = incomingData.readInteger();
+        short userMinMAN = incomingData.readInteger();
+        short userMaxSTA = incomingData.readInteger();
+        short userMinSTA = incomingData.readInteger();
+        int userGLD = incomingData.readLong();
+        byte userLvl = incomingData.readByte();
+        int userPasarNivel = incomingData.readLong();
+        int userExp = incomingData.readLong();
+
+        System.out.println("handleUpdateUserStats Cargado!");
     }
 
     private static void handleCreateFX() {
+        if (incomingData.length() < 7) {
+            System.out.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handleCreateFX");
+            return;
+        }
+
         // Remove packet ID
         incomingData.readByte();
+
+        short charIndex = incomingData.readInteger();
+        short fX = incomingData.readInteger();
+        short loops = incomingData.readInteger();
+
+        User.getInstance().setCharacterFx(charIndex, fX, loops);
+        System.out.println("handleCreateFX Cargado!");
     }
 
     private static void handleRainToggle() {
@@ -746,8 +852,20 @@ public class Protocol {
     }
 
     private static void handleAreaChanged() {
+        if (incomingData.length() < 3) {
+            System.out.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handleAreaChanged");
+            return;
+        }
+
         // Remove packet ID
         incomingData.readByte();
+
+        byte x = incomingData.readByte();
+        byte y = incomingData.readByte();
+
+        User.getInstance().areaChange(x, y);
+
+        System.out.println("handleAreaChanged Cargado!");
     }
 
     private static void handleGuildList() {
@@ -761,13 +879,41 @@ public class Protocol {
     }
 
     private static void handlePlayMIDI() {
+        if (incomingData.length() < 4) {
+            System.out.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handlePlayMIDI");
+            return;
+        }
+
         // Remove packet ID
         incomingData.readByte();
+
+        byte currentMidi = incomingData.readByte();
+
+        if(currentMidi > 0) {
+            incomingData.readInteger();
+            // play midi
+        } else {
+            incomingData.readInteger();
+        }
+
+        System.out.println("handlePlayMIDI Cargado! - FALTA TERMINAR!");
     }
 
     private static void handleBlockPosition() {
+        if (incomingData.length() < 4) {
+            System.out.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handleBlockPosition");
+            return;
+        }
+
         // Remove packet ID
         incomingData.readByte();
+
+        byte x = incomingData.readByte();
+        byte y = incomingData.readByte();
+
+        mapData[x][y].setBlocked(incomingData.readBoolean());
+
+        System.out.println("handleBlockPosition Cargado!");
     }
 
     private static void handleObjectDelete() {
@@ -776,8 +922,22 @@ public class Protocol {
     }
 
     private static void handleObjectCreate() {
+        if (incomingData.length() < 5) {
+            System.out.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handleObjectCreate");
+            return;
+        }
+
         // Remove packet ID
         incomingData.readByte();
+
+        byte x = incomingData.readByte();
+        byte y = incomingData.readByte();
+
+        mapData[x][y].getObjGrh().setGrhIndex(incomingData.readInteger());
+
+        initGrh(mapData[x][y].getObjGrh(), mapData[x][y].getObjGrh().getGrhIndex(), true);
+
+        System.out.println("handleObjectCreate Cargado! - FALTA TERMINAR!");
     }
 
     private static void handleCharacterChange() {
@@ -806,18 +966,100 @@ public class Protocol {
     }
 
     private static void handleCharacterCreate() {
+        if (incomingData.length() < 24) {
+            System.out.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handleCharacterCreate");
+            return;
+        }
+
+        ByteQueue buffer = new ByteQueue();
+        buffer.copyBuffer(incomingData);
+
         // Remove packet ID
-        incomingData.readByte();
+        buffer.readByte();
+
+        int charIndex = buffer.readInteger();
+        short body = buffer.readInteger();
+        short head = buffer.readInteger();
+        byte numHeading = buffer.readByte();
+        E_Heading heading = E_Heading.values()[numHeading - 1];
+        byte x = buffer.readByte();
+        byte y = buffer.readByte();
+        short weapon = buffer.readInteger();
+        short shield = buffer.readInteger();
+        short helmet = buffer.readInteger();
+
+
+        charList[charIndex].setfX(new GrhInfo());
+        User.getInstance().setCharacterFx(charIndex, buffer.readInteger(), buffer.readInteger());
+        charList[charIndex].setName(buffer.readASCIIString());
+
+        byte nickColor = buffer.readByte();
+        short privs = buffer.readByte();
+
+        /*
+        If (NickColor And eNickColor.ieCriminal) <> 0 Then
+            .Criminal = 1
+        Else
+            .Criminal = 0
+        End If
+
+        .Atacable = (NickColor And eNickColor.ieAtacable) <> 0
+
+        If privs <> 0 Then
+            'If the player belongs to a council AND is an admin, only whos as an admin
+            If (privs And PlayerType.ChaosCouncil) <> 0 And (privs And PlayerType.User) = 0 Then
+                privs = privs Xor PlayerType.ChaosCouncil
+            End If
+
+            If (privs And PlayerType.RoyalCouncil) <> 0 And (privs And PlayerType.User) = 0 Then
+                privs = privs Xor PlayerType.RoyalCouncil
+            End If
+
+            'If the player is a RM, ignore other flags
+            If privs And PlayerType.RoleMaster Then
+                privs = PlayerType.RoleMaster
+            End If
+
+            'Log2 of the bit flags sent by the server gives our numbers ^^
+            .priv = Log(privs) / Log(2)
+        Else
+            .priv = 0
+        End If
+         */
+
+        makeChar(charIndex, body, head, heading, x, y, weapon, shield, helmet);
+        refreshAllChars();
+
+        incomingData.copyBuffer(buffer);
+        System.out.println("handleCharacterCreate Cargado! - FALTA TERMINAR!");
     }
 
     private static void handleUserCharIndexInServer() {
+        if (incomingData.length() < 3) {
+            System.out.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handleUserCharIndexInServer");
+            return;
+        }
+
         // Remove packet ID
         incomingData.readByte();
+
+        User.getInstance().setUserCharIndex(incomingData.readInteger());
+        User.getInstance().setUserPos(charList[User.getInstance().getUserCharIndex()].getPos());
+
+        System.out.println("handleUserCharIndexInServer Cargado! - FALTA TERMINAR!");
     }
 
     private static void handleUserIndexInServer() {
+        if (incomingData.length() < 3) {
+            System.out.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handleChangeInventorySlot");
+            return;
+        }
+
         // Remove packet ID
         incomingData.readByte();
+
+        int userIndex = incomingData.readInteger();
+        System.out.println("handleUserIndexInServer Cargado! - FALTA TERMINAR!");
     }
 
     private static void handleShowMessageBox() {
@@ -826,8 +1068,22 @@ public class Protocol {
     }
 
     private static void handleGuildChat() {
+        if (incomingData.length() < 3) {
+            System.out.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handleGuildChat");
+            return;
+        }
+
+        ByteQueue buffer = new ByteQueue();
+        buffer.copyBuffer(incomingData);
+
         // Remove packet ID
-        incomingData.readByte();
+        buffer.readByte();
+
+        String chat = buffer.readASCIIString();
+
+        incomingData.copyBuffer(buffer);
+
+        System.out.println("handleGuildChat CARGADO - FALTA TERMINAR");
     }
 
     private static void handleConsoleMessage() {
@@ -846,8 +1102,35 @@ public class Protocol {
     }
 
     private static void handleChangeMap() {
+        if (incomingData.length() < 5) {
+            System.out.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handleChangeMap");
+            return;
+        }
+
         // Remove packet ID
         incomingData.readByte();
+
+        int userMap = incomingData.readInteger();
+        User.getInstance().setUserMap( (short) userMap);
+
+        // Todo: Once on-the-fly editor is implemented check for map version before loading....
+        // For now we just drop it
+        incomingData.readInteger();
+
+        GameData.loadMap(userMap);
+
+        /*
+        If bLluvia(UserMap) = 0 Then
+            If bRain Then
+                Call Audio.StopWave(RainBufferIndex)
+                RainBufferIndex = 0
+                frmMain.IsPlaying = PlayLoop.plNone
+            End If
+        End If
+         */
+
+        System.out.println("handleChangeMap Cargado! - FALTA TERMINAR!");
+
     }
 
     private static void handleUpdateExp() {
@@ -965,13 +1248,6 @@ public class Protocol {
         outgoingData.writeByte(0);  // App.Revision
     }
 
-    /**
-     * '***************************************************
-     * 'Author: Juan Martin Sotuyo Dodero (Maraxus)
-     * 'Last Modification: 05/17/06
-     * 'Writes the "LoginNewChar" message to the outgoing data buffer
-     * '***************************************************
-     */
     public static void writeLoginNewChar(){
 
     }

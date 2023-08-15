@@ -10,10 +10,10 @@ public final class Camera {
     public static final int TILE_BUFFER_SIZE = 9;
 
     // Rango maximo de la matriz del mapa.
-    public static final int XMaxMapSize = 99;
-    public static final int XMinMapSize = 0;
-    public static final int YMaxMapSize = 99;
-    public static final int YMinMapSize = 0;
+    public static final int XMaxMapSize = 100;
+    public static final int XMinMapSize = 1;
+    public static final int YMaxMapSize = 100;
+    public static final int YMinMapSize = 1;
 
     // Tiles visibles segun la pantalla
     private int halfWindowTileWidth;

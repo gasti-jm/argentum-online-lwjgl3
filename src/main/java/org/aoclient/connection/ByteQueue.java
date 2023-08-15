@@ -3,6 +3,8 @@ package org.aoclient.connection;
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 
+import static org.aoclient.engine.utils.GameData.*;
+
 public class ByteQueue {
     // codigos de error
     private static final int NOT_ENOUGH_DATA = 10000;
@@ -16,21 +18,6 @@ public class ByteQueue {
     public ByteQueue() {
         data = new byte[DATA_BUFFER];
         queueCapacity = DATA_BUFFER;
-    }
-
-    private void copyMemory(Object destination, Object source, int length) {
-        if (destination instanceof byte[] && source instanceof byte[]) {
-            byte[] destArray = (byte[]) destination;
-            byte[] srcArray = (byte[]) source;
-
-
-            //System.arraycopy(buf, 0, data, queueLength, dataLength);
-
-
-            System.arraycopy(srcArray, 0, destArray, 0, length);
-        } else {
-            throw new IllegalArgumentException("Both destination and source must be byte arrays");
-        }
     }
 
     /**
@@ -156,7 +143,6 @@ public class ByteQueue {
         return writeData(buf, value.length() + 2);
     }
 
-    // OJO
     public int writeUnicodeString(String value) {
         byte[] valueBytes = value.getBytes();
         byte[] buf = new byte[value.length() + 2];
@@ -179,32 +165,31 @@ public class ByteQueue {
     public byte readByte() {
         byte[] buf = new byte[1];
         removeData(readData(buf, 1));
-        return ByteBuffer.wrap(buf).get();
+        return bigToLittle_Byte(ByteBuffer.wrap(buf).get());
     }
 
     public short readInteger() {
-        byte[] buf = new byte[3];
-        removeData(readData(buf, 3));
-
-        return ByteBuffer.wrap(buf).getShort();
+        byte[] buf = new byte[2];
+        removeData(readData(buf, 2));
+        return bigToLittle_Short(ByteBuffer.wrap(buf).getShort());
     }
 
     public int readLong() {
         byte[] buf = new byte[4];
         removeData(readData(buf, 4));
-        return ByteBuffer.wrap(buf).getInt();
+        return bigToLittle_Int(ByteBuffer.wrap(buf).getInt());
     }
 
-    public float readSingle() {
+    public float readFloat() {
         byte[] buf = new byte[4];
         removeData(readData(buf, 4));
-        return ByteBuffer.wrap(buf).getFloat();
+        return bigToLittle_Float(ByteBuffer.wrap(buf).getFloat());
     }
 
     public double readDouble() {
         byte[] buf = new byte[8];
         removeData(readData(buf, 8));
-        return ByteBuffer.wrap(buf).getDouble();
+        return bigToLittle_Double(ByteBuffer.wrap(buf).getDouble());
     }
 
     public boolean readBoolean() {
@@ -246,9 +231,8 @@ public class ByteQueue {
         short length = 0;
 
         if (queueLength > 1) {
-            removeData(readData(buf, 2));
-            length = buf[0];
-            //length = ByteBuffer.wrap(buf).getShort();
+            readData(buf, 2);
+            length = bigToLittle_Short(ByteBuffer.wrap(buf).getShort());
 
             if (queueLength >= length + 2) {
                 removeData(2);
@@ -261,9 +245,11 @@ public class ByteQueue {
             } else {
                 throw new RuntimeException("Not enough data");
             }
+        } else {
+            throw new RuntimeException("Not enough data");
         }
 
-        throw new RuntimeException("Not enough data");
+        return "";
     }
 
     public String readUnicodeString() {

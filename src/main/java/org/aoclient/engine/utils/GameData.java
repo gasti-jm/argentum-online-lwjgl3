@@ -28,7 +28,7 @@ public final class GameData {
     public static MapData[][] mapData;
     public static FontData[] fontTypes = new FontData[2];
 
-    public static Map<Integer, Character> charList = new HashMap<>();
+    public static Character charList[] = new Character[10000+1];
     public static Sound music;
     public static Map<String, Sound> sounds = new HashMap<>();
 
@@ -36,6 +36,10 @@ public final class GameData {
      * @desc: Inicializamos todos los datos almacenados en archivos.
      */
     public static void initialize() {
+        for (int i = 0; i < charList.length; i++) {
+            charList[i] = new Character();
+        }
+
         loadGrhData();
         loadHeads();
         loadHelmets();
@@ -52,7 +56,7 @@ public final class GameData {
      * @desc: Permite migrar un Integer de mas cantidad de bytes a uno mas chico por que en
      *        VB6 las variables son de distinta cantidad de bytes
      */
-    private static int bigToLittle_Int(int bigendian) {
+    public static int bigToLittle_Int(int bigendian) {
         ByteBuffer buf = ByteBuffer.allocate(4);
 
         buf.order(ByteOrder.BIG_ENDIAN);
@@ -66,7 +70,7 @@ public final class GameData {
      * @desc: Permite migrar un Float de mas cantidad de bytes a uno mas chico por que en
      *        VB6 las variables son de distinta cantidad de bytes
      */
-    private static float bigToLittle_Float(float bigendian) {
+    public static float bigToLittle_Float(float bigendian) {
         ByteBuffer buf = ByteBuffer.allocate(4);
 
         buf.order(ByteOrder.BIG_ENDIAN);
@@ -77,10 +81,24 @@ public final class GameData {
     }
 
     /**
+     * @desc: Permite migrar un Float de mas cantidad de bytes a uno mas chico por que en
+     *        VB6 las variables son de distinta cantidad de bytes
+     */
+    public static double bigToLittle_Double(double bigendian) {
+        ByteBuffer buf = ByteBuffer.allocate(8);
+
+        buf.order(ByteOrder.BIG_ENDIAN);
+        buf.putDouble(bigendian);
+
+        buf.order(ByteOrder.LITTLE_ENDIAN);
+        return buf.getDouble(0);
+    }
+
+    /**
      * @desc: Permite migrar un Short de mas cantidad de bytes a uno mas chico por que en
      *        VB6 las variables son de distinta cantidad de bytes
      */
-    private static short bigToLittle_Short(short bigendian) {
+    public static short bigToLittle_Short(short bigendian) {
         ByteBuffer buf = ByteBuffer.allocate(2);
 
         buf.order(ByteOrder.BIG_ENDIAN);
@@ -94,7 +112,7 @@ public final class GameData {
      * @desc: Permite migrar un Byte de mas cantidad de bytes a uno mas chico por que en
      *        VB6 las variables son de distinta cantidad de bytes
      */
-    private static byte bigToLittle_Byte(byte bigendian) {
+    public static byte bigToLittle_Byte(byte bigendian) {
         ByteBuffer buf = ByteBuffer.allocate(1);
 
         buf.order(ByteOrder.BIG_ENDIAN);
@@ -217,23 +235,23 @@ public final class GameData {
             f.read(cabecera);
             final short numHeads = bigToLittle_Short(f.readShort());
 
-            headData = new HeadData[numHeads];
-            myHeads = new IndexHeads[numHeads];
+            headData = new HeadData[numHeads + 1];
+            myHeads = new IndexHeads[numHeads + 1];
 
-            for (int i = 0; i < numHeads; i++) {
+            for (int i = 1; i <= numHeads; i++) {
                 myHeads[i] = new IndexHeads();
-                myHeads[i].setHead(0, bigToLittle_Short(f.readShort()));
                 myHeads[i].setHead(1, bigToLittle_Short(f.readShort()));
                 myHeads[i].setHead(2, bigToLittle_Short(f.readShort()));
                 myHeads[i].setHead(3, bigToLittle_Short(f.readShort()));
+                myHeads[i].setHead(4, bigToLittle_Short(f.readShort()));
 
-                if (myHeads[i].getHead(0) != 0) {
+                if (myHeads[i].getHead(1) != 0) {
                     headData[i] = new HeadData();
 
-                    headData[i].setHead(0, initGrh(headData[i].getHead(0), myHeads[i].getHead(0), false));
                     headData[i].setHead(1, initGrh(headData[i].getHead(1), myHeads[i].getHead(1), false));
                     headData[i].setHead(2, initGrh(headData[i].getHead(2), myHeads[i].getHead(2), false));
                     headData[i].setHead(3, initGrh(headData[i].getHead(3), myHeads[i].getHead(3), false));
+                    headData[i].setHead(4, initGrh(headData[i].getHead(4), myHeads[i].getHead(4), false));
                 }
             }
 
@@ -255,24 +273,24 @@ public final class GameData {
             f.read(cabecera);
             final short numHeads = bigToLittle_Short(f.readShort());
 
-            helmetsData = new HeadData[numHeads];
-            myHeads = new IndexHeads[numHeads];
+            helmetsData = new HeadData[numHeads + 1];
+            myHeads = new IndexHeads[numHeads + 1];
 
-            for (int i = 0; i < numHeads; i++) {
+            for (int i = 1; i <= numHeads; i++) {
                 myHeads[i] = new IndexHeads();
-                myHeads[i].setHead(0, bigToLittle_Short(f.readShort()));
                 myHeads[i].setHead(1, bigToLittle_Short(f.readShort()));
                 myHeads[i].setHead(2, bigToLittle_Short(f.readShort()));
                 myHeads[i].setHead(3, bigToLittle_Short(f.readShort()));
+                myHeads[i].setHead(4, bigToLittle_Short(f.readShort()));
 
-                if (myHeads[i].getHead(0) != 0) {
+                //if (myHeads[i].getHead(1) != 0) {
                     helmetsData[i] = new HeadData();
-                    helmetsData[i].setHead(0, initGrh(helmetsData[i].getHead(0), myHeads[i].getHead(0), false));
                     helmetsData[i].setHead(1, initGrh(helmetsData[i].getHead(1), myHeads[i].getHead(1), false));
                     helmetsData[i].setHead(2, initGrh(helmetsData[i].getHead(2), myHeads[i].getHead(2), false));
                     helmetsData[i].setHead(3, initGrh(helmetsData[i].getHead(3), myHeads[i].getHead(3), false));
+                    helmetsData[i].setHead(4, initGrh(helmetsData[i].getHead(4), myHeads[i].getHead(4), false));
 
-                }
+                //}
             }
 
         } catch (IOException ex) {
@@ -293,25 +311,25 @@ public final class GameData {
             f.read(cabecera);
             final short numBodys = bigToLittle_Short(f.readShort());
 
-            bodyData = new BodyData[numBodys];
-            myBodys = new IndexBodys[numBodys];
+            bodyData = new BodyData[numBodys + 1];
+            myBodys = new IndexBodys[numBodys + 1];
 
-            for (int i = 0; i < numBodys; i++) {
+            for (int i = 1; i <= numBodys; i++) {
                 myBodys[i] = new IndexBodys();
-                myBodys[i].setBody(0, bigToLittle_Short(f.readShort()));
                 myBodys[i].setBody(1, bigToLittle_Short(f.readShort()));
                 myBodys[i].setBody(2, bigToLittle_Short(f.readShort()));
                 myBodys[i].setBody(3, bigToLittle_Short(f.readShort()));
+                myBodys[i].setBody(4, bigToLittle_Short(f.readShort()));
 
                 myBodys[i].setHeadOffsetX( bigToLittle_Short(f.readShort()) );
                 myBodys[i].setHeadOffsetY( bigToLittle_Short(f.readShort()) );
 
-                if (myBodys[i].getBody(0) != 0) {
+                if (myBodys[i].getBody(1) != 0) {
                     bodyData[i] = new BodyData();
-                    bodyData[i].setWalk(0, initGrh(bodyData[i].getWalk(0), myBodys[i].getBody(0), false));
                     bodyData[i].setWalk(1, initGrh(bodyData[i].getWalk(1), myBodys[i].getBody(1), false));
                     bodyData[i].setWalk(2, initGrh(bodyData[i].getWalk(2), myBodys[i].getBody(2), false));
                     bodyData[i].setWalk(3, initGrh(bodyData[i].getWalk(3), myBodys[i].getBody(3), false));
+                    bodyData[i].setWalk(4, initGrh(bodyData[i].getWalk(4), myBodys[i].getBody(4), false));
 
                     bodyData[i].getHeadOffset().setX(myBodys[i].getHeadOffsetX());
                     bodyData[i].getHeadOffset().setY(myBodys[i].getHeadOffsetY());
@@ -329,14 +347,14 @@ public final class GameData {
     private static void loadArms() {
         try (RandomAccessFile f = new RandomAccessFile("resources/inits/arms.ind", "rw")) {
             final int numArms = bigToLittle_Short(f.readShort());
-            weaponData = new WeaponData[numArms];
+            weaponData = new WeaponData[numArms + 1];
 
-            for(int loopc = 0; loopc < numArms; loopc++) {
+            for(int loopc = 1; loopc <= numArms; loopc++) {
                 weaponData[loopc] = new WeaponData();
-                weaponData[loopc].setWeaponWalk(0, initGrh(weaponData[loopc].getWeaponWalk(0), bigToLittle_Short(f.readShort()), false));
                 weaponData[loopc].setWeaponWalk(1, initGrh(weaponData[loopc].getWeaponWalk(1), bigToLittle_Short(f.readShort()), false));
                 weaponData[loopc].setWeaponWalk(2, initGrh(weaponData[loopc].getWeaponWalk(2), bigToLittle_Short(f.readShort()), false));
                 weaponData[loopc].setWeaponWalk(3, initGrh(weaponData[loopc].getWeaponWalk(3), bigToLittle_Short(f.readShort()), false));
+                weaponData[loopc].setWeaponWalk(4, initGrh(weaponData[loopc].getWeaponWalk(4), bigToLittle_Short(f.readShort()), false));
             }
 
         } catch (IOException ex) {
@@ -354,10 +372,10 @@ public final class GameData {
 
             for(int loopc = 1; loopc <= numShields; loopc++) {
                 shieldData[loopc] = new ShieldData();
-                shieldData[loopc].setShieldWalk(0, initGrh(shieldData[loopc].getShieldWalk(0), bigToLittle_Short(f.readShort()), false));
                 shieldData[loopc].setShieldWalk(1, initGrh(shieldData[loopc].getShieldWalk(1), bigToLittle_Short(f.readShort()), false));
                 shieldData[loopc].setShieldWalk(2, initGrh(shieldData[loopc].getShieldWalk(2), bigToLittle_Short(f.readShort()), false));
                 shieldData[loopc].setShieldWalk(3, initGrh(shieldData[loopc].getShieldWalk(3), bigToLittle_Short(f.readShort()), false));
+                shieldData[loopc].setShieldWalk(4, initGrh(shieldData[loopc].getShieldWalk(4), bigToLittle_Short(f.readShort()), false));
             }
 
         } catch (IOException ex) {
@@ -372,7 +390,7 @@ public final class GameData {
         try (RandomAccessFile f = new RandomAccessFile("resources/maps/mapa" + map + ".map", "rw")) {
             f.seek(0);
 
-            mapData = new MapData[100][100];
+            mapData = new MapData[101][101];
 
             final short mapversion = bigToLittle_Short(f.readShort());
             final byte[] cabecera = new byte[263];
@@ -388,8 +406,8 @@ public final class GameData {
 
             byte bloq;
 
-            for (int y = 0; y < 100; y++) {
-                for (int x = 0; x < 100; x++) {
+            for (int y = 1; y <= 100; y++) {
+                for (int x = 1; x <= 100; x++) {
 
                     mapData[x][y] = new MapData();
 
@@ -397,30 +415,29 @@ public final class GameData {
                     bloq = (byte)(byflags & 1);
                     mapData[x][y].setBlocked(bloq == 1);
 
-                    mapData[x][y].getLayer(0).setGrhIndex( bigToLittle_Short(f.readShort()) );
-
-                    mapData[x][y].setLayer(0, initGrh(mapData[x][y].getLayer(0), mapData[x][y].getLayer(0).getGrhIndex(), true));
+                    mapData[x][y].getLayer(1).setGrhIndex( bigToLittle_Short(f.readShort()) );
+                    mapData[x][y].setLayer(1, initGrh(mapData[x][y].getLayer(1), mapData[x][y].getLayer(1).getGrhIndex(), true));
 
                     if ((byte)(byflags & 2) != 0) {
-                        mapData[x][y].getLayer(1).setGrhIndex( bigToLittle_Short(f.readShort()) );
-                        mapData[x][y].setLayer(1, initGrh(mapData[x][y].getLayer(1), mapData[x][y].getLayer(1).getGrhIndex(), true));
-
-                    } else {
-                        mapData[x][y].getLayer(1).setGrhIndex(0);
-                    }
-
-                    if ((byte)(byflags & 4) != 0) {
                         mapData[x][y].getLayer(2).setGrhIndex( bigToLittle_Short(f.readShort()) );
                         mapData[x][y].setLayer(2, initGrh(mapData[x][y].getLayer(2), mapData[x][y].getLayer(2).getGrhIndex(), true));
+
                     } else {
                         mapData[x][y].getLayer(2).setGrhIndex(0);
                     }
 
-                    if ((byte)(byflags & 8) != 0) {
+                    if ((byte)(byflags & 4) != 0) {
                         mapData[x][y].getLayer(3).setGrhIndex( bigToLittle_Short(f.readShort()) );
                         mapData[x][y].setLayer(3, initGrh(mapData[x][y].getLayer(3), mapData[x][y].getLayer(3).getGrhIndex(), true));
                     } else {
                         mapData[x][y].getLayer(3).setGrhIndex(0);
+                    }
+
+                    if ((byte)(byflags & 8) != 0) {
+                        mapData[x][y].getLayer(4).setGrhIndex( bigToLittle_Short(f.readShort()) );
+                        mapData[x][y].setLayer(4, initGrh(mapData[x][y].getLayer(4), mapData[x][y].getLayer(4).getGrhIndex(), true));
+                    } else {
+                        mapData[x][y].getLayer(4).setGrhIndex(0);
                     }
 
                     if ((byte)(byflags & 16) != 0) {
@@ -457,9 +474,9 @@ public final class GameData {
 
             f.read(cabecera);
             final short numFXs = bigToLittle_Short(f.readShort());
-            fxData = new FxData[numFXs];
+            fxData = new FxData[numFXs + 1];
 
-            for (int i = 0; i < numFXs; i++) {
+            for (int i = 1; i <= numFXs; i++) {
                 fxData[i] = new FxData();
                 fxData[i].setAnimacion( bigToLittle_Short(f.readShort()) );
                 fxData[i].setOffsetX( bigToLittle_Short(f.readShort()) );

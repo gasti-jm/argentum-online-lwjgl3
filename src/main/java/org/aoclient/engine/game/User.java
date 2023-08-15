@@ -19,13 +19,20 @@ public final class User {
     private boolean underCeiling;
     private boolean userMoving;
 
+    // mapa
+    short userMap;
     private Position userPos;
     private Position addToUserPos;
+    private short userCharIndex;
+
+    // personajes (incluido yo)
     private int lastChar = 0;
+    private int numChars = 0;
 
     // areas
     private int minLimiteX, maxLimiteX;
     private int minLimiteY, maxLimiteY;
+
 
 
     private User () {
@@ -78,8 +85,8 @@ public final class User {
     public void moveCharbyHead(int charIndex, E_Heading nHeading) {
         int addX = 0, addY = 0;
 
-        final int x = charList.get(charIndex).getPos().getX();
-        final int y = charList.get(charIndex).getPos().getY();
+        final int x = charList[charIndex].getPos().getX();
+        final int y = charList[charIndex].getPos().getY();
 
         switch (nHeading) {
             case NORTH  : addY = -1;    break;
@@ -93,32 +100,32 @@ public final class User {
 
         mapData[x][y].setCharIndex(0);
         mapData[nX][nY].setCharIndex( charIndex);
-        charList.get(charIndex).getPos().setX(nX);
-        charList.get(charIndex).getPos().setY(nY);
+        charList[charIndex].getPos().setX(nX);
+        charList[charIndex].getPos().setY(nY);
 
-        charList.get(charIndex).setMoveOffsetX(-1 * (Camera.TILE_PIXEL_SIZE * addX));
-        charList.get(charIndex).setMoveOffsetY(-1 * (Camera.TILE_PIXEL_SIZE * addY));
+        charList[charIndex].setMoveOffsetX(-1 * (Camera.TILE_PIXEL_SIZE * addX));
+        charList[charIndex].setMoveOffsetY(-1 * (Camera.TILE_PIXEL_SIZE * addY));
 
-        charList.get(charIndex).setMoving(true);
+        charList[charIndex].setMoving(true);
 
-        charList.get(charIndex).setScrollDirectionX(addX);
-        charList.get(charIndex).setScrollDirectionY(addY);
-        charList.get(charIndex).setFxIndex(0);
+        charList[charIndex].setScrollDirectionX(addX);
+        charList[charIndex].setScrollDirectionY(addY);
+        charList[charIndex].setFxIndex(0);
 
         doPasosFx(charIndex);
 
         // areas viejos
         if ((nY < minLimiteY) || (nY > maxLimiteY) || (nX < minLimiteX) || (nX > maxLimiteX)) {
-//            if(charIndex != userCharIndex) {
-//                eraseChar(charIndex);
-//            }
+            if(charIndex != userCharIndex) {
+                eraseChar(charIndex);
+            }
         }
 
     }
 
     /**
      *
-     * @desc: Cambio de area... (INCOMPLETO)
+     * @desc: Cambio de area...
      */
     public void areaChange(int x, int y) {
         minLimiteX = (x / TILE_BUFFER_SIZE - 1) * TILE_BUFFER_SIZE;
@@ -126,15 +133,15 @@ public final class User {
         minLimiteY = (y / TILE_BUFFER_SIZE - 1) * TILE_BUFFER_SIZE;
         maxLimiteY = minLimiteY + 26;
 
-        for (int loopX = 0; loopX < 100; loopX++) {
-            for (int loopY = 0; loopY < 100; loopY++) {
+        for (int loopX = 1; loopX <= 100; loopX++) {
+            for (int loopY = 1; loopY <= 100; loopY++) {
                 if ((loopY < minLimiteY) || (loopY > maxLimiteY) || (loopX < minLimiteX) || (loopX > maxLimiteX)) {
 
                     // Erase NPCs
                     if(mapData[loopX][loopY].getCharIndex() > 0) {
-//                        if(mapData[loopX][loopY].getCharIndex() != userCharIndex) {
-//                            eraseChar(mapData[loopX][loopY].getCharIndex());
-//                        }
+                        if(mapData[loopX][loopY].getCharIndex() != userCharIndex) {
+                            eraseChar(mapData[loopX][loopY].getCharIndex());
+                        }
 
                         // Erase Objs
                         mapData[loopX][loopY].getObjGrh().setGrhIndex(0);
@@ -170,17 +177,43 @@ public final class User {
             if (mapData[userPos.getX()][userPos.getY()].getBlocked()) {
                 return false;
             }
+
+            /*
+            If .iHead <> CASPER_HEAD And .iBody <> FRAGATA_FANTASMAL Then
+                Exit Function
+            Else
+                ' No puedo intercambiar con un casper que este en la orilla (Lado tierra)
+                If HayAgua(UserPos.X, UserPos.Y) Then
+                    If Not HayAgua(X, Y) Then Exit Function
+                Else
+                    ' No puedo intercambiar con un casper que este en la orilla (Lado agua)
+                    If HayAgua(X, Y) Then Exit Function
+                End If
+
+                ' Los admins no pueden intercambiar pos con caspers cuando estan invisibles
+                If charlist(UserCharIndex).priv > 0 And charlist(UserCharIndex).priv < 6 Then
+                    If charlist(UserCharIndex).invisible = True Then Exit Function
+                End If
+            End If
+             */
+
         }
+
+        /*
+            If UserNavegando <> HayAgua(X, Y) Then
+                Exit Function
+            End If
+         */
 
         return true;
     }
 
     public void setCharacterFx(int charIndex, int fx, int loops) {
-        charList.get(charIndex).setFxIndex(fx);
+        charList[charIndex].setFxIndex(fx);
 
-        if (charList.get(charIndex).getFxIndex() > 0){
-            initGrh(charList.get(charIndex).getfX(), fxData[fx].getAnimacion(), true);
-            charList.get(charIndex).getfX().setLoops(loops);
+        if (charList[charIndex].getFxIndex() > 0){
+            initGrh(charList[charIndex].getfX(), fxData[fx].getAnimacion(), true);
+            charList[charIndex].getfX().setLoops(loops);
         }
     }
 
@@ -205,22 +238,22 @@ public final class User {
                 break;
         }
 
-        charList.get(lastChar).setHeading(direction);
+        charList[userCharIndex].setHeading(direction);
 
         if (legalOk){
             moveScreen(direction);
-            moveCharbyHead(lastChar, direction);
+            moveCharbyHead(userCharIndex, direction);
         }
     }
 
     private void doPasosFx(int charIndex) {
-        if (!charList.get(charIndex).isDead()) {
-            if(charList.get(charIndex).isPie()) {
+        if (!charList[charIndex].isDead()) {
+            if(charList[charIndex].isPie()) {
                 playSound(SND_PASOS1);
-                charList.get(charIndex).setPie(false);
+                charList[charIndex].setPie(false);
             } else {
                 playSound(SND_PASOS2);
-                charList.get(charIndex).setPie(true);
+                charList[charIndex].setPie(true);
             }
         }
     }
@@ -265,7 +298,35 @@ public final class User {
         this.lastChar = lastChar;
     }
 
+    public short getUserMap() {
+        return userMap;
+    }
+
+    public void setUserMap(short userMap) {
+        this.userMap = userMap;
+    }
+
+    public int getNumChars() {
+        return numChars;
+    }
+
+    public void incrementNumChars() {
+        this.numChars++;
+    }
+
+    public void decrementNumChars() {
+        this.numChars--;
+    }
+
     public void setConnected() {
 
+    }
+
+    public short getUserCharIndex() {
+        return userCharIndex;
+    }
+
+    public void setUserCharIndex(short userCharIndex) {
+        this.userCharIndex = userCharIndex;
     }
 }

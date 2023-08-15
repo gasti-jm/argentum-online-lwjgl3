@@ -35,10 +35,9 @@ public final class GameScene extends Scene {
 
         user = User.getInstance();
 
-        GameData.loadMap(1);
-        mapData[50][50].setCharIndex(makeChar(1, 127, SOUTH, 50, 50));
-
-        refreshAllChars();
+        //GameData.loadMap(1);
+        //mapData[50][50].setCharIndex(makeChar(1, 127, SOUTH, 50, 50));
+        //refreshAllChars();
 
         user.getUserPos().setX(50);
         user.getUserPos().setY(50);
@@ -132,8 +131,8 @@ public final class GameScene extends Scene {
             int x;
             for(x = camera.getScreenminX(); x <= camera.getScreenmaxX(); x++) {
 
-                if (mapData[x][y].getLayer(0).getGrhIndex() != 0) {
-                    draw(mapData[x][y].getLayer(0),
+                if (mapData[x][y].getLayer(1).getGrhIndex() != 0) {
+                    draw(mapData[x][y].getLayer(1),
                             POS_SCREEN_X + (camera.getScreenX() - 1) * TILE_PIXEL_SIZE + PixelOffsetX,
                             POS_SCREEN_Y + (camera.getScreenY() - 1) * TILE_PIXEL_SIZE + PixelOffsetY,
                             true, true, false,1.0f, ambientColor);
@@ -150,8 +149,8 @@ public final class GameScene extends Scene {
             camera.setScreenX(camera.getMinXOffset() - TILE_BUFFER_SIZE);
             for(int x = camera.getMinX(); x <= camera.getMaxX(); x++) {
 
-                if (mapData[x][y].getLayer(1).getGrhIndex() != 0) {
-                    draw(mapData[x][y].getLayer(1),
+                if (mapData[x][y].getLayer(2).getGrhIndex() != 0) {
+                    draw(mapData[x][y].getLayer(2),
                             POS_SCREEN_X + camera.getScreenX() * TILE_PIXEL_SIZE + PixelOffsetX,
                             POS_SCREEN_Y + camera.getScreenY() * TILE_PIXEL_SIZE + PixelOffsetY,
                             true, true, false,1.0f, ambientColor);
@@ -195,8 +194,8 @@ public final class GameScene extends Scene {
                             POS_SCREEN_Y + camera.getScreenY() * TILE_PIXEL_SIZE + PixelOffsetY, ambientColor);
                 }
 
-                if (mapData[x][y].getLayer(2).getGrhIndex() != 0) {
-                    draw(mapData[x][y].getLayer(2),
+                if (mapData[x][y].getLayer(3).getGrhIndex() != 0) {
+                    draw(mapData[x][y].getLayer(3),
                             POS_SCREEN_X + camera.getScreenX() * TILE_PIXEL_SIZE + PixelOffsetX,
                             POS_SCREEN_Y + camera.getScreenY() * TILE_PIXEL_SIZE + PixelOffsetY,
                             true, true, false, 1.0f, ambientColor);
@@ -213,8 +212,8 @@ public final class GameScene extends Scene {
             camera.setScreenX(camera.getMinXOffset() - TILE_BUFFER_SIZE);
             for (int x = camera.getMinX(); x <= camera.getMaxX(); x++) {
 
-                if (mapData[x][y].getLayer(3).getGrhIndex() > 0) {
-                    draw(mapData[x][y].getLayer(3),
+                if (mapData[x][y].getLayer(4).getGrhIndex() > 0) {
+                    draw(mapData[x][y].getLayer(4),
                             POS_SCREEN_X + camera.getScreenX() * TILE_PIXEL_SIZE + PixelOffsetX,
                             POS_SCREEN_Y + camera.getScreenY() * TILE_PIXEL_SIZE + PixelOffsetY,
                             true, true, false, alphaCeiling, ambientColor);
@@ -259,7 +258,7 @@ public final class GameScene extends Scene {
 
         if (user.isUserMoving()) {
             if (user.getAddToUserPos().getX() != 0) {
-                offSetCounterX -= charList.get(1).getWalkingSpeed() * user.getAddToUserPos().getX() * timerTicksPerFrame;
+                offSetCounterX -= charList[1].getWalkingSpeed() * user.getAddToUserPos().getX() * timerTicksPerFrame;
                 if (Math.abs(offSetCounterX) >= Math.abs(TILE_PIXEL_SIZE * user.getAddToUserPos().getX())) {
                     offSetCounterX = 0;
                     user.getAddToUserPos().setX(0);
@@ -268,7 +267,7 @@ public final class GameScene extends Scene {
             }
 
             if (user.getAddToUserPos().getY() != 0) {
-                offSetCounterY -= charList.get(1).getWalkingSpeed() * user.getAddToUserPos().getY() * timerTicksPerFrame;
+                offSetCounterY -= charList[1].getWalkingSpeed() * user.getAddToUserPos().getY() * timerTicksPerFrame;
                 if (Math.abs(offSetCounterY) >= Math.abs(TILE_PIXEL_SIZE * user.getAddToUserPos().getY())) {
                     offSetCounterY = 0;
                     user.getAddToUserPos().setY(0);

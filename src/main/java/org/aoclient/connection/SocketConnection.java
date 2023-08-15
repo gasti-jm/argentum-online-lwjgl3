@@ -4,9 +4,11 @@ import org.aoclient.connection.packets.E_Modo;
 
 import java.net.*;
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 
 import static org.aoclient.connection.Protocol.*;
 import static org.aoclient.connection.packets.E_Modo.NORMAL;
+import static org.aoclient.engine.utils.GameData.bigToLittle_Int;
 
 public class SocketConnection {
     private static SocketConnection instance;
@@ -91,24 +93,24 @@ public class SocketConnection {
 
         try {
             int availableBytes = handleData.available();
-
-
             if (availableBytes > 0) {
-                System.out.println("Available Bytes: " + availableBytes);
-
+                //System.out.println("Available Bytes: " + availableBytes);
                 byte[] dataBuffer = new byte[availableBytes];
-                int bytesRead = handleData.read(dataBuffer);
-                System.out.println("Bytes Read: " + bytesRead);
+
+                int bytesRead = 0;
+
+                bytesRead = handleData.read(dataBuffer);
+                //System.out.println("Bytes Read: " + bytesRead);
 
                 if (bytesRead > 0) {
-                    String receivedData = new String(dataBuffer, 0, bytesRead);
-
-                    byte[] data = receivedData.getBytes();
+                    String RD = new String(dataBuffer, 0 , bytesRead);
+                    System.out.println(RD.length());
+                    byte[] data = RD.getBytes();
 
                     // Process the received data here
-                    System.out.println("Received data: " + receivedData);
+                    //System.out.println("Received data: " + RD);
 
-                    if (receivedData.isEmpty() || receivedData == null) return;
+                    if (RD.isEmpty()) return;
 
                     // Put data in the buffer
                     incomingData.writeBlock(data, -1);
@@ -118,8 +120,13 @@ public class SocketConnection {
                 }
             }
 
+            // Add some delay to avoid busy-waiting
+            Thread.sleep(100);
+
         } catch (IOException e) {
             e.printStackTrace();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
         }
 
     }

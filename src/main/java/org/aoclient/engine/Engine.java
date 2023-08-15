@@ -14,9 +14,8 @@ import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.*;
 
 public final class Engine {
-    private boolean prgRun = true;
+    private static boolean prgRun = true;
     private Window window;
-    private Surface surface;
     private Scene currentScene;
 
     public void start() {
@@ -25,10 +24,7 @@ public final class Engine {
         window = Window.getInstance();
         window.initialize();
 
-
-        surface = Surface.getInstance();
-
-        surface.initialize();
+        Surface.getInstance().initialize();
         GameData.initialize();
 
         changeScene(INTRO_SCENE);
@@ -37,7 +33,7 @@ public final class Engine {
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
         glViewport(0, 0, window.getWidth(), window.getHeight());
-        glOrtho(0, window.getWidth(), window.getHeight(), 0, 1, -1); // con este estiramos a la pantalla
+        glOrtho(0, window.getWidth(), window.getHeight(), 0, 1, -1);
 
         glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
         glEnable(GL_ALPHA);
@@ -97,7 +93,7 @@ public final class Engine {
 
     private void render() {
         if (KeyListener.isKeyPressed(GLFW_KEY_ESCAPE)) {
-            this.prgRun = false;
+            closeClient();
         }
 
         // Check change screen
@@ -111,6 +107,10 @@ public final class Engine {
         // If there is anything to be sent, we send it
         SocketConnection.getInstance().flushBuffer();
         SocketConnection.getInstance().readData();
+    }
+
+    public static void closeClient() {
+        prgRun = false;
     }
 
 }

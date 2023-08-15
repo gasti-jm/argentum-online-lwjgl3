@@ -63,8 +63,8 @@ public final class MainScene extends Scene {
             int x;
             for (x = camera.getScreenminX(); x <= camera.getScreenmaxX(); x++) {
 
-                if (mapData[x][y].getLayer(0).getGrhIndex() != 0) {
-                    draw(mapData[x][y].getLayer(0),
+                if (mapData[x][y].getLayer(1).getGrhIndex() != 0) {
+                    draw(mapData[x][y].getLayer(1),
                             (camera.getScreenX() - 1) * TILE_PIXEL_SIZE,
                             (camera.getScreenY() - 1) * TILE_PIXEL_SIZE,
                             true, true, false, 1.0f, ambientColor);
@@ -81,8 +81,8 @@ public final class MainScene extends Scene {
             camera.setScreenX(camera.getMinXOffset() - TILE_BUFFER_SIZE);
             for(int x = camera.getMinX(); x <= camera.getMaxX(); x++) {
 
-                if (mapData[x][y].getLayer(1).getGrhIndex() != 0) {
-                    draw(mapData[x][y].getLayer(1),
+                if (mapData[x][y].getLayer(2).getGrhIndex() != 0) {
+                    draw(mapData[x][y].getLayer(2),
                             camera.getScreenX() * TILE_PIXEL_SIZE,
                             camera.getScreenY() * TILE_PIXEL_SIZE, true, true, false,1.0f, ambientColor);
                 }
@@ -109,8 +109,8 @@ public final class MainScene extends Scene {
                                 camera.getScreenY() * TILE_PIXEL_SIZE, ambientColor);
                     }
 
-                    if (mapData[x][y].getLayer(2).getGrhIndex() != 0) {
-                        draw(mapData[x][y].getLayer(2),
+                    if (mapData[x][y].getLayer(3).getGrhIndex() != 0) {
+                        draw(mapData[x][y].getLayer(3),
                                 camera.getScreenX() * TILE_PIXEL_SIZE,
                                 camera.getScreenY() * TILE_PIXEL_SIZE,
                                 true, true, false, 1.0f, ambientColor);
@@ -126,8 +126,8 @@ public final class MainScene extends Scene {
             camera.setScreenX(camera.getMinXOffset() - TILE_BUFFER_SIZE);
             for(int x = camera.getMinX(); x <= camera.getMaxX(); x++) {
 
-                if (mapData[x][y].getLayer(3).getGrhIndex() > 0) {
-                    draw(mapData[x][y].getLayer(3),
+                if (mapData[x][y].getLayer(4).getGrhIndex() > 0) {
+                    draw(mapData[x][y].getLayer(4),
                             camera.getScreenX() * TILE_PIXEL_SIZE,
                             camera.getScreenY() * TILE_PIXEL_SIZE,
                             true, true, false,1.0f, ambientColor);
