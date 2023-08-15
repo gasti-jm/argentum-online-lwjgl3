@@ -8,7 +8,7 @@ import org.aoclient.engine.utils.GameData;
 import org.aoclient.engine.utils.Time;
 import org.lwjgl.Version;
 
-import static org.aoclient.engine.scenes.SceneNames.INTRO_SCENE;
+import static org.aoclient.engine.scenes.SceneType.INTRO_SCENE;
 import static org.aoclient.engine.utils.Time.deltaTime;
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.*;
@@ -25,7 +25,6 @@ public final class Engine {
         window = Window.getInstance();
         window.initialize();
 
-        SocketConnection.getInstance().initialize();
 
         surface = Surface.getInstance();
 
@@ -76,7 +75,7 @@ public final class Engine {
         }
     }
 
-    private void changeScene(SceneNames scene) {
+    private void changeScene(SceneType scene) {
         switch (scene) {
             case INTRO_SCENE:
                 currentScene = new IntroScene();
@@ -108,6 +107,9 @@ public final class Engine {
 
         currentScene.keyEvents();
         currentScene.render();
+
+        // If there is anything to be sent, we send it
+        SocketConnection.getInstance().flushBuffer();
     }
 
 }

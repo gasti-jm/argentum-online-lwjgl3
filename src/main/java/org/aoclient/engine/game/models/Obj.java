@@ -1,6 +1,6 @@
 package org.aoclient.engine.game.models;
 
-public class Obj {
+public final class Obj {
     private int objIndex;
     private int amount;
 

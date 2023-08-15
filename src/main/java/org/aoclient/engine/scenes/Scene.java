@@ -6,7 +6,7 @@ public abstract class Scene {
     protected RGBColor background;
     protected Camera camera;
     protected boolean visible = false;
-    protected SceneNames canChangeTo;
+    protected SceneType canChangeTo;
 
     public void init() {
         this.visible = true;
@@ -35,7 +35,7 @@ public abstract class Scene {
         this.visible = visible;
     }
 
-    public SceneNames getChangeScene() {
+    public SceneType getChangeScene() {
         return canChangeTo;
     }
 }

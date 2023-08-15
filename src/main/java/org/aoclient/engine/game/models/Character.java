@@ -1,16 +1,16 @@
 package org.aoclient.engine.game.models;
 
+import org.aoclient.engine.game.User;
 import org.aoclient.engine.renderer.RGBColor;
 import org.aoclient.engine.utils.filedata.*;
 
 import static org.aoclient.engine.game.models.E_Heading.SOUTH;
 import static org.aoclient.engine.renderer.Drawn.*;
 import static org.aoclient.engine.renderer.Drawn.draw;
-import static org.aoclient.engine.utils.GameData.charList;
-import static org.aoclient.engine.utils.GameData.fxData;
+import static org.aoclient.engine.utils.GameData.*;
 import static org.aoclient.engine.utils.Time.timerTicksPerFrame;
 
-public class Character {
+public final class Character {
     private boolean active;
     private E_Heading heading;
     private Position pos;
@@ -49,11 +49,83 @@ public class Character {
     private boolean invisible;
     private byte priv;
 
+
     public Character() {
         this.pos = new Position();
         this.heading = SOUTH;
         this.active = false;
         this.walkingSpeed = 8;
+    }
+
+    public static int makeChar(int charIndex, int body, E_Heading heading, int x, int y) {
+        if (charList.isEmpty() || !charList.containsKey(charIndex)) {
+            charList.put(charIndex, new Character());
+        }
+
+        if (charIndex > User.getInstance().getLastChar())
+            User.getInstance().setLastChar(charIndex);
+
+        if (charList.get(charIndex).isActive())
+            return 0;
+
+        charList.get(charIndex).setName("Saurus");
+        charList.get(charIndex).setClanName("<" + "Argentum Online Staff" + ">");
+        charList.get(charIndex).setiBody(body);
+        charList.get(charIndex).setiHead(7);
+        charList.get(charIndex).setBody(new BodyData(bodyData[body]));
+        charList.get(charIndex).setHead(new HeadData(headData[7]));
+        charList.get(charIndex).setWeapon(new WeaponData(weaponData[9]));
+        charList.get(charIndex).setShield(new ShieldData(shieldData[1]));
+        charList.get(charIndex).setHelmet(new HeadData(helmetsData[3]));
+        charList.get(charIndex).setHeading(heading);
+        charList.get(charIndex).setMoving(false);
+        charList.get(charIndex).setMoveOffsetX(0);
+        charList.get(charIndex).setMoveOffsetY(0);
+        charList.get(charIndex).getPos().setX(x);
+        charList.get(charIndex).getPos().setY(y);
+        charList.get(charIndex).setActive(true);
+        charList.get(charIndex).setfX(new GrhInfo());
+
+        return charIndex;
+    }
+
+    public static void eraseChar(int charIndex) {
+        charList.get(charIndex).setActive(false);
+
+        if (charIndex == User.getInstance().getLastChar()) {
+            while (!charList.get(User.getInstance().getLastChar()).isActive()) {
+                User.getInstance().setLastChar(User.getInstance().getLastChar() - 1);
+                if (User.getInstance().getLastChar() == 0) {
+                    break;
+                }
+            }
+        }
+
+        mapData[charList.get(charIndex).getPos().getX()][charList.get(charIndex).getPos().getY()].setCharIndex(0);
+
+        charList.remove(charIndex);
+
+        /*
+
+        'Remove char's dialog
+        Call Dialogos.RemoveDialog(CharIndex)
+
+        Call ResetCharInfo(CharIndex)
+
+        'Update NumChars
+        NumChars = NumChars - 1
+
+         */
+    }
+
+    public static void refreshAllChars() {
+        for (int LoopC = 1; LoopC <= User.getInstance().getLastChar(); LoopC++) {
+            if(charList.containsKey(LoopC)){
+                if (charList.get(LoopC).isActive()) {
+                    mapData[charList.get(LoopC).getPos().getX()][charList.get(LoopC).getPos().getY()].setCharIndex(LoopC);
+                }
+            }
+        }
     }
 
     public int getWalkingSpeed() {
@@ -64,7 +136,7 @@ public class Character {
         this.walkingSpeed = walkingSpeed;
     }
 
-    public boolean getActive() {
+    public boolean isActive() {
         return active;
     }
 
@@ -92,16 +164,16 @@ public class Character {
         return iHead;
     }
 
-    public void setiHead(short iHead) {
-        this.iHead = iHead;
+    public void setiHead(int iHead) {
+        this.iHead = (short) iHead;
     }
 
     public short getiBody() {
         return iBody;
     }
 
-    public void setiBody(short iBody) {
-        this.iBody = iBody;
+    public void setiBody(int iBody) {
+        this.iBody = (short) iBody;
     }
 
     public BodyData getBody() {

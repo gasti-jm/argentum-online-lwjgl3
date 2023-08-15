@@ -1,21 +1,13 @@
 package org.aoclient.engine.scenes;
 
-import org.aoclient.engine.Window;
 import org.aoclient.engine.gui.ElementGUI;
 import org.aoclient.engine.gui.elements.ImageGUI;
 import org.aoclient.engine.listeners.KeyListener;
 import org.aoclient.engine.game.User;
 import org.aoclient.engine.renderer.RGBColor;
 import org.aoclient.engine.utils.GameData;
-import org.aoclient.engine.utils.filedata.GrhInfo;
-import org.aoclient.engine.utils.filedata.MapData;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import static org.aoclient.engine.game.models.Character.charRender;
+import static org.aoclient.engine.game.models.Character.*;
 import static org.aoclient.engine.game.models.E_Heading.*;
 import static org.aoclient.engine.renderer.Drawn.*;
 import static org.aoclient.engine.scenes.Camera.*;
@@ -25,8 +17,11 @@ import static org.lwjgl.glfw.GLFW.*;
 
 public final class GameScene extends Scene {
     private User user;
+
     private float offSetCounterX = 0;
     private float offSetCounterY = 0;
+    private float alphaCeiling = 1.0f;
+
     RGBColor ambientColor;
     private boolean autoMove = false;
 
@@ -36,14 +31,14 @@ public final class GameScene extends Scene {
     @Override
     public void init() {
         super.init();
-        canChangeTo = SceneNames.MAIN_SCENE;
+        canChangeTo = SceneType.MAIN_SCENE;
 
-        this.user = new User();
+        user = User.getInstance();
 
         GameData.loadMap(1);
-        mapData[50][50].setCharIndex( (short) user.makeChar(1, 127, SOUTH, 50, 50) );
+        mapData[50][50].setCharIndex(makeChar(1, 127, SOUTH, 50, 50));
 
-        user.refreshAllChars();
+        refreshAllChars();
 
         user.getUserPos().setX(50);
         user.getUserPos().setY(50);
@@ -64,6 +59,10 @@ public final class GameScene extends Scene {
     public void keyEvents() {
         if (KeyListener.isKeyReadyForAction(GLFW_KEY_F5)) {
             user.setCharacterFx(1, 7, -1);
+        }
+
+        if (KeyListener.isKeyReadyForAction(GLFW_KEY_F)) {
+            GameData.loadMap(34);
         }
 
         if (KeyListener.isKeyReadyForAction(GLFW_KEY_TAB)) {
@@ -123,6 +122,9 @@ public final class GameScene extends Scene {
         }
     }
 
+    /**
+     * @desc: Dibuja cada capa y objeto del mapa, el personaje, la interfaz y demas.
+     */
     private void renderScreen(int tileX, int tileY, int PixelOffsetX, int PixelOffsetY) {
         camera.update(tileX, tileY);
 
@@ -155,11 +157,21 @@ public final class GameScene extends Scene {
                             true, true, false,1.0f, ambientColor);
                 }
 
+                if (mapData[x][y].getObjGrh().getGrhIndex() != 0) {
+                    if(grhData[mapData[x][y].getObjGrh().getGrhIndex()].getPixelWidth() == TILE_PIXEL_SIZE &&
+                        grhData[mapData[x][y].getObjGrh().getGrhIndex()].getPixelHeight() == TILE_PIXEL_SIZE) {
+
+                        draw(mapData[x][y].getObjGrh(),
+                                POS_SCREEN_X + camera.getScreenX() * TILE_PIXEL_SIZE + PixelOffsetX,
+                                POS_SCREEN_Y + camera.getScreenY() * TILE_PIXEL_SIZE + PixelOffsetY,
+                                true, true, false,1.0f, ambientColor);
+                    }
+                }
+
                 camera.incrementScreenX();
             }
             camera.incrementScreenY();
         }
-
 
         camera.setScreenY(camera.getMinYOffset() - TILE_BUFFER_SIZE);
         for (int y = camera.getMinY(); y <= camera.getMaxY(); y++) {
@@ -167,10 +179,14 @@ public final class GameScene extends Scene {
             for(int x = camera.getMinX(); x <= camera.getMaxX(); x++) {
 
                 if (mapData[x][y].getObjGrh().getGrhIndex() != 0) {
-                    draw(mapData[x][y].getObjGrh(),
-                            POS_SCREEN_X + camera.getScreenX() * TILE_PIXEL_SIZE + PixelOffsetX,
-                            POS_SCREEN_Y + camera.getScreenY() * TILE_PIXEL_SIZE + PixelOffsetY,
-                            true, true, false,1.0f, ambientColor);
+                    if(grhData[mapData[x][y].getObjGrh().getGrhIndex()].getPixelWidth() != TILE_PIXEL_SIZE &&
+                            grhData[mapData[x][y].getObjGrh().getGrhIndex()].getPixelHeight() != TILE_PIXEL_SIZE) {
+
+                        draw(mapData[x][y].getObjGrh(),
+                                POS_SCREEN_X + camera.getScreenX() * TILE_PIXEL_SIZE + PixelOffsetX,
+                                POS_SCREEN_Y + camera.getScreenY() * TILE_PIXEL_SIZE + PixelOffsetY,
+                                true, true, false,1.0f, ambientColor);
+                    }
                 }
 
                 if (mapData[x][y].getCharIndex() > 0) {
@@ -191,16 +207,17 @@ public final class GameScene extends Scene {
             camera.incrementScreenY();
         }
 
+        checkEffectCeiling();
         camera.setScreenY(camera.getMinYOffset() - TILE_BUFFER_SIZE);
         for (int y = camera.getMinY(); y <= camera.getMaxY(); y++) {
             camera.setScreenX(camera.getMinXOffset() - TILE_BUFFER_SIZE);
-            for(int x = camera.getMinX(); x <= camera.getMaxX(); x++) {
+            for (int x = camera.getMinX(); x <= camera.getMaxX(); x++) {
 
                 if (mapData[x][y].getLayer(3).getGrhIndex() > 0) {
                     draw(mapData[x][y].getLayer(3),
                             POS_SCREEN_X + camera.getScreenX() * TILE_PIXEL_SIZE + PixelOffsetX,
                             POS_SCREEN_Y + camera.getScreenY() * TILE_PIXEL_SIZE + PixelOffsetY,
-                            true, true, false,1.0f, ambientColor);
+                            true, true, false, alphaCeiling, ambientColor);
                 }
 
                 camera.incrementScreenX();
@@ -209,10 +226,28 @@ public final class GameScene extends Scene {
         }
 
         main.render();
-
         showFPS();
     }
 
+    /**
+     * @desc: Detecta si el usuario esta debajo del techo, si es asi se desvanecera
+     *        el techo, caso contrario re aparece.
+     */
+    private void checkEffectCeiling(){
+        if(user.isUnderCeiling()) {
+            if (alphaCeiling > 0.0f){
+                alphaCeiling -= 0.5f * deltaTime;
+            }
+        } else {
+            if (alphaCeiling < 1.0f){
+                alphaCeiling += 0.5f * deltaTime;
+            }
+        }
+    }
+
+    /**
+     * @desc: Mostramos y dibujamos en texto la cantidad de FPS que se van actualizando.
+     */
     private void showFPS() {
         final String txtFPS = String.valueOf(FPS);
         drawText(txtFPS, (SCREEN_SIZE_X - getSizeText(txtFPS) / 2) - 90, 3, ambientColor, 0, false);

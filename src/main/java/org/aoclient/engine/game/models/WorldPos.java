@@ -1,6 +1,6 @@
 package org.aoclient.engine.game.models;
 
-public class WorldPos {
+public final class WorldPos {
     private int map;
     private int x;
     private int y;

@@ -14,6 +14,9 @@ import org.aoclient.engine.game.models.Character;
 import org.aoclient.engine.renderer.Surface;
 import org.aoclient.engine.utils.filedata.*;
 
+import static org.aoclient.engine.Sound.clearSounds;
+import static org.aoclient.engine.game.models.Character.eraseChar;
+
 public final class GameData {
     public static BodyData[] bodyData;
     public static HeadData[] headData;
@@ -25,16 +28,14 @@ public final class GameData {
     public static MapData[][] mapData;
     public static FontData[] fontTypes = new FontData[2];
 
-    public static Map<Integer, Character> charList;
-    public static Map<String, Sound> sounds;
+    public static Map<Integer, Character> charList = new HashMap<>();
+    public static Sound music;
+    public static Map<String, Sound> sounds = new HashMap<>();
 
     /**
      * @desc: Inicializamos todos los datos almacenados en archivos.
      */
     public static void initialize() {
-        charList    = new HashMap<>();
-        sounds      = new HashMap<>();
-
         loadGrhData();
         loadHeads();
         loadHelmets();
@@ -44,8 +45,7 @@ public final class GameData {
         loadFonts();
         LoadFXs();
 
-        addSound("resources/MP3/intro.ogg", false).play();
-        //addSound("resources/MIDI/7.mid", true).play();
+        //addMusic("resources/MP3/intro.ogg").play();
     }
 
     /**
@@ -430,14 +430,16 @@ public final class GameData {
                     }
 
                     if (mapData[x][y].getCharIndex() > 0) {
-                        //EraseChar;
+                        eraseChar(mapData[x][y].getCharIndex());
                     }
 
-                    Surface.getInstance().deleteAllTextures(); // para liberar memoria
-
-                    mapData[x][y].getObjGrh().setGrhIndex((short) 0);
+                    mapData[x][y].getObjGrh().setGrhIndex(0);
                 }
             }
+
+            // Liberar memoria
+            clearSounds();
+            Surface.getInstance().deleteAllTextures();
 
         } catch (IOException ex) {
             ex.printStackTrace();
@@ -610,41 +612,5 @@ public final class GameData {
         return grh;
     }
 
-    /**
-     *
-     * @desc: Devuelve todos los sonidos
-     */
-    public static Collection<Sound> getAllSounds() {
-        return sounds.values();
-    }
 
-    /**
-     *
-     * @desc: Nos devuelve un sonido cargado a nuestro mapa.
-     */
-    public static Sound getSound(String soundFile) {
-        File file = new File(soundFile);
-        if (sounds.containsKey(file.getAbsolutePath())) {
-            return sounds.get(file.getAbsolutePath());
-        } else {
-            System.out.println("Sound file not added '" + soundFile + "'");
-        }
-
-        return null;
-    }
-
-    /**
-     *
-     * @desc: Agregamos un sonido a nuestro mapa.
-     */
-    public static Sound addSound(String soundFile, boolean loops) {
-        File file = new File(soundFile);
-        if (sounds.containsKey(file.getAbsolutePath())) {
-            return sounds.get(file.getAbsolutePath());
-        } else {
-            Sound sound = new Sound(file.getAbsolutePath(), loops);
-            sounds.put(file.getAbsolutePath(), sound);
-            return sound;
-        }
-    }
 }

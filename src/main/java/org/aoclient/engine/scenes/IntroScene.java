@@ -24,7 +24,7 @@ public final class IntroScene extends Scene {
     public void init() {
         super.init();
         this.alphaInterface = 0.0f;
-        this.canChangeTo = SceneNames.MAIN_SCENE;
+        this.canChangeTo = SceneType.MAIN_SCENE;
         this.images = new ArrayList<>();
 
         // agregamos 4 interfaces

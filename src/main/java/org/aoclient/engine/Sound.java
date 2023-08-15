@@ -1,19 +1,30 @@
 package org.aoclient.engine;
 
-import javax.sound.midi.*;
 import java.io.File;
-import java.io.IOException;
 import java.nio.IntBuffer;
 import java.nio.ShortBuffer;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Collection;
 
+import static org.aoclient.engine.utils.GameData.music;
+import static org.aoclient.engine.utils.GameData.sounds;
 import static org.lwjgl.openal.AL10.*;
 import static org.lwjgl.stb.STBVorbis.stb_vorbis_decode_filename;
 import static org.lwjgl.system.MemoryStack.*;
 import static org.lwjgl.system.libc.LibCStdlib.free;
 
 public final class Sound {
+    // Constantes
+    public static final String SND_CLICK = "click.ogg";
+    public static final String SND_PASOS1 = "23.ogg";
+    public static final String SND_PASOS2 = "24.ogg";
+    public static final String SND_NAVEGANDO = "50.ogg";
+    public static final String SND_OVER = "click2.ogg";
+    public static final String SND_DICE = "cupdice.ogg";
+    public static final String SND_LLUVIAINEND = "lluviainend.ogg";
+    public static final String SND_LLUVIAOUTEND = "lluviaoutend.ogg";
+
+
+    // Atributos
     private int bufferId;
     private int sourceId;
     private String filepath;
@@ -23,16 +34,6 @@ public final class Sound {
     public Sound(String filepath, boolean loops) {
         this.filepath = filepath;
 
-        if (filepath.endsWith(".ogg")) {
-            loadOgg(filepath, loops);
-        } else if (filepath.endsWith(".mp3")) {
-            //loadMP3(filepath);
-        } else if (filepath.endsWith(".midi") || filepath.endsWith(".mid")) {
-            loadMIDI(filepath, loops);
-        }
-    }
-
-    private void loadOgg(String filepath, boolean loops) {
         // Allocate space to store the return information from stb
         stackPush();
         IntBuffer channelsBuffer = stackMallocInt(1);
@@ -80,10 +81,6 @@ public final class Sound {
         free(rawAudioBuffer);
     }
 
-    private void loadMIDI(String filepath, boolean loops) {
-
-    }
-
     public void delete() {
         alDeleteSources(sourceId);
         alDeleteBuffers(bufferId);
@@ -102,6 +99,7 @@ public final class Sound {
         }
     }
 
+
     public void stop() {
         if (isPlaying) {
             alSourceStop(sourceId);
@@ -119,5 +117,77 @@ public final class Sound {
             isPlaying = false;
         }
         return isPlaying;
+    }
+
+    /**
+     *
+     * @desc: Devuelve todos los sonidos
+     */
+    public static Collection<Sound> getAllSounds() {
+        return sounds.values();
+    }
+
+    /**
+     *
+     * @desc: Nos devuelve un sonido cargado a nuestro mapa.
+     */
+    public static Sound getSound(String soundFile) {
+        File file = new File(soundFile);
+        if (sounds.containsKey(file.getAbsolutePath())) {
+            return sounds.get(file.getAbsolutePath());
+        } else {
+            System.out.println("Sound file not added '" + soundFile + "'");
+        }
+
+        return null;
+    }
+
+    /**
+     *
+     * @desc: Agregamos un sonido a nuestro mapa.
+     */
+    public static Sound addSound(String soundFile, boolean loops) {
+        final File file = new File(soundFile);
+        if (sounds.containsKey(file.getAbsolutePath())) {
+            return sounds.get(file.getAbsolutePath());
+        } else {
+            Sound sound = new Sound(file.getAbsolutePath(), loops);
+            sounds.put(file.getAbsolutePath(), sound);
+            return sound;
+        }
+    }
+
+    public static void playSound(String soundName) {
+        final File file = new File("resources/sounds/" + soundName);
+
+        // existe?
+        if (sounds.containsKey(file.getAbsolutePath())) {
+            sounds.get(file.getAbsolutePath()).play();
+        } else {
+            addSound("resources/sounds/" + soundName, false).play();
+        }
+    }
+
+    /**
+     *
+     * @desc: Agregamos musica a nuestro variable de musica.
+     */
+    public static Sound addMusic(String soundFile) {
+        final File file = new File(soundFile);
+
+        if(music != null) {
+            music.stop();
+            music.delete();
+        }
+
+        Sound sound = new Sound(file.getAbsolutePath(), true);
+        music = sound;
+
+        return sound;
+    }
+
+    public static void clearSounds() {
+        sounds.forEach((s, sound) -> sound.delete());
+        sounds.clear();
     }
 }

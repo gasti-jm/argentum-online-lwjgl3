@@ -1,5 +1,7 @@
 package org.aoclient.engine.scenes;
 
+import org.aoclient.connection.SocketConnection;
+import org.aoclient.connection.packets.E_Modo;
 import org.aoclient.engine.Window;
 import org.aoclient.engine.gui.ElementGUI;
 import org.aoclient.engine.gui.elements.ImageGUI;
@@ -22,7 +24,7 @@ public final class MainScene extends Scene {
     @Override
     public void init() {
         super.init();
-        canChangeTo = SceneNames.GAME_SCENE;
+        canChangeTo = SceneType.GAME_SCENE;
 
         // Interface
         loginInterface = new ImageGUI();
@@ -33,16 +35,16 @@ public final class MainScene extends Scene {
 
 
         GameData.loadMap(58); // banderbill
-
-        camera.setHalfWindowTileWidth(((Window.getInstance().getWidth() / 32) / 2));
-        camera.setHalfWindowTileHeight(((Window.getInstance().getHeight() / 32) / 2));
+        camera.setHalfWindowTileWidth(((Window.getInstance().getWidth() / TILE_PIXEL_SIZE) / 2));
+        camera.setHalfWindowTileHeight(((Window.getInstance().getHeight() / TILE_PIXEL_SIZE) / 2));
     }
 
     @Override
     public void keyEvents() {
         if (KeyListener.isKeyReadyForAction(GLFW_KEY_ENTER)) {
-            this.visible = false;
-            loginInterface.clear();
+            SocketConnection.getInstance().connect(E_Modo.NORMAL);
+            //this.visible = false;
+            ///loginInterface.clear();
         }
     }
 
@@ -137,5 +139,6 @@ public final class MainScene extends Scene {
         }
 
     }
+
 
 }
