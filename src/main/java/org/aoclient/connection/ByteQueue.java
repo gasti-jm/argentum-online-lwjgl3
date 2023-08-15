@@ -50,7 +50,6 @@ public class ByteQueue {
         System.arraycopy(buf, 0, data, queueLength, dataLength);
 
         queueLength += dataLength;
-        System.out.println(queueLength);
         return dataLength;
     }
 
@@ -120,16 +119,6 @@ public class ByteQueue {
         byte[] buf = value.getBytes();
         return writeData(buf, buf.length);
     }
-
-//    public int writeASCIIString(String value) {
-//        byte[] valueBytes = value.getBytes();
-//        byte[] buf = new byte[value.length() + 2];
-//
-//        buf[0] = (byte) value.length();
-//        System.arraycopy(valueBytes, 0, buf, 2, value.length());
-//
-//        return writeData(buf, value.length() + 2);
-//    }
 
     public int writeASCIIString(String value) {
         byte[] valueBytes = value.getBytes();

@@ -4,10 +4,6 @@ import org.aoclient.connection.packets.E_Modo;
 
 import java.net.*;
 import java.io.*;
-import java.nio.ByteBuffer;
-import java.nio.charset.StandardCharsets;
-import java.sql.SQLOutput;
-import java.util.Arrays;
 
 import static org.aoclient.connection.Protocol.*;
 import static org.aoclient.connection.packets.E_Modo.NORMAL;
@@ -37,7 +33,7 @@ public class SocketConnection {
 
     public void connect(E_Modo estadoLogin) {
         try {
-            if(!isConnected()) {
+            if(sock == null) {
                 sock = new Socket(IP_SERVER, PORT_SERVER);
                 writeData = new DataOutputStream(sock.getOutputStream()); // envio
                 handleData = new DataInputStream(sock.getInputStream()); // respuesta..
@@ -81,7 +77,7 @@ public class SocketConnection {
     }
 
     public void sendData(String sdData) {
-        if (isConnected()){
+        if (sock.isConnected()){
             try {
                 writeData.write(sdData.getBytes());
             } catch (IOException e) {
@@ -91,16 +87,47 @@ public class SocketConnection {
     }
 
     public void readData() {
+        if (handleData == null) return;
+
+        try {
+            int availableBytes = handleData.available();
+
+
+            if (availableBytes > 0) {
+                System.out.println("Available Bytes: " + availableBytes);
+
+                byte[] dataBuffer = new byte[availableBytes];
+                int bytesRead = handleData.read(dataBuffer);
+                System.out.println("Bytes Read: " + bytesRead);
+
+                if (bytesRead > 0) {
+                    String receivedData = new String(dataBuffer, 0, bytesRead);
+
+                    byte[] data = receivedData.getBytes();
+
+                    // Process the received data here
+                    System.out.println("Received data: " + receivedData);
+
+                    if (receivedData.isEmpty() || receivedData == null) return;
+
+                    // Put data in the buffer
+                    incomingData.writeBlock(data, -1);
+
+                    //Send buffer to Handle data
+                    handleIncomingData();
+                }
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
     }
 
-    public boolean isConnected() {
-        return sock != null;
-    }
 
     public void disconnect() {
         try {
-            if (isConnected()) {
+            if (sock.isConnected()) {
                 writeData.close();
                 handleData.close();
                 sock.close();

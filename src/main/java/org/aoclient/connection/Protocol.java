@@ -15,7 +15,14 @@ public class Protocol {
      * '***************************************************
      */
     public static void handleIncomingData(){
-        ServerPacketID packet = ServerPacketID.values()[incomingData.peekByte()];
+        byte p = incomingData.peekByte();
+
+        if (p > ServerPacketID.values().length) return;
+
+        ServerPacketID packet = ServerPacketID.values()[p];
+        System.out.println("Numero de paquete: " + p);
+        //System.out.println(packet + " " + packet.ordinal());
+
 
         switch (packet) {
             case logged: handleLogged(); break;
@@ -126,316 +133,528 @@ public class Protocol {
             case MultiMessage: handleMultiMessage(); break;
             case StopWorking: handleStopWorking(); break;
             case CancelOfferItem: handleCancelOfferItem(); break;
+            default: return;
+        }
+
+        // Done with this packet, move on to next one
+        if(incomingData.length() > 0) {
+            handleIncomingData();
         }
     }
 
     private static void handleCancelOfferItem() {
+        // Remove packet ID
+        incomingData.readByte();
     }
 
     private static void handleStopWorking() {
+        // Remove packet ID
+        incomingData.readByte();
     }
 
     private static void handleMultiMessage() {
+        // Remove packet ID
+        incomingData.readByte();
     }
 
     private static void handleAddSlots() {
+        // Remove packet ID
+        incomingData.readByte();
     }
 
     private static void handleUpdateDexterity() {
+        // Remove packet ID
+        incomingData.readByte();
     }
 
     private static void handleUpdateStrenght() {
+        // Remove packet ID
+        incomingData.readByte();
     }
 
     private static void handleUpdateStrenghtAndDexterity() {
+        // Remove packet ID
+        incomingData.readByte();
     }
 
     private static void handleShowPartyForm() {
+        // Remove packet ID
+        incomingData.readByte();
     }
 
     private static void handleShowGuildAlign() {
+        // Remove packet ID
+        incomingData.readByte();
     }
 
     private static void handleUserNameList() {
+        // Remove packet ID
+        incomingData.readByte();
     }
 
     private static void handleShowGMPanelForm() {
+        // Remove packet ID
+        incomingData.readByte();
     }
 
     private static void handleShowMOTDEditionForm() {
+        // Remove packet ID
+        incomingData.readByte();
     }
 
     private static void handleShowSOSForm() {
+        // Remove packet ID
+        incomingData.readByte();
     }
 
     private static void handleSpawnList() {
+        // Remove packet ID
+        incomingData.readByte();
     }
 
     private static void handleGuildMemberInfo() {
+        // Remove packet ID
+        incomingData.readByte();
     }
 
     private static void handleUpdateTagAndStatus() {
+        // Remove packet ID
+        incomingData.readByte();
     }
 
     private static void handlePong() {
+        // Remove packet ID
+        incomingData.readByte();
     }
 
     private static void handleSendNight() {
+        // Remove packet ID
+        incomingData.readByte();
     }
 
     private static void handleChangeUserTradeSlot() {
+        // Remove packet ID
+        incomingData.readByte();
     }
 
     private static void handleBankOK() {
+        // Remove packet ID
+        incomingData.readByte();
     }
 
     private static void handleTradeOK() {
+        // Remove packet ID
+        incomingData.readByte();
     }
 
     private static void handleShowUserRequest() {
+        // Remove packet ID
+        incomingData.readByte();
     }
 
     private static void handleParalizeOK() {
+        // Remove packet ID
+        incomingData.readByte();
     }
 
     private static void handleShowGuildFundationForm() {
+        // Remove packet ID
+        incomingData.readByte();
     }
 
     private static void handleGuildDetails() {
+        // Remove packet ID
+        incomingData.readByte();
     }
 
     private static void handleGuildLeaderInfo() {
+        // Remove packet ID
+        incomingData.readByte();
     }
 
     private static void handleCharacterInfo() {
+        // Remove packet ID
+        incomingData.readByte();
     }
 
     private static void handlePeaceProposalsList() {
+        // Remove packet ID
+        incomingData.readByte();
     }
 
     private static void handleAlianceProposalsList() {
+        // Remove packet ID
+        incomingData.readByte();
     }
 
     private static void handleOfferDetails() {
+        // Remove packet ID
+        incomingData.readByte();
     }
 
     private static void handleGuildNews() {
+        // Remove packet ID
+        incomingData.readByte();
     }
 
     private static void handleTrainerCreatureList() {
+        // Remove packet ID
+        incomingData.readByte();
     }
 
     private static void handleSendSkills() {
+        // Remove packet ID
+        incomingData.readByte();
     }
 
     private static void handleDumbNoMore() {
+        // Remove packet ID
+        incomingData.readByte();
     }
 
     private static void handleBlindNoMore() {
+        // Remove packet ID
+        incomingData.readByte();
     }
 
     private static void handleMeditateToggle() {
+        // Remove packet ID
+        incomingData.readByte();
     }
 
     private static void handleDiceRoll() {
+        // Remove packet ID
+        incomingData.readByte();
     }
 
     private static void handleSetInvisible() {
+        // Remove packet ID
+        incomingData.readByte();
     }
 
     private static void handleShowForumForm() {
+        // Remove packet ID
+        incomingData.readByte();
     }
 
     private static void handleAddForumMessage() {
+        // Remove packet ID
+        incomingData.readByte();
     }
 
     private static void handleLevelUp() {
+        // Remove packet ID
+        incomingData.readByte();
     }
 
     private static void handleMiniStats() {
+        // Remove packet ID
+        incomingData.readByte();
     }
 
     private static void handleFame() {
+        // Remove packet ID
+        incomingData.readByte();
     }
 
     private static void handleUpdateHungerAndThirst() {
+        // Remove packet ID
+        incomingData.readByte();
     }
 
     private static void handleChangeNPCInventorySlot() {
+        // Remove packet ID
+        incomingData.readByte();
     }
 
     private static void handleShowSignal() {
+        // Remove packet ID
+        incomingData.readByte();
     }
 
     private static void handleDumb() {
+        // Remove packet ID
+        incomingData.readByte();
     }
 
     private static void handleBlind() {
+        // Remove packet ID
+        incomingData.readByte();
     }
 
     private static void handleErrorMessage() {
+        // Remove packet ID
+        incomingData.readByte();
     }
 
     private static void handleRestOK() {
+        // Remove packet ID
+        incomingData.readByte();
     }
 
     private static void handleCarpenterObjects() {
+        // Remove packet ID
+        incomingData.readByte();
     }
 
     private static void handleBlacksmithArmors() {
+        // Remove packet ID
+        incomingData.readByte();
     }
 
     private static void handleBlacksmithWeapons() {
+        // Remove packet ID
+        incomingData.readByte();
     }
 
     private static void handleAtributes() {
+        // Remove packet ID
+        incomingData.readByte();
     }
 
     private static void handleChangeSpellSlot() {
+        // Remove packet ID
+        incomingData.readByte();
     }
 
     private static void handleChangeBankSlot() {
+        // Remove packet ID
+        incomingData.readByte();
     }
 
     private static void handleChangeInventorySlot() {
+        // Remove packet ID
+        incomingData.readByte();
     }
 
     private static void handleWorkRequestTarget() {
+        // Remove packet ID
+        incomingData.readByte();
     }
 
     private static void handleUpdateUserStats() {
+        // Remove packet ID
+        incomingData.readByte();
     }
 
     private static void handleCreateFX() {
+        // Remove packet ID
+        incomingData.readByte();
     }
 
     private static void handleRainToggle() {
+        // Remove packet ID
+        incomingData.readByte();
     }
 
     private static void handlePauseToggle() {
+        // Remove packet ID
+        incomingData.readByte();
     }
 
     private static void handleAreaChanged() {
+        // Remove packet ID
+        incomingData.readByte();
     }
 
     private static void handleGuildList() {
+        // Remove packet ID
+        incomingData.readByte();
     }
 
     private static void handlePlayWave() {
+        // Remove packet ID
+        incomingData.readByte();
     }
 
     private static void handlePlayMIDI() {
+        // Remove packet ID
+        incomingData.readByte();
     }
 
     private static void handleBlockPosition() {
+        // Remove packet ID
+        incomingData.readByte();
     }
 
     private static void handleObjectDelete() {
+        // Remove packet ID
+        incomingData.readByte();
     }
 
     private static void handleObjectCreate() {
+        // Remove packet ID
+        incomingData.readByte();
     }
 
     private static void handleCharacterChange() {
+        // Remove packet ID
+        incomingData.readByte();
     }
 
     private static void handleForceCharMove() {
+        // Remove packet ID
+        incomingData.readByte();
     }
 
     private static void handleCharacterMove() {
+        // Remove packet ID
+        incomingData.readByte();
     }
 
     private static void handleCharacterChangeNick() {
+        // Remove packet ID
+        incomingData.readByte();
     }
 
     private static void handleCharacterRemove() {
+        // Remove packet ID
+        incomingData.readByte();
     }
 
     private static void handleCharacterCreate() {
+        // Remove packet ID
+        incomingData.readByte();
     }
 
     private static void handleUserCharIndexInServer() {
+        // Remove packet ID
+        incomingData.readByte();
     }
 
     private static void handleUserIndexInServer() {
+        // Remove packet ID
+        incomingData.readByte();
     }
 
     private static void handleShowMessageBox() {
+        // Remove packet ID
+        incomingData.readByte();
     }
 
     private static void handleGuildChat() {
+        // Remove packet ID
+        incomingData.readByte();
     }
 
     private static void handleConsoleMessage() {
+        // Remove packet ID
+        incomingData.readByte();
     }
 
     private static void handleChatOverHead() {
+        // Remove packet ID
+        incomingData.readByte();
     }
 
     private static void handlePosUpdate() {
+        // Remove packet ID
+        incomingData.readByte();
     }
 
     private static void handleChangeMap() {
+        // Remove packet ID
+        incomingData.readByte();
     }
 
     private static void handleUpdateExp() {
+        // Remove packet ID
+        incomingData.readByte();
     }
 
     private static void handleUpdateBankGold() {
+        // Remove packet ID
+        incomingData.readByte();
     }
 
     private static void handleUpdateGold() {
+        // Remove packet ID
+        incomingData.readByte();
     }
 
     private static void handleUpdateHP() {
+        // Remove packet ID
+        incomingData.readByte();
     }
 
     private static void handleUpdateMana() {
+        // Remove packet ID
+        incomingData.readByte();
     }
 
     private static void handleUpdateSta() {
+        // Remove packet ID
+        incomingData.readByte();
     }
 
     private static void handleShowCarpenterForm() {
+        // Remove packet ID
+        incomingData.readByte();
     }
 
     private static void handleShowBlacksmithForm() {
+        // Remove packet ID
+        incomingData.readByte();
     }
 
     private static void handleUserOfferConfirm() {
+        // Remove packet ID
+        incomingData.readByte();
     }
 
     private static void handleUserCommerceEnd() {
+        // Remove packet ID
+        incomingData.readByte();
     }
 
     private static void handleUserCommerceInit() {
+        // Remove packet ID
+        incomingData.readByte();
     }
 
     private static void handleBankInit() {
+        // Remove packet ID
+        incomingData.readByte();
     }
 
     private static void handleCommerceInit() {
+        // Remove packet ID
+        incomingData.readByte();
     }
 
     private static void handleBankEnd() {
+        // Remove packet ID
+        incomingData.readByte();
     }
 
     private static void handleCommerceChat() {
+        // Remove packet ID
+        incomingData.readByte();
     }
 
     private static void handleCommerceEnd() {
+        // Remove packet ID
+        incomingData.readByte();
     }
 
     private static void handleDisconnect() {
+        // Remove packet ID
+        incomingData.readByte();
     }
 
     private static void handleNavigateToggle() {
+        // Remove packet ID
+        incomingData.readByte();
     }
 
     private static void handleRemoveCharDialog() {
+        // Remove packet ID
+        incomingData.readByte();
     }
 
     private static void handleRemoveDialogs() {
+        // Remove packet ID
+        incomingData.readByte();
     }
 
     private static void handleLogged() {

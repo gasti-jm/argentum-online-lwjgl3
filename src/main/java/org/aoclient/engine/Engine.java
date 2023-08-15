@@ -110,6 +110,7 @@ public final class Engine {
 
         // If there is anything to be sent, we send it
         SocketConnection.getInstance().flushBuffer();
+        SocketConnection.getInstance().readData();
     }
 
 }
