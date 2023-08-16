@@ -1,6 +1,8 @@
 package org.aoclient.engine;
 
 import org.aoclient.connection.SocketConnection;
+import org.aoclient.engine.game.BindKeys;
+import org.aoclient.engine.game.eKeyType;
 import org.aoclient.engine.listeners.KeyListener;
 import org.aoclient.engine.renderer.Surface;
 import org.aoclient.engine.scenes.*;
@@ -17,6 +19,7 @@ public final class Engine {
     private static boolean prgRun = true;
     private Window window;
     private Scene currentScene;
+    private BindKeys bindKeys;
 
     public void start() {
         System.out.println("Hello LWJGL " + Version.getVersion() + "!");
@@ -26,6 +29,7 @@ public final class Engine {
 
         Surface.getInstance().initialize();
         GameData.initialize();
+        bindKeys = BindKeys.get();
 
         changeScene(INTRO_SCENE);
 
@@ -92,7 +96,7 @@ public final class Engine {
     }
 
     private void render() {
-        if (KeyListener.isKeyPressed(GLFW_KEY_ESCAPE)) {
+        if (KeyListener.isKeyPressed(bindKeys.getBindedKey(eKeyType.mKeyExitGame))) {
             closeClient();
         }
 

@@ -15,6 +15,7 @@ import static org.aoclient.engine.renderer.Drawn.draw;
 import static org.aoclient.engine.scenes.Camera.TILE_BUFFER_SIZE;
 import static org.aoclient.engine.scenes.Camera.TILE_PIXEL_SIZE;
 import static org.aoclient.engine.utils.GameData.mapData;
+import static org.aoclient.engine.utils.GameData.music;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_ENTER;
 
 public final class MainScene extends Scene {
@@ -57,6 +58,7 @@ public final class MainScene extends Scene {
     public void render() {
 
         if(User.getInstance().isUserConected()) {
+            music.stop();
             close();
         }
 

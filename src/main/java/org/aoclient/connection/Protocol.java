@@ -3208,4 +3208,8 @@ public class Protocol {
         outgoingData.writeByte(ClientPacketID.Attack.ordinal());
     }
 
+    public static void writePickUp() {
+        outgoingData.writeByte(ClientPacketID.PickUp.ordinal());
+    }
+
 }

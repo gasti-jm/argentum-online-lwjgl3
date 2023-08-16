@@ -11,6 +11,7 @@ import org.aoclient.engine.game.models.Character;
 import org.aoclient.engine.renderer.Surface;
 import org.aoclient.engine.utils.filedata.*;
 
+import static org.aoclient.engine.Sound.addMusic;
 import static org.aoclient.engine.Sound.clearSounds;
 import static org.aoclient.engine.game.models.Character.eraseChar;
 import static org.aoclient.engine.utils.ByteMigration.*;
@@ -47,7 +48,7 @@ public final class GameData {
         loadFonts();
         LoadFXs();
 
-        //addMusic("resources/MP3/intro.ogg").play();
+        addMusic("resources/MP3/intro.ogg").play();
     }
 
     /**
@@ -330,7 +331,7 @@ public final class GameData {
 
             byte byflags = 0;
 
-            // que era esto?
+            // Falta implementar el mapInfo xd....
             bigToLittle_Short(f.readShort());
             bigToLittle_Short(f.readShort());
             bigToLittle_Short(f.readShort());

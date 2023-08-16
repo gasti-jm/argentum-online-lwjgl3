@@ -1,5 +1,7 @@
 package org.aoclient.engine.scenes;
 
+import org.aoclient.engine.game.BindKeys;
+import org.aoclient.engine.game.eKeyType;
 import org.aoclient.engine.gui.ElementGUI;
 import org.aoclient.engine.gui.elements.ImageGUI;
 import org.aoclient.engine.listeners.KeyListener;
@@ -9,6 +11,8 @@ import org.aoclient.engine.renderer.RGBColor;
 import org.aoclient.engine.utils.GameData;
 
 import static org.aoclient.connection.Protocol.writeAttack;
+import static org.aoclient.connection.Protocol.writePickUp;
+import static org.aoclient.engine.game.eKeyType.*;
 import static org.aoclient.engine.game.models.Character.*;
 import static org.aoclient.engine.game.models.E_Heading.*;
 import static org.aoclient.engine.renderer.Drawn.*;
@@ -18,6 +22,7 @@ import static org.aoclient.engine.utils.Time.*;
 import static org.lwjgl.glfw.GLFW.*;
 
 public final class GameScene extends Scene {
+    private BindKeys bindKeys;
     private User user;
 
     private float offSetCounterX = 0;
@@ -34,6 +39,7 @@ public final class GameScene extends Scene {
         super.init();
         canChangeTo = SceneType.MAIN_SCENE;
 
+        bindKeys = BindKeys.get();
         user = User.getInstance();
 
         ambientColor = new RGBColor(1.0f, 1.0f, 1.0f);
@@ -50,34 +56,32 @@ public final class GameScene extends Scene {
 
     @Override
     public void keyEvents() {
+        // falta bindear xd
         if (KeyListener.isKeyReadyForAction(GLFW_KEY_TAB)) {
             KeyListener.setLastKeyPressed(0);
             autoMove = !autoMove;
         }
 
-        if (KeyListener.isKeyReadyForAction(GLFW_KEY_LEFT_CONTROL)) {
+        if (KeyListener.isKeyReadyForAction(bindKeys.getBindedKey(mKeyAttack))) {
             writeAttack();
+        }
+
+        if (KeyListener.isKeyReadyForAction(bindKeys.getBindedKey(mKeyGetObject))) {
+            writePickUp();
         }
 
         if(!user.isUserMoving()) {
             if(!autoMove){
+
                 if (!KeyListener.lastKeysPressed.isEmpty()) {
-                    switch (KeyListener.lastKeysPressed.get(KeyListener.lastKeysPressed.size() - 1)) {
-                        case GLFW_KEY_W:
-                            if (KeyListener.isKeyPressed(GLFW_KEY_W)) user.moveTo(NORTH);
-                            break;
-
-                        case GLFW_KEY_S:
-                            if (KeyListener.isKeyPressed(GLFW_KEY_S)) user.moveTo(SOUTH);
-                            break;
-
-                        case GLFW_KEY_A:
-                            if (KeyListener.isKeyPressed(GLFW_KEY_A)) user.moveTo(WEST);
-                            break;
-
-                        case GLFW_KEY_D:
-                            if (KeyListener.isKeyPressed(GLFW_KEY_D)) user.moveTo(EAST);
-                            break;
+                    if (KeyListener.lastKeysPressed.get(KeyListener.lastKeysPressed.size() - 1) == bindKeys.getBindedKey(mKeyUp)) {
+                        user.moveTo(NORTH);
+                    } else if (KeyListener.lastKeysPressed.get(KeyListener.lastKeysPressed.size() - 1) == bindKeys.getBindedKey(mKeyDown)) {
+                        user.moveTo(SOUTH);
+                    } else if (KeyListener.lastKeysPressed.get(KeyListener.lastKeysPressed.size() - 1) == bindKeys.getBindedKey(mKeyLeft)) {
+                        user.moveTo(WEST);
+                    } else if (KeyListener.lastKeysPressed.get(KeyListener.lastKeysPressed.size() - 1) == bindKeys.getBindedKey(mKeyRight)) {
+                        user.moveTo(EAST);
                     }
                 }
 
