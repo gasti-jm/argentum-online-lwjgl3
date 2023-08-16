@@ -3,6 +3,7 @@ package org.aoclient.engine.scenes;
 import org.aoclient.connection.SocketConnection;
 import org.aoclient.connection.packets.E_Modo;
 import org.aoclient.engine.Window;
+import org.aoclient.engine.game.User;
 import org.aoclient.engine.gui.ElementGUI;
 import org.aoclient.engine.gui.elements.ImageGUI;
 import org.aoclient.engine.listeners.KeyListener;
@@ -42,14 +43,23 @@ public final class MainScene extends Scene {
     @Override
     public void keyEvents() {
         if (KeyListener.isKeyReadyForAction(GLFW_KEY_ENTER)) {
+            // conectarse al servidor con el usuario "GS" y pass "gszone".
             SocketConnection.getInstance().connect(E_Modo.NORMAL);
-            //this.visible = false;
-            ///loginInterface.clear();
         }
+    }
+
+    public void close() {
+        this.visible = false;
+        loginInterface.clear();
     }
 
     @Override
     public void render() {
+
+        if(User.getInstance().isUserConected()) {
+            close();
+        }
+
         if (!visible) return;
 
         renderMap();

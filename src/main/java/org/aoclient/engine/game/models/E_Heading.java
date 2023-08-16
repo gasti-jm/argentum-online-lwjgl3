@@ -1,5 +1,10 @@
 package org.aoclient.engine.game.models;
 
 public enum E_Heading {
-    NORTH, EAST, SOUTH, WEST
+    NORTH(1), EAST(2), SOUTH(3), WEST(4);
+    public int value;
+
+    E_Heading(int value) {
+        this.value = value;
+    }
 }

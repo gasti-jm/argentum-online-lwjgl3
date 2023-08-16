@@ -10,7 +10,7 @@ public final class GrhInfo {
 
     public GrhInfo() {
         this.started         = false;
-        this.grhIndex        = 1;
+        this.grhIndex        = 0;
         this.frameCounter    = 1.0f;
         this.loops           = 0;
         this.speed           = 0.0f;

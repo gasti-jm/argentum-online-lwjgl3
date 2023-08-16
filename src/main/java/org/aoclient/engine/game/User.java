@@ -7,8 +7,8 @@ import org.aoclient.engine.game.models.Position;
 import org.aoclient.engine.utils.filedata.*;
 
 import static org.aoclient.engine.Sound.*;
-import static org.aoclient.engine.game.models.Character.eraseChar;
-import static org.aoclient.engine.game.models.Character.refreshAllChars;
+import static org.aoclient.engine.game.models.Character.*;
+import static org.aoclient.engine.game.models.E_Heading.*;
 import static org.aoclient.engine.scenes.Camera.*;
 import static org.aoclient.engine.utils.GameData.*;
 import static org.aoclient.engine.utils.GameData.fxData;
@@ -25,15 +25,16 @@ public final class User {
     private Position addToUserPos;
     private short userCharIndex;
 
-    // personajes (incluido yo)
+    // personajes visibles (incluido yo)
     private int lastChar = 0;
     private int numChars = 0;
+
+    // conexion
+    private boolean userConected;
 
     // areas
     private int minLimiteX, maxLimiteX;
     private int minLimiteY, maxLimiteY;
-
-
 
     private User () {
         userPos = new Position();
@@ -85,9 +86,6 @@ public final class User {
     public void moveCharbyHead(int charIndex, E_Heading nHeading) {
         int addX = 0, addY = 0;
 
-        final int x = charList[charIndex].getPos().getX();
-        final int y = charList[charIndex].getPos().getY();
-
         switch (nHeading) {
             case NORTH  : addY = -1;    break;
             case EAST   : addX = 1;     break;
@@ -95,18 +93,22 @@ public final class User {
             case WEST   : addX = -1;    break;
         }
 
-        final int nX = x + addX;
-        final int nY = y + addY;
+        int x = charList[charIndex].getPos().getX();
+        int y = charList[charIndex].getPos().getY();
+        int nX = x + addX;
+        int nY = y + addY;
 
-        mapData[x][y].setCharIndex(0);
-        mapData[nX][nY].setCharIndex( charIndex);
+        mapData[nX][nY].setCharIndex(charIndex);
         charList[charIndex].getPos().setX(nX);
         charList[charIndex].getPos().setY(nY);
+        mapData[x][y].setCharIndex(0);
 
-        charList[charIndex].setMoveOffsetX(-1 * (Camera.TILE_PIXEL_SIZE * addX));
-        charList[charIndex].setMoveOffsetY(-1 * (Camera.TILE_PIXEL_SIZE * addY));
+
+        charList[charIndex].setMoveOffsetX(-1 * (TILE_PIXEL_SIZE * addX));
+        charList[charIndex].setMoveOffsetY(-1 * (TILE_PIXEL_SIZE * addY));
 
         charList[charIndex].setMoving(true);
+        charList[charIndex].setHeading(nHeading);
 
         charList[charIndex].setScrollDirectionX(addX);
         charList[charIndex].setScrollDirectionY(addY);
@@ -135,20 +137,19 @@ public final class User {
 
         for (int loopX = 1; loopX <= 100; loopX++) {
             for (int loopY = 1; loopY <= 100; loopY++) {
-                if ((loopY < minLimiteY) || (loopY > maxLimiteY) || (loopX < minLimiteX) || (loopX > maxLimiteX)) {
 
+                if ((loopY < minLimiteY) || (loopY > maxLimiteY) || (loopX < minLimiteX) || (loopX > maxLimiteX)) {
                     // Erase NPCs
                     if(mapData[loopX][loopY].getCharIndex() > 0) {
                         if(mapData[loopX][loopY].getCharIndex() != userCharIndex) {
                             eraseChar(mapData[loopX][loopY].getCharIndex());
                         }
-
-                        // Erase Objs
-                        mapData[loopX][loopY].getObjGrh().setGrhIndex(0);
-
                     }
 
+                    // Erase Objs
+                    mapData[loopX][loopY].getObjGrh().setGrhIndex(0);
                 }
+
             }
         }
 
@@ -161,7 +162,6 @@ public final class User {
     }
 
     private boolean moveToLegalPos(int x, int y) {
-        final int charIndex = mapData[x][y].getCharIndex();
 
         // Limite del mapa
         if (inMapBounds(x, y))
@@ -172,6 +172,7 @@ public final class User {
             return false;
         }
 
+        int charIndex = mapData[x][y].getCharIndex();
         // ¿Hay un personaje?
         if (charIndex > 0) {
             if (mapData[userPos.getX()][userPos.getY()].getBlocked()) {
@@ -217,8 +218,56 @@ public final class User {
         }
     }
 
+    public void moveCharbyPos(int charIndex, int nX, int nY) {
+        E_Heading heading = charList[charIndex].getHeading();
+        final int x = charList[charIndex].getPos().getX();
+        final int y = charList[charIndex].getPos().getY();
+
+        final int addX = nX - x;
+        final int addY = nY - y;
+
+        if(sgn( (short) addX) == 1) {
+            heading = EAST;
+        } else if(sgn( (short) addX) == -1) {
+            heading = WEST;
+        } else if (sgn( (short) addY) == -1) {
+            heading = NORTH;
+        } else if (sgn( (short) addY) == 1) {
+            heading = SOUTH;
+        }
+
+        mapData[nX][nY].setCharIndex(charIndex);
+        charList[charIndex].getPos().setX(nX);
+        charList[charIndex].getPos().setY(nY);
+        mapData[x][y].setCharIndex(0);
+
+        charList[charIndex].setMoveOffsetX(-1 * (TILE_PIXEL_SIZE * addX));
+        charList[charIndex].setMoveOffsetY(-1 * (TILE_PIXEL_SIZE * addY));
+
+        charList[charIndex].setMoving(true);
+        charList[charIndex].setHeading(heading);
+
+        charList[charIndex].setScrollDirectionX( sgn( (short) addX));
+        charList[charIndex].setScrollDirectionY( sgn( (short) addY));
+
+        /*
+            'parche para que no medite cuando camina
+            If .FxIndex = FxMeditar.CHICO Or .FxIndex = FxMeditar.GRANDE Or .FxIndex = FxMeditar.MEDIANO Or .FxIndex = FxMeditar.XGRANDE Or .FxIndex = FxMeditar.XXGRANDE Then
+                .FxIndex = 0
+            End If
+         */
+
+        // If Not EstaPCarea(CharIndex) Then Call Dialogos.RemoveDialog(CharIndex)
+
+        if ((nY < minLimiteY) || (nY > maxLimiteY) || (nX < minLimiteX) || (nX > maxLimiteX)) {
+            if(charIndex != userCharIndex) {
+                eraseChar(charIndex);
+            }
+        }
+    }
+
     public void moveTo(E_Heading direction) {
-        boolean legalOk = true;
+        boolean legalOk = false;
 
         switch (direction){
             case NORTH:
@@ -238,15 +287,14 @@ public final class User {
                 break;
         }
 
-        charList[userCharIndex].setHeading(direction);
-
+        //charList[userCharIndex].setHeading(direction);
         if (legalOk){
             moveScreen(direction);
             moveCharbyHead(userCharIndex, direction);
         }
     }
 
-    private void doPasosFx(int charIndex) {
+    public void doPasosFx(int charIndex) {
         if (!charList[charIndex].isDead()) {
             if(charList[charIndex].isPie()) {
                 playSound(SND_PASOS1);
@@ -319,7 +367,15 @@ public final class User {
     }
 
     public void setConnected() {
+        userConected = true;
+    }
 
+    public boolean isUserConected() {
+        return userConected;
+    }
+
+    public void setUserConected(boolean userConected) {
+        this.userConected = userConected;
     }
 
     public short getUserCharIndex() {

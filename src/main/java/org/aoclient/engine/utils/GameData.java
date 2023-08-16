@@ -283,14 +283,13 @@ public final class GameData {
                 myHeads[i].setHead(3, bigToLittle_Short(f.readShort()));
                 myHeads[i].setHead(4, bigToLittle_Short(f.readShort()));
 
-                //if (myHeads[i].getHead(1) != 0) {
+                if (myHeads[i].getHead(1) != 0) {
                     helmetsData[i] = new HeadData();
                     helmetsData[i].setHead(1, initGrh(helmetsData[i].getHead(1), myHeads[i].getHead(1), false));
                     helmetsData[i].setHead(2, initGrh(helmetsData[i].getHead(2), myHeads[i].getHead(2), false));
                     helmetsData[i].setHead(3, initGrh(helmetsData[i].getHead(3), myHeads[i].getHead(3), false));
                     helmetsData[i].setHead(4, initGrh(helmetsData[i].getHead(4), myHeads[i].getHead(4), false));
-
-                //}
+                }
             }
 
         } catch (IOException ex) {
@@ -408,7 +407,6 @@ public final class GameData {
 
             for (int y = 1; y <= 100; y++) {
                 for (int x = 1; x <= 100; x++) {
-
                     mapData[x][y] = new MapData();
 
                     byflags = bigToLittle_Byte(f.readByte());

@@ -17,9 +17,9 @@ public class SocketConnection {
     final static String IP_SERVER = "127.0.0.1";
     final static int PORT_SERVER = 7666;
 
-    Socket sock;
-    DataOutputStream writeData;
-    DataInputStream handleData;
+    private Socket sock;
+    private DataOutputStream writeData;
+    private DataInputStream handleData;
 
     private SocketConnection() {
 
@@ -67,6 +67,8 @@ public class SocketConnection {
     }
 
     public void flushBuffer() {
+        if (writeData == null || !sock.isConnected()) return;
+
         if (outgoingData.length() != 0){
 
             new Thread(() -> {
@@ -89,7 +91,7 @@ public class SocketConnection {
     }
 
     public void readData() {
-        if (handleData == null) return;
+        if (handleData == null || !sock.isConnected()) return;
 
         try {
             int availableBytes = handleData.available();
@@ -120,13 +122,8 @@ public class SocketConnection {
                 }
             }
 
-            // Add some delay to avoid busy-waiting
-            Thread.sleep(100);
-
         } catch (IOException e) {
             e.printStackTrace();
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
         }
 
     }

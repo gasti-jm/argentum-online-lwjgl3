@@ -24,7 +24,6 @@ public final class GameScene extends Scene {
 
     RGBColor ambientColor;
     private boolean autoMove = false;
-
     private ElementGUI main;
 
 
@@ -34,13 +33,6 @@ public final class GameScene extends Scene {
         canChangeTo = SceneType.MAIN_SCENE;
 
         user = User.getInstance();
-
-        //GameData.loadMap(1);
-        //mapData[50][50].setCharIndex(makeChar(1, 127, SOUTH, 50, 50));
-        //refreshAllChars();
-
-        user.getUserPos().setX(50);
-        user.getUserPos().setY(50);
 
         ambientColor = new RGBColor(1.0f, 1.0f, 1.0f);
 
@@ -56,14 +48,6 @@ public final class GameScene extends Scene {
 
     @Override
     public void keyEvents() {
-        if (KeyListener.isKeyReadyForAction(GLFW_KEY_F5)) {
-            user.setCharacterFx(1, 7, -1);
-        }
-
-        if (KeyListener.isKeyReadyForAction(GLFW_KEY_F)) {
-            GameData.loadMap(34);
-        }
-
         if (KeyListener.isKeyReadyForAction(GLFW_KEY_TAB)) {
             KeyListener.setLastKeyPressed(0);
             autoMove = !autoMove;
@@ -188,7 +172,7 @@ public final class GameScene extends Scene {
                     }
                 }
 
-                if (mapData[x][y].getCharIndex() > 0) {
+                if (mapData[x][y].getCharIndex() != 0) {
                     charRender(mapData[x][y].getCharIndex(),
                             POS_SCREEN_X + camera.getScreenX() * TILE_PIXEL_SIZE + PixelOffsetX,
                             POS_SCREEN_Y + camera.getScreenY() * TILE_PIXEL_SIZE + PixelOffsetY, ambientColor);
@@ -258,7 +242,7 @@ public final class GameScene extends Scene {
 
         if (user.isUserMoving()) {
             if (user.getAddToUserPos().getX() != 0) {
-                offSetCounterX -= charList[1].getWalkingSpeed() * user.getAddToUserPos().getX() * timerTicksPerFrame;
+                offSetCounterX -= charList[user.getUserCharIndex()].getWalkingSpeed() * user.getAddToUserPos().getX() * timerTicksPerFrame;
                 if (Math.abs(offSetCounterX) >= Math.abs(TILE_PIXEL_SIZE * user.getAddToUserPos().getX())) {
                     offSetCounterX = 0;
                     user.getAddToUserPos().setX(0);
@@ -267,7 +251,7 @@ public final class GameScene extends Scene {
             }
 
             if (user.getAddToUserPos().getY() != 0) {
-                offSetCounterY -= charList[1].getWalkingSpeed() * user.getAddToUserPos().getY() * timerTicksPerFrame;
+                offSetCounterY -= charList[user.getUserCharIndex()].getWalkingSpeed() * user.getAddToUserPos().getY() * timerTicksPerFrame;
                 if (Math.abs(offSetCounterY) >= Math.abs(TILE_PIXEL_SIZE * user.getAddToUserPos().getY())) {
                     offSetCounterY = 0;
                     user.getAddToUserPos().setY(0);

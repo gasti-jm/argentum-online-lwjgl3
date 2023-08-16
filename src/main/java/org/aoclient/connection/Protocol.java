@@ -951,8 +951,32 @@ public class Protocol {
     }
 
     private static void handleCharacterMove() {
+        if (incomingData.length() < 5) {
+            System.out.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handleCharacterMove");
+            return;
+        }
+
         // Remove packet ID
         incomingData.readByte();
+
+        short charIndex = incomingData.readInteger();
+        byte x = incomingData.readByte();
+        byte y = incomingData.readByte();
+
+        // Si esta meditando, removemos el FX.
+        if (charList[charIndex].getFxIndex() >= 40 && charList[charIndex].getFxIndex() <= 49) {
+            charList[charIndex].setFxIndex(0);
+        }
+
+        // Play steps sounds if the user is not an admin of any kind
+        int priv = charList[charIndex].getPriv();
+        if (priv != 1 && priv != 2 && priv != 3 && priv != 5 && priv != 25) {
+            User.getInstance().doPasosFx(charIndex);
+        }
+
+        User.getInstance().moveCharbyPos(charIndex, x, y);
+        refreshAllChars();
+        System.out.println("handleCharacterCreate Cargado! - FALTA TERMINAR!");
     }
 
     private static void handleCharacterChangeNick() {
@@ -1044,7 +1068,8 @@ public class Protocol {
         incomingData.readByte();
 
         User.getInstance().setUserCharIndex(incomingData.readInteger());
-        User.getInstance().setUserPos(charList[User.getInstance().getUserCharIndex()].getPos());
+        User.getInstance().getUserPos().setX(charList[User.getInstance().getUserCharIndex()].getPos().getX());
+        User.getInstance().getUserPos().setY(charList[User.getInstance().getUserCharIndex()].getPos().getY());
 
         System.out.println("handleUserCharIndexInServer Cargado! - FALTA TERMINAR!");
     }
