@@ -45,8 +45,7 @@ public final class IntroScene extends Scene {
     @Override
     public void keyEvents() {
         if (KeyListener.isKeyReadyForAction(GLFW_KEY_ENTER) || KeyListener.isKeyPressed(GLFW_KEY_SPACE)) {
-            this.visible = false;
-            images.forEach(elementGUI -> elementGUI.clear());
+            close();
         }
     }
 
@@ -86,8 +85,14 @@ public final class IntroScene extends Scene {
         timeScene -= deltaTime;
 
         if(timeScene <= 0) {
-            this.visible = false;
+            close();
         }
+    }
+
+    @Override
+    public void close() {
+        this.visible = false;
+        images.forEach(elementGUI -> elementGUI.clear());
     }
 
     /**

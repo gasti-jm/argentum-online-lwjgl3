@@ -37,7 +37,7 @@ public final class User {
     private int minLimiteX, maxLimiteX;
     private int minLimiteY, maxLimiteY;
 
-    //
+    // limites del mapa
     public final int minXBorder = XMinMapSize + ( (SCREEN_SIZE_X / 32) / 2);
     public final int maxXBorder = XMaxMapSize - ( (SCREEN_SIZE_X / 32) / 2);
     public final int minYBorder = YMinMapSize + ( (SCREEN_SIZE_Y / 32) / 2);
@@ -132,7 +132,7 @@ public final class User {
 
     /**
      *
-     * @desc: Cambio de area...
+     * @desc: Cambio de area
      */
     public void areaChange(int x, int y) {
         minLimiteX = (x / TILE_BUFFER_SIZE - 1) * TILE_BUFFER_SIZE;
@@ -167,7 +167,6 @@ public final class User {
     }
 
     private boolean moveToLegalPos(int x, int y) {
-
         // Limite del mapa
         if (x < minXBorder || x > maxXBorder || y < minYBorder || y > maxYBorder)
             return false;

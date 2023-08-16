@@ -49,16 +49,16 @@ public final class MainScene extends Scene {
         }
     }
 
+    @Override
     public void close() {
+        music.stop();
         this.visible = false;
         loginInterface.clear();
     }
 
     @Override
     public void render() {
-
         if(User.getInstance().isUserConected()) {
-            music.stop();
             close();
         }
 
@@ -151,6 +151,5 @@ public final class MainScene extends Scene {
         }
 
     }
-
 
 }

@@ -11,9 +11,8 @@ import static org.aoclient.connection.packets.E_Modo.NORMAL;
 public class SocketConnection {
     private static SocketConnection instance;
 
-
-    final static String IP_SERVER = "127.0.0.1";
-    final static int PORT_SERVER = 7666;
+    private final static String IP_SERVER = "127.0.0.1";
+    private final static int PORT_SERVER = 7666;
 
     private Socket sock;
     private DataOutputStream writeData;
@@ -33,7 +32,7 @@ public class SocketConnection {
 
     public void connect(E_Modo estadoLogin) {
         try {
-            if(sock == null) {
+            if(sock == null || sock.isClosed()) {
                 sock = new Socket(IP_SERVER, PORT_SERVER);
                 writeData = new DataOutputStream(sock.getOutputStream()); // envio
                 handleData = new DataInputStream(sock.getInputStream()); // respuesta..
@@ -65,16 +64,14 @@ public class SocketConnection {
     }
 
     public void flushBuffer() {
-        if (writeData == null || !sock.isConnected()) return;
+        if (writeData == null || !sock.isConnected() || sock.isClosed()) return;
 
         if (outgoingData.length() != 0){
-
             //new Thread(() -> {
                 String sndData;
                 sndData = outgoingData.readASCIIStringFixed(outgoingData.length());
                 sendData(sndData);
            // }).start();
-
         }
     }
 
@@ -89,22 +86,18 @@ public class SocketConnection {
     }
 
     public void readData() {
-        if (handleData == null || !sock.isConnected()) return;
+        if (handleData == null || !sock.isConnected() || sock.isClosed()) return;
 
         try {
-            int availableBytes = handleData.available();
+            final int availableBytes = handleData.available();
             if (availableBytes > 0) {
                 //System.out.println("Available Bytes: " + availableBytes);
-                byte[] dataBuffer = new byte[availableBytes];
-
-                int bytesRead = 0;
-
-                bytesRead = handleData.read(dataBuffer);
+                final byte[] dataBuffer = new byte[availableBytes];
+                final int bytesRead = handleData.read(dataBuffer);
                 //System.out.println("Bytes Read: " + bytesRead);
 
                 if (bytesRead > 0) {
                     String RD = new String(dataBuffer, 0 , bytesRead);
-                    //System.out.println(RD.length());
                     byte[] data = RD.getBytes();
 
                     // Process the received data here
@@ -123,17 +116,15 @@ public class SocketConnection {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
 
 
     public void disconnect() {
         try {
-            if (sock.isConnected()) {
-                writeData.close();
-                handleData.close();
-                sock.close();
-            }
+            writeData.close();
+            handleData.close();
+            sock.close();
+
 
         } catch (IOException e) {
             e.printStackTrace();

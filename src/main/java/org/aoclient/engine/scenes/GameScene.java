@@ -47,7 +47,6 @@ public final class GameScene extends Scene {
         camera.setHalfWindowTileWidth   (( (SCREEN_SIZE_X / TILE_PIXEL_SIZE) / 2 ));
         camera.setHalfWindowTileHeight  (( (SCREEN_SIZE_Y / TILE_PIXEL_SIZE) / 2 ));
 
-
         // Interface
         main = new ImageGUI();
         main.init();
@@ -90,6 +89,12 @@ public final class GameScene extends Scene {
             }
 
         }
+    }
+
+    @Override
+    public void close() {
+        this.visible = false;
+        main.clear();
     }
 
     /**
@@ -248,6 +253,10 @@ public final class GameScene extends Scene {
 
     @Override
     public void render() {
+        if(!User.getInstance().isUserConected()) {
+            close();
+        }
+
         if(!visible) return;
 
         if (user.isUserMoving()) {

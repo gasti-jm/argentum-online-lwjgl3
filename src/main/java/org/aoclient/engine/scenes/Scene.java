@@ -17,6 +17,8 @@ public abstract class Scene {
 
     public abstract void render();
 
+    public abstract void close();
+
     public RGBColor getBackground() {
         return background;
     }
