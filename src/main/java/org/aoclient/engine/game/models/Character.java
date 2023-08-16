@@ -11,6 +11,9 @@ import static org.aoclient.engine.utils.GameData.*;
 import static org.aoclient.engine.utils.Time.timerTicksPerFrame;
 
 public final class Character {
+    public static final int CASPER_HEAD = 500;
+    public static final int FRAGATA_FANTASMAL = 87;
+
     private boolean active;
     private E_Heading heading;
     private Position pos;

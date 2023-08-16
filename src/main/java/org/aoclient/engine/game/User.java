@@ -49,7 +49,7 @@ public final class User {
         return instance;
     }
 
-    private void moveScreen(E_Heading nHeading) {
+    public void moveScreen(E_Heading nHeading) {
         int x = 0, y = 0;
 
         switch (nHeading) {
@@ -156,7 +156,7 @@ public final class User {
         refreshAllChars();
     }
 
-    private boolean inMapBounds(int x, int y) {
+    public boolean inMapBounds(int x, int y) {
         return (x < TILE_BUFFER_SIZE || x > XMaxMapSize - TILE_BUFFER_SIZE ||
                 y < TILE_BUFFER_SIZE || y > YMaxMapSize - TILE_BUFFER_SIZE);
     }
@@ -179,6 +179,7 @@ public final class User {
                 return false;
             }
 
+            return false;
             /*
             If .iHead <> CASPER_HEAD And .iBody <> FRAGATA_FANTASMAL Then
                 Exit Function

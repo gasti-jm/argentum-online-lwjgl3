@@ -7,8 +7,8 @@
 <br/>
 
 <p>
-  MMORPG Video Game of the year 1999 created in Visual Basic 6.0 by Pablo Marquez (Morgolock), this game is open source. <br/>
-  I have translated in Java under LWJGL3, this game would be your base client, it would be necessary to implement the multiplayer with your server.
+  MMORPG Video Game of the year 1999 created in Visual Basic 6.0 by Pablo Marquez (Morgolock), this game is open source. <br/> <br/>
+  I have translated it to Java with LWJGL3, this game would be the base client, the connection to the server is being implemented with Java sockets. The java server has not been developed yet, but you can use the Argentum Online Alkon v13.0 server from VB6.
 </p>
 
 # How to compile

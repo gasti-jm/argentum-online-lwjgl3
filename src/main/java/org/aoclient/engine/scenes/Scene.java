@@ -13,7 +13,6 @@ public abstract class Scene {
         this.camera = new Camera();
         this.background = new RGBColor(0.0f, 0.0f, 0.0f);
     }
-
     public abstract void keyEvents();
 
     public abstract void render();
@@ -25,7 +24,6 @@ public abstract class Scene {
     public void setBackground(RGBColor background) {
         this.background = background;
     }
-
 
     public boolean isVisible() {
         return visible;
