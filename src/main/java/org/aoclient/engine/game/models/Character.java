@@ -83,11 +83,11 @@ public final class Character {
         charList[charIndex].setiHead(head);
         charList[charIndex].setiBody(body);
 
-        if (headData[head] != null) charList[charIndex].setHead(new HeadData(headData[head]));
-        if (bodyData[body] != null) charList[charIndex].setBody(new BodyData(bodyData[body]));
-        if (weaponData[weapon] != null) charList[charIndex].setWeapon(new WeaponData(weaponData[weapon]));
-        if (shieldData[shield] != null) charList[charIndex].setShield(new ShieldData(shieldData[shield]));
-        if (helmetsData[helmet] != null) charList[charIndex].setHelmet(new HeadData(helmetsData[helmet]));
+        charList[charIndex].setHead(new HeadData(headData[head]));
+        charList[charIndex].setBody(new BodyData(bodyData[body]));
+        charList[charIndex].setWeapon(new WeaponData(weaponData[weapon]));
+        charList[charIndex].setShield(new ShieldData(shieldData[shield]));
+        charList[charIndex].setHelmet(new HeadData(helmetsData[helmet]));
 
         charList[charIndex].setHeading(heading);
 
@@ -424,30 +424,34 @@ public final class Character {
         if (charList[charIndex].getHead().getHead(charList[charIndex].getHeading().value).getGrhIndex() != 0) {
             if (!charList[charIndex].isInvisible()) {
 
-                if (charList[charIndex].getBody().getWalk(charList[charIndex].getHeading().value).getGrhIndex() > 0) {
+                if (charList[charIndex].getBody().getWalk(charList[charIndex].getHeading().value).getGrhIndex() != 0) {
                     draw(charList[charIndex].getBody().getWalk(charList[charIndex].getHeading().value),
                             PixelOffsetX, PixelOffsetY, true, true, false, 1.0f, ambientcolor);
                 }
 
-                if (charList[charIndex].getHead().getHead(charList[charIndex].getHeading().value).getGrhIndex() > 0) {
+                if (charList[charIndex].getHead().getHead(charList[charIndex].getHeading().value).getGrhIndex() != 0) {
                     draw(charList[charIndex].getHead().getHead(charList[charIndex].getHeading().value),
                             PixelOffsetX + charList[charIndex].getBody().getHeadOffset().getX(),
                             PixelOffsetY + charList[charIndex].getBody().getHeadOffset().getY(),
                             true, false, false, 1.0f, ambientcolor);
 
-                    if (charList[charIndex].getHelmet().getHead(charList[charIndex].getHeading().value).getGrhIndex() > 0) {
+                    //System.out.println(charList[charIndex].getHelmet().getHead(charList[charIndex].getHeading().value));
+
+
+
+                    if (charList[charIndex].getHelmet().getHead(charList[charIndex].getHeading().value).getGrhIndex() != 0) {
                         draw(charList[charIndex].getHelmet().getHead(charList[charIndex].getHeading().value),
                                 PixelOffsetX + charList[charIndex].getBody().getHeadOffset().getX(),
-                                PixelOffsetY + charList[charIndex].getBody().getHeadOffset().getY() -34,
+                                PixelOffsetY + charList[charIndex].getBody().getHeadOffset().getY() - 34,
                                 true, false, false, 1.0f, ambientcolor);
                     }
 
-                    if (charList[charIndex].getWeapon().getWeaponWalk(charList[charIndex].getHeading().value).getGrhIndex() > 0) {
+                    if (charList[charIndex].getWeapon().getWeaponWalk(charList[charIndex].getHeading().value).getGrhIndex() != 0) {
                         draw(charList[charIndex].getWeapon().getWeaponWalk(charList[charIndex].getHeading().value),
                                 PixelOffsetX, PixelOffsetY, true, true, false, 1.0f, ambientcolor);
                     }
 
-                    if (charList[charIndex].getShield().getShieldWalk(charList[charIndex].getHeading().value).getGrhIndex() > 0) {
+                    if (charList[charIndex].getShield().getShieldWalk(charList[charIndex].getHeading().value).getGrhIndex() != 0) {
                         draw(charList[charIndex].getShield().getShieldWalk(charList[charIndex].getHeading().value),
                                 PixelOffsetX, PixelOffsetY, true, true, false, 1.0f, ambientcolor);
                     }

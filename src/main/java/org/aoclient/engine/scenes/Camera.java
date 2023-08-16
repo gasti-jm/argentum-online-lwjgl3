@@ -19,6 +19,7 @@ public final class Camera {
     private int halfWindowTileWidth;
     private int halfWindowTileHeight;
 
+
     private int screenminY, screenmaxY;
     private int screenminX, screenmaxX;
     private int minY, maxY;
@@ -201,4 +202,6 @@ public final class Camera {
     public void setMinYOffset(int minYOffset) {
         this.minYOffset = minYOffset;
     }
+
+
 }

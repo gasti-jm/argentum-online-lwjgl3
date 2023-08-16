@@ -1,11 +1,8 @@
 package org.aoclient.engine.utils;
 
-import java.io.File;
+
 import java.io.IOException;
 import java.io.RandomAccessFile;
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -16,6 +13,7 @@ import org.aoclient.engine.utils.filedata.*;
 
 import static org.aoclient.engine.Sound.clearSounds;
 import static org.aoclient.engine.game.models.Character.eraseChar;
+import static org.aoclient.engine.utils.ByteMigration.*;
 
 public final class GameData {
     public static BodyData[] bodyData;
@@ -50,76 +48,6 @@ public final class GameData {
         LoadFXs();
 
         //addMusic("resources/MP3/intro.ogg").play();
-    }
-
-    /**
-     * @desc: Permite migrar un Integer de mas cantidad de bytes a uno mas chico por que en
-     *        VB6 las variables son de distinta cantidad de bytes
-     */
-    public static int bigToLittle_Int(int bigendian) {
-        ByteBuffer buf = ByteBuffer.allocate(4);
-
-        buf.order(ByteOrder.BIG_ENDIAN);
-        buf.putInt(bigendian);
-
-        buf.order(ByteOrder.LITTLE_ENDIAN);
-        return buf.getInt(0);
-    }
-
-    /**
-     * @desc: Permite migrar un Float de mas cantidad de bytes a uno mas chico por que en
-     *        VB6 las variables son de distinta cantidad de bytes
-     */
-    public static float bigToLittle_Float(float bigendian) {
-        ByteBuffer buf = ByteBuffer.allocate(4);
-
-        buf.order(ByteOrder.BIG_ENDIAN);
-        buf.putFloat(bigendian);
-
-        buf.order(ByteOrder.LITTLE_ENDIAN);
-        return buf.getFloat(0);
-    }
-
-    /**
-     * @desc: Permite migrar un Float de mas cantidad de bytes a uno mas chico por que en
-     *        VB6 las variables son de distinta cantidad de bytes
-     */
-    public static double bigToLittle_Double(double bigendian) {
-        ByteBuffer buf = ByteBuffer.allocate(8);
-
-        buf.order(ByteOrder.BIG_ENDIAN);
-        buf.putDouble(bigendian);
-
-        buf.order(ByteOrder.LITTLE_ENDIAN);
-        return buf.getDouble(0);
-    }
-
-    /**
-     * @desc: Permite migrar un Short de mas cantidad de bytes a uno mas chico por que en
-     *        VB6 las variables son de distinta cantidad de bytes
-     */
-    public static short bigToLittle_Short(short bigendian) {
-        ByteBuffer buf = ByteBuffer.allocate(2);
-
-        buf.order(ByteOrder.BIG_ENDIAN);
-        buf.putShort(bigendian);
-
-        buf.order(ByteOrder.LITTLE_ENDIAN);
-        return buf.getShort(0);
-    }
-
-    /**
-     * @desc: Permite migrar un Byte de mas cantidad de bytes a uno mas chico por que en
-     *        VB6 las variables son de distinta cantidad de bytes
-     */
-    public static byte bigToLittle_Byte(byte bigendian) {
-        ByteBuffer buf = ByteBuffer.allocate(1);
-
-        buf.order(ByteOrder.BIG_ENDIAN);
-        buf.put(bigendian);
-
-        buf.order(ByteOrder.LITTLE_ENDIAN);
-        return buf.get(0);
     }
 
     /**
@@ -238,6 +166,7 @@ public final class GameData {
             headData = new HeadData[numHeads + 1];
             myHeads = new IndexHeads[numHeads + 1];
 
+            headData[0] = new HeadData();
             for (int i = 1; i <= numHeads; i++) {
                 myHeads[i] = new IndexHeads();
                 myHeads[i].setHead(1, bigToLittle_Short(f.readShort()));
@@ -245,9 +174,8 @@ public final class GameData {
                 myHeads[i].setHead(3, bigToLittle_Short(f.readShort()));
                 myHeads[i].setHead(4, bigToLittle_Short(f.readShort()));
 
+                headData[i] = new HeadData();
                 if (myHeads[i].getHead(1) != 0) {
-                    headData[i] = new HeadData();
-
                     headData[i].setHead(1, initGrh(headData[i].getHead(1), myHeads[i].getHead(1), false));
                     headData[i].setHead(2, initGrh(headData[i].getHead(2), myHeads[i].getHead(2), false));
                     headData[i].setHead(3, initGrh(headData[i].getHead(3), myHeads[i].getHead(3), false));
@@ -276,6 +204,7 @@ public final class GameData {
             helmetsData = new HeadData[numHeads + 1];
             myHeads = new IndexHeads[numHeads + 1];
 
+            helmetsData[0] = new HeadData();
             for (int i = 1; i <= numHeads; i++) {
                 myHeads[i] = new IndexHeads();
                 myHeads[i].setHead(1, bigToLittle_Short(f.readShort()));
@@ -283,8 +212,8 @@ public final class GameData {
                 myHeads[i].setHead(3, bigToLittle_Short(f.readShort()));
                 myHeads[i].setHead(4, bigToLittle_Short(f.readShort()));
 
+                helmetsData[i] = new HeadData();
                 if (myHeads[i].getHead(1) != 0) {
-                    helmetsData[i] = new HeadData();
                     helmetsData[i].setHead(1, initGrh(helmetsData[i].getHead(1), myHeads[i].getHead(1), false));
                     helmetsData[i].setHead(2, initGrh(helmetsData[i].getHead(2), myHeads[i].getHead(2), false));
                     helmetsData[i].setHead(3, initGrh(helmetsData[i].getHead(3), myHeads[i].getHead(3), false));
@@ -313,6 +242,7 @@ public final class GameData {
             bodyData = new BodyData[numBodys + 1];
             myBodys = new IndexBodys[numBodys + 1];
 
+            bodyData[0] = new BodyData();
             for (int i = 1; i <= numBodys; i++) {
                 myBodys[i] = new IndexBodys();
                 myBodys[i].setBody(1, bigToLittle_Short(f.readShort()));
@@ -323,8 +253,8 @@ public final class GameData {
                 myBodys[i].setHeadOffsetX( bigToLittle_Short(f.readShort()) );
                 myBodys[i].setHeadOffsetY( bigToLittle_Short(f.readShort()) );
 
+                bodyData[i] = new BodyData();
                 if (myBodys[i].getBody(1) != 0) {
-                    bodyData[i] = new BodyData();
                     bodyData[i].setWalk(1, initGrh(bodyData[i].getWalk(1), myBodys[i].getBody(1), false));
                     bodyData[i].setWalk(2, initGrh(bodyData[i].getWalk(2), myBodys[i].getBody(2), false));
                     bodyData[i].setWalk(3, initGrh(bodyData[i].getWalk(3), myBodys[i].getBody(3), false));
@@ -348,6 +278,7 @@ public final class GameData {
             final int numArms = bigToLittle_Short(f.readShort());
             weaponData = new WeaponData[numArms + 1];
 
+            weaponData[0] = new WeaponData();
             for(int loopc = 1; loopc <= numArms; loopc++) {
                 weaponData[loopc] = new WeaponData();
                 weaponData[loopc].setWeaponWalk(1, initGrh(weaponData[loopc].getWeaponWalk(1), bigToLittle_Short(f.readShort()), false));
@@ -369,6 +300,8 @@ public final class GameData {
             final int numShields = bigToLittle_Short(f.readShort());
             shieldData = new ShieldData[numShields + 1];
 
+
+            shieldData[0] = new ShieldData();
             for(int loopc = 1; loopc <= numShields; loopc++) {
                 shieldData[loopc] = new ShieldData();
                 shieldData[loopc].setShieldWalk(1, initGrh(shieldData[loopc].getShieldWalk(1), bigToLittle_Short(f.readShort()), false));
@@ -608,6 +541,8 @@ public final class GameData {
      * @desc: Inicializa los graficos, ya sean animaciones o no.
      */
     public static GrhInfo initGrh(GrhInfo grh, short grhIndex, boolean started) {
+        if (grh == null) throw new NullPointerException("Se esta intentando incializar un GrhInfo nulo...");
+
         grh.setGrhIndex(grhIndex);
         grh.setStarted(false);
         grh.setLoops(0);
@@ -626,6 +561,5 @@ public final class GameData {
 
         return grh;
     }
-
 
 }

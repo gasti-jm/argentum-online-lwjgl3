@@ -4,9 +4,11 @@ import org.aoclient.engine.gui.ElementGUI;
 import org.aoclient.engine.gui.elements.ImageGUI;
 import org.aoclient.engine.listeners.KeyListener;
 import org.aoclient.engine.game.User;
+import org.aoclient.engine.listeners.MouseListener;
 import org.aoclient.engine.renderer.RGBColor;
 import org.aoclient.engine.utils.GameData;
 
+import static org.aoclient.connection.Protocol.writeAttack;
 import static org.aoclient.engine.game.models.Character.*;
 import static org.aoclient.engine.game.models.E_Heading.*;
 import static org.aoclient.engine.renderer.Drawn.*;
@@ -51,6 +53,10 @@ public final class GameScene extends Scene {
         if (KeyListener.isKeyReadyForAction(GLFW_KEY_TAB)) {
             KeyListener.setLastKeyPressed(0);
             autoMove = !autoMove;
+        }
+
+        if (KeyListener.isKeyReadyForAction(GLFW_KEY_LEFT_CONTROL)) {
+            writeAttack();
         }
 
         if(!user.isUserMoving()) {
@@ -264,4 +270,16 @@ public final class GameScene extends Scene {
                      user.getUserPos().getY() - user.getAddToUserPos().getY(),
                           (int)(offSetCounterX), (int)(offSetCounterY));
     }
+
+    private boolean inGameArea() {
+        if (MouseListener.getX() < POS_SCREEN_X || MouseListener.getX() > POS_SCREEN_X + SCREEN_SIZE_X)
+            return false;
+
+        if (MouseListener.getY() < POS_SCREEN_Y || MouseListener.getY() > POS_SCREEN_Y + SCREEN_SIZE_Y)
+            return false;
+
+        return true;
+    }
+
+
 }

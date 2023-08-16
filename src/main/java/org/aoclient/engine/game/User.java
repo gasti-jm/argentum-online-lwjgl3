@@ -6,12 +6,13 @@ import org.aoclient.engine.scenes.Camera;
 import org.aoclient.engine.game.models.Position;
 import org.aoclient.engine.utils.filedata.*;
 
+import static org.aoclient.connection.Protocol.writeChangeHeading;
+import static org.aoclient.connection.Protocol.writeWalk;
 import static org.aoclient.engine.Sound.*;
 import static org.aoclient.engine.game.models.Character.*;
 import static org.aoclient.engine.game.models.E_Heading.*;
 import static org.aoclient.engine.scenes.Camera.*;
 import static org.aoclient.engine.utils.GameData.*;
-import static org.aoclient.engine.utils.GameData.fxData;
 
 public final class User {
     private static User instance;
@@ -35,6 +36,12 @@ public final class User {
     // areas
     private int minLimiteX, maxLimiteX;
     private int minLimiteY, maxLimiteY;
+
+    //
+    public final int minXBorder = XMinMapSize + ( (SCREEN_SIZE_X / 32) / 2);
+    public final int maxXBorder = XMaxMapSize - ( (SCREEN_SIZE_X / 32) / 2);
+    public final int minYBorder = YMinMapSize + ( (SCREEN_SIZE_Y / 32) / 2);
+    public final int maxYBorder = YMaxMapSize - ( (SCREEN_SIZE_Y / 32) / 2);
 
     private User () {
         userPos = new Position();
@@ -62,7 +69,7 @@ public final class User {
         final int tX = userPos.getX() + x;
         final int tY = userPos.getY() + y;
 
-        if (!inMapBounds(tX, tY)) {
+        if (!(tX < minXBorder || tX > maxXBorder || tY < minYBorder || tY > maxYBorder)) {
             addToUserPos.setX(x);
             userPos.setX(tX);
 
@@ -93,16 +100,15 @@ public final class User {
             case WEST   : addX = -1;    break;
         }
 
-        int x = charList[charIndex].getPos().getX();
-        int y = charList[charIndex].getPos().getY();
-        int nX = x + addX;
-        int nY = y + addY;
+        final int x = charList[charIndex].getPos().getX();
+        final int y = charList[charIndex].getPos().getY();
+        final int nX = x + addX;
+        final int nY = y + addY;
 
         mapData[nX][nY].setCharIndex(charIndex);
         charList[charIndex].getPos().setX(nX);
         charList[charIndex].getPos().setY(nY);
         mapData[x][y].setCharIndex(0);
-
 
         charList[charIndex].setMoveOffsetX(-1 * (TILE_PIXEL_SIZE * addX));
         charList[charIndex].setMoveOffsetY(-1 * (TILE_PIXEL_SIZE * addY));
@@ -122,7 +128,6 @@ public final class User {
                 eraseChar(charIndex);
             }
         }
-
     }
 
     /**
@@ -164,7 +169,7 @@ public final class User {
     private boolean moveToLegalPos(int x, int y) {
 
         // Limite del mapa
-        if (inMapBounds(x, y))
+        if (x < minXBorder || x > maxXBorder || y < minYBorder || y > maxYBorder)
             return false;
 
         // Tile Bloqueado?
@@ -290,8 +295,13 @@ public final class User {
 
         //charList[userCharIndex].setHeading(direction);
         if (legalOk){
+            writeWalk(direction);
             moveScreen(direction);
             moveCharbyHead(userCharIndex, direction);
+        } else {
+            if(charList[userCharIndex].getHeading() != direction) {
+                writeChangeHeading(direction);
+            }
         }
     }
 

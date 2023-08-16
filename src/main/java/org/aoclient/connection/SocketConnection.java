@@ -4,11 +4,9 @@ import org.aoclient.connection.packets.E_Modo;
 
 import java.net.*;
 import java.io.*;
-import java.nio.charset.StandardCharsets;
 
 import static org.aoclient.connection.Protocol.*;
 import static org.aoclient.connection.packets.E_Modo.NORMAL;
-import static org.aoclient.engine.utils.GameData.bigToLittle_Int;
 
 public class SocketConnection {
     private static SocketConnection instance;
@@ -71,11 +69,11 @@ public class SocketConnection {
 
         if (outgoingData.length() != 0){
 
-            new Thread(() -> {
+            //new Thread(() -> {
                 String sndData;
                 sndData = outgoingData.readASCIIStringFixed(outgoingData.length());
                 sendData(sndData);
-            }).start();
+           // }).start();
 
         }
     }
@@ -106,7 +104,7 @@ public class SocketConnection {
 
                 if (bytesRead > 0) {
                     String RD = new String(dataBuffer, 0 , bytesRead);
-                    System.out.println(RD.length());
+                    //System.out.println(RD.length());
                     byte[] data = RD.getBytes();
 
                     // Process the received data here

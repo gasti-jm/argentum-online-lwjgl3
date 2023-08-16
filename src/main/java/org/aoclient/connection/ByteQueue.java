@@ -3,7 +3,7 @@ package org.aoclient.connection;
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 
-import static org.aoclient.engine.utils.GameData.*;
+import static org.aoclient.engine.utils.ByteMigration.*;
 
 public class ByteQueue {
     // codigos de error

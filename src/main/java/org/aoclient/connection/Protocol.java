@@ -2060,7 +2060,14 @@ public class Protocol {
         short fX = incomingData.readInteger();
         short loops = incomingData.readInteger();
 
+        if(charList[charIndex].getfX() == null) {
+            charList[charIndex].setfX(new GrhInfo());
+        }
+
         User.getInstance().setCharacterFx(charIndex, fX, loops);
+
+
+
         System.out.println("handleCreateFX Cargado!");
     }
 
@@ -2287,8 +2294,6 @@ public class Protocol {
 
         User.getInstance().setCharacterFx(charIndex, incomingData.readInteger(), incomingData.readInteger());
         refreshAllChars();
-
-        System.out.println("handleCharacterChange CARGADO!, HAY QUE TESTIAR!!!");
     }
 
     private static void handleForceCharMove() {
@@ -3187,6 +3192,20 @@ public class Protocol {
 
     public static void writeLoginNewChar(){
 
+    }
+
+    public static void writeWalk(E_Heading direction) {
+        outgoingData.writeByte(ClientPacketID.Walk.ordinal());
+        outgoingData.writeByte(direction.value);
+    }
+
+    public static void writeChangeHeading(E_Heading direction) {
+        outgoingData.writeByte(ClientPacketID.ChangeHeading.ordinal());
+        outgoingData.writeByte(direction.value);
+    }
+
+    public static void writeAttack() {
+        outgoingData.writeByte(ClientPacketID.Attack.ordinal());
     }
 
 }
