@@ -9,7 +9,7 @@ public class KeyListener {
     private static KeyListener instance;
     private boolean keyPressed[] = new boolean[350];
     private int lastKeyPressed;
-    private static boolean actionKey[] = new boolean[350];
+    //private static boolean actionKey[] = new boolean[350];
     public static List<Integer> lastKeysPressed = new ArrayList<>();
 
     private KeyListener() {
@@ -30,7 +30,7 @@ public class KeyListener {
     public static void keyCallback(long window, int key, int scancode, int action, int mods) {
         if (action == GLFW_PRESS) {
             get().keyPressed[key] = true;
-            actionKey[key] = true; // estoy listo para accionar cualquier cosa.
+            //actionKey[key] = true; // estoy listo para accionar cualquier cosa.
 
             if (key == GLFW_KEY_W || key == GLFW_KEY_A || key == GLFW_KEY_S || key == GLFW_KEY_D) {
                 get().lastKeyPressed = key;
@@ -59,10 +59,10 @@ public class KeyListener {
      *        ejecutando la accion en el main loop del juego (como hacemos con la caminata).
      */
     public static boolean isKeyReadyForAction(int keyCode) {
-        boolean retVal = actionKey[keyCode];
+        boolean retVal = get().keyPressed[keyCode];
 
         if (retVal) {
-            actionKey[keyCode] = false;
+            get().keyPressed[keyCode] = false;
         }
 
         return retVal;

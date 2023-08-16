@@ -42,6 +42,11 @@ public final class MainScene extends Scene {
     }
 
     @Override
+    public void mouseEvents() {
+
+    }
+
+    @Override
     public void keyEvents() {
         if (KeyListener.isKeyReadyForAction(GLFW_KEY_ENTER)) {
             // conectarse al servidor con el usuario "GS" y pass "gszone".

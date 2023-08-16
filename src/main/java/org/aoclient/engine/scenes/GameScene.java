@@ -10,8 +10,7 @@ import org.aoclient.engine.listeners.MouseListener;
 import org.aoclient.engine.renderer.RGBColor;
 import org.aoclient.engine.utils.GameData;
 
-import static org.aoclient.connection.Protocol.writeAttack;
-import static org.aoclient.connection.Protocol.writePickUp;
+import static org.aoclient.connection.Protocol.*;
 import static org.aoclient.engine.game.eKeyType.*;
 import static org.aoclient.engine.game.models.Character.*;
 import static org.aoclient.engine.game.models.E_Heading.*;
@@ -54,7 +53,21 @@ public final class GameScene extends Scene {
     }
 
     @Override
+    public void mouseEvents() {
+        if (MouseListener.mouseButtonClick(GLFW_MOUSE_BUTTON_LEFT)) {
+
+            // si estamos haciendo click en el render. (osea fuera de la interface)
+            if(inGameArea()) {
+                final int mouseX = (int) MouseListener.getX() - POS_SCREEN_X;
+                final int mouseY = (int) MouseListener.getY() - POS_SCREEN_Y;
+                writeLeftClick(getTileMouseX(mouseX), getTileMouseY(mouseY));
+            }
+        }
+    }
+
+    @Override
     public void keyEvents() {
+
         // falta bindear xd
         if (KeyListener.isKeyReadyForAction(GLFW_KEY_TAB)) {
             KeyListener.setLastKeyPressed(0);
@@ -292,6 +305,14 @@ public final class GameScene extends Scene {
             return false;
 
         return true;
+    }
+
+    private byte getTileMouseX(int mouseX) {
+        return (byte) (user.getUserPos().getX() + mouseX / TILE_PIXEL_SIZE - camera.getHalfWindowTileWidth());
+    }
+
+    private byte getTileMouseY(int mouseY) {
+        return  (byte) (user.getUserPos().getY() +  mouseY / TILE_PIXEL_SIZE - camera.getHalfWindowTileHeight());
     }
 
 

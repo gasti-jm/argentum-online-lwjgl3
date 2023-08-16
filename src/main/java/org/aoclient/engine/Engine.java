@@ -105,6 +105,7 @@ public final class Engine {
             changeScene(currentScene.getChangeScene());
         }
 
+        currentScene.mouseEvents();
         currentScene.keyEvents();
         currentScene.render();
 

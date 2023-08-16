@@ -125,7 +125,6 @@ public class SocketConnection {
             handleData.close();
             sock.close();
 
-
         } catch (IOException e) {
             e.printStackTrace();
         }

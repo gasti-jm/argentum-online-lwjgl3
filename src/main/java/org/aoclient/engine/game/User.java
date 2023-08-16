@@ -172,11 +172,11 @@ public final class User {
             return false;
 
         // Tile Bloqueado?
-        if (mapData[x][y].getBlocked()) {
+        if (mapData[x][y].getBlocked())
             return false;
-        }
 
-        int charIndex = mapData[x][y].getCharIndex();
+        final int charIndex = mapData[x][y].getCharIndex();
+
         // ¿Hay un personaje?
         if (charIndex > 0) {
             if (mapData[userPos.getX()][userPos.getY()].getBlocked()) {
@@ -292,7 +292,6 @@ public final class User {
                 break;
         }
 
-        //charList[userCharIndex].setHeading(direction);
         if (legalOk){
             writeWalk(direction);
             moveScreen(direction);

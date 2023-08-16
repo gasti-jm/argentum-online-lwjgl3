@@ -2565,6 +2565,8 @@ public class Protocol {
         String chat = buffer.readASCIIString();
         short fontIndex = buffer.readByte();
 
+        System.out.println(chat);
+
         //If InStr(1, chat, "~") Then
         //        str = ReadField(2, chat, 126)
         //            If Val(str) > 255 Then
@@ -3210,6 +3212,12 @@ public class Protocol {
 
     public static void writePickUp() {
         outgoingData.writeByte(ClientPacketID.PickUp.ordinal());
+    }
+
+    public static void writeLeftClick(byte x, byte y) {
+        outgoingData.writeByte(ClientPacketID.LeftClick.ordinal());
+        outgoingData.writeByte(x);
+        outgoingData.writeByte(y);
     }
 
 }

@@ -13,6 +13,9 @@ public abstract class Scene {
         this.camera = new Camera();
         this.background = new RGBColor(0.0f, 0.0f, 0.0f);
     }
+
+    public abstract void mouseEvents();
+
     public abstract void keyEvents();
 
     public abstract void render();
