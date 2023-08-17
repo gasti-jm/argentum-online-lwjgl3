@@ -12,7 +12,7 @@ public final class BindKeys {
     private static BindKeys instance;
 
     private BindKeys()  {
-        mappedKeys = new int[eKeyType.values().length];
+        mappedKeys = new int[E_KeyType.values().length];
 
         try {
             loadBindKeys();
@@ -32,48 +32,48 @@ public final class BindKeys {
     }
 
     public void loadDefaultKeys () {
-        mappedKeys[eKeyType.mKeyUp.ordinal()] = GLFW_KEY_W;
-        mappedKeys[eKeyType.mKeyDown.ordinal()] = GLFW_KEY_S;
-        mappedKeys[eKeyType.mKeyLeft.ordinal()] = GLFW_KEY_A;
-        mappedKeys[eKeyType.mKeyRight.ordinal()] = GLFW_KEY_D;
+        mappedKeys[E_KeyType.mKeyUp.ordinal()] = GLFW_KEY_W;
+        mappedKeys[E_KeyType.mKeyDown.ordinal()] = GLFW_KEY_S;
+        mappedKeys[E_KeyType.mKeyLeft.ordinal()] = GLFW_KEY_A;
+        mappedKeys[E_KeyType.mKeyRight.ordinal()] = GLFW_KEY_D;
 
-        mappedKeys[eKeyType.mKeyToggleMusic.ordinal()] = GLFW_KEY_M;
-        mappedKeys[eKeyType.mKeyToggleSound.ordinal()] = GLFW_KEY_S;
-        mappedKeys[eKeyType.mKeyToggleFxs.ordinal()] = GLFW_KEY_F;
+        mappedKeys[E_KeyType.mKeyToggleMusic.ordinal()] = GLFW_KEY_M;
+        mappedKeys[E_KeyType.mKeyToggleSound.ordinal()] = GLFW_KEY_S;
+        mappedKeys[E_KeyType.mKeyToggleFxs.ordinal()] = GLFW_KEY_F;
 
-        mappedKeys[eKeyType.mKeyRequestRefresh.ordinal()] = GLFW_KEY_L;
+        mappedKeys[E_KeyType.mKeyRequestRefresh.ordinal()] = GLFW_KEY_L;
 
-        mappedKeys[eKeyType.mKeyToggleNames.ordinal()] = GLFW_KEY_N;
+        mappedKeys[E_KeyType.mKeyToggleNames.ordinal()] = GLFW_KEY_N;
 
-        mappedKeys[eKeyType.mKeyGetObject.ordinal()] = GLFW_KEY_Q;
-        mappedKeys[eKeyType.mKeyEquipObject.ordinal()] = GLFW_KEY_E;
+        mappedKeys[E_KeyType.mKeyGetObject.ordinal()] = GLFW_KEY_Q;
+        mappedKeys[E_KeyType.mKeyEquipObject.ordinal()] = GLFW_KEY_E;
 
-        mappedKeys[eKeyType.mKeyTamAnimal.ordinal()] = GLFW_KEY_D;
-        mappedKeys[eKeyType.mKeySteal.ordinal()] = GLFW_KEY_R;
-        mappedKeys[eKeyType.mKeyToggleSafeMode.ordinal()] = GLFW_KEY_KP_MULTIPLY;
-        mappedKeys[eKeyType.mKeyToggleResuscitationSafe.ordinal()] = GLFW_KEY_END;
+        mappedKeys[E_KeyType.mKeyTamAnimal.ordinal()] = GLFW_KEY_D;
+        mappedKeys[E_KeyType.mKeySteal.ordinal()] = GLFW_KEY_R;
+        mappedKeys[E_KeyType.mKeyToggleSafeMode.ordinal()] = GLFW_KEY_KP_MULTIPLY;
+        mappedKeys[E_KeyType.mKeyToggleResuscitationSafe.ordinal()] = GLFW_KEY_END;
 
-        mappedKeys[eKeyType.mKeyHide.ordinal()] = GLFW_KEY_O;
-        mappedKeys[eKeyType.mKeyDropObject.ordinal()] = GLFW_KEY_T;
-        mappedKeys[eKeyType.mKeyUseObject.ordinal()] = GLFW_KEY_SPACE;
-        mappedKeys[eKeyType.mKeyAttack.ordinal()] = GLFW_KEY_LEFT_CONTROL;
+        mappedKeys[E_KeyType.mKeyHide.ordinal()] = GLFW_KEY_O;
+        mappedKeys[E_KeyType.mKeyDropObject.ordinal()] = GLFW_KEY_T;
+        mappedKeys[E_KeyType.mKeyUseObject.ordinal()] = GLFW_KEY_SPACE;
+        mappedKeys[E_KeyType.mKeyAttack.ordinal()] = GLFW_KEY_LEFT_CONTROL;
 
-        mappedKeys[eKeyType.mKeyTalk.ordinal()] = GLFW_KEY_ENTER;
-        mappedKeys[eKeyType.mKeyTalkWithGuild.ordinal()] = GLFW_KEY_DELETE;
-        mappedKeys[eKeyType.mKeyTakeScreenShot.ordinal()] = GLFW_KEY_F2;
+        mappedKeys[E_KeyType.mKeyTalk.ordinal()] = GLFW_KEY_ENTER;
+        mappedKeys[E_KeyType.mKeyTalkWithGuild.ordinal()] = GLFW_KEY_DELETE;
+        mappedKeys[E_KeyType.mKeyTakeScreenShot.ordinal()] = GLFW_KEY_F2;
 
-        mappedKeys[eKeyType.mKeyShowOptions.ordinal()] = GLFW_KEY_F5;
-        mappedKeys[eKeyType.mKeyMeditate.ordinal()] = GLFW_KEY_F6;
-        mappedKeys[eKeyType.mKeyCastSpellMacro.ordinal()] = GLFW_KEY_F7;
-        mappedKeys[eKeyType.mKeyWorkMacro.ordinal()] = GLFW_KEY_F8;
+        mappedKeys[E_KeyType.mKeyShowOptions.ordinal()] = GLFW_KEY_F5;
+        mappedKeys[E_KeyType.mKeyMeditate.ordinal()] = GLFW_KEY_F6;
+        mappedKeys[E_KeyType.mKeyCastSpellMacro.ordinal()] = GLFW_KEY_F7;
+        mappedKeys[E_KeyType.mKeyWorkMacro.ordinal()] = GLFW_KEY_F8;
 
-        mappedKeys[eKeyType.mKeyExitGame.ordinal()] = GLFW_KEY_ESCAPE;
+        mappedKeys[E_KeyType.mKeyExitGame.ordinal()] = GLFW_KEY_ESCAPE;
     }
 
     /**
      *
      * @throws IOException: Puede suceder que no encuentre el archivo o que tenga menos informacion
-     *                      de lo que se esperaba desde el programa.
+     *                      de lo que se esperaba desde el programa (en caso de que agregemos una tecla nueva).
      *
      * @desc: Carga todas las teclas guardadas por el usuario.
      */
@@ -81,7 +81,7 @@ public final class BindKeys {
         RandomAccessFile f = new RandomAccessFile("resources/inits/keys.bin", "rw");
         f.seek(0);
 
-        for (int i = 0; i < eKeyType.values().length; i++) {
+        for (int i = 0; i < E_KeyType.values().length; i++) {
             mappedKeys[i] = f.readInt();
         }
 
@@ -98,7 +98,7 @@ public final class BindKeys {
             f = new RandomAccessFile("resources/inits/keys.bin", "rw");
             f.seek(0);
 
-            for (int i = 0; i < eKeyType.values().length; i++) {
+            for (int i = 0; i < E_KeyType.values().length; i++) {
                 f.writeInt(mappedKeys[i]);
             }
 
@@ -112,11 +112,11 @@ public final class BindKeys {
     /**
      * @desc: Permite bindear una nueva tecla.
      */
-    public void changeBindedKey(eKeyType key, int newKey) {
+    public void changeBindedKey(E_KeyType key, int newKey) {
 
     }
 
-    public int getBindedKey(eKeyType key) {
+    public int getBindedKey(E_KeyType key) {
         return mappedKeys[key.ordinal()];
     }
 

@@ -1,6 +1,6 @@
 package org.aoclient.engine.game;
 
-public enum eKeyType {
+public enum E_KeyType {
     mKeyUp,
     mKeyDown,
     mKeyLeft,

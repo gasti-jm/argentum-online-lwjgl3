@@ -1,17 +1,15 @@
 package org.aoclient.engine.scenes;
 
 import org.aoclient.engine.game.BindKeys;
-import org.aoclient.engine.game.eKeyType;
 import org.aoclient.engine.gui.ElementGUI;
 import org.aoclient.engine.gui.elements.ImageGUI;
 import org.aoclient.engine.listeners.KeyListener;
 import org.aoclient.engine.game.User;
 import org.aoclient.engine.listeners.MouseListener;
 import org.aoclient.engine.renderer.RGBColor;
-import org.aoclient.engine.utils.GameData;
 
 import static org.aoclient.connection.Protocol.*;
-import static org.aoclient.engine.game.eKeyType.*;
+import static org.aoclient.engine.game.E_KeyType.*;
 import static org.aoclient.engine.game.models.Character.*;
 import static org.aoclient.engine.game.models.E_Heading.*;
 import static org.aoclient.engine.renderer.Drawn.*;

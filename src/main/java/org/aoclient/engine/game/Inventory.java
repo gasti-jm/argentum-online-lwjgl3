@@ -1,19 +1,17 @@
 package org.aoclient.engine.game;
 
+import org.aoclient.engine.game.models.E_ObjType;
 import org.aoclient.engine.listeners.MouseListener;
 import org.aoclient.engine.renderer.RGBColor;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import static org.aoclient.connection.Protocol.writeEquipItem;
 import static org.aoclient.connection.Protocol.writeUseItem;
 import static org.aoclient.engine.renderer.Drawn.drawGrhIndex;
 import static org.aoclient.engine.renderer.Drawn.drawText;
 import static org.aoclient.engine.scenes.Camera.*;
-import static org.lwjgl.glfw.GLFW.GLFW_MOUSE_BUTTON_LEFT;
 
 public final class Inventory {
-    // Constantes ///////////////////////////////////////////////////
+    // Constantes //////////////////////////////////////////////////
 
     // posicion del inventario en pantalla
     public static final int MAIN_POS_X = 600;
@@ -39,7 +37,7 @@ public final class Inventory {
         int amount;
         boolean equipped;
         float value;
-        short objType;
+        E_ObjType objType;
         short maxDef;
         short minDef;
         short maxHit;
@@ -58,6 +56,10 @@ public final class Inventory {
         this.visible = true;
         this.slotSelected = 0;
         this.slots = new Slot[MAX_INVENTORY_SLOTS];
+
+        for (int i = 0; i < slots.length; i++) {
+            slots[i] = new Slot();
+        }
 
         this.posX = MAIN_POS_X;
         this.posY = MAIN_POS_Y;
@@ -85,10 +87,10 @@ public final class Inventory {
     /**
      * @desc: Agregamos un item al slot del inventario.
      */
-    public void setItem(byte slot, short objIndex, int amount, boolean equipped, short grhIndex, short objType,
+    public void setItem(int slot, short objIndex, int amount, boolean equipped, short grhIndex, short objType,
                         short maxHit, short minHit, short maxDef, short minDef, float value, String name) {
 
-        slots[slot] = new Slot();
+
         slots[slot].amount      = amount;
         slots[slot].maxDef      = maxDef;
         slots[slot].minDef      = minDef;
@@ -98,7 +100,7 @@ public final class Inventory {
         slots[slot].minHit      = minHit;
         slots[slot].name        = name;
         slots[slot].objIndex    = objIndex;
-        slots[slot].objType     = objType;
+        if (objType > 0) slots[slot].objType = E_ObjType.values()[objType - 1];
         slots[slot].value       = value;
     }
 
@@ -109,59 +111,68 @@ public final class Inventory {
         if(slots.length == 0) return;
 
         // posiciones por slot
-        int iX = 0;
-        int iY = 0;
+        int iX = posX;
+        int iY = posY;
 
-        for (Slot slot: slots) {
-            if (slot == null) break;
+        for (int i = 0; i < slots.length; i++) {
+            if (slots[i].grhIndex > 0) {
+                drawGrhIndex(slots[i].grhIndex, iX,  iY, null);
 
-            if (slot.grhIndex > 0) {
+                drawText(String.valueOf(slots[i].amount),  iX, iY + 20, null, 0, false);
 
-                // primero actualizamos las columnas
-
-                drawGrhIndex(slot.grhIndex, posX + iX, posY + iY, null);
-
-                if (slot.equals(slots[slotSelected])) {
-                    drawGrhIndex(2, posX + iX, posY + iY, null);
+                if (slots[i].equipped) {
+                    drawText("E",  iX + 20, iY, colorEquipped, 0, false);
                 }
+            }
 
-                drawGrhIndex(slot.grhIndex, posX + iX, posY + iY, null);
+            if(i == slotSelected) {
+                drawGrhIndex(2, iX,  iY, null);
+            }
 
-
-                drawText(String.valueOf(slot.amount), posX + iX, posY + iY + 20, null, 0, false);
-
-                if(slot.equipped) {
-                    drawText("E", posX + iX + 20, posY + iY, colorEquipped, 0, false);
-                }
-
-                // actualizamos la posicion en forma de grilla.
-                iX += TILE_PIXEL_SIZE;
-                if(iX / TILE_PIXEL_SIZE == this.cantColumns) {
-                    iY += TILE_PIXEL_SIZE;
-                    iX = 0;
-                }
-
+            // actualizamos la posicion en forma de tabla.
+            iX += TILE_PIXEL_SIZE;
+            if((iX - posX) / TILE_PIXEL_SIZE == this.cantColumns) {
+                iY += TILE_PIXEL_SIZE;
+                iX = posX;
             }
         }
     }
 
     public void clickInventory(){
         if (inInventoryArea()) {
-            // actualizamos el slot seleccionado
-            setSelectedSlot((int) ((MouseListener.getX() - posX) / TILE_PIXEL_SIZE),
-                    (int) ((MouseListener.getY() - posY) / TILE_PIXEL_SIZE));
+            final int x = (int) ((MouseListener.getX() - posX) / TILE_PIXEL_SIZE);
+            final int y = (int) ((MouseListener.getY() - posY) / TILE_PIXEL_SIZE);
+            final int slot = x + (this.cantColumns * y);
+
+            setSelectedSlot(slot); // actualizamos el slot seleccionado
         }
     }
 
     public void dobleClickInventory() {
+        final int x = (int) ((MouseListener.getX() - posX) / TILE_PIXEL_SIZE);
+        final int y = (int) ((MouseListener.getY() - posY) / TILE_PIXEL_SIZE);
+
+        // esta el mouse dentro del inventario??
         if (inInventoryArea()) {
-            writeUseItem(this.slotSelected + 1);
+
+            // Esta selecionado primero?
+            if (x + (this.cantColumns * y) == this.slotSelected){
+
+                // no vamos a mandar un paquete al pedo.
+                if (slots[slotSelected].grhIndex > 0) {
+                    if (slots[slotSelected].objType.equippable) {
+                        writeEquipItem(this.slotSelected + 1);
+                    } else {
+                        writeUseItem(this.slotSelected + 1);
+                    }
+                }
+
+            }
         }
     }
 
-
-    private void setSelectedSlot(int x, int y) {
-        slotSelected = x + (this.cantColumns * y);
+    private void setSelectedSlot(int slot) {
+        slotSelected = slot;
     }
 
 }

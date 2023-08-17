@@ -1934,20 +1934,20 @@ public class Protocol {
         // Remove packet ID
         buffer.readByte();
 
-        byte slot = buffer.readByte();
-        short objIndex = buffer.readInteger();
-        String name = buffer.readASCIIString(); //(Hay que arreglar a este puto)
-        short amount = buffer.readInteger();
-        boolean equipped = buffer.readBoolean();
-        short grhIndex = buffer.readInteger();
-        byte objType = buffer.readByte();
-        short maxHit = buffer.readInteger();
-        short minHit = buffer.readInteger();
-        short maxDef = buffer.readInteger();
-        short minDef = buffer.readInteger();
-        float value = buffer.readFloat();
+        final int slot = buffer.readByte();
+        final short objIndex = buffer.readInteger();
+        final String name = buffer.readASCIIString(); //(Hay que arreglar a este puto)
+        final short amount = buffer.readInteger();
+        final boolean equipped = buffer.readBoolean();
+        final short grhIndex = buffer.readInteger();
+        final byte objType = buffer.readByte();
+        final short maxHit = buffer.readInteger();
+        final short minHit = buffer.readInteger();
+        final short maxDef = buffer.readInteger();
+        final short minDef = buffer.readInteger();
+        final float value = buffer.readFloat();
 
-        User.getInstance().getUserInventory().setItem((byte) (slot - 1), objIndex, amount, equipped, grhIndex, objType,
+        User.getInstance().getUserInventory().setItem( slot - 1, objIndex, amount, equipped, grhIndex, objType,
                 maxHit, minHit, maxDef, minDef, value, name);
 
         /*
@@ -1988,7 +1988,6 @@ public class Protocol {
          */
 
         incomingData.copyBuffer(buffer);
-        System.out.println("ChangeInventorySlot Cargado! - FALTA TERMINAR!");
     }
 
     private static void handleWorkRequestTarget() {
@@ -3230,6 +3229,11 @@ public class Protocol {
 
     public static void writeUseItem(int slot) {
         outgoingData.writeByte(ClientPacketID.UseItem.ordinal());
+        outgoingData.writeByte(slot);
+    }
+
+    public static void writeEquipItem(int slot) {
+        outgoingData.writeByte(ClientPacketID.EquipItem.ordinal());
         outgoingData.writeByte(slot);
     }
 

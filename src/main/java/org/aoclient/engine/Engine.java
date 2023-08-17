@@ -2,7 +2,7 @@ package org.aoclient.engine;
 
 import org.aoclient.connection.SocketConnection;
 import org.aoclient.engine.game.BindKeys;
-import org.aoclient.engine.game.eKeyType;
+import org.aoclient.engine.game.E_KeyType;
 import org.aoclient.engine.listeners.KeyListener;
 import org.aoclient.engine.renderer.Surface;
 import org.aoclient.engine.scenes.*;
@@ -96,7 +96,7 @@ public final class Engine {
     }
 
     private void render() {
-        if (KeyListener.isKeyPressed(bindKeys.getBindedKey(eKeyType.mKeyExitGame))) {
+        if (KeyListener.isKeyPressed(bindKeys.getBindedKey(E_KeyType.mKeyExitGame))) {
             closeClient();
         }
 
