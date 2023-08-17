@@ -1,15 +1,16 @@
 package org.aoclient.engine.listeners;
 
-import static org.lwjgl.glfw.GLFW.GLFW_PRESS;
-import static org.lwjgl.glfw.GLFW.GLFW_RELEASE;
+import static org.lwjgl.glfw.GLFW.*;
 
 public class MouseListener {
     private static MouseListener instance;
     private double scrollX, scrollY;
     private double xPos, yPos, lastY, lastX;
     private boolean mouseButtonPressed[] = new boolean[3];
+    private boolean mouseButtonDobleClickPressed[] = new boolean[3];
     private boolean isDragging;
-    private static final float DOUBLE_CLICK_TIME = 0.3f;
+    private static final double DOUBLE_CLICK_TIME = 0.3;
+    private double lastTimeClick;
 
     private MouseListener() {
         this.scrollX = 0.0;
@@ -18,6 +19,7 @@ public class MouseListener {
         this.yPos = 0.0;
         this.lastX = 0.0;
         this.lastY = 0.0;
+        this.lastTimeClick = 0;
     }
 
     public static MouseListener get() {
@@ -40,6 +42,17 @@ public class MouseListener {
         if (action == GLFW_PRESS) {
             if (button < get().mouseButtonPressed.length) {
                 get().mouseButtonPressed[button] = true;
+
+                // Doble click!
+                double currentTime = glfwGetTime();
+
+                if (currentTime - get().lastTimeClick  <= DOUBLE_CLICK_TIME) {
+                    get().mouseButtonDobleClickPressed[button] = true;
+                } else {
+                    get().mouseButtonDobleClickPressed[button] = false;
+                }
+
+                get().lastTimeClick = currentTime;
             }
         } else if (action == GLFW_RELEASE) {
             if (button < get().mouseButtonPressed.length) {
@@ -92,11 +105,14 @@ public class MouseListener {
     public static boolean mouseButtonDown(int button) {
         if (button < get().mouseButtonPressed.length) {
             return get().mouseButtonPressed[button];
-        } else {
-            return false;
         }
+
+        return false;
     }
 
+    /**
+     * Detecta si hicimos 1 click
+     */
     public static boolean mouseButtonClick(int button) {
         if (button < get().mouseButtonPressed.length) {
             boolean retVal = get().mouseButtonPressed[button];
@@ -109,6 +125,20 @@ public class MouseListener {
         } else {
             return false;
         }
+    }
+
+    /**
+     * Detecta si hicimos doble click
+     */
+    public static boolean mouseButtonDoubleClick(int button) {
+        if (button < get().mouseButtonPressed.length) {
+            if(get().mouseButtonDobleClickPressed[button]){
+                get().mouseButtonDobleClickPressed[button] = false;
+                return true;
+            }
+        }
+
+        return false;
     }
 }
 

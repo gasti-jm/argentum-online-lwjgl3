@@ -3220,4 +3220,10 @@ public class Protocol {
         outgoingData.writeByte(y);
     }
 
+    public static void writeDoubleClick(byte x, byte y) {
+        outgoingData.writeByte(ClientPacketID.DoubleClick.ordinal());
+        outgoingData.writeByte(x);
+        outgoingData.writeByte(y);
+    }
+
 }

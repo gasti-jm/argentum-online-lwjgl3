@@ -54,15 +54,19 @@ public final class GameScene extends Scene {
 
     @Override
     public void mouseEvents() {
+        if(MouseListener.mouseButtonDoubleClick(GLFW_MOUSE_BUTTON_RIGHT)) {
+            writeDoubleClick(getTileMouseX((int) MouseListener.getX() - POS_SCREEN_X), getTileMouseY((int) MouseListener.getY() - POS_SCREEN_Y));
+        }
+
         if (MouseListener.mouseButtonClick(GLFW_MOUSE_BUTTON_LEFT)) {
 
             // si estamos haciendo click en el render. (osea fuera de la interface)
             if(inGameArea()) {
-                final int mouseX = (int) MouseListener.getX() - POS_SCREEN_X;
-                final int mouseY = (int) MouseListener.getY() - POS_SCREEN_Y;
-                writeLeftClick(getTileMouseX(mouseX), getTileMouseY(mouseY));
+                writeLeftClick(getTileMouseX((int) MouseListener.getX() - POS_SCREEN_X), getTileMouseY((int) MouseListener.getY() - POS_SCREEN_Y));
             }
         }
+
+
     }
 
     @Override
