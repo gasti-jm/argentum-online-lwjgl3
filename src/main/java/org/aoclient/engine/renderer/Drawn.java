@@ -3,6 +3,7 @@ package org.aoclient.engine.renderer;
 import org.aoclient.engine.scenes.Camera;
 import org.aoclient.engine.utils.filedata.GrhInfo;
 
+import static org.aoclient.engine.scenes.Camera.TILE_PIXEL_SIZE;
 import static org.aoclient.engine.utils.GameData.fontTypes;
 import static org.aoclient.engine.utils.GameData.grhData;
 import static org.aoclient.engine.utils.Time.deltaTime;
@@ -161,11 +162,11 @@ public final class Drawn {
             return;
 
         if (animate && grh.isStarted()) {
-            //grh.setFrameCounter(grh.getFrameCounter() + (deltaTime * grhData[grh.getGrhIndex()].getNumFrames() / (grh.getSpeed() * 0.002f)));
             grh.setFrameCounter(grh.getFrameCounter() + (deltaTime * grhData[grh.getGrhIndex()].getNumFrames() / grh.getSpeed()));
 
             if (grh.getFrameCounter() > grhData[grh.getGrhIndex()].getNumFrames()) {
                 grh.setFrameCounter((grh.getFrameCounter() % grhData[grh.getGrhIndex()].getNumFrames()) + 1);
+
                 if (grh.getLoops() != -1) {
                     if (grh.getLoops() > 0) {
                         grh.setLoops(grh.getLoops() - 1);
@@ -173,18 +174,20 @@ public final class Drawn {
                         grh.setStarted(false);
                     }
                 }
+
             }
+
         }
 
         final int currentGrhIndex = grhData[grh.getGrhIndex()].getFrame((int)(grh.getFrameCounter()));
 
         if (center) {
             if (grhData[currentGrhIndex].getTileWidth() != 1) {
-                x = x - (int)(grhData[currentGrhIndex].getTileWidth() * Camera.TILE_PIXEL_SIZE / 2) + Camera.TILE_PIXEL_SIZE / 2;
+                x = x - (int)(grhData[currentGrhIndex].getTileWidth() * TILE_PIXEL_SIZE / 2) + TILE_PIXEL_SIZE / 2;
             }
 
             if (grhData[currentGrhIndex].getTileHeight() != 1) {
-                y = y - (int)(grhData[currentGrhIndex].getTileHeight() * Camera.TILE_PIXEL_SIZE) + Camera.TILE_PIXEL_SIZE;
+                y = y - (int)(grhData[currentGrhIndex].getTileHeight() * TILE_PIXEL_SIZE) + TILE_PIXEL_SIZE;
             }
         }
 
@@ -203,6 +206,10 @@ public final class Drawn {
      * @desc: Dibujamos sin animacion
      */
     public static void drawGrhIndex(int grhIndex, int x, int y, RGBColor color) {
+        if (color == null){
+            color = new RGBColor(1.0f, 1.0f, 1.0f);
+        }
+
         geometryBoxRender(grhIndex, x, y,
                 grhData[grhIndex].getPixelWidth(),
                 grhData[grhIndex].getPixelHeight(),
@@ -238,8 +245,6 @@ public final class Drawn {
             }
         }
     }
-
-
 
     /**
      *

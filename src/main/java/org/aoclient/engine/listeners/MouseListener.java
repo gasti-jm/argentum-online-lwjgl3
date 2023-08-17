@@ -9,7 +9,7 @@ public class MouseListener {
     private boolean mouseButtonPressed[] = new boolean[3];
     private boolean mouseButtonDobleClickPressed[] = new boolean[3];
     private boolean isDragging;
-    private static final double DOUBLE_CLICK_TIME = 0.3;
+    private static final double DOUBLE_CLICK_TIME =1;
     private double lastTimeClick;
 
     private MouseListener() {
@@ -132,10 +132,14 @@ public class MouseListener {
      */
     public static boolean mouseButtonDoubleClick(int button) {
         if (button < get().mouseButtonPressed.length) {
-            if(get().mouseButtonDobleClickPressed[button]){
+            boolean retVal = get().mouseButtonDobleClickPressed[button];
+
+            if (retVal) {
+                get().lastTimeClick = 0;
                 get().mouseButtonDobleClickPressed[button] = false;
-                return true;
             }
+
+            return retVal;
         }
 
         return false;

@@ -24,6 +24,7 @@ public final class GameScene extends Scene {
     private BindKeys bindKeys;
     private User user;
 
+
     private float offSetCounterX = 0;
     private float offSetCounterY = 0;
     private float alphaCeiling = 1.0f;
@@ -54,16 +55,21 @@ public final class GameScene extends Scene {
 
     @Override
     public void mouseEvents() {
-        if(MouseListener.mouseButtonDoubleClick(GLFW_MOUSE_BUTTON_RIGHT)) {
-            writeDoubleClick(getTileMouseX((int) MouseListener.getX() - POS_SCREEN_X), getTileMouseY((int) MouseListener.getY() - POS_SCREEN_Y));
-        }
-
         if (MouseListener.mouseButtonClick(GLFW_MOUSE_BUTTON_LEFT)) {
-
             // si estamos haciendo click en el render. (osea fuera de la interface)
             if(inGameArea()) {
                 writeLeftClick(getTileMouseX((int) MouseListener.getX() - POS_SCREEN_X), getTileMouseY((int) MouseListener.getY() - POS_SCREEN_Y));
             }
+
+            // cheakeamos tambien del inventario
+            user.getUserInventory().clickInventory();
+
+        }
+
+        if(MouseListener.mouseButtonDoubleClick(GLFW_MOUSE_BUTTON_LEFT)) {
+            user.getUserInventory().dobleClickInventory();
+        } else if(MouseListener.mouseButtonDoubleClick(GLFW_MOUSE_BUTTON_RIGHT)) {
+            writeDoubleClick(getTileMouseX((int) MouseListener.getX() - POS_SCREEN_X), getTileMouseY((int) MouseListener.getY() - POS_SCREEN_Y));
         }
 
 
@@ -241,6 +247,7 @@ public final class GameScene extends Scene {
         }
 
         main.render();
+        user.getUserInventory().drawInventory();
         showFPS();
     }
 

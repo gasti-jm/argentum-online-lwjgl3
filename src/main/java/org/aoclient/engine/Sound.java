@@ -88,20 +88,25 @@ public final class Sound {
 
     public void play() {
         int state = alGetSourcei(sourceId, AL_SOURCE_STATE);
-        if (state == AL_STOPPED) {
-            isPlaying = false;
-            alSourcei(sourceId, AL_POSITION, 0);
+//        if (state == AL_PENDING) {
+//            isPlaying = false;
+//            alSourcei(sourceId, AL_POSITION, 0);
+//        }
+
+        if (state == AL_PLAYING) {
+            new Sound(this.filepath, false).play();
         }
 
         if (!isPlaying) {
-            alSourcePlay(sourceId);
             isPlaying = true;
         }
+
+        alSourcePlay(sourceId);
     }
 
 
     public void stop() {
-        if (isPlaying) {
+        if (isPlaying){
             alSourceStop(sourceId);
             isPlaying = false;
         }

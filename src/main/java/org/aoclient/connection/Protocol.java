@@ -1947,6 +1947,8 @@ public class Protocol {
         short minDef = buffer.readInteger();
         float value = buffer.readFloat();
 
+        User.getInstance().getUserInventory().setItem((byte) (slot - 1), objIndex, amount, equipped, grhIndex, objType,
+                maxHit, minHit, maxDef, minDef, value, name);
 
         /*
         If Equipped Then
@@ -3214,16 +3216,21 @@ public class Protocol {
         outgoingData.writeByte(ClientPacketID.PickUp.ordinal());
     }
 
-    public static void writeLeftClick(byte x, byte y) {
+    public static void writeLeftClick(int x, int y) {
         outgoingData.writeByte(ClientPacketID.LeftClick.ordinal());
         outgoingData.writeByte(x);
         outgoingData.writeByte(y);
     }
 
-    public static void writeDoubleClick(byte x, byte y) {
+    public static void writeDoubleClick(int x, int y) {
         outgoingData.writeByte(ClientPacketID.DoubleClick.ordinal());
         outgoingData.writeByte(x);
         outgoingData.writeByte(y);
+    }
+
+    public static void writeUseItem(int slot) {
+        outgoingData.writeByte(ClientPacketID.UseItem.ordinal());
+        outgoingData.writeByte(slot);
     }
 
 }

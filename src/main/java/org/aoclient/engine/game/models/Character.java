@@ -69,9 +69,6 @@ public final class Character {
         if (charIndex > User.getInstance().getLastChar())
             User.getInstance().setLastChar(charIndex);
 
-        if (charList[charIndex].isActive()) {
-            User.getInstance().incrementNumChars();
-        }
 
         if (weapon <= 0) weapon = 2;
         if (shield <= 0) shield = 2;
@@ -123,9 +120,6 @@ public final class Character {
          */
 
         resetCharInfo(charIndex);
-        // Update NumChars
-        User.getInstance().decrementNumChars();
-
     }
 
     private static void resetCharInfo(int charIndex) {

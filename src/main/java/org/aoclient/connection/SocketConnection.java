@@ -97,7 +97,7 @@ public class SocketConnection {
                 //System.out.println("Bytes Read: " + bytesRead);
 
                 if (bytesRead > 0) {
-                    String RD = new String(dataBuffer, 0 , bytesRead);
+                    final String RD = new String(dataBuffer, 0 , bytesRead);
                     byte[] data = RD.getBytes();
 
                     // Process the received data here

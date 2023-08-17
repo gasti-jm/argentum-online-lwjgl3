@@ -7,7 +7,7 @@ import java.io.RandomAccessFile;
 import static org.lwjgl.glfw.GLFW.*;
 
 
-public class BindKeys {
+public final class BindKeys {
     private final int mappedKeys[];
     private static BindKeys instance;
 

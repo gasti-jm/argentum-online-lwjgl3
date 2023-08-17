@@ -17,6 +17,9 @@ import static org.aoclient.engine.utils.GameData.*;
 public final class User {
     private static User instance;
 
+    private Inventory userInventory;
+    // private InventorySpells inventorySpells;
+
     private boolean underCeiling;
     private boolean userMoving;
 
@@ -28,7 +31,6 @@ public final class User {
 
     // personajes visibles (incluido yo)
     private int lastChar = 0;
-    private int numChars = 0;
 
     // conexion
     private boolean userConected;
@@ -46,6 +48,7 @@ public final class User {
     private User () {
         userPos = new Position();
         addToUserPos = new Position();
+        userInventory = new Inventory();
     }
 
     public static User getInstance(){
@@ -363,18 +366,6 @@ public final class User {
         this.userMap = userMap;
     }
 
-    public int getNumChars() {
-        return numChars;
-    }
-
-    public void incrementNumChars() {
-        this.numChars++;
-    }
-
-    public void decrementNumChars() {
-        this.numChars--;
-    }
-
     public void setConnected() {
         userConected = true;
     }
@@ -393,5 +384,9 @@ public final class User {
 
     public void setUserCharIndex(short userCharIndex) {
         this.userCharIndex = userCharIndex;
+    }
+
+    public Inventory getUserInventory() {
+        return userInventory;
     }
 }
