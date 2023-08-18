@@ -27,5 +27,5 @@ public enum E_KeyType {
     mKeyMeditate,
     mKeyCastSpellMacro,
     mKeyWorkMacro,
-    mKeyExitGame,
+    mKeyExitGame
 }

@@ -1,6 +1,7 @@
 package org.aoclient.engine.scenes;
 
 import org.aoclient.engine.game.BindKeys;
+import org.aoclient.engine.game.E_KeyType;
 import org.aoclient.engine.gui.ElementGUI;
 import org.aoclient.engine.gui.elements.ImageGUI;
 import org.aoclient.engine.listeners.KeyListener;
@@ -82,14 +83,6 @@ public final class GameScene extends Scene {
             autoMove = !autoMove;
         }
 
-        if (KeyListener.isKeyReadyForAction(bindKeys.getBindedKey(mKeyAttack))) {
-            writeAttack();
-        }
-
-        if (KeyListener.isKeyReadyForAction(bindKeys.getBindedKey(mKeyGetObject))) {
-            writePickUp();
-        }
-
         if(!user.isUserMoving()) {
             if(!autoMove){
 
@@ -110,6 +103,8 @@ public final class GameScene extends Scene {
             }
 
         }
+
+        checkBindedKeys();
     }
 
     @Override
@@ -118,24 +113,59 @@ public final class GameScene extends Scene {
         main.clear();
     }
 
+
+    private void checkBindedKeys() {
+        E_KeyType keyPressed = bindKeys.getKeyPressed(KeyListener.getLastKeyPressed());
+        if(keyPressed == null) return;
+
+        if (KeyListener.isKeyReadyForAction(bindKeys.getBindedKey(keyPressed))) {
+            switch (keyPressed) {
+                case mKeyGetObject:
+                    writePickUp();
+                    break;
+
+                case mKeyAttack:
+                    writeAttack();
+                    break;
+
+                case mKeyUseObject:
+                    user.getUserInventory().usarItem();
+                    break;
+
+                case mKeyEquipObject:
+                    user.getUserInventory().equiparItem();
+                    break;
+            }
+
+
+        }
+
+    }
+
+
+
     /**
      * Permite que si caminar automaticamente si el usuario activa la opcion de "autoMove"
      */
     private void autoWalk() {
-        switch(KeyListener.getLastKeyPressed()) {
-            case GLFW_KEY_W:
+        E_KeyType keyPressed = bindKeys.getKeyPressed(KeyListener.getLastKeyPressed());
+
+        if(keyPressed == null) return;
+
+        switch(keyPressed) {
+            case mKeyUp:
                 user.moveTo(NORTH);
                 break;
 
-            case GLFW_KEY_S:
+            case mKeyDown:
                 user.moveTo(SOUTH);
                 break;
 
-            case GLFW_KEY_A:
+            case mKeyLeft:
                 user.moveTo(WEST);
                 break;
 
-            case GLFW_KEY_D:
+            case mKeyRight:
                 user.moveTo(EAST);
                 break;
         }
@@ -275,7 +305,7 @@ public final class GameScene extends Scene {
 
     @Override
     public void render() {
-        if(!User.getInstance().isUserConected()) {
+        if(!user.isUserConected()) {
             close();
         }
 

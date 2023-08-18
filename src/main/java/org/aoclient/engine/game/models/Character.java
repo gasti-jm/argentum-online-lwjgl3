@@ -138,10 +138,6 @@ public final class Character {
         return walkingSpeed;
     }
 
-    public void setWalkingSpeed(int walkingSpeed) {
-        this.walkingSpeed = walkingSpeed;
-    }
-
     public boolean isActive() {
         return active;
     }
@@ -160,10 +156,6 @@ public final class Character {
 
     public Position getPos() {
         return pos;
-    }
-
-    public void setPos(Position pos) {
-        this.pos = pos;
     }
 
     public short getiHead() {

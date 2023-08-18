@@ -46,8 +46,7 @@ public final class Inventory {
 
     private Slot slots[];
     private int slotSelected;
-
-    private RGBColor colorEquipped = new RGBColor(1.0f, 1.0f, 0.0f);
+    private final RGBColor colorEquipped = new RGBColor(1.0f, 1.0f, 0.0f);
 
     /**
      * Constructor para inventario de usuario
@@ -100,7 +99,10 @@ public final class Inventory {
         slots[slot].minHit      = minHit;
         slots[slot].name        = name;
         slots[slot].objIndex    = objIndex;
-        if (objType > 0) slots[slot].objType = E_ObjType.values()[objType - 1];
+
+        if (objType > 0)
+            slots[slot].objType = E_ObjType.values()[objType - 1];
+
         slots[slot].value       = value;
     }
 
@@ -157,17 +159,29 @@ public final class Inventory {
 
             // Esta selecionado primero?
             if (x + (this.cantColumns * y) == this.slotSelected){
-
-                // no vamos a mandar un paquete al pedo.
-                if (slots[slotSelected].grhIndex > 0) {
-                    if (slots[slotSelected].objType.equippable) {
-                        writeEquipItem(this.slotSelected + 1);
-                    } else {
-                        writeUseItem(this.slotSelected + 1);
-                    }
+                if (slots[slotSelected].objType.equippable) { // es equipable?
+                    equiparItem();
+                } else {
+                    usarItem();
                 }
-
             }
+        }
+    }
+
+    public int getSlotSelected() {
+        return slotSelected;
+    }
+
+    public void usarItem() {
+        if (slots[slotSelected].grhIndex > 0) {
+            writeUseItem(this.slotSelected + 1);
+        }
+    }
+
+    public void equiparItem() {
+        // no vamos a mandar un paquete al pedo.
+        if (slots[slotSelected].grhIndex > 0 && slots[slotSelected].objType.equippable) {
+            writeEquipItem(this.slotSelected + 1);
         }
     }
 

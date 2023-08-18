@@ -1,15 +1,19 @@
 package org.aoclient.engine.listeners;
 
+import org.aoclient.engine.game.BindKeys;
+
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.aoclient.engine.game.E_KeyType.*;
 import static org.lwjgl.glfw.GLFW.*;
 
 public class KeyListener {
     private static KeyListener instance;
-    private boolean keyPressed[] = new boolean[350];
+
+    private final BindKeys bindKeys = BindKeys.get();
+    private final boolean[] keyPressed = new boolean[350];
     private int lastKeyPressed;
-    //private static boolean actionKey[] = new boolean[350];
     public static List<Integer> lastKeysPressed = new ArrayList<>();
 
     private KeyListener() {
@@ -30,17 +34,20 @@ public class KeyListener {
     public static void keyCallback(long window, int key, int scancode, int action, int mods) {
         if (action == GLFW_PRESS) {
             get().keyPressed[key] = true;
-            //actionKey[key] = true; // estoy listo para accionar cualquier cosa.
+            get().lastKeyPressed = key;
 
-            if (key == GLFW_KEY_W || key == GLFW_KEY_A || key == GLFW_KEY_S || key == GLFW_KEY_D) {
-                get().lastKeyPressed = key;
+            if (key == get().bindKeys.getBindedKey(mKeyUp) || key == get().bindKeys.getBindedKey(mKeyLeft) ||
+                    key == get().bindKeys.getBindedKey(mKeyDown) || key == get().bindKeys.getBindedKey(mKeyRight)) {
+
                 lastKeysPressed.add(key);
             }
 
         } else if (action == GLFW_RELEASE) {
             get().keyPressed[key] = false;
 
-            if (key == GLFW_KEY_W || key == GLFW_KEY_A || key == GLFW_KEY_S || key == GLFW_KEY_D) {
+            if (key == get().bindKeys.getBindedKey(mKeyUp) || key == get().bindKeys.getBindedKey(mKeyLeft) ||
+                    key == get().bindKeys.getBindedKey(mKeyDown) || key == get().bindKeys.getBindedKey(mKeyRight)) {
+
                 lastKeysPressed.remove(lastKeysPressed.indexOf(key));
             }
         }

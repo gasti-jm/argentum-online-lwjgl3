@@ -120,4 +120,14 @@ public final class BindKeys {
         return mappedKeys[key.ordinal()];
     }
 
+    public E_KeyType getKeyPressed(int keyCode) {
+        for (int i = 0; i < mappedKeys.length; i++) {
+            if(keyCode == mappedKeys[i]) {
+                return E_KeyType.values()[i];
+            }
+        }
+
+        return null;
+    }
+
 }
