@@ -13,8 +13,9 @@ public class KeyListener {
 
     private final BindKeys bindKeys = BindKeys.get();
     private final boolean[] keyPressed = new boolean[350];
+    private int lastKeyMovedPressed;
     private int lastKeyPressed;
-    public static List<Integer> lastKeysPressed = new ArrayList<>();
+    public static List<Integer> lastKeysMovedPressed = new ArrayList<>();
 
     private KeyListener() {
 
@@ -39,7 +40,8 @@ public class KeyListener {
             if (key == get().bindKeys.getBindedKey(mKeyUp) || key == get().bindKeys.getBindedKey(mKeyLeft) ||
                     key == get().bindKeys.getBindedKey(mKeyDown) || key == get().bindKeys.getBindedKey(mKeyRight)) {
 
-                lastKeysPressed.add(key);
+                get().lastKeyMovedPressed = key;
+                lastKeysMovedPressed.add(key);
             }
 
         } else if (action == GLFW_RELEASE) {
@@ -48,7 +50,7 @@ public class KeyListener {
             if (key == get().bindKeys.getBindedKey(mKeyUp) || key == get().bindKeys.getBindedKey(mKeyLeft) ||
                     key == get().bindKeys.getBindedKey(mKeyDown) || key == get().bindKeys.getBindedKey(mKeyRight)) {
 
-                lastKeysPressed.remove(lastKeysPressed.indexOf(key));
+                 lastKeysMovedPressed.remove(lastKeysMovedPressed.indexOf(key));
             }
         }
     }
@@ -84,6 +86,14 @@ public class KeyListener {
 
     public static void setLastKeyPressed(int value) {
         get().lastKeyPressed = value;
+    }
+
+    public static int getLastKeyMovedPressed () {
+        return get().lastKeyMovedPressed;
+    }
+
+    public static void setLastKeyMovedPressed(int value) {
+        get().lastKeyMovedPressed = value;
     }
 }
 

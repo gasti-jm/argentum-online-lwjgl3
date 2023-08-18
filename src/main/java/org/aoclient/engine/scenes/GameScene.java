@@ -76,24 +76,23 @@ public final class GameScene extends Scene {
 
     @Override
     public void keyEvents() {
-
         // falta bindear xd
         if (KeyListener.isKeyReadyForAction(GLFW_KEY_TAB)) {
-            KeyListener.setLastKeyPressed(0);
+            KeyListener.setLastKeyMovedPressed(0);
             autoMove = !autoMove;
         }
 
         if(!user.isUserMoving()) {
             if(!autoMove){
 
-                if (!KeyListener.lastKeysPressed.isEmpty()) {
-                    if (KeyListener.lastKeysPressed.get(KeyListener.lastKeysPressed.size() - 1) == bindKeys.getBindedKey(mKeyUp)) {
+                if (!KeyListener.lastKeysMovedPressed.isEmpty()) {
+                    if (KeyListener.lastKeysMovedPressed.get(KeyListener.lastKeysMovedPressed.size() - 1) == bindKeys.getBindedKey(mKeyUp)) {
                         user.moveTo(NORTH);
-                    } else if (KeyListener.lastKeysPressed.get(KeyListener.lastKeysPressed.size() - 1) == bindKeys.getBindedKey(mKeyDown)) {
+                    } else if (KeyListener.lastKeysMovedPressed.get(KeyListener.lastKeysMovedPressed.size() - 1) == bindKeys.getBindedKey(mKeyDown)) {
                         user.moveTo(SOUTH);
-                    } else if (KeyListener.lastKeysPressed.get(KeyListener.lastKeysPressed.size() - 1) == bindKeys.getBindedKey(mKeyLeft)) {
+                    } else if (KeyListener.lastKeysMovedPressed.get(KeyListener.lastKeysMovedPressed.size() - 1) == bindKeys.getBindedKey(mKeyLeft)) {
                         user.moveTo(WEST);
-                    } else if (KeyListener.lastKeysPressed.get(KeyListener.lastKeysPressed.size() - 1) == bindKeys.getBindedKey(mKeyRight)) {
+                    } else if (KeyListener.lastKeysMovedPressed.get(KeyListener.lastKeysMovedPressed.size() - 1) == bindKeys.getBindedKey(mKeyRight)) {
                         user.moveTo(EAST);
                     }
                 }
@@ -118,18 +117,19 @@ public final class GameScene extends Scene {
         E_KeyType keyPressed = bindKeys.getKeyPressed(KeyListener.getLastKeyPressed());
         if(keyPressed == null) return;
 
+
         if (KeyListener.isKeyReadyForAction(bindKeys.getBindedKey(keyPressed))) {
             switch (keyPressed) {
+                case mKeyUseObject:
+                    user.getUserInventory().usarItem();
+                    break;
+
                 case mKeyGetObject:
                     writePickUp();
                     break;
 
                 case mKeyAttack:
                     writeAttack();
-                    break;
-
-                case mKeyUseObject:
-                    user.getUserInventory().usarItem();
                     break;
 
                 case mKeyEquipObject:
@@ -148,7 +148,7 @@ public final class GameScene extends Scene {
      * Permite que si caminar automaticamente si el usuario activa la opcion de "autoMove"
      */
     private void autoWalk() {
-        E_KeyType keyPressed = bindKeys.getKeyPressed(KeyListener.getLastKeyPressed());
+        E_KeyType keyPressed = bindKeys.getKeyPressed(KeyListener.getLastKeyMovedPressed());
 
         if(keyPressed == null) return;
 
