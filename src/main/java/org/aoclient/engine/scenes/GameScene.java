@@ -23,7 +23,6 @@ public final class GameScene extends Scene {
     private BindKeys bindKeys;
     private User user;
 
-
     private float offSetCounterX = 0;
     private float offSetCounterY = 0;
     private float alphaCeiling = 1.0f;
@@ -112,10 +111,12 @@ public final class GameScene extends Scene {
         main.clear();
     }
 
-
+    /**
+     * Chequea y ejecuta la tecla que fue bindeada.
+     */
     private void checkBindedKeys() {
         E_KeyType keyPressed = bindKeys.getKeyPressed(KeyListener.getLastKeyPressed());
-        if(keyPressed == null) return;
+        if(keyPressed == null) return; // ni me gasto si la tecla presionada no existe en nuestro bind.
 
 
         if (KeyListener.isKeyReadyForAction(bindKeys.getBindedKey(keyPressed))) {
@@ -142,32 +143,18 @@ public final class GameScene extends Scene {
 
     }
 
-
-
     /**
      * Permite que si caminar automaticamente si el usuario activa la opcion de "autoMove"
      */
     private void autoWalk() {
         E_KeyType keyPressed = bindKeys.getKeyPressed(KeyListener.getLastKeyMovedPressed());
-
         if(keyPressed == null) return;
 
         switch(keyPressed) {
-            case mKeyUp:
-                user.moveTo(NORTH);
-                break;
-
-            case mKeyDown:
-                user.moveTo(SOUTH);
-                break;
-
-            case mKeyLeft:
-                user.moveTo(WEST);
-                break;
-
-            case mKeyRight:
-                user.moveTo(EAST);
-                break;
+            case mKeyUp: user.moveTo(NORTH); break;
+            case mKeyDown: user.moveTo(SOUTH); break;
+            case mKeyLeft: user.moveTo(WEST); break;
+            case mKeyRight: user.moveTo(EAST); break;
         }
     }
 
@@ -177,6 +164,7 @@ public final class GameScene extends Scene {
     private void renderScreen(int tileX, int tileY, int PixelOffsetX, int PixelOffsetY) {
         camera.update(tileX, tileY);
 
+        // LAYER 1
         for (int y = camera.getScreenminY(); y <= camera.getScreenmaxY(); y++) {
             int x;
             for(x = camera.getScreenminX(); x <= camera.getScreenmaxX(); x++) {
@@ -194,6 +182,8 @@ public final class GameScene extends Scene {
             camera.incrementScreenY();
         }
 
+
+        // LAYER 2 & OBJECTS 32x32
         camera.setScreenY(camera.getMinYOffset() - TILE_BUFFER_SIZE);
         for (int y = camera.getMinY(); y <= camera.getMaxY(); y++) {
             camera.setScreenX(camera.getMinXOffset() - TILE_BUFFER_SIZE);
@@ -222,6 +212,7 @@ public final class GameScene extends Scene {
             camera.incrementScreenY();
         }
 
+        // LAYER 3, CHARACTERS & OBJECTS > 32x32
         camera.setScreenY(camera.getMinYOffset() - TILE_BUFFER_SIZE);
         for (int y = camera.getMinY(); y <= camera.getMaxY(); y++) {
             camera.setScreenX(camera.getMinXOffset() - TILE_BUFFER_SIZE);
@@ -239,7 +230,7 @@ public final class GameScene extends Scene {
                 }
 
                 if (mapData[x][y].getCharIndex() != 0) {
-                    charRender(mapData[x][y].getCharIndex(),
+                    drawCharacter(mapData[x][y].getCharIndex(),
                             POS_SCREEN_X + camera.getScreenX() * TILE_PIXEL_SIZE + PixelOffsetX,
                             POS_SCREEN_Y + camera.getScreenY() * TILE_PIXEL_SIZE + PixelOffsetY, ambientColor);
                 }
@@ -256,6 +247,7 @@ public final class GameScene extends Scene {
             camera.incrementScreenY();
         }
 
+        // LAYER 4
         checkEffectCeiling();
         camera.setScreenY(camera.getMinYOffset() - TILE_BUFFER_SIZE);
         for (int y = camera.getMinY(); y <= camera.getMaxY(); y++) {
@@ -305,8 +297,9 @@ public final class GameScene extends Scene {
 
     @Override
     public void render() {
+        // si el usuario se desconecta debe regresar al menu principal.
         if(!user.isUserConected()) {
-            close();
+            this.close();
         }
 
         if(!visible) return;

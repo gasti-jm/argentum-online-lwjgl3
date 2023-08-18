@@ -58,6 +58,8 @@ public final class Window {
         glfwWindowHint(GLFW_MAXIMIZED, GLFW_FALSE);
         glfwWindowHint(GLFW_DECORATED, GLFW_FALSE);
 
+
+        // glfwGetPrimaryMonitor() permite pantalla completa.
         // Create the window
         window = glfwCreateWindow(this.width, this.height, this.title, NULL, NULL);
 

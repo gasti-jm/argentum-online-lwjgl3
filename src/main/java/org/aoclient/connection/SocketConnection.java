@@ -6,7 +6,6 @@ import java.net.*;
 import java.io.*;
 
 import static org.aoclient.connection.Protocol.*;
-import static org.aoclient.connection.packets.E_Modo.NORMAL;
 
 public class SocketConnection {
     private static SocketConnection instance;
@@ -30,7 +29,7 @@ public class SocketConnection {
         return instance;
     }
 
-    public void connect(E_Modo estadoLogin) {
+    public void connect() {
         try {
             if(sock == null || sock.isClosed()) {
                 sock = new Socket(IP_SERVER, PORT_SERVER);
@@ -41,37 +40,16 @@ public class SocketConnection {
             incomingData.readASCIIStringFixed(incomingData.length());
             outgoingData.readASCIIStringFixed(outgoingData.length());
 
-            switch (estadoLogin) {
-                case NORMAL:
-                case CREATE_NEW_CHARACTER: login(estadoLogin); break;
-                case DICES: break;
-            }
-
-            readData();
         } catch(Exception e) {
             e.printStackTrace();
         }
-    }
-
-    private void login(E_Modo estadoLogin) {
-        if (estadoLogin == NORMAL) {
-            writeLoginExistingChar();
-        } else {
-            writeLoginNewChar();
-        }
-
-        flushBuffer();
     }
 
     public void flushBuffer() {
         if (writeData == null || !sock.isConnected() || sock.isClosed()) return;
 
         if (outgoingData.length() != 0){
-            //new Thread(() -> {
-                String sndData;
-                sndData = outgoingData.readASCIIStringFixed(outgoingData.length());
-                sendData(sndData);
-           // }).start();
+            sendData(outgoingData.readASCIIStringFixed(outgoingData.length()));
         }
     }
 
@@ -80,6 +58,7 @@ public class SocketConnection {
             try {
                 writeData.write(sdData.getBytes());
             } catch (IOException e) {
+                disconnect();
                 throw new RuntimeException(e);
             }
         }
@@ -99,8 +78,6 @@ public class SocketConnection {
                 if (bytesRead > 0) {
                     final String RD = new String(dataBuffer, 0 , bytesRead);
                     byte[] data = RD.getBytes();
-
-                    // Process the received data here
                     //System.out.println("Received data: " + RD);
 
                     if (RD.isEmpty()) return;
@@ -108,7 +85,7 @@ public class SocketConnection {
                     // Put data in the buffer
                     incomingData.writeBlock(data, -1);
 
-                    //Send buffer to Handle data
+                    //Send buffer to handle data
                     handleIncomingData();
                 }
             }
@@ -117,7 +94,6 @@ public class SocketConnection {
             e.printStackTrace();
         }
     }
-
 
     public void disconnect() {
         try {

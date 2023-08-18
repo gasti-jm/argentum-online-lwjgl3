@@ -342,7 +342,7 @@ public final class Character {
         this.priv = priv;
     }
 
-    public static void charRender(int charIndex, int PixelOffsetX, int PixelOffsetY, RGBColor ambientcolor) {
+    public static void drawCharacter(int charIndex, int PixelOffsetX, int PixelOffsetY, RGBColor ambientcolor) {
         boolean moved = false;
         RGBColor color = new RGBColor();
 

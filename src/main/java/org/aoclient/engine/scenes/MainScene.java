@@ -10,7 +10,8 @@ import org.aoclient.engine.listeners.KeyListener;
 import org.aoclient.engine.renderer.RGBColor;
 import org.aoclient.engine.utils.GameData;
 
-import static org.aoclient.engine.game.models.Character.charRender;
+import static org.aoclient.connection.Protocol.writeLoginExistingChar;
+import static org.aoclient.engine.game.models.Character.drawCharacter;
 import static org.aoclient.engine.renderer.Drawn.draw;
 import static org.aoclient.engine.scenes.Camera.TILE_BUFFER_SIZE;
 import static org.aoclient.engine.scenes.Camera.TILE_PIXEL_SIZE;
@@ -50,7 +51,8 @@ public final class MainScene extends Scene {
     public void keyEvents() {
         if (KeyListener.isKeyReadyForAction(GLFW_KEY_ENTER)) {
             // conectarse al servidor con el usuario "GS" y pass "gszone".
-            SocketConnection.getInstance().connect(E_Modo.NORMAL);
+            SocketConnection.getInstance().connect();
+            writeLoginExistingChar();
         }
     }
 
@@ -121,7 +123,7 @@ public final class MainScene extends Scene {
                     }
 
                     if (mapData[x][y].getCharIndex() > 0) {
-                        charRender(mapData[x][y].getCharIndex(),
+                        drawCharacter(mapData[x][y].getCharIndex(),
                                 camera.getScreenX() * TILE_PIXEL_SIZE,
                                 camera.getScreenY() * TILE_PIXEL_SIZE, ambientColor);
                     }

@@ -87,21 +87,14 @@ public final class Sound {
     }
 
     public void play() {
-        int state = alGetSourcei(sourceId, AL_SOURCE_STATE);
-//        if (state == AL_PENDING) {
-//            isPlaying = false;
-//            alSourcei(sourceId, AL_POSITION, 0);
-//        }
-
-        if (state == AL_PLAYING) {
+        if (alGetSourcei(sourceId, AL_SOURCE_STATE) == AL_PLAYING) {
             new Sound(this.filepath, false).play();
-        }
+        } else {
+            if (!isPlaying)
+                isPlaying = true;
 
-        if (!isPlaying) {
-            isPlaying = true;
+            alSourcePlay(sourceId);
         }
-
-        alSourcePlay(sourceId);
     }
 
 
@@ -117,10 +110,10 @@ public final class Sound {
     }
 
     public boolean isPlaying() {
-        int state = alGetSourcei(sourceId, AL_SOURCE_STATE);
-        if (state == AL_STOPPED) {
+        if (alGetSourcei(sourceId, AL_SOURCE_STATE) == AL_STOPPED) {
             isPlaying = false;
         }
+
         return isPlaying;
     }
 

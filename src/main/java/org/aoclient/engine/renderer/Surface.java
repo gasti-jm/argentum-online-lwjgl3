@@ -15,9 +15,7 @@ import static org.lwjgl.opengl.GL11.*;
 
 public class Surface {
     private static Surface instance;
-
     private ByteBuffer pixels;
-    private int textureWidth, textureHeight;
     private Map<Integer, TextureOGL> textures;
 
     private Surface() {
@@ -57,13 +55,10 @@ public class Surface {
         File file = new File("resources/graphics/" + fileNum + ".bmp");
 
         if (file.exists()) {
-            texture.id = loadTexture("resources/graphics/" + fileNum + ".bmp", false);
+            texture.id = loadTexture(texture, "resources/graphics/" + fileNum + ".bmp", false);
         } else {
-            texture.id = loadTexture("resources/graphics/" + fileNum + ".png", false);
+            texture.id = loadTexture(texture, "resources/graphics/" + fileNum + ".png", false);
         }
-
-        texture.tex_width = textureWidth;
-        texture.tex_height = textureHeight;
 
         textures.put(fileNum, texture);
 
@@ -76,18 +71,14 @@ public class Surface {
      */
     public TextureOGL createTexture(String file) {
         TextureOGL texture = new TextureOGL();
-
-        texture.id = loadTexture("resources/gui/" + file, true);
-        texture.tex_width = textureWidth;
-        texture.tex_height = textureHeight;
-
+        texture.id = loadTexture(texture,"resources/gui/" + file, true);
         return texture;
     }
 
     /**
      * @desc: Carga una textura y lo guarda en la GPU, retorna su id.
      */
-    public int loadTexture(String file, boolean isGUI) {
+    public int loadTexture(TextureOGL refTexture, String file, boolean isGUI) {
         pixels = BufferUtils.createByteBuffer(1);
         BufferedImage bi;
         int id = 0;
@@ -96,20 +87,20 @@ public class Surface {
             File fil = new File(file);
             BufferedImage image = ImageIO.read(fil);
 
-            textureWidth = image.getWidth();
-            textureHeight = image.getHeight();
+            refTexture.tex_width = image.getWidth();
+            refTexture.tex_height = image.getHeight();
 
-            bi = new BufferedImage(textureWidth, textureHeight, BufferedImage.TYPE_4BYTE_ABGR);
+            bi = new BufferedImage(refTexture.tex_width, refTexture.tex_height, BufferedImage.TYPE_4BYTE_ABGR);
 
             Graphics2D g = bi.createGraphics();
             g.scale(1, -1);
-            g.drawImage(image, 0, 0, textureWidth, -textureHeight, null);
+            g.drawImage(image, 0, 0, refTexture.tex_width, -refTexture.tex_height, null);
 
-            byte[] data = new byte[4 * textureWidth * textureHeight];
-            bi.getRaster().getDataElements(0, 0, textureWidth, textureHeight, data);
+            byte[] data = new byte[4 * refTexture.tex_width * refTexture.tex_height];
+            bi.getRaster().getDataElements(0, 0, refTexture.tex_width, refTexture.tex_height, data);
 
             if(!isGUI) {
-                for (int j = 0; j < textureWidth * textureHeight; j++) {
+                for (int j = 0; j < refTexture.tex_width * refTexture.tex_height; j++) {
                     if (data[j * 4] == 0 && data[j * 4 + 1] == 0 && data[j * 4 + 2] == 0) {
                         data[j * 4] = -1;
                         data[j * 4 + 1] = -1;
@@ -132,7 +123,7 @@ public class Surface {
             pixels.rewind();
 
             glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA,
-                    textureWidth, textureHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
+                    refTexture.tex_width, refTexture.tex_height, 0, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
 
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 
