@@ -1,6 +1,5 @@
 package org.aoclient.engine.renderer;
 
-import org.aoclient.engine.scenes.Camera;
 import org.aoclient.engine.utils.filedata.GrhInfo;
 
 import static org.aoclient.engine.scenes.Camera.TILE_PIXEL_SIZE;
@@ -18,13 +17,17 @@ public final class Drawn {
         if (blend)
             glBlendFunc(GL_SRC_ALPHA, GL_ONE);
 
-        TextureOGL texture = Surface.getInstance().getTexture(grhData[grh_index].getFileNum());
+        TextureOGL texture = Surface.get().getTexture(grhData[grh_index].getFileNum());
 
-        final float src_right = (float) sX + src_width;
-        final float src_bottom = (float) sY + (src_height);
+        final float src_left = sX;
+        final float src_top = sY;
+        final float src_right = src_left + src_width;
+        final float src_bottom = src_top + (src_height);
 
-        final float dest_right = x + (src_right - (float) sX);
-        final float dest_bottom = y + (src_bottom - (float) sY);
+        final float dest_left = x;
+        final float dest_top = y;
+        final float dest_right = x + (src_right - src_left);
+        final float dest_bottom = y + (src_bottom - src_top);
 
         float x_cor, y_cor;
         glBindTexture(GL_TEXTURE_2D, texture.id);
@@ -34,31 +37,31 @@ public final class Drawn {
             //  0----0
             //  |    |
             //  1----0
-            x_cor = (float) x;
+            x_cor = dest_left;
             y_cor = dest_bottom;
 
             glColor4f(color.getRed(), color.getGreen(), color.getBlue(), alpha);
-            glTexCoord2f ((float) sX / texture.tex_width, (src_bottom) / texture.tex_height);
+            glTexCoord2f (src_left / texture.tex_width, (src_bottom) / texture.tex_height);
             glVertex2d(x_cor, y_cor);
 
             //  1----0
             //  |    |
             //  0----0
-            x_cor = (float) x;
-            y_cor = (float) y;
+            x_cor = dest_left;
+            y_cor = dest_top;
 
             glColor4f(color.getRed(), color.getGreen(), color.getBlue(), alpha);
-            glTexCoord2f((float) sX / texture.tex_width, (float) sY / texture.tex_height);
+            glTexCoord2f(src_left / texture.tex_width, src_top / texture.tex_height);
             glVertex2d(x_cor, y_cor);
 
             //  0----1
             //  |    |
             //  0----0
             x_cor = dest_right;
-            y_cor = (float) y;
+            y_cor = dest_top;
 
             glColor4f(color.getRed(), color.getGreen(), color.getBlue(), alpha);
-            glTexCoord2f((src_right) / texture.tex_width, (float) sY / texture.tex_height);
+            glTexCoord2f((src_right) / texture.tex_width, src_top / texture.tex_height);
             glVertex2d(x_cor, y_cor);
 
             //  0----0

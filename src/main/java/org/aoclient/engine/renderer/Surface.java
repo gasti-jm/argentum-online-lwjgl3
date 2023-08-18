@@ -22,7 +22,7 @@ public class Surface {
 
     }
 
-    public static Surface getInstance() {
+    public static Surface get() {
         if (instance == null){
             instance = new Surface();
         }

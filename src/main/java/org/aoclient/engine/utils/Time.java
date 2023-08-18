@@ -15,22 +15,10 @@ public final class Time {
     public static float endTime;
     public static float deltaTime;
 
-    // Intervalos
-    public static final float INT_MACRO_HECHIS = 2.788f;
-    public static final float INT_MACRO_TRABAJO = 0.9f;
-    public static final float INT_ATTACK = 1.5f;
-    public static final float INT_ARROWS = 1.4f;
-    public static final float INT_CAST_SPELL = 1.4f;
-    public static final float INT_CAST_ATTACK = 1.0f;
-    public static final float INT_WORK = 0.7f;
-    public static final float INT_USEITEMU = 0.45f;
-    public static final float INT_USEITEMDCK = 0.125f;
-    public static final float INT_SENTRPU = 2.0f;
-
     /**
      * @desc: Inicializamos las variables necesarias para calcular el tiempo
      */
-    public static void initTimers() {
+    public static void initTime() {
         beginTime = (float) glfwGetTime();
         deltaTime = -1.0f;
     }
@@ -38,7 +26,7 @@ public final class Time {
     /**
      * @desc: Actualizamos los timers, incluido los FPS
      */
-    public static void updateTimers() {
+    public static void updateTime() {
         updateFPS();
 
         endTime = (float) glfwGetTime();

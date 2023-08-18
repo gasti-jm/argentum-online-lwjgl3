@@ -1,34 +1,17 @@
-package org.aoclient.engine.game;
+package org.aoclient.engine.game.inventory;
 
 import org.aoclient.engine.game.models.E_ObjType;
 import org.aoclient.engine.listeners.MouseListener;
-import org.aoclient.engine.renderer.RGBColor;
 
-import static org.aoclient.connection.Protocol.writeEquipItem;
-import static org.aoclient.connection.Protocol.writeUseItem;
 import static org.aoclient.engine.renderer.Drawn.drawGrhIndex;
 import static org.aoclient.engine.renderer.Drawn.drawText;
 import static org.aoclient.engine.scenes.Camera.*;
 
-public final class Inventory {
-    // Constantes //////////////////////////////////////////////////
-
-    // posicion del inventario en pantalla
-    public static final int MAIN_POS_X = 600;
-    public static final int MAIN_POS_Y = 160;
-
-    // size
-    public static final int MAIN_SIZE_WIDTH = 160;
-    public static final int MAIN_SIZE_HEIGHT = 128;
-    public static final int MAX_INVENTORY_SLOTS = 30;
-
-    ////////////////////////////////////////////////////////////////
-
-    private int posX, posY;
-    private int sWidth, sHeigth;
-    private int cantRows, cantColumns;
-
-    private boolean visible;
+public class Inventory {
+    protected int posX, posY;
+    protected int sWidth, sHeigth;
+    protected int cantRows, cantColumns;
+    protected boolean visible;
 
     class Slot {
         short objIndex;
@@ -44,27 +27,23 @@ public final class Inventory {
         short minHit;
     }
 
-    private Slot slots[];
-    private int slotSelected;
-    private final RGBColor colorEquipped = new RGBColor(1.0f, 1.0f, 0.0f);
+    protected Slot slots[];
+    protected int slotSelected;
 
-    /**
-     * Constructor para inventario de usuario
-     */
-    public Inventory(){
+    public Inventory(int posX, int posY, int width, int heigth, int cantSlots){
         this.visible = true;
         this.slotSelected = 0;
-        this.slots = new Slot[MAX_INVENTORY_SLOTS];
+        this.slots = new Slot[cantSlots];
 
         for (int i = 0; i < slots.length; i++) {
             slots[i] = new Slot();
         }
 
-        this.posX = MAIN_POS_X;
-        this.posY = MAIN_POS_Y;
+        this.posX = posX;
+        this.posY = posY;
 
-        this.sWidth = MAIN_SIZE_WIDTH;
-        this.sHeigth = MAIN_SIZE_HEIGHT;
+        this.sWidth = width;
+        this.sHeigth = heigth;
 
         this.cantColumns = sWidth / TILE_PIXEL_SIZE;
         this.cantRows = sHeigth / TILE_PIXEL_SIZE;
@@ -73,7 +52,7 @@ public final class Inventory {
     /**
      * @desc: Chekeamos que el mouse este dentro del inventario.
      */
-    private boolean inInventoryArea() {
+    protected boolean inInventoryArea() {
         if (MouseListener.getX() < posX || MouseListener.getX() > posX + sWidth)
             return false;
 
@@ -119,12 +98,7 @@ public final class Inventory {
         for (int i = 0; i < slots.length; i++) {
             if (slots[i].grhIndex > 0) {
                 drawGrhIndex(slots[i].grhIndex, iX,  iY, null);
-
                 drawText(String.valueOf(slots[i].amount),  iX, iY + 20, null, 0, false);
-
-                if (slots[i].equipped) {
-                    drawText("E",  iX + 20, iY, colorEquipped, 0, false);
-                }
             }
 
             if(i == slotSelected) {
@@ -150,39 +124,8 @@ public final class Inventory {
         }
     }
 
-    public void dobleClickInventory() {
-        final int x = (int) ((MouseListener.getX() - posX) / TILE_PIXEL_SIZE);
-        final int y = (int) ((MouseListener.getY() - posY) / TILE_PIXEL_SIZE);
-
-        // esta el mouse dentro del inventario??
-        if (inInventoryArea()) {
-
-            // Esta selecionado primero?
-            if (x + (this.cantColumns * y) == this.slotSelected){
-                if (slots[slotSelected].objType.equippable) { // es equipable?
-                    equiparItem();
-                } else {
-                    usarItem();
-                }
-            }
-        }
-    }
-
     public int getSlotSelected() {
         return slotSelected;
-    }
-
-    public void usarItem() {
-        if (slots[slotSelected].grhIndex > 0) {
-            writeUseItem(this.slotSelected + 1);
-        }
-    }
-
-    public void equiparItem() {
-        // no vamos a mandar un paquete al pedo.
-        if (slots[slotSelected].grhIndex > 0 && slots[slotSelected].objType.equippable) {
-            writeEquipItem(this.slotSelected + 1);
-        }
     }
 
     private void setSelectedSlot(int slot) {

@@ -1,6 +1,8 @@
 package org.aoclient.engine.game;
 
 
+import org.aoclient.engine.game.models.E_KeyType;
+
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;

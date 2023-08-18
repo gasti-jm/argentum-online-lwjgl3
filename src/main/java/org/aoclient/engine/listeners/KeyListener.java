@@ -5,7 +5,7 @@ import org.aoclient.engine.game.BindKeys;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.aoclient.engine.game.E_KeyType.*;
+import static org.aoclient.engine.game.models.E_KeyType.*;
 import static org.lwjgl.glfw.GLFW.*;
 
 public class KeyListener {

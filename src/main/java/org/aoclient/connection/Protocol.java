@@ -1937,7 +1937,7 @@ public class Protocol {
         final int slot = buffer.readByte();
         final short objIndex = buffer.readInteger();
         final String name = buffer.readASCIIString(); //(Hay que arreglar a este puto)
-        final short amount = buffer.readInteger();
+        final int amount = buffer.readInteger();
         final boolean equipped = buffer.readBoolean();
         final short grhIndex = buffer.readInteger();
         final byte objType = buffer.readByte();

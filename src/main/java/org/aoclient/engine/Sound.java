@@ -13,7 +13,6 @@ import static org.lwjgl.system.MemoryStack.*;
 import static org.lwjgl.system.libc.LibCStdlib.free;
 
 public final class Sound {
-    // Constantes
     public static final String SND_CLICK = "click.ogg";
     public static final String SND_PASOS1 = "23.ogg";
     public static final String SND_PASOS2 = "24.ogg";
@@ -23,12 +22,9 @@ public final class Sound {
     public static final String SND_LLUVIAINEND = "lluviainend.ogg";
     public static final String SND_LLUVIAOUTEND = "lluviaoutend.ogg";
 
-
-    // Atributos
     private int bufferId;
     private int sourceId;
     private String filepath;
-
     private boolean isPlaying = false;
 
     public Sound(String filepath, boolean loops) {
@@ -96,7 +92,6 @@ public final class Sound {
             alSourcePlay(sourceId);
         }
     }
-
 
     public void stop() {
         if (isPlaying){

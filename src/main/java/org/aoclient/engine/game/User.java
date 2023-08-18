@@ -1,10 +1,8 @@
 package org.aoclient.engine.game;
 
-import org.aoclient.engine.game.models.Character;
+import org.aoclient.engine.game.inventory.UserInventory;
 import org.aoclient.engine.game.models.E_Heading;
-import org.aoclient.engine.scenes.Camera;
 import org.aoclient.engine.game.models.Position;
-import org.aoclient.engine.utils.filedata.*;
 
 import static org.aoclient.connection.Protocol.writeChangeHeading;
 import static org.aoclient.connection.Protocol.writeWalk;
@@ -17,7 +15,7 @@ import static org.aoclient.engine.utils.GameData.*;
 public final class User {
     private static User instance;
 
-    private Inventory userInventory;
+    private UserInventory userInventory;
     // private InventorySpells inventorySpells;
 
     private boolean underCeiling;
@@ -48,7 +46,7 @@ public final class User {
     private User () {
         userPos = new Position();
         addToUserPos = new Position();
-        userInventory = new Inventory();
+        userInventory = new UserInventory();
     }
 
     public static User getInstance(){
@@ -386,7 +384,7 @@ public final class User {
         this.userCharIndex = userCharIndex;
     }
 
-    public Inventory getUserInventory() {
+    public UserInventory getUserInventory() {
         return userInventory;
     }
 }

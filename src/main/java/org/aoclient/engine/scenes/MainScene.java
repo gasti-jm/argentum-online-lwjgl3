@@ -1,7 +1,6 @@
 package org.aoclient.engine.scenes;
 
 import org.aoclient.connection.SocketConnection;
-import org.aoclient.connection.packets.E_Modo;
 import org.aoclient.engine.Window;
 import org.aoclient.engine.game.User;
 import org.aoclient.engine.gui.ElementGUI;
@@ -38,8 +37,8 @@ public final class MainScene extends Scene {
 
 
         GameData.loadMap(58); // banderbill
-        camera.setHalfWindowTileWidth(((Window.getInstance().getWidth() / TILE_PIXEL_SIZE) / 2));
-        camera.setHalfWindowTileHeight(((Window.getInstance().getHeight() / TILE_PIXEL_SIZE) / 2));
+        camera.setHalfWindowTileWidth(((Window.get().getWidth() / TILE_PIXEL_SIZE) / 2));
+        camera.setHalfWindowTileHeight(((Window.get().getHeight() / TILE_PIXEL_SIZE) / 2));
     }
 
     @Override

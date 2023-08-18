@@ -1,4 +1,4 @@
-package org.aoclient.engine.game;
+package org.aoclient.engine.game.models;
 
 public enum E_KeyType {
     mKeyUp,

@@ -2,7 +2,7 @@ package org.aoclient.engine;
 
 import org.aoclient.connection.SocketConnection;
 import org.aoclient.engine.game.BindKeys;
-import org.aoclient.engine.game.E_KeyType;
+import org.aoclient.engine.game.models.E_KeyType;
 import org.aoclient.engine.listeners.KeyListener;
 import org.aoclient.engine.renderer.Surface;
 import org.aoclient.engine.scenes.*;
@@ -24,27 +24,14 @@ public final class Engine {
     public void start() {
         System.out.println("Hello LWJGL " + Version.getVersion() + "!");
 
-        window = Window.getInstance();
+        window = Window.get();
         window.initialize();
 
-        Surface.getInstance().initialize();
+        Surface.get().initialize();
         GameData.initialize();
         bindKeys = BindKeys.get();
 
         changeScene(INTRO_SCENE);
-
-        glEnable(GL_TEXTURE_2D);
-        glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-
-        glViewport(0, 0, window.getWidth(), window.getHeight());
-        glOrtho(0, window.getWidth(), window.getHeight(), 0, 1, -1);
-
-        glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
-        glEnable(GL_ALPHA);
-
-        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-        glEnable(GL_BLEND);
-        glDisable(GL_DEPTH_TEST);
 
         loop();
         close();
@@ -55,7 +42,7 @@ public final class Engine {
     }
 
     private void loop() {
-        Time.initTimers();
+        Time.initTime();
 
         while (prgRun) {
             glfwPollEvents();
@@ -70,7 +57,7 @@ public final class Engine {
 
                 glfwSwapBuffers(window.getWindow());
 
-                Time.updateTimers();
+                Time.updateTime();
             }
         }
     }

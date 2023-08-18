@@ -1,7 +1,7 @@
 package org.aoclient.engine.scenes;
 
 import org.aoclient.engine.game.BindKeys;
-import org.aoclient.engine.game.E_KeyType;
+import org.aoclient.engine.game.models.E_KeyType;
 import org.aoclient.engine.gui.ElementGUI;
 import org.aoclient.engine.gui.elements.ImageGUI;
 import org.aoclient.engine.listeners.KeyListener;
@@ -10,7 +10,7 @@ import org.aoclient.engine.listeners.MouseListener;
 import org.aoclient.engine.renderer.RGBColor;
 
 import static org.aoclient.connection.Protocol.*;
-import static org.aoclient.engine.game.E_KeyType.*;
+import static org.aoclient.engine.game.models.E_KeyType.*;
 import static org.aoclient.engine.game.models.Character.*;
 import static org.aoclient.engine.game.models.E_Heading.*;
 import static org.aoclient.engine.renderer.Drawn.*;
@@ -31,7 +31,6 @@ public final class GameScene extends Scene {
     private boolean autoMove = false;
     private ElementGUI main;
 
-
     @Override
     public void init() {
         super.init();
@@ -49,6 +48,41 @@ public final class GameScene extends Scene {
         main = new ImageGUI();
         main.init();
         main.loadTextures("VentanaPrincipal.png");
+    }
+
+    @Override
+    public void render() {
+        // si el usuario se desconecta debe regresar al menu principal.
+        if(!user.isUserConected()) {
+            this.close();
+        }
+
+        if(!visible) return;
+
+
+        if (user.isUserMoving()) {
+            if (user.getAddToUserPos().getX() != 0) {
+                offSetCounterX -= charList[user.getUserCharIndex()].getWalkingSpeed() * user.getAddToUserPos().getX() * timerTicksPerFrame;
+                if (Math.abs(offSetCounterX) >= Math.abs(TILE_PIXEL_SIZE * user.getAddToUserPos().getX())) {
+                    offSetCounterX = 0;
+                    user.getAddToUserPos().setX(0);
+                    user.setUserMoving(false);
+                }
+            }
+
+            if (user.getAddToUserPos().getY() != 0) {
+                offSetCounterY -= charList[user.getUserCharIndex()].getWalkingSpeed() * user.getAddToUserPos().getY() * timerTicksPerFrame;
+                if (Math.abs(offSetCounterY) >= Math.abs(TILE_PIXEL_SIZE * user.getAddToUserPos().getY())) {
+                    offSetCounterY = 0;
+                    user.getAddToUserPos().setY(0);
+                    user.setUserMoving(false);
+                }
+            }
+        }
+
+        renderScreen(user.getUserPos().getX() - user.getAddToUserPos().getX(),
+                user.getUserPos().getY() - user.getAddToUserPos().getY(),
+                (int)(offSetCounterX), (int)(offSetCounterY));
     }
 
     @Override
@@ -122,7 +156,7 @@ public final class GameScene extends Scene {
         if (KeyListener.isKeyReadyForAction(bindKeys.getBindedKey(keyPressed))) {
             switch (keyPressed) {
                 case mKeyUseObject:
-                    user.getUserInventory().usarItem();
+                    user.getUserInventory().useItem();
                     break;
 
                 case mKeyGetObject:
@@ -134,7 +168,7 @@ public final class GameScene extends Scene {
                     break;
 
                 case mKeyEquipObject:
-                    user.getUserInventory().equiparItem();
+                    user.getUserInventory().equipItem();
                     break;
             }
 
@@ -293,40 +327,6 @@ public final class GameScene extends Scene {
     private void showFPS() {
         final String txtFPS = String.valueOf(FPS);
         drawText(txtFPS, (SCREEN_SIZE_X - getSizeText(txtFPS) / 2) - 90, 3, ambientColor, 0, false);
-    }
-
-    @Override
-    public void render() {
-        // si el usuario se desconecta debe regresar al menu principal.
-        if(!user.isUserConected()) {
-            this.close();
-        }
-
-        if(!visible) return;
-
-        if (user.isUserMoving()) {
-            if (user.getAddToUserPos().getX() != 0) {
-                offSetCounterX -= charList[user.getUserCharIndex()].getWalkingSpeed() * user.getAddToUserPos().getX() * timerTicksPerFrame;
-                if (Math.abs(offSetCounterX) >= Math.abs(TILE_PIXEL_SIZE * user.getAddToUserPos().getX())) {
-                    offSetCounterX = 0;
-                    user.getAddToUserPos().setX(0);
-                    user.setUserMoving(false);
-                }
-            }
-
-            if (user.getAddToUserPos().getY() != 0) {
-                offSetCounterY -= charList[user.getUserCharIndex()].getWalkingSpeed() * user.getAddToUserPos().getY() * timerTicksPerFrame;
-                if (Math.abs(offSetCounterY) >= Math.abs(TILE_PIXEL_SIZE * user.getAddToUserPos().getY())) {
-                    offSetCounterY = 0;
-                    user.getAddToUserPos().setY(0);
-                    user.setUserMoving(false);
-                }
-            }
-        }
-
-        renderScreen(user.getUserPos().getX() - user.getAddToUserPos().getX(),
-                     user.getUserPos().getY() - user.getAddToUserPos().getY(),
-                          (int)(offSetCounterX), (int)(offSetCounterY));
     }
 
     private boolean inGameArea() {

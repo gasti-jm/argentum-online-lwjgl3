@@ -24,7 +24,7 @@ public abstract class ElementGUI {
 
     public void loadTextures(String... files) {
         for (int i = 0; i < files.length; i++) {
-            texture.add(Surface.getInstance().createTexture(files[i]));
+            texture.add(Surface.get().createTexture(files[i]));
         }
     }
 

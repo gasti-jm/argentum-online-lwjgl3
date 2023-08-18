@@ -9,7 +9,7 @@ public class MouseListener {
     private boolean mouseButtonPressed[] = new boolean[3];
     private boolean mouseButtonDobleClickPressed[] = new boolean[3];
     private boolean isDragging;
-    private static final double DOUBLE_CLICK_TIME =1;
+    private static final double DOUBLE_CLICK_TIME = 0.2;
     private double lastTimeClick;
 
     private MouseListener() {

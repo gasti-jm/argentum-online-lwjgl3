@@ -8,12 +8,13 @@ import org.lwjgl.openal.*;
 import org.lwjgl.opengl.GL;
 import org.lwjgl.system.MemoryStack;
 
-import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 
 import static org.lwjgl.glfw.Callbacks.glfwFreeCallbacks;
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.openal.ALC10.*;
+import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL11.GL_DEPTH_TEST;
 import static org.lwjgl.system.MemoryStack.stackPush;
 import static org.lwjgl.system.MemoryUtil.NULL;
 
@@ -34,7 +35,7 @@ public final class Window {
         this.height = 600;
     }
 
-    public static Window getInstance() {
+    public static Window get() {
         if (instance == null) {
             instance = new Window();
         }
@@ -117,6 +118,19 @@ public final class Window {
         }
 
         GL.createCapabilities();
+
+        glEnable(GL_TEXTURE_2D);
+        glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+
+        glViewport(0, 0, width, height);
+        glOrtho(0, width, height, 0, 1, -1);
+
+        glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+        glEnable(GL_ALPHA);
+
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        glEnable(GL_BLEND);
+        glDisable(GL_DEPTH_TEST);
     }
 
     public void close() {

@@ -388,7 +388,7 @@ public final class GameData {
 
             // Liberar memoria
             clearSounds();
-            Surface.getInstance().deleteAllTextures();
+            Surface.get().deleteAllTextures();
 
         } catch (IOException ex) {
             ex.printStackTrace();
