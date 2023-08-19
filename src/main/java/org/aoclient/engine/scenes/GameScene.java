@@ -31,7 +31,6 @@ public final class GameScene extends Scene {
     RGBColor ambientColor;
     private boolean autoMove = false;
     private MainGame frm;
-    private Form above;
 
     @Override
     public void init() {
@@ -46,7 +45,6 @@ public final class GameScene extends Scene {
         camera.setHalfWindowTileHeight  (( (SCREEN_SIZE_Y / TILE_PIXEL_SIZE) / 2 ));
 
         frm = new MainGame("VentanaPrincipal.png");
-        above = new Message("VentanaMsj.jpg","Esto es un mensaje de prueba!"); // prueba
     }
 
     @Override
@@ -83,17 +81,12 @@ public final class GameScene extends Scene {
                 user.getUserPos().getY() - user.getAddToUserPos().getY(),
                 (int)(offSetCounterX), (int)(offSetCounterY));
 
-
-        if (above.isVisible()) {
-            above.render();
-        }
     }
 
     @Override
     public void mouseEvents() {
         if (MouseListener.mouseButtonClick(GLFW_MOUSE_BUTTON_LEFT)) {
             // intentamos ejecutar las acciones de los botones si es que estan dentro de nuestro
-            above.checkButtons();
             frm.checkButtons();
 
             // si estamos haciendo click en el render. (osea fuera de la interface)
@@ -142,7 +135,6 @@ public final class GameScene extends Scene {
     public void close() {
         this.visible = false;
         frm.close();
-        above.close();
     }
 
     /**

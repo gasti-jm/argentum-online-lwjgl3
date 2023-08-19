@@ -2,6 +2,9 @@ package org.aoclient.engine.gui.forms;
 
 import org.aoclient.engine.gui.elements.Button;
 import org.aoclient.engine.gui.elements.Label;
+import org.aoclient.engine.listeners.MouseListener;
+
+import static org.lwjgl.glfw.GLFW.GLFW_MOUSE_BUTTON_LEFT;
 
 public class Message extends Form {
     private static final int LBL_MSG_POS_X = 16;
@@ -29,12 +32,17 @@ public class Message extends Form {
         this.accept.setAction(this::close);
     }
 
+    @Override
     public void checkButtons() {
-        accept.runAction();
+        if (MouseListener.mouseButtonClick(GLFW_MOUSE_BUTTON_LEFT)) {
+            accept.runAction();
+        }
     }
 
     @Override
     public void render() {
+        if (!visible) return;
+
         this.background.render();
         this.msg.render();
         this.accept.render();

@@ -2,6 +2,8 @@ package org.aoclient.engine.gui.elements;
 
 import org.aoclient.engine.renderer.RGBColor;
 
+import static org.aoclient.engine.renderer.Drawn.drawRectangle;
+
 public class TextBox extends Label {
     private RGBColor backgroundColor;
 
@@ -12,6 +14,6 @@ public class TextBox extends Label {
 
     @Override
     public void render() {
-
+        drawRectangle(x, y, width, height, backgroundColor);
     }
 }

@@ -3,12 +3,18 @@ package org.aoclient.engine;
 import org.aoclient.connection.SocketConnection;
 import org.aoclient.engine.game.BindKeys;
 import org.aoclient.engine.game.models.E_KeyType;
+import org.aoclient.engine.gui.forms.Form;
+import org.aoclient.engine.gui.forms.Message;
 import org.aoclient.engine.listeners.KeyListener;
+import org.aoclient.engine.listeners.MouseListener;
 import org.aoclient.engine.renderer.Surface;
 import org.aoclient.engine.scenes.*;
 import org.aoclient.engine.utils.GameData;
 import org.aoclient.engine.utils.Time;
 import org.lwjgl.Version;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.aoclient.engine.scenes.SceneType.INTRO_SCENE;
 import static org.aoclient.engine.utils.Time.deltaTime;
@@ -20,16 +26,21 @@ public final class Engine {
     private Window window;
     private Scene currentScene;
     private BindKeys bindKeys;
+    private List<Form> forms; // formularios por encima de las escenas (por ejemplo: frmMensaje).
 
     public void start() {
         System.out.println("Hello LWJGL " + Version.getVersion() + "!");
 
-        window = Window.get();
-        window.initialize();
+        this.window = Window.get();
+        this.window.initialize();
 
         Surface.get().initialize();
         GameData.initialize();
-        bindKeys = BindKeys.get();
+        this.bindKeys = BindKeys.get();
+        this.forms = new ArrayList<>();
+
+        this.forms.add(new Message("VentanaMsj.jpg","Esto es un mensaje de prueba!"));
+
 
         changeScene(INTRO_SCENE);
 
@@ -96,10 +107,23 @@ public final class Engine {
         currentScene.keyEvents();
         currentScene.render();
 
-        // If there is anything to be sent, we send it
+        // dibujado de formularios por encima de las escenas!
+        if(!forms.isEmpty()) {
+            for (Form frm : forms) {
+                if (frm.isVisible()) {
+                    frm.checkButtons();
+                    frm.render();
+                } else {
+                    forms.remove(frm);
+                    break;
+                }
+            }
+        }
+
+        // Si hay algo para enviar, lo enviamos
         SocketConnection.getInstance().flushBuffer();
 
-        // same for the handleData
+        // lo mismo para el handle data, leemos lo que nos envio el servidor.
         SocketConnection.getInstance().readData();
     }
 
