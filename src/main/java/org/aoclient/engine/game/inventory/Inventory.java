@@ -3,8 +3,7 @@ package org.aoclient.engine.game.inventory;
 import org.aoclient.engine.game.models.E_ObjType;
 import org.aoclient.engine.listeners.MouseListener;
 
-import static org.aoclient.engine.renderer.Drawn.drawGrhIndex;
-import static org.aoclient.engine.renderer.Drawn.drawText;
+import static org.aoclient.engine.renderer.Drawn.*;
 import static org.aoclient.engine.scenes.Camera.*;
 
 public class Inventory {
@@ -95,7 +94,9 @@ public class Inventory {
         int iX = posX;
         int iY = posY;
 
+        drawRectangle(posX, posY, sWidth, sHeigth, null);
         for (int i = 0; i < slots.length; i++) {
+
             if (slots[i].grhIndex > 0) {
                 drawGrhIndex(slots[i].grhIndex, iX,  iY, null);
                 drawText(String.valueOf(slots[i].amount),  iX, iY + 20, null, 0, false);

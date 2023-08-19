@@ -153,6 +153,83 @@ public final class Drawn {
     }
 
     /**
+     * @desc: Dibuja un cuadrado o rectangulo segun la dimencion que le asignemos.
+     */
+    public static void drawRectangle(int x, int y, int width, int height, RGBColor color) {
+        if(color == null)
+            color = new RGBColor(0.0f, 0.0f, 0.0f);
+
+        glDisable(GL_BLEND);
+        glBegin(GL_QUADS);
+
+        {
+            //  0----0
+            //  |    |
+            //  1----0
+
+            glColor3f(color.getRed(), color.getGreen(), color.getBlue());
+            glVertex2d(x, y + height);
+
+            //  1----0
+            //  |    |
+            //  0----0
+            glColor3f(color.getRed(), color.getGreen(), color.getBlue());
+            glVertex2f(x, y);
+
+            //  0----1
+            //  |    |
+            //  0----0
+            glColor3f(color.getRed(), color.getGreen(), color.getBlue());
+            glVertex2f(x + width, y);
+
+
+            //  0----0
+            //  |    |
+            //  0----1
+            glColor3f(color.getRed(), color.getGreen(), color.getBlue());
+            glVertex2f(x + width, y + height);
+
+        }
+        glEnd();
+
+        glEnable(GL_BLEND);
+    }
+
+    /**
+     * @desc: Dibuja una linea seun las dimenciones que les demos.
+     */
+    public static void drawLine(int x, int y, int width, int height, RGBColor color) {
+        if(color == null)
+            color = new RGBColor(0.0f, 0.0f, 0.0f);
+
+        glDisable(GL_BLEND);
+        glBegin(GL_LINES);
+
+        // Bottom-left to top-left
+        glColor3f(color.getRed(), color.getGreen(), color.getBlue());
+        glVertex2d(x, y);
+        glVertex2d(x, y + height);
+
+        // Top-left to top-right
+        glColor3f(color.getRed(), color.getGreen(), color.getBlue());
+        glVertex2d(x, y + height);
+        glVertex2d(x + width, y + height);
+
+        // Top-right to bottom-right
+        glColor3f(color.getRed(), color.getGreen(), color.getBlue());
+        glVertex2d(x + width, y + height);
+        glVertex2d(x + width, y);
+
+        // Bottom-right to bottom-left
+        glColor3f(color.getRed(), color.getGreen(), color.getBlue());
+        glVertex2d(x + width, y);
+        glVertex2d(x, y);
+
+        glEnd();
+        glEnable(GL_BLEND);
+    }
+
+    /**
      *
      * @desc: Dibuja un grafico en la pantalla
      */

@@ -3,6 +3,8 @@ package org.aoclient.engine.gui.elements;
 import org.aoclient.engine.gui.ElementGUI;
 import org.aoclient.engine.listeners.MouseListener;
 
+import static org.aoclient.engine.Sound.SND_CLICK;
+import static org.aoclient.engine.Sound.playSound;
 import static org.aoclient.engine.gui.elements.ButtonStatus.*;
 import static org.aoclient.engine.renderer.Drawn.geometryBoxRenderGUI;
 
@@ -38,13 +40,16 @@ public final class Button extends ElementGUI {
     }
 
     public void runAction() {
-        if(isInside()) {
+        if(action != null && isInside()) {
+            playSound(SND_CLICK);
             this.action.run();
-        } else {
-            System.out.println("Estas haciendo click fuera del boton.");
         }
     }
 
-
+    @Override
+    public void clear() {
+        super.clear();
+        action = null;
+    }
 
 }

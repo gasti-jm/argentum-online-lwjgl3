@@ -421,9 +421,6 @@ public final class Character {
                             PixelOffsetY + charList[charIndex].getBody().getHeadOffset().getY(),
                             true, false, false, 1.0f, ambientcolor);
 
-                    //System.out.println(charList[charIndex].getHelmet().getHead(charList[charIndex].getHeading().value));
-
-
 
                     if (charList[charIndex].getHelmet().getHead(charList[charIndex].getHeading().value).getGrhIndex() != 0) {
                         draw(charList[charIndex].getHelmet().getHead(charList[charIndex].getHeading().value),

@@ -2,7 +2,9 @@ package org.aoclient.engine.gui.forms;
 
 public class CreateCharacter extends Form {
 
-
+    public CreateCharacter(String fileName) {
+        super(fileName);
+    }
 
     @Override
     public void render() {

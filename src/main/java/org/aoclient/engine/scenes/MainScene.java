@@ -34,7 +34,6 @@ public final class MainScene extends Scene {
 
         ambientColor = new RGBColor(1.0f, 1.0f, 1.0f);
 
-
         GameData.loadMap(58); // banderbill
         camera.setHalfWindowTileWidth(((Window.get().getWidth() / TILE_PIXEL_SIZE) / 2));
         camera.setHalfWindowTileHeight(((Window.get().getHeight() / TILE_PIXEL_SIZE) / 2));

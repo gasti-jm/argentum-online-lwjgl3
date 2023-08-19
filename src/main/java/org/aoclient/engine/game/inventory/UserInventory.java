@@ -6,8 +6,7 @@ import org.aoclient.engine.renderer.RGBColor;
 
 import static org.aoclient.connection.Protocol.writeEquipItem;
 import static org.aoclient.connection.Protocol.writeUseItem;
-import static org.aoclient.engine.renderer.Drawn.drawGrhIndex;
-import static org.aoclient.engine.renderer.Drawn.drawText;
+import static org.aoclient.engine.renderer.Drawn.*;
 import static org.aoclient.engine.scenes.Camera.*;
 
 public final class UserInventory extends Inventory {
@@ -47,6 +46,9 @@ public final class UserInventory extends Inventory {
         // posiciones por slot
         int iX = posX;
         int iY = posY;
+
+        // simulando un pictureBox
+        drawRectangle(posX, posY, sWidth, sHeigth, null);
 
         for (int i = 0; i < slots.length; i++) {
             if (slots[i].grhIndex > 0) {

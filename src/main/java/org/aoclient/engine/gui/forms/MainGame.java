@@ -5,13 +5,12 @@ import org.aoclient.engine.gui.elements.Button;
 import org.aoclient.engine.gui.elements.ImageGUI;
 
 public class MainGame extends Form {
-    private final ImageGUI main;
     private final Button buttonClose;
 
-    public MainGame() {
-        main = new ImageGUI("VentanaPrincipal.png");
-        buttonClose = new Button(770,4, 17, 17);
-        buttonClose.setAction(Engine::closeClient); // definimos su funcion pasando una lambda.
+    public MainGame(String fileName) {
+        super(fileName);
+        this.buttonClose = new Button(770,4, 17, 17);
+        this.buttonClose.setAction(Engine::closeClient); // definimos su funcion pasando una lambda.
     }
 
     @Override
@@ -21,13 +20,13 @@ public class MainGame extends Form {
 
     @Override
     public void render() {
-        main.render();
+        background.render();
     }
 
     @Override
     public void close() {
         super.close();
-        main.clear();
+        background.clear();
         buttonClose.clear();
     }
 }

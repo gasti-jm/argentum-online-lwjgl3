@@ -45,8 +45,8 @@ public final class GameScene extends Scene {
         camera.setHalfWindowTileWidth   (( (SCREEN_SIZE_X / TILE_PIXEL_SIZE) / 2 ));
         camera.setHalfWindowTileHeight  (( (SCREEN_SIZE_Y / TILE_PIXEL_SIZE) / 2 ));
 
-        frm = new MainGame();
-        above = new Message("Esto es un mensaje de prueba!"); // prueba
+        frm = new MainGame("VentanaPrincipal.png");
+        above = new Message("VentanaMsj.jpg","Esto es un mensaje de prueba!"); // prueba
     }
 
     @Override

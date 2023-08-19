@@ -2340,7 +2340,6 @@ public class Protocol {
 
         User.getInstance().moveCharbyPos(charIndex, x, y);
         refreshAllChars();
-        System.out.println("handleCharacterCreate Cargado! - FALTA TERMINAR!");
     }
 
     private static void handleCharacterChangeNick() {
@@ -3193,8 +3192,42 @@ public class Protocol {
         outgoingData.writeByte(0);  // App.Revision
     }
 
-    public static void writeLoginNewChar(){
+    public static void writeThrowDices() {
+        outgoingData.writeByte(ClientPacketID.ThrowDices.ordinal());
+    }
 
+    public static void writeLoginNewChar(String userName, String userPassword, int userRaza, int userSexo, int userClase, short userHead, String userEmail, int userHogar){
+        outgoingData.writeByte(ClientPacketID.LoginNewChar.ordinal());
+        outgoingData.writeASCIIString(userName);
+        outgoingData.writeASCIIString(userPassword);
+
+        outgoingData.writeByte(0);  // App.Major
+        outgoingData.writeByte(13); // App.Minor
+        outgoingData.writeByte(0);  // App.Revision
+
+        outgoingData.writeByte(userRaza);
+        outgoingData.writeByte(userSexo);
+        outgoingData.writeByte(userClase);
+        outgoingData.writeInteger(userHead);
+
+        outgoingData.writeASCIIString(userEmail);
+        outgoingData.writeByte(userHogar);
+    }
+
+    public static void writeTalk(String chat) {
+        outgoingData.writeByte(ClientPacketID.Talk.ordinal());
+        outgoingData.writeASCIIString(chat);
+    }
+
+    public static void writeYell(String chat) {
+        outgoingData.writeByte(ClientPacketID.Yell.ordinal());
+        outgoingData.writeASCIIString(chat);
+    }
+
+    public static void writeWhisper(short charIndex, String chat) {
+        outgoingData.writeByte(ClientPacketID.Whisper.ordinal());
+        outgoingData.writeInteger(charIndex);
+        outgoingData.writeASCIIString(chat);
     }
 
     public static void writeWalk(E_Heading direction) {
@@ -3202,9 +3235,8 @@ public class Protocol {
         outgoingData.writeByte(direction.value);
     }
 
-    public static void writeChangeHeading(E_Heading direction) {
-        outgoingData.writeByte(ClientPacketID.ChangeHeading.ordinal());
-        outgoingData.writeByte(direction.value);
+    public static void writeRequestPositionUpdate() {
+        outgoingData.writeByte(ClientPacketID.RequestPositionUpdate.ordinal());
     }
 
     public static void writeAttack() {
@@ -3213,6 +3245,25 @@ public class Protocol {
 
     public static void writePickUp() {
         outgoingData.writeByte(ClientPacketID.PickUp.ordinal());
+    }
+
+    public static void writeSafeToggle() {
+        outgoingData.writeByte(ClientPacketID.SafeToggle.ordinal());
+    }
+
+    public static void writeResucitationToggle() {
+        outgoingData.writeByte(ClientPacketID.ResuscitationSafeToggle.ordinal());
+    }
+
+    public static void writeRequestGuildLeaderInfo() {
+        outgoingData.writeByte(ClientPacketID.RequestGuildLeaderInfo.ordinal());
+    }
+
+
+
+    public static void writeChangeHeading(E_Heading direction) {
+        outgoingData.writeByte(ClientPacketID.ChangeHeading.ordinal());
+        outgoingData.writeByte(direction.value);
     }
 
     public static void writeLeftClick(int x, int y) {
