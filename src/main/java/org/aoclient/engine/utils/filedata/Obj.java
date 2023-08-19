@@ -1,4 +1,4 @@
-package org.aoclient.engine.game.models;
+package org.aoclient.engine.utils.filedata;
 
 public final class Obj {
     private int objIndex;

@@ -4,6 +4,7 @@ package org.aoclient.engine.gui;
 import org.aoclient.engine.renderer.Surface;
 import org.aoclient.engine.renderer.TextureOGL;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public abstract class ElementGUI {
@@ -15,7 +16,18 @@ public abstract class ElementGUI {
     protected int height;
     protected List<TextureOGL> texture;
 
-    public abstract void init();
+    public ElementGUI() {
+        this.texture = new ArrayList<>();
+    }
+
+    public ElementGUI(int x, int y, int width, int height) {
+        this.texture = new ArrayList<>();
+        this.x = x;
+        this.y = y;
+        this.width = width;
+        this.height = height;
+    }
+
     public abstract void render();
 
     public void clear() {

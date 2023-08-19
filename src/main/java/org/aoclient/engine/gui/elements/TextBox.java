@@ -6,9 +6,9 @@ import org.aoclient.engine.listeners.MouseListener;
 import java.util.ArrayList;
 
 public class TextBox extends ElementGUI {
-    @Override
-    public void init() {
-        this.texture = new ArrayList<>();
+
+    public TextBox(int x, int y, int width, int height) {
+        super(x, y, width, height);
     }
 
     @Override

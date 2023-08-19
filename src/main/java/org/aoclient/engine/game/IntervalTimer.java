@@ -11,8 +11,6 @@ public final class IntervalTimer {
     public static final float INT_CAST_SPELL = 1.4f;
     public static final float INT_CAST_ATTACK = 1.0f;
     public static final float INT_WORK = 0.7f;
-    public static final float INT_USE_ITEM = 0.240f; // 240
-    public static final float INT_EQUIP_ITEM = 0.2f;
     public static final float INT_USEITEMDCK = 0.125f;
     public static final float INT_SENTRPU = 2.0f;
 

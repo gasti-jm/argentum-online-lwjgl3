@@ -30,7 +30,6 @@ public final class MainScene extends Scene {
 
         // Interface
         loginInterface = new ImageGUI();
-        loginInterface.init();
         loginInterface.loadTextures("VentanaConectar.png");
 
         ambientColor = new RGBColor(1.0f, 1.0f, 1.0f);

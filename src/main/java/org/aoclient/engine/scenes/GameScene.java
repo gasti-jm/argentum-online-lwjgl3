@@ -1,8 +1,10 @@
 package org.aoclient.engine.scenes;
 
+import org.aoclient.engine.Engine;
 import org.aoclient.engine.game.BindKeys;
 import org.aoclient.engine.game.models.E_KeyType;
 import org.aoclient.engine.gui.ElementGUI;
+import org.aoclient.engine.gui.elements.Button;
 import org.aoclient.engine.gui.elements.ImageGUI;
 import org.aoclient.engine.listeners.KeyListener;
 import org.aoclient.engine.game.User;
@@ -30,6 +32,7 @@ public final class GameScene extends Scene {
     RGBColor ambientColor;
     private boolean autoMove = false;
     private ElementGUI main;
+    private ElementGUI buttonClose;
 
     @Override
     public void init() {
@@ -46,8 +49,10 @@ public final class GameScene extends Scene {
 
         // Interface
         main = new ImageGUI();
-        main.init();
         main.loadTextures("VentanaPrincipal.png");
+
+        buttonClose = new Button(770,4, 17, 17);
+        ((Button) buttonClose).setAction(Engine::closeClient); // definimos su funcion pasando una lambda.
     }
 
     @Override
@@ -88,6 +93,9 @@ public final class GameScene extends Scene {
     @Override
     public void mouseEvents() {
         if (MouseListener.mouseButtonClick(GLFW_MOUSE_BUTTON_LEFT)) {
+            // intentamos ejecutar las acciones de los botones si es que estan dentro de nuestro
+            ((Button) buttonClose).runAction();
+
             // si estamos haciendo click en el render. (osea fuera de la interface)
             if(inGameArea()) {
                 writeLeftClick(getTileMouseX((int) MouseListener.getX() - POS_SCREEN_X), getTileMouseY((int) MouseListener.getY() - POS_SCREEN_Y));

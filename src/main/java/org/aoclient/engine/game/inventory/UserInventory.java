@@ -6,18 +6,21 @@ import org.aoclient.engine.renderer.RGBColor;
 
 import static org.aoclient.connection.Protocol.writeEquipItem;
 import static org.aoclient.connection.Protocol.writeUseItem;
-import static org.aoclient.engine.game.IntervalTimer.*;
 import static org.aoclient.engine.renderer.Drawn.drawGrhIndex;
 import static org.aoclient.engine.renderer.Drawn.drawText;
 import static org.aoclient.engine.scenes.Camera.*;
 
 public final class UserInventory extends Inventory {
-    public static final int MAIN_POS_X = 600;
-    public static final int MAIN_POS_Y = 160;
+    private static final int MAIN_POS_X = 600;
+    private static final int MAIN_POS_Y = 160;
 
-    public static final int MAIN_SIZE_WIDTH = 160;
-    public static final int MAIN_SIZE_HEIGHT = 128;
-    public static final int MAX_INVENTORY_SLOTS = 30;
+    private static final int MAIN_SIZE_WIDTH = 160;
+    private static final int MAIN_SIZE_HEIGHT = 128;
+    private static final int MAX_INVENTORY_SLOTS = 30;
+
+    // Intervalos del inventario.
+    private static final float INT_USE_ITEM = 0.240f;
+    private static final float INT_EQUIP_ITEM = 0.15f;
 
     private final RGBColor colorEquipped = new RGBColor(1.0f, 1.0f, 0.0f);
     private final IntervalTimer intervalUseItem = new IntervalTimer(INT_USE_ITEM);

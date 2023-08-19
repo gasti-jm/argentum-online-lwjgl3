@@ -30,9 +30,6 @@ public final class IntroScene extends Scene {
         // agregamos 4 interfaces
         for(int i = 0; i < 4; i++){
             this.images.add(new ImageGUI());
-
-            images.get(i).init();
-
         }
 
         // le cargamos las texturas

@@ -8,9 +8,12 @@ import static org.aoclient.engine.renderer.Drawn.geometryBoxRenderGUI;
 
 public final class ImageGUI extends ElementGUI {
 
-    @Override
-    public void init() {
-        this.texture = new ArrayList<>();
+    public ImageGUI() {
+
+    }
+
+    public ImageGUI(int x, int y, int width, int height) {
+        super(x, y, width, height);
     }
 
     @Override

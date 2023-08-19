@@ -1,16 +1,12 @@
 package org.aoclient.engine.utils.filedata;
 
 
-import org.aoclient.engine.game.models.Obj;
-import org.aoclient.engine.game.models.WorldPos;
-
 public final class MapData {
     private GrhInfo[] layer = new GrhInfo[5];
     private short charIndex;
     private GrhInfo objGrh;
     private short npcIndex;
     private Obj objInfo;
-    private WorldPos tileExit;
     private boolean blocked;
     private short trigger;
 
@@ -60,14 +56,6 @@ public final class MapData {
 
     public void setObjInfo(Obj objInfo) {
         this.objInfo = objInfo;
-    }
-
-    public WorldPos getTileExit() {
-        return tileExit;
-    }
-
-    public void setTileExit(WorldPos tileExit) {
-        this.tileExit = tileExit;
     }
 
     public boolean getBlocked() {
