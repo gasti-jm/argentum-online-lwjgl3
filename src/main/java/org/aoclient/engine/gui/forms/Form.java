@@ -17,10 +17,15 @@ public abstract class Form {
     public Form(String fileBackground) {
         this.background = new ImageGUI(fileBackground);
 
+        // posicionamos el formulario en el centro de la pantalla segun el background cargado!
         this.fPosX = (Window.get().getWidth() / 2) - (this.background.getWidth() / 2);
         this.fPosY = (Window.get().getHeight() / 2) - (this.background.getHeight() / 2);
         this.fHeight = this.background.getHeight();
         this.fWidth = this.background.getWidth();
+
+        // posicionamos el fondo en la posicion de nuestro formulario
+        this.background.setX(fPosX);
+        this.background.setY(fPosY);
 
         this.visible = true;
     }

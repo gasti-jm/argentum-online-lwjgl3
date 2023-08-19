@@ -11,6 +11,7 @@ import org.aoclient.engine.listeners.MouseListener;
 import org.aoclient.engine.renderer.RGBColor;
 
 import static org.aoclient.connection.Protocol.*;
+import static org.aoclient.engine.Engine.forms;
 import static org.aoclient.engine.game.models.E_KeyType.*;
 import static org.aoclient.engine.game.models.Character.*;
 import static org.aoclient.engine.game.models.E_Heading.*;
@@ -85,7 +86,10 @@ public final class GameScene extends Scene {
 
     @Override
     public void mouseEvents() {
+        if (!forms.isEmpty()) return;
+
         if (MouseListener.mouseButtonClick(GLFW_MOUSE_BUTTON_LEFT)) {
+
             // intentamos ejecutar las acciones de los botones si es que estan dentro de nuestro
             frm.checkButtons();
 
@@ -96,6 +100,7 @@ public final class GameScene extends Scene {
 
             // cheakeamos tambien del inventario
             user.getUserInventory().clickInventory();
+
         }
 
         if(MouseListener.mouseButtonDoubleClick(GLFW_MOUSE_BUTTON_LEFT)) {
@@ -107,6 +112,8 @@ public final class GameScene extends Scene {
 
     @Override
     public void keyEvents() {
+        if (!forms.isEmpty()) return; // darle prioridad a los formularios
+
         if(!user.isUserMoving()) {
             if(!autoMove){
 

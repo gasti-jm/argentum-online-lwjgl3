@@ -26,7 +26,7 @@ public final class Engine {
     private Window window;
     private Scene currentScene;
     private BindKeys bindKeys;
-    private List<Form> forms; // formularios por encima de las escenas (por ejemplo: frmMensaje).
+    public static List<Form> forms = new ArrayList<>(); // formularios por encima de las escenas (por ejemplo: frmMensaje).
 
     public void start() {
         System.out.println("Hello LWJGL " + Version.getVersion() + "!");
@@ -37,9 +37,7 @@ public final class Engine {
         Surface.get().initialize();
         GameData.initialize();
         this.bindKeys = BindKeys.get();
-        this.forms = new ArrayList<>();
-
-        this.forms.add(new Message("VentanaMsj.jpg","Esto es un mensaje de prueba!"));
+        forms.add(new Message("VentanaMsj.jpg","Esto es un mensaje de prueba!"));
 
 
         changeScene(INTRO_SCENE);
