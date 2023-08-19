@@ -1,13 +1,11 @@
 package org.aoclient.engine.game;
 
-
 import org.aoclient.engine.game.models.E_KeyType;
-
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
-import static org.lwjgl.glfw.GLFW.*;
 
+import static org.lwjgl.glfw.GLFW.*;
 
 public final class BindKeys {
     private final int mappedKeys[];
@@ -69,6 +67,7 @@ public final class BindKeys {
         mappedKeys[E_KeyType.mKeyCastSpellMacro.ordinal()] = GLFW_KEY_F7;
         mappedKeys[E_KeyType.mKeyWorkMacro.ordinal()] = GLFW_KEY_F8;
 
+        mappedKeys[E_KeyType.mKeyAutoMove.ordinal()] = GLFW_KEY_TAB;
         mappedKeys[E_KeyType.mKeyExitGame.ordinal()] = GLFW_KEY_ESCAPE;
     }
 

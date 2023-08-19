@@ -1,6 +1,7 @@
 package org.aoclient.engine.gui;
 
 
+import org.aoclient.engine.listeners.MouseListener;
 import org.aoclient.engine.renderer.Surface;
 import org.aoclient.engine.renderer.TextureOGL;
 
@@ -38,6 +39,11 @@ public abstract class ElementGUI {
         for (int i = 0; i < files.length; i++) {
             texture.add(Surface.get().createTexture(files[i]));
         }
+    }
+
+    public boolean isInside(){
+        return MouseListener.getX() >= this.x && MouseListener.getX() <= this.x + this.width &&
+                MouseListener.getY() >= this.y && MouseListener.getY() <= this.y + this.height;
     }
 
     public int getX() {

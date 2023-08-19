@@ -225,7 +225,6 @@ public final class User {
     }
 
     public void moveCharbyPos(int charIndex, int nX, int nY) {
-        E_Heading heading = charList[charIndex].getHeading();
         final int x = charList[charIndex].getPos().getX();
         final int y = charList[charIndex].getPos().getY();
 
@@ -233,13 +232,13 @@ public final class User {
         final int addY = nY - y;
 
         if(sgn( (short) addX) == 1) {
-            heading = EAST;
+            charList[charIndex].setHeading(EAST);
         } else if(sgn( (short) addX) == -1) {
-            heading = WEST;
+            charList[charIndex].setHeading(WEST);
         } else if (sgn( (short) addY) == -1) {
-            heading = NORTH;
+            charList[charIndex].setHeading(NORTH);
         } else if (sgn( (short) addY) == 1) {
-            heading = SOUTH;
+            charList[charIndex].setHeading(SOUTH);
         }
 
         mapData[nX][nY].setCharIndex(charIndex);
@@ -251,7 +250,6 @@ public final class User {
         charList[charIndex].setMoveOffsetY(-1 * (TILE_PIXEL_SIZE * addY));
 
         charList[charIndex].setMoving(true);
-        charList[charIndex].setHeading(heading);
 
         charList[charIndex].setScrollDirectionX( sgn( (short) addX));
         charList[charIndex].setScrollDirectionY( sgn( (short) addY));

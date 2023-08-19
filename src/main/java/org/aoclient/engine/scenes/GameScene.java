@@ -1,11 +1,10 @@
 package org.aoclient.engine.scenes;
 
-import org.aoclient.engine.Engine;
 import org.aoclient.engine.game.BindKeys;
 import org.aoclient.engine.game.models.E_KeyType;
-import org.aoclient.engine.gui.ElementGUI;
-import org.aoclient.engine.gui.elements.Button;
-import org.aoclient.engine.gui.elements.ImageGUI;
+import org.aoclient.engine.gui.forms.Form;
+import org.aoclient.engine.gui.forms.MainGame;
+import org.aoclient.engine.gui.forms.Message;
 import org.aoclient.engine.listeners.KeyListener;
 import org.aoclient.engine.game.User;
 import org.aoclient.engine.listeners.MouseListener;
@@ -31,8 +30,8 @@ public final class GameScene extends Scene {
 
     RGBColor ambientColor;
     private boolean autoMove = false;
-    private ElementGUI main;
-    private ElementGUI buttonClose;
+    private MainGame frm;
+    private Form above;
 
     @Override
     public void init() {
@@ -41,18 +40,13 @@ public final class GameScene extends Scene {
 
         bindKeys = BindKeys.get();
         user = User.getInstance();
-
         ambientColor = new RGBColor(1.0f, 1.0f, 1.0f);
 
         camera.setHalfWindowTileWidth   (( (SCREEN_SIZE_X / TILE_PIXEL_SIZE) / 2 ));
         camera.setHalfWindowTileHeight  (( (SCREEN_SIZE_Y / TILE_PIXEL_SIZE) / 2 ));
 
-        // Interface
-        main = new ImageGUI();
-        main.loadTextures("VentanaPrincipal.png");
-
-        buttonClose = new Button(770,4, 17, 17);
-        ((Button) buttonClose).setAction(Engine::closeClient); // definimos su funcion pasando una lambda.
+        frm = new MainGame();
+        above = new Message("Esto es un mensaje de prueba!"); // prueba
     }
 
     @Override
@@ -88,13 +82,19 @@ public final class GameScene extends Scene {
         renderScreen(user.getUserPos().getX() - user.getAddToUserPos().getX(),
                 user.getUserPos().getY() - user.getAddToUserPos().getY(),
                 (int)(offSetCounterX), (int)(offSetCounterY));
+
+
+        if (above.isVisible()) {
+            above.render();
+        }
     }
 
     @Override
     public void mouseEvents() {
         if (MouseListener.mouseButtonClick(GLFW_MOUSE_BUTTON_LEFT)) {
             // intentamos ejecutar las acciones de los botones si es que estan dentro de nuestro
-            ((Button) buttonClose).runAction();
+            above.checkButtons();
+            frm.checkButtons();
 
             // si estamos haciendo click en el render. (osea fuera de la interface)
             if(inGameArea()) {
@@ -103,7 +103,6 @@ public final class GameScene extends Scene {
 
             // cheakeamos tambien del inventario
             user.getUserInventory().clickInventory();
-
         }
 
         if(MouseListener.mouseButtonDoubleClick(GLFW_MOUSE_BUTTON_LEFT)) {
@@ -111,18 +110,10 @@ public final class GameScene extends Scene {
         } else if(MouseListener.mouseButtonDoubleClick(GLFW_MOUSE_BUTTON_RIGHT)) {
             writeDoubleClick(getTileMouseX((int) MouseListener.getX() - POS_SCREEN_X), getTileMouseY((int) MouseListener.getY() - POS_SCREEN_Y));
         }
-
-
     }
 
     @Override
     public void keyEvents() {
-        // falta bindear xd
-        if (KeyListener.isKeyReadyForAction(GLFW_KEY_TAB)) {
-            KeyListener.setLastKeyMovedPressed(0);
-            autoMove = !autoMove;
-        }
-
         if(!user.isUserMoving()) {
             if(!autoMove){
 
@@ -150,7 +141,8 @@ public final class GameScene extends Scene {
     @Override
     public void close() {
         this.visible = false;
-        main.clear();
+        frm.close();
+        above.close();
     }
 
     /**
@@ -159,7 +151,6 @@ public final class GameScene extends Scene {
     private void checkBindedKeys() {
         E_KeyType keyPressed = bindKeys.getKeyPressed(KeyListener.getLastKeyPressed());
         if(keyPressed == null) return; // ni me gasto si la tecla presionada no existe en nuestro bind.
-
 
         if (KeyListener.isKeyReadyForAction(bindKeys.getBindedKey(keyPressed))) {
             switch (keyPressed) {
@@ -178,6 +169,12 @@ public final class GameScene extends Scene {
                 case mKeyEquipObject:
                     user.getUserInventory().equipItem();
                     break;
+
+                case mKeyAutoMove:
+                    KeyListener.setLastKeyMovedPressed(0);
+                    autoMove = !autoMove;
+                    break;
+
             }
 
 
@@ -308,7 +305,7 @@ public final class GameScene extends Scene {
             camera.incrementScreenY();
         }
 
-        main.render();
+        frm.render();
         user.getUserInventory().drawInventory();
         showFPS();
     }

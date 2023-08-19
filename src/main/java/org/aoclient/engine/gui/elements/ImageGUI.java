@@ -12,8 +12,10 @@ public final class ImageGUI extends ElementGUI {
 
     }
 
-    public ImageGUI(int x, int y, int width, int height) {
-        super(x, y, width, height);
+    public ImageGUI(String... textures) {
+        this.loadTextures(textures);
+        this.width = this.texture.get(0).getTex_width();
+        this.height = this.texture.get(0).getTex_height();
     }
 
     @Override
