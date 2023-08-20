@@ -2,9 +2,7 @@ package org.aoclient.engine.scenes;
 
 import org.aoclient.engine.game.BindKeys;
 import org.aoclient.engine.game.models.E_KeyType;
-import org.aoclient.engine.gui.forms.Form;
 import org.aoclient.engine.gui.forms.MainGame;
-import org.aoclient.engine.gui.forms.Message;
 import org.aoclient.engine.listeners.KeyListener;
 import org.aoclient.engine.game.User;
 import org.aoclient.engine.listeners.MouseListener;
@@ -16,6 +14,7 @@ import static org.aoclient.engine.game.models.E_KeyType.*;
 import static org.aoclient.engine.game.models.Character.*;
 import static org.aoclient.engine.game.models.E_Heading.*;
 import static org.aoclient.engine.renderer.Drawn.*;
+import static org.aoclient.engine.renderer.FontTypes.drawText;
 import static org.aoclient.engine.scenes.Camera.*;
 import static org.aoclient.engine.utils.GameData.*;
 import static org.aoclient.engine.utils.Time.*;
@@ -200,7 +199,7 @@ public final class GameScene extends Scene {
             for(x = camera.getScreenminX(); x <= camera.getScreenmaxX(); x++) {
 
                 if (mapData[x][y].getLayer(1).getGrhIndex() != 0) {
-                    draw(mapData[x][y].getLayer(1),
+                    drawTexture(mapData[x][y].getLayer(1),
                             POS_SCREEN_X + (camera.getScreenX() - 1) * TILE_PIXEL_SIZE + PixelOffsetX,
                             POS_SCREEN_Y + (camera.getScreenY() - 1) * TILE_PIXEL_SIZE + PixelOffsetY,
                             true, true, false,1.0f, ambientColor);
@@ -220,7 +219,7 @@ public final class GameScene extends Scene {
             for(int x = camera.getMinX(); x <= camera.getMaxX(); x++) {
 
                 if (mapData[x][y].getLayer(2).getGrhIndex() != 0) {
-                    draw(mapData[x][y].getLayer(2),
+                    drawTexture(mapData[x][y].getLayer(2),
                             POS_SCREEN_X + camera.getScreenX() * TILE_PIXEL_SIZE + PixelOffsetX,
                             POS_SCREEN_Y + camera.getScreenY() * TILE_PIXEL_SIZE + PixelOffsetY,
                             true, true, false,1.0f, ambientColor);
@@ -230,7 +229,7 @@ public final class GameScene extends Scene {
                     if(grhData[mapData[x][y].getObjGrh().getGrhIndex()].getPixelWidth() == TILE_PIXEL_SIZE &&
                         grhData[mapData[x][y].getObjGrh().getGrhIndex()].getPixelHeight() == TILE_PIXEL_SIZE) {
 
-                        draw(mapData[x][y].getObjGrh(),
+                        drawTexture(mapData[x][y].getObjGrh(),
                                 POS_SCREEN_X + camera.getScreenX() * TILE_PIXEL_SIZE + PixelOffsetX,
                                 POS_SCREEN_Y + camera.getScreenY() * TILE_PIXEL_SIZE + PixelOffsetY,
                                 true, true, false,1.0f, ambientColor);
@@ -252,7 +251,7 @@ public final class GameScene extends Scene {
                     if(grhData[mapData[x][y].getObjGrh().getGrhIndex()].getPixelWidth() != TILE_PIXEL_SIZE &&
                             grhData[mapData[x][y].getObjGrh().getGrhIndex()].getPixelHeight() != TILE_PIXEL_SIZE) {
 
-                        draw(mapData[x][y].getObjGrh(),
+                        drawTexture(mapData[x][y].getObjGrh(),
                                 POS_SCREEN_X + camera.getScreenX() * TILE_PIXEL_SIZE + PixelOffsetX,
                                 POS_SCREEN_Y + camera.getScreenY() * TILE_PIXEL_SIZE + PixelOffsetY,
                                 true, true, false,1.0f, ambientColor);
@@ -266,7 +265,7 @@ public final class GameScene extends Scene {
                 }
 
                 if (mapData[x][y].getLayer(3).getGrhIndex() != 0) {
-                    draw(mapData[x][y].getLayer(3),
+                    drawTexture(mapData[x][y].getLayer(3),
                             POS_SCREEN_X + camera.getScreenX() * TILE_PIXEL_SIZE + PixelOffsetX,
                             POS_SCREEN_Y + camera.getScreenY() * TILE_PIXEL_SIZE + PixelOffsetY,
                             true, true, false, 1.0f, ambientColor);
@@ -285,7 +284,7 @@ public final class GameScene extends Scene {
             for (int x = camera.getMinX(); x <= camera.getMaxX(); x++) {
 
                 if (mapData[x][y].getLayer(4).getGrhIndex() > 0) {
-                    draw(mapData[x][y].getLayer(4),
+                    drawTexture(mapData[x][y].getLayer(4),
                             POS_SCREEN_X + camera.getScreenX() * TILE_PIXEL_SIZE + PixelOffsetX,
                             POS_SCREEN_Y + camera.getScreenY() * TILE_PIXEL_SIZE + PixelOffsetY,
                             true, true, false, alphaCeiling, ambientColor);
@@ -322,7 +321,7 @@ public final class GameScene extends Scene {
      */
     private void showFPS() {
         final String txtFPS = String.valueOf(FPS);
-        drawText(txtFPS, (SCREEN_SIZE_X - getSizeText(txtFPS) / 2) - 90, 3, ambientColor, 0, false, false);
+        drawText(txtFPS, (SCREEN_SIZE_X - getSizeText(txtFPS) / 2) - 90, 3, ambientColor, 0, true, false, false);
     }
 
     private boolean inGameArea() {

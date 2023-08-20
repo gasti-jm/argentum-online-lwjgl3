@@ -23,14 +23,11 @@ public final class Button extends ElementGUI {
     public void render() {
         if(!texture.isEmpty()) {
             if (!isInside() && !MouseListener.isDragging()) {
-                geometryBoxRenderGUI(this.texture.get(BUTTON_NORMAL.ordinal()), x, y,
-                        this.texture.get(BUTTON_NORMAL.ordinal()).getTex_width(), this.texture.get(BUTTON_NORMAL.ordinal()).getTex_height(), 0, 0, false, 1.0f);
+                geometryBoxRenderGUI(this.texture.get(BUTTON_NORMAL.ordinal()), x, y, 1.0f);
             } else if (isInside()) {
-                geometryBoxRenderGUI(this.texture.get(BUTTON_ROLLOVER.ordinal()), x, y,
-                        this.texture.get(BUTTON_ROLLOVER.ordinal()).getTex_width(), this.texture.get(BUTTON_ROLLOVER.ordinal()).getTex_height(), 0, 0, false, 1.0f);
+                geometryBoxRenderGUI(this.texture.get(BUTTON_ROLLOVER.ordinal()), x, y, 1.0f);
             } else {
-                geometryBoxRenderGUI(this.texture.get(BUTTON_PRESSED.ordinal()), x, y,
-                        this.texture.get(BUTTON_PRESSED.ordinal()).getTex_width(), this.texture.get(BUTTON_PRESSED.ordinal()).getTex_height(), 0, 0, false, 1.0f);
+                geometryBoxRenderGUI(this.texture.get(BUTTON_PRESSED.ordinal()), x, y, 1.0f);
             }
         }
     }

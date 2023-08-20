@@ -6,7 +6,8 @@ import org.aoclient.engine.utils.filedata.*;
 
 import static org.aoclient.engine.game.models.E_Heading.SOUTH;
 import static org.aoclient.engine.renderer.Drawn.*;
-import static org.aoclient.engine.renderer.Drawn.draw;
+import static org.aoclient.engine.renderer.Drawn.drawTexture;
+import static org.aoclient.engine.renderer.FontTypes.drawText;
 import static org.aoclient.engine.utils.GameData.*;
 import static org.aoclient.engine.utils.Time.timerTicksPerFrame;
 
@@ -411,31 +412,31 @@ public final class Character {
             if (!charList[charIndex].isInvisible()) {
 
                 if (charList[charIndex].getBody().getWalk(charList[charIndex].getHeading().value).getGrhIndex() != 0) {
-                    draw(charList[charIndex].getBody().getWalk(charList[charIndex].getHeading().value),
+                    drawTexture(charList[charIndex].getBody().getWalk(charList[charIndex].getHeading().value),
                             PixelOffsetX, PixelOffsetY, true, true, false, 1.0f, ambientcolor);
                 }
 
                 if (charList[charIndex].getHead().getHead(charList[charIndex].getHeading().value).getGrhIndex() != 0) {
-                    draw(charList[charIndex].getHead().getHead(charList[charIndex].getHeading().value),
+                    drawTexture(charList[charIndex].getHead().getHead(charList[charIndex].getHeading().value),
                             PixelOffsetX + charList[charIndex].getBody().getHeadOffset().getX(),
                             PixelOffsetY + charList[charIndex].getBody().getHeadOffset().getY(),
                             true, false, false, 1.0f, ambientcolor);
 
 
                     if (charList[charIndex].getHelmet().getHead(charList[charIndex].getHeading().value).getGrhIndex() != 0) {
-                        draw(charList[charIndex].getHelmet().getHead(charList[charIndex].getHeading().value),
+                        drawTexture(charList[charIndex].getHelmet().getHead(charList[charIndex].getHeading().value),
                                 PixelOffsetX + charList[charIndex].getBody().getHeadOffset().getX(),
                                 PixelOffsetY + charList[charIndex].getBody().getHeadOffset().getY() - 34,
                                 true, false, false, 1.0f, ambientcolor);
                     }
 
                     if (charList[charIndex].getWeapon().getWeaponWalk(charList[charIndex].getHeading().value).getGrhIndex() != 0) {
-                        draw(charList[charIndex].getWeapon().getWeaponWalk(charList[charIndex].getHeading().value),
+                        drawTexture(charList[charIndex].getWeapon().getWeaponWalk(charList[charIndex].getHeading().value),
                                 PixelOffsetX, PixelOffsetY, true, true, false, 1.0f, ambientcolor);
                     }
 
                     if (charList[charIndex].getShield().getShieldWalk(charList[charIndex].getHeading().value).getGrhIndex() != 0) {
-                        draw(charList[charIndex].getShield().getShieldWalk(charList[charIndex].getHeading().value),
+                        drawTexture(charList[charIndex].getShield().getShieldWalk(charList[charIndex].getHeading().value),
                                 PixelOffsetX, PixelOffsetY, true, true, false, 1.0f, ambientcolor);
                     }
 
@@ -447,11 +448,11 @@ public final class Character {
                         }
 
                         String line = charList[charIndex].getName();
-                        drawText(line, PixelOffsetX - (getSizeText(line) / 2) + 15, PixelOffsetY + 30, color, 0, true, false);
+                        drawText(line, PixelOffsetX - (getSizeText(line) / 2) + 15, PixelOffsetY + 30, color, 0, true, false, false);
 
                         line = charList[charIndex].getClanName();
                         if (!line.isEmpty()) {
-                            drawText(line, PixelOffsetX - (getSizeText(line) / 2) + 15, PixelOffsetY + 43, color, 0, true, false);
+                            drawText(line, PixelOffsetX - (getSizeText(line) / 2) + 15, PixelOffsetY + 43, color, 0, true, false, false);
                         }
 
                     }
@@ -461,7 +462,7 @@ public final class Character {
 
             // Draw FX
             if (charList[charIndex].getFxIndex() != 0) {
-                draw(charList[charIndex].getfX(),
+                drawTexture(charList[charIndex].getfX(),
                         PixelOffsetX + fxData[charList[charIndex].getFxIndex()].getOffsetX(),
                         PixelOffsetY + fxData[charList[charIndex].getFxIndex()].getOffsetY(),
                         true, true, true,1.0f, ambientcolor);
@@ -473,7 +474,7 @@ public final class Character {
 
         } else {
             if (charList[charIndex].getBody().getWalk(charList[charIndex].getHeading().value).getGrhIndex() > 0) {
-                draw(charList[charIndex].getBody().getWalk(charList[charIndex].getHeading().value),
+                drawTexture(charList[charIndex].getBody().getWalk(charList[charIndex].getHeading().value),
                         PixelOffsetX, PixelOffsetY, true, true, false, 1.0f, ambientcolor);
             }
 

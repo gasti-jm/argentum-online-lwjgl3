@@ -7,6 +7,8 @@ import org.aoclient.engine.gui.forms.Form;
 import org.aoclient.engine.gui.forms.Message;
 import org.aoclient.engine.listeners.KeyListener;
 import org.aoclient.engine.listeners.MouseListener;
+import org.aoclient.engine.renderer.FontTypes;
+import org.aoclient.engine.renderer.RGBColor;
 import org.aoclient.engine.renderer.Surface;
 import org.aoclient.engine.scenes.*;
 import org.aoclient.engine.utils.GameData;

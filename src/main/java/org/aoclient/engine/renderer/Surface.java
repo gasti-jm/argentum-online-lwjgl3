@@ -65,6 +65,12 @@ public class Surface {
         return texture;
     }
 
+    public TextureOGL createFontTexture(String fileName) {
+        TextureOGL texture = new TextureOGL();
+        texture.id = loadTexture(texture, "resources/fonts/" + fileName + ".bmp", false);
+        return texture;
+    }
+
     /**
      *
      * @desc: Crea y retorna una textura (en este caso una interfaz de usuario).

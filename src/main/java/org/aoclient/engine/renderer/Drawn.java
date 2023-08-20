@@ -3,33 +3,32 @@ package org.aoclient.engine.renderer;
 import org.aoclient.engine.utils.filedata.GrhInfo;
 
 import static org.aoclient.engine.scenes.Camera.TILE_PIXEL_SIZE;
-import static org.aoclient.engine.utils.GameData.fontTypes;
-import static org.aoclient.engine.utils.GameData.grhData;
+import static org.aoclient.engine.utils.GameData.*;
 import static org.aoclient.engine.utils.Time.deltaTime;
 import static org.lwjgl.opengl.GL11.*;
 
 public final class Drawn {
     /**
      *
+     * @param: grh_index = Numero de indice de grafico del GrhData
+     * @param: x, y: posicion eje x e y de la pantalla.
+     * @param: src_width, src_height: size de recorte
+     * @param: sX, sY: posicion de recorte
+     * @param: blend: efecto blend
+     * @param: alpha: efecto de transparencia (0 a 1)
+     * @param: color: objeto que contiene valores RGB como punto flotante (0 a 1).
+     *
      * @desc: Se encargara de guardar la textura en la grafica y prepararla para su dibujado (en pocas palabras).
      */
-    public static void geometryBoxRender(int grh_index, int x, int y, int src_width, int src_height, int sX, int sY, boolean blend, float alpha, RGBColor color) {
+    public static void geometryBoxRender(int grh_index, int x, int y, int src_width, int src_height, float sX, float sY, boolean blend, float alpha, RGBColor color) {
         if (blend)
             glBlendFunc(GL_SRC_ALPHA, GL_ONE);
 
         TextureOGL texture = Surface.get().getTexture(grhData[grh_index].getFileNum());
 
-        final float src_left = sX;
-        final float src_top = sY;
-        final float src_right = src_left + src_width;
-        final float src_bottom = src_top + (src_height);
+        final float src_right = sX + src_width;
+        final float src_bottom = sY + src_height;
 
-        final float dest_left = x;
-        final float dest_top = y;
-        final float dest_right = x + (src_right - src_left);
-        final float dest_bottom = y + (src_bottom - src_top);
-
-        float x_cor, y_cor;
         glBindTexture(GL_TEXTURE_2D, texture.id);
         glBegin(GL_QUADS);
 
@@ -37,42 +36,30 @@ public final class Drawn {
             //  0----0
             //  |    |
             //  1----0
-            x_cor = dest_left;
-            y_cor = dest_bottom;
-
             glColor4f(color.getRed(), color.getGreen(), color.getBlue(), alpha);
-            glTexCoord2f (src_left / texture.tex_width, (src_bottom) / texture.tex_height);
-            glVertex2d(x_cor, y_cor);
+            glTexCoord2f (sX / texture.tex_width, (src_bottom) / texture.tex_height);
+            glVertex2d(x, y + src_height);
 
             //  1----0
             //  |    |
             //  0----0
-            x_cor = dest_left;
-            y_cor = dest_top;
-
             glColor4f(color.getRed(), color.getGreen(), color.getBlue(), alpha);
-            glTexCoord2f(src_left / texture.tex_width, src_top / texture.tex_height);
-            glVertex2d(x_cor, y_cor);
+            glTexCoord2f(sX / texture.tex_width, sY / texture.tex_height);
+            glVertex2d(x, y);
 
             //  0----1
             //  |    |
             //  0----0
-            x_cor = dest_right;
-            y_cor = dest_top;
-
             glColor4f(color.getRed(), color.getGreen(), color.getBlue(), alpha);
-            glTexCoord2f((src_right) / texture.tex_width, src_top / texture.tex_height);
-            glVertex2d(x_cor, y_cor);
+            glTexCoord2f((src_right) / texture.tex_width, sY / texture.tex_height);
+            glVertex2d(x + src_width, y);
 
             //  0----0
             //  |    |
             //  0----1
-            x_cor = dest_right;
-            y_cor = dest_bottom;
-
             glColor4f(color.getRed(), color.getGreen(), color.getBlue(), alpha);
             glTexCoord2f((src_right) / texture.tex_width, (src_bottom) / texture.tex_height);
-            glVertex2d(x_cor, y_cor);
+            glVertex2d(x + src_width, y + src_height);
         }
 
         glEnd();
@@ -85,22 +72,7 @@ public final class Drawn {
      *
      * @desc: Lo mismo pero para interfaces de usuario.
      */
-    public static void geometryBoxRenderGUI(TextureOGL texture, int x, int y, int src_width, int src_height, int sX, int sY, boolean blend, float alpha) {
-        if (blend)
-            glBlendFunc(GL_SRC_ALPHA, GL_ONE);
-
-
-        final float src_left = sX;
-        final float src_top = sY;
-        final float src_right = src_left + src_width;
-        final float src_bottom = src_top + (src_height);
-
-        final float dest_left = x;
-        final float dest_top = y;
-        final float dest_right = x + (src_right - src_left);
-        final float dest_bottom = y + (src_bottom - src_top);
-
-        float x_cor, y_cor;
+    public static void geometryBoxRenderGUI(TextureOGL texture, int x, int y, float alpha) {
         glBindTexture(GL_TEXTURE_2D, texture.id);
         glBegin(GL_QUADS);
 
@@ -108,48 +80,33 @@ public final class Drawn {
             //  0----0
             //  |    |
             //  1----0
-            x_cor = dest_left;
-            y_cor = dest_bottom;
-
             glColor4f(1.0f, 1.0f, 1.0f, alpha);
-            glTexCoord2f (src_left / texture.tex_width, (src_bottom) / texture.tex_height);
-            glVertex2d(x_cor, y_cor);
+            glTexCoord2f (0, 1);
+            glVertex2d(x, y + texture.tex_height);
 
             //  1----0
             //  |    |
             //  0----0
-            x_cor = dest_left;
-            y_cor = dest_top;
-
             glColor4f(1.0f, 1.0f, 1.0f, alpha);
-            glTexCoord2f(src_left / texture.tex_width, src_top / texture.tex_height);
-            glVertex2d(x_cor, y_cor);
+            glTexCoord2f(0, 0);
+            glVertex2d(x, y);
 
             //  0----1
             //  |    |
             //  0----0
-            x_cor = dest_right;
-            y_cor = dest_top;
-
             glColor4f(1.0f, 1.0f, 1.0f, alpha);
-            glTexCoord2f((src_right) / texture.tex_width, src_top / texture.tex_height);
-            glVertex2d(x_cor, y_cor);
+            glTexCoord2f(1, 0);
+            glVertex2d(x + texture.tex_width, y);
 
             //  0----0
             //  |    |
             //  0----1
-            x_cor = dest_right;
-            y_cor = dest_bottom;
-
             glColor4f(1.0f, 1.0f, 1.0f, alpha);
-            glTexCoord2f((src_right) / texture.tex_width, (src_bottom) / texture.tex_height);
-            glVertex2d(x_cor, y_cor);
+            glTexCoord2f(1, 1);
+            glVertex2d(x + texture.tex_width, y + texture.tex_height);
         }
 
         glEnd();
-
-        if (blend)
-            glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     }
 
     /**
@@ -231,9 +188,9 @@ public final class Drawn {
 
     /**
      *
-     * @desc: Dibuja un grafico en la pantalla
+     * @desc: Dibuja una textura en la pantalla
      */
-    public static void draw(GrhInfo grh, int x, int y, boolean center, boolean animate, boolean blend, float alpha, RGBColor color) {
+    public static void drawTexture(GrhInfo grh, int x, int y, boolean center, boolean animate, boolean blend, float alpha, RGBColor color) {
         if (grh.getGrhIndex() == 0 || grhData[grh.getGrhIndex()].getNumFrames() == 0)
             return;
 
@@ -291,64 +248,6 @@ public final class Drawn {
                 grhData[grhIndex].getPixelHeight(),
                 grhData[grhIndex].getsX(),
                 grhData[grhIndex].getsY(), false, 1.0f, color);
-    }
-
-    /**
-     *
-     * @desc: Dibuja texto en la pantlla
-     */
-    public static void drawText(String text, int x, int y, RGBColor color, int font_index, boolean shadow, boolean multi_line) {
-        if (text.length() == 0) return;
-
-        int space = 0;
-
-        if(!multi_line) {
-            for (int a = 0; a < text.length(); a++) {
-                int ascii = text.charAt(a);
-                if (ascii > 255) ascii = 0;
-
-                if (ascii != 32) {
-                    if (fontTypes[font_index].getAscii_code(ascii) != 0) {
-
-                        // sombra
-                        if (shadow) {
-                            drawGrhIndex(fontTypes[font_index].getAscii_code(ascii) + 100, (x + space) + 1, y + 1, color);
-                        }
-
-                        drawGrhIndex(fontTypes[font_index].getAscii_code(ascii), (x + space) + 1, y, color);
-                        space += grhData[grhData[fontTypes[font_index].getAscii_code(ascii)].getFrame(1)].getPixelWidth();
-                    }
-                } else {
-                    space += 4;
-                }
-            }
-        } else {
-            int e = 0;
-            int f = 0;
-
-            for (int a = 0; a < text.length(); a++) {
-                int ascii = text.charAt(a);
-                if (ascii > 255) ascii = 0;
-
-                if (ascii == 32 || ascii == 13) {
-                    if (e >= 26) {
-                        f++;
-                        e = 0;
-                        space = 0;
-                    } else {
-                        if (ascii == 32) space += 4;
-                    }
-                } else {
-                    if(fontTypes[font_index].getAscii_code(ascii) > 12) {
-                        drawGrhIndex(fontTypes[font_index].getAscii_code(ascii), (x + space) + 1, y + f * 14, color);
-                        space += grhData[grhData[fontTypes[font_index].getAscii_code(ascii)].getFrame(1)].getPixelWidth();
-                    }
-                }
-
-                e++;
-            }
-        }
-
     }
 
     /**

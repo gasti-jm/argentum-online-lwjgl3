@@ -20,8 +20,7 @@ public final class ImageGUI extends ElementGUI {
 
     @Override
     public void render() {
-        geometryBoxRenderGUI(this.texture.get(0), x, y,
-                this.texture.get(0).getTex_width(), this.texture.get(0).getTex_height(), 0, 0, false, alphaTexture);
+        geometryBoxRenderGUI(this.texture.get(0), x, y, alphaTexture);
     }
 
 }

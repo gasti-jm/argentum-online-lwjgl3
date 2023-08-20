@@ -14,6 +14,7 @@ import org.aoclient.engine.utils.filedata.*;
 import static org.aoclient.engine.Sound.addMusic;
 import static org.aoclient.engine.Sound.clearSounds;
 import static org.aoclient.engine.game.models.Character.eraseChar;
+import static org.aoclient.engine.renderer.FontTypes.loadCSV;
 import static org.aoclient.engine.utils.ByteMigration.*;
 
 public final class GameData {
@@ -47,9 +48,11 @@ public final class GameData {
         loadShields();
         loadFonts();
         LoadFXs();
+        loadCSV();
 
         addMusic("resources/MP3/intro.ogg").play();
     }
+
 
     /**
      * @desc: Cargamos y almacenamos los datos del archivo "graphics.ind".
@@ -57,6 +60,7 @@ public final class GameData {
     private static void loadGrhData() {
         try (RandomAccessFile f = new RandomAccessFile("resources/inits/graphics.ind", "rw")) {
             f.seek(0);
+
 
             final int fileversion = bigToLittle_Int( f.readInt() );
             final int grhCount = bigToLittle_Int(f.readInt());

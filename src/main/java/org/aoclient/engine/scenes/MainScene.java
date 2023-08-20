@@ -11,7 +11,7 @@ import org.aoclient.engine.utils.GameData;
 
 import static org.aoclient.connection.Protocol.writeLoginExistingChar;
 import static org.aoclient.engine.game.models.Character.drawCharacter;
-import static org.aoclient.engine.renderer.Drawn.draw;
+import static org.aoclient.engine.renderer.Drawn.drawTexture;
 import static org.aoclient.engine.scenes.Camera.TILE_BUFFER_SIZE;
 import static org.aoclient.engine.scenes.Camera.TILE_PIXEL_SIZE;
 import static org.aoclient.engine.utils.GameData.mapData;
@@ -80,7 +80,7 @@ public final class MainScene extends Scene {
             for (x = camera.getScreenminX(); x <= camera.getScreenmaxX(); x++) {
 
                 if (mapData[x][y].getLayer(1).getGrhIndex() != 0) {
-                    draw(mapData[x][y].getLayer(1),
+                    drawTexture(mapData[x][y].getLayer(1),
                             (camera.getScreenX() - 1) * TILE_PIXEL_SIZE,
                             (camera.getScreenY() - 1) * TILE_PIXEL_SIZE,
                             true, true, false, 1.0f, ambientColor);
@@ -98,7 +98,7 @@ public final class MainScene extends Scene {
             for(int x = camera.getMinX(); x <= camera.getMaxX(); x++) {
 
                 if (mapData[x][y].getLayer(2).getGrhIndex() != 0) {
-                    draw(mapData[x][y].getLayer(2),
+                    drawTexture(mapData[x][y].getLayer(2),
                             camera.getScreenX() * TILE_PIXEL_SIZE,
                             camera.getScreenY() * TILE_PIXEL_SIZE, true, true, false,1.0f, ambientColor);
                 }
@@ -113,7 +113,7 @@ public final class MainScene extends Scene {
             camera.setScreenX(camera.getMinXOffset() - TILE_BUFFER_SIZE);
             for(int x = camera.getMinX(); x <= camera.getMaxX(); x++) {
                     if (mapData[x][y].getObjGrh().getGrhIndex() != 0) {
-                        draw(mapData[x][y].getObjGrh(),
+                        drawTexture(mapData[x][y].getObjGrh(),
                                 camera.getScreenX() * TILE_PIXEL_SIZE,
                                 camera.getScreenY() * TILE_PIXEL_SIZE,
                                 true, true, false,1.0f, ambientColor);
@@ -126,7 +126,7 @@ public final class MainScene extends Scene {
                     }
 
                     if (mapData[x][y].getLayer(3).getGrhIndex() != 0) {
-                        draw(mapData[x][y].getLayer(3),
+                        drawTexture(mapData[x][y].getLayer(3),
                                 camera.getScreenX() * TILE_PIXEL_SIZE,
                                 camera.getScreenY() * TILE_PIXEL_SIZE,
                                 true, true, false, 1.0f, ambientColor);
@@ -143,7 +143,7 @@ public final class MainScene extends Scene {
             for(int x = camera.getMinX(); x <= camera.getMaxX(); x++) {
 
                 if (mapData[x][y].getLayer(4).getGrhIndex() > 0) {
-                    draw(mapData[x][y].getLayer(4),
+                    drawTexture(mapData[x][y].getLayer(4),
                             camera.getScreenX() * TILE_PIXEL_SIZE,
                             camera.getScreenY() * TILE_PIXEL_SIZE,
                             true, true, false,1.0f, ambientColor);

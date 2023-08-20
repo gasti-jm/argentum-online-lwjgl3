@@ -7,6 +7,7 @@ import org.aoclient.engine.renderer.RGBColor;
 import static org.aoclient.connection.Protocol.writeEquipItem;
 import static org.aoclient.connection.Protocol.writeUseItem;
 import static org.aoclient.engine.renderer.Drawn.*;
+import static org.aoclient.engine.renderer.FontTypes.drawText;
 import static org.aoclient.engine.scenes.Camera.*;
 
 public final class UserInventory extends Inventory {
@@ -53,10 +54,10 @@ public final class UserInventory extends Inventory {
         for (int i = 0; i < slots.length; i++) {
             if (slots[i].grhIndex > 0) {
                 drawGrhIndex(slots[i].grhIndex, iX,  iY, null);
-                drawText(String.valueOf(slots[i].amount),  iX, iY + 20, null, 0, false, false);
+                drawText(String.valueOf(slots[i].amount),  iX, iY + 20, null, 0, true, false, false);
 
                 if (slots[i].equipped) {
-                    drawText("E",  iX + 20, iY, colorEquipped, 0, false, false);
+                    drawText("E",  iX + 20, iY, colorEquipped, 0, true, false, false);
                 }
             }
 

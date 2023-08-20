@@ -7,8 +7,8 @@ import static org.aoclient.engine.renderer.Drawn.drawRectangle;
 public class TextBox extends Label {
     private RGBColor backgroundColor;
 
-    public TextBox(int x, int y, int width, int height) {
-        super("", x, y, width, height);
+    public TextBox(int x, int y, int width, int height, boolean bold, boolean italic) {
+        super("", x, y, width, height, bold, italic);
         this.backgroundColor = new RGBColor(0.0f, 0.0f, 0.0f);
     }
 
