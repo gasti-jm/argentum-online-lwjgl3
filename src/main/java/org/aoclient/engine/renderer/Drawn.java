@@ -297,29 +297,58 @@ public final class Drawn {
      *
      * @desc: Dibuja texto en la pantlla
      */
-    public static void drawText(String text, int x, int y, RGBColor color, int font_index, boolean shadow) {
+    public static void drawText(String text, int x, int y, RGBColor color, int font_index, boolean shadow, boolean multi_line) {
         if (text.length() == 0) return;
 
-        int d = 0;
-        for (int a = 0; a < text.length(); a++) {
-            int b = text.charAt(a);
-            if (b > 255) b = 0;
+        int space = 0;
 
-            if (b != 32) {
-                if (fontTypes[font_index].getAscii_code(b) != 0) {
+        if(!multi_line) {
+            for (int a = 0; a < text.length(); a++) {
+                int ascii = text.charAt(a);
+                if (ascii > 255) ascii = 0;
 
-                    // sombra
-                    if (shadow) {
-                        drawGrhIndex(fontTypes[font_index].getAscii_code(b) + 100, (x + d) + 1, y + 1, color);
+                if (ascii != 32) {
+                    if (fontTypes[font_index].getAscii_code(ascii) != 0) {
+
+                        // sombra
+                        if (shadow) {
+                            drawGrhIndex(fontTypes[font_index].getAscii_code(ascii) + 100, (x + space) + 1, y + 1, color);
+                        }
+
+                        drawGrhIndex(fontTypes[font_index].getAscii_code(ascii), (x + space) + 1, y, color);
+                        space += grhData[grhData[fontTypes[font_index].getAscii_code(ascii)].getFrame(1)].getPixelWidth();
                     }
-
-                    drawGrhIndex(fontTypes[font_index].getAscii_code(b), (x + d) + 1, y, color);
-                    d = d + grhData[grhData[fontTypes[font_index].getAscii_code(b)].getFrame(1)].getPixelWidth();
+                } else {
+                    space += 4;
                 }
-            } else {
-                d = d + 4;
+            }
+        } else {
+            int e = 0;
+            int f = 0;
+
+            for (int a = 0; a < text.length(); a++) {
+                int ascii = text.charAt(a);
+                if (ascii > 255) ascii = 0;
+
+                if (ascii == 32 || ascii == 13) {
+                    if (e >= 26) {
+                        f++;
+                        e = 0;
+                        space = 0;
+                    } else {
+                        if (ascii == 32) space += 4;
+                    }
+                } else {
+                    if(fontTypes[font_index].getAscii_code(ascii) > 12) {
+                        drawGrhIndex(fontTypes[font_index].getAscii_code(ascii), (x + space) + 1, y + f * 14, color);
+                        space += grhData[grhData[fontTypes[font_index].getAscii_code(ascii)].getFrame(1)].getPixelWidth();
+                    }
+                }
+
+                e++;
             }
         }
+
     }
 
     /**

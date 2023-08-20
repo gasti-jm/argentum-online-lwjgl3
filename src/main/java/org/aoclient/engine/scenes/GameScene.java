@@ -45,7 +45,7 @@ public final class GameScene extends Scene {
         camera.setHalfWindowTileWidth   (( (SCREEN_SIZE_X / TILE_PIXEL_SIZE) / 2 ));
         camera.setHalfWindowTileHeight  (( (SCREEN_SIZE_Y / TILE_PIXEL_SIZE) / 2 ));
 
-        frm = new MainGame("VentanaPrincipal.png");
+        frm = new MainGame();
     }
 
     @Override
@@ -56,7 +56,6 @@ public final class GameScene extends Scene {
         }
 
         if(!visible) return;
-
 
         if (user.isUserMoving()) {
             if (user.getAddToUserPos().getX() != 0) {
@@ -89,7 +88,6 @@ public final class GameScene extends Scene {
         if (!forms.isEmpty()) return;
 
         if (MouseListener.mouseButtonClick(GLFW_MOUSE_BUTTON_LEFT)) {
-
             // intentamos ejecutar las acciones de los botones si es que estan dentro de nuestro
             frm.checkButtons();
 
@@ -100,7 +98,6 @@ public final class GameScene extends Scene {
 
             // cheakeamos tambien del inventario
             user.getUserInventory().clickInventory();
-
         }
 
         if(MouseListener.mouseButtonDoubleClick(GLFW_MOUSE_BUTTON_LEFT)) {
@@ -113,28 +110,6 @@ public final class GameScene extends Scene {
     @Override
     public void keyEvents() {
         if (!forms.isEmpty()) return; // darle prioridad a los formularios
-
-        if(!user.isUserMoving()) {
-            if(!autoMove){
-
-                if (!KeyListener.lastKeysMovedPressed.isEmpty()) {
-                    if (KeyListener.lastKeysMovedPressed.get(KeyListener.lastKeysMovedPressed.size() - 1) == bindKeys.getBindedKey(mKeyUp)) {
-                        user.moveTo(NORTH);
-                    } else if (KeyListener.lastKeysMovedPressed.get(KeyListener.lastKeysMovedPressed.size() - 1) == bindKeys.getBindedKey(mKeyDown)) {
-                        user.moveTo(SOUTH);
-                    } else if (KeyListener.lastKeysMovedPressed.get(KeyListener.lastKeysMovedPressed.size() - 1) == bindKeys.getBindedKey(mKeyLeft)) {
-                        user.moveTo(WEST);
-                    } else if (KeyListener.lastKeysMovedPressed.get(KeyListener.lastKeysMovedPressed.size() - 1) == bindKeys.getBindedKey(mKeyRight)) {
-                        user.moveTo(EAST);
-                    }
-                }
-
-            } else {
-                autoWalk();
-            }
-
-        }
-
         checkBindedKeys();
     }
 
@@ -149,8 +124,27 @@ public final class GameScene extends Scene {
      */
     private void checkBindedKeys() {
         E_KeyType keyPressed = bindKeys.getKeyPressed(KeyListener.getLastKeyPressed());
-        if(keyPressed == null) return; // ni me gasto si la tecla presionada no existe en nuestro bind.
 
+        // Caminata!
+        if(!user.isUserMoving()) {
+            if(!autoMove){
+                if (!KeyListener.lastKeysMovedPressed.isEmpty()) {
+                    if (KeyListener.lastKeysMovedPressed.get(KeyListener.lastKeysMovedPressed.size() - 1) == bindKeys.getBindedKey(mKeyUp)) {
+                        user.moveTo(NORTH);
+                    } else if (KeyListener.lastKeysMovedPressed.get(KeyListener.lastKeysMovedPressed.size() - 1) == bindKeys.getBindedKey(mKeyDown)) {
+                        user.moveTo(SOUTH);
+                    } else if (KeyListener.lastKeysMovedPressed.get(KeyListener.lastKeysMovedPressed.size() - 1) == bindKeys.getBindedKey(mKeyLeft)) {
+                        user.moveTo(WEST);
+                    } else if (KeyListener.lastKeysMovedPressed.get(KeyListener.lastKeysMovedPressed.size() - 1) == bindKeys.getBindedKey(mKeyRight)) {
+                        user.moveTo(EAST);
+                    }
+                }
+            } else {
+                autoWalk();
+            }
+        }
+
+        if(keyPressed == null) return; // ni me gasto si la tecla presionada no existe en nuestro bind.
         if (KeyListener.isKeyReadyForAction(bindKeys.getBindedKey(keyPressed))) {
             switch (keyPressed) {
                 case mKeyUseObject:
@@ -175,8 +169,6 @@ public final class GameScene extends Scene {
                     break;
 
             }
-
-
         }
 
     }
@@ -330,7 +322,7 @@ public final class GameScene extends Scene {
      */
     private void showFPS() {
         final String txtFPS = String.valueOf(FPS);
-        drawText(txtFPS, (SCREEN_SIZE_X - getSizeText(txtFPS) / 2) - 90, 3, ambientColor, 0, false);
+        drawText(txtFPS, (SCREEN_SIZE_X - getSizeText(txtFPS) / 2) - 90, 3, ambientColor, 0, false, false);
     }
 
     private boolean inGameArea() {

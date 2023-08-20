@@ -447,11 +447,11 @@ public final class Character {
                         }
 
                         String line = charList[charIndex].getName();
-                        drawText(line, PixelOffsetX - (getSizeText(line) / 2) + 15, PixelOffsetY + 30, color, 0, true);
+                        drawText(line, PixelOffsetX - (getSizeText(line) / 2) + 15, PixelOffsetY + 30, color, 0, true, false);
 
                         line = charList[charIndex].getClanName();
                         if (!line.isEmpty()) {
-                            drawText(line, PixelOffsetX - (getSizeText(line) / 2) + 15, PixelOffsetY + 43, color, 0, true);
+                            drawText(line, PixelOffsetX - (getSizeText(line) / 2) + 15, PixelOffsetY + 43, color, 0, true, false);
                         }
 
                     }

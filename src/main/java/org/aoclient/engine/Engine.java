@@ -37,8 +37,6 @@ public final class Engine {
         Surface.get().initialize();
         GameData.initialize();
         this.bindKeys = BindKeys.get();
-        forms.add(new Message("VentanaMsj.jpg","Esto es un mensaje de prueba!"));
-
 
         changeScene(INTRO_SCENE);
 

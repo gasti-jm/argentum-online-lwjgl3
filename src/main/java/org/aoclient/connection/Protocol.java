@@ -6,10 +6,12 @@ import org.aoclient.connection.packets.ServerPacketID;
 import org.aoclient.engine.Sound;
 import org.aoclient.engine.game.User;
 import org.aoclient.engine.game.models.E_Heading;
+import org.aoclient.engine.gui.forms.Message;
 import org.aoclient.engine.utils.GameData;
 import org.aoclient.engine.utils.filedata.GrhInfo;
 
 import static org.aoclient.connection.Messages.*;
+import static org.aoclient.engine.Engine.forms;
 import static org.aoclient.engine.game.models.Character.*;
 import static org.aoclient.engine.utils.GameData.*;
 
@@ -2482,11 +2484,9 @@ public class Protocol {
         buffer.readByte();
 
         String msg = buffer.readASCIIString();
-        //frmMensaje.msg.Caption = Buffer.ReadASCIIString()
-        //    frmMensaje.Show
+        forms.add(new Message(msg));
 
         incomingData.copyBuffer(buffer);
-        System.out.println("handleShowMessageBox CARGADO - FALTA TERMINAR");
     }
 
     private static void handleGuildChat() {

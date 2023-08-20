@@ -99,7 +99,7 @@ public class Inventory {
 
             if (slots[i].grhIndex > 0) {
                 drawGrhIndex(slots[i].grhIndex, iX,  iY, null);
-                drawText(String.valueOf(slots[i].amount),  iX, iY + 20, null, 0, false);
+                drawText(String.valueOf(slots[i].amount),  iX, iY + 20, null, 0, false, false);
             }
 
             if(i == slotSelected) {

@@ -26,6 +26,6 @@ public class Label extends ElementGUI {
 
     @Override
     public void render() {
-        drawText(this.text, this.x, this.y, this.color, 0, false);
+        drawText(this.text, this.x, this.y, this.color, 0, false, true);
     }
 }

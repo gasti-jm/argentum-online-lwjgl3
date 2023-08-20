@@ -159,6 +159,10 @@ public final class Window {
         return height;
     }
 
+    public void minimizar(){
+        glfwIconifyWindow(window);
+    }
+
     public boolean isMinimized() {
         return glfwGetWindowAttrib(window, GLFW_ICONIFIED) == GLFW_TRUE;
     }
