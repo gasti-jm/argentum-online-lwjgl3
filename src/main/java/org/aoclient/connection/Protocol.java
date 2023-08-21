@@ -1,5 +1,6 @@
 package org.aoclient.connection;
 
+import org.aoclient.Main;
 import org.aoclient.connection.packets.ClientPacketID;
 import org.aoclient.connection.packets.E_Messages;
 import org.aoclient.connection.packets.ServerPacketID;
@@ -7,6 +8,7 @@ import org.aoclient.engine.Sound;
 import org.aoclient.engine.game.Console;
 import org.aoclient.engine.game.UserLogic;
 import org.aoclient.engine.game.models.E_Heading;
+import org.aoclient.engine.gui.forms.MainGame;
 import org.aoclient.engine.gui.forms.Message;
 import org.aoclient.engine.renderer.RGBColor;
 import org.aoclient.engine.utils.GameData;
@@ -1481,11 +1483,21 @@ public class Protocol {
         // Remove packet ID
         incomingData.readByte();
 
-        byte userMaxAGU = incomingData.readByte();
-        byte userMinAGU = incomingData.readByte();
-        byte userMaxHAM = incomingData.readByte();
-        byte userMinHAM = incomingData.readByte();
-        System.out.println("handleUpdateHungerAndThirst, cargado... - FALTA TERMINAR!");
+        UserLogic.getInstance().userMaxAGU = incomingData.readByte();
+        UserLogic.getInstance().userMinAGU = incomingData.readByte();
+        UserLogic.getInstance().userMaxHAM = incomingData.readByte();
+        UserLogic.getInstance().userMinHAM = incomingData.readByte();
+
+        MainGame.get().lblSed.setText(UserLogic.getInstance().userMinAGU + "/" + UserLogic.getInstance().userMaxAGU);
+        MainGame.get().lblHambre.setText(UserLogic.getInstance().userMinHAM + "/" + UserLogic.getInstance().userMaxHAM);
+
+        float bWidth = (((float) (UserLogic.getInstance().userMinAGU) / ((float) UserLogic.getInstance().userMaxAGU)) * 75);
+        MainGame.get().shpSed.setWidth((int) (75 - bWidth));
+        MainGame.get().shpSed.setX(584 + (75 - MainGame.get().shpSed.getWidth()));
+
+        bWidth = (((float) (UserLogic.getInstance().userMinHAM) / ((float) UserLogic.getInstance().userMaxHAM)) * 75);
+        MainGame.get().shpHambre.setWidth((int) (75 - bWidth));
+        MainGame.get().shpHambre.setX(584 + (75 - MainGame.get().shpHambre.getWidth()));
     }
 
     private static void handleChangeNPCInventorySlot() {
@@ -2038,18 +2050,71 @@ public class Protocol {
         // Remove packet ID
         incomingData.readByte();
 
-        short userMaxHP = incomingData.readInteger();
-        short userMinHP = incomingData.readInteger();
-        short userMaxMAN = incomingData.readInteger();
-        short userMinMAN = incomingData.readInteger();
-        short userMaxSTA = incomingData.readInteger();
-        short userMinSTA = incomingData.readInteger();
-        int userGLD = incomingData.readLong();
-        byte userLvl = incomingData.readByte();
-        int userPasarNivel = incomingData.readLong();
-        int userExp = incomingData.readLong();
+        UserLogic.getInstance().userMaxHP = incomingData.readInteger();
+        UserLogic.getInstance().userMinHP = incomingData.readInteger();
+        UserLogic.getInstance().userMaxMAN = incomingData.readInteger();
+        UserLogic.getInstance().userMinMAN = incomingData.readInteger();
+        UserLogic.getInstance().userMaxSTA = incomingData.readInteger();
+        UserLogic.getInstance().userMinSTA = incomingData.readInteger();
+        UserLogic.getInstance().userGLD = incomingData.readLong();
+        UserLogic.getInstance().userLvl = incomingData.readByte();
+        UserLogic.getInstance().userPasarNivel = incomingData.readLong();
+        UserLogic.getInstance().userExp = incomingData.readLong();
 
-        System.out.println("handleUpdateUserStats Cargado!");
+        MainGame.get().lblMana.setText(UserLogic.getInstance().userMinMAN + "/" + UserLogic.getInstance().userMaxMAN);
+        MainGame.get().lblVida.setText(UserLogic.getInstance().userMinHP + "/" + UserLogic.getInstance().userMaxHP);
+        MainGame.get().lblEnergia.setText(UserLogic.getInstance().userMinSTA + "/" + UserLogic.getInstance().userMaxSTA);
+
+        ///////// MANA
+        float bWidth = (((float) (UserLogic.getInstance().userMinMAN) / ((float) UserLogic.getInstance().userMaxMAN)) * 75);
+        MainGame.get().shpMana.setWidth((int) (75 - bWidth));
+        MainGame.get().shpMana.setX(584 + (75 - MainGame.get().shpMana.getWidth()));
+
+        //////// VIDA
+        bWidth = (((float) (UserLogic.getInstance().userMinHP) / ((float) UserLogic.getInstance().userMaxHP)) * 75);
+        MainGame.get().shpVida.setWidth((int) (75 - bWidth));
+        MainGame.get().shpVida.setX(584 + (75 - MainGame.get().shpVida.getWidth()));
+
+
+        //////// ENERGIA
+        bWidth = (((float) (UserLogic.getInstance().userMinSTA) / ((float) UserLogic.getInstance().userMaxSTA)) * 75);
+        MainGame.get().shpEnergia.setWidth((int) (75 - bWidth));
+        MainGame.get().shpEnergia.setX(584 + (75 - MainGame.get().shpEnergia.getWidth()));
+
+
+
+        //frmMain.lblExp.Caption = "Exp: " & UserExp & "/" & UserPasarNivel
+        //
+        //    If UserPasarNivel > 0 Then
+        //        frmMain.lblPorcLvl.Caption = "[" & Round(CDbl(UserExp) * CDbl(100) / CDbl(UserPasarNivel), 2) & "%]"
+        //    Else
+        //        frmMain.lblPorcLvl.Caption = "[N/A]"
+        //    End If
+        //
+        //    frmMain.GldLbl.Caption = UserGLD
+        //    frmMain.lblLvl.Caption = UserLvl
+        //
+        //
+        //    Dim bWidth As Byte
+
+        //    '***************************
+        //
+        //    If UserMinHP = 0 Then
+        //        UserEstado = 1
+        //        If frmMain.TrainingMacro Then Call frmMain.DesactivarMacroHechizos
+        //        If frmMain.macrotrabajo Then Call frmMain.DesactivarMacroTrabajo
+        //    Else
+        //        UserEstado = 0
+        //    End If
+        //
+        //    If UserGLD >= CLng(UserLvl) * 10000 Then
+        //        'Changes color
+        //        frmMain.GldLbl.ForeColor = &HFF& 'Red
+        //    Else
+        //        'Changes color
+        //        frmMain.GldLbl.ForeColor = &HFFFF& 'Yellow
+        //    End If
+
     }
 
     private static void handleCreateFX() {
@@ -2748,6 +2813,7 @@ public class Protocol {
 
         int userGLD = incomingData.readLong();
 
+
         //If UserGLD >= CLng(UserLvl) * 10000 Then
         //        'Changes color
         //        frmMain.GldLbl.ForeColor = &HFF& 'Red
@@ -2770,7 +2836,14 @@ public class Protocol {
         // Remove packet ID
         incomingData.readByte();
 
-        short userMinHP = incomingData.readInteger();
+        UserLogic.getInstance().userMinHP = incomingData.readInteger();
+
+        MainGame.get().lblMana.setText(UserLogic.getInstance().userMinHP + "/" + UserLogic.getInstance().userMaxHP);
+        MainGame.get().shpVida.setWidth( (( (UserLogic.getInstance().userMinHP / 100) / (UserLogic.getInstance().userMaxHP / 100)) * 75));
+        MainGame.get().shpVida.setX(584 + (75 - MainGame.get().shpVida.getWidth()));
+
+        System.out.println();
+
 
         //frmMain.lblVida = UserMinHP & "/" & UserMaxHP
         //
@@ -2832,18 +2905,15 @@ public class Protocol {
         incomingData.readByte();
 
         // variable global
-        short userMinSTA = incomingData.readInteger();
+        UserLogic.getInstance().userMinSTA = incomingData.readInteger();
 
-        //frmMain.lblEnergia = UserMinSTA & "/" & UserMaxSTA
-        //
-        //    Dim bWidth As Byte
-        //
-        //    bWidth = (((UserMinSTA / 100) / (UserMaxSTA / 100)) * 75)
-        //
-        //    frmMain.shpEnergia.Width = 75 - bWidth
-        //    frmMain.shpEnergia.Left = 584 + (75 - frmMain.shpEnergia.Width)
-        //
-        //    frmMain.shpEnergia.Visible = (bWidth <> 75)
+        MainGame.get().lblEnergia.setText(UserLogic.getInstance().userMinSTA + "/" + UserLogic.getInstance().userMaxSTA);
+
+        float bWidth = (((float) (UserLogic.getInstance().userMinSTA) / ((float) UserLogic.getInstance().userMaxSTA)) * 75);
+        MainGame.get().shpEnergia.setWidth((int) (75 - bWidth));
+        MainGame.get().shpEnergia.setX(584 + (75 - MainGame.get().shpEnergia.getWidth()));
+
+
 
         System.out.println("handleUpdateSta CARGADO - FALTA TERMINAR!");
     }

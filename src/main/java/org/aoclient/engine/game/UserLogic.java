@@ -22,7 +22,7 @@ public final class UserLogic {
     private boolean userMoving;
 
     // mapa
-    short userMap;
+    public short userMap;
     private Position userPos;
     private Position addToUserPos;
     private short userCharIndex;
@@ -42,6 +42,22 @@ public final class UserLogic {
     public final int maxXBorder = XMaxMapSize - ( (SCREEN_SIZE_X / 32) / 2);
     public final int minYBorder = YMinMapSize + ( (SCREEN_SIZE_Y / 32) / 2);
     public final int maxYBorder = YMaxMapSize - ( (SCREEN_SIZE_Y / 32) / 2);
+
+    // valores del personaje del usuario
+    public short userMaxHP;
+    public short userMinHP;
+    public short userMaxMAN;
+    public short userMinMAN;
+    public short userMaxSTA;
+    public short userMinSTA;
+    public int userGLD;
+    public byte userLvl;
+    public int userPasarNivel;
+    public int userExp;
+    public byte userMaxAGU;
+    public byte userMinAGU;
+    public byte userMaxHAM;
+    public byte userMinHAM;
 
     private UserLogic() {
         userPos = new Position();
@@ -136,9 +152,9 @@ public final class UserLogic {
      * @desc: Cambio de area
      */
     public void areaChange(int x, int y) {
-        minLimiteX = (x / TILE_BUFFER_SIZE - 1) * TILE_BUFFER_SIZE;
+        minLimiteX = (x / 9 - 1) * 9;
         maxLimiteX = minLimiteX + 26;
-        minLimiteY = (y / TILE_BUFFER_SIZE - 1) * TILE_BUFFER_SIZE;
+        minLimiteY = (y / 9 - 1) * 9;
         maxLimiteY = minLimiteY + 26;
 
         for (int loopX = 1; loopX <= 100; loopX++) {

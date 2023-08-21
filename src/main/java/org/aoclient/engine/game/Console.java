@@ -5,7 +5,7 @@ import org.aoclient.engine.renderer.RGBColor;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.aoclient.engine.renderer.FontText.drawText;
+import static org.aoclient.engine.renderer.FontText.drawConsoleText;
 
 public class Console {
     private static Console instance;
@@ -41,8 +41,9 @@ public class Console {
     }
 
     public void addMessageToConsole(String text, boolean bold, boolean italic, RGBColor color) {
-        if(dataConsole.size() > 100){
+        if(dataConsole.size() > 100) {
             dataConsole.clear();
+            posList = 0;
         }
 
         if(dataConsole.size() >= 7) {
@@ -58,7 +59,7 @@ public class Console {
         if (!dataConsole.isEmpty()) {
             for (int i = this.posList; i < dataConsole.size(); i++) {
                 TextConsole data = dataConsole.get(i);
-                drawText(data.text, POS_X, POS_Y + ((i - this.posList) * 12), data.color, 0, data.bold, data.italic, true);
+                drawConsoleText(data.text, POS_X, POS_Y + ((i - this.posList) * 12), data.color, 0, data.bold, data.italic);
             }
         }
     }

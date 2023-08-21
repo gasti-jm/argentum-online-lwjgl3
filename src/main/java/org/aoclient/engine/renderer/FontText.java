@@ -39,7 +39,6 @@ public class FontText {
         TextureOGL[] textureFonts = new TextureOGL[4];
         Map<Integer, FontData> fontData = new HashMap<>(); // <ASCII, Valores de posicionamiento>
     }
-
     private static Font[] fonts = new Font[1];
 
     public static void loadCSV(){
@@ -120,6 +119,56 @@ public class FontText {
 
     }
 
+    public static void drawConsoleText(String text, int x, int y, RGBColor color, int fontIndex, boolean bold, boolean italic) {
+        if (text.length() == 0) return;
+
+        byte[] chars = text.getBytes(Charset.forName("ISO-8859-1"));
+        int numChars = chars.length;
+
+        int fontType = FONT_NORMAL.ordinal();
+
+        if (color == null) {
+            color = new RGBColor(1.0f, 1.0f, 1.0f);
+        }
+
+        if (!bold && italic) {
+            fontType = FONT_ITALIC.ordinal();
+        } else if (bold && !italic) {
+            fontType = FONT_BOLD.ordinal();
+        } else if (bold && italic) {
+            fontType = FONT_BOLD_ITALIC.ordinal();
+        }
+
+        int space = 0;
+        int e = 0;
+        int f = 0;
+
+        for (int a = 0; a < text.length(); a++) {
+            int ascii = text.charAt(a);
+            if (ascii > 255) ascii = 0;
+
+            if (ascii == 32 || ascii == 13) {
+                if (e >= 50) {
+                    f++;
+                    e = 0;
+                    space = 0;
+                } else {
+                    if (ascii == 32) space += 4;
+                }
+            } else {
+                geometryBoxRenderFont(fonts[fontIndex].textureFonts[fontType], (x + space) + 1, y + f * 14,
+                        fonts[fontIndex].fontData.get(ascii).width, 15,
+                        fonts[fontIndex].fontData.get(ascii).x, fonts[fontIndex].fontData.get(ascii).y,
+                        false, 1.0f, color);
+
+                space += fonts[fontIndex].fontData.get(ascii).width;
+            }
+
+            e++;
+        }
+
+    }
+
     public static void geometryBoxRenderFont(TextureOGL texture, int x, int y, int src_width, int src_height, float sX, float sY, boolean blend, float alpha, RGBColor color) {
         if (blend)
             glBlendFunc(GL_SRC_ALPHA, GL_ONE);
@@ -165,7 +214,6 @@ public class FontText {
         if (blend)
             glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     }
-
 
     public static void loadTextures(int fontIndex) {
         fonts[0].textureFonts[0] = Surface.get().createFontTexture("normal");

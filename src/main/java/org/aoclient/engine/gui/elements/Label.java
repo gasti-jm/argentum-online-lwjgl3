@@ -21,6 +21,22 @@ public class Label extends ElementGUI {
         this.italic = italic;
     }
 
+    public Label(String text, int x, int y, RGBColor color) {
+        super(x, y, 0, 0);
+        this.text = text;
+        this.color = color;
+        this.bold = false;
+        this.italic = false;
+    }
+
+    public Label(String text, int x, int y, boolean bold, boolean italic, RGBColor color) {
+        super(x, y, 0, 0);
+        this.text = text;
+        this.color = color;
+        this.bold = bold;
+        this.italic = italic;
+    }
+
     public Label(String text) {
         this.text = text;
         this.color = new RGBColor(1.0f, 1.0f, 1.0f);

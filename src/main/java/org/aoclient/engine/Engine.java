@@ -19,13 +19,17 @@ import static org.aoclient.engine.utils.Time.deltaTime;
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.*;
 
-public class Engine {
+public class Engine implements Runnable {
+    private final Thread gameLoopThread;
     private static boolean prgRun = true;
     private Window window;
     private Scene currentScene;
     private BindKeys bindKeys;
     public static List<Form> forms = new ArrayList<>(); // formularios por encima de las escenas (por ejemplo: frmMensaje).
 
+    public Engine() {
+        gameLoopThread = new Thread(this, "GAME_LOOP_THREAD");
+    }
 
     private void close() {
         window.close();
@@ -58,7 +62,11 @@ public class Engine {
         }
     }
 
-    public void start(){
+    public void start() {
+        gameLoopThread.start();
+    }
+
+    public void init(){
         System.out.println("Hello LWJGL " + Version.getVersion() + "!");
 
         this.window = Window.get();
@@ -69,9 +77,6 @@ public class Engine {
         this.bindKeys = BindKeys.get();
 
         changeScene(INTRO_SCENE);
-
-        loop();
-        close();
     }
 
     private void changeScene(SceneType scene) {
@@ -126,4 +131,10 @@ public class Engine {
         prgRun = false;
     }
 
+    @Override
+    public void run() {
+        init();
+        loop();
+        close();
+    }
 }

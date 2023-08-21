@@ -1,9 +1,18 @@
 package org.aoclient.engine.gui.forms;
 
 public class Login extends Form{
+    private static Login instance;
 
-    public Login(String fileBackground) {
-        super(fileBackground);
+    private Login() {
+        super("VentanaConectar.png");
+    }
+
+    public static Login get(){
+        if (instance == null){
+            instance = new Login();
+        }
+
+        return instance;
     }
 
     @Override

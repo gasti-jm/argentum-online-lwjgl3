@@ -7,7 +7,7 @@ public final class Camera {
     public static final int POS_SCREEN_Y = 147;
 
     public static final int TILE_PIXEL_SIZE = 32;
-    public static final int TILE_BUFFER_SIZE = 9;
+    public static final int TILE_BUFFER_SIZE = 7;
 
     // Rango maximo de la matriz del mapa.
     public static final int XMaxMapSize = 100;

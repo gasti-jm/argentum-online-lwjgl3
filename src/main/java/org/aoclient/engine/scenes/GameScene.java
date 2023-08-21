@@ -44,7 +44,7 @@ public final class GameScene extends Scene {
         camera.setHalfWindowTileWidth   (( (SCREEN_SIZE_X / TILE_PIXEL_SIZE) / 2 ));
         camera.setHalfWindowTileHeight  (( (SCREEN_SIZE_Y / TILE_PIXEL_SIZE) / 2 ));
 
-        frm = new MainGame();
+        frm = MainGame.get();
     }
 
     @Override
@@ -298,7 +298,6 @@ public final class GameScene extends Scene {
         frm.render();
         user.getUserInventory().drawInventory();
         showFPS();
-
     }
 
     /**
