@@ -9,6 +9,7 @@ import org.aoclient.engine.gui.elements.Label;
 import org.aoclient.engine.gui.elements.Shape;
 import org.aoclient.engine.renderer.RGBColor;
 
+import static org.aoclient.engine.renderer.FontText.getSizeText;
 import static org.aoclient.engine.utils.GameData.charList;
 
 public class MainGame extends Form {
@@ -20,11 +21,11 @@ public class MainGame extends Form {
     public Shape shpHambre = new Shape(584, 521, 75, 12, new RGBColor(0.0f, 0.0f, 0.0f));
     public Shape shpSed = new Shape(584, 542, 75, 12, new RGBColor(0.0f, 0.0f, 0.0f));
 
-    public Label lblEnergia = new Label("999/999", 584, 453, 75, 12, false, false);
-    public Label lblMana = new Label("9999/9999", 584, 477, 75, 12, false, false);
-    public Label lblVida = new Label("999/999", 584, 498, 75, 12, false, false);
-    public Label lblHambre = new Label("999/999", 584, 521, 75, 12, false, false);
-    public Label lblSed = new Label("999/999", 584, 542, 75, 12, false, false);
+    public Label lblEnergia = new Label("999/999", 584 - (getSizeText("999/999") / 2), 453, 75, 12, false, false);
+    public Label lblMana = new Label("9999/9999", 584 - (getSizeText("9999/9999") / 2), 477, 75, 12, false, false);
+    public Label lblVida = new Label("999/999", 584 - (getSizeText("999/999") / 2), 498, 75, 12, false, false);
+    public Label lblHambre = new Label("999/999", 584 - (getSizeText("100/100") / 2), 521, 75, 12, false, false);
+    public Label lblSed = new Label("999/999", 584 - (getSizeText("100/100") / 2), 542, 75, 12, false, false);
 
     private Label lblName;
 
@@ -60,13 +61,14 @@ public class MainGame extends Form {
 
     @Override
     public void checkButtons(){
-        buttonMinimizar.runAction();
-        buttonClose.runAction();
+        setButtonState(buttonMinimizar);
+        setButtonState(buttonClose);
     }
 
     @Override
     public void render() {
         background.render();
+
         console.drawConsole();
         renderUserStats();
     }

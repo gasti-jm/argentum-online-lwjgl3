@@ -6,14 +6,13 @@ import java.io.FileReader;
 import java.io.IOException;
 
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static org.aoclient.engine.renderer.FontText.E_FontType.*;
-import static org.aoclient.engine.utils.GameData.fontTypes;
-import static org.aoclient.engine.utils.GameData.grhData;
 import static org.lwjgl.opengl.GL11.*;
 
 
@@ -56,7 +55,7 @@ public class FontText {
     public static void drawText(String text, int x, int y, RGBColor color, int fontIndex, boolean bold, boolean italic, boolean multi_line) {
         if (text.length() == 0) return;
 
-        byte[] chars = text.getBytes(Charset.forName("ISO-8859-1"));
+        byte[] chars = text.getBytes(StandardCharsets.ISO_8859_1);
         int numChars = chars.length;
 
         int fontType = FONT_NORMAL.ordinal();
@@ -69,16 +68,14 @@ public class FontText {
             fontType = FONT_ITALIC.ordinal();
         } else if (bold && !italic) {
             fontType = FONT_BOLD.ordinal();
-        } else if (bold && italic) {
+        } else if (bold) {
             fontType = FONT_BOLD_ITALIC.ordinal();
         }
 
         int space = 0;
         if(!multi_line) {
-            for (int a = 0; a < numChars; a++) {
-                int ascii = chars[a];
-
-                if (ascii != 32){
+            for (int ascii : chars) {
+                if (ascii != 32) {
                     geometryBoxRenderFont(fonts[fontIndex].textureFonts[fontType], (x + space), y,
                             fonts[fontIndex].fontData.get(ascii).width, 15,
                             fonts[fontIndex].fontData.get(ascii).x, fonts[fontIndex].fontData.get(ascii).y,
@@ -94,8 +91,7 @@ public class FontText {
             int e = 0;
             int f = 0;
 
-            for (int a = 0; a < text.length(); a++) {
-                int ascii = text.charAt(a);
+            for (int ascii : chars) {
                 if (ascii > 255) ascii = 0;
 
                 if (ascii == 32 || ascii == 13) {
@@ -124,7 +120,7 @@ public class FontText {
     public static void drawConsoleText(String text, int x, int y, RGBColor color, int fontIndex, boolean bold, boolean italic) {
         if (text.length() == 0) return;
 
-        byte[] chars = text.getBytes(Charset.forName("ISO-8859-1"));
+        byte[] chars = text.getBytes(StandardCharsets.ISO_8859_1);
         int numChars = chars.length;
 
         int fontType = FONT_NORMAL.ordinal();
@@ -137,7 +133,7 @@ public class FontText {
             fontType = FONT_ITALIC.ordinal();
         } else if (bold && !italic) {
             fontType = FONT_BOLD.ordinal();
-        } else if (bold && italic) {
+        } else if (bold) {
             fontType = FONT_BOLD_ITALIC.ordinal();
         }
 
@@ -145,8 +141,7 @@ public class FontText {
         int e = 0;
         int f = 0;
 
-        for (int a = 0; a < text.length(); a++) {
-            int ascii = text.charAt(a);
+        for (int ascii : chars) {
             if (ascii > 255) ascii = 0;
 
             if (ascii == 32 || ascii == 13) {

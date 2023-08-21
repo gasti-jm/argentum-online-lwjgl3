@@ -52,7 +52,7 @@ public class Inventory {
     /**
      * @desc: Chekeamos que el mouse este dentro del inventario.
      */
-    protected boolean inInventoryArea() {
+    public boolean inInventoryArea() {
         if (MouseListener.getX() < posX || MouseListener.getX() > posX + sWidth)
             return false;
 
@@ -117,13 +117,11 @@ public class Inventory {
     }
 
     public void clickInventory(){
-        if (inInventoryArea()) {
-            final int x = (int) ((MouseListener.getX() - posX) / TILE_PIXEL_SIZE);
-            final int y = (int) ((MouseListener.getY() - posY) / TILE_PIXEL_SIZE);
-            final int slot = x + (this.cantColumns * y);
+        final int x = (int) ((MouseListener.getX() - posX) / TILE_PIXEL_SIZE);
+        final int y = (int) ((MouseListener.getY() - posY) / TILE_PIXEL_SIZE);
+        final int slot = x + (this.cantColumns * y);
 
-            setSelectedSlot(slot); // actualizamos el slot seleccionado
-        }
+        setSelectedSlot(slot); // actualizamos el slot seleccionado
     }
 
     public int getSlotSelected() {

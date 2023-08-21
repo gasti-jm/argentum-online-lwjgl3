@@ -42,6 +42,7 @@ public class MouseListener {
         if (action == GLFW_PRESS) {
             if (button < get().mouseButtonPressed.length) {
                 get().mouseButtonPressed[button] = true;
+                get().isDragging = true;
 
                 // Doble click!
                 double currentTime = glfwGetTime();
@@ -102,6 +103,10 @@ public class MouseListener {
         return get().isDragging;
     }
 
+    public static boolean pressing(int button) {
+        return get().mouseButtonPressed[button];
+    }
+
     public static boolean mouseButtonDown(int button) {
         if (button < get().mouseButtonPressed.length) {
             return get().mouseButtonPressed[button];
@@ -122,9 +127,22 @@ public class MouseListener {
             }
 
             return retVal;
-        } else {
-            return false;
         }
+
+        return false;
+    }
+
+    /**
+     * Detecta si soltamos un click
+     */
+    public static boolean mouseButtonClickReleased(int button) {
+        if (button < get().mouseButtonPressed.length) {
+            if (!get().mouseButtonPressed[button] && !isDragging()) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**

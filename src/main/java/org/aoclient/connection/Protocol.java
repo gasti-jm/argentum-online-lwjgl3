@@ -17,6 +17,7 @@ import org.aoclient.engine.utils.filedata.GrhInfo;
 import static org.aoclient.connection.Messages.*;
 import static org.aoclient.engine.Engine.forms;
 import static org.aoclient.engine.game.models.Character.*;
+import static org.aoclient.engine.renderer.FontText.getSizeText;
 import static org.aoclient.engine.utils.GameData.*;
 
 public class Protocol {
@@ -1491,6 +1492,9 @@ public class Protocol {
         MainGame.get().lblSed.setText(UserLogic.getInstance().userMinAGU + "/" + UserLogic.getInstance().userMaxAGU);
         MainGame.get().lblHambre.setText(UserLogic.getInstance().userMinHAM + "/" + UserLogic.getInstance().userMaxHAM);
 
+        MainGame.get().lblHambre.setX(621 - (getSizeText(MainGame.get().lblHambre.getText()) / 2));
+        MainGame.get().lblSed.setX(621 - (getSizeText(MainGame.get().lblSed.getText()) / 2));
+
         float bWidth = (((float) (UserLogic.getInstance().userMinAGU) / ((float) UserLogic.getInstance().userMaxAGU)) * 75);
         MainGame.get().shpSed.setWidth((int) (75 - bWidth));
         MainGame.get().shpSed.setX(584 + (75 - MainGame.get().shpSed.getWidth()));
@@ -2065,10 +2069,15 @@ public class Protocol {
         MainGame.get().lblVida.setText(UserLogic.getInstance().userMinHP + "/" + UserLogic.getInstance().userMaxHP);
         MainGame.get().lblEnergia.setText(UserLogic.getInstance().userMinSTA + "/" + UserLogic.getInstance().userMaxSTA);
 
+        MainGame.get().lblMana.setX(621 - (getSizeText(MainGame.get().lblMana.getText()) / 2));
+        MainGame.get().lblVida.setX(621 - (getSizeText(MainGame.get().lblVida.getText()) / 2));
+        MainGame.get().lblEnergia.setX(621 - (getSizeText(MainGame.get().lblEnergia.getText()) / 2));
+
         ///////// MANA
         float bWidth = (((float) (UserLogic.getInstance().userMinMAN) / ((float) UserLogic.getInstance().userMaxMAN)) * 75);
         MainGame.get().shpMana.setWidth((int) (75 - bWidth));
         MainGame.get().shpMana.setX(584 + (75 - MainGame.get().shpMana.getWidth()));
+
 
         //////// VIDA
         bWidth = (((float) (UserLogic.getInstance().userMinHP) / ((float) UserLogic.getInstance().userMaxHP)) * 75);
@@ -2838,23 +2847,17 @@ public class Protocol {
 
         UserLogic.getInstance().userMinHP = incomingData.readInteger();
 
-        MainGame.get().lblMana.setText(UserLogic.getInstance().userMinHP + "/" + UserLogic.getInstance().userMaxHP);
+        MainGame.get().lblVida.setText(UserLogic.getInstance().userMinHP + "/" + UserLogic.getInstance().userMaxHP);
         MainGame.get().shpVida.setWidth( (( (UserLogic.getInstance().userMinHP / 100) / (UserLogic.getInstance().userMaxHP / 100)) * 75));
         MainGame.get().shpVida.setX(584 + (75 - MainGame.get().shpVida.getWidth()));
+        MainGame.get().lblVida.setX(621 - (getSizeText(MainGame.get().lblVida.getText()) / 2));
 
-        System.out.println();
+        if(UserLogic.getInstance().userMinHP == 0) {
+            charList[UserLogic.getInstance().getUserCharIndex()].setDead(true);
+            //If frmMain.TrainingMacro Then Call frmMain.DesactivarMacroHechizos
+            //If frmMain.macrotrabajo Then Call frmMain.DesactivarMacroTrabajo
+        }
 
-
-        //frmMain.lblVida = UserMinHP & "/" & UserMaxHP
-        //
-        //    Dim bWidth As Byte
-        //
-        //    bWidth = (((UserMinHP / 100) / (UserMaxHP / 100)) * 75)
-        //
-        //    frmMain.shpVida.Width = 75 - bWidth
-        //    frmMain.shpVida.Left = 584 + (75 - frmMain.shpVida.Width)
-        //
-        //    frmMain.shpVida.Visible = (bWidth <> 75)
         //
         //    'Is the user alive??
         //    If UserMinHP = 0 Then
@@ -2878,21 +2881,13 @@ public class Protocol {
         incomingData.readByte();
 
         // variable global
-        short userMinMAN = incomingData.readInteger();
+        UserLogic.getInstance().userMinMAN = incomingData.readInteger();
 
-        //frmMain.lblMana = UserMinMAN & "/" & UserMaxMAN
-        //
-        //    Dim bWidth As Byte
-        //
-        //    If UserMaxMAN > 0 Then _
-        //        bWidth = (((UserMinMAN / 100) / (UserMaxMAN / 100)) * 75)
-        //
-        //    frmMain.shpMana.Width = 75 - bWidth
-        //    frmMain.shpMana.Left = 584 + (75 - frmMain.shpMana.Width)
-        //
-        //    frmMain.shpMana.Visible = (bWidth <> 75)
+        float bWidth = (((float) (UserLogic.getInstance().userMinMAN) / ((float) UserLogic.getInstance().userMaxMAN)) * 75);
+        MainGame.get().shpMana.setWidth((int) (75 - bWidth));
+        MainGame.get().shpMana.setX(584 + (75 - MainGame.get().shpMana.getWidth()));
+        MainGame.get().lblMana.setX(621 - (getSizeText(MainGame.get().lblMana.getText()) / 2));
 
-        System.out.println("handleUpdateMana CARGADO - FALTA TERMINAR!");
     }
 
     private static void handleUpdateSta() {
@@ -2912,6 +2907,7 @@ public class Protocol {
         float bWidth = (((float) (UserLogic.getInstance().userMinSTA) / ((float) UserLogic.getInstance().userMaxSTA)) * 75);
         MainGame.get().shpEnergia.setWidth((int) (75 - bWidth));
         MainGame.get().shpEnergia.setX(584 + (75 - MainGame.get().shpEnergia.getWidth()));
+        MainGame.get().lblEnergia.setX(621 - (getSizeText(MainGame.get().lblEnergia.getText()) / 2));
 
 
 

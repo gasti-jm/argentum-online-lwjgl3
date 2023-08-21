@@ -88,24 +88,32 @@ public final class GameScene extends Scene {
     public void mouseEvents() {
         if (!forms.isEmpty()) return;
 
-        if (MouseListener.mouseButtonClick(GLFW_MOUSE_BUTTON_LEFT)) {
-            // intentamos ejecutar las acciones de los botones si es que estan dentro de nuestro
-            frm.checkButtons();
+        // checkeamos el estado de los botones
+        frm.checkButtons();
 
-            // si estamos haciendo click en el render. (osea fuera de la interface)
-            if(inGameArea()) {
+        // Estamos haciendo click en el render?
+        if(inGameArea()) {
+            if (MouseListener.mouseButtonClick(GLFW_MOUSE_BUTTON_LEFT)) {
                 writeLeftClick(getTileMouseX((int) MouseListener.getX() - POS_SCREEN_X), getTileMouseY((int) MouseListener.getY() - POS_SCREEN_Y));
             }
-
-            // cheakeamos tambien del inventario
-            user.getUserInventory().clickInventory();
         }
 
+        // estamos haciendo click en el inventario?
+        if (user.getUserInventory().inInventoryArea()) {
+            if (MouseListener.mouseButtonClick(GLFW_MOUSE_BUTTON_LEFT)) {
+                // cheakeamos tambien del inventario
+                user.getUserInventory().clickInventory();
+            }
+        }
+
+        // estamos haciendo doble click?
         if(MouseListener.mouseButtonDoubleClick(GLFW_MOUSE_BUTTON_LEFT)) {
             user.getUserInventory().dobleClickInventory();
         } else if(MouseListener.mouseButtonDoubleClick(GLFW_MOUSE_BUTTON_RIGHT)) {
             writeDoubleClick(getTileMouseX((int) MouseListener.getX() - POS_SCREEN_X), getTileMouseY((int) MouseListener.getY() - POS_SCREEN_Y));
         }
+
+
     }
 
     @Override

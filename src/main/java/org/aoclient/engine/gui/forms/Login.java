@@ -2,11 +2,9 @@ package org.aoclient.engine.gui.forms;
 
 import org.aoclient.connection.SocketConnection;
 import org.aoclient.engine.gui.elements.Button;
-import org.aoclient.engine.listeners.MouseListener;
 
 import static org.aoclient.connection.Protocol.writeLoginExistingChar;
 import static org.aoclient.engine.Engine.forms;
-import static org.lwjgl.glfw.GLFW.GLFW_MOUSE_BUTTON_LEFT;
 
 public class Login extends Form{
     private static Login instance;
@@ -19,10 +17,10 @@ public class Login extends Form{
 
     public void init() {
         this.background.init("VentanaConectar.png");
-        //this.loadParentAttributes();
 
         this.btnConnect = new Button(320, 264, 89, 25);
         this.btnConnect.loadTextures("BotonConectarse.jpg", "BotonConectarseRollover.jpg", "BotonConectarseClick.jpg");
+
         this.btnConnect.setAction( () -> {
             SocketConnection.getInstance().connect();
             writeLoginExistingChar();
@@ -47,10 +45,9 @@ public class Login extends Form{
     public void checkButtons() {
         if(!forms.isEmpty()) return;
 
-        if (MouseListener.mouseButtonClick(GLFW_MOUSE_BUTTON_LEFT)) {
-            btnConnect.runAction();
-        }
+        setButtonState(btnConnect);
     }
+
 
     @Override
     public void close() {
