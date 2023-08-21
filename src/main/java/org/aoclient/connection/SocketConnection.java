@@ -59,7 +59,7 @@ public class SocketConnection {
                 writeData.write(sdData.getBytes());
             } catch (IOException e) {
                 disconnect();
-                throw new RuntimeException(e);
+                //throw new RuntimeException(e);
             }
         }
     }

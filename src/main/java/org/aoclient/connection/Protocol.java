@@ -4,9 +4,11 @@ import org.aoclient.connection.packets.ClientPacketID;
 import org.aoclient.connection.packets.E_Messages;
 import org.aoclient.connection.packets.ServerPacketID;
 import org.aoclient.engine.Sound;
-import org.aoclient.engine.game.User;
+import org.aoclient.engine.game.Console;
+import org.aoclient.engine.game.UserLogic;
 import org.aoclient.engine.game.models.E_Heading;
 import org.aoclient.engine.gui.forms.Message;
+import org.aoclient.engine.renderer.RGBColor;
 import org.aoclient.engine.utils.GameData;
 import org.aoclient.engine.utils.filedata.GrhInfo;
 
@@ -198,7 +200,7 @@ public class Protocol {
 
         switch (msg) {
             case DontSeeAnything:
-                System.out.println(MENSAJE_NO_VES_NADA_INTERESANTE);
+                Console.get().addMessageToConsole(MENSAJE_NO_VES_NADA_INTERESANTE, false, false, new RGBColor(0.25f, 0.75f, 0.60f));
                 break;
 
             case NPCSwing:
@@ -1576,7 +1578,7 @@ public class Protocol {
 
         String errMsg = buffer.readASCIIString();
         SocketConnection.getInstance().disconnect();
-        User.getInstance().setUserConected(false);
+        UserLogic.getInstance().setUserConected(false);
 
         incomingData.copyBuffer(buffer);
         System.out.println("handleErrorMessage Cargado! - FALTA TERMINAR!");
@@ -1949,7 +1951,7 @@ public class Protocol {
         final short minDef = buffer.readInteger();
         final float value = buffer.readFloat();
 
-        User.getInstance().getUserInventory().setItem( slot - 1, objIndex, amount, equipped, grhIndex, objType,
+        UserLogic.getInstance().getUserInventory().setItem( slot - 1, objIndex, amount, equipped, grhIndex, objType,
                 maxHit, minHit, maxDef, minDef, value, name);
 
         /*
@@ -2067,7 +2069,7 @@ public class Protocol {
             charList[charIndex].setfX(new GrhInfo());
         }
 
-        User.getInstance().setCharacterFx(charIndex, fX, loops);
+        UserLogic.getInstance().setCharacterFx(charIndex, fX, loops);
 
 
 
@@ -2078,9 +2080,9 @@ public class Protocol {
         // Remove packet ID
         incomingData.readByte();
 
-        final int userX = User.getInstance().getUserPos().getX();
-        final int userY = User.getInstance().getUserPos().getY();
-        if (User.getInstance().inMapBounds(userX, userY)) return;
+        final int userX = UserLogic.getInstance().getUserPos().getX();
+        final int userY = UserLogic.getInstance().getUserPos().getY();
+        if (UserLogic.getInstance().inMapBounds(userX, userY)) return;
 
         //bTecho = (MapData(UserPos.X, UserPos.Y).Trigger = 1 Or _
         //            MapData(UserPos.X, UserPos.Y).Trigger = 2 Or _
@@ -2124,7 +2126,7 @@ public class Protocol {
         byte x = incomingData.readByte();
         byte y = incomingData.readByte();
 
-        User.getInstance().areaChange(x, y);
+        UserLogic.getInstance().areaChange(x, y);
     }
 
     private static void handleGuildList() {
@@ -2295,7 +2297,7 @@ public class Protocol {
             charList[charIndex].setHelmet(helmetsData[tempint]);
         }
 
-        User.getInstance().setCharacterFx(charIndex, incomingData.readInteger(), incomingData.readInteger());
+        UserLogic.getInstance().setCharacterFx(charIndex, incomingData.readInteger(), incomingData.readInteger());
         refreshAllChars();
     }
 
@@ -2309,9 +2311,9 @@ public class Protocol {
         incomingData.readByte();
 
         E_Heading direction = E_Heading.values()[incomingData.readByte() - 1];
-        int userCharIndex = User.getInstance().getUserCharIndex();
-        User.getInstance().moveCharbyHead(userCharIndex, direction);
-        User.getInstance().moveScreen(direction);
+        int userCharIndex = UserLogic.getInstance().getUserCharIndex();
+        UserLogic.getInstance().moveCharbyHead(userCharIndex, direction);
+        UserLogic.getInstance().moveScreen(direction);
 
         refreshAllChars();
     }
@@ -2337,10 +2339,10 @@ public class Protocol {
         // Play steps sounds if the user is not an admin of any kind
         int priv = charList[charIndex].getPriv();
         if (priv != 1 && priv != 2 && priv != 3 && priv != 5 && priv != 25) {
-            User.getInstance().doPasosFx(charIndex);
+            UserLogic.getInstance().doPasosFx(charIndex);
         }
 
-        User.getInstance().moveCharbyPos(charIndex, x, y);
+        UserLogic.getInstance().moveCharbyPos(charIndex, x, y);
         refreshAllChars();
     }
 
@@ -2393,7 +2395,7 @@ public class Protocol {
 
 
         charList[charIndex].setfX(new GrhInfo());
-        User.getInstance().setCharacterFx(charIndex, buffer.readInteger(), buffer.readInteger());
+        UserLogic.getInstance().setCharacterFx(charIndex, buffer.readInteger(), buffer.readInteger());
         charList[charIndex].setName(buffer.readASCIIString());
 
         byte nickColor = buffer.readByte();
@@ -2446,9 +2448,9 @@ public class Protocol {
         // Remove packet ID
         incomingData.readByte();
 
-        User.getInstance().setUserCharIndex(incomingData.readInteger());
-        User.getInstance().getUserPos().setX(charList[User.getInstance().getUserCharIndex()].getPos().getX());
-        User.getInstance().getUserPos().setY(charList[User.getInstance().getUserCharIndex()].getPos().getY());
+        UserLogic.getInstance().setUserCharIndex(incomingData.readInteger());
+        UserLogic.getInstance().getUserPos().setX(charList[UserLogic.getInstance().getUserCharIndex()].getPos().getX());
+        UserLogic.getInstance().getUserPos().setY(charList[UserLogic.getInstance().getUserCharIndex()].getPos().getY());
 
         //'Are we under a roof?
         //    bTecho = IIf(MapData(UserPos.X, UserPos.Y).Trigger = 1 Or _
@@ -2565,7 +2567,7 @@ public class Protocol {
         String chat = buffer.readASCIIString();
         short fontIndex = buffer.readByte();
 
-        System.out.println(chat);
+        Console.get().addMessageToConsole(chat, false, false, new RGBColor(1.0f, 1.0f, 1.0f));
 
         //If InStr(1, chat, "~") Then
         //        str = ReadField(2, chat, 126)
@@ -2641,9 +2643,9 @@ public class Protocol {
         // Remove packet ID
         incomingData.readByte();
 
-        int x = User.getInstance().getUserPos().getX();
-        int y = User.getInstance().getUserPos().getY();
-        int userCharIndex = User.getInstance().getUserCharIndex();
+        int x = UserLogic.getInstance().getUserPos().getX();
+        int y = UserLogic.getInstance().getUserPos().getY();
+        int userCharIndex = UserLogic.getInstance().getUserCharIndex();
 
         // Remove char form old position
         if(mapData[x][y].getCharIndex() == userCharIndex) {
@@ -2651,12 +2653,12 @@ public class Protocol {
         }
 
         // Set new pos
-        User.getInstance().getUserPos().setX(incomingData.readByte());
-        User.getInstance().getUserPos().setY(incomingData.readByte());
+        UserLogic.getInstance().getUserPos().setX(incomingData.readByte());
+        UserLogic.getInstance().getUserPos().setY(incomingData.readByte());
 
         // again xd
-        x = User.getInstance().getUserPos().getX();
-        y = User.getInstance().getUserPos().getY();
+        x = UserLogic.getInstance().getUserPos().getX();
+        y = UserLogic.getInstance().getUserPos().getY();
 
         mapData[x][y].setCharIndex(userCharIndex);
         charList[userCharIndex].getPos().setX(x);
@@ -2683,7 +2685,7 @@ public class Protocol {
         incomingData.readByte();
 
         int userMap = incomingData.readInteger();
-        User.getInstance().setUserMap( (short) userMap);
+        UserLogic.getInstance().setUserMap( (short) userMap);
 
         // Todo: Once on-the-fly editor is implemented check for map version before loading....
         // For now we just drop it
@@ -3103,7 +3105,7 @@ public class Protocol {
         // Remove packet ID
         incomingData.readByte();
 
-        User.getInstance().setUserConected(false);
+        UserLogic.getInstance().setUserConected(false);
         SocketConnection.getInstance().disconnect();
 
         /*
@@ -3180,7 +3182,7 @@ public class Protocol {
 
     private static void handleLogged() {
         incomingData.readByte();
-        User.getInstance().setConnected();
+        UserLogic.getInstance().setConnected();
     }
 
     public static void writeLoginExistingChar() {

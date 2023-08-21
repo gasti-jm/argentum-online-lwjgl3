@@ -1,13 +1,13 @@
 package org.aoclient.engine.game.models;
 
-import org.aoclient.engine.game.User;
+import org.aoclient.engine.game.UserLogic;
 import org.aoclient.engine.renderer.RGBColor;
 import org.aoclient.engine.utils.filedata.*;
 
 import static org.aoclient.engine.game.models.E_Heading.SOUTH;
 import static org.aoclient.engine.renderer.Drawn.*;
 import static org.aoclient.engine.renderer.Drawn.drawTexture;
-import static org.aoclient.engine.renderer.FontTypes.drawText;
+import static org.aoclient.engine.renderer.FontText.drawText;
 import static org.aoclient.engine.utils.GameData.*;
 import static org.aoclient.engine.utils.Time.timerTicksPerFrame;
 
@@ -67,8 +67,8 @@ public final class Character {
     }
 
     public static void makeChar(int charIndex, int body, int head,  E_Heading heading, int x, int y, int weapon, int shield, int helmet) {
-        if (charIndex > User.getInstance().getLastChar())
-            User.getInstance().setLastChar(charIndex);
+        if (charIndex > UserLogic.getInstance().getLastChar())
+            UserLogic.getInstance().setLastChar(charIndex);
 
 
         if (weapon <= 0) weapon = 2;
@@ -104,10 +104,10 @@ public final class Character {
     public static void eraseChar(int charIndex) {
         charList[charIndex].setActive(false);
 
-        if (charIndex == User.getInstance().getLastChar()) {
-            while (!charList[User.getInstance().getLastChar()].isActive()) {
-                User.getInstance().setLastChar(User.getInstance().getLastChar() - 1);
-                if (User.getInstance().getLastChar() == 0) {
+        if (charIndex == UserLogic.getInstance().getLastChar()) {
+            while (!charList[UserLogic.getInstance().getLastChar()].isActive()) {
+                UserLogic.getInstance().setLastChar(UserLogic.getInstance().getLastChar() - 1);
+                if (UserLogic.getInstance().getLastChar() == 0) {
                     break;
                 }
             }
@@ -128,7 +128,7 @@ public final class Character {
     }
 
     public static void refreshAllChars() {
-        for (int LoopC = 1; LoopC <= User.getInstance().getLastChar(); LoopC++) {
+        for (int LoopC = 1; LoopC <= UserLogic.getInstance().getLastChar(); LoopC++) {
             if (charList[LoopC].isActive()) {
                 mapData[charList[LoopC].getPos().getX()][charList[LoopC].getPos().getY()].setCharIndex(LoopC);
             }

@@ -4,16 +4,12 @@ import org.aoclient.engine.Window;
 import org.aoclient.engine.gui.elements.ImageGUI;
 import org.aoclient.engine.listeners.MouseListener;
 
-
 public abstract class Form {
     protected ImageGUI background; // siempre, sino no seria un formulario para argentum, no podemos usar una interfaz de windows o un JFrame...
     protected int fPosX, fPosY;
     protected int fWidth, fHeight;
     protected boolean visible;
 
-    /**
-     * @param fileBackground, nombre del archivo de la interface.
-     */
     public Form(String fileBackground) {
         this.background = new ImageGUI(fileBackground);
 

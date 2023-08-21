@@ -4,7 +4,7 @@ import org.aoclient.engine.game.BindKeys;
 import org.aoclient.engine.game.models.E_KeyType;
 import org.aoclient.engine.gui.forms.MainGame;
 import org.aoclient.engine.listeners.KeyListener;
-import org.aoclient.engine.game.User;
+import org.aoclient.engine.game.UserLogic;
 import org.aoclient.engine.listeners.MouseListener;
 import org.aoclient.engine.renderer.RGBColor;
 
@@ -14,7 +14,7 @@ import static org.aoclient.engine.game.models.E_KeyType.*;
 import static org.aoclient.engine.game.models.Character.*;
 import static org.aoclient.engine.game.models.E_Heading.*;
 import static org.aoclient.engine.renderer.Drawn.*;
-import static org.aoclient.engine.renderer.FontTypes.drawText;
+import static org.aoclient.engine.renderer.FontText.drawText;
 import static org.aoclient.engine.scenes.Camera.*;
 import static org.aoclient.engine.utils.GameData.*;
 import static org.aoclient.engine.utils.Time.*;
@@ -22,7 +22,7 @@ import static org.lwjgl.glfw.GLFW.*;
 
 public final class GameScene extends Scene {
     private BindKeys bindKeys;
-    private User user;
+    private UserLogic user;
 
     private float offSetCounterX = 0;
     private float offSetCounterY = 0;
@@ -38,7 +38,7 @@ public final class GameScene extends Scene {
         canChangeTo = SceneType.MAIN_SCENE;
 
         bindKeys = BindKeys.get();
-        user = User.getInstance();
+        user = UserLogic.getInstance();
         ambientColor = new RGBColor(1.0f, 1.0f, 1.0f);
 
         camera.setHalfWindowTileWidth   (( (SCREEN_SIZE_X / TILE_PIXEL_SIZE) / 2 ));
@@ -298,6 +298,7 @@ public final class GameScene extends Scene {
         frm.render();
         user.getUserInventory().drawInventory();
         showFPS();
+
     }
 
     /**

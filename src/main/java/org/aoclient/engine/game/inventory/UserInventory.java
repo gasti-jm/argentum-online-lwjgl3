@@ -7,7 +7,7 @@ import org.aoclient.engine.renderer.RGBColor;
 import static org.aoclient.connection.Protocol.writeEquipItem;
 import static org.aoclient.connection.Protocol.writeUseItem;
 import static org.aoclient.engine.renderer.Drawn.*;
-import static org.aoclient.engine.renderer.FontTypes.drawText;
+import static org.aoclient.engine.renderer.FontText.drawText;
 import static org.aoclient.engine.scenes.Camera.*;
 
 public final class UserInventory extends Inventory {
@@ -57,7 +57,7 @@ public final class UserInventory extends Inventory {
                 drawText(String.valueOf(slots[i].amount),  iX, iY + 20, null, 0, true, false, false);
 
                 if (slots[i].equipped) {
-                    drawText("E",  iX + 20, iY, colorEquipped, 0, true, false, false);
+                    drawText("E",  iX + 23, iY, colorEquipped, 0, true, false, false);
                 }
             }
 

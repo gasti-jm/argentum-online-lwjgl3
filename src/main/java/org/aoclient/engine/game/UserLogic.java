@@ -12,8 +12,8 @@ import static org.aoclient.engine.game.models.E_Heading.*;
 import static org.aoclient.engine.scenes.Camera.*;
 import static org.aoclient.engine.utils.GameData.*;
 
-public final class User {
-    private static User instance;
+public final class UserLogic {
+    private static UserLogic instance;
 
     private UserInventory userInventory;
     // private InventorySpells inventorySpells;
@@ -43,15 +43,15 @@ public final class User {
     public final int minYBorder = YMinMapSize + ( (SCREEN_SIZE_Y / 32) / 2);
     public final int maxYBorder = YMaxMapSize - ( (SCREEN_SIZE_Y / 32) / 2);
 
-    private User () {
+    private UserLogic() {
         userPos = new Position();
         addToUserPos = new Position();
         userInventory = new UserInventory();
     }
 
-    public static User getInstance(){
+    public static UserLogic getInstance(){
         if(instance == null) {
-            instance = new User();
+            instance = new UserLogic();
         }
 
         return instance;
@@ -326,24 +326,12 @@ public final class User {
         return userPos;
     }
 
-    public void setUserPos(Position userPos) {
-        this.userPos = userPos;
-    }
-
     public Position getAddToUserPos() {
         return addToUserPos;
     }
 
-    public void setAddToUserPos(Position addToUserPos) {
-        this.addToUserPos = addToUserPos;
-    }
-
     public boolean isUnderCeiling() {
         return underCeiling;
-    }
-
-    public void setUnderCeiling(boolean underCeiling) {
-        this.underCeiling = underCeiling;
     }
 
     public int getLastChar() {
@@ -354,9 +342,6 @@ public final class User {
         this.lastChar = lastChar;
     }
 
-    public short getUserMap() {
-        return userMap;
-    }
 
     public void setUserMap(short userMap) {
         this.userMap = userMap;

@@ -1,7 +1,7 @@
 package org.aoclient.engine.gui.elements;
 
 import org.aoclient.engine.gui.ElementGUI;
-import org.aoclient.engine.renderer.FontTypes;
+import org.aoclient.engine.renderer.FontText;
 import org.aoclient.engine.renderer.RGBColor;
 
 public class Label extends ElementGUI {
@@ -30,6 +30,22 @@ public class Label extends ElementGUI {
 
     @Override
     public void render() {
-        FontTypes.drawText(this.text, this.x, this.y, this.color, 0, this.bold, this.italic, true);
+        FontText.drawText(this.text, this.x, this.y, this.color, 0, this.bold, this.italic, true);
+    }
+
+    public RGBColor getColor() {
+        return color;
+    }
+
+    public void setColor(RGBColor color) {
+        this.color = color;
+    }
+
+    public String getText() {
+        return text;
+    }
+
+    public void setText(String text) {
+        this.text = text;
     }
 }

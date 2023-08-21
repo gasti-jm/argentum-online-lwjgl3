@@ -19,6 +19,9 @@ import static org.lwjgl.system.MemoryStack.stackPush;
 import static org.lwjgl.system.MemoryUtil.NULL;
 
 public final class Window {
+    private static final int SCREEN_WIDTH = 800;
+    private static final int SCREEN_HEIGHT = 600;
+
     private static Window instance;
 
     private long window;
@@ -31,8 +34,8 @@ public final class Window {
 
     private Window() {
         this.title = "Argentum Online";
-        this.width = 800;
-        this.height = 600;
+        this.width = SCREEN_WIDTH;
+        this.height = SCREEN_HEIGHT;
     }
 
     public static Window get() {
@@ -58,7 +61,6 @@ public final class Window {
         glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
         glfwWindowHint(GLFW_MAXIMIZED, GLFW_FALSE);
         glfwWindowHint(GLFW_DECORATED, GLFW_FALSE);
-
 
         // glfwGetPrimaryMonitor() permite pantalla completa.
         // Create the window

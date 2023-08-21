@@ -1,7 +1,6 @@
 package org.aoclient.connection;
 
 public class Messages {
-
     public static final String MENSAJE_CRIATURA_FALLA_GOLPE = "¡¡¡La criatura falló el golpe!!!";
     public static final String MENSAJE_CRIATURA_MATADO = "¡¡¡La criatura te ha matado!!!";
     public static final String MENSAJE_RECHAZO_ATAQUE_ESCUDO = "¡¡¡Has rechazado el ataque con el escudo!!!";

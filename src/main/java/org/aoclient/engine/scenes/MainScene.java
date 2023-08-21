@@ -2,7 +2,7 @@ package org.aoclient.engine.scenes;
 
 import org.aoclient.connection.SocketConnection;
 import org.aoclient.engine.Window;
-import org.aoclient.engine.game.User;
+import org.aoclient.engine.game.UserLogic;
 import org.aoclient.engine.gui.ElementGUI;
 import org.aoclient.engine.gui.elements.ImageGUI;
 import org.aoclient.engine.listeners.KeyListener;
@@ -62,7 +62,7 @@ public final class MainScene extends Scene {
 
     @Override
     public void render() {
-        if(User.getInstance().isUserConected()) {
+        if(UserLogic.getInstance().isUserConected()) {
             close();
         }
 

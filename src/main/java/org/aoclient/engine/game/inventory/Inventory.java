@@ -4,7 +4,7 @@ import org.aoclient.engine.game.models.E_ObjType;
 import org.aoclient.engine.listeners.MouseListener;
 
 import static org.aoclient.engine.renderer.Drawn.*;
-import static org.aoclient.engine.renderer.FontTypes.drawText;
+import static org.aoclient.engine.renderer.FontText.drawText;
 import static org.aoclient.engine.scenes.Camera.*;
 
 public class Inventory {

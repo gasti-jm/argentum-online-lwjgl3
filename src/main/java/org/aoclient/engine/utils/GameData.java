@@ -14,7 +14,7 @@ import org.aoclient.engine.utils.filedata.*;
 import static org.aoclient.engine.Sound.addMusic;
 import static org.aoclient.engine.Sound.clearSounds;
 import static org.aoclient.engine.game.models.Character.eraseChar;
-import static org.aoclient.engine.renderer.FontTypes.loadCSV;
+import static org.aoclient.engine.renderer.FontText.loadCSV;
 import static org.aoclient.engine.utils.ByteMigration.*;
 
 public final class GameData {

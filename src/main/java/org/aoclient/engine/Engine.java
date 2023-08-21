@@ -4,11 +4,7 @@ import org.aoclient.connection.SocketConnection;
 import org.aoclient.engine.game.BindKeys;
 import org.aoclient.engine.game.models.E_KeyType;
 import org.aoclient.engine.gui.forms.Form;
-import org.aoclient.engine.gui.forms.Message;
 import org.aoclient.engine.listeners.KeyListener;
-import org.aoclient.engine.listeners.MouseListener;
-import org.aoclient.engine.renderer.FontTypes;
-import org.aoclient.engine.renderer.RGBColor;
 import org.aoclient.engine.renderer.Surface;
 import org.aoclient.engine.scenes.*;
 import org.aoclient.engine.utils.GameData;
@@ -23,28 +19,13 @@ import static org.aoclient.engine.utils.Time.deltaTime;
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.*;
 
-public final class Engine {
+public class Engine {
     private static boolean prgRun = true;
     private Window window;
     private Scene currentScene;
     private BindKeys bindKeys;
     public static List<Form> forms = new ArrayList<>(); // formularios por encima de las escenas (por ejemplo: frmMensaje).
 
-    public void start() {
-        System.out.println("Hello LWJGL " + Version.getVersion() + "!");
-
-        this.window = Window.get();
-        this.window.initialize();
-
-        Surface.get().initialize();
-        GameData.initialize();
-        this.bindKeys = BindKeys.get();
-
-        changeScene(INTRO_SCENE);
-
-        loop();
-        close();
-    }
 
     private void close() {
         window.close();
@@ -68,7 +49,29 @@ public final class Engine {
 
                 Time.updateTime();
             }
+
+            // Si hay algo para enviar, lo enviamos
+            SocketConnection.getInstance().flushBuffer();
+
+            // lo mismo para el handle data, leemos lo que nos envio el servidor.
+            SocketConnection.getInstance().readData();
         }
+    }
+
+    public void start(){
+        System.out.println("Hello LWJGL " + Version.getVersion() + "!");
+
+        this.window = Window.get();
+        this.window.initialize();
+
+        Surface.get().initialize();
+        GameData.initialize();
+        this.bindKeys = BindKeys.get();
+
+        changeScene(INTRO_SCENE);
+
+        loop();
+        close();
     }
 
     private void changeScene(SceneType scene) {
@@ -117,12 +120,6 @@ public final class Engine {
                 }
             }
         }
-
-        // Si hay algo para enviar, lo enviamos
-        SocketConnection.getInstance().flushBuffer();
-
-        // lo mismo para el handle data, leemos lo que nos envio el servidor.
-        SocketConnection.getInstance().readData();
     }
 
     public static void closeClient() {

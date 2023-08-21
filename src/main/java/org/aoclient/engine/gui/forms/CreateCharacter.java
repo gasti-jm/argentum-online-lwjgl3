@@ -2,8 +2,8 @@ package org.aoclient.engine.gui.forms;
 
 public class CreateCharacter extends Form {
 
-    public CreateCharacter(String fileName) {
-        super(fileName);
+    public CreateCharacter(String fileBackground) {
+        super(fileBackground);
     }
 
     @Override
@@ -20,4 +20,5 @@ public class CreateCharacter extends Form {
     public void close(){
         super.close();
     }
+
 }
