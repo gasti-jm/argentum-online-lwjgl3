@@ -5,9 +5,9 @@ import org.aoclient.engine.renderer.RGBColor;
 import org.aoclient.engine.utils.filedata.*;
 
 import static org.aoclient.engine.game.models.E_Heading.SOUTH;
-import static org.aoclient.engine.renderer.Drawn.*;
 import static org.aoclient.engine.renderer.Drawn.drawTexture;
 import static org.aoclient.engine.renderer.FontText.drawText;
+import static org.aoclient.engine.renderer.FontText.getSizeText;
 import static org.aoclient.engine.utils.GameData.*;
 import static org.aoclient.engine.utils.Time.timerTicksPerFrame;
 

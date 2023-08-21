@@ -46,7 +46,6 @@ public final class GameData {
         loadBodys();
         loadArms();
         loadShields();
-        loadFonts();
         LoadFXs();
         loadCSV();
 
@@ -424,122 +423,6 @@ public final class GameData {
         }
     }
 
-    /**
-     * @desc: Cargamos el indice de graficos de la fuente de letras (ESTA HARDCODEADO, HAY QUE ARMAR UN ARCHIVO!)
-     */
-    private static void loadFonts() {
-        fontTypes[0] = new FontData();
-        fontTypes[0].setFont_size(9);
-        fontTypes[0].setAscii_code(48, 23703);
-        fontTypes[0].setAscii_code(49, 23704);
-        fontTypes[0].setAscii_code(50, 23705);
-        fontTypes[0].setAscii_code(51, 23706);
-        fontTypes[0].setAscii_code(52, 23707);
-        fontTypes[0].setAscii_code(53, 23708);
-        fontTypes[0].setAscii_code(54, 23709);
-        fontTypes[0].setAscii_code(55, 23710);
-        fontTypes[0].setAscii_code(56, 23711);
-        fontTypes[0].setAscii_code(57, 23712);
-
-
-        for (int a = 0; a <= 25; a++) {
-            fontTypes[0].setAscii_code(a + 97, 23651 + a);
-        }
-
-        for (int a = 0; a <= 25; a++) {
-            fontTypes[0].setAscii_code(a + 65, 23677 + a);
-        }
-
-        fontTypes[0].setAscii_code(33,23713);
-        fontTypes[0].setAscii_code(161, 23714);
-        fontTypes[0].setAscii_code(34,23715);
-        fontTypes[0].setAscii_code(36,23716);
-        fontTypes[0].setAscii_code(191, 23717);
-        fontTypes[0].setAscii_code(35,23718);
-        fontTypes[0].setAscii_code(36,23719);
-        fontTypes[0].setAscii_code(37,23720);
-        fontTypes[0].setAscii_code(38,23721);
-        fontTypes[0].setAscii_code(47,23722);
-        fontTypes[0].setAscii_code(92,23723);
-        fontTypes[0].setAscii_code(40,23724);
-        fontTypes[0].setAscii_code(41,23725);
-        fontTypes[0].setAscii_code(61,23726);
-        fontTypes[0].setAscii_code(39,23727);
-        fontTypes[0].setAscii_code(123, 23728);
-        fontTypes[0].setAscii_code(125, 23729);
-        fontTypes[0].setAscii_code(95,23730);
-        fontTypes[0].setAscii_code(45,23731);
-        fontTypes[0].setAscii_code(63,23716);
-        fontTypes[0].setAscii_code(64,23732);
-        fontTypes[0].setAscii_code(94,23733);
-        fontTypes[0].setAscii_code(91,23734);
-        fontTypes[0].setAscii_code(93,23735);
-        fontTypes[0].setAscii_code(60,23736);
-        fontTypes[0].setAscii_code(62,23737);
-        fontTypes[0].setAscii_code(42,23738);
-        fontTypes[0].setAscii_code(43,23739);
-        fontTypes[0].setAscii_code(46,23740);
-        fontTypes[0].setAscii_code(44,23741);
-        fontTypes[0].setAscii_code(58,23742);
-        fontTypes[0].setAscii_code(59,23743);
-        fontTypes[0].setAscii_code(124, 23744);
-        /////////////////
-        fontTypes[0].setAscii_code(252, 23845);
-        fontTypes[0].setAscii_code(220, 23846);
-        fontTypes[0].setAscii_code(225, 23847);
-        fontTypes[0].setAscii_code(233, 23848);
-        fontTypes[0].setAscii_code(237, 23849);
-        fontTypes[0].setAscii_code(243, 23850);
-        fontTypes[0].setAscii_code(250, 23851);
-        fontTypes[0].setAscii_code(253, 23852);
-        fontTypes[0].setAscii_code(193, 23853);
-        fontTypes[0].setAscii_code(201, 23854);
-        fontTypes[0].setAscii_code(205, 23855);
-        fontTypes[0].setAscii_code(211, 23856);
-        fontTypes[0].setAscii_code(218, 23857);
-        fontTypes[0].setAscii_code(221, 23858);
-        fontTypes[0].setAscii_code(224, 23859);
-        fontTypes[0].setAscii_code(232, 23860);
-        fontTypes[0].setAscii_code(236, 23861);
-        fontTypes[0].setAscii_code(242, 23862);
-        fontTypes[0].setAscii_code(249, 23863);
-        fontTypes[0].setAscii_code(192, 23864);
-        fontTypes[0].setAscii_code(200, 23865);
-        fontTypes[0].setAscii_code(204, 23866);
-        fontTypes[0].setAscii_code(210, 23867);
-        fontTypes[0].setAscii_code(217, 23868);
-        fontTypes[0].setAscii_code(241, 23869);
-        fontTypes[0].setAscii_code(209, 23870);
-
-        fontTypes[0].setAscii_code(196, 23970);
-        fontTypes[0].setAscii_code(194, 23971);
-        fontTypes[0].setAscii_code(203, 23972);
-        fontTypes[0].setAscii_code(207, 23973);
-        fontTypes[0].setAscii_code(214, 23974);
-        fontTypes[0].setAscii_code(212, 23975);
-
-        fontTypes[0].setAscii_code(172, 23975);
-
-        fontTypes[1] = new FontData();
-        fontTypes[1].setFont_size(9);
-        fontTypes[1].setAscii_code(97,24076);
-        fontTypes[1].setAscii_code(108, 24077);
-        fontTypes[1].setAscii_code(115, 24078);
-        fontTypes[1].setAscii_code(70,24079);
-        fontTypes[1].setAscii_code(48,24080);
-        fontTypes[1].setAscii_code(49,24081);
-        fontTypes[1].setAscii_code(50,24082);
-        fontTypes[1].setAscii_code(51,24083);
-        fontTypes[1].setAscii_code(52,24084);
-        fontTypes[1].setAscii_code(53,24085);
-        fontTypes[1].setAscii_code(54,24086);
-        fontTypes[1].setAscii_code(55,24087);
-        fontTypes[1].setAscii_code(56,24088);
-        fontTypes[1].setAscii_code(57,24089);
-        fontTypes[1].setAscii_code(33,24090);
-        fontTypes[1].setAscii_code(161, 24091);
-        fontTypes[1].setAscii_code(42,24092);
-    }
 
     /**
      *

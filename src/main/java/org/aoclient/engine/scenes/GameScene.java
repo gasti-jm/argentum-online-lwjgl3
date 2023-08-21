@@ -15,6 +15,7 @@ import static org.aoclient.engine.game.models.Character.*;
 import static org.aoclient.engine.game.models.E_Heading.*;
 import static org.aoclient.engine.renderer.Drawn.*;
 import static org.aoclient.engine.renderer.FontText.drawText;
+import static org.aoclient.engine.renderer.FontText.getSizeText;
 import static org.aoclient.engine.scenes.Camera.*;
 import static org.aoclient.engine.utils.GameData.*;
 import static org.aoclient.engine.utils.Time.*;

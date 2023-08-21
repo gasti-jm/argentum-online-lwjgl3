@@ -250,28 +250,5 @@ public final class Drawn {
                 grhData[grhIndex].getsY(), false, 1.0f, color);
     }
 
-    /**
-     *
-     * @desc: Esta funcion sirve para pasarle una cadena (ej: nickname) y sacar el size total
-     *          que hay por cada grafico en caracter (ya que los textos son atravez de graficos).
-     */
-    public static int getSizeText(String text) {
-        if (text.length() == 0) return 0;
-        int totalSize = 0;
-
-        // recorremos los caracteres
-        for (int a = 0; a < text.length(); a++) {
-            int b = text.charAt(a); // obtenemos el ASCII
-            if (b > 255) break;
-
-            if (b != 32) {
-                totalSize += grhData[grhData[fontTypes[0].getAscii_code(b)].getFrame(1)].getPixelWidth();
-            } else {
-                totalSize += 4;
-            }
-        }
-
-        return totalSize;
-    }
 
 }

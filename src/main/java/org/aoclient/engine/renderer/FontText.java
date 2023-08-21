@@ -12,6 +12,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static org.aoclient.engine.renderer.FontText.E_FontType.*;
+import static org.aoclient.engine.utils.GameData.fontTypes;
+import static org.aoclient.engine.utils.GameData.grhData;
 import static org.lwjgl.opengl.GL11.*;
 
 
@@ -255,5 +257,29 @@ public class FontText {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    /**
+     *
+     * @desc: Esta funcion sirve para pasarle una cadena (ej: nickname) y sacar el size total
+     *          que hay por cada grafico en caracter (ya que los textos son atravez de graficos).
+     */
+    public static int getSizeText(String text) {
+        if (text.length() == 0) return 0;
+        int totalSize = 0;
+
+        // recorremos los caracteres
+        for (int a = 0; a < text.length(); a++) {
+            int b = text.charAt(a); // obtenemos el ASCII
+            if (b > 255) break;
+
+            if (b != 32) {
+                totalSize += fonts[0].fontData.get(b).width;
+            } else {
+                totalSize += 4;
+            }
+        }
+
+        return totalSize;
     }
 }
