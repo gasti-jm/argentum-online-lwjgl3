@@ -45,6 +45,7 @@ public final class GameScene extends Scene {
         camera.setHalfWindowTileHeight  (( (SCREEN_SIZE_Y / TILE_PIXEL_SIZE) / 2 ));
 
         frm = MainGame.get();
+        frm.init();
     }
 
     @Override

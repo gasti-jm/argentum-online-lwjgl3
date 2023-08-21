@@ -21,7 +21,9 @@ public class Message extends Form {
     private final Button accept;
 
     public Message(String msg) {
-        super("VentanaMsj.jpg");
+        this.background.init("VentanaMsj.jpg");
+        this.loadParentAttributes();
+
         this.msg = new Label(msg, fPosX + LBL_MSG_POS_X, fPosY + LBL_MSG_POS_Y, LBL_SIZE_WIDTH, LBL_SIZE_HEIGHT, true, false);
         this.accept = new Button(fPosX + BTN_MSG_POS_X, fPosY + BTN_MSG_POS_Y, BTN_SIZE_WIDTH, BTN_SIZE_HEIGHT);
         this.accept.loadTextures("BotonCerrarMsj.jpg", "BotonCerrarRolloverMsj.jpg", "BotonCerrarClickMsj.jpg");

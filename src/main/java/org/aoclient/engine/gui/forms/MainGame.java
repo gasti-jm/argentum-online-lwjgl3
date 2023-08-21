@@ -14,43 +14,35 @@ import static org.aoclient.engine.utils.GameData.charList;
 public class MainGame extends Form {
     private static MainGame instance;
 
-    public final Shape shpEnergia;
-    public final Shape shpMana;
-    public final Shape shpVida;
-    public final Shape shpHambre;
-    public final Shape shpSed;
+    public Shape shpEnergia = new Shape(584, 453, 75, 12, new RGBColor(0.0f, 0.0f, 0.0f));
+    public Shape shpMana = new Shape(584, 477, 75, 12, new RGBColor(0.0f, 0.0f, 0.0f));
+    public Shape shpVida = new Shape(584, 498, 75, 12, new RGBColor(0.0f, 0.0f, 0.0f));
+    public Shape shpHambre = new Shape(584, 521, 75, 12, new RGBColor(0.0f, 0.0f, 0.0f));
+    public Shape shpSed = new Shape(584, 542, 75, 12, new RGBColor(0.0f, 0.0f, 0.0f));
 
-    public final Label lblEnergia;
-    public final Label lblMana;
-    public final Label lblVida;
-    public final Label lblHambre;
-    public final Label lblSed;
+    public Label lblEnergia = new Label("999/999", 584, 453, 75, 12, false, false);
+    public Label lblMana = new Label("9999/9999", 584, 477, 75, 12, false, false);
+    public Label lblVida = new Label("999/999", 584, 498, 75, 12, false, false);
+    public Label lblHambre = new Label("999/999", 584, 521, 75, 12, false, false);
+    public Label lblSed = new Label("999/999", 584, 542, 75, 12, false, false);
 
-    private final Label lblName;
+    private Label lblName;
 
-
-    private final Button buttonClose, buttonMinimizar;
-    private final Console console;
+    private Button buttonClose, buttonMinimizar;
+    private Console console;
 
     private MainGame() {
-        super("VentanaPrincipal.png");
+
+    }
+
+    public void init(){
+        this.background.init("VentanaPrincipal.png");
+
         this.buttonClose = new Button(770,4, 17, 17);
         this.buttonClose.setAction(Engine::closeClient); // definimos su funcion pasando una lambda.
 
         this.buttonMinimizar = new Button(752, 4, 17, 17);
         this.buttonMinimizar.setAction(() -> Window.get().minimizar());
-
-        this.shpEnergia = new Shape(584, 453, 75, 12, new RGBColor(0.0f, 0.0f, 0.0f));
-        this.shpMana = new Shape(584, 477, 75, 12, new RGBColor(0.0f, 0.0f, 0.0f));
-        this.shpVida = new Shape(584, 498, 75, 12, new RGBColor(0.0f, 0.0f, 0.0f));
-        this.shpHambre = new Shape(584, 521, 75, 12, new RGBColor(0.0f, 0.0f, 0.0f));
-        this.shpSed = new Shape(584, 542, 75, 12, new RGBColor(0.0f, 0.0f, 0.0f));
-
-        this.lblEnergia = new Label("999/999", 584, 453, 75, 12, false, false);
-        this.lblMana = new Label("9999/9999", 584, 477, 75, 12, false, false);
-        this.lblVida = new Label("999/999", 584, 498, 75, 12, false, false);
-        this.lblHambre = new Label("999/999", 584, 521, 75, 12, false, false);
-        this.lblSed = new Label("999/999", 584, 542, 75, 12, false, false);
 
         this.lblName = new Label(charList[UserLogic.getInstance().getUserCharIndex()].getName().toUpperCase(),
                 584, 24, true, false, new RGBColor(1.0f, 0.0f, 0.0f));
@@ -104,7 +96,19 @@ public class MainGame extends Form {
         background.clear();
         buttonClose.clear();
         buttonMinimizar.clear();
-    }
 
+        shpHambre.clear();
+        shpMana.clear();
+        shpVida.clear();
+        shpSed.clear();
+        shpEnergia.clear();
+
+        lblHambre.clear();
+        lblSed.clear();
+        lblEnergia.clear();
+        lblName.clear();
+        lblMana.clear();
+        lblVida.clear();
+    }
 
 }

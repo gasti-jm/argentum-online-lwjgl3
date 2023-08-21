@@ -4,6 +4,7 @@ import org.aoclient.connection.SocketConnection;
 import org.aoclient.engine.game.BindKeys;
 import org.aoclient.engine.game.models.E_KeyType;
 import org.aoclient.engine.gui.forms.Form;
+import org.aoclient.engine.gui.forms.Message;
 import org.aoclient.engine.listeners.KeyListener;
 import org.aoclient.engine.renderer.Surface;
 import org.aoclient.engine.scenes.*;

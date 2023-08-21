@@ -5,6 +5,7 @@ import org.aoclient.engine.Window;
 import org.aoclient.engine.game.UserLogic;
 import org.aoclient.engine.gui.ElementGUI;
 import org.aoclient.engine.gui.elements.ImageGUI;
+import org.aoclient.engine.gui.forms.Login;
 import org.aoclient.engine.listeners.KeyListener;
 import org.aoclient.engine.renderer.RGBColor;
 import org.aoclient.engine.utils.GameData;
@@ -19,8 +20,9 @@ import static org.aoclient.engine.utils.GameData.music;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_ENTER;
 
 public final class MainScene extends Scene {
+    private Login frmLogin;
+
     // Conectar
-    private ElementGUI loginInterface;
     private RGBColor ambientColor;
 
     @Override
@@ -28,10 +30,8 @@ public final class MainScene extends Scene {
         super.init();
         canChangeTo = SceneType.GAME_SCENE;
 
-        // Interface
-        loginInterface = new ImageGUI();
-        loginInterface.loadTextures("VentanaConectar.png");
-
+        frmLogin = Login.get();
+        frmLogin.init();
         ambientColor = new RGBColor(1.0f, 1.0f, 1.0f);
 
         GameData.loadMap(58); // banderbill
@@ -41,7 +41,7 @@ public final class MainScene extends Scene {
 
     @Override
     public void mouseEvents() {
-
+        frmLogin.checkButtons();
     }
 
     @Override
@@ -57,23 +57,23 @@ public final class MainScene extends Scene {
     public void close() {
         music.stop();
         this.visible = false;
-        loginInterface.clear();
+        frmLogin.close();
     }
 
     @Override
     public void render() {
         if(UserLogic.getInstance().isUserConected()) {
-            close();
+            this.close();
         }
 
         if (!visible) return;
 
         renderMap();
-        loginInterface.render();
+        frmLogin.render();
     }
 
     private void renderMap() {
-        camera.update(35, 11);
+        camera.update(34, 16);
 
         for (int y = camera.getScreenminY(); y <= camera.getScreenmaxY(); y++) {
             int x;

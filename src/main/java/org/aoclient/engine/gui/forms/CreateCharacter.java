@@ -2,8 +2,12 @@ package org.aoclient.engine.gui.forms;
 
 public class CreateCharacter extends Form {
 
-    public CreateCharacter(String fileBackground) {
-        super(fileBackground);
+    public CreateCharacter() {
+
+    }
+
+    public void init(){
+        this.loadParentAttributes();
     }
 
     @Override

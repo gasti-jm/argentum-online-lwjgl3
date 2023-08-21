@@ -10,9 +10,12 @@ public abstract class Form {
     protected int fWidth, fHeight;
     protected boolean visible;
 
-    public Form(String fileBackground) {
-        this.background = new ImageGUI(fileBackground);
+    public Form() {
+        this.background = new ImageGUI();
+        this.visible = true;
+    }
 
+    protected void loadParentAttributes(){
         // posicionamos el formulario en el centro de la pantalla segun el background cargado!
         this.fPosX = (Window.get().getWidth() / 2) - (this.background.getWidth() / 2);
         this.fPosY = (Window.get().getHeight() / 2) - (this.background.getHeight() / 2);
@@ -22,8 +25,6 @@ public abstract class Form {
         // posicionamos el fondo en la posicion de nuestro formulario
         this.background.setX(fPosX);
         this.background.setY(fPosY);
-
-        this.visible = true;
     }
 
     public abstract void render();
@@ -31,6 +32,7 @@ public abstract class Form {
 
     public void close() {
         this.visible = false;
+        this.background.clear();
     }
 
     public boolean isVisible() {
