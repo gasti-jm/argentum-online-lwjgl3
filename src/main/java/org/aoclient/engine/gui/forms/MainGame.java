@@ -45,7 +45,7 @@ public class MainGame extends Form {
         this.buttonMinimizar = new Button(752, 4, 17, 17);
         this.buttonMinimizar.setAction(() -> Window.get().minimizar());
 
-        this.lblName = new Label(charList[UserLogic.getInstance().getUserCharIndex()].getName().toUpperCase(),
+        this.lblName = new Label(charList[UserLogic.get().getUserCharIndex()].getName().toUpperCase(),
                 584, 24, true, false, new RGBColor(1.0f, 0.0f, 0.0f));
 
         this.console = Console.get();

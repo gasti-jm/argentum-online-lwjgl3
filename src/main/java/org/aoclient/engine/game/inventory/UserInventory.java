@@ -11,9 +11,11 @@ import static org.aoclient.engine.renderer.FontText.drawText;
 import static org.aoclient.engine.scenes.Camera.*;
 
 public final class UserInventory extends Inventory {
+    // Posicion original del picInv del frmMain original de AO
     private static final int MAIN_POS_X = 600;
     private static final int MAIN_POS_Y = 160;
 
+    // Tamaño del inventario segun el frmMain original de AO
     private static final int MAIN_SIZE_WIDTH = 160;
     private static final int MAIN_SIZE_HEIGHT = 128;
     private static final int MAX_INVENTORY_SLOTS = 30;

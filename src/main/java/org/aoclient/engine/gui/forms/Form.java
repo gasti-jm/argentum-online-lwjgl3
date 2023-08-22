@@ -2,19 +2,19 @@ package org.aoclient.engine.gui.forms;
 
 import org.aoclient.engine.Window;
 import org.aoclient.engine.gui.elements.Button;
-import org.aoclient.engine.gui.elements.ImageGUI;
+import org.aoclient.engine.gui.elements.ImageBox;
 import org.aoclient.engine.listeners.MouseListener;
 
 import static org.lwjgl.glfw.GLFW.GLFW_MOUSE_BUTTON_LEFT;
 
 public abstract class Form {
-    protected ImageGUI background; // siempre, sino no seria un formulario para argentum, no podemos usar una interfaz de windows o un JFrame...
+    protected ImageBox background; // siempre, sino no seria un formulario para argentum, no podemos usar una interfaz de windows o un JFrame...
     protected int fPosX, fPosY;
     protected int fWidth, fHeight;
     protected boolean visible;
 
     public Form() {
-        this.background = new ImageGUI();
+        this.background = new ImageBox();
         this.visible = true;
     }
 
@@ -43,6 +43,7 @@ public abstract class Form {
         }
     }
 
+
     public void close() {
         this.visible = false;
         this.background.clear();
@@ -52,24 +53,6 @@ public abstract class Form {
         return visible;
     }
 
-    public int getfPosX() {
-        return fPosX;
-    }
 
-    public void setfPosX(int fPosX) {
-        this.fPosX = fPosX;
-    }
 
-    public int getfPosY() {
-        return fPosY;
-    }
-
-    public void setfPosY(int fPosY) {
-        this.fPosY = fPosY;
-    }
-
-    public boolean isInside(){
-        return MouseListener.getX() >= this.fPosX && MouseListener.getX() <= this.fPosX + this.fWidth &&
-                MouseListener.getY() >= this.fPosY && MouseListener.getY() <= this.fPosY + this.fHeight;
-    }
 }

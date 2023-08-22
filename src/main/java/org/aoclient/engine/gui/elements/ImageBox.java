@@ -2,17 +2,15 @@ package org.aoclient.engine.gui.elements;
 
 import org.aoclient.engine.gui.ElementGUI;
 
-import java.util.ArrayList;
-
 import static org.aoclient.engine.renderer.Drawn.geometryBoxRenderGUI;
 
-public final class ImageGUI extends ElementGUI {
+public final class ImageBox extends ElementGUI {
 
-    public ImageGUI() {
+    public ImageBox() {
 
     }
 
-    public ImageGUI(String... textures) {
+    public ImageBox(String... textures) {
         this.loadTextures(textures);
         this.width = this.texture.get(0).getTex_width();
         this.height = this.texture.get(0).getTex_height();

@@ -3,8 +3,6 @@ package org.aoclient.engine.scenes;
 import org.aoclient.connection.SocketConnection;
 import org.aoclient.engine.Window;
 import org.aoclient.engine.game.UserLogic;
-import org.aoclient.engine.gui.ElementGUI;
-import org.aoclient.engine.gui.elements.ImageGUI;
 import org.aoclient.engine.gui.forms.Login;
 import org.aoclient.engine.listeners.KeyListener;
 import org.aoclient.engine.renderer.RGBColor;
@@ -62,7 +60,7 @@ public final class MainScene extends Scene {
 
     @Override
     public void render() {
-        if(UserLogic.getInstance().isUserConected()) {
+        if(UserLogic.get().isUserConected()) {
             this.close();
         }
 

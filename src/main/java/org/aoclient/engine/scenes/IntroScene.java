@@ -1,8 +1,9 @@
 package org.aoclient.engine.scenes;
 
 import org.aoclient.engine.gui.ElementGUI;
-import org.aoclient.engine.gui.elements.ImageGUI;
+import org.aoclient.engine.gui.elements.ImageBox;
 import org.aoclient.engine.listeners.KeyListener;
+import org.aoclient.engine.listeners.MouseListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,7 +30,7 @@ public final class IntroScene extends Scene {
 
         // agregamos 4 interfaces
         for(int i = 0; i < 4; i++){
-            this.images.add(new ImageGUI());
+            this.images.add(new ImageBox());
         }
 
         // le cargamos las texturas
@@ -46,7 +47,9 @@ public final class IntroScene extends Scene {
 
     @Override
     public void keyEvents() {
-        if (KeyListener.isKeyReadyForAction(GLFW_KEY_ENTER) || KeyListener.isKeyPressed(GLFW_KEY_SPACE)) {
+        if (KeyListener.isKeyReadyForAction(GLFW_KEY_ENTER) ||
+                KeyListener.isKeyPressed(GLFW_KEY_SPACE) || MouseListener.mouseButtonClick(GLFW_MOUSE_BUTTON_LEFT)) {
+
             close();
         }
     }

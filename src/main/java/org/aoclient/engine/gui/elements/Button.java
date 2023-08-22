@@ -12,15 +12,14 @@ public final class Button extends ElementGUI {
     private Runnable action;
     private boolean pressed;
 
-    public Button() {
-        this.pressed = false;
-    }
-
     public Button(int x, int y, int width, int height) {
         super(x, y, width, height);
         this.pressed = false;
     }
 
+    /**
+     * @desc: Dibujamos el boton, segun el estado del mouse y en caso de no tener textura ni se gasta en dibujarlo.
+     */
     @Override
     public void render() {
         if(!texture.isEmpty()) {
@@ -41,6 +40,9 @@ public final class Button extends ElementGUI {
         this.action = action;
     }
 
+    /**
+     * @desc: Ejecuta la accion del boton (si fue apretado), y reproduce un sonido.
+     */
     public void runAction() {
         if(action != null && isInside() && pressed) {
             playSound(SND_CLICK);
@@ -50,6 +52,9 @@ public final class Button extends ElementGUI {
         if(pressed) this.pressed = false;
     }
 
+    /**
+     * @desc: Borramos el boton reservado en memoria (su textura y runnable)
+     */
     @Override
     public void clear() {
         super.clear();

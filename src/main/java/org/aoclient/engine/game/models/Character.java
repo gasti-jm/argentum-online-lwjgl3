@@ -67,8 +67,8 @@ public final class Character {
     }
 
     public static void makeChar(int charIndex, int body, int head,  E_Heading heading, int x, int y, int weapon, int shield, int helmet) {
-        if (charIndex > UserLogic.getInstance().getLastChar())
-            UserLogic.getInstance().setLastChar(charIndex);
+        if (charIndex > UserLogic.get().getLastChar())
+            UserLogic.get().setLastChar(charIndex);
 
 
         if (weapon <= 0) weapon = 2;
@@ -104,10 +104,10 @@ public final class Character {
     public static void eraseChar(int charIndex) {
         charList[charIndex].setActive(false);
 
-        if (charIndex == UserLogic.getInstance().getLastChar()) {
-            while (!charList[UserLogic.getInstance().getLastChar()].isActive()) {
-                UserLogic.getInstance().setLastChar(UserLogic.getInstance().getLastChar() - 1);
-                if (UserLogic.getInstance().getLastChar() == 0) {
+        if (charIndex == UserLogic.get().getLastChar()) {
+            while (!charList[UserLogic.get().getLastChar()].isActive()) {
+                UserLogic.get().setLastChar(UserLogic.get().getLastChar() - 1);
+                if (UserLogic.get().getLastChar() == 0) {
                     break;
                 }
             }
@@ -128,7 +128,7 @@ public final class Character {
     }
 
     public static void refreshAllChars() {
-        for (int LoopC = 1; LoopC <= UserLogic.getInstance().getLastChar(); LoopC++) {
+        for (int LoopC = 1; LoopC <= UserLogic.get().getLastChar(); LoopC++) {
             if (charList[LoopC].isActive()) {
                 mapData[charList[LoopC].getPos().getX()][charList[LoopC].getPos().getY()].setCharIndex(LoopC);
             }

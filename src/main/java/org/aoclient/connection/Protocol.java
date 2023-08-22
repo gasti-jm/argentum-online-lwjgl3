@@ -1,6 +1,5 @@
 package org.aoclient.connection;
 
-import org.aoclient.Main;
 import org.aoclient.connection.packets.ClientPacketID;
 import org.aoclient.connection.packets.E_Messages;
 import org.aoclient.connection.packets.ServerPacketID;
@@ -1484,22 +1483,22 @@ public class Protocol {
         // Remove packet ID
         incomingData.readByte();
 
-        UserLogic.getInstance().userMaxAGU = incomingData.readByte();
-        UserLogic.getInstance().userMinAGU = incomingData.readByte();
-        UserLogic.getInstance().userMaxHAM = incomingData.readByte();
-        UserLogic.getInstance().userMinHAM = incomingData.readByte();
+        UserLogic.get().userMaxAGU = incomingData.readByte();
+        UserLogic.get().userMinAGU = incomingData.readByte();
+        UserLogic.get().userMaxHAM = incomingData.readByte();
+        UserLogic.get().userMinHAM = incomingData.readByte();
 
-        MainGame.get().lblSed.setText(UserLogic.getInstance().userMinAGU + "/" + UserLogic.getInstance().userMaxAGU);
-        MainGame.get().lblHambre.setText(UserLogic.getInstance().userMinHAM + "/" + UserLogic.getInstance().userMaxHAM);
+        MainGame.get().lblSed.setText(UserLogic.get().userMinAGU + "/" + UserLogic.get().userMaxAGU);
+        MainGame.get().lblHambre.setText(UserLogic.get().userMinHAM + "/" + UserLogic.get().userMaxHAM);
 
         MainGame.get().lblHambre.setX(621 - (getSizeText(MainGame.get().lblHambre.getText()) / 2));
         MainGame.get().lblSed.setX(621 - (getSizeText(MainGame.get().lblSed.getText()) / 2));
 
-        float bWidth = (((float) (UserLogic.getInstance().userMinAGU) / ((float) UserLogic.getInstance().userMaxAGU)) * 75);
+        float bWidth = (((float) (UserLogic.get().userMinAGU) / ((float) UserLogic.get().userMaxAGU)) * 75);
         MainGame.get().shpSed.setWidth((int) (75 - bWidth));
         MainGame.get().shpSed.setX(584 + (75 - MainGame.get().shpSed.getWidth()));
 
-        bWidth = (((float) (UserLogic.getInstance().userMinHAM) / ((float) UserLogic.getInstance().userMaxHAM)) * 75);
+        bWidth = (((float) (UserLogic.get().userMinHAM) / ((float) UserLogic.get().userMaxHAM)) * 75);
         MainGame.get().shpHambre.setWidth((int) (75 - bWidth));
         MainGame.get().shpHambre.setX(584 + (75 - MainGame.get().shpHambre.getWidth()));
     }
@@ -1594,7 +1593,7 @@ public class Protocol {
 
         String errMsg = buffer.readASCIIString();
         SocketConnection.getInstance().disconnect();
-        UserLogic.getInstance().setUserConected(false);
+        UserLogic.get().setUserConected(false);
 
         incomingData.copyBuffer(buffer);
         System.out.println("handleErrorMessage Cargado! - FALTA TERMINAR!");
@@ -1967,7 +1966,7 @@ public class Protocol {
         final short minDef = buffer.readInteger();
         final float value = buffer.readFloat();
 
-        UserLogic.getInstance().getUserInventory().setItem( slot - 1, objIndex, amount, equipped, grhIndex, objType,
+        UserLogic.get().getUserInventory().setItem( slot - 1, objIndex, amount, equipped, grhIndex, objType,
                 maxHit, minHit, maxDef, minDef, value, name);
 
         /*
@@ -2054,39 +2053,39 @@ public class Protocol {
         // Remove packet ID
         incomingData.readByte();
 
-        UserLogic.getInstance().userMaxHP = incomingData.readInteger();
-        UserLogic.getInstance().userMinHP = incomingData.readInteger();
-        UserLogic.getInstance().userMaxMAN = incomingData.readInteger();
-        UserLogic.getInstance().userMinMAN = incomingData.readInteger();
-        UserLogic.getInstance().userMaxSTA = incomingData.readInteger();
-        UserLogic.getInstance().userMinSTA = incomingData.readInteger();
-        UserLogic.getInstance().userGLD = incomingData.readLong();
-        UserLogic.getInstance().userLvl = incomingData.readByte();
-        UserLogic.getInstance().userPasarNivel = incomingData.readLong();
-        UserLogic.getInstance().userExp = incomingData.readLong();
+        UserLogic.get().userMaxHP = incomingData.readInteger();
+        UserLogic.get().userMinHP = incomingData.readInteger();
+        UserLogic.get().userMaxMAN = incomingData.readInteger();
+        UserLogic.get().userMinMAN = incomingData.readInteger();
+        UserLogic.get().userMaxSTA = incomingData.readInteger();
+        UserLogic.get().userMinSTA = incomingData.readInteger();
+        UserLogic.get().userGLD = incomingData.readLong();
+        UserLogic.get().userLvl = incomingData.readByte();
+        UserLogic.get().userPasarNivel = incomingData.readLong();
+        UserLogic.get().userExp = incomingData.readLong();
 
-        MainGame.get().lblMana.setText(UserLogic.getInstance().userMinMAN + "/" + UserLogic.getInstance().userMaxMAN);
-        MainGame.get().lblVida.setText(UserLogic.getInstance().userMinHP + "/" + UserLogic.getInstance().userMaxHP);
-        MainGame.get().lblEnergia.setText(UserLogic.getInstance().userMinSTA + "/" + UserLogic.getInstance().userMaxSTA);
+        MainGame.get().lblMana.setText(UserLogic.get().userMinMAN + "/" + UserLogic.get().userMaxMAN);
+        MainGame.get().lblVida.setText(UserLogic.get().userMinHP + "/" + UserLogic.get().userMaxHP);
+        MainGame.get().lblEnergia.setText(UserLogic.get().userMinSTA + "/" + UserLogic.get().userMaxSTA);
 
         MainGame.get().lblMana.setX(621 - (getSizeText(MainGame.get().lblMana.getText()) / 2));
         MainGame.get().lblVida.setX(621 - (getSizeText(MainGame.get().lblVida.getText()) / 2));
         MainGame.get().lblEnergia.setX(621 - (getSizeText(MainGame.get().lblEnergia.getText()) / 2));
 
         ///////// MANA
-        float bWidth = (((float) (UserLogic.getInstance().userMinMAN) / ((float) UserLogic.getInstance().userMaxMAN)) * 75);
+        float bWidth = (((float) (UserLogic.get().userMinMAN) / ((float) UserLogic.get().userMaxMAN)) * 75);
         MainGame.get().shpMana.setWidth((int) (75 - bWidth));
         MainGame.get().shpMana.setX(584 + (75 - MainGame.get().shpMana.getWidth()));
 
 
         //////// VIDA
-        bWidth = (((float) (UserLogic.getInstance().userMinHP) / ((float) UserLogic.getInstance().userMaxHP)) * 75);
+        bWidth = (((float) (UserLogic.get().userMinHP) / ((float) UserLogic.get().userMaxHP)) * 75);
         MainGame.get().shpVida.setWidth((int) (75 - bWidth));
         MainGame.get().shpVida.setX(584 + (75 - MainGame.get().shpVida.getWidth()));
 
 
         //////// ENERGIA
-        bWidth = (((float) (UserLogic.getInstance().userMinSTA) / ((float) UserLogic.getInstance().userMaxSTA)) * 75);
+        bWidth = (((float) (UserLogic.get().userMinSTA) / ((float) UserLogic.get().userMaxSTA)) * 75);
         MainGame.get().shpEnergia.setWidth((int) (75 - bWidth));
         MainGame.get().shpEnergia.setX(584 + (75 - MainGame.get().shpEnergia.getWidth()));
 
@@ -2143,7 +2142,7 @@ public class Protocol {
             charList[charIndex].setfX(new GrhInfo());
         }
 
-        UserLogic.getInstance().setCharacterFx(charIndex, fX, loops);
+        UserLogic.get().setCharacterFx(charIndex, fX, loops);
 
 
 
@@ -2154,9 +2153,9 @@ public class Protocol {
         // Remove packet ID
         incomingData.readByte();
 
-        final int userX = UserLogic.getInstance().getUserPos().getX();
-        final int userY = UserLogic.getInstance().getUserPos().getY();
-        if (UserLogic.getInstance().inMapBounds(userX, userY)) return;
+        final int userX = UserLogic.get().getUserPos().getX();
+        final int userY = UserLogic.get().getUserPos().getY();
+        if (UserLogic.get().inMapBounds(userX, userY)) return;
 
         //bTecho = (MapData(UserPos.X, UserPos.Y).Trigger = 1 Or _
         //            MapData(UserPos.X, UserPos.Y).Trigger = 2 Or _
@@ -2200,7 +2199,7 @@ public class Protocol {
         byte x = incomingData.readByte();
         byte y = incomingData.readByte();
 
-        UserLogic.getInstance().areaChange(x, y);
+        UserLogic.get().areaChange(x, y);
     }
 
     private static void handleGuildList() {
@@ -2371,7 +2370,7 @@ public class Protocol {
             charList[charIndex].setHelmet(helmetsData[tempint]);
         }
 
-        UserLogic.getInstance().setCharacterFx(charIndex, incomingData.readInteger(), incomingData.readInteger());
+        UserLogic.get().setCharacterFx(charIndex, incomingData.readInteger(), incomingData.readInteger());
         refreshAllChars();
     }
 
@@ -2385,9 +2384,9 @@ public class Protocol {
         incomingData.readByte();
 
         E_Heading direction = E_Heading.values()[incomingData.readByte() - 1];
-        int userCharIndex = UserLogic.getInstance().getUserCharIndex();
-        UserLogic.getInstance().moveCharbyHead(userCharIndex, direction);
-        UserLogic.getInstance().moveScreen(direction);
+        int userCharIndex = UserLogic.get().getUserCharIndex();
+        UserLogic.get().moveCharbyHead(userCharIndex, direction);
+        UserLogic.get().moveScreen(direction);
 
         refreshAllChars();
     }
@@ -2413,10 +2412,10 @@ public class Protocol {
         // Play steps sounds if the user is not an admin of any kind
         int priv = charList[charIndex].getPriv();
         if (priv != 1 && priv != 2 && priv != 3 && priv != 5 && priv != 25) {
-            UserLogic.getInstance().doPasosFx(charIndex);
+            UserLogic.get().doPasosFx(charIndex);
         }
 
-        UserLogic.getInstance().moveCharbyPos(charIndex, x, y);
+        UserLogic.get().moveCharbyPos(charIndex, x, y);
         refreshAllChars();
     }
 
@@ -2469,7 +2468,7 @@ public class Protocol {
 
 
         charList[charIndex].setfX(new GrhInfo());
-        UserLogic.getInstance().setCharacterFx(charIndex, buffer.readInteger(), buffer.readInteger());
+        UserLogic.get().setCharacterFx(charIndex, buffer.readInteger(), buffer.readInteger());
         charList[charIndex].setName(buffer.readASCIIString());
 
         byte nickColor = buffer.readByte();
@@ -2522,9 +2521,9 @@ public class Protocol {
         // Remove packet ID
         incomingData.readByte();
 
-        UserLogic.getInstance().setUserCharIndex(incomingData.readInteger());
-        UserLogic.getInstance().getUserPos().setX(charList[UserLogic.getInstance().getUserCharIndex()].getPos().getX());
-        UserLogic.getInstance().getUserPos().setY(charList[UserLogic.getInstance().getUserCharIndex()].getPos().getY());
+        UserLogic.get().setUserCharIndex(incomingData.readInteger());
+        UserLogic.get().getUserPos().setX(charList[UserLogic.get().getUserCharIndex()].getPos().getX());
+        UserLogic.get().getUserPos().setY(charList[UserLogic.get().getUserCharIndex()].getPos().getY());
 
         //'Are we under a roof?
         //    bTecho = IIf(MapData(UserPos.X, UserPos.Y).Trigger = 1 Or _
@@ -2717,9 +2716,9 @@ public class Protocol {
         // Remove packet ID
         incomingData.readByte();
 
-        int x = UserLogic.getInstance().getUserPos().getX();
-        int y = UserLogic.getInstance().getUserPos().getY();
-        int userCharIndex = UserLogic.getInstance().getUserCharIndex();
+        int x = UserLogic.get().getUserPos().getX();
+        int y = UserLogic.get().getUserPos().getY();
+        int userCharIndex = UserLogic.get().getUserCharIndex();
 
         // Remove char form old position
         if(mapData[x][y].getCharIndex() == userCharIndex) {
@@ -2727,12 +2726,12 @@ public class Protocol {
         }
 
         // Set new pos
-        UserLogic.getInstance().getUserPos().setX(incomingData.readByte());
-        UserLogic.getInstance().getUserPos().setY(incomingData.readByte());
+        UserLogic.get().getUserPos().setX(incomingData.readByte());
+        UserLogic.get().getUserPos().setY(incomingData.readByte());
 
         // again xd
-        x = UserLogic.getInstance().getUserPos().getX();
-        y = UserLogic.getInstance().getUserPos().getY();
+        x = UserLogic.get().getUserPos().getX();
+        y = UserLogic.get().getUserPos().getY();
 
         mapData[x][y].setCharIndex(userCharIndex);
         charList[userCharIndex].getPos().setX(x);
@@ -2759,7 +2758,7 @@ public class Protocol {
         incomingData.readByte();
 
         int userMap = incomingData.readInteger();
-        UserLogic.getInstance().setUserMap( (short) userMap);
+        UserLogic.get().setUserMap( (short) userMap);
 
         // Todo: Once on-the-fly editor is implemented check for map version before loading....
         // For now we just drop it
@@ -2845,15 +2844,15 @@ public class Protocol {
         // Remove packet ID
         incomingData.readByte();
 
-        UserLogic.getInstance().userMinHP = incomingData.readInteger();
+        UserLogic.get().userMinHP = incomingData.readInteger();
 
-        MainGame.get().lblVida.setText(UserLogic.getInstance().userMinHP + "/" + UserLogic.getInstance().userMaxHP);
-        MainGame.get().shpVida.setWidth( (( (UserLogic.getInstance().userMinHP / 100) / (UserLogic.getInstance().userMaxHP / 100)) * 75));
+        MainGame.get().lblVida.setText(UserLogic.get().userMinHP + "/" + UserLogic.get().userMaxHP);
+        MainGame.get().shpVida.setWidth( (( (UserLogic.get().userMinHP / 100) / (UserLogic.get().userMaxHP / 100)) * 75));
         MainGame.get().shpVida.setX(584 + (75 - MainGame.get().shpVida.getWidth()));
         MainGame.get().lblVida.setX(621 - (getSizeText(MainGame.get().lblVida.getText()) / 2));
 
-        if(UserLogic.getInstance().userMinHP == 0) {
-            charList[UserLogic.getInstance().getUserCharIndex()].setDead(true);
+        if(UserLogic.get().userMinHP == 0) {
+            charList[UserLogic.get().getUserCharIndex()].setDead(true);
             //If frmMain.TrainingMacro Then Call frmMain.DesactivarMacroHechizos
             //If frmMain.macrotrabajo Then Call frmMain.DesactivarMacroTrabajo
         }
@@ -2881,9 +2880,9 @@ public class Protocol {
         incomingData.readByte();
 
         // variable global
-        UserLogic.getInstance().userMinMAN = incomingData.readInteger();
+        UserLogic.get().userMinMAN = incomingData.readInteger();
 
-        float bWidth = (((float) (UserLogic.getInstance().userMinMAN) / ((float) UserLogic.getInstance().userMaxMAN)) * 75);
+        float bWidth = (((float) (UserLogic.get().userMinMAN) / ((float) UserLogic.get().userMaxMAN)) * 75);
         MainGame.get().shpMana.setWidth((int) (75 - bWidth));
         MainGame.get().shpMana.setX(584 + (75 - MainGame.get().shpMana.getWidth()));
         MainGame.get().lblMana.setX(621 - (getSizeText(MainGame.get().lblMana.getText()) / 2));
@@ -2900,11 +2899,11 @@ public class Protocol {
         incomingData.readByte();
 
         // variable global
-        UserLogic.getInstance().userMinSTA = incomingData.readInteger();
+        UserLogic.get().userMinSTA = incomingData.readInteger();
 
-        MainGame.get().lblEnergia.setText(UserLogic.getInstance().userMinSTA + "/" + UserLogic.getInstance().userMaxSTA);
+        MainGame.get().lblEnergia.setText(UserLogic.get().userMinSTA + "/" + UserLogic.get().userMaxSTA);
 
-        float bWidth = (((float) (UserLogic.getInstance().userMinSTA) / ((float) UserLogic.getInstance().userMaxSTA)) * 75);
+        float bWidth = (((float) (UserLogic.get().userMinSTA) / ((float) UserLogic.get().userMaxSTA)) * 75);
         MainGame.get().shpEnergia.setWidth((int) (75 - bWidth));
         MainGame.get().shpEnergia.setX(584 + (75 - MainGame.get().shpEnergia.getWidth()));
         MainGame.get().lblEnergia.setX(621 - (getSizeText(MainGame.get().lblEnergia.getText()) / 2));
@@ -3171,7 +3170,7 @@ public class Protocol {
         // Remove packet ID
         incomingData.readByte();
 
-        UserLogic.getInstance().setUserConected(false);
+        UserLogic.get().setUserConected(false);
         SocketConnection.getInstance().disconnect();
 
         /*
@@ -3248,7 +3247,7 @@ public class Protocol {
 
     private static void handleLogged() {
         incomingData.readByte();
-        UserLogic.getInstance().setConnected();
+        UserLogic.get().setConnected();
     }
 
     public static void writeLoginExistingChar() {

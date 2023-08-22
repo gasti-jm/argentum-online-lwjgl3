@@ -26,16 +26,8 @@ public abstract class Scene {
         return background;
     }
 
-    public void setBackground(RGBColor background) {
-        this.background = background;
-    }
-
     public boolean isVisible() {
         return visible;
-    }
-
-    public void setVisible(boolean visible) {
-        this.visible = visible;
     }
 
     public SceneType getChangeScene() {

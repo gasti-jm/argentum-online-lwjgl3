@@ -39,7 +39,7 @@ public final class GameScene extends Scene {
         canChangeTo = SceneType.MAIN_SCENE;
 
         bindKeys = BindKeys.get();
-        user = UserLogic.getInstance();
+        user = UserLogic.get();
         ambientColor = new RGBColor(1.0f, 1.0f, 1.0f);
 
         camera.setHalfWindowTileWidth   (( (SCREEN_SIZE_X / TILE_PIXEL_SIZE) / 2 ));
@@ -351,6 +351,5 @@ public final class GameScene extends Scene {
     private byte getTileMouseY(int mouseY) {
         return  (byte) (user.getUserPos().getY() +  mouseY / TILE_PIXEL_SIZE - camera.getHalfWindowTileHeight());
     }
-
 
 }

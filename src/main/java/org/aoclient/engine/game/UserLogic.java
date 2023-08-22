@@ -27,7 +27,7 @@ public final class UserLogic {
     private Position addToUserPos;
     private short userCharIndex;
 
-    // personajes visibles (incluido yo)
+    // ultimo personaje del array
     private int lastChar = 0;
 
     // conexion
@@ -36,12 +36,6 @@ public final class UserLogic {
     // areas
     private int minLimiteX, maxLimiteX;
     private int minLimiteY, maxLimiteY;
-
-    // limites del mapa
-    public final int minXBorder = XMinMapSize + ( (SCREEN_SIZE_X / 32) / 2);
-    public final int maxXBorder = XMaxMapSize - ( (SCREEN_SIZE_X / 32) / 2);
-    public final int minYBorder = YMinMapSize + ( (SCREEN_SIZE_Y / 32) / 2);
-    public final int maxYBorder = YMaxMapSize - ( (SCREEN_SIZE_Y / 32) / 2);
 
     // valores del personaje del usuario
     public short userMaxHP;
@@ -65,7 +59,7 @@ public final class UserLogic {
         userInventory = new UserInventory();
     }
 
-    public static UserLogic getInstance(){
+    public static UserLogic get(){
         if(instance == null) {
             instance = new UserLogic();
         }

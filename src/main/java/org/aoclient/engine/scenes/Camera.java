@@ -27,6 +27,12 @@ public final class Camera {
     private int ScreenX, ScreenY;
     private int minXOffset, minYOffset;
 
+    // limites del mapa
+    public static final int minXBorder = XMinMapSize + ( (SCREEN_SIZE_X / 32) / 2);
+    public static final int maxXBorder = XMaxMapSize - ( (SCREEN_SIZE_X / 32) / 2);
+    public static final int minYBorder = YMinMapSize + ( (SCREEN_SIZE_Y / 32) / 2);
+    public static final int maxYBorder = YMaxMapSize - ( (SCREEN_SIZE_Y / 32) / 2);
+
     public Camera() {
 
     }
