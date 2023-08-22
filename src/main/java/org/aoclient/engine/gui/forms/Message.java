@@ -32,9 +32,7 @@ public class Message extends Form {
 
     @Override
     public void checkButtons() {
-        if (MouseListener.mouseButtonClick(GLFW_MOUSE_BUTTON_LEFT)) {
-            accept.runAction();
-        }
+        setButtonState(accept);
     }
 
     @Override

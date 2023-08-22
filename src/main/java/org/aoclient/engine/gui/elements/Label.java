@@ -17,6 +17,30 @@ public class Label extends ElementGUI {
         this.italic = italic;
     }
 
+    public Label(int x, int y, boolean bold, RGBColor color) {
+        super(x, y, 0, 0);
+        this.text = "0/0";
+        this.color = color;
+        this.bold = bold;
+        this.italic = false;
+    }
+
+    public Label(int x, int y, int width, int height) {
+        super(x, y, width, height);
+        this.text = "";
+        this.color = new RGBColor(1.0f, 1.0f, 1.0f);
+        this.bold = false;
+        this.italic = false;
+    }
+
+    public Label(int x, int y, int width, int height, RGBColor color) {
+        super(x, y, width, height);
+        this.text = "";
+        this.color = color;
+        this.bold = false;
+        this.italic = false;
+    }
+
     public Label(String text, int x, int y, boolean bold, boolean italic, RGBColor color) {
         super(x, y, 0, 0);
         this.text = text;
@@ -28,10 +52,6 @@ public class Label extends ElementGUI {
     @Override
     public void render() {
         FontText.drawText(this.text, this.x, this.y, this.color, 0, this.bold, this.italic, true);
-    }
-
-    public RGBColor getColor() {
-        return color;
     }
 
     public void setColor(RGBColor color) {

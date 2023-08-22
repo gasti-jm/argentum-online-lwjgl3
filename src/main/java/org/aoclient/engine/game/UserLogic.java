@@ -37,21 +37,20 @@ public final class UserLogic {
     private int minLimiteX, maxLimiteX;
     private int minLimiteY, maxLimiteY;
 
-    // valores del personaje del usuario
+    // stats del usuario
     public short userMaxHP;
     public short userMinHP;
     public short userMaxMAN;
     public short userMinMAN;
     public short userMaxSTA;
     public short userMinSTA;
-    public int userGLD;
-    public byte userLvl;
     public int userPasarNivel;
     public int userExp;
-    public byte userMaxAGU;
-    public byte userMinAGU;
-    public byte userMaxHAM;
-    public byte userMinHAM;
+
+    public byte userWeaponEqpSlot;
+    public byte userArmourEqpSlot;
+    public byte userHelmEqpSlot;
+    public byte userShieldEqpSlot;
 
     private UserLogic() {
         userPos = new Position();

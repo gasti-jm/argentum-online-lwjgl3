@@ -12,7 +12,7 @@ public enum E_ObjType {
     otLlaves(9),
     otForos(10),
     otPociones(11),
-
+    otBooks(12),
     otBebidas(13),
     otFirewood(14),
     otFogata(15),
@@ -20,15 +20,17 @@ public enum E_ObjType {
     otHelmet(17, true),
     otAnillo(18, true),
     otTeleport(19),
-
+    otMuebles(20),
+    otJoyas(21),
     otYacimiento(22),
     otMinerales(23),
     otPergaminos(24),
-
+    otAura(25),
     otInstrumentos(26),
     otYunque(27),
     otFragua(28),
-
+    otGema(29),
+    otFlowers(30),
     otBarcos(31, true),
     otFlechas(32, true),
     otBotellaVacia(33),
@@ -36,7 +38,6 @@ public enum E_ObjType {
     otManchas(35),
     otArbolElfico(36),
     otMochilas(37),
-
     otCualquiera(1000);
 
     public final int value;

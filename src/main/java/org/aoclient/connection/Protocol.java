@@ -7,6 +7,7 @@ import org.aoclient.engine.Sound;
 import org.aoclient.engine.game.Console;
 import org.aoclient.engine.game.UserLogic;
 import org.aoclient.engine.game.models.E_Heading;
+import org.aoclient.engine.game.models.E_ObjType;
 import org.aoclient.engine.gui.forms.MainGame;
 import org.aoclient.engine.gui.forms.Message;
 import org.aoclient.engine.renderer.RGBColor;
@@ -434,9 +435,7 @@ public class Protocol {
         // Remove packet ID
         incomingData.readByte();
 
-        byte userAgilidad = incomingData.readByte();
-        //frmMain.lblDext.Caption = UserAgilidad
-        //    frmMain.lblDext.ForeColor = getDexterityColor()
+        MainGame.get().lblDext.setText(String.valueOf(incomingData.readByte()));
     }
 
     private static void handleUpdateStrenght() {
@@ -448,9 +447,7 @@ public class Protocol {
         // Remove packet ID
         incomingData.readByte();
 
-        byte userFuerza = incomingData.readByte();
-        //frmMain.lblStrg.Caption = UserFuerza
-        //    frmMain.lblStrg.ForeColor = getStrenghtColor()
+        MainGame.get().lblStrg.setText(String.valueOf(incomingData.readByte()));
     }
 
     private static void handleUpdateStrenghtAndDexterity() {
@@ -462,10 +459,8 @@ public class Protocol {
         // Remove packet ID
         incomingData.readByte();
 
-        byte userFuerza = incomingData.readByte();
-        byte userAgilidad = incomingData.readByte();
-
-        System.out.println("handleUpdateStrenghtAndDexterity CARGADO - FALTA TERMINAR");
+        MainGame.get().lblStrg.setText(String.valueOf(incomingData.readByte()));
+        MainGame.get().lblDext.setText(String.valueOf(incomingData.readByte()));
     }
 
     private static void handleShowPartyForm() {
@@ -1483,22 +1478,22 @@ public class Protocol {
         // Remove packet ID
         incomingData.readByte();
 
-        UserLogic.get().userMaxAGU = incomingData.readByte();
-        UserLogic.get().userMinAGU = incomingData.readByte();
-        UserLogic.get().userMaxHAM = incomingData.readByte();
-        UserLogic.get().userMinHAM = incomingData.readByte();
+        final short userMaxAGU = incomingData.readByte();
+        final short userMinAGU = incomingData.readByte();
+        final short userMaxHAM = incomingData.readByte();
+        final short userMinHAM = incomingData.readByte();
 
-        MainGame.get().lblSed.setText(UserLogic.get().userMinAGU + "/" + UserLogic.get().userMaxAGU);
-        MainGame.get().lblHambre.setText(UserLogic.get().userMinHAM + "/" + UserLogic.get().userMaxHAM);
+        MainGame.get().lblSed.setText(userMinAGU + "/" + userMaxAGU);
+        MainGame.get().lblHambre.setText(userMinHAM + "/" + userMaxHAM);
 
         MainGame.get().lblHambre.setX(621 - (getSizeText(MainGame.get().lblHambre.getText()) / 2));
         MainGame.get().lblSed.setX(621 - (getSizeText(MainGame.get().lblSed.getText()) / 2));
 
-        float bWidth = (((float) (UserLogic.get().userMinAGU) / ((float) UserLogic.get().userMaxAGU)) * 75);
+        float bWidth = (((float) (userMinAGU) / ((float) userMaxAGU)) * 75);
         MainGame.get().shpSed.setWidth((int) (75 - bWidth));
         MainGame.get().shpSed.setX(584 + (75 - MainGame.get().shpSed.getWidth()));
 
-        bWidth = (((float) (UserLogic.get().userMinHAM) / ((float) UserLogic.get().userMaxHAM)) * 75);
+        bWidth = (((float) (userMinHAM) / ((float) userMaxHAM)) * 75);
         MainGame.get().shpHambre.setWidth((int) (75 - bWidth));
         MainGame.get().shpHambre.setX(584 + (75 - MainGame.get().shpHambre.getWidth()));
     }
@@ -1953,7 +1948,7 @@ public class Protocol {
         // Remove packet ID
         buffer.readByte();
 
-        final int slot = buffer.readByte();
+        final byte slot = buffer.readByte();
         final short objIndex = buffer.readInteger();
         final String name = buffer.readASCIIString(); //(Hay que arreglar a este puto)
         final int amount = buffer.readInteger();
@@ -1969,42 +1964,55 @@ public class Protocol {
         UserLogic.get().getUserInventory().setItem( slot - 1, objIndex, amount, equipped, grhIndex, objType,
                 maxHit, minHit, maxDef, minDef, value, name);
 
-        /*
-        If Equipped Then
-        Select Case OBJType
-            Case eObjType.otWeapon
-                frmMain.lblWeapon = MinHit & "/" & MaxHit
-                UserWeaponEqpSlot = slot
-            Case eObjType.otArmadura
-                frmMain.lblArmor = MinDef & "/" & MaxDef
-                UserArmourEqpSlot = slot
-            Case eObjType.otescudo
-                frmMain.lblShielder = MinDef & "/" & MaxDef
-                UserHelmEqpSlot = slot
-            Case eObjType.otcasco
-                frmMain.lblHelm = MinDef & "/" & MaxDef
-                UserShieldEqpSlot = slot
-        End Select
-    Else
-        Select Case slot
-            Case UserWeaponEqpSlot
-                frmMain.lblWeapon = "0/0"
-                UserWeaponEqpSlot = 0
-            Case UserArmourEqpSlot
-                frmMain.lblArmor = "0/0"
-                UserArmourEqpSlot = 0
-            Case UserHelmEqpSlot
-                frmMain.lblShielder = "0/0"
-                UserHelmEqpSlot = 0
-            Case UserShieldEqpSlot
-                frmMain.lblHelm = "0/0"
-                UserShieldEqpSlot = 0
-        End Select
-    End If
 
-    Call Inventario.SetItem(slot, OBJIndex, Amount, Equipped, GrhIndex, OBJType, MaxHit, MinHit, MaxDef, MinDef, value, Name)
+        //    public Label lblHelm = new Label(342, 579, false, new RGBColor(1.0f, 0.0f, 0.0f));
+        //    public Label lblShielder = new Label(400, 579, false, new RGBColor(1.0f, 0.0f, 0.0f));
 
-         */
+
+
+        if(equipped) {
+            switch (E_ObjType.values()[objType - 1]) {
+                case otWeapon:
+                    MainGame.get().lblWeapon.setText(minHit + "/" + maxHit);
+                    UserLogic.get().userWeaponEqpSlot = slot;
+                    break;
+
+                case otArmor:
+                    MainGame.get().lblArmor.setText(minDef + "/" + maxDef);
+                    UserLogic.get().userArmourEqpSlot = slot;
+                    break;
+
+                case otShield:
+                    MainGame.get().lblShielder.setText(minDef + "/" + maxDef);
+                    UserLogic.get().userShieldEqpSlot = slot;
+                    break;
+
+                case otHelmet:
+                    MainGame.get().lblHelm.setText(minDef + "/" + maxDef);
+                    UserLogic.get().userHelmEqpSlot = slot;
+                    break;
+            }
+        } else {
+            if(slot == UserLogic.get().userWeaponEqpSlot) {
+                MainGame.get().lblWeapon.setText("0/0");
+                UserLogic.get().userWeaponEqpSlot = 0;
+            } else if(slot == UserLogic.get().userArmourEqpSlot) {
+                MainGame.get().lblArmor.setText("0/0");
+                UserLogic.get().userArmourEqpSlot = 0;
+            } else if(slot == UserLogic.get().userShieldEqpSlot) {
+                MainGame.get().lblShielder.setText("0/0");
+                UserLogic.get().userShieldEqpSlot = 0;
+            } else if(slot == UserLogic.get().userHelmEqpSlot) {
+                MainGame.get().lblHelm.setText("0/0");
+                UserLogic.get().userHelmEqpSlot = 0;
+            }
+        }
+
+        // ajustamos al centro.
+        MainGame.get().lblShielder.setX(370 - (getSizeText(MainGame.get().lblShielder.getText() ) / 2));
+        MainGame.get().lblHelm.setX(222 - (getSizeText(MainGame.get().lblHelm.getText() ) / 2));
+        MainGame.get().lblArmor.setX(104 - (getSizeText(MainGame.get().lblArmor.getText() ) / 2));
+        MainGame.get().lblWeapon.setX(488 - (getSizeText(MainGame.get().lblWeapon.getText() ) / 2));
 
         incomingData.copyBuffer(buffer);
     }
@@ -2059,8 +2067,8 @@ public class Protocol {
         UserLogic.get().userMinMAN = incomingData.readInteger();
         UserLogic.get().userMaxSTA = incomingData.readInteger();
         UserLogic.get().userMinSTA = incomingData.readInteger();
-        UserLogic.get().userGLD = incomingData.readLong();
-        UserLogic.get().userLvl = incomingData.readByte();
+        final int userGLD = incomingData.readLong();
+        final byte userLvl = incomingData.readByte();
         UserLogic.get().userPasarNivel = incomingData.readLong();
         UserLogic.get().userExp = incomingData.readLong();
 
@@ -2077,12 +2085,10 @@ public class Protocol {
         MainGame.get().shpMana.setWidth((int) (75 - bWidth));
         MainGame.get().shpMana.setX(584 + (75 - MainGame.get().shpMana.getWidth()));
 
-
         //////// VIDA
         bWidth = (((float) (UserLogic.get().userMinHP) / ((float) UserLogic.get().userMaxHP)) * 75);
         MainGame.get().shpVida.setWidth((int) (75 - bWidth));
         MainGame.get().shpVida.setX(584 + (75 - MainGame.get().shpVida.getWidth()));
-
 
         //////// ENERGIA
         bWidth = (((float) (UserLogic.get().userMinSTA) / ((float) UserLogic.get().userMaxSTA)) * 75);
@@ -2090,22 +2096,21 @@ public class Protocol {
         MainGame.get().shpEnergia.setX(584 + (75 - MainGame.get().shpEnergia.getWidth()));
 
 
+        MainGame.get().lblExp.setText("Exp: " + UserLogic.get().userExp + "/" + UserLogic.get().userPasarNivel);
 
-        //frmMain.lblExp.Caption = "Exp: " & UserExp & "/" & UserPasarNivel
-        //
-        //    If UserPasarNivel > 0 Then
-        //        frmMain.lblPorcLvl.Caption = "[" & Round(CDbl(UserExp) * CDbl(100) / CDbl(UserPasarNivel), 2) & "%]"
-        //    Else
-        //        frmMain.lblPorcLvl.Caption = "[N/A]"
-        //    End If
-        //
-        //    frmMain.GldLbl.Caption = UserGLD
-        //    frmMain.lblLvl.Caption = UserLvl
-        //
-        //
-        //    Dim bWidth As Byte
+        if (UserLogic.get().userPasarNivel > 0) {
+            final float percent = Math.round((float) (UserLogic.get().userExp * 100) / UserLogic.get().userPasarNivel);
+            MainGame.get().lblPorcLvl.setText("[" + percent + "%]");
+        } else {
+            MainGame.get().lblPorcLvl.setText("[N/A]");
+        }
 
-        //    '***************************
+        MainGame.get().lblLvl.setText("Nivel: " + userLvl);
+
+        charList[UserLogic.get().getUserCharIndex()].setDead(UserLogic.get().userMinHP == 0);
+
+        MainGame.get().gldLbl.setText(String.valueOf(userGLD));
+
         //
         //    If UserMinHP = 0 Then
         //        UserEstado = 1
@@ -2115,14 +2120,6 @@ public class Protocol {
         //        UserEstado = 0
         //    End If
         //
-        //    If UserGLD >= CLng(UserLvl) * 10000 Then
-        //        'Changes color
-        //        frmMain.GldLbl.ForeColor = &HFF& 'Red
-        //    Else
-        //        'Changes color
-        //        frmMain.GldLbl.ForeColor = &HFFFF& 'Yellow
-        //    End If
-
     }
 
     private static void handleCreateFX() {
@@ -2790,11 +2787,12 @@ public class Protocol {
         incomingData.readByte();
 
         // Get data and update
-        int userExp = incomingData.readLong();
+        UserLogic.get().userExp = incomingData.readLong();
 
-        //frmMain.lblExp.Caption = "Exp: " & UserExp & "/" & UserPasarNivel
-        //frmMain.lblPorcLvl.Caption = "[" & Round(CDbl(UserExp) * CDbl(100) / CDbl(UserPasarNivel), 2) & "%]"
-        System.out.println("handleUpdateExp CARGADO - FALTA TERMINAR!");
+        MainGame.get().lblExp.setText("Exp: " + UserLogic.get().userExp + "/" + UserLogic.get().userPasarNivel);
+        final float percent = Math.round((float) (UserLogic.get().userExp * 100) / UserLogic.get().userPasarNivel);
+        MainGame.get().lblPorcLvl.setText("[" + percent + "%]");
+
     }
 
     private static void handleUpdateBankGold() {
@@ -2819,20 +2817,9 @@ public class Protocol {
         // Remove packet ID
         incomingData.readByte();
 
-        int userGLD = incomingData.readLong();
+        final int userGLD = incomingData.readLong();
+        MainGame.get().gldLbl.setText(String.valueOf(userGLD));
 
-
-        //If UserGLD >= CLng(UserLvl) * 10000 Then
-        //        'Changes color
-        //        frmMain.GldLbl.ForeColor = &HFF& 'Red
-        //    Else
-        //        'Changes color
-        //        frmMain.GldLbl.ForeColor = &HFFFF& 'Yellow
-        //    End If
-        //
-        //    frmMain.GldLbl.Caption = UserGLD
-
-        System.out.println("handleUpdateGold CARGADO - FALTA TERMINAR!");
     }
 
     private static void handleUpdateHP() {
@@ -2851,11 +2838,7 @@ public class Protocol {
         MainGame.get().shpVida.setX(584 + (75 - MainGame.get().shpVida.getWidth()));
         MainGame.get().lblVida.setX(621 - (getSizeText(MainGame.get().lblVida.getText()) / 2));
 
-        if(UserLogic.get().userMinHP == 0) {
-            charList[UserLogic.get().getUserCharIndex()].setDead(true);
-            //If frmMain.TrainingMacro Then Call frmMain.DesactivarMacroHechizos
-            //If frmMain.macrotrabajo Then Call frmMain.DesactivarMacroTrabajo
-        }
+        charList[UserLogic.get().getUserCharIndex()].setDead(UserLogic.get().userMinHP == 0);
 
         //
         //    'Is the user alive??

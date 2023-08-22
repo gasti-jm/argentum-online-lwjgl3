@@ -331,7 +331,7 @@ public final class GameScene extends Scene {
      */
     private void showFPS() {
         final String txtFPS = String.valueOf(FPS);
-        drawText(txtFPS, (SCREEN_SIZE_X - getSizeText(txtFPS) / 2) - 90, 3, ambientColor, 0, true, false, false);
+        drawText(txtFPS, (SCREEN_SIZE_X - getSizeText(txtFPS) / 2) - 88, 3, ambientColor, 0, true, false, false);
     }
 
     private boolean inGameArea() {

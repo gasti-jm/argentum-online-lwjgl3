@@ -53,7 +53,6 @@ public class Console {
         dataConsole.add(new TextConsole(text, bold, italic, color));
     }
 
-
     public void drawConsole() {
         // Tenemos que mostrar siempre los ultimos.
         if (!dataConsole.isEmpty()) {

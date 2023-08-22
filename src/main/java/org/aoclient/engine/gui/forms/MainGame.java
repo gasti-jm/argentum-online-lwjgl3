@@ -9,7 +9,6 @@ import org.aoclient.engine.gui.elements.Label;
 import org.aoclient.engine.gui.elements.Shape;
 import org.aoclient.engine.renderer.RGBColor;
 
-import static org.aoclient.engine.renderer.FontText.getSizeText;
 import static org.aoclient.engine.utils.GameData.charList;
 
 public class MainGame extends Form {
@@ -21,11 +20,25 @@ public class MainGame extends Form {
     public Shape shpHambre = new Shape(584, 521, 75, 12, new RGBColor(0.0f, 0.0f, 0.0f));
     public Shape shpSed = new Shape(584, 542, 75, 12, new RGBColor(0.0f, 0.0f, 0.0f));
 
-    public Label lblEnergia = new Label("999/999", 584 - (getSizeText("999/999") / 2), 453, 75, 12, false, false);
-    public Label lblMana = new Label("9999/9999", 584 - (getSizeText("9999/9999") / 2), 477, 75, 12, false, false);
-    public Label lblVida = new Label("999/999", 584 - (getSizeText("999/999") / 2), 498, 75, 12, false, false);
-    public Label lblHambre = new Label("999/999", 584 - (getSizeText("100/100") / 2), 521, 75, 12, false, false);
-    public Label lblSed = new Label("999/999", 584 - (getSizeText("100/100") / 2), 542, 75, 12, false, false);
+    public Label lblEnergia = new Label(584, 453, 75, 12);
+    public Label lblMana = new Label(584, 477, 75, 12);
+    public Label lblVida = new Label(584 , 498, 75, 12);
+    public Label lblHambre = new Label(584, 521, 75, 12);
+    public Label lblSed = new Label(584, 542, 75, 12);
+
+    public Label lblLvl = new Label(615, 78, 134, 15);
+    public Label lblPorcLvl = new Label(615, 90, 134, 15, new RGBColor(0.0f, 1.0f, 1.0f));
+    public Label lblExp = new Label(615, 102, 134, 15);
+
+    public Label gldLbl = new Label(724, 419, false, new RGBColor(1.0f, 1.0f, 0.0f));
+    public Label lblDext = new Label(607, 412, true, new RGBColor(1.0f, 1.0f, 0.0f));
+    public Label lblStrg = new Label(645, 412, true, new RGBColor(0.0f, 1.0f, 0.0f));
+
+    public Label lblArmor = new Label(104, 579, false, new RGBColor(1.0f, 0.0f, 0.0f));
+    public Label lblShielder = new Label(370, 579, false, new RGBColor(1.0f, 0.0f, 0.0f));
+    public Label lblHelm = new Label(222, 579, false, new RGBColor(1.0f, 0.0f, 0.0f));
+    public Label lblWeapon = new Label(488, 579, false, new RGBColor(1.0f, 0.0f, 0.0f));
+
 
     private Label lblName;
 
@@ -68,7 +81,6 @@ public class MainGame extends Form {
     @Override
     public void render() {
         background.render();
-
         console.drawConsole();
         renderUserStats();
     }
@@ -90,6 +102,18 @@ public class MainGame extends Form {
         lblSed.render();
 
         lblName.render();
+
+        lblLvl.render();
+        lblPorcLvl.render();
+        lblExp.render();
+        gldLbl.render();
+        lblDext.render();
+        lblStrg.render();
+
+        lblArmor.render();
+        lblHelm.render();
+        lblShielder.render();
+        lblWeapon.render();
     }
 
     @Override
@@ -111,6 +135,19 @@ public class MainGame extends Form {
         lblName.clear();
         lblMana.clear();
         lblVida.clear();
+
+        lblLvl.clear();
+        lblPorcLvl.clear();
+        lblExp.clear();
+
+        gldLbl.clear();
+        lblDext.clear();
+        lblStrg.clear();
+
+        lblArmor.clear();
+        lblHelm.clear();
+        lblShielder.clear();
+        lblWeapon.clear();
     }
 
 }
