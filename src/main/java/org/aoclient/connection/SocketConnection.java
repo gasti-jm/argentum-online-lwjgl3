@@ -1,11 +1,13 @@
 package org.aoclient.connection;
 
 import org.aoclient.connection.packets.E_Modo;
+import org.aoclient.engine.gui.forms.Message;
 
 import java.net.*;
 import java.io.*;
 
 import static org.aoclient.connection.Protocol.*;
+import static org.aoclient.engine.Engine.forms;
 
 public class SocketConnection {
     private static SocketConnection instance;
@@ -41,7 +43,7 @@ public class SocketConnection {
             outgoingData.readASCIIStringFixed(outgoingData.length());
 
         } catch(Exception e) {
-            e.printStackTrace();
+            forms.add(new Message(e.getMessage()));
         }
     }
 

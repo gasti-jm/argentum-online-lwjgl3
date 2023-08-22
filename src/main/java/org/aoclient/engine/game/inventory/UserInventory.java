@@ -84,11 +84,13 @@ public final class UserInventory extends Inventory {
         if (inInventoryArea()) {
 
             // Esta selecionado primero?
-            if (x + (this.cantColumns * y) == this.slotSelected){
-                if (slots[slotSelected].objType.equippable) { // es equipable?
-                    equipItem();
-                } else {
-                    useItem();
+            if (x + (this.cantColumns * y) == this.slotSelected) {
+                if (slots[slotSelected].grhIndex > 0) {
+                    if (slots[slotSelected].objType.equippable) { // es equipable?
+                        equipItem();
+                    } else {
+                        useItem();
+                    }
                 }
             }
         }
