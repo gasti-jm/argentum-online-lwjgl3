@@ -15,6 +15,7 @@ public abstract class ElementGUI {
     protected int y;
     protected int width;
     protected int height;
+    protected boolean visible = true;
     protected List<TextureOGL> texture;
 
     public ElementGUI() {
@@ -84,5 +85,13 @@ public abstract class ElementGUI {
 
     public void setAlphaTexture(float alphaTexture) {
         this.alphaTexture = alphaTexture;
+    }
+
+    public boolean isVisible() {
+        return visible;
+    }
+
+    public void setVisible(boolean visible) {
+        this.visible = visible;
     }
 }

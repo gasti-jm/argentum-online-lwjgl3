@@ -1,14 +1,13 @@
 package org.aoclient.engine.game;
 
 import org.aoclient.engine.game.models.E_KeyType;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 
 import static org.lwjgl.glfw.GLFW.*;
 
 public final class BindKeys {
-    private final int mappedKeys[];
+    private final int[] mappedKeys;
     private static BindKeys instance;
 
     private BindKeys()  {
@@ -93,7 +92,7 @@ public final class BindKeys {
      * @desc: Guarda la configuracion de teclas.
      */
     public void saveBindKeys() {
-        RandomAccessFile f = null;
+        RandomAccessFile f;
 
         try {
             f = new RandomAccessFile("resources/inits/keys.bin", "rw");
@@ -103,8 +102,6 @@ public final class BindKeys {
                 f.writeInt(mappedKeys[i]);
             }
 
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -114,7 +111,7 @@ public final class BindKeys {
      * @desc: Permite bindear una nueva tecla.
      */
     public void changeBindedKey(E_KeyType key, int newKey) {
-
+        mappedKeys[key.ordinal()] = newKey;
     }
 
     public int getBindedKey(E_KeyType key) {

@@ -1587,11 +1587,12 @@ public class Protocol {
         buffer.readByte();
 
         String errMsg = buffer.readASCIIString();
+        forms.add(new Message(errMsg));
+
         SocketConnection.getInstance().disconnect();
         UserLogic.get().setUserConected(false);
 
         incomingData.copyBuffer(buffer);
-        System.out.println("handleErrorMessage Cargado! - FALTA TERMINAR!");
     }
 
     private static void handleRestOK() {
@@ -3233,10 +3234,10 @@ public class Protocol {
         UserLogic.get().setConnected();
     }
 
-    public static void writeLoginExistingChar() {
+    public static void writeLoginExistingChar(String username, String password) {
         outgoingData.writeByte(ClientPacketID.LoginExistingChar.ordinal());
-        outgoingData.writeASCIIString("gs");
-        outgoingData.writeASCIIString("gszone");
+        outgoingData.writeASCIIString(username);
+        outgoingData.writeASCIIString(password);
         outgoingData.writeByte(0);  // App.Major
         outgoingData.writeByte(13); // App.Minor
         outgoingData.writeByte(0);  // App.Revision

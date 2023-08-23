@@ -13,6 +13,10 @@ public abstract class Form {
     protected int fWidth, fHeight;
     protected boolean visible;
 
+    // para la gestion del formulario con los TextBoxes
+    protected static int txtTabIndexsAdded;
+    protected int tabIndexSelected;
+
     public Form() {
         this.background = new ImageBox();
         this.visible = true;

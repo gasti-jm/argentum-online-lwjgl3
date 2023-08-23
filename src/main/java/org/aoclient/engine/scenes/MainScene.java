@@ -4,11 +4,13 @@ import org.aoclient.connection.SocketConnection;
 import org.aoclient.engine.Window;
 import org.aoclient.engine.game.UserLogic;
 import org.aoclient.engine.gui.forms.Login;
+import org.aoclient.engine.gui.forms.Message;
 import org.aoclient.engine.listeners.KeyListener;
 import org.aoclient.engine.renderer.RGBColor;
 import org.aoclient.engine.utils.GameData;
 
 import static org.aoclient.connection.Protocol.writeLoginExistingChar;
+import static org.aoclient.engine.Engine.forms;
 import static org.aoclient.engine.game.models.Character.drawCharacter;
 import static org.aoclient.engine.renderer.Drawn.drawTexture;
 import static org.aoclient.engine.scenes.Camera.TILE_BUFFER_SIZE;
@@ -39,16 +41,26 @@ public final class MainScene extends Scene {
 
     @Override
     public void mouseEvents() {
+        if(!forms.isEmpty()) return;
+
         frmLogin.checkButtons();
+        frmLogin.checkMouseTextBoxs();
     }
 
     @Override
     public void keyEvents() {
+        if (!forms.isEmpty()) return;
+
         if (KeyListener.isKeyReadyForAction(GLFW_KEY_ENTER)) {
-            // conectarse al servidor con el usuario "GS" y pass "gszone".
-            SocketConnection.getInstance().connect();
-            writeLoginExistingChar();
+            if (frmLogin.getUsername().isEmpty() || !frmLogin.getPassword().isEmpty()) {
+                SocketConnection.getInstance().connect();
+                writeLoginExistingChar(frmLogin.getUsername(), frmLogin.getPassword());
+            } else {
+                forms.add(new Message("Por favor, ingrese un nombre de usuario y/o contraseña valida."));
+            }
         }
+
+        frmLogin.checkKeyTextBoxs();
     }
 
     @Override

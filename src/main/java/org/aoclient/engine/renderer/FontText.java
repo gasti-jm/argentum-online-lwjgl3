@@ -55,9 +55,6 @@ public class FontText {
     public static void drawText(String text, int x, int y, RGBColor color, int fontIndex, boolean bold, boolean italic, boolean multi_line) {
         if (text.length() == 0) return;
 
-        byte[] chars = text.getBytes(StandardCharsets.ISO_8859_1);
-        int numChars = chars.length;
-
         int fontType = FONT_NORMAL.ordinal();
 
         if (color == null) {
@@ -74,7 +71,9 @@ public class FontText {
 
         int space = 0;
         if(!multi_line) {
-            for (int ascii : chars) {
+            for (int a = 0; a < text.length(); a++) {
+                int ascii = text.charAt(a);
+
                 if (ascii != 32) {
                     geometryBoxRenderFont(fonts[fontIndex].textureFonts[fontType], (x + space), y,
                             fonts[fontIndex].fontData.get(ascii).width, 15,
@@ -91,7 +90,8 @@ public class FontText {
             int e = 0;
             int f = 0;
 
-            for (int ascii : chars) {
+            for (int a = 0; a < text.length(); a++) {
+                int ascii = text.charAt(a);
                 if (ascii > 255) ascii = 0;
 
                 if (ascii == 32 || ascii == 13) {
@@ -145,7 +145,7 @@ public class FontText {
             if (ascii > 255) ascii = 0;
 
             if (ascii == 32 || ascii == 13) {
-                if (e >= 50) {
+                if (e >= 100) {
                     f++;
                     e = 0;
                     space = 0;

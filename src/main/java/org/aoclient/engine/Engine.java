@@ -12,6 +12,8 @@ import org.aoclient.engine.utils.GameData;
 import org.aoclient.engine.utils.Time;
 import org.lwjgl.Version;
 
+import java.awt.*;
+import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,6 +29,7 @@ public class Engine implements Runnable {
     private Scene currentScene;
     private BindKeys bindKeys;
     public static List<Form> forms = new ArrayList<>(); // formularios por encima de las escenas (por ejemplo: frmMensaje).
+    public static boolean capsState = Toolkit.getDefaultToolkit().getLockingKeyState(KeyEvent.VK_CAPS_LOCK);
 
     public Engine() {
         gameLoopThread = new Thread(this, "GAME_LOOP_THREAD");
@@ -103,6 +106,8 @@ public class Engine implements Runnable {
     private void render() {
         if (KeyListener.isKeyPressed(bindKeys.getBindedKey(E_KeyType.mKeyExitGame))) {
             closeClient();
+        } else if(KeyListener.isKeyReadyForAction(GLFW_KEY_CAPS_LOCK)) {
+            capsState = !capsState;
         }
 
         // Check change screen

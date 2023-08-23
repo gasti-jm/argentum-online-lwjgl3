@@ -42,14 +42,12 @@ public final class IntroScene extends Scene {
 
     @Override
     public void mouseEvents() {
-
+        // nothing to do..
     }
 
     @Override
     public void keyEvents() {
-        if (KeyListener.isKeyReadyForAction(GLFW_KEY_ENTER) ||
-                KeyListener.isKeyPressed(GLFW_KEY_SPACE) || MouseListener.mouseButtonClick(GLFW_MOUSE_BUTTON_LEFT)) {
-
+        if (KeyListener.isKeyReadyForAction(GLFW_KEY_ENTER)) {
             close();
         }
     }

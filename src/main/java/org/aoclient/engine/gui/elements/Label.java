@@ -49,6 +49,14 @@ public class Label extends ElementGUI {
         this.italic = italic;
     }
 
+    public Label(String text, int x, int y, int width, int height, boolean bold, boolean italic, RGBColor color) {
+        super(x, y, width, height);
+        this.text = text;
+        this.color = color;
+        this.bold = bold;
+        this.italic = italic;
+    }
+
     @Override
     public void render() {
         FontText.drawText(this.text, this.x, this.y, this.color, 0, this.bold, this.italic, true);

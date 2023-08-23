@@ -1,19 +1,84 @@
 package org.aoclient.engine.gui.elements;
 
+import org.aoclient.engine.listeners.KeyListener;
+import org.aoclient.engine.listeners.MouseListener;
 import org.aoclient.engine.renderer.RGBColor;
 
+import static org.aoclient.engine.Engine.capsState;
 import static org.aoclient.engine.renderer.Drawn.drawRectangle;
+import static org.aoclient.engine.renderer.FontText.drawText;
+import static org.lwjgl.glfw.GLFW.*;
 
 public class TextBox extends Label {
     private RGBColor backgroundColor;
+    private boolean hideChars;
+    private int tabIndex;
+    private boolean selected = false;
 
-    public TextBox(int x, int y, int width, int height, boolean bold, boolean italic) {
-        super("", x, y, width, height, bold, italic);
+    public TextBox(int tabIndex, int x, int y, int width, int height, boolean bold, boolean italic, boolean hideChars, RGBColor color) {
+        super("", x, y, width, height, bold, italic, color);
+        this.tabIndex = tabIndex;
         this.backgroundColor = new RGBColor(0.0f, 0.0f, 0.0f);
+        this.hideChars = hideChars;
     }
 
     @Override
     public void render() {
         drawRectangle(x, y, width, height, backgroundColor);
+
+        if (!hideChars) {
+            drawText(this.text, x, y, this.color, 0, this.bold, this.italic, false);
+        } else {
+            StringBuilder txtHided = new StringBuilder();
+            for (int i = 0; i < this.text.length(); i++) txtHided.append("*");
+            drawText(txtHided.toString(), x, y, this.color, 0, this.bold, this.italic, false);
+        }
+    }
+
+    public int checkSelected() {
+        if (isInside()) {
+            if (MouseListener.mouseButtonClick(GLFW_MOUSE_BUTTON_LEFT)) {
+                return tabIndex;
+            }
+        }
+
+        return -1;
+    }
+
+
+    public void keyEvents() {
+        if (!selected) return;
+        final int keyCode = KeyListener.getLastKeyPressed();
+
+        switch (keyCode) {
+            case GLFW_KEY_BACKSPACE:
+                if(KeyListener.isKeyReadyForAction(keyCode) && this.text.length() > 0) {
+                    this.text = this.text.substring(0, text.length() - 1);
+                }
+                break;
+
+            default:
+                if(KeyListener.isKeyReadyForAction(keyCode)) { // estoy aprentando una tecla?
+                    if (keyCode >= 32 && keyCode <= 162) { // caracteres del teclado.
+                        if (capsState) {
+                            this.text += Character.toString((char) keyCode);
+                        } else {
+                            this.text += Character.toString((char) keyCode).toLowerCase();
+                        }
+                    }
+                }
+        }
+    }
+
+    public int getTabIndex() {
+        return tabIndex;
+    }
+
+    public boolean isSelected() {
+        return selected;
+    }
+
+    public void setSelected(boolean value) {
+        this.selected = value;
     }
 }

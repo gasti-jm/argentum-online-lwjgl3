@@ -25,7 +25,7 @@ public class Console {
         }
     }
 
-    private List<TextConsole> dataConsole = new ArrayList<>();
+    private final List<TextConsole> dataConsole = new ArrayList<>();
     private int posList;
 
     private Console() {
