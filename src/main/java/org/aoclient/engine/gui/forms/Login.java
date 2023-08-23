@@ -9,6 +9,7 @@ import org.aoclient.engine.renderer.RGBColor;
 import java.util.ArrayList;
 
 import static org.aoclient.connection.Protocol.writeLoginExistingChar;
+import static org.aoclient.engine.Sound.addMusic;
 
 public class Login extends Form{
     private static Login instance;
@@ -52,6 +53,7 @@ public class Login extends Form{
         buttonList.add(new Button(40, 560, BTN_SIZE_WIDTH, BTN_SIZE_HEIGHT, () -> {
             CreateCharacter.get().init();
             CreateCharacter.get().setVisible(true);
+            addMusic("resources/music/7.ogg").play();
         }, "BotonCrearPersonajeConectar.jpg",
                     "BotonCrearPersonajeRolloverConectar.jpg",
                     "BotonCrearPersonajeClickConectar.jpg"));
@@ -113,11 +115,11 @@ public class Login extends Form{
 
         // txtPort
         txtList.add(new TextBox(txtTabIndexsAdded++, "7666", 326, 184, 55, 13,
-                true, false, new RGBColor(0.0f, 1.0f, 0.0f)));
+                true, false, true, new RGBColor(0.0f, 1.0f, 0.0f)));
 
         // txtIP
         txtList.add(new TextBox(txtTabIndexsAdded++, "127.0.0.1", 384, 184, 105, 13,
-                true, false, new RGBColor(0.0f, 1.0f, 0.0f)));
+                true, false, true, new RGBColor(0.0f, 1.0f, 0.0f)));
 
 
         txtList.get(tabIndexSelected).setSelected(true);

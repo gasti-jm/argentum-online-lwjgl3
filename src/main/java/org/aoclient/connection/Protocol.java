@@ -1486,9 +1486,6 @@ public class Protocol {
         MainGame.get().lblSed.setText(userMinAGU + "/" + userMaxAGU);
         MainGame.get().lblHambre.setText(userMinHAM + "/" + userMaxHAM);
 
-        MainGame.get().lblHambre.setX(621 - (getSizeText(MainGame.get().lblHambre.getText()) / 2));
-        MainGame.get().lblSed.setX(621 - (getSizeText(MainGame.get().lblSed.getText()) / 2));
-
         float bWidth = (((float) (userMinAGU) / ((float) userMaxAGU)) * 75);
         MainGame.get().shpSed.setWidth((int) (75 - bWidth));
         MainGame.get().shpSed.setX(584 + (75 - MainGame.get().shpSed.getWidth()));
@@ -2009,12 +2006,6 @@ public class Protocol {
             }
         }
 
-        // ajustamos al centro.
-        MainGame.get().lblShielder.setX(370 - (getSizeText(MainGame.get().lblShielder.getText() ) / 2));
-        MainGame.get().lblHelm.setX(222 - (getSizeText(MainGame.get().lblHelm.getText() ) / 2));
-        MainGame.get().lblArmor.setX(104 - (getSizeText(MainGame.get().lblArmor.getText() ) / 2));
-        MainGame.get().lblWeapon.setX(488 - (getSizeText(MainGame.get().lblWeapon.getText() ) / 2));
-
         incomingData.copyBuffer(buffer);
     }
 
@@ -2077,10 +2068,6 @@ public class Protocol {
         MainGame.get().lblVida.setText(UserLogic.get().userMinHP + "/" + UserLogic.get().userMaxHP);
         MainGame.get().lblEnergia.setText(UserLogic.get().userMinSTA + "/" + UserLogic.get().userMaxSTA);
 
-        MainGame.get().lblMana.setX(621 - (getSizeText(MainGame.get().lblMana.getText()) / 2));
-        MainGame.get().lblVida.setX(621 - (getSizeText(MainGame.get().lblVida.getText()) / 2));
-        MainGame.get().lblEnergia.setX(621 - (getSizeText(MainGame.get().lblEnergia.getText()) / 2));
-
         ///////// MANA
         float bWidth = (((float) (UserLogic.get().userMinMAN) / ((float) UserLogic.get().userMaxMAN)) * 75);
         MainGame.get().shpMana.setWidth((int) (75 - bWidth));
@@ -2097,7 +2084,6 @@ public class Protocol {
         bWidth = (((float) (UserLogic.get().userMinSTA) / ((float) UserLogic.get().userMaxSTA)) * 75);
         MainGame.get().shpEnergia.setWidth((int) (75 - bWidth));
         MainGame.get().shpEnergia.setX(584 + (75 - MainGame.get().shpEnergia.getWidth()));
-
 
         MainGame.get().lblExp.setText("Exp: " + UserLogic.get().userExp + "/" + UserLogic.get().userPasarNivel);
 
@@ -2839,7 +2825,6 @@ public class Protocol {
         MainGame.get().lblVida.setText(UserLogic.get().userMinHP + "/" + UserLogic.get().userMaxHP);
         MainGame.get().shpVida.setWidth( (int) (((float) (UserLogic.get().userMinHP) / ((float) UserLogic.get().userMaxHP)) * 75) );
         MainGame.get().shpVida.setX(584 + (75 - MainGame.get().shpVida.getWidth()));
-        MainGame.get().lblVida.setX(621 - (getSizeText(MainGame.get().lblVida.getText()) / 2));
 
         charList[UserLogic.get().getUserCharIndex()].setDead(UserLogic.get().userMinHP == 0);
 
@@ -2871,7 +2856,6 @@ public class Protocol {
         float bWidth = (((float) (UserLogic.get().userMinMAN) / ((float) UserLogic.get().userMaxMAN)) * 75);
         MainGame.get().shpMana.setWidth((int) (75 - bWidth));
         MainGame.get().shpMana.setX(584 + (75 - MainGame.get().shpMana.getWidth()));
-        MainGame.get().lblMana.setX(621 - (getSizeText(MainGame.get().lblMana.getText()) / 2));
 
     }
 
@@ -2892,7 +2876,6 @@ public class Protocol {
         float bWidth = (((float) (UserLogic.get().userMinSTA) / ((float) UserLogic.get().userMaxSTA)) * 75);
         MainGame.get().shpEnergia.setWidth((int) (75 - bWidth));
         MainGame.get().shpEnergia.setX(584 + (75 - MainGame.get().shpEnergia.getWidth()));
-        MainGame.get().lblEnergia.setX(621 - (getSizeText(MainGame.get().lblEnergia.getText()) / 2));
 
 
 

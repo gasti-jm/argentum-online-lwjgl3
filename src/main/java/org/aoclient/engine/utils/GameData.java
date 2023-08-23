@@ -49,7 +49,7 @@ public final class GameData {
         LoadFXs();
         loadCSV();
 
-        addMusic("resources/MP3/intro.ogg").play();
+        addMusic("resources/music/intro.ogg").play();
     }
 
 
@@ -422,7 +422,6 @@ public final class GameData {
             ex.printStackTrace();
         }
     }
-
 
     /**
      *

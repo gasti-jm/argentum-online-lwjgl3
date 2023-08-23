@@ -60,18 +60,18 @@ public final class MainScene extends Scene {
     public void keyEvents() {
         if (!forms.isEmpty()) return;
 
-        if (KeyListener.isKeyReadyForAction(GLFW_KEY_ENTER)) {
-            if (frmLogin.getUsername().isEmpty() || !frmLogin.getPassword().isEmpty()) {
-                SocketConnection.getInstance().connect();
-                writeLoginExistingChar(frmLogin.getUsername(), frmLogin.getPassword());
-            } else {
-                forms.add(new Message("Por favor, ingrese un nombre de usuario y/o contraseña valida."));
-            }
-        }
-
         if (frmCreateCharacter.isVisible()) {
             frmCreateCharacter.checkKeyTextBoxes();
         } else {
+            if (KeyListener.isKeyReadyForAction(GLFW_KEY_ENTER)) {
+                if (frmLogin.getUsername().isEmpty() || !frmLogin.getPassword().isEmpty()) {
+                    SocketConnection.getInstance().connect();
+                    writeLoginExistingChar(frmLogin.getUsername(), frmLogin.getPassword());
+                } else {
+                    forms.add(new Message("Por favor, ingrese un nombre de usuario y/o contraseña valida."));
+                }
+            }
+
             frmLogin.checkKeyTextBoxes();
         }
     }

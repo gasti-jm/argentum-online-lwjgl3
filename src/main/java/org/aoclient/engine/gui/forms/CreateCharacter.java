@@ -49,12 +49,23 @@ public class CreateCharacter extends Form {
         txtTabIndexsAdded = 0;
 
         // txtUsername
-        txtList.add(new TextBox(txtTabIndexsAdded++,232, 88, 337, 15, true, false));
+        txtList.add(new TextBox(txtTabIndexsAdded++,232, 88, 337, 15,
+                true, false));
 
         // txtPassword
-        txtList.add(new TextBox(txtTabIndexsAdded++, 232, 120, 161, 15, true, false, true));
+        txtList.add(new TextBox(txtTabIndexsAdded++, 232, 120, 161, 15,
+                true, false, true));
         // txtCofirmPassword
-        txtList.add(new TextBox(txtTabIndexsAdded++, 408, 120, 161, 15, true, false, true));
+        txtList.add(new TextBox(txtTabIndexsAdded++, 408, 120, 161, 15,
+                true, false, true));
+
+        //txtMail
+        txtList.add(new TextBox(txtTabIndexsAdded++, 232, 152, 337, 15,
+                true, false));
+
+
+
+
 
         txtList.get(tabIndexSelected).setSelected(true);
     }
