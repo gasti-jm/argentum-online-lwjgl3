@@ -4,10 +4,11 @@ import org.aoclient.engine.Engine;
 import org.aoclient.engine.Window;
 import org.aoclient.engine.game.Console;
 import org.aoclient.engine.game.UserLogic;
-import org.aoclient.engine.gui.elements.Button;
 import org.aoclient.engine.gui.elements.Label;
 import org.aoclient.engine.gui.elements.Shape;
 import org.aoclient.engine.renderer.RGBColor;
+
+import java.util.ArrayList;
 
 import static org.aoclient.engine.utils.GameData.charList;
 
@@ -39,29 +40,11 @@ public class MainGame extends Form {
     public Label lblHelm = new Label(222, 579, false, new RGBColor(1.0f, 0.0f, 0.0f));
     public Label lblWeapon = new Label(488, 579, false, new RGBColor(1.0f, 0.0f, 0.0f));
 
-
     private Label lblName;
-
-    private Button buttonClose, buttonMinimizar;
     private Console console;
 
     private MainGame() {
 
-    }
-
-    public void init(){
-        this.background.init("VentanaPrincipal.png");
-
-        this.buttonClose = new Button(770,4, 17, 17);
-        this.buttonClose.setAction(Engine::closeClient); // definimos su funcion pasando una lambda.
-
-        this.buttonMinimizar = new Button(752, 4, 17, 17);
-        this.buttonMinimizar.setAction(() -> Window.get().minimizar());
-
-        this.lblName = new Label(charList[UserLogic.get().getUserCharIndex()].getName().toUpperCase(),
-                584, 24, true, false, new RGBColor(1.0f, 0.0f, 0.0f));
-
-        this.console = Console.get();
     }
 
     public static MainGame get(){
@@ -72,17 +55,28 @@ public class MainGame extends Form {
         return instance;
     }
 
-    @Override
-    public void checkButtons(){
-        setButtonState(buttonMinimizar);
-        setButtonState(buttonClose);
+    public void init(){
+        this.visible = true;
+        this.background.init("VentanaPrincipal.png");
+
+        this.buttonList = new ArrayList<>();
+        buttonList.add(addButton(770, 4, 17, 17, Engine::closeClient));
+        buttonList.add(addButton(752, 4, 17, 17, () -> Window.get().minimizar()));
+
+        this.lblName = new Label(charList[UserLogic.get().getUserCharIndex()].getName().toUpperCase(),
+                584, 24, true, false, new RGBColor(1.0f, 0.0f, 0.0f));
+
+        this.console = Console.get();
     }
 
     @Override
     public void render() {
+        if(!visible) return;
+
         background.render();
         console.drawConsole();
-        renderUserStats();
+        this.renderButtons();
+        this.renderUserStats();
     }
 
     private void renderUserStats() {
@@ -120,8 +114,7 @@ public class MainGame extends Form {
     public void close() {
         super.close();
         background.clear();
-        buttonClose.clear();
-        buttonMinimizar.clear();
+        buttonList.clear();
 
         shpHambre.clear();
         shpMana.clear();

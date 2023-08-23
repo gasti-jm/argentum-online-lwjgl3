@@ -76,6 +76,8 @@ public class Surface {
      * @desc: Crea y retorna una textura (en este caso una interfaz de usuario).
      */
     public TextureOGL createTexture(String file) {
+        if (file.isEmpty()) return null;
+
         TextureOGL texture = new TextureOGL();
         texture.id = loadTexture(texture,"resources/gui/" + file, true);
         return texture;

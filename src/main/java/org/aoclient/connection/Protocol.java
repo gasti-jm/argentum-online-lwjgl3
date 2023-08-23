@@ -3310,8 +3310,6 @@ public class Protocol {
         outgoingData.writeByte(ClientPacketID.RequestGuildLeaderInfo.ordinal());
     }
 
-
-
     public static void writeChangeHeading(E_Heading direction) {
         outgoingData.writeByte(ClientPacketID.ChangeHeading.ordinal());
         outgoingData.writeByte(direction.value);

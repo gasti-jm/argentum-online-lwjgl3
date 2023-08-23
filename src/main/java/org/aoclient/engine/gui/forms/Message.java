@@ -22,7 +22,8 @@ public class Message extends Form {
 
     public Message(String msg) {
         this.background.init("VentanaMsj.jpg");
-        this.loadParentAttributes();
+        this.loadPositionAttributes();
+        this.visible = true;
 
         this.msg = new Label(msg, fPosX + LBL_MSG_POS_X, fPosY + LBL_MSG_POS_Y, LBL_SIZE_WIDTH, LBL_SIZE_HEIGHT, true, false);
         this.accept = new Button(fPosX + BTN_MSG_POS_X, fPosY + BTN_MSG_POS_Y, BTN_SIZE_WIDTH, BTN_SIZE_HEIGHT);

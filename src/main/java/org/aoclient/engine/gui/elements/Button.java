@@ -31,7 +31,9 @@ public final class Button extends ElementGUI {
                 }
 
             } else {
-                geometryBoxRenderGUI(this.texture.get(BUTTON_NORMAL.ordinal()), x, y, 1.0f);
+                if (texture.get(BUTTON_NORMAL.ordinal()) != null) {
+                    geometryBoxRenderGUI(this.texture.get(BUTTON_NORMAL.ordinal()), x, y, 1.0f);
+                }
             }
         }
     }

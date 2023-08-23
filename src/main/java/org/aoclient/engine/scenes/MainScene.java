@@ -3,6 +3,7 @@ package org.aoclient.engine.scenes;
 import org.aoclient.connection.SocketConnection;
 import org.aoclient.engine.Window;
 import org.aoclient.engine.game.UserLogic;
+import org.aoclient.engine.gui.forms.CreateCharacter;
 import org.aoclient.engine.gui.forms.Login;
 import org.aoclient.engine.gui.forms.Message;
 import org.aoclient.engine.listeners.KeyListener;
@@ -21,6 +22,7 @@ import static org.lwjgl.glfw.GLFW.GLFW_KEY_ENTER;
 
 public final class MainScene extends Scene {
     private Login frmLogin;
+    private CreateCharacter frmCreateCharacter;
 
     // Conectar
     private RGBColor ambientColor;
@@ -31,6 +33,8 @@ public final class MainScene extends Scene {
         canChangeTo = SceneType.GAME_SCENE;
 
         frmLogin = Login.get();
+        frmCreateCharacter = CreateCharacter.get();
+
         frmLogin.init();
         ambientColor = new RGBColor(1.0f, 1.0f, 1.0f);
 
@@ -43,8 +47,13 @@ public final class MainScene extends Scene {
     public void mouseEvents() {
         if(!forms.isEmpty()) return;
 
-        frmLogin.checkButtons();
-        frmLogin.checkMouseTextBoxs();
+        if (frmCreateCharacter.isVisible()) {
+            frmCreateCharacter.checkButtons();
+            frmCreateCharacter.checkMouseTextBoxes();
+        } else {
+            frmLogin.checkButtons();
+            frmLogin.checkMouseTextBoxes();
+        }
     }
 
     @Override
@@ -60,7 +69,11 @@ public final class MainScene extends Scene {
             }
         }
 
-        frmLogin.checkKeyTextBoxs();
+        if (frmCreateCharacter.isVisible()) {
+            frmCreateCharacter.checkKeyTextBoxes();
+        } else {
+            frmLogin.checkKeyTextBoxes();
+        }
     }
 
     @Override
@@ -78,8 +91,12 @@ public final class MainScene extends Scene {
 
         if (!visible) return;
 
-        renderMap();
-        frmLogin.render();
+        if (frmCreateCharacter.isVisible()) {
+            frmCreateCharacter.render();
+        } else {
+            renderMap();
+            frmLogin.render();
+        }
     }
 
     private void renderMap() {
