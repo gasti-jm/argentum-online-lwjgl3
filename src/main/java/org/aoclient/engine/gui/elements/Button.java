@@ -17,6 +17,19 @@ public final class Button extends ElementGUI {
         this.pressed = false;
     }
 
+    public Button(int x, int y, int width, int height, Runnable action, String... textures) {
+        super(x, y, width, height);
+        this.pressed = false;
+        this.action = action;
+        this.loadTextures(textures);
+    }
+
+    public Button(int x, int y, int width, int height, Runnable action) {
+        super(x, y, width, height);
+        this.pressed = false;
+        this.action = action;
+    }
+
     /**
      * @desc: Dibujamos el boton, segun el estado del mouse y en caso de no tener textura ni se gasta en dibujarlo.
      */

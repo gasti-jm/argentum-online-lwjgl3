@@ -5,8 +5,6 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -40,7 +38,7 @@ public class FontText {
         TextureOGL[] textureFonts = new TextureOGL[4];
         Map<Integer, FontData> fontData = new HashMap<>(); // <ASCII, Valores de posicionamiento>
     }
-    private static Font[] fonts = new Font[1];
+    private static final Font[] fonts = new Font[1]; // por el momento va a ser 1, si queremos agregas mas fuentes, aumentamos...
 
     public static void loadCSV(){
         fonts[0] = new Font();
@@ -120,8 +118,6 @@ public class FontText {
     public static void drawConsoleText(String text, int x, int y, RGBColor color, int fontIndex, boolean bold, boolean italic) {
         if (text.length() == 0) return;
 
-        byte[] chars = text.getBytes(StandardCharsets.ISO_8859_1);
-        int numChars = chars.length;
 
         int fontType = FONT_NORMAL.ordinal();
 
@@ -141,7 +137,8 @@ public class FontText {
         int e = 0;
         int f = 0;
 
-        for (int ascii : chars) {
+        for (int a = 0; a < text.length(); a++) {
+            int ascii = text.charAt(a);
             if (ascii > 255) ascii = 0;
 
             if (ascii == 32 || ascii == 13) {
@@ -213,10 +210,10 @@ public class FontText {
     }
 
     public static void loadTextures(int fontIndex) {
-        fonts[0].textureFonts[0] = Surface.get().createFontTexture("normal");
-        fonts[0].textureFonts[1] = Surface.get().createFontTexture("normal-italic");
-        fonts[0].textureFonts[2] = Surface.get().createFontTexture("bold");
-        fonts[0].textureFonts[3] = Surface.get().createFontTexture("bold-italic");
+        fonts[fontIndex].textureFonts[0] = Surface.get().createFontTexture("normal");
+        fonts[fontIndex].textureFonts[1] = Surface.get().createFontTexture("normal-italic");
+        fonts[fontIndex].textureFonts[2] = Surface.get().createFontTexture("bold");
+        fonts[fontIndex].textureFonts[3] = Surface.get().createFontTexture("bold-italic");
     }
 
     public static void loadFontData(int fontIndex, String fileName) {

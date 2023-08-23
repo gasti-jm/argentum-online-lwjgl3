@@ -95,7 +95,7 @@ public final class IntroScene extends Scene {
     @Override
     public void close() {
         this.visible = false;
-        images.forEach(elementGUI -> elementGUI.clear());
+        images.forEach(ElementGUI::clear);
     }
 
     /**

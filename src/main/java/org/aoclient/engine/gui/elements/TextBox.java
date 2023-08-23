@@ -1,5 +1,6 @@
 package org.aoclient.engine.gui.elements;
 
+import org.aoclient.engine.Window;
 import org.aoclient.engine.listeners.KeyListener;
 import org.aoclient.engine.listeners.MouseListener;
 import org.aoclient.engine.renderer.RGBColor;
@@ -10,9 +11,9 @@ import static org.aoclient.engine.renderer.FontText.drawText;
 import static org.lwjgl.glfw.GLFW.*;
 
 public class TextBox extends Label {
-    private RGBColor backgroundColor;
-    private boolean hideChars;
-    private int tabIndex;
+    private final RGBColor backgroundColor;
+    private final boolean hideChars;
+    private final int tabIndex;
     private boolean selected = false;
 
     public TextBox(int tabIndex, int x, int y, int width, int height, boolean bold, boolean italic, boolean hideChars, RGBColor color) {
@@ -20,6 +21,20 @@ public class TextBox extends Label {
         this.tabIndex = tabIndex;
         this.backgroundColor = new RGBColor(0.0f, 0.0f, 0.0f);
         this.hideChars = hideChars;
+    }
+
+    public TextBox(int tabIndex, int x, int y, int width, int height, boolean bold, boolean italic, boolean hideChars) {
+        super("", x, y, width, height, bold, italic, new RGBColor(1.0f, 1.0f, 1.0f));
+        this.tabIndex = tabIndex;
+        this.backgroundColor = new RGBColor(0.0f, 0.0f, 0.0f);
+        this.hideChars = hideChars;
+    }
+
+    public TextBox(int tabIndex, int x, int y, int width, int height, boolean bold, boolean italic) {
+        super("", x, y, width, height, bold, italic, new RGBColor(1.0f, 1.0f, 1.0f));
+        this.tabIndex = tabIndex;
+        this.backgroundColor = new RGBColor(0.0f, 0.0f, 0.0f);
+        this.hideChars = false;
     }
 
     @Override
@@ -50,32 +65,21 @@ public class TextBox extends Label {
         if (!selected) return;
         final int keyCode = KeyListener.getLastKeyPressed();
 
-        switch (keyCode) {
-            case GLFW_KEY_BACKSPACE:
-                if(KeyListener.isKeyReadyForAction(keyCode) && this.text.length() > 0) {
-                    this.text = this.text.substring(0, text.length() - 1);
-                }
-                break;
-
-            default:
-                if(KeyListener.isKeyReadyForAction(keyCode)) { // estoy aprentando una tecla?
-                    if (keyCode >= 32 && keyCode <= 162) { // caracteres del teclado.
-                        if (capsState) {
-                            this.text += Character.toString((char) keyCode);
-                        } else {
-                            this.text += Character.toString((char) keyCode).toLowerCase();
-                        }
+        if (keyCode == GLFW_KEY_BACKSPACE) {
+            if (KeyListener.isKeyReadyForAction(keyCode) && this.text.length() > 0) {
+                this.text = this.text.substring(0, text.length() - 1);
+            }
+        } else {
+            if (KeyListener.isKeyReadyForAction(keyCode)) { // estoy aprentando una tecla?
+                if (keyCode >= 32 && keyCode <= 162) { // caracteres del teclado.
+                    if (capsState) {
+                        this.text += Character.toString((char) keyCode);
+                    } else {
+                        this.text += Character.toString((char) keyCode).toLowerCase();
                     }
                 }
+            }
         }
-    }
-
-    public int getTabIndex() {
-        return tabIndex;
-    }
-
-    public boolean isSelected() {
-        return selected;
     }
 
     public void setSelected(boolean value) {

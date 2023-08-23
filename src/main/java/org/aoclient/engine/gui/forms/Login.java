@@ -38,18 +38,18 @@ public class Login extends Form{
         this.buttonList = new ArrayList<>();
 
         // btnConectar
-        buttonList.add(addButton(320, 264, BTN_SIZE_WIDTH, BTN_SIZE_HEIGHT, () -> {
+        buttonList.add(new Button(320, 264, BTN_SIZE_WIDTH, BTN_SIZE_HEIGHT, () -> {
             SocketConnection.getInstance().connect();
             writeLoginExistingChar(txtList.get(TXT_USERNAME_INDEX).getText(), txtList.get(TXT_PASSWORD_INDEX).getText());
         }, "BotonConectarse.jpg", "BotonConectarseRollover.jpg", "BotonConectarseClick.jpg"));
 
         // btnTeclas
-        buttonList.add(addButton(408, 264, BTN_SIZE_WIDTH, BTN_SIZE_HEIGHT, () -> {
+        buttonList.add(new Button(408, 264, BTN_SIZE_WIDTH, BTN_SIZE_HEIGHT, () -> {
             // nothing to do yet...
         }, "BotonTeclas.jpg", "BotonTeclasRollover.jpg", "BotonTeclasClick.jpg"));
 
         // btnCrearPJ
-        buttonList.add(addButton(40, 560, BTN_SIZE_WIDTH, BTN_SIZE_HEIGHT, () -> {
+        buttonList.add(new Button(40, 560, BTN_SIZE_WIDTH, BTN_SIZE_HEIGHT, () -> {
             CreateCharacter.get().init();
             CreateCharacter.get().setVisible(true);
         }, "BotonCrearPersonajeConectar.jpg",
@@ -57,42 +57,42 @@ public class Login extends Form{
                     "BotonCrearPersonajeClickConectar.jpg"));
 
         // btnRecuperar
-        buttonList.add(addButton(144, 560, BTN_SIZE_WIDTH, BTN_SIZE_HEIGHT, () -> {
+        buttonList.add(new Button(144, 560, BTN_SIZE_WIDTH, BTN_SIZE_HEIGHT, () -> {
                     // nothing to do yet...
                 }, "BotonRecuperarPass.jpg",
                 "BotonRecuperarPassRollover.jpg",
                 "BotonRecuperarPassClick.jpg"));
 
         // btnManual
-        buttonList.add(addButton(248, 560, BTN_SIZE_WIDTH, BTN_SIZE_HEIGHT, () -> {
+        buttonList.add(new Button(248, 560, BTN_SIZE_WIDTH, BTN_SIZE_HEIGHT, () -> {
                     // nothing to do yet...
                 }, "BotonManual.jpg",
                 "BotonManualRollover.jpg",
                 "BotonManualClick.jpg"));
 
         // btnReglamento
-        buttonList.add(addButton(352, 560, BTN_SIZE_WIDTH, BTN_SIZE_HEIGHT, () -> {
+        buttonList.add(new Button(352, 560, BTN_SIZE_WIDTH, BTN_SIZE_HEIGHT, () -> {
                     // nothing to do yet...
                 }, "BotonReglamento.jpg",
                 "BotonReglamentoRollover.jpg",
                 "BotonReglamentoClick.jpg"));
 
         // btnCodigoFuente
-        buttonList.add(addButton(456, 560, BTN_SIZE_WIDTH, BTN_SIZE_HEIGHT, () -> {
+        buttonList.add(new Button(456, 560, BTN_SIZE_WIDTH, BTN_SIZE_HEIGHT, () -> {
                     // nothing to do yet...
                 }, "BotonCodigoFuente.jpg",
                 "BotonCodigoFuenteRollover.jpg",
                 "BotonCodigoFuenteClick.jpg"));
 
         // btnBorrarPJ
-        buttonList.add(addButton(560, 560, BTN_SIZE_WIDTH, BTN_SIZE_HEIGHT, () -> {
+        buttonList.add(new Button(560, 560, BTN_SIZE_WIDTH, BTN_SIZE_HEIGHT, () -> {
                     // nothing to do yet...
                 }, "BotonBorrarPersonaje.jpg",
                 "BotonBorrarPersonajeRollover.jpg",
                 "BotonBorrarPersonajeClick.jpg"));
 
         // btnBorrarPJ
-        buttonList.add(addButton(664, 560, BTN_SIZE_WIDTH, BTN_SIZE_HEIGHT, Engine::closeClient,
+        buttonList.add(new Button(664, 560, BTN_SIZE_WIDTH, BTN_SIZE_HEIGHT, Engine::closeClient,
                 "BotonSalirConnect.jpg",
                 "BotonBotonSalirRolloverConnect.jpg",
                 "BotonSalirClickConnect.jpg"));
@@ -106,12 +106,10 @@ public class Login extends Form{
         txtTabIndexsAdded = 0;
 
         // txtUserName
-        txtList.add(addTextBox(327, 214, 164, 15, true, false, false,
-                new RGBColor(1.0f, 1.0f, 1.0f)));
+        txtList.add(new TextBox(txtTabIndexsAdded++,327, 214, 164, 15, true, false));
 
         // txtPass
-        txtList.add(addTextBox(327, 248, 164, 15, true, false, true,
-                new RGBColor(1.0f, 1.0f, 1.0f)));
+        txtList.add(new TextBox(txtTabIndexsAdded++, 327, 248, 164, 15, true, false, true));
 
         txtList.get(tabIndexSelected).setSelected(true);
     }

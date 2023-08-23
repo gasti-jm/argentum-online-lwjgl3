@@ -10,8 +10,7 @@ import org.aoclient.engine.renderer.RGBColor;
 
 import java.util.List;
 
-import static org.lwjgl.glfw.GLFW.GLFW_KEY_TAB;
-import static org.lwjgl.glfw.GLFW.GLFW_MOUSE_BUTTON_LEFT;
+import static org.lwjgl.glfw.GLFW.*;
 
 public abstract class Form {
     protected ImageBox background; // siempre, sino no seria un formulario para argentum, no podemos usar una interfaz de windows o un JFrame...
@@ -66,25 +65,6 @@ public abstract class Form {
         }
     }
 
-    protected TextBox addTextBox(int x, int y, int w, int h, boolean b, boolean i, boolean hide, RGBColor color) {
-        return new TextBox(txtTabIndexsAdded++, x, y, w, h, b, i, hide, color);
-    }
-
-    protected Button addButton(int x, int y, int w, int h, Runnable action, String... textures) {
-        Button btn = new Button(x, y, w, h);
-        btn.setAction(action);
-        btn.loadTextures(textures);
-
-        return btn;
-    }
-
-    protected Button addButton(int x, int y, int w, int h, Runnable action) {
-        Button btn = new Button(x, y, w, h);
-        btn.setAction(action);
-
-        return btn;
-    }
-
     public void checkKeyTextBoxes() {
         if(KeyListener.isKeyReadyForAction(GLFW_KEY_TAB)) {
             if (tabIndexSelected < txtTabIndexsAdded - 1) {
@@ -103,13 +83,24 @@ public abstract class Form {
     }
 
     public void checkMouseTextBoxes() {
+        boolean insideTxt = false;
+
         for (TextBox txt: txtList) {
+            if (txt.isInside()) {
+                insideTxt = true;
+                glfwSetCursor(Window.get().getWindow(), glfwCreateStandardCursor(GLFW_IBEAM_CURSOR));
+            }
+
             final int selected = txt.checkSelected();
             if (selected > -1) {
                 txtList.get(tabIndexSelected).setSelected(false);
                 tabIndexSelected = selected;
                 txtList.get(selected).setSelected(true);
             }
+        }
+
+        if (!insideTxt) {
+            glfwSetCursor(Window.get().getWindow(), glfwCreateStandardCursor(GLFW_ARROW_CURSOR));
         }
     }
 
@@ -124,7 +115,6 @@ public abstract class Form {
             btn.render();
         }
     }
-
 
     public void close() {
         this.visible = false;

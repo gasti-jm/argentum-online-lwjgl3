@@ -4,6 +4,7 @@ import org.aoclient.engine.Engine;
 import org.aoclient.engine.Window;
 import org.aoclient.engine.game.Console;
 import org.aoclient.engine.game.UserLogic;
+import org.aoclient.engine.gui.elements.Button;
 import org.aoclient.engine.gui.elements.Label;
 import org.aoclient.engine.gui.elements.Shape;
 import org.aoclient.engine.renderer.RGBColor;
@@ -60,8 +61,8 @@ public class MainGame extends Form {
         this.background.init("VentanaPrincipal.png");
 
         this.buttonList = new ArrayList<>();
-        buttonList.add(addButton(770, 4, 17, 17, Engine::closeClient));
-        buttonList.add(addButton(752, 4, 17, 17, () -> Window.get().minimizar()));
+        buttonList.add(new Button(770, 4, 17, 17, Engine::closeClient));
+        buttonList.add(new Button(752, 4, 17, 17, () -> Window.get().minimizar()));
 
         this.lblName = new Label(charList[UserLogic.get().getUserCharIndex()].getName().toUpperCase(),
                 584, 24, true, false, new RGBColor(1.0f, 0.0f, 0.0f));
