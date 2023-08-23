@@ -111,6 +111,15 @@ public class Login extends Form{
         // txtPass
         txtList.add(new TextBox(txtTabIndexsAdded++, 327, 248, 164, 15, true, false, true));
 
+        // txtPort
+        txtList.add(new TextBox(txtTabIndexsAdded++, "7666", 326, 184, 55, 13,
+                true, false, new RGBColor(0.0f, 1.0f, 0.0f)));
+
+        // txtIP
+        txtList.add(new TextBox(txtTabIndexsAdded++, "127.0.0.1", 384, 184, 105, 13,
+                true, false, new RGBColor(0.0f, 1.0f, 0.0f)));
+
+
         txtList.get(tabIndexSelected).setSelected(true);
     }
 

@@ -37,6 +37,13 @@ public class TextBox extends Label {
         this.hideChars = false;
     }
 
+    public TextBox(int tabIndex, String text, int x, int y, int width, int height, boolean bold, boolean italic, RGBColor color) {
+        super(text, x, y, width, height, bold, italic, color);
+        this.tabIndex = tabIndex;
+        this.backgroundColor = new RGBColor(0.0f, 0.0f, 0.0f);
+        this.hideChars = false;
+    }
+
     @Override
     public void render() {
         drawRectangle(x, y, width, height, backgroundColor);

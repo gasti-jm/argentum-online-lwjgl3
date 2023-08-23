@@ -2091,6 +2091,8 @@ public class Protocol {
         MainGame.get().shpVida.setWidth((int) (75 - bWidth));
         MainGame.get().shpVida.setX(584 + (75 - MainGame.get().shpVida.getWidth()));
 
+
+
         //////// ENERGIA
         bWidth = (((float) (UserLogic.get().userMinSTA) / ((float) UserLogic.get().userMaxSTA)) * 75);
         MainGame.get().shpEnergia.setWidth((int) (75 - bWidth));
@@ -2835,7 +2837,7 @@ public class Protocol {
         UserLogic.get().userMinHP = incomingData.readInteger();
 
         MainGame.get().lblVida.setText(UserLogic.get().userMinHP + "/" + UserLogic.get().userMaxHP);
-        MainGame.get().shpVida.setWidth( (( (UserLogic.get().userMinHP / 100) / (UserLogic.get().userMaxHP / 100)) * 75));
+        MainGame.get().shpVida.setWidth( (int) (((float) (UserLogic.get().userMinHP) / ((float) UserLogic.get().userMaxHP)) * 75) );
         MainGame.get().shpVida.setX(584 + (75 - MainGame.get().shpVida.getWidth()));
         MainGame.get().lblVida.setX(621 - (getSizeText(MainGame.get().lblVida.getText()) / 2));
 
