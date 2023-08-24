@@ -77,7 +77,6 @@ public final class IntroScene extends Scene {
 
         images.get(nextInterface).render();
 
-
         timePresentation -= deltaTime;
     }
 

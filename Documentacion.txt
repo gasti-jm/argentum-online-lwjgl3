@@ -1,0 +1,70 @@
+* Terminar de desarrollar los TextBox:
+- Ponerle un limite de caracteres o un movimento, ya que al ingresar varios sobresale de su cuadro de texto
+- Agregarle un puntero de posicion (barrita: | ).
+- Barra de seleccionado
+
+* Desarrollar los ListBox y ComboBox.
+* Crear formularios:
+- frmCargando o frmPres (TERMINADO en IntroScene).
+- frmConectar (TERMINADO)
+- frmMain (EN PROGRESO)
+- frmCrearPersonaje (EN PROGRESO).
+- frmMensaje (COMPLETO)
+- frmCustomKeys
+- frmBancoObj
+- frmCambiaMotd
+- frmCantidad
+- frmCarp
+- frmCharInfo
+- frmComerciar
+- frmComerciarUsu
+- frmCommet
+- frmEligeAlneacion
+- frmEntrenador
+- frmEstadisticas
+- frmForo
+- frmGuildAdm
+- frmGuildBrief
+- frmGuildDetails
+- frmGuildFoundation
+- frmGuildLeader
+- frmGuildMember
+- frmGuildNews
+- frmGuildSol
+- frmGuildURL
+- frmHerrero
+- frmKeyPad
+- frmMapa
+- frmMensajeTxt
+- frmMSG
+- frmNewPassword
+- frmOpciones
+- frmPanelGM
+- frmParty
+- frmPeaceProp
+- frmScreenshot (no creo que sea necesario en un formulario, sino implementar un sistema de screenshots).
+- frmSkills
+- frmSpawnList
+- frmTip
+- frmTutorial
+- frmUserRequest
+
+* Terminar de implementar todos los metodos write del protocolo del cliente para enviar paquetes al servidor.
+* Implementar los colores en el nombre del usuario (segun su faccion) y los colores en los mensajes en consola.
+- Una vez que se implemente esto, se debe terminar la funcion handleMultiMessage para que muestre todos los mensajes a consola (ya que no se muestran todos).
+
+
+* Arreglar el grafico de las letras para que pueda leer caracteres especiales (como la letra Ñ, letras con acentos, etc).
+* Testiar la conexion con usuarios
+* Agregar botones, ImageGUI (grafico para inventario de items y de hechizos) y textbox (para escribir una conversacion o un comando) en el MainGame.java (este seria el frmMain).
+* Sistema de dialogos (letras arriba de la cabeza de los personajes).
+* Migrar todos los MIDIS a OGG (OpenAL no reproduce en otros formatos... nose si es por la multicompatiblidad esto. Lo malo es que para migrarlo vamos a tener que grabar cada midi, ya que los codex de reproducion que usan los migradores no son los de Windows y te devuelve un ogg con sonido de otros instrumentos). 
+* Implementar un sistema de configuracion en archivos (para guardar el volumen, pantalla completa, audio activado/desactivado, etc).
+* Implementar acciones en algunas teclas bindeadas (por ejemplo al apretar la "O" te intente hacer invisible, al apretar la "M" que deje de reproducir musica, etc).
+
+* Todos las funciones handle que imprimen en consola son los que faltan terminar ya sea por falta de formularios o de sistemas a implementar.
+
+/////////////////////////////////////////////////////////////////////////
+
+Estas son todas las tareas a realizar por el momento
+a medida que se vaya testiando el cliente se iran agregando mas.

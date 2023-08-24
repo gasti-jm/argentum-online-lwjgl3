@@ -68,11 +68,13 @@ public class TextBox extends Label {
             } else {
                 FontText.drawText(this.text, this.x, this.y, this.color, 0, this.bold, this.italic, false);
             }
+
         } else {
             StringBuilder txtHided = new StringBuilder();
             for (int i = 0; i < this.text.length(); i++) txtHided.append("*");
             drawText(txtHided.toString(), this.x, this.y, this.color, 0, this.bold, this.italic, false);
         }
+
     }
 
     public int checkSelected() {
@@ -105,6 +107,7 @@ public class TextBox extends Label {
                 }
             }
         }
+
     }
 
     public void setSelected(boolean value) {

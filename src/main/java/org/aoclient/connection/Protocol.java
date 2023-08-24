@@ -17,7 +17,6 @@ import org.aoclient.engine.utils.filedata.GrhInfo;
 import static org.aoclient.connection.Messages.*;
 import static org.aoclient.engine.Engine.forms;
 import static org.aoclient.engine.game.models.Character.*;
-import static org.aoclient.engine.renderer.FontText.getSizeText;
 import static org.aoclient.engine.utils.GameData.*;
 
 public class Protocol {
@@ -1962,12 +1961,6 @@ public class Protocol {
         UserLogic.get().getUserInventory().setItem( slot - 1, objIndex, amount, equipped, grhIndex, objType,
                 maxHit, minHit, maxDef, minDef, value, name);
 
-
-        //    public Label lblHelm = new Label(342, 579, false, new RGBColor(1.0f, 0.0f, 0.0f));
-        //    public Label lblShielder = new Label(400, 579, false, new RGBColor(1.0f, 0.0f, 0.0f));
-
-
-
         if(equipped) {
             switch (E_ObjType.values()[objType - 1]) {
                 case otWeapon:
@@ -2096,7 +2089,7 @@ public class Protocol {
 
         MainGame.get().lblLvl.setText("Nivel: " + userLvl);
 
-        charList[UserLogic.get().getUserCharIndex()].setDead(UserLogic.get().userMinHP == 0);
+        charList[UserLogic.get().getUserCharIndex()].setDead(UserLogic.get().userMinHP <= 0);
 
         MainGame.get().gldLbl.setText(String.valueOf(userGLD));
 
@@ -2826,7 +2819,7 @@ public class Protocol {
         MainGame.get().shpVida.setWidth( (int) (((float) (UserLogic.get().userMinHP) / ((float) UserLogic.get().userMaxHP)) * 75) );
         MainGame.get().shpVida.setX(584 + (75 - MainGame.get().shpVida.getWidth()));
 
-        charList[UserLogic.get().getUserCharIndex()].setDead(UserLogic.get().userMinHP == 0);
+        charList[UserLogic.get().getUserCharIndex()].setDead(UserLogic.get().userMinHP <= 0);
 
         //
         //    'Is the user alive??
