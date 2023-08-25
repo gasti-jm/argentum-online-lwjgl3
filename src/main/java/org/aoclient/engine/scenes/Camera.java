@@ -197,17 +197,8 @@ public final class Camera {
         return minXOffset;
     }
 
-    public void setMinXOffset(int minXOffset) {
-        this.minXOffset = minXOffset;
-    }
-
     public int getMinYOffset() {
         return minYOffset;
     }
-
-    public void setMinYOffset(int minYOffset) {
-        this.minYOffset = minYOffset;
-    }
-
 
 }

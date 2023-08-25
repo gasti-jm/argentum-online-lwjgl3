@@ -5,6 +5,10 @@ import org.aoclient.engine.gui.forms.Message;
 
 import java.net.*;
 import java.io.*;
+import java.nio.ByteBuffer;
+import java.nio.charset.Charset;
+import java.nio.charset.CharsetDecoder;
+import java.nio.charset.StandardCharsets;
 
 import static org.aoclient.connection.Protocol.*;
 import static org.aoclient.engine.Engine.forms;
@@ -78,11 +82,16 @@ public class SocketConnection {
                 //System.out.println("Bytes Read: " + bytesRead);
 
                 if (bytesRead > 0) {
-                    final String RD = new String(dataBuffer, 0 , bytesRead);
+                    //final String RD =
+                    //final String RD = new String(dataBuffer, 0 , bytesRead, "Cp1252");
+                    //System.out.println(RD);
+                    //if (RD.isEmpty()) return;
+                    String RD = convertVBUnicodeToUTF8(dataBuffer, bytesRead);
+                    if (RD.isEmpty()) return;
+
                     byte[] data = RD.getBytes();
                     //System.out.println("Received data: " + RD);
 
-                    if (RD.isEmpty()) return;
 
                     // Put data in the buffer
                     incomingData.writeBlock(data, -1);
@@ -94,6 +103,17 @@ public class SocketConnection {
 
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    public String convertVBUnicodeToUTF8(byte[] dataBuffer, int bytesRead) {
+        try {
+            String rawData = new String(dataBuffer, 0, bytesRead, "Cp1252"); // Assuming Windows-1252 encoding
+            byte[] utf8Bytes = rawData.getBytes(StandardCharsets.UTF_8);
+            return new String(utf8Bytes, StandardCharsets.UTF_8);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+            return "";
         }
     }
 

@@ -1,5 +1,6 @@
 package org.aoclient.connection;
 
+import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 
@@ -240,7 +241,11 @@ public class ByteQueue {
                 if (length > 0) {
                     byte[] buf2 = new byte[length];
                     removeData(readData(buf2, length));
-                    return new String(buf2, StandardCharsets.UTF_8);
+                    try {
+                        return new String(buf2, "Cp1252");
+                    } catch (UnsupportedEncodingException e) {
+                        throw new RuntimeException(e);
+                    }
                 }
             } else {
                 throw new RuntimeException("Not enough data");

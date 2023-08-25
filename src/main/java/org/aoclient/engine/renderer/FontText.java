@@ -5,6 +5,9 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 
+import java.io.UnsupportedEncodingException;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -118,7 +121,6 @@ public class FontText {
     public static void drawConsoleText(String text, int x, int y, RGBColor color, int fontIndex, boolean bold, boolean italic) {
         if (text.length() == 0) return;
 
-
         int fontType = FONT_NORMAL.ordinal();
 
         if (color == null) {
@@ -139,6 +141,7 @@ public class FontText {
 
         for (int a = 0; a < text.length(); a++) {
             int ascii = text.charAt(a);
+
             if (ascii > 255) ascii = 0;
 
             if (ascii == 32 || ascii == 13) {
