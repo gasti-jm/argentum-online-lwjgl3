@@ -5,8 +5,7 @@ import java.nio.IntBuffer;
 import java.nio.ShortBuffer;
 import java.util.Collection;
 
-import static org.aoclient.engine.utils.GameData.music;
-import static org.aoclient.engine.utils.GameData.sounds;
+import static org.aoclient.engine.utils.GameData.*;
 import static org.lwjgl.openal.AL10.*;
 import static org.lwjgl.stb.STBVorbis.stb_vorbis_decode_filename;
 import static org.lwjgl.system.MemoryStack.*;
@@ -83,13 +82,16 @@ public final class Sound {
     }
 
     public void play() {
-        if (alGetSourcei(sourceId, AL_SOURCE_STATE) == AL_PLAYING) {
-            new Sound(this.filepath, false).play();
-        } else {
-            if (!isPlaying)
-                isPlaying = true;
 
-            alSourcePlay(sourceId);
+        if (options.isMusic()) {
+            if (alGetSourcei(sourceId, AL_SOURCE_STATE) == AL_PLAYING) {
+                new Sound(this.filepath, false).play();
+            } else {
+                if (!isPlaying)
+                    isPlaying = true;
+
+                alSourcePlay(sourceId);
+            }
         }
     }
 
@@ -151,13 +153,15 @@ public final class Sound {
     }
 
     public static void playSound(String soundName) {
-        final File file = new File("resources/sounds/" + soundName);
+        if (!options.isSound()) {
+            final File file = new File("resources/sounds/" + soundName);
 
-        // existe?
-        if (sounds.containsKey(file.getAbsolutePath())) {
-            sounds.get(file.getAbsolutePath()).play();
-        } else {
-            addSound("resources/sounds/" + soundName, false).play();
+            // existe?
+            if (sounds.containsKey(file.getAbsolutePath())) {
+                sounds.get(file.getAbsolutePath()).play();
+            } else {
+                addSound("resources/sounds/" + soundName, false).play();
+            }
         }
     }
 
@@ -168,10 +172,10 @@ public final class Sound {
     public static Sound addMusic(String soundFile) {
         final File file = new File(soundFile);
 
-        if(music != null) {
-            music.stop();
-            music.delete();
-        }
+            if (music != null) {
+                music.stop();
+                music.delete();
+            }
 
         Sound sound = new Sound(file.getAbsolutePath(), true);
         music = sound;
