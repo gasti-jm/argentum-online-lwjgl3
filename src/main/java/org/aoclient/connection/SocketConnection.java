@@ -82,16 +82,12 @@ public class SocketConnection {
                 //System.out.println("Bytes Read: " + bytesRead);
 
                 if (bytesRead > 0) {
-                    //final String RD =
                     //final String RD = new String(dataBuffer, 0 , bytesRead, "Cp1252");
-                    //System.out.println(RD);
-                    //if (RD.isEmpty()) return;
-                    String RD = convertVBUnicodeToUTF8(dataBuffer, bytesRead);
+                    final String RD = convertVBUnicodeToUTF8(dataBuffer, bytesRead);
                     if (RD.isEmpty()) return;
 
                     byte[] data = RD.getBytes();
                     //System.out.println("Received data: " + RD);
-
 
                     // Put data in the buffer
                     incomingData.writeBlock(data, -1);

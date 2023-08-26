@@ -13,7 +13,9 @@
 
 # How to compile
 <p>
-  <a href="https://www.jetbrains.com/es-es/idea/" target="_blank">IntelliJ IDEA</a> is needed (although with <a href="https://netbeans.apache.org/" target="_blank">NetBeans</a>, <a href="https://www.eclipse.org/downloads/" target="_blank">Eclipse</a> or any other IDE you can use it, if you know how to build the project). <br/> <br/>
+  <a href="https://www.jetbrains.com/es-es/idea/" target="_blank">IntelliJ IDEA</a> is needed (although with <a href="https://netbeans.apache.org/" target="_blank">NetBeans</a>, <a href="https://www.eclipse.org/downloads/" target="_blank">Eclipse</a> or any other IDE you can use it, if you know how to build the project). 
+  You will also need to install <a href="https://www.oracle.com/ar/java/technologies/javase/javase8-archive-downloads.html" target="_blank">Java SE 8 JDK</a> to use in your IDE. <br/> <br/>
+
   If you use IntelliJ, opening the project will be enough to start working, since Gradle will take care of downloading and installing the dependencies.
 
 </p>
@@ -28,7 +30,8 @@
 
 <p>
   <b>Pablo Marquez (Morgolock) creator of Argentum Online</b> <br/>
-  The GS-Zone people <br/>
+  <b>Lord Fers</b> - GS-Zone user who released a base client offline in LWJGL2 <br/>
+  And the GS-Zone people <br/>
   <a target="_blank" href="https://www.gs-zone.org/"><img src="https://user-images.githubusercontent.com/82490615/187148671-1d7f92b9-7ea1-45f2-b6f1-f53b07454d93.png"></img></a>
 </p>
 
