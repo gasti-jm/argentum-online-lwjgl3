@@ -9,7 +9,7 @@ import org.aoclient.engine.renderer.RGBColor;
 import java.util.ArrayList;
 
 import static org.aoclient.connection.Protocol.writeLoginExistingChar;
-import static org.aoclient.engine.Sound.addMusic;
+import static org.aoclient.engine.Sound.playMusic;
 import static org.aoclient.engine.utils.GameData.options;
 
 public class Login extends Form{
@@ -56,7 +56,7 @@ public class Login extends Form{
         buttonList.add(new Button(40, 560, BTN_SIZE_WIDTH, BTN_SIZE_HEIGHT, () -> {
             CreateCharacter.get().init();
             CreateCharacter.get().setVisible(true);
-            addMusic("resources/music/7.ogg").play();
+            playMusic("7.ogg");
         }, "BotonCrearPersonajeConectar.jpg",
                     "BotonCrearPersonajeRolloverConectar.jpg",
                     "BotonCrearPersonajeClickConectar.jpg"));

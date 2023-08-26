@@ -12,8 +12,7 @@ import org.aoclient.engine.game.models.Character;
 import org.aoclient.engine.renderer.Surface;
 import org.aoclient.engine.utils.filedata.*;
 
-import static org.aoclient.engine.Sound.addMusic;
-import static org.aoclient.engine.Sound.clearSounds;
+import static org.aoclient.engine.Sound.*;
 import static org.aoclient.engine.game.models.Character.eraseChar;
 import static org.aoclient.engine.renderer.FontText.loadCSV;
 import static org.aoclient.engine.utils.ByteMigration.*;
@@ -56,7 +55,7 @@ public final class GameData {
         LoadFXs();
         loadCSV();
 
-        addMusic("resources/music/intro.ogg").play();
+        playMusic("intro.ogg");
     }
 
 

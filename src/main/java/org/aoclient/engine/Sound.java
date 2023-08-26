@@ -94,16 +94,13 @@ public final class Sound {
      *        En caso contrario, se comienza a reproducir el sonido 1 sola vez.
      */
     public void play() {
+        if (alGetSourcei(sourceId, AL_SOURCE_STATE) == AL_PLAYING) {
+            new Sound(this.filepath, false).play();
+        } else {
+            if (!isPlaying)
+                isPlaying = true;
 
-        if (options.isMusic()) {
-            if (alGetSourcei(sourceId, AL_SOURCE_STATE) == AL_PLAYING) {
-                new Sound(this.filepath, false).play();
-            } else {
-                if (!isPlaying)
-                    isPlaying = true;
-
-                alSourcePlay(sourceId);
-            }
+            alSourcePlay(sourceId);
         }
     }
 
@@ -169,13 +166,15 @@ public final class Sound {
      *        contrario: crea uno, lo guarda en el mapa y lo reproduce.
      */
     public static void playSound(String soundName) {
-        if (!options.isSound()) {
-            final File file = new File("resources/sounds/" + soundName);
+        final File file = new File("resources/sounds/" + soundName);
 
-            // existe?
-            if (sounds.containsKey(file.getAbsolutePath())) {
+        // existe?
+        if (sounds.containsKey(file.getAbsolutePath())) {
+            if (options.isSound()) {
                 sounds.get(file.getAbsolutePath()).play();
-            } else {
+            }
+        } else {
+            if (options.isSound()) {
                 addSound("resources/sounds/" + soundName, false).play();
             }
         }
@@ -183,20 +182,21 @@ public final class Sound {
 
     /**
      *
-     * @desc: Agregamos musica a nuestro variable de musica.
+     * @desc: Agregamos musica a nuestro objeto de musica y lo reproduce.
      */
-    public static Sound addMusic(String soundFile) {
-        final File file = new File(soundFile);
+    public static void playMusic(String musicName) {
+        final File file = new File("resources/music/" + musicName);
 
-            if (music != null) {
-                music.stop();
-                music.delete();
-            }
+        if (music != null) {
+            music.stop();
+            music.delete();
+        }
 
-        Sound sound = new Sound(file.getAbsolutePath(), true);
-        music = sound;
+        music = new Sound(file.getAbsolutePath(), true);
 
-        return sound;
+        if(options.isMusic()) {
+            music.play();
+        }
     }
 
     /**
