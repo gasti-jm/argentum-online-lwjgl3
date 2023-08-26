@@ -42,6 +42,14 @@ public class TextBox extends Label {
         this.center = false;
     }
 
+    public TextBox(int tabIndex, String text, int x, int y, int width, int height, boolean bold, boolean italic) {
+        super(text, x, y, width, height, bold, italic, new RGBColor(1.0f, 1.0f, 1.0f));
+        this.tabIndex = tabIndex;
+        this.backgroundColor = new RGBColor(0.0f, 0.0f, 0.0f);
+        this.hideChars = false;
+        this.center = false;
+    }
+
     public TextBox(int tabIndex, String text, int x, int y, int width, int height, boolean bold, boolean italic, RGBColor color) {
         super(text, x, y, width, height, bold, italic, color);
         this.tabIndex = tabIndex;

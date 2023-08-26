@@ -440,21 +440,22 @@ public final class Character {
                                 PixelOffsetX, PixelOffsetY, true, true, false, 1.0f, ambientcolor);
                     }
 
-                    if (charList[charIndex].getName().length() > 0) {
-                        if (charList[charIndex].getPriv() == 0) {
-                            color.setRed(0.0f);
-                            color.setGreen(0.5f);
-                            color.setBlue(1.0f);
+                    if (options.isShowName()) {
+                        if (charList[charIndex].getName().length() > 0) {
+                            if (charList[charIndex].getPriv() == 0) {
+                                color.setRed(0.0f);
+                                color.setGreen(0.5f);
+                                color.setBlue(1.0f);
+                            }
+
+                            String line = charList[charIndex].getName();
+                            drawText(line, PixelOffsetX - (getSizeText(line) / 2) + 15, PixelOffsetY + 30, color, 0, true, false, false);
+
+                            line = charList[charIndex].getClanName();
+                            if (!line.isEmpty()) {
+                                drawText(line, PixelOffsetX - (getSizeText(line) / 2) + 15, PixelOffsetY + 43, color, 0, true, false, false);
+                            }
                         }
-
-                        String line = charList[charIndex].getName();
-                        drawText(line, PixelOffsetX - (getSizeText(line) / 2) + 15, PixelOffsetY + 30, color, 0, true, false, false);
-
-                        line = charList[charIndex].getClanName();
-                        if (!line.isEmpty()) {
-                            drawText(line, PixelOffsetX - (getSizeText(line) / 2) + 15, PixelOffsetY + 43, color, 0, true, false, false);
-                        }
-
                     }
 
                 }

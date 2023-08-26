@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.aoclient.engine.Sound;
+import org.aoclient.engine.game.Options;
 import org.aoclient.engine.game.models.Character;
 import org.aoclient.engine.renderer.Surface;
 import org.aoclient.engine.utils.filedata.*;
@@ -31,6 +32,8 @@ public final class GameData {
     public static Sound music;
     public static Map<String, Sound> sounds = new HashMap<>();
 
+    public static Options options;
+
     /**
      * @desc: Inicializamos todos los datos almacenados en archivos.
      */
@@ -39,6 +42,11 @@ public final class GameData {
             charList[i] = new Character();
         }
 
+        // Creamos el objeto de las opciones.
+        options = new Options();
+        options.LoadOptions();
+
+        loadGrhData();
         loadGrhData();
         loadHeads();
         loadHelmets();

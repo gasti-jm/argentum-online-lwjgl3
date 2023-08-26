@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.aoclient.engine.scenes.SceneType.INTRO_SCENE;
+import static org.aoclient.engine.utils.GameData.options;
 import static org.aoclient.engine.utils.Time.deltaTime;
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.*;
@@ -164,6 +165,8 @@ public class Engine implements Runnable {
      *        desactiva nuestro booleano del MainLoop para que se cierre el juego.
      */
     public static void closeClient() {
+
+        options.SaveOptions();
         prgRun = false;
     }
 
