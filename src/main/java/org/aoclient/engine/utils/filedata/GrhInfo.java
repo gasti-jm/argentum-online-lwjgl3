@@ -1,5 +1,8 @@
 package org.aoclient.engine.utils.filedata;
 
+/**
+ * Simula el "Type" o la estructura de Grh.
+ */
 public final class GrhInfo {
     private short grhIndex;
     private float frameCounter;

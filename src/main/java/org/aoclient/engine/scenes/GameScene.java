@@ -21,6 +21,12 @@ import static org.aoclient.engine.utils.GameData.*;
 import static org.aoclient.engine.utils.Time.*;
 import static org.lwjgl.glfw.GLFW.*;
 
+
+/**
+ * Esta es la escena donde el usuario jugara (frmMain).
+ *
+ * Se recomienda leer el JavaDoc de la clase padre "Scene.java".
+ */
 public final class GameScene extends Scene {
     private BindKeys bindKeys;
     private UserLogic user;
@@ -29,9 +35,9 @@ public final class GameScene extends Scene {
     private float offSetCounterY = 0;
     private float alphaCeiling = 1.0f;
 
-    RGBColor ambientColor;
+    RGBColor ambientColor; // color de ambiente.
     private boolean autoMove = false;
-    private MainGame frm;
+    private MainGame frm; // formulario frmMain diseñado.
 
     @Override
     public void init() {
@@ -84,9 +90,12 @@ public final class GameScene extends Scene {
 
     }
 
+    /**
+     * @desc: Escucha los eventos del mouse.
+     */
     @Override
     public void mouseEvents() {
-        if (!forms.isEmpty()) return;
+        if (!forms.isEmpty()) return; // prioridad a cualquier frm por encima.
 
         // checkeamos el estado de los botones
         frm.checkButtons();
@@ -116,12 +125,20 @@ public final class GameScene extends Scene {
 
     }
 
+    /**
+     * @desc: Escucha los eventos del teclado.
+     */
     @Override
     public void keyEvents() {
-        if (!forms.isEmpty()) return; // darle prioridad a los formularios
+        // Si tenemos un formulario por encima del juego, le damos prioridad.
+        if (!forms.isEmpty()) return;
+
         checkBindedKeys();
     }
 
+    /**
+     * Cierre de la escena.
+     */
     @Override
     public void close() {
         this.visible = false;
@@ -334,6 +351,9 @@ public final class GameScene extends Scene {
         drawText(txtFPS, (SCREEN_SIZE_X - getSizeText(txtFPS) / 2) - 88, 3, ambientColor, 0, true, false, false);
     }
 
+    /**
+     * @desc: Detecta si tenemos el mouse adentro del "render MainViewPic".
+     */
     private boolean inGameArea() {
         if (MouseListener.getX() < POS_SCREEN_X || MouseListener.getX() > POS_SCREEN_X + SCREEN_SIZE_X)
             return false;
@@ -344,10 +364,22 @@ public final class GameScene extends Scene {
         return true;
     }
 
+    /**
+     *
+     * @param mouseX: Posicion X del mouse en la pantalla
+     * @return: Devuelve la posicion en tile del eje X del mouse.
+     * @desc: Se utiliza al hacer click izquierdo por el mapa, para interactuar con NPCs, etc.
+     */
     private byte getTileMouseX(int mouseX) {
         return (byte) (user.getUserPos().getX() + mouseX / TILE_PIXEL_SIZE - camera.getHalfWindowTileWidth());
     }
 
+    /**
+     *
+     * @param mouseY: Posicion X del mouse en la pantalla
+     * @return: Devuelve la posicion en tile del eje Y del mouse.
+     * @desc: Se utiliza al hacer click izquierdo por el mapa, para interactuar con NPCs, etc.
+     */
     private byte getTileMouseY(int mouseY) {
         return  (byte) (user.getUserPos().getY() +  mouseY / TILE_PIXEL_SIZE - camera.getHalfWindowTileHeight());
     }

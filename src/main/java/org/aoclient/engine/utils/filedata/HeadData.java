@@ -1,5 +1,8 @@
 package org.aoclient.engine.utils.filedata;
 
+/**
+ * Simula el "Type" o la estructura de HeadData.
+ */
 public final class HeadData {
     private GrhInfo[] head = new GrhInfo[5];
 

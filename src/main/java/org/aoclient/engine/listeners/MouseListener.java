@@ -2,6 +2,11 @@ package org.aoclient.engine.listeners;
 
 import static org.lwjgl.glfw.GLFW.*;
 
+/**
+ * Aca es donde se gestiona la logica de la deteccion de los botones del mouse en nuestro contexto GLFW.
+ *
+ * Hay funciones callBack que se pasan en la configuracion de nuestra ventana.
+ */
 public class MouseListener {
     private static MouseListener instance;
     private double scrollX, scrollY;
@@ -12,6 +17,9 @@ public class MouseListener {
     private static final double DOUBLE_CLICK_TIME = 0.2;
     private double lastTimeClick;
 
+    /**
+     * Constructor privado para nuestro Singleton.
+     */
     private MouseListener() {
         this.scrollX = 0.0;
         this.scrollY = 0.0;
@@ -22,6 +30,10 @@ public class MouseListener {
         this.lastTimeClick = 0;
     }
 
+    /**
+     *
+     * @return Mismo objeto (Patron de diseño Singleton).
+     */
     public static MouseListener get() {
         if (MouseListener.instance == null) {
             MouseListener.instance = new MouseListener();
@@ -30,6 +42,9 @@ public class MouseListener {
         return MouseListener.instance;
     }
 
+    /**
+     * @desc: Funcion callBack para detectar y actualizar la posicion del mouse.
+     */
     public static void mousePosCallback(long window, double xpos, double ypos) {
         get().lastX = get().xPos;
         get().lastY = get().yPos;
@@ -38,6 +53,9 @@ public class MouseListener {
         get().isDragging = get().mouseButtonPressed[0] || get().mouseButtonPressed[1] || get().mouseButtonPressed[2];
     }
 
+    /**
+     * @desc: Funcion callBack para detectar los botones pulsados.
+     */
     public static void mouseButtonCallback(long window, int button, int action, int mods) {
         if (action == GLFW_PRESS) {
             if (button < get().mouseButtonPressed.length) {
@@ -63,6 +81,9 @@ public class MouseListener {
         }
     }
 
+    /**
+     * @desc: Funcion callBack para detectar el desplazamiento del mouse de una posicion a otra.
+     */
     public static void mouseScrollCallback(long window, double xOffset, double yOffset) {
         get().scrollX = xOffset;
         get().scrollY = yOffset;
@@ -107,6 +128,11 @@ public class MouseListener {
         return get().mouseButtonPressed[button];
     }
 
+    /**
+     *
+     * @param button Boton que querramos detectar
+     * @return True si estamos apretamos un dicho boton, caso contrario false.
+     */
     public static boolean mouseButtonDown(int button) {
         if (button < get().mouseButtonPressed.length) {
             return get().mouseButtonPressed[button];
@@ -132,18 +158,6 @@ public class MouseListener {
         return false;
     }
 
-    /**
-     * Detecta si soltamos un click
-     */
-    public static boolean mouseButtonClickReleased(int button) {
-        if (button < get().mouseButtonPressed.length) {
-            if (!get().mouseButtonPressed[button] && !isDragging()) {
-                return true;
-            }
-        }
-
-        return false;
-    }
 
     /**
      * Detecta si hicimos doble click

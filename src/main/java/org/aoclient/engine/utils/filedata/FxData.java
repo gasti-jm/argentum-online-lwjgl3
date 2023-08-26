@@ -1,5 +1,8 @@
 package org.aoclient.engine.utils.filedata;
 
+/**
+ * Simula el "Type" o la estructura de FxData.
+ */
 public final class FxData {
     private short Animacion;
     private short OffsetX;

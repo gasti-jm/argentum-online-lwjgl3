@@ -1,5 +1,8 @@
 package org.aoclient.engine.utils.filedata;
 
+/**
+ * Simula el "Type" o la estructura de WeaponData.
+ */
 public final class WeaponData {
     private GrhInfo[] WeaponWalk = new GrhInfo[5];
 

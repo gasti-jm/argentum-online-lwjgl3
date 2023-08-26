@@ -11,6 +11,12 @@ import java.util.List;
 import static org.aoclient.engine.utils.Time.*;
 import static org.lwjgl.glfw.GLFW.*;
 
+
+/**
+ * Escena de presentacion (frmCargando - frmPresentacion).
+ *
+ * Se recomienda leer el JavaDoc de la clase padre "Scene.java".
+ */
 public final class IntroScene extends Scene {
     private static float timeScene = 15.0f; // 15 segundos de intro.
     private static float timeLogo = 5.0f; // 5seg
@@ -45,6 +51,9 @@ public final class IntroScene extends Scene {
         // nothing to do..
     }
 
+    /**
+     * @desc: En caso de apretar enter: cerrame la presentacion y mostrame el conectar.
+     */
     @Override
     public void keyEvents() {
         if (KeyListener.isKeyReadyForAction(GLFW_KEY_ENTER)) {
@@ -52,9 +61,12 @@ public final class IntroScene extends Scene {
         }
     }
 
+    /**
+     * @desc: Renderiza nuestra escena y actualiza el efecto y el tiempo de presentancion.
+     */
     @Override
     public void render() {
-        if(!visible) return;
+        if(!visible) return; // Si no dejamos esto, es posible que al cerrarse la escena genere un NullPointerException.
 
         // mientras no termine su tiempo se va a renderizar el efecto del logo.
         if(timeLogo >= 0) {
@@ -91,6 +103,9 @@ public final class IntroScene extends Scene {
         }
     }
 
+    /**
+     * @desc: Prepara el cierre de la escena.
+     */
     @Override
     public void close() {
         this.visible = false;

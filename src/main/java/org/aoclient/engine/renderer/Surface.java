@@ -13,6 +13,14 @@ import org.lwjgl.BufferUtils;
 
 import static org.lwjgl.opengl.GL11.*;
 
+/**
+ * Aca es donde se gestiona (en gran parte) la carga y el almacen de los graficos que se van renderizar en el juego.
+ * El mapa "textures" definida en esta clase se va a utilizar para guardar y encontrar rapido todos los graficos
+ * que se van a renderizar, donde la llave es el numero del grafico y el valor la textura en si.
+ *
+ * Los textos y la interfaz de usuario no van a trabajar con este mapa, cada uno de ellos lo almacenan en
+ * su dicha clase, pero los metodos de carga tambien se trabajan desde aqui.
+ */
 public class Surface {
     private static Surface instance;
     private ByteBuffer pixels;
@@ -22,6 +30,10 @@ public class Surface {
 
     }
 
+    /**
+     *
+     * @return Mismo objeto (Patron de diseño Singleton).
+     */
     public static Surface get() {
         if (instance == null){
             instance = new Surface();
@@ -30,14 +42,27 @@ public class Surface {
         return instance;
     }
 
+    /**
+     * Constructor que solo inicializa nuestro mapa.
+     */
     public void initialize() {
         this.textures = new HashMap<>();
     }
 
+    /**
+     * @desc: Elimina todas las texturas del mapa, esto se utiliza al pasar de mapa en el juego, ya que
+     *        en algun momento las texturas que no se van a dibujar y deben eliminarse para ahorrar espacio.
+     */
     public void deleteAllTextures() {
         this.textures.clear();
     }
 
+    /**
+     *
+     * @param fileNum: Nombre del archivo del grafico (en este caso siempre es un numero)
+     * @return Textura. Si existe: la devuelve segun la llave pasada por parametro. En caso contrario crea una nueva,
+     *         la guarda en el mapa y la retorna.
+     */
     public TextureOGL getTexture(int fileNum) {
         if (textures.containsKey(fileNum)) {
             return textures.get(fileNum);
@@ -65,6 +90,10 @@ public class Surface {
         return texture;
     }
 
+    /**
+     *
+     * @desc: Crea y retorna una textura para nuestra fuente de letras (Va a ser almacenada en su clase).
+     */
     public TextureOGL createFontTexture(String fileName) {
         TextureOGL texture = new TextureOGL();
         texture.id = loadTexture(texture, "resources/fonts/" + fileName + ".bmp", false);

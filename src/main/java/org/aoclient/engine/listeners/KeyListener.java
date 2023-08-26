@@ -8,6 +8,11 @@ import java.util.List;
 import static org.aoclient.engine.game.models.E_KeyType.*;
 import static org.lwjgl.glfw.GLFW.*;
 
+/**
+ * Aca es donde se gestiona la logica de la deteccion de las teclas del teclado en nuestro contexto GLFW.
+ * 
+ * Hay funciones callBack que se pasan en la configuracion de nuestra ventana.
+ */
 public class KeyListener {
     private static KeyListener instance;
 
@@ -21,6 +26,10 @@ public class KeyListener {
 
     }
 
+    /**
+     *
+     * @return Mismo objeto (Patron de diseño Singleton).
+     */
     public static KeyListener get() {
         if (KeyListener.instance == null) {
             KeyListener.instance = new KeyListener();

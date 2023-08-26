@@ -32,12 +32,19 @@ public final class Window {
     private final String title;
     private final int width, height;
 
+    /**
+     * @desc: Constructor privado por singleton.
+     */
     private Window() {
         this.title = "Argentum Online";
         this.width = SCREEN_WIDTH;
         this.height = SCREEN_HEIGHT;
     }
 
+    /**
+     *
+     * @return Mismo objeto (Patron de diseño Singleton)
+     */
     public static Window get() {
         if (instance == null) {
             instance = new Window();
@@ -46,6 +53,9 @@ public final class Window {
         return instance;
     }
 
+    /**
+     * @desc: Inicializamos nuestro contexto GLFW (ventana) con sus sistemas (OpenGL y OpenAL)
+     */
     public void initialize() {
         // Setup an error callback
         GLFWErrorCallback.createPrint(System.err).set();
@@ -98,7 +108,7 @@ public final class Window {
         // Make the OpenGL context current
         glfwMakeContextCurrent(window);
 
-        // Enable v-sync
+        // Disable v-sync
         glfwSwapInterval(0);
 
         // Make the window visible
@@ -135,6 +145,9 @@ public final class Window {
         glDisable(GL_DEPTH_TEST);
     }
 
+    /**
+     * @desc: Destruye el contexto de LWJGL3 para el cierre del programa.
+     */
     public void close() {
         // Destroy the audio context
         alcDestroyContext(audioContext);
@@ -149,6 +162,21 @@ public final class Window {
         glfwSetErrorCallback(null).free();
     }
 
+    /**
+     * @desc Minimiza nuestra ventana
+     */
+    public void minimizar(){
+        glfwIconifyWindow(window);
+    }
+
+    /**
+     *
+     * @return True si la ventana esta minimizada, caso contrario falso.
+     */
+    public boolean isMinimized() {
+        return glfwGetWindowAttrib(window, GLFW_ICONIFIED) == GLFW_TRUE;
+    }
+
     public long getWindow() {
         return this.window;
     }
@@ -159,14 +187,6 @@ public final class Window {
 
     public int getHeight() {
         return height;
-    }
-
-    public void minimizar(){
-        glfwIconifyWindow(window);
-    }
-
-    public boolean isMinimized() {
-        return glfwGetWindowAttrib(window, GLFW_ICONIFIED) == GLFW_TRUE;
     }
 
 }

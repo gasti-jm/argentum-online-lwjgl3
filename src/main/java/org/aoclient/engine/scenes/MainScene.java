@@ -20,6 +20,11 @@ import static org.aoclient.engine.utils.GameData.mapData;
 import static org.aoclient.engine.utils.GameData.music;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_ENTER;
 
+/**
+ * Esta es la escena donde se va a mostrar un conectar renderizado y se va a tener en cuenta el crear personaje.
+ *
+ * Se recomienda leer el JavaDoc de la clase padre "Scene.java".
+ */
 public final class MainScene extends Scene {
     private Login frmLogin;
     private CreateCharacter frmCreateCharacter;
@@ -76,6 +81,9 @@ public final class MainScene extends Scene {
         }
     }
 
+    /**
+     * Cierre de escena
+     */
     @Override
     public void close() {
         music.stop();

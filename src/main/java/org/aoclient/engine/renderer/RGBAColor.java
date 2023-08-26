@@ -1,5 +1,8 @@
 package org.aoclient.engine.renderer;
 
+/**
+ * Sirve para almacenar una mezcla de colores con alpha.
+ */
 public final class RGBAColor extends RGBColor {
     private float alpha;
 

@@ -27,6 +27,9 @@ public final class Sound {
     private String filepath;
     private boolean isPlaying = false;
 
+    /**
+     * @desc: Carga nuestro sonido en formato .ogg y activa si es en un loop infinito o no (ya sea para musica o sonido)
+     */
     public Sound(String filepath, boolean loops) {
         this.filepath = filepath;
 
@@ -69,19 +72,28 @@ public final class Sound {
         sourceId = alGenSources();
 
         alSourcei(sourceId, AL_BUFFER, bufferId);
-        alSourcei(sourceId, AL_LOOPING, loops ? 1 : 0);
-        alSourcei(sourceId, AL_POSITION, 0);
-        alSourcef(sourceId, AL_GAIN, 1f);
+        alSourcei(sourceId, AL_LOOPING, loops ? 1 : 0); // loop
+        alSourcei(sourceId, AL_POSITION, 0); // posicion
+        alSourcef(sourceId, AL_GAIN, 1f); // configuracion de volumen
 
         // Free stb raw audio buffer
         free(rawAudioBuffer);
     }
 
+    /**
+     * @desc: Destruye el sonido creado en OpenAL.
+     */
     public void delete() {
         alDeleteSources(sourceId);
         alDeleteBuffers(bufferId);
     }
 
+    /**
+     * @desc: Reproduce un sonido.
+     *        Primero checkea si se esta reproduciendo el mismo sonido, si es asi crea el mismo sonido y lo reproduce,
+     *        ya que en el AO cuando se reproduce el mismo sonido, se reproduce varias veces por encima del otro.
+     *        En caso contrario, se comienza a reproducir el sonido 1 sola vez.
+     */
     public void play() {
         if (alGetSourcei(sourceId, AL_SOURCE_STATE) == AL_PLAYING) {
             new Sound(this.filepath, false).play();
@@ -93,6 +105,9 @@ public final class Sound {
         }
     }
 
+    /**
+     * @desc: Detiene el sonido que se esta reproduciendo.
+     */
     public void stop() {
         if (isPlaying){
             alSourceStop(sourceId);
@@ -113,7 +128,6 @@ public final class Sound {
     }
 
     /**
-     *
      * @desc: Devuelve todos los sonidos
      */
     public static Collection<Sound> getAllSounds() {
@@ -121,7 +135,6 @@ public final class Sound {
     }
 
     /**
-     *
      * @desc: Nos devuelve un sonido cargado a nuestro mapa.
      */
     public static Sound getSound(String soundFile) {
@@ -136,7 +149,6 @@ public final class Sound {
     }
 
     /**
-     *
      * @desc: Agregamos un sonido a nuestro mapa.
      */
     public static Sound addSound(String soundFile, boolean loops) {
@@ -150,6 +162,10 @@ public final class Sound {
         }
     }
 
+    /**
+     * @desc: Reproduce un sonido, primero checkea si existe en nuestro mapa, en caso de que exista lo reproduce, caso
+     *        contrario: crea uno, lo guarda en el mapa y lo reproduce.
+     */
     public static void playSound(String soundName) {
         final File file = new File("resources/sounds/" + soundName);
 
@@ -179,6 +195,9 @@ public final class Sound {
         return sound;
     }
 
+    /**
+     * @desc: Vacia y elimina todos los sonidos de nuestro mapa.
+     */
     public static void clearSounds() {
         sounds.forEach((s, sound) -> sound.delete());
         sounds.clear();

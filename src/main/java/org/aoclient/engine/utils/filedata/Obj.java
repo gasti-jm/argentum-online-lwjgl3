@@ -1,5 +1,8 @@
 package org.aoclient.engine.utils.filedata;
 
+/**
+ * Simula el "Type" o la estructura de Obj.
+ */
 public final class Obj {
     private int objIndex;
     private int amount;

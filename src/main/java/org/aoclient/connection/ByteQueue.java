@@ -6,8 +6,11 @@ import java.nio.charset.StandardCharsets;
 
 import static org.aoclient.engine.utils.ByteMigration.*;
 
+/**
+ * Aca es donde se gestiona toda la cola de bytes que entran y salen de nuestro cliente.
+ */
 public class ByteQueue {
-    // codigos de error
+    // codigos de error (Hay que quitarlo esto, es al pepe)....
     private static final int NOT_ENOUGH_DATA = 10000;
     private static final int NOT_ENOUGH_SPACE = 10001;
     private static final int DATA_BUFFER = 10240;
@@ -22,7 +25,7 @@ public class ByteQueue {
     }
 
     /**
-     * Crea una copia de este mismo objeto.
+     * Crea una copia del objeto que se paso por parametro.
      */
     public void copyBuffer(ByteQueue source) {
         if (source.length() == 0) {

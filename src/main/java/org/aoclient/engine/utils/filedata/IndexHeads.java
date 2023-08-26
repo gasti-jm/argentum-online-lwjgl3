@@ -1,5 +1,8 @@
 package org.aoclient.engine.utils.filedata;
 
+/**
+ * Simula el "Type" o la estructura de IndexHeads.
+ */
 public final class IndexHeads {
     private short[] head = new short[5];
 

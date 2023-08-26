@@ -7,6 +7,12 @@ import static org.aoclient.engine.utils.GameData.*;
 import static org.aoclient.engine.utils.Time.deltaTime;
 import static org.lwjgl.opengl.GL11.*;
 
+/**
+ * Aqui es donde se van a encontrar la mayoria de los metodos que nos permiten dibujar en nuestro renderizado.
+ *
+ * El dibujado del personaje se encuentra en la clase Character, el de la Interfaz de usuario en ElementGUI y los textos
+ * en la clase FontText
+ */
 public final class Drawn {
     /**
      *

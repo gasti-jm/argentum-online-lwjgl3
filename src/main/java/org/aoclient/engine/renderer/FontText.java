@@ -53,6 +53,18 @@ public class FontText {
         loadFontData(0, "bold-italic.csv");
     }
 
+
+    /**
+     *
+     * @param text Texto a mostrar
+     * @param x Posicion X de la pantalla
+     * @param y Posicion Y de la pantalla
+     * @param color Mezcla de colores RGB
+     * @param fontIndex En este momento solo esta 0, ya que tenemos una fuente de letras con un tamaño de 13.
+     * @param bold Activa el efecto negrita en la letra
+     * @param italic Activa el efecto italica en la letra
+     * @param multi_line Activa un limite de caracteres para que tenga un salto de linea.
+     */
     public static void drawText(String text, int x, int y, RGBColor color, int fontIndex, boolean bold, boolean italic, boolean multi_line) {
         if (text.length() == 0) return;
 
@@ -118,6 +130,16 @@ public class FontText {
 
     }
 
+    /**
+     *
+     * @param text Texto a mostrar
+     * @param x Posicion X de la pantalla
+     * @param y Posicion Y de la pantalla
+     * @param color Mezcla de colores RGB
+     * @param fontIndex En este momento solo esta 0, ya que tenemos una fuente de letras con un tamaño de 13.
+     * @param bold Activa el efecto negrita en la letra
+     * @param italic Activa el efecto italica en la letra
+     */
     public static void drawConsoleText(String text, int x, int y, RGBColor color, int fontIndex, boolean bold, boolean italic) {
         if (text.length() == 0) return;
 
@@ -166,6 +188,21 @@ public class FontText {
 
     }
 
+    /**
+     *
+     * @param texture Textura almacenada
+     * @param x Posicion X de la pantalla
+     * @param y Posicion Y de la pantalla
+     * @param src_width Ancho del recorte
+     * @param src_height Alto del recorte
+     * @param sX Posicion X del recorte
+     * @param sY Posicion Y del recorte
+     * @param blend Efecto blend
+     * @param alpha Cantidad de transparencia (de 0 a 1)
+     * @param color Mezcla de colores RGB
+     *
+     * @desc Sirve para las funciones de dibujado.
+     */
     public static void geometryBoxRenderFont(TextureOGL texture, int x, int y, int src_width, int src_height, float sX, float sY, boolean blend, float alpha, RGBColor color) {
         if (blend)
             glBlendFunc(GL_SRC_ALPHA, GL_ONE);

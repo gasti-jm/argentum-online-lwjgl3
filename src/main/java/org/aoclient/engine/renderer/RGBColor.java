@@ -1,5 +1,8 @@
 package org.aoclient.engine.renderer;
 
+/**
+ * Sirve para almacenar una mezcla de colores y se utiliza en el dibujado.
+ */
 public class RGBColor{
     private float red;
     private float green;

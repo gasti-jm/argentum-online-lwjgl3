@@ -1,5 +1,8 @@
 package org.aoclient.engine.utils.filedata;
 
+/**
+ * Simula el "Type" o la estructura de GrhData.
+ */
 public final class GrhData {
     private short sX;
     private short sY;

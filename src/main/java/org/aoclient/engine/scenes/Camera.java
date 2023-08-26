@@ -1,5 +1,13 @@
 package org.aoclient.engine.scenes;
 
+/**
+ * Aqui es donde se van guardar ciertas variables relacionadas con el campo de vision del juego.
+ *
+ * Tenemos: La distancia de dibujado, el tamaño del render del frmMain, el tamaño del tile (32x32), los bordes del mapa,
+ *          Despues tenemos la funcion de update que actualiza las variables de la distancia del dibujado. Esto es segun
+ *          la posicion de donde este parado el usuario. Tambien sirve para MainScene para su "conectar renderizado" y
+ *          por ultimo, el resto de funciones son getters y setters que pueden ser leidos en el resto del programa.
+ */
 public final class Camera {
     public static final int SCREEN_SIZE_X = 546;
     public static final int SCREEN_SIZE_Y = 416;
@@ -37,6 +45,15 @@ public final class Camera {
 
     }
 
+    /**
+     *
+     * @param tileX: Posicion X donde este parado nuestro usuario.
+     * @param tileY: Posicion Y donde este parado nuestro usuario.
+     *
+     * @desc: Esta es toda la logica que se encontraba al principio del "RenderScreen", permite actualizar la distancia
+     *        de dibujado segun la posicion en la que se encuentre el usuario. Esto sirve para el recorrido de la matriz
+     *        del MapData, cada uno tiene distinto rango segun la capa que se va a dibujar.
+     */
     public void update(int tileX, int tileY) {
         ScreenX = 0;
         ScreenY = 0;

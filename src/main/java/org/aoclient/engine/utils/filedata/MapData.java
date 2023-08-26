@@ -1,6 +1,8 @@
 package org.aoclient.engine.utils.filedata;
 
-
+/**
+ * Simula el "Type" o la estructura de MapData.
+ */
 public final class MapData {
     private GrhInfo[] layer = new GrhInfo[5];
     private short charIndex;

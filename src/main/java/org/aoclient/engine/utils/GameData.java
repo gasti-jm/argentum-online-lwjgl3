@@ -26,7 +26,6 @@ public final class GameData {
     public static FxData[] fxData;
     public static GrhData[] grhData;
     public static MapData[][] mapData;
-    public static FontData[] fontTypes = new FontData[2];
 
     public static Character charList[] = new Character[10000+1];
     public static Sound music;

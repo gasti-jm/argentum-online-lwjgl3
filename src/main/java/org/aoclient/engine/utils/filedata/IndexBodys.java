@@ -1,5 +1,8 @@
 package org.aoclient.engine.utils.filedata;
 
+/**
+ * Simula el "Type" o la estructura de IndexBodys.
+ */
 public final class IndexBodys {
     private short body[] = new short [5];
     private short headOffsetX;

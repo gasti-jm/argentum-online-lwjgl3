@@ -38,6 +38,9 @@ public class Engine implements Runnable {
         window.close();
     }
 
+    /**
+     * @desc: Main loop del juego, se empieza a correr ni bien se inicia nuestro motor grafico.
+     */
     private void loop() {
         Time.initTime();
 
@@ -64,10 +67,16 @@ public class Engine implements Runnable {
         }
     }
 
+    /**
+     * @desc: Inicia nuestro Thread principal.
+     */
     public void start() {
         gameLoopThread.start();
     }
 
+    /**
+     * @desc: Inicia nuestro motor grafico con su ventana, gestor de texturas (surface), inits (gamedata) y escenas.
+     */
     public void init(){
         System.out.println("Hello LWJGL " + Version.getVersion() + "!");
 
@@ -81,6 +90,12 @@ public class Engine implements Runnable {
         changeScene(INTRO_SCENE);
     }
 
+    /**
+     * @desc: funcion que permite cambiar nuestro atributo de escena y cambiar de una a otra.
+     *
+     * @param: scene: SceneType es un enumerador definido en el package de scenes, bascicamente recibe un tipo de este
+     *         enumerador y segun el elegido realiza el cambio de escena.
+     */
     private void changeScene(SceneType scene) {
         switch (scene) {
             case INTRO_SCENE:
@@ -101,6 +116,19 @@ public class Engine implements Runnable {
         }
     }
 
+    /**
+     * @desc: Renderizado general, primero checkea algunas teclas claves que es para salir del juego con ESC y
+     *        el cambio de mayusculas (Bloq mayus) para ser detectado en cualquier momento por el programa.
+     *
+     *        Luego checkea si nuestra escena es visible, todas las escenas guardan un atributo de la posible escena
+     *        en la que deba ir cada una. Por ejemplo: En la escena de "IntroScene.java" tiene guardado para que su
+     *        siguente escena sea la de la clase "MainScene" donde se va mostrar el "frmConectar".
+     *        Si estas escenas no son visibles, quiere decir que estan listas para ser cambiadas a otra, por eso se
+     *        llama a la funcion "changeScene".
+     *
+     *        Por ultimo, dibuja la escena en la que estemos y renderiza cualquier formulario que pueda estar por encima
+     *        en cualquier escena. Por ejemplo un "frmMensaje".
+     */
     private void render() {
         if (KeyListener.isKeyPressed(bindKeys.getBindedKey(E_KeyType.mKeyExitGame))) {
             closeClient();
@@ -131,10 +159,18 @@ public class Engine implements Runnable {
         }
     }
 
+    /**
+     * @desc: Funcion publica y estatica que permite ser utilizada en cualquier parte del programa, basicamente
+     *        desactiva nuestro booleano del MainLoop para que se cierre el juego.
+     */
     public static void closeClient() {
         prgRun = false;
     }
 
+    /**
+     * @desc: Funcion sobreescrita de la interface Runnable, permite ejecutar nuestro Thread principal y inicializar
+     *        nuestro motor grafico.
+     */
     @Override
     public void run() {
         init();

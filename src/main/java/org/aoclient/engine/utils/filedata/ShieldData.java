@@ -1,5 +1,8 @@
 package org.aoclient.engine.utils.filedata;
 
+/**
+ * Simula el "Type" o la estructura de ShieldData.
+ */
 public final class ShieldData {
     private GrhInfo[] shieldWalk = new GrhInfo[5];
 

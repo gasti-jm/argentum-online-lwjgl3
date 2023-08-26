@@ -2,6 +2,9 @@ package org.aoclient.engine.utils.filedata;
 
 import org.aoclient.engine.game.models.Position;
 
+/**
+ * Simula el "Type" o la estructura de BodyData.
+ */
 public final class BodyData {
     private GrhInfo[] walk = new GrhInfo[5];
     private Position headOffset;

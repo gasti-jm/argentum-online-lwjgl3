@@ -75,6 +75,7 @@ public class SocketConnection {
 
         try {
             final int availableBytes = handleData.available();
+
             if (availableBytes > 0) {
                 //System.out.println("Available Bytes: " + availableBytes);
                 final byte[] dataBuffer = new byte[availableBytes];
