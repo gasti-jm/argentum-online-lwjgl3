@@ -10,12 +10,18 @@ public class Options {
     private boolean Music;
     private boolean Sound;
     private boolean ShowName;
+    private String Name;
 
     public Options() {
         Music = true;
         Sound = true;
         ShowName = true;
+        Name = "";
     }
+
+    public String getName() { return Name; }
+
+    public void setName(String name) {  Name = name; }
 
     public boolean isMusic() {
         return Music;
@@ -64,7 +70,8 @@ public class Options {
             writer.write("Sound = " + Sound);
             writer.newLine();
             writer.write("ShowName = " + ShowName);
-            // Agrega más líneas aquí para otras opciones si es necesario
+            writer.newLine();
+            writer.write("Name = " + Name);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -81,7 +88,9 @@ public class Options {
             case "ShowName":
                 ShowName = Boolean.parseBoolean(value);
                 break;
-            // Puedes añadir más opciones aquí
+            case "Name":
+                Name = value;
+                break;
         }
     }
 }

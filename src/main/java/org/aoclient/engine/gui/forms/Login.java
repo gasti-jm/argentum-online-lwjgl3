@@ -10,6 +10,7 @@ import java.util.ArrayList;
 
 import static org.aoclient.connection.Protocol.writeLoginExistingChar;
 import static org.aoclient.engine.Sound.addMusic;
+import static org.aoclient.engine.utils.GameData.options;
 
 public class Login extends Form{
     private static Login instance;
@@ -24,6 +25,7 @@ public class Login extends Form{
     }
 
     public static Login get(){
+
         if (instance == null){
             instance = new Login();
         }
@@ -42,6 +44,7 @@ public class Login extends Form{
         buttonList.add(new Button(320, 264, BTN_SIZE_WIDTH, BTN_SIZE_HEIGHT, () -> {
             SocketConnection.getInstance().connect();
             writeLoginExistingChar(txtList.get(TXT_USERNAME_INDEX).getText(), txtList.get(TXT_PASSWORD_INDEX).getText());
+            options.setName(txtList.get(TXT_USERNAME_INDEX).getText());
         }, "BotonConectarse.jpg", "BotonConectarseRollover.jpg", "BotonConectarseClick.jpg"));
 
         // btnTeclas
@@ -108,7 +111,7 @@ public class Login extends Form{
         txtTabIndexsAdded = 0;
 
         // txtUserName
-        txtList.add(new TextBox(txtTabIndexsAdded++,327, 214, 164, 15, true, false));
+        txtList.add(new TextBox(txtTabIndexsAdded++, options.getName(),327, 214, 164, 15, true, false));
 
         // txtPass
         txtList.add(new TextBox(txtTabIndexsAdded++, 327, 248, 164, 15, true, false, true));
