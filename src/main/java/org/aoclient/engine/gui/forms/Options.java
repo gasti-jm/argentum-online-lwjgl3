@@ -15,8 +15,8 @@ public class Options extends Form {
         return instance;
     }
     public void init() {
+        this.background.init("VentanaOpciones.jpg");
         this.visible = true;
-        this.background.init("VentanaOpciones.png");
     }
 
     @Override
