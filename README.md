@@ -11,6 +11,9 @@
   I have translated it to Java with LWJGL3, this game would be the base client, the connection to the server is being implemented with Java sockets. The java server has not been developed yet, but you can use the Argentum Online Alkon v13.0 server from VB6.
 </p>
 
+# Discord
+For those who want to collaborate with the project, they are more than welcome! You can communicate with us on our <a href="https://discord.gg/RtsGRqJVt9">Discord.</a>
+
 # How to compile
 <p>
   <a href="https://www.jetbrains.com/es-es/idea/" target="_blank">IntelliJ IDEA</a> is needed (although with <a href="https://netbeans.apache.org/" target="_blank">NetBeans</a>, <a href="https://www.eclipse.org/downloads/" target="_blank">Eclipse</a> or any other IDE you can use it, if you know how to build the project). 
