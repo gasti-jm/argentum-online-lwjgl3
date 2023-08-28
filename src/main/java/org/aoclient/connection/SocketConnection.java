@@ -1,18 +1,17 @@
 package org.aoclient.connection;
 
-import org.aoclient.connection.packets.E_Modo;
-import org.aoclient.engine.gui.forms.Message;
 
+import org.aoclient.engine.gui.forms.Message;
 import java.net.*;
 import java.io.*;
-import java.nio.ByteBuffer;
-import java.nio.charset.Charset;
-import java.nio.charset.CharsetDecoder;
 import java.nio.charset.StandardCharsets;
 
 import static org.aoclient.connection.Protocol.*;
 import static org.aoclient.engine.Engine.forms;
 
+/**
+ * Clase que maneja el socket de conexion.
+ */
 public class SocketConnection {
     private static SocketConnection instance;
 
@@ -23,10 +22,17 @@ public class SocketConnection {
     private DataOutputStream writeData;
     private DataInputStream handleData;
 
+    /**
+     * @desc: Constructor privado por singleton.
+     */
     private SocketConnection() {
 
     }
 
+    /**
+     *
+     * @return Mismo objeto (Patron de diseño Singleton)
+     */
     public static SocketConnection getInstance() {
         if(instance == null) {
             instance = new SocketConnection();
@@ -35,6 +41,9 @@ public class SocketConnection {
         return instance;
     }
 
+    /**
+     * Intenta conectarse con el servidor segun la Ip y el puerto asignado.
+     */
     public void connect() {
         try {
             if(sock == null || sock.isClosed()) {
@@ -51,6 +60,9 @@ public class SocketConnection {
         }
     }
 
+    /**
+     * Prepara el envio de informacion checkeando nuestra cola de bytes y que el socket este conectado
+     */
     public void flushBuffer() {
         if (writeData == null || !sock.isConnected() || sock.isClosed()) return;
 
@@ -59,6 +71,11 @@ public class SocketConnection {
         }
     }
 
+    /**
+     *
+     * @param sdData Bytes en cadena para ser enviada
+     * @desc Envia los bytes al servidor.
+     */
     public void sendData(String sdData) {
         if (sock.isConnected()){
             try {
@@ -70,24 +87,27 @@ public class SocketConnection {
         }
     }
 
+    /**
+     * Lee los datos recibidos del servidor
+     */
     public void readData() {
         if (handleData == null || !sock.isConnected() || sock.isClosed()) return;
 
         try {
-            final int availableBytes = handleData.available();
+            final int availableBytes = handleData.available(); // cantidad de bytes que devolvio el servidor.
 
             if (availableBytes > 0) {
                 //System.out.println("Available Bytes: " + availableBytes);
                 final byte[] dataBuffer = new byte[availableBytes];
-                final int bytesRead = handleData.read(dataBuffer);
+                final int bytesRead = handleData.read(dataBuffer); // leemos los bytes que devolvio
                 //System.out.println("Bytes Read: " + bytesRead);
 
                 if (bytesRead > 0) {
                     //final String RD = new String(dataBuffer, 0 , bytesRead, "Cp1252");
-                    final String RD = convertVBUnicodeToUTF8(dataBuffer, bytesRead);
+                    final String RD = convertVBUnicodeToUTF8(dataBuffer, bytesRead); // leemos la informacion
                     if (RD.isEmpty()) return;
 
-                    byte[] data = RD.getBytes();
+                    byte[] data = RD.getBytes(); // la convertimos en bytes
                     //System.out.println("Received data: " + RD);
 
                     // Put data in the buffer
@@ -103,6 +123,10 @@ public class SocketConnection {
         }
     }
 
+    /**
+     * @return Covierte una string al formato de "vbUnicode" (Cp1252). Esto es para que pueda leer los caracteres
+     *         especiales que devuleve el servidor.
+     */
     public String convertVBUnicodeToUTF8(byte[] dataBuffer, int bytesRead) {
         try {
             String rawData = new String(dataBuffer, 0, bytesRead, "Cp1252"); // Assuming Windows-1252 encoding
@@ -114,6 +138,9 @@ public class SocketConnection {
         }
     }
 
+    /**
+     * Desconecta el socket.
+     */
     public void disconnect() {
         try {
             writeData.close();

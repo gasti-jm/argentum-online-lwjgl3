@@ -8,10 +8,18 @@ import static org.aoclient.engine.Sound.playSound;
 import static org.aoclient.engine.gui.elements.ButtonStatus.*;
 import static org.aoclient.engine.renderer.Drawn.geometryBoxRenderGUI;
 
+/**
+ * Clase Button heredada de la clase abstracta ElementGUI
+ *
+ * Aca esta toda la logica de como crear botones, dibujarlo, etc.
+ */
 public final class Button extends ElementGUI {
     private Runnable action;
     private boolean pressed;
 
+    /**
+     * Sobrecarga de constructores para que se pueda crear un boton de distintas formas.
+     */
     public Button(int x, int y, int width, int height) {
         super(x, y, width, height);
         this.pressed = false;
@@ -51,6 +59,10 @@ public final class Button extends ElementGUI {
         }
     }
 
+    /**
+     * @param action Funcion lambda
+     * @desc Setter del atributo action.
+     */
     public void setAction(Runnable action) {
         this.action = action;
     }
@@ -76,6 +88,10 @@ public final class Button extends ElementGUI {
         action = null;
     }
 
+    /**
+     * @param value Nuevo valor booleano
+     * @desc Setter del atributo pressed.
+     */
     public void setPressed(boolean value) {
         this.pressed = value;
     }

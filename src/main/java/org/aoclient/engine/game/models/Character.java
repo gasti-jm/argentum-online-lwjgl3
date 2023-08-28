@@ -11,6 +11,9 @@ import static org.aoclient.engine.renderer.FontText.getSizeText;
 import static org.aoclient.engine.utils.GameData.*;
 import static org.aoclient.engine.utils.Time.timerTicksPerFrame;
 
+/**
+ * Clase para un objeto personaje.
+ */
 public final class Character {
     public static final int CASPER_HEAD = 500;
     public static final int FRAGATA_FANTASMAL = 87;
@@ -66,6 +69,9 @@ public final class Character {
         this.walkingSpeed = 8;
     }
 
+    /**
+     * @desc Crea un nuevo personaje segun los parametros establecidos.
+     */
     public static void makeChar(int charIndex, int body, int head,  E_Heading heading, int x, int y, int weapon, int shield, int helmet) {
         if (charIndex > UserLogic.get().getLastChar())
             UserLogic.get().setLastChar(charIndex);
@@ -101,6 +107,11 @@ public final class Character {
         mapData[x][y].setCharIndex(charIndex);
     }
 
+    /**
+     *
+     * @param charIndex Numero de identificador de personaje
+     * @desc Elimina un personaje del array de personajes.
+     */
     public static void eraseChar(int charIndex) {
         charList[charIndex].setActive(false);
 
@@ -123,10 +134,29 @@ public final class Character {
         resetCharInfo(charIndex);
     }
 
+    /**
+     * @desc elimina todos los personajes de nuestro array charList.
+     */
+    public static void eraseAllChars() {
+        for (int i = 0; i <= UserLogic.get().getLastChar(); i++) {
+            resetCharInfo(i);
+        }
+
+        UserLogic.get().setLastChar(0);
+    }
+
+    /**
+     *
+     * @param charIndex Numero de identificador del personaje
+     * @desc Resetea los atributos del personaje.
+     */
     private static void resetCharInfo(int charIndex) {
         charList[charIndex] = new Character(); // al crear un obj nuevo, el viejo sera eliminado por el recolector de basura de java.
     }
 
+    /**
+     * @desc Actualiza todos los personajes visibles.
+     */
     public static void refreshAllChars() {
         for (int LoopC = 1; LoopC <= UserLogic.get().getLastChar(); LoopC++) {
             if (charList[LoopC].isActive()) {
@@ -343,6 +373,9 @@ public final class Character {
         this.priv = priv;
     }
 
+    /**
+     * @desc Dibuja nuestro personaje!
+     */
     public static void drawCharacter(int charIndex, int PixelOffsetX, int PixelOffsetY, RGBColor ambientcolor) {
         boolean moved = false;
         RGBColor color = new RGBColor();

@@ -10,6 +10,9 @@ public final class BindKeys {
     private final int[] mappedKeys;
     private static BindKeys instance;
 
+    /**
+     * @desc: Constructor privado por singleton.
+     */
     private BindKeys()  {
         mappedKeys = new int[E_KeyType.values().length];
 
@@ -22,6 +25,10 @@ public final class BindKeys {
         }
     }
 
+    /**
+     *
+     * @return Mismo objeto (Patron de diseño Singleton)
+     */
     public static BindKeys get() {
         if(instance == null) {
             instance = new BindKeys();
@@ -30,6 +37,9 @@ public final class BindKeys {
         return instance;
     }
 
+    /**
+     * @desc Carga una configuracion por defecto.
+     */
     public void loadDefaultKeys () {
         mappedKeys[E_KeyType.mKeyUp.ordinal()] = GLFW_KEY_W;
         mappedKeys[E_KeyType.mKeyDown.ordinal()] = GLFW_KEY_S;
@@ -115,10 +125,20 @@ public final class BindKeys {
         mappedKeys[key.ordinal()] = newKey;
     }
 
+    /**
+     *
+     * @param key Tecla del enumerador E_KeyType
+     * @return Entero que representa a una tecla de nuestra ventana GLFW.
+     */
     public int getBindedKey(E_KeyType key) {
         return mappedKeys[key.ordinal()];
     }
 
+    /**
+     * @param keyCode entero que representa a una tecla de nuestra ventana GLFW.
+     * @return Devuelve un E_KeyType segun la tecla que tenga bindeada ese entero pasado por parametro.
+     *         Si no existe devuelve null.
+     */
     public E_KeyType getKeyPressed(int keyCode) {
         for (int i = 0; i < mappedKeys.length; i++) {
             if(keyCode == mappedKeys[i]) {

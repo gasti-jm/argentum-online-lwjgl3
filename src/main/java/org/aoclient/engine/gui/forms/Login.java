@@ -12,6 +12,11 @@ import static org.aoclient.connection.Protocol.writeLoginExistingChar;
 import static org.aoclient.engine.Sound.playMusic;
 import static org.aoclient.engine.utils.GameData.options;
 
+
+/**
+ * Este seria la clase que define nuestro formulario "frmConectar".
+ * Contiene elementos de GUI.
+ */
 public class Login extends Form{
     private static Login instance;
 
@@ -20,10 +25,17 @@ public class Login extends Form{
     private static final int BTN_SIZE_WIDTH = 89;
     private static final int BTN_SIZE_HEIGHT = 25;
 
+    /**
+     * @desc: Constructor privado por singleton.
+     */
     private Login() {
 
     }
 
+    /**
+     *
+     * @return Mismo objeto (Patron de diseño Singleton)
+     */
     public static Login get(){
 
         if (instance == null){
@@ -33,6 +45,9 @@ public class Login extends Form{
         return instance;
     }
 
+    /**
+     * Como tenemos un singleton, necesitamos de una funcion init para incializar nuestros atributos de la clase.
+     */
     public void init() {
         this.visible = true;
         this.background.init("VentanaConectar.png");
@@ -104,7 +119,11 @@ public class Login extends Form{
 
     }
 
-    // OBLIGATORIO PARA LOS TEXTS BOX!
+    /**
+     * @desc Inicializa el tabIndex del formulario y nuestra lista de TextBoxes, agregando tambien los definidos.
+     *       No es necesario crear esta funcion.. Es mas que nada para dividir un poco la funcion "init", y podemos hacer
+     *       una funcion similar si tenemos muchos botones o algun otro componente.
+     */
     private void loadTxtBoxes() {
         this.txtList = new ArrayList<>();
         this.tabIndexSelected = 0;
@@ -128,6 +147,9 @@ public class Login extends Form{
         txtList.get(tabIndexSelected).setSelected(true);
     }
 
+    /**
+     * @desc Renderiza el contenido de nuestro formulario.
+     */
     @Override
     public void render() {
         if(!visible) return;
@@ -137,17 +159,28 @@ public class Login extends Form{
         this.renderButtons();
     }
 
+    /**
+     * @desc Cierra y elimina nuestro formulario.
+     */
     @Override
     public void close() {
         super.close();
-        txtList.clear();
-        buttonList.clear();
+        this.txtList.clear();
+        this.buttonList.clear();
     }
 
+    /**
+     *
+     * @return Texto que contiene nuestro "txtUsername"
+     */
     public String getUsername() {
         return txtList.get(TXT_USERNAME_INDEX).getText();
     }
 
+    /**
+     *
+     * @return Texto que contiene nuestro "txtPassword"
+     */
     public String getPassword() {
         return txtList.get(TXT_PASSWORD_INDEX).getText();
     }

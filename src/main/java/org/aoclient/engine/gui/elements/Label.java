@@ -6,11 +6,19 @@ import org.aoclient.engine.renderer.RGBColor;
 
 import static org.aoclient.engine.renderer.FontText.getSizeText;
 
+/**
+ * Clase Label heredada de la clase abstracta ElementGUI
+ *
+ * Aca esta toda la logica de como crear labels, dibujarlo, etc.
+ */
 public class Label extends ElementGUI {
     protected String text;
     protected RGBColor color;
     protected boolean bold, italic, center;
 
+    /**
+     * Sobrecarga de constructores para que se pueda crear un Label de distintas formas.
+     */
     public Label(String text, int x, int y, int width, int height, boolean bold, boolean italic) {
         super(x, y, width, height);
         this.text = text;
@@ -92,6 +100,9 @@ public class Label extends ElementGUI {
         this.center = true;
     }
 
+    /**
+     * @desc: Dibujamos el Label segun los atributos establecdos.
+     */
     @Override
     public void render() {
         if (center) {
@@ -101,10 +112,16 @@ public class Label extends ElementGUI {
         }
     }
 
+    /**
+     * @return Getter del atributo text.
+     */
     public String getText() {
         return text;
     }
 
+    /**
+     * @desc Setter del atributo text.
+     */
     public void setText(String text) {
         this.text = text;
     }

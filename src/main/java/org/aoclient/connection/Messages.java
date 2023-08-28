@@ -1,5 +1,8 @@
 package org.aoclient.connection;
 
+/**
+ * Aqui solo hay constantes de mensajes, estaria bueno guardarlas en un archivo.
+ */
 public class Messages {
     public static final String MENSAJE_CRIATURA_FALLA_GOLPE = "¡¡¡La criatura falló el golpe!!!";
     public static final String MENSAJE_CRIATURA_MATADO = "¡¡¡La criatura te ha matado!!!";

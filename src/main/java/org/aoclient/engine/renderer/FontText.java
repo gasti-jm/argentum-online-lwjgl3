@@ -5,9 +5,6 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 
-import java.io.UnsupportedEncodingException;
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -17,6 +14,9 @@ import static org.aoclient.engine.renderer.FontText.E_FontType.*;
 import static org.lwjgl.opengl.GL11.*;
 
 
+/**
+ * Esta es la clase donde se inicializa y dibuja la fuente de letra.
+ */
 public class FontText {
     private static final int TILE_SIZE = 15;
 
@@ -31,9 +31,9 @@ public class FontText {
         int x, y, width;
 
         public FontData(int x, int y, int width) {
-            this.x = x;
-            this.y = y;
-            this.width = width;
+            this.x = x; // posicion x del recorte
+            this.y = y; // posicion y del recorte
+            this.width = width; // ancho de letra (15 seria el alto, esto mas adelante debera cambiar).
         }
     }
 
@@ -43,6 +43,9 @@ public class FontText {
     }
     private static final Font[] fonts = new Font[1]; // por el momento va a ser 1, si queremos agregas mas fuentes, aumentamos...
 
+    /**
+     * Comienza a cargar los recursos para la fuente de letra.
+     */
     public static void loadCSV(){
         fonts[0] = new Font();
 
@@ -108,7 +111,7 @@ public class FontText {
                 if (ascii > 255) ascii = 0;
 
                 if (ascii == 32 || ascii == 13) {
-                    if (e >= 26) {
+                    if (e >= 20) {
                         f++;
                         e = 0;
                         space = 0;
@@ -249,6 +252,10 @@ public class FontText {
             glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     }
 
+    /**
+     * @param fontIndex indice de fuente
+     * @desc carga las texturas (normal, italic, bold, etc...) del X indice de fuentes.
+     */
     public static void loadTextures(int fontIndex) {
         fonts[fontIndex].textureFonts[0] = Surface.get().createFontTexture("normal");
         fonts[fontIndex].textureFonts[1] = Surface.get().createFontTexture("normal-italic");
@@ -256,6 +263,18 @@ public class FontText {
         fonts[fontIndex].textureFonts[3] = Surface.get().createFontTexture("bold-italic");
     }
 
+    /**
+     *
+     * @param fontIndex indice de fuente
+     * @param fileName nombre del archivo
+     *
+     * @desc Carga un archivo .csv donde contiene los espacios (width) en cada letra y asigna una pos (x,y) de recorte
+     *       para que al momento de dibujar sepa que letra se debe mostrar.
+     *
+     * @pd Esto debera cambiar ya que si tenemos texturas de distintos tama;os de letras debemos detectar su altura
+     *     y tambien al hacer esto necesitaremos mas fontIndex, mas texturas y archivos .csv para una letra
+     *     normal, italic, bold, etc.
+     */
     public static void loadFontData(int fontIndex, String fileName) {
         try (BufferedReader reader = new BufferedReader(new FileReader("resources/fonts/" + fileName))) {
             String line;

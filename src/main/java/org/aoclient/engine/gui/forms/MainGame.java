@@ -13,6 +13,10 @@ import java.util.ArrayList;
 
 import static org.aoclient.engine.utils.GameData.charList;
 
+/**
+ * Este seria la clase que define nuestro formulario "frmMain".
+ * Contiene elementos de GUI.
+ */
 public class MainGame extends Form {
     private static MainGame instance;
 
@@ -44,10 +48,17 @@ public class MainGame extends Form {
     private Label lblName;
     private Console console;
 
+    /**
+     * @desc: Constructor privado por singleton.
+     */
     private MainGame() {
 
     }
 
+    /**
+     *
+     * @return Mismo objeto (Patron de diseño Singleton)
+     */
     public static MainGame get(){
         if(instance == null) {
             instance = new MainGame();
@@ -56,6 +67,9 @@ public class MainGame extends Form {
         return instance;
     }
 
+    /**
+     * Como tenemos un singleton, necesitamos de una funcion init para incializar nuestros atributos de la clase.
+     */
     public void init(){
         this.visible = true;
         this.background.init("VentanaPrincipal.png");
@@ -70,6 +84,9 @@ public class MainGame extends Form {
         this.console = Console.get();
     }
 
+    /**
+     * @desc Renderiza el contenido de nuestro formulario.
+     */
     @Override
     public void render() {
         if(!visible) return;
@@ -80,6 +97,11 @@ public class MainGame extends Form {
         this.renderUserStats();
     }
 
+    /**
+     * @desc Renderiza todos los componentes agregados al frmMain.
+     *
+     * @pd Habria que crear una lista o una coleccion de "ElementGUI" y hacer esto mas sencillo.
+     */
     private void renderUserStats() {
         shpEnergia.render();
         lblEnergia.render();
@@ -111,6 +133,9 @@ public class MainGame extends Form {
         lblWeapon.render();
     }
 
+    /**
+     * @desc Cierra y elimina nuestro formulario.
+     */
     @Override
     public void close() {
         super.close();

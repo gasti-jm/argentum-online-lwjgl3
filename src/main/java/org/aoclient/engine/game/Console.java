@@ -9,6 +9,8 @@ import static org.aoclient.engine.renderer.FontText.drawConsoleText;
 
 public class Console {
     private static Console instance;
+
+    // Posicion original en la interface del juego.
     private static final int POS_X = 12;
     private static final int POS_Y = 24;
 
@@ -28,10 +30,17 @@ public class Console {
     private final List<TextConsole> dataConsole = new ArrayList<>();
     private int posList;
 
+    /**
+     * @desc: Constructor privado por singleton.
+     */
     private Console() {
         this.posList = 0;
     }
 
+    /**
+     *
+     * @return Mismo objeto (Patron de diseño Singleton)
+     */
     public static Console get() {
         if (instance == null) {
             instance = new Console();
@@ -40,12 +49,23 @@ public class Console {
         return instance;
     }
 
+    /**
+     *
+     * @param text Texto a agregar.
+     * @param bold efecto negrita.
+     * @param italic efecto italica.
+     * @param color color de letra.
+     *
+     * @desc Agrega un nuevo mensaje en la consola.
+     */
     public void addMessageToConsole(String text, boolean bold, boolean italic, RGBColor color) {
         if(dataConsole.size() > 100) {
             dataConsole.clear();
             posList = 0;
         }
 
+        // si superamos la cantidad de filas que puede mostrar nuestra interface vamos bajando de puntero para mostrar
+        // los nuevos.
         if(dataConsole.size() >= 7) {
             posList++;
         }
@@ -53,8 +73,11 @@ public class Console {
         dataConsole.add(new TextConsole(text, bold, italic, color));
     }
 
+    /**
+     * @desc Dibujamos la consola
+     */
     public void drawConsole() {
-        // Tenemos que mostrar siempre los ultimos.
+        // Tenemos que mostrar siempre los ultimos mensajes.
         if (!dataConsole.isEmpty()) {
             for (int i = this.posList; i < dataConsole.size(); i++) {
                 TextConsole data = dataConsole.get(i);

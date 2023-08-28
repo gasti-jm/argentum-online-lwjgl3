@@ -2539,6 +2539,7 @@ public class Protocol {
 
         String msg = buffer.readASCIIString();
         forms.add(new Message(msg));
+        System.out.println(forms);
 
         incomingData.copyBuffer(buffer);
     }
@@ -3133,6 +3134,7 @@ public class Protocol {
         incomingData.readByte();
 
         UserLogic.get().setUserConected(false);
+        eraseAllChars();
         SocketConnection.getInstance().disconnect();
 
         /*
@@ -3209,7 +3211,7 @@ public class Protocol {
 
     private static void handleLogged() {
         incomingData.readByte();
-        UserLogic.get().setConnected();
+        UserLogic.get().setUserConected(true);
     }
 
     public static void writeLoginExistingChar(String username, String password) {

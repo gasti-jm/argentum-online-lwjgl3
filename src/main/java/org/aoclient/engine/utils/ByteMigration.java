@@ -3,6 +3,10 @@ package org.aoclient.engine.utils;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
+/**
+ * Esta clase contiene metodos para migrar ciertos tipos de datos de altas cantidades de bytes a bajas. Para que la
+ * lectura de estos mismos sean compatibles con la de Visual Basic 6.0
+ */
 public final class ByteMigration {
 
     /**

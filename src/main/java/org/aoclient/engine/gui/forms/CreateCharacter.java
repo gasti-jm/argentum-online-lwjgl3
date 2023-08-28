@@ -10,13 +10,26 @@ import static org.aoclient.connection.Protocol.writeThrowDices;
 import static org.aoclient.engine.Sound.SND_DICE;
 import static org.aoclient.engine.Sound.playSound;
 
+/**
+ * Este seria la clase que define nuestro formulario "frmCrearPersonaje".
+ * Contiene elementos de GUI.
+ *
+ * EN PROGRESO....
+ */
 public class CreateCharacter extends Form {
     private static CreateCharacter instance;
 
+    /**
+     * @desc: Constructor privado por singleton.
+     */
     private CreateCharacter() {
 
     }
 
+    /**
+     *
+     * @return Mismo objeto (Patron de diseño Singleton)
+     */
     public static CreateCharacter get() {
         if (instance == null) {
             instance = new CreateCharacter();
@@ -25,6 +38,9 @@ public class CreateCharacter extends Form {
         return instance;
     }
 
+    /**
+     * Como tenemos un singleton, necesitamos de una funcion init para incializar nuestros atributos de la clase.
+     */
     public void init(){
         this.background.init("VentanaCrearPersonaje.jpg");
 
@@ -43,6 +59,11 @@ public class CreateCharacter extends Form {
 
     }
 
+    /**
+     * @desc Inicializa el tabIndex del formulario y nuestra lista de TextBoxes, agregando tambien los definidos.
+     *       No es necesario crear esta funcion.. Es mas que nada para dividir un poco la funcion "init", y podemos hacer
+     *       una funcion similar si tenemos muchos botones o algun otro componente.
+     */
     private void loadTxtBoxes() {
         this.txtList = new ArrayList<>();
         this.tabIndexSelected = 0;
@@ -71,6 +92,9 @@ public class CreateCharacter extends Form {
     }
 
 
+    /**
+     * @desc Renderiza el contenido de nuestro formulario.
+     */
     @Override
     public void render() {
         if (!visible) return;
@@ -79,6 +103,9 @@ public class CreateCharacter extends Form {
         this.renderButtons();
     }
 
+    /**
+     * @desc Cierra y elimina nuestro formulario.
+     */
     @Override
     public void close(){
         super.close();

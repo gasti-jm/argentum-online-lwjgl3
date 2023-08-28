@@ -35,6 +35,10 @@ public class Engine implements Runnable {
         gameLoopThread = new Thread(this, "GAME_LOOP_THREAD");
     }
 
+    /**
+     * Cierra nuestro motor grafico, para eso se llama al close de nuestra ventana, ya que tiene todo el contexto
+     * del motor.
+     */
     private void close() {
         window.close();
     }
@@ -94,7 +98,7 @@ public class Engine implements Runnable {
     /**
      * @desc: funcion que permite cambiar nuestro atributo de escena y cambiar de una a otra.
      *
-     * @param: scene: SceneType es un enumerador definido en el package de scenes, bascicamente recibe un tipo de este
+     * @param scene: SceneType es un enumerador definido en el package de scenes, bascicamente recibe un tipo de este
      *         enumerador y segun el elegido realiza el cambio de escena.
      */
     private void changeScene(SceneType scene) {
@@ -148,14 +152,19 @@ public class Engine implements Runnable {
 
         // dibujado de formularios por encima de las escenas!
         if(!forms.isEmpty()) {
+            // recorre la lista de formularios, los dibuja y si deja de ser visible los elimina.
             for (Form frm : forms) {
-                if (frm.isVisible()) {
-                    frm.checkButtons();
+                if(frm.isVisible()) {
                     frm.render();
                 } else {
                     forms.remove(frm);
                     break;
                 }
+            }
+
+            // siempre debe darle prioridad a la funcionalidad del ultimo formulario cargado.
+            if (!forms.isEmpty()) {
+                forms.get(forms.size() - 1).checkButtons();
             }
         }
     }
@@ -165,7 +174,6 @@ public class Engine implements Runnable {
      *        desactiva nuestro booleano del MainLoop para que se cierre el juego.
      */
     public static void closeClient() {
-
         options.SaveOptions();
         prgRun = false;
     }

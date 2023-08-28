@@ -10,6 +10,9 @@ import static org.aoclient.engine.renderer.Drawn.*;
 import static org.aoclient.engine.renderer.FontText.drawText;
 import static org.aoclient.engine.scenes.Camera.*;
 
+/**
+ * Clase creada unicamente para el inventario de nuestro usuario, viene heredada de la clase Inventory.
+ */
 public final class UserInventory extends Inventory {
     // Posicion original del picInv del frmMain original de AO
     private static final int MAIN_POS_X = 600;
@@ -37,7 +40,7 @@ public final class UserInventory extends Inventory {
     }
 
     /**
-     * @desc: Update and draw inventory.
+     * @desc: Actualiza y dibuja el inventario.
      */
     @Override
     public void drawInventory() {
@@ -76,6 +79,9 @@ public final class UserInventory extends Inventory {
         }
     }
 
+    /**
+     * @desc Realiza una accion al hacer doble click dentro del inventario.
+     */
     public void dobleClickInventory() {
         final int x = (int) ((MouseListener.getX() - posX) / TILE_PIXEL_SIZE);
         final int y = (int) ((MouseListener.getY() - posY) / TILE_PIXEL_SIZE);
