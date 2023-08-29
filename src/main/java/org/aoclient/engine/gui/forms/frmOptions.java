@@ -1,22 +1,27 @@
 package org.aoclient.engine.gui.forms;
 
-public class Options extends Form {
-    private static Options instance;
+import java.util.ArrayList;
 
-    private Options() {
+public class frmOptions extends Form {
+    private static frmOptions instance;
+
+    private frmOptions() {
 
     }
 
-    public static Options get() {
+    public static frmOptions get() {
         if (instance == null) {
-            instance = new Options();
+            instance = new frmOptions();
         }
 
         return instance;
     }
     public void init() {
         this.visible = true;
-        this.background.init("VentanaOpciones.png");
+        this.background.init("VentanaOpciones.jpg");
+
+        this.loadPositionAttributes();
+        this.buttonList = new ArrayList<>();
     }
 
     @Override

@@ -11,6 +11,7 @@ import org.aoclient.engine.renderer.RGBColor;
 
 import java.util.ArrayList;
 
+import static org.aoclient.engine.Engine.forms;
 import static org.aoclient.engine.utils.GameData.charList;
 
 /**
@@ -77,6 +78,12 @@ public class MainGame extends Form {
         this.buttonList = new ArrayList<>();
         buttonList.add(new Button(770, 4, 17, 17, Engine::closeClient));
         buttonList.add(new Button(752, 4, 17, 17, () -> Window.get().minimizar()));
+
+        //Boton Opciones
+        buttonList.add(new Button(681, 485, 92, 22, () -> {
+            frmOptions.get().init();
+            forms.add(frmOptions.get());
+        }, "", "BotonOpcionesRollover.jpg", "BotonOpcionesClick.jpg"));
 
         this.lblName = new Label(charList[UserLogic.get().getUserCharIndex()].getName().toUpperCase(),
                 584, 24, true, false, new RGBColor(1.0f, 0.0f, 0.0f));
