@@ -11,7 +11,6 @@ import org.aoclient.engine.renderer.RGBColor;
 
 import java.util.ArrayList;
 
-import static org.aoclient.engine.Sound.playMusic;
 import static org.aoclient.engine.utils.GameData.charList;
 
 public class MainGame extends Form {
@@ -67,9 +66,8 @@ public class MainGame extends Form {
 
         //Boton Opciones
         buttonList.add(new Button(681, 485, 92, 22, () -> {
-            Options.get().init();
-            Options.get().setVisible(true);
-            playMusic("7.ogg");
+            frmOptions.get().init();
+            frmOptions.get().setVisible(true);
         }, "", "BotonOpcionesRollover.jpg", "BotonOpcionesClick.jpg"));
 
         this.lblName = new Label(charList[UserLogic.get().getUserCharIndex()].getName().toUpperCase(),

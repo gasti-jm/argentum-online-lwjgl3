@@ -1,15 +1,15 @@
 package org.aoclient.engine.gui.forms;
 
-public class Options extends Form {
-    private static Options instance;
+public class frmOptions extends Form {
+    private static frmOptions instance;
 
-    private Options() {
+    private frmOptions() {
 
     }
 
-    public static Options get() {
+    public static frmOptions get() {
         if (instance == null) {
-            instance = new Options();
+            instance = new frmOptions();
         }
 
         return instance;
