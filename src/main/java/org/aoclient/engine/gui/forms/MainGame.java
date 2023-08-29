@@ -11,6 +11,7 @@ import org.aoclient.engine.renderer.RGBColor;
 
 import java.util.ArrayList;
 
+import static org.aoclient.engine.Engine.forms;
 import static org.aoclient.engine.utils.GameData.charList;
 
 public class MainGame extends Form {
@@ -67,7 +68,7 @@ public class MainGame extends Form {
         //Boton Opciones
         buttonList.add(new Button(681, 485, 92, 22, () -> {
             frmOptions.get().init();
-            frmOptions.get().setVisible(true);
+            forms.add(frmOptions.get());
         }, "", "BotonOpcionesRollover.jpg", "BotonOpcionesClick.jpg"));
 
         this.lblName = new Label(charList[UserLogic.get().getUserCharIndex()].getName().toUpperCase(),

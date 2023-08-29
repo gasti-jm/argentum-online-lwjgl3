@@ -1,5 +1,7 @@
 package org.aoclient.engine.gui.forms;
 
+import java.util.ArrayList;
+
 public class frmOptions extends Form {
     private static frmOptions instance;
 
@@ -15,8 +17,11 @@ public class frmOptions extends Form {
         return instance;
     }
     public void init() {
-        this.background.init("VentanaOpciones.jpg");
         this.visible = true;
+        this.background.init("VentanaOpciones.jpg");
+
+        this.loadPositionAttributes();
+        this.buttonList = new ArrayList<>();
     }
 
     @Override
