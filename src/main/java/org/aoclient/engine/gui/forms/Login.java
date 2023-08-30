@@ -81,7 +81,9 @@ public class Login extends Form{
 
         // btnReglamento
         buttonList.add(new Button(352, 560, BTN_SIZE_WIDTH, BTN_SIZE_HEIGHT, () -> {
-                    // nothing to do yet...
+
+                this.abrirURL(("http://wiki.argentumonline.org/reglamento.html"));
+
                 }, "BotonReglamento.jpg",
                 "BotonReglamentoRollover.jpg",
                 "BotonReglamentoClick.jpg"));
