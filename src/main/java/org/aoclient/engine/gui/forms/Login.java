@@ -7,6 +7,8 @@ import org.aoclient.engine.gui.elements.TextBox;
 import org.aoclient.engine.renderer.RGBColor;
 
 import java.util.ArrayList;
+import java.awt.Desktop;
+import java.net.URI;
 
 import static org.aoclient.connection.Protocol.writeLoginExistingChar;
 import static org.aoclient.engine.Sound.playMusic;
@@ -70,7 +72,9 @@ public class Login extends Form{
 
         // btnManual
         buttonList.add(new Button(248, 560, BTN_SIZE_WIDTH, BTN_SIZE_HEIGHT, () -> {
-                    // nothing to do yet...
+
+                this.abrirURL(("http://wiki.argentumonline.org/"));
+
                 }, "BotonManual.jpg",
                 "BotonManualRollover.jpg",
                 "BotonManualClick.jpg"));
@@ -84,7 +88,9 @@ public class Login extends Form{
 
         // btnCodigoFuente
         buttonList.add(new Button(456, 560, BTN_SIZE_WIDTH, BTN_SIZE_HEIGHT, () -> {
-                    // nothing to do yet...
+
+                this.abrirURL("https://github.com/gasti-jm/argentum-online-lwjgl3");
+
                 }, "BotonCodigoFuente.jpg",
                 "BotonCodigoFuenteRollover.jpg",
                 "BotonCodigoFuenteClick.jpg"));
@@ -128,6 +134,23 @@ public class Login extends Form{
         txtList.get(tabIndexSelected).setSelected(true);
     }
 
+    private void abrirURL(String url) {
+        // Verifica si Desktop es compatible con la plataforma actual
+        if (Desktop.isDesktopSupported()) {
+            Desktop desktop = Desktop.getDesktop();
+            try {
+                // Crea una instancia de URI desde la URL
+                URI uri = new URI(url);
+                // Abrimos la URL en el navegador predeterminado
+                desktop.browse(uri);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else {
+            System.out.println("La apertura de URL no es compatible en esta plataforma.");
+        }
+    }
+
     @Override
     public void render() {
         if(!visible) return;
@@ -151,4 +174,5 @@ public class Login extends Form{
     public String getPassword() {
         return txtList.get(TXT_PASSWORD_INDEX).getText();
     }
+
 }
