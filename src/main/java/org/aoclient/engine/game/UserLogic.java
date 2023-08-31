@@ -52,12 +52,19 @@ public final class UserLogic {
     public byte userHelmEqpSlot;
     public byte userShieldEqpSlot;
 
+    /**
+     * @desc: Constructor privado por singleton.
+     */
     private UserLogic() {
         userPos = new Position();
         addToUserPos = new Position();
         userInventory = new UserInventory();
     }
 
+    /**
+     *
+     * @return Mismo objeto (Patron de diseño Singleton)
+     */
     public static UserLogic get(){
         if(instance == null) {
             instance = new UserLogic();
@@ -66,6 +73,11 @@ public final class UserLogic {
         return instance;
     }
 
+    /**
+     *
+     * @param nHeading direccion pasada por parametro
+     * @desc Mueve la camara hacia una direccion.
+     */
     public void moveScreen(E_Heading nHeading) {
         int x = 0, y = 0;
 
@@ -100,6 +112,13 @@ public final class UserLogic {
         return trigger == 1 || trigger == 2 || trigger == 4;
     }
 
+    /**
+     *
+     * @param charIndex Numero de identificador de personaje
+     * @param nHeading Direccion del personaje
+     *
+     * @desc Mueve el personaje segun la direccion establecida en "nHeading".
+     */
     public void moveCharbyHead(int charIndex, E_Heading nHeading) {
         int addX = 0, addY = 0;
 
@@ -142,7 +161,7 @@ public final class UserLogic {
 
     /**
      *
-     * @desc: Cambio de area
+     * @desc: Actualiza las areas de vision de objetos y personajes.
      */
     public void areaChange(int x, int y) {
         minLimiteX = (x / 9 - 1) * 9;
@@ -171,11 +190,23 @@ public final class UserLogic {
         refreshAllChars();
     }
 
+    /**
+     *
+     * @param x Posicion X del usuario.
+     * @param y Posicion Y del usuario.
+     * @return True si se encuentra dentro del limite del mapa, false en caso contrario.
+     */
     public boolean inMapBounds(int x, int y) {
         return (x < TILE_BUFFER_SIZE || x > XMaxMapSize - TILE_BUFFER_SIZE ||
                 y < TILE_BUFFER_SIZE || y > YMaxMapSize - TILE_BUFFER_SIZE);
     }
 
+    /**
+     *
+     * @param x Posicion X del usuario.
+     * @param y Posicion Y del usuario.
+     * @return True si el usuario puede caminar hacia cierta posicion, false caso contrario.
+     */
     private boolean moveToLegalPos(int x, int y) {
         // Limite del mapa
         if (x < minXBorder || x > maxXBorder || y < minYBorder || y > maxYBorder)
@@ -224,6 +255,14 @@ public final class UserLogic {
         return true;
     }
 
+    /**
+     *
+     * @param charIndex Numero de identificador de personaje.
+     * @param fx Numero de efecto FX.
+     * @param loops Tiempo del efecto FX.
+     *
+     * @desc Establece un efecto FX en un personaje.
+     */
     public void setCharacterFx(int charIndex, int fx, int loops) {
         charList[charIndex].setFxIndex(fx);
 
@@ -233,6 +272,15 @@ public final class UserLogic {
         }
     }
 
+    /**
+     *
+     * @param charIndex Numero de identificador de personaje
+     * @param nX Posicion X a actualizar
+     * @param nY Posicion Y a actualizar
+     *
+     *
+     * @desc Mueve el personaje segun la direccion establecida en "nX" y "nY".
+     */
     public void moveCharbyPos(int charIndex, int nX, int nY) {
         final int x = charList[charIndex].getPos().getX();
         final int y = charList[charIndex].getPos().getY();
@@ -279,6 +327,11 @@ public final class UserLogic {
         }
     }
 
+    /**
+     *
+     * @param direction
+     * @desc Mueve nuestro personaje a una cierta direccion si es posible.
+     */
     public void moveTo(E_Heading direction) {
         boolean legalOk = false;
 
@@ -311,6 +364,13 @@ public final class UserLogic {
         }
     }
 
+    /**
+     *
+     * @param charIndex Numero de identificador de personaje
+     * @desc Realiza sonidos de caminata segun el estado del personaje
+     *
+     * EN PROGRESO....
+     */
     public void doPasosFx(int charIndex) {
         if (!charList[charIndex].isDead()) {
             if(charList[charIndex].isPie()) {
@@ -323,59 +383,107 @@ public final class UserLogic {
         }
     }
 
+    /**
+     *
+     * @return Getter del atributo userMoving
+     */
     public boolean isUserMoving() {
         return userMoving;
     }
 
+    /**
+     *
+     * @return Setter del atributo userMoving
+     */
     public void setUserMoving(boolean userMoving) {
         this.userMoving = userMoving;
     }
 
+    /**
+     *
+     * @return Getter del atributo userPos
+     */
     public Position getUserPos() {
         return userPos;
     }
 
+    /**
+     *
+     * @return Getter del atributo addToUserPos
+     */
     public Position getAddToUserPos() {
         return addToUserPos;
     }
 
+    /**
+     *
+     * @return Getter del atributo underCeiling
+     */
     public boolean isUnderCeiling() {
         return underCeiling;
     }
 
+    /**
+     *
+     * @return Getter del atributo lastChar
+     */
     public int getLastChar() {
         return lastChar;
     }
 
+    /**
+     *
+     * @return Setter del atributo lastChar
+     */
     public void setLastChar(int lastChar) {
         this.lastChar = lastChar;
     }
 
-
+    /**
+     *
+     * @return Setter del atributo userMap
+     */
     public void setUserMap(short userMap) {
         this.userMap = userMap;
     }
 
-    public void setConnected() {
-        userConected = true;
-    }
 
+    /**
+     *
+     * @return Getter del atributo userConected
+     */
     public boolean isUserConected() {
         return userConected;
     }
 
+    /**
+     *
+     * @return Setter del atributo userConected
+     */
     public void setUserConected(boolean userConected) {
         this.userConected = userConected;
     }
 
+    /**
+     *
+     * @return Getter del atributo userCharIndex
+     */
     public short getUserCharIndex() {
         return userCharIndex;
     }
 
+    /**
+     *
+     * @return Setter del atributo userCharIndex
+     */
     public void setUserCharIndex(short userCharIndex) {
         this.userCharIndex = userCharIndex;
     }
 
+    /**
+     *
+     * @return Getter del atributo userInventory
+     */
     public UserInventory getUserInventory() {
         return userInventory;
     }

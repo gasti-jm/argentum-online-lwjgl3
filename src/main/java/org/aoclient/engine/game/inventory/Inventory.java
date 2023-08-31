@@ -7,6 +7,9 @@ import static org.aoclient.engine.renderer.Drawn.*;
 import static org.aoclient.engine.renderer.FontText.drawText;
 import static org.aoclient.engine.scenes.Camera.*;
 
+/**
+ * Clase padre de inventario, ya que puede existir distintos inventarios (usuario, npc, etc).
+ */
 public class Inventory {
     protected int posX, posY;
     protected int sWidth, sHeigth;
@@ -116,6 +119,9 @@ public class Inventory {
         }
     }
 
+    /**
+     * @desc Selecciona un slot al hacer un solo click dentro del inventario.
+     */
     public void clickInventory(){
         final int x = (int) ((MouseListener.getX() - posX) / TILE_PIXEL_SIZE);
         final int y = (int) ((MouseListener.getY() - posY) / TILE_PIXEL_SIZE);
@@ -124,10 +130,16 @@ public class Inventory {
         setSelectedSlot(slot); // actualizamos el slot seleccionado
     }
 
+    /**
+     * @return Getter del atributo slotSelected
+     */
     public int getSlotSelected() {
         return slotSelected;
     }
 
+    /**
+     * @desc Setter del atributo slotSelected
+     */
     private void setSelectedSlot(int slot) {
         slotSelected = slot;
     }

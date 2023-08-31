@@ -6,6 +6,12 @@ import org.aoclient.engine.listeners.MouseListener;
 
 import static org.lwjgl.glfw.GLFW.GLFW_MOUSE_BUTTON_LEFT;
 
+/**
+ * Formulario frmMensaje.
+ * Contiene constantes de posicion y tamaño para el formulario y algunos de sus elementos de GUI.
+ *
+ * SE RECOMIENDA CREAR ESTE OBJETO EN EL ARRAYLIST PUBLICO DE "forms" PARA QUE SE PUEDA DIBUJAR EN CUALQUIER ESCENA..
+ */
 public class Message extends Form {
     private static final int LBL_MSG_POS_X = 16;
     private static final int LBL_MSG_POS_Y = 32;
@@ -31,20 +37,30 @@ public class Message extends Form {
         this.accept.setAction(this::close);
     }
 
+    /**
+     * @desc Actualiza el estado del boton (segun lo que hagamos con el mouse) y en caso de hacerle click completamente
+     *       realiza su accion.
+     */
     @Override
     public void checkButtons() {
         setButtonState(accept);
     }
 
+    /**
+     * @desc Dibuja nuestros componentes del frm.
+     */
     @Override
     public void render() {
-        if (!visible) return;
+        if (!visible) return; // Sino esta visible no dibujamos, ya que puede llamarse al momento de cerrar.
 
         this.background.render();
         this.msg.render();
         this.accept.render();
     }
 
+    /**
+     * @desc Cerramos el formulario.
+     */
     @Override
     public void close() {
         super.close();

@@ -1,8 +1,10 @@
-# Argentum Online Java LWJGL3
+
 <div align='center'>
-  <a target="_blank"><img src="https://img.shields.io/badge/Built%20in-Java_8-43ca1f.svg?style=flat-square"></img></a>
-  <a target="_blank"><img src="https://img.shields.io/badge/Made%20in-IntelliJ%20Community-be27e9.svg?style=flat-square"></img></a>
-  <a target="_blank"><img src="https://img.shields.io/badge/License-GNU%20General%20Public%20License%20-e98227.svg?style=flat-square"></img></a>
+    <h1>Argentum Online Java LWJGL3</h1> <br/>
+    <img src="https://github.com/gasti-jm/argentum-online-lwjgl3/assets/82490615/0ad2c3a1-c512-464c-a0a8-2cfc9f06c0f8" width= "300px"/> <br/> <br/>
+    <a target="_blank"><img src="https://img.shields.io/badge/Built%20in-Java_8-43ca1f.svg?style=flat-square"></img></a>
+    <a target="_blank"><img src="https://img.shields.io/badge/Made%20in-IntelliJ%20Community-be27e9.svg?style=flat-square"></img></a>
+    <a target="_blank"><img src="https://img.shields.io/badge/License-GNU%20General%20Public%20License%20-e98227.svg?style=flat-square"></img></a>
 </div>
 <br/>
 
@@ -10,6 +12,9 @@
   MMORPG Video Game of the year 1999 created in Visual Basic 6.0 by Pablo Marquez (Morgolock), this game is open source. <br/> <br/>
   I have translated it to Java with LWJGL3, this game would be the base client, the connection to the server is being implemented with Java sockets. The java server has not been developed yet, but you can use the Argentum Online Alkon v13.0 server from VB6.
 </p>
+
+# Discord
+For those who want to collaborate with the project, they are more than welcome! You can communicate with us on our <a href="https://discord.gg/RtsGRqJVt9">Discord.</a>
 
 # How to compile
 <p>

@@ -18,6 +18,10 @@ import static org.lwjgl.opengl.GL11.GL_DEPTH_TEST;
 import static org.lwjgl.system.MemoryStack.stackPush;
 import static org.lwjgl.system.MemoryUtil.NULL;
 
+/**
+ * Esta es la clase de nuestra Ventana GLFW, donde inicializa una nueva ventana y inicializa y crea nuestro contexto de
+ * OpenGL y OpenAL.
+ */
 public final class Window {
     private static final int SCREEN_WIDTH = 800;
     private static final int SCREEN_HEIGHT = 600;
@@ -177,14 +181,26 @@ public final class Window {
         return glfwGetWindowAttrib(window, GLFW_ICONIFIED) == GLFW_TRUE;
     }
 
+    /**
+     *
+     * @return Getter del atributo Window (Contexto de nuestra ventana)
+     */
     public long getWindow() {
         return this.window;
     }
 
+    /**
+     *
+     * @return Getter del atributo width
+     */
     public int getWidth() {
         return width;
     }
 
+    /**
+     *
+     * @return Getter del atributo height
+     */
     public int getHeight() {
         return height;
     }

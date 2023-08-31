@@ -114,10 +114,18 @@ public final class Sound {
         }
     }
 
+    /**
+     *
+     * @return Getter del atributo filepath.
+     */
     public String getFilepath() {
         return this.filepath;
     }
 
+    /**
+     *
+     * @return True si esta reproduciendose el sonido, falso en caso contrario.
+     */
     public boolean isPlaying() {
         if (alGetSourcei(sourceId, AL_SOURCE_STATE) == AL_STOPPED) {
             isPlaying = false;

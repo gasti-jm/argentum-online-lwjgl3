@@ -17,6 +17,9 @@ import static org.aoclient.engine.game.models.Character.eraseChar;
 import static org.aoclient.engine.renderer.FontText.loadCSV;
 import static org.aoclient.engine.utils.ByteMigration.*;
 
+/**
+ * Clase en donde se carga todos los archivos necesarios del juego.
+ */
 public final class GameData {
     public static BodyData[] bodyData;
     public static HeadData[] headData;
@@ -27,7 +30,7 @@ public final class GameData {
     public static GrhData[] grhData;
     public static MapData[][] mapData;
 
-    public static Character charList[] = new Character[10000+1];
+    public static Character charList[] = new Character[10000+1]; // se agrega aca porque hay mapas que tienen NPCs.
     public static Sound music;
     public static Map<String, Sound> sounds = new HashMap<>();
 

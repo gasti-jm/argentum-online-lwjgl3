@@ -2,8 +2,11 @@ package org.aoclient.engine.game;
 
 import static org.aoclient.engine.utils.Time.deltaTime;
 
+/**
+ * Esta es la clase que gestiona y crea intervalos para el juego.
+ */
 public final class IntervalTimer {
-    // Intervalos
+    // Intervalos de AO.
     public static final float INT_MACRO_HECHIS = 2.788f;
     public static final float INT_MACRO_TRABAJO = 0.9f;
     public static final float INT_ATTACK = 1.5f;
@@ -22,6 +25,9 @@ public final class IntervalTimer {
         this.interval = interval;
     }
 
+    /**
+     * @desc Actualiza el intervalo.
+     */
     public void update() {
         if(this.currentTime < interval) {
             this.currentTime += deltaTime;
@@ -29,7 +35,7 @@ public final class IntervalTimer {
     }
 
     /**
-     * @desc: Esta es la funcion en la que vamos a preguntar si nuestro intervalo ya paso y podemos accionar.
+     * @desc Esta es la funcion en la que vamos a preguntar si nuestro intervalo ya paso y podemos accionar.
      */
     public boolean check(){
         if(this.currentTime >= interval) {
