@@ -2,9 +2,6 @@ package org.aoclient.engine.gui.forms;
 
 import org.aoclient.engine.gui.elements.Button;
 import org.aoclient.engine.gui.elements.Label;
-import org.aoclient.engine.listeners.MouseListener;
-
-import static org.lwjgl.glfw.GLFW.GLFW_MOUSE_BUTTON_LEFT;
 
 /**
  * Formulario frmMensaje.
@@ -12,7 +9,7 @@ import static org.lwjgl.glfw.GLFW.GLFW_MOUSE_BUTTON_LEFT;
  *
  * SE RECOMIENDA CREAR ESTE OBJETO EN EL ARRAYLIST PUBLICO DE "forms" PARA QUE SE PUEDA DIBUJAR EN CUALQUIER ESCENA..
  */
-public class Message extends Form {
+public class FrmMessage extends Form {
     private static final int LBL_MSG_POS_X = 16;
     private static final int LBL_MSG_POS_Y = 32;
     private static final int LBL_SIZE_WIDTH = 233;
@@ -26,7 +23,7 @@ public class Message extends Form {
     private final Label msg;
     private final Button accept;
 
-    public Message(String msg) {
+    public FrmMessage(String msg) {
         this.background.init("VentanaMsj.jpg");
         this.loadPositionAttributes();
         this.visible = true;

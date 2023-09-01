@@ -22,7 +22,7 @@ public class Shape extends ElementGUI {
     }
 
     /**
-     * @desc Dibuja nuestro shape como un rectangulo y color.
+     * Dibuja nuestro shape como un rectangulo y color.
      */
     @Override
     public void render() {

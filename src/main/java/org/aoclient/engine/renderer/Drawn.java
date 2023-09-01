@@ -1,6 +1,6 @@
 package org.aoclient.engine.renderer;
 
-import org.aoclient.engine.utils.filedata.GrhInfo;
+import org.aoclient.engine.utils.structs.GrhInfo;
 
 import static org.aoclient.engine.scenes.Camera.TILE_PIXEL_SIZE;
 import static org.aoclient.engine.utils.GameData.*;

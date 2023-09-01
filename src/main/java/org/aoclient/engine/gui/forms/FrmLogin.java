@@ -19,8 +19,8 @@ import static org.aoclient.engine.utils.GameData.options;
  * Este seria la clase que define nuestro formulario "frmConectar".
  * Contiene elementos de GUI.
  */
-public class Login extends Form{
-    private static Login instance;
+public class FrmLogin extends Form{
+    private static FrmLogin instance;
 
     private static final int TXT_USERNAME_INDEX = 0;
     private static final int TXT_PASSWORD_INDEX = 1;
@@ -30,7 +30,7 @@ public class Login extends Form{
     /**
      * @desc: Constructor privado por singleton.
      */
-    private Login() {
+    private FrmLogin() {
 
     }
 
@@ -38,10 +38,10 @@ public class Login extends Form{
      *
      * @return Mismo objeto (Patron de diseño Singleton)
      */
-    public static Login get(){
+    public static FrmLogin get(){
 
         if (instance == null){
-            instance = new Login();
+            instance = new FrmLogin();
         }
 
         return instance;
@@ -71,8 +71,8 @@ public class Login extends Form{
 
         // btnCrearPJ
         buttonList.add(new Button(40, 560, BTN_SIZE_WIDTH, BTN_SIZE_HEIGHT, () -> {
-            CreateCharacter.get().init();
-            CreateCharacter.get().setVisible(true);
+            FrmCreateCharacter.get().init();
+            FrmCreateCharacter.get().setVisible(true);
             playMusic("7.ogg");
         }, "BotonCrearPersonajeConectar.jpg",
                     "BotonCrearPersonajeRolloverConectar.jpg",

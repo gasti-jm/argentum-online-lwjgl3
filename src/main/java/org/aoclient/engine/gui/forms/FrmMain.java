@@ -3,7 +3,7 @@ package org.aoclient.engine.gui.forms;
 import org.aoclient.engine.Engine;
 import org.aoclient.engine.Window;
 import org.aoclient.engine.game.Console;
-import org.aoclient.engine.game.UserLogic;
+import org.aoclient.engine.game.User;
 import org.aoclient.engine.gui.elements.Button;
 import org.aoclient.engine.gui.elements.Label;
 import org.aoclient.engine.gui.elements.Shape;
@@ -18,8 +18,8 @@ import static org.aoclient.engine.utils.GameData.charList;
  * Este seria la clase que define nuestro formulario "frmMain".
  * Contiene elementos de GUI.
  */
-public class MainGame extends Form {
-    private static MainGame instance;
+public class FrmMain extends Form {
+    private static FrmMain instance;
 
     public Shape shpEnergia = new Shape(584, 453, 75, 12, new RGBColor(0.0f, 0.0f, 0.0f));
     public Shape shpMana = new Shape(584, 477, 75, 12, new RGBColor(0.0f, 0.0f, 0.0f));
@@ -46,13 +46,15 @@ public class MainGame extends Form {
     public Label lblHelm = new Label(222, 579, false, true, new RGBColor(1.0f, 0.0f, 0.0f));
     public Label lblWeapon = new Label(488, 579, false, true, new RGBColor(1.0f, 0.0f, 0.0f));
 
+    public Label lblCoords = new Label(630,571, true, true, new RGBColor(1.0f, 1.0f, 0.0f));
+
     private Label lblName;
     private Console console;
 
     /**
      * @desc: Constructor privado por singleton.
      */
-    private MainGame() {
+    private FrmMain() {
 
     }
 
@@ -60,9 +62,9 @@ public class MainGame extends Form {
      *
      * @return Mismo objeto (Patron de diseño Singleton)
      */
-    public static MainGame get(){
+    public static FrmMain get(){
         if(instance == null) {
-            instance = new MainGame();
+            instance = new FrmMain();
         }
 
         return instance;
@@ -79,13 +81,35 @@ public class MainGame extends Form {
         buttonList.add(new Button(770, 4, 17, 17, Engine::closeClient));
         buttonList.add(new Button(752, 4, 17, 17, () -> Window.get().minimizar()));
 
+
+        //Boton Mapa
+        buttonList.add(new Button(682, 445, 93, 20, () -> {
+            // nothing to do...
+        }, "", "BotonMapaRollover.jpg", "BotonMapaClick.jpg"));
+
+        //Boton Grupo
+        buttonList.add(new Button(681, 466, 94, 21, () -> {
+            // nothing to do...
+        }, "", "BotonGrupoRollover.jpg", "BotonGrupoClick.jpg"));
+
         //Boton Opciones
         buttonList.add(new Button(681, 485, 92, 22, () -> {
-            frmOptions.get().init();
-            forms.add(frmOptions.get());
+            FrmOptions.get().init();
+            forms.add(FrmOptions.get());
         }, "", "BotonOpcionesRollover.jpg", "BotonOpcionesClick.jpg"));
 
-        this.lblName = new Label(charList[UserLogic.get().getUserCharIndex()].getName().toUpperCase(),
+        //Boton Estadisticas
+        buttonList.add(new Button(681, 507, 95, 24, () -> {
+            //asd
+        }, "", "BotonEstadisticasRollover.jpg", "BotonEstadisticasClick.jpg"));
+
+        //Boton Clanes
+        buttonList.add(new Button(683, 532, 92, 26, () -> {
+            //asd
+        }, "", "BotonClanesRollover.jpg", "BotonClanesClick.jpg"));
+
+
+        this.lblName = new Label(charList[User.get().getUserCharIndex()].getName().toUpperCase(),
                 584, 24, true, false, new RGBColor(1.0f, 0.0f, 0.0f));
 
         this.console = Console.get();
@@ -100,6 +124,8 @@ public class MainGame extends Form {
 
         background.render();
         console.drawConsole();
+        lblCoords.render();
+
         this.renderButtons();
         this.renderUserStats();
     }

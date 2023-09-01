@@ -16,13 +16,13 @@ import static org.aoclient.engine.Sound.playSound;
  *
  * EN PROGRESO....
  */
-public class CreateCharacter extends Form {
-    private static CreateCharacter instance;
+public class FrmCreateCharacter extends Form {
+    private static FrmCreateCharacter instance;
 
     /**
      * @desc: Constructor privado por singleton.
      */
-    private CreateCharacter() {
+    private FrmCreateCharacter() {
 
     }
 
@@ -30,9 +30,9 @@ public class CreateCharacter extends Form {
      *
      * @return Mismo objeto (Patron de diseño Singleton)
      */
-    public static CreateCharacter get() {
+    public static FrmCreateCharacter get() {
         if (instance == null) {
-            instance = new CreateCharacter();
+            instance = new FrmCreateCharacter();
         }
 
         return instance;

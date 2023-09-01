@@ -55,6 +55,8 @@ public abstract class Form {
         // posicionamos el fondo en la posicion de nuestro formulario
         this.background.setX(fPosX);
         this.background.setY(fPosY);
+
+
     }
 
     /**

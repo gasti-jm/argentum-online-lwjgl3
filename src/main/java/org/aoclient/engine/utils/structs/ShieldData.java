@@ -1,4 +1,4 @@
-package org.aoclient.engine.utils.filedata;
+package org.aoclient.engine.utils.structs;
 
 /**
  * Simula el "Type" o la estructura de ShieldData.

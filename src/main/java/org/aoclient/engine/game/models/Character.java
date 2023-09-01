@@ -1,8 +1,8 @@
 package org.aoclient.engine.game.models;
 
-import org.aoclient.engine.game.UserLogic;
+import org.aoclient.engine.game.User;
 import org.aoclient.engine.renderer.RGBColor;
-import org.aoclient.engine.utils.filedata.*;
+import org.aoclient.engine.utils.structs.*;
 
 import static org.aoclient.engine.game.models.E_Heading.SOUTH;
 import static org.aoclient.engine.renderer.Drawn.drawTexture;
@@ -37,7 +37,7 @@ public final class Character {
     private GrhInfo fX;
     private int fxIndex;
 
-    private byte criminal;
+    private boolean criminal;
     private boolean attackable;
 
     // Nicknames
@@ -73,8 +73,8 @@ public final class Character {
      * @desc Crea un nuevo personaje segun los parametros establecidos.
      */
     public static void makeChar(int charIndex, int body, int head,  E_Heading heading, int x, int y, int weapon, int shield, int helmet) {
-        if (charIndex > UserLogic.get().getLastChar())
-            UserLogic.get().setLastChar(charIndex);
+        if (charIndex > User.get().getLastChar())
+            User.get().setLastChar(charIndex);
 
 
         if (weapon <= 0) weapon = 2;
@@ -82,7 +82,12 @@ public final class Character {
         if (helmet <= 0) helmet = 2;
 
         char f = '<', u = '>';
+
         charList[charIndex].setClanName("");
+
+        if(charList[charIndex].priv != 0) {
+            charList[charIndex].setClanName(f + "Argentum Online Staff" + u);
+        }
 
         charList[charIndex].setiHead(head);
         charList[charIndex].setiBody(body);
@@ -115,10 +120,10 @@ public final class Character {
     public static void eraseChar(int charIndex) {
         charList[charIndex].setActive(false);
 
-        if (charIndex == UserLogic.get().getLastChar()) {
-            while (!charList[UserLogic.get().getLastChar()].isActive()) {
-                UserLogic.get().setLastChar(UserLogic.get().getLastChar() - 1);
-                if (UserLogic.get().getLastChar() == 0) {
+        if (charIndex == User.get().getLastChar()) {
+            while (!charList[User.get().getLastChar()].isActive()) {
+                User.get().setLastChar(User.get().getLastChar() - 1);
+                if (User.get().getLastChar() == 0) {
                     break;
                 }
             }
@@ -138,11 +143,11 @@ public final class Character {
      * @desc elimina todos los personajes de nuestro array charList.
      */
     public static void eraseAllChars() {
-        for (int i = 0; i <= UserLogic.get().getLastChar(); i++) {
+        for (int i = 0; i <= User.get().getLastChar(); i++) {
             resetCharInfo(i);
         }
 
-        UserLogic.get().setLastChar(0);
+        User.get().setLastChar(0);
     }
 
     /**
@@ -158,7 +163,7 @@ public final class Character {
      * @desc Actualiza todos los personajes visibles.
      */
     public static void refreshAllChars() {
-        for (int LoopC = 1; LoopC <= UserLogic.get().getLastChar(); LoopC++) {
+        for (int LoopC = 1; LoopC <= User.get().getLastChar(); LoopC++) {
             if (charList[LoopC].isActive()) {
                 mapData[charList[LoopC].getPos().getX()][charList[LoopC].getPos().getY()].setCharIndex(LoopC);
             }
@@ -269,11 +274,11 @@ public final class Character {
         this.fxIndex = fxIndex;
     }
 
-    public byte getCriminal() {
+    public boolean getCriminal() {
         return criminal;
     }
 
-    public void setCriminal(byte criminal) {
+    public void setCriminal(boolean criminal) {
         this.criminal = criminal;
     }
 
@@ -369,8 +374,8 @@ public final class Character {
         return priv;
     }
 
-    public void setPriv(byte priv) {
-        this.priv = priv;
+    public void setPriv(int priv) {
+        this.priv = (byte) priv;
     }
 
     /**
@@ -474,17 +479,34 @@ public final class Character {
                     }
 
                     if (options.isShowName()) {
-                        if (charList[charIndex].getName().length() > 0) {
-                            if (charList[charIndex].getPriv() == 0) {
-                                color.setRed(0.0f);
-                                color.setGreen(0.5f);
-                                color.setBlue(1.0f);
+                        if (charList[charIndex].name.length() > 0) {
+
+                            if (charList[charIndex].priv == 0) {
+                                if(charList[charIndex].attackable) {
+                                    color.setRed(0.54f);
+                                    color.setGreen(0.0f);
+                                    color.setBlue(1.0f);
+                                } else {
+                                    if(charList[charIndex].criminal) {
+                                        color.setRed(1.0f);
+                                        color.setGreen(0.0f);
+                                        color.setBlue(0.0f);
+                                    } else {
+                                        color.setRed(0.0f);
+                                        color.setGreen(0.5f);
+                                        color.setBlue(1.0f);
+                                    }
+                                }
+                            } else {
+                                color.setRed(0.13f);
+                                color.setGreen(0.7f);
+                                color.setBlue(0.3f);
                             }
 
-                            String line = charList[charIndex].getName();
+                            String line = charList[charIndex].name;
                             drawText(line, PixelOffsetX - (getSizeText(line) / 2) + 15, PixelOffsetY + 30, color, 0, true, false, false);
 
-                            line = charList[charIndex].getClanName();
+                            line = charList[charIndex].clanName;
                             if (!line.isEmpty()) {
                                 drawText(line, PixelOffsetX - (getSizeText(line) / 2) + 15, PixelOffsetY + 43, color, 0, true, false, false);
                             }
@@ -495,14 +517,14 @@ public final class Character {
             }
 
             // Draw FX
-            if (charList[charIndex].getFxIndex() != 0) {
-                drawTexture(charList[charIndex].getfX(),
-                        PixelOffsetX + fxData[charList[charIndex].getFxIndex()].getOffsetX(),
-                        PixelOffsetY + fxData[charList[charIndex].getFxIndex()].getOffsetY(),
+            if (charList[charIndex].fxIndex != 0) {
+                drawTexture(charList[charIndex].fX,
+                        PixelOffsetX + fxData[charList[charIndex].fxIndex].getOffsetX(),
+                        PixelOffsetY + fxData[charList[charIndex].fxIndex].getOffsetY(),
                         true, true, true,1.0f, ambientcolor);
 
                 // Check if animation is over
-                if (!charList[charIndex].getfX().isStarted())
+                if (!charList[charIndex].fX.isStarted())
                     charList[charIndex].setFxIndex(0);
             }
 

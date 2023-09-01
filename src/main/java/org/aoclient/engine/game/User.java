@@ -3,6 +3,7 @@ package org.aoclient.engine.game;
 import org.aoclient.engine.game.inventory.UserInventory;
 import org.aoclient.engine.game.models.E_Heading;
 import org.aoclient.engine.game.models.Position;
+import org.aoclient.engine.gui.forms.FrmMain;
 
 import static org.aoclient.connection.Protocol.writeChangeHeading;
 import static org.aoclient.connection.Protocol.writeWalk;
@@ -12,8 +13,8 @@ import static org.aoclient.engine.game.models.E_Heading.*;
 import static org.aoclient.engine.scenes.Camera.*;
 import static org.aoclient.engine.utils.GameData.*;
 
-public final class UserLogic {
-    private static UserLogic instance;
+public final class User {
+    private static User instance;
 
     private UserInventory userInventory;
     // private InventorySpells inventorySpells;
@@ -55,7 +56,7 @@ public final class UserLogic {
     /**
      * @desc: Constructor privado por singleton.
      */
-    private UserLogic() {
+    private User() {
         userPos = new Position();
         addToUserPos = new Position();
         userInventory = new UserInventory();
@@ -65,9 +66,9 @@ public final class UserLogic {
      *
      * @return Mismo objeto (Patron de diseño Singleton)
      */
-    public static UserLogic get(){
+    public static User get(){
         if(instance == null) {
-            instance = new UserLogic();
+            instance = new User();
         }
 
         return instance;
@@ -357,6 +358,10 @@ public final class UserLogic {
             writeWalk(direction);
             moveScreen(direction);
             moveCharbyHead(userCharIndex, direction);
+
+            FrmMain.get().lblCoords.setText(userMap +
+                    " X: " + userPos.getX() + " Y: " + userPos.getY());
+
         } else {
             if(charList[userCharIndex].getHeading() != direction) {
                 writeChangeHeading(direction);

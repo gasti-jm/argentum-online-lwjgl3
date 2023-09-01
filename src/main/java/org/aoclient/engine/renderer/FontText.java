@@ -56,7 +56,6 @@ public class FontText {
         loadFontData(0, "bold-italic.csv");
     }
 
-
     /**
      *
      * @param text Texto a mostrar

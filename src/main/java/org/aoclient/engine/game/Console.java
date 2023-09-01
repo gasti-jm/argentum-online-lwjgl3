@@ -31,7 +31,7 @@ public class Console {
     private int posList;
 
     /**
-     * @desc: Constructor privado por singleton.
+     * Constructor privado por singleton.
      */
     private Console() {
         this.posList = 0;
@@ -56,7 +56,7 @@ public class Console {
      * @param italic efecto italica.
      * @param color color de letra.
      *
-     * @desc Agrega un nuevo mensaje en la consola.
+     * Agrega un nuevo mensaje en la consola.
      */
     public void addMessageToConsole(String text, boolean bold, boolean italic, RGBColor color) {
         if(dataConsole.size() > 100) {
@@ -74,7 +74,7 @@ public class Console {
     }
 
     /**
-     * @desc Dibujamos la consola
+     * Dibujamos la consola
      */
     public void drawConsole() {
         // Tenemos que mostrar siempre los ultimos mensajes.
@@ -85,6 +85,5 @@ public class Console {
             }
         }
     }
-
 
 }

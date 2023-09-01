@@ -2,9 +2,9 @@ package org.aoclient.engine.scenes;
 
 import org.aoclient.engine.game.BindKeys;
 import org.aoclient.engine.game.models.E_KeyType;
-import org.aoclient.engine.gui.forms.MainGame;
+import org.aoclient.engine.gui.forms.FrmMain;
 import org.aoclient.engine.listeners.KeyListener;
-import org.aoclient.engine.game.UserLogic;
+import org.aoclient.engine.game.User;
 import org.aoclient.engine.listeners.MouseListener;
 import org.aoclient.engine.renderer.RGBColor;
 
@@ -29,7 +29,7 @@ import static org.lwjgl.glfw.GLFW.*;
  */
 public final class GameScene extends Scene {
     private BindKeys bindKeys;
-    private UserLogic user;
+    private User user;
 
     private float offSetCounterX = 0;
     private float offSetCounterY = 0;
@@ -37,7 +37,7 @@ public final class GameScene extends Scene {
 
     RGBColor ambientColor; // color de ambiente.
     private boolean autoMove = false;
-    private MainGame frm; // formulario frmMain diseñado.
+    private FrmMain frm; // formulario frmMain diseñado.
 
     @Override
     public void init() {
@@ -45,13 +45,13 @@ public final class GameScene extends Scene {
         canChangeTo = SceneType.MAIN_SCENE;
 
         bindKeys = BindKeys.get();
-        user = UserLogic.get();
+        user = User.get();
         ambientColor = new RGBColor(1.0f, 1.0f, 1.0f);
 
         camera.setHalfWindowTileWidth   (( (SCREEN_SIZE_X / TILE_PIXEL_SIZE) / 2 ));
         camera.setHalfWindowTileHeight  (( (SCREEN_SIZE_Y / TILE_PIXEL_SIZE) / 2 ));
 
-        frm = MainGame.get();
+        frm = FrmMain.get();
         frm.init();
     }
 

@@ -1,7 +1,7 @@
 package org.aoclient.connection;
 
 
-import org.aoclient.engine.gui.forms.Message;
+import org.aoclient.engine.gui.forms.FrmMessage;
 import java.net.*;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -56,7 +56,7 @@ public class SocketConnection {
             outgoingData.readASCIIStringFixed(outgoingData.length());
 
         } catch(Exception e) {
-            forms.add(new Message(e.getMessage()));
+            forms.add(new FrmMessage(e.getMessage()));
         }
     }
 

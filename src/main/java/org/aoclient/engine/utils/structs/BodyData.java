@@ -1,4 +1,4 @@
-package org.aoclient.engine.utils.filedata;
+package org.aoclient.engine.utils.structs;
 
 import org.aoclient.engine.game.models.Position;
 

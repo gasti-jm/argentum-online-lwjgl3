@@ -2,10 +2,10 @@ package org.aoclient.engine.scenes;
 
 import org.aoclient.connection.SocketConnection;
 import org.aoclient.engine.Window;
-import org.aoclient.engine.game.UserLogic;
-import org.aoclient.engine.gui.forms.CreateCharacter;
-import org.aoclient.engine.gui.forms.Login;
-import org.aoclient.engine.gui.forms.Message;
+import org.aoclient.engine.game.User;
+import org.aoclient.engine.gui.forms.FrmCreateCharacter;
+import org.aoclient.engine.gui.forms.FrmLogin;
+import org.aoclient.engine.gui.forms.FrmMessage;
 import org.aoclient.engine.listeners.KeyListener;
 import org.aoclient.engine.renderer.RGBColor;
 import org.aoclient.engine.utils.GameData;
@@ -26,8 +26,8 @@ import static org.lwjgl.glfw.GLFW.GLFW_KEY_ENTER;
  * Se recomienda leer el JavaDoc de la clase padre "Scene.java".
  */
 public final class MainScene extends Scene {
-    private Login frmLogin;
-    private CreateCharacter frmCreateCharacter;
+    private FrmLogin frmLogin;
+    private FrmCreateCharacter frmCreateCharacter;
 
     // Conectar
     private RGBColor ambientColor;
@@ -37,8 +37,8 @@ public final class MainScene extends Scene {
         super.init();
         canChangeTo = SceneType.GAME_SCENE;
 
-        frmLogin = Login.get();
-        frmCreateCharacter = CreateCharacter.get();
+        frmLogin = FrmLogin.get();
+        frmCreateCharacter = FrmCreateCharacter.get();
 
         frmLogin.init();
         ambientColor = new RGBColor(1.0f, 1.0f, 1.0f);
@@ -73,7 +73,7 @@ public final class MainScene extends Scene {
                     SocketConnection.getInstance().connect();
                     writeLoginExistingChar(frmLogin.getUsername(), frmLogin.getPassword());
                 } else {
-                    forms.add(new Message("Por favor, ingrese un nombre de usuario y/o contraseña valida."));
+                    forms.add(new FrmMessage("Por favor, ingrese un nombre de usuario y/o contraseña valida."));
                 }
             }
 
@@ -93,7 +93,7 @@ public final class MainScene extends Scene {
 
     @Override
     public void render() {
-        if(UserLogic.get().isUserConected()) {
+        if(User.get().isUserConected()) {
             this.close();
         }
 

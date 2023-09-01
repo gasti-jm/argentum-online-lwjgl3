@@ -1,17 +1,19 @@
 package org.aoclient.engine.gui.forms;
 
+import org.aoclient.engine.gui.elements.Button;
+
 import java.util.ArrayList;
 
-public class frmOptions extends Form {
-    private static frmOptions instance;
+public class FrmOptions extends Form {
+    private static FrmOptions instance;
 
-    private frmOptions() {
+    private FrmOptions() {
 
     }
 
-    public static frmOptions get() {
+    public static FrmOptions get() {
         if (instance == null) {
-            instance = new frmOptions();
+            instance = new FrmOptions();
         }
 
         return instance;
@@ -19,9 +21,14 @@ public class frmOptions extends Form {
     public void init() {
         this.visible = true;
         this.background.init("VentanaOpciones.jpg");
-
         this.loadPositionAttributes();
+
         this.buttonList = new ArrayList<>();
+
+        buttonList.add(new Button(this.background.getX() + 96, this.background.getY() + 440, 134, 19, this::close,
+                "BotonSalirOpciones.jpg", "BotonSalirRolloverOpciones.jpg", "BotonSalirClickOpciones.jpg"));
+
+
     }
 
     @Override
@@ -29,10 +36,12 @@ public class frmOptions extends Form {
         if (!visible) return;
 
         this.background.render();
+        this.renderButtons();
     }
 
     @Override
     public void close() {
         super.close();
+        background.clear();
     }
 }

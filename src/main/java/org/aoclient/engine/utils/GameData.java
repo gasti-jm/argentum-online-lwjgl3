@@ -10,7 +10,7 @@ import org.aoclient.engine.Sound;
 import org.aoclient.engine.game.Options;
 import org.aoclient.engine.game.models.Character;
 import org.aoclient.engine.renderer.Surface;
-import org.aoclient.engine.utils.filedata.*;
+import org.aoclient.engine.utils.structs.*;
 
 import static org.aoclient.engine.Sound.*;
 import static org.aoclient.engine.game.models.Character.eraseChar;
@@ -33,11 +33,10 @@ public final class GameData {
     public static Character charList[] = new Character[10000+1]; // se agrega aca porque hay mapas que tienen NPCs.
     public static Sound music;
     public static Map<String, Sound> sounds = new HashMap<>();
-
     public static Options options;
 
     /**
-     * @desc: Inicializamos todos los datos almacenados en archivos.
+     * Inicializamos todos los datos almacenados en archivos.
      */
     public static void initialize() {
         for (int i = 0; i < charList.length; i++) {
@@ -48,7 +47,6 @@ public final class GameData {
         options = new Options();
         options.LoadOptions();
 
-        loadGrhData();
         loadGrhData();
         loadHeads();
         loadHelmets();
@@ -63,7 +61,7 @@ public final class GameData {
 
 
     /**
-     * @desc: Cargamos y almacenamos los datos del archivo "graphics.ind".
+     * Cargamos y almacenamos los datos del archivo "graphics.ind".
      */
     private static void loadGrhData() {
         try (RandomAccessFile f = new RandomAccessFile("resources/inits/graphics.ind", "rw")) {
@@ -164,7 +162,7 @@ public final class GameData {
     }
 
     /**
-     * @desc: Cargamos y almacenamos los datos del archivo "heads.ind".
+     * Cargamos y almacenamos los datos del archivo "heads.ind".
      */
     private static void loadHeads() {
         try (RandomAccessFile f = new RandomAccessFile("resources/inits/heads.ind", "rw")) {
@@ -202,7 +200,7 @@ public final class GameData {
     }
 
     /**
-     * @desc: Cargamos y almacenamos los datos del archivo "helmets.ind".
+     * Cargamos y almacenamos los datos del archivo "helmets.ind".
      */
     private static void loadHelmets() {
         try (RandomAccessFile f = new RandomAccessFile("resources/inits/helmets.ind", "rw")) {
@@ -240,7 +238,7 @@ public final class GameData {
     }
 
     /**
-     * @desc: Cargamos y almacenamos los datos del archivo "bodys.ind".
+     * Cargamos y almacenamos los datos del archivo "bodys.ind".
      */
     private static void loadBodys() {
         try (RandomAccessFile f = new RandomAccessFile("resources/inits/bodys.ind", "rw")) {
@@ -284,7 +282,7 @@ public final class GameData {
     }
 
     /**
-     * @desc: Cargamos y almacenamos los datos del archivo "arms.ind".
+     * Cargamos y almacenamos los datos del archivo "arms.ind".
      */
     private static void loadArms() {
         try (RandomAccessFile f = new RandomAccessFile("resources/inits/arms.ind", "rw")) {
@@ -306,7 +304,7 @@ public final class GameData {
     }
 
     /**
-     * @desc: Cargamos y almacenamos los datos del archivo "shields.ind".
+     * Cargamos y almacenamos los datos del archivo "shields.ind".
      */
     private static void loadShields() {
         try (RandomAccessFile f = new RandomAccessFile("resources/inits/shields.ind", "rw")) {
@@ -329,7 +327,7 @@ public final class GameData {
     }
 
     /**
-     * @desc: Cargamos el mapa.
+     * Cargamos el mapa.
      */
     public static void loadMap(int map) {
         try (RandomAccessFile f = new RandomAccessFile("resources/maps/mapa" + map + ".map", "rw")) {
@@ -408,7 +406,7 @@ public final class GameData {
     }
 
     /**
-     * @desc: Cargamos los indices de animaciones FXs del archivo "fxs.ind"
+     * Cargamos los indices de animaciones FXs del archivo "fxs.ind"
      */
     private static void LoadFXs() {
         try (RandomAccessFile f = new RandomAccessFile("resources/inits/fxs.ind", "rw")) {
@@ -434,7 +432,7 @@ public final class GameData {
 
     /**
      *
-     * @desc: Inicializa los graficos, ya sean animaciones o no.
+     * Inicializa los graficos, ya sean animaciones o no.
      */
     public static GrhInfo initGrh(GrhInfo grh, short grhIndex, boolean started) {
         if (grh == null) throw new NullPointerException("Se esta intentando incializar un GrhInfo nulo...");
