@@ -40,12 +40,13 @@ For those who want to collaborate with the project, they are more than welcome! 
   <a target="_blank" href="https://www.gs-zone.org/"><img src="https://user-images.githubusercontent.com/82490615/187148671-1d7f92b9-7ea1-45f2-b6f1-f53b07454d93.png"></img></a>
 </p>
 
-<h1>Contribution:</h1>
+<h1>How to Contribute:</h1>
 <br/>
 
-1. Clona este repositorio: `git clone https://github.com/Lorwik/Nehli-Backend`
-2. Instala las dependencias: `npm install`
-3. Crea el archivo .env y configura las variables de entorno
-4. Inicia la aplicación: `npm start`
+1. Fork the Repository: Click on "Fork" in the top right corner of the page to create your own copy.
+2. Clone Your Repository: Clone your fork to your computer using git clone https://github.com/YOUR_USERNAME/argentum-online-lwjgl3.git.
+3. Create a Branch: Create a branch with git checkout -b branch-name for your changes.
+4. Make Changes: Make your improvements or fixes and commit them.
+5. Submit a Pull Request: From your fork, create a pull request for us to review your changes.
 
 </div>
