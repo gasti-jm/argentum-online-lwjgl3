@@ -40,4 +40,12 @@ For those who want to collaborate with the project, they are more than welcome! 
   <a target="_blank" href="https://www.gs-zone.org/"><img src="https://user-images.githubusercontent.com/82490615/187148671-1d7f92b9-7ea1-45f2-b6f1-f53b07454d93.png"></img></a>
 </p>
 
+<h1>Contribution:</h1>
+<br/>
+
+1. Clona este repositorio: `git clone https://github.com/Lorwik/Nehli-Backend`
+2. Instala las dependencias: `npm install`
+3. Crea el archivo .env y configura las variables de entorno
+4. Inicia la aplicación: `npm start`
+
 </div>
