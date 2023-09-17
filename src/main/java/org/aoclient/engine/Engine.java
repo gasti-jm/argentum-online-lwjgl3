@@ -3,6 +3,7 @@ package org.aoclient.engine;
 import org.aoclient.connection.SocketConnection;
 import org.aoclient.engine.game.BindKeys;
 import org.aoclient.engine.game.models.E_KeyType;
+import org.aoclient.engine.gui.GUI;
 import org.aoclient.engine.gui.forms.Form;
 import org.aoclient.engine.listeners.KeyListener;
 import org.aoclient.engine.renderer.Surface;
@@ -27,7 +28,12 @@ public class Engine implements Runnable {
     private static boolean prgRun = true;
     private Window window;
     private Scene currentScene;
+    private GUI gui;
     private BindKeys bindKeys;
+
+
+
+    // Esto lo vamos a eliminar mas tarde
     public static List<Form> forms = new ArrayList<>(); // formularios por encima de las escenas (por ejemplo: frmMensaje).
     public static boolean capsState = Toolkit.getDefaultToolkit().getLockingKeyState(KeyEvent.VK_CAPS_LOCK);
 
@@ -40,6 +46,7 @@ public class Engine implements Runnable {
      * del motor.
      */
     private void close() {
+        //gui.destroyImGui();
         window.close();
     }
 
@@ -87,6 +94,9 @@ public class Engine implements Runnable {
 
         this.window = Window.get();
         this.window.initialize();
+
+        this.gui = GUI.get();
+        //this.gui.init();
 
         Surface.get().initialize();
         GameData.initialize();
@@ -146,9 +156,12 @@ public class Engine implements Runnable {
             changeScene(currentScene.getChangeScene());
         }
 
+        //gui.renderGUI();
+
         currentScene.mouseEvents();
         currentScene.keyEvents();
         currentScene.render();
+
 
         // dibujado de formularios por encima de las escenas!
         if(!forms.isEmpty()) {

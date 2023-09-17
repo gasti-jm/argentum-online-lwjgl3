@@ -6,17 +6,25 @@ group = 'org.aoclient'
 version = '1.0-SNAPSHOT'
 
 repositories {
+    jcenter()
     mavenCentral()
 }
 
 project.ext.lwjglVersion = "3.3.2"
 project.ext.jomlVersion = "1.10.5"
 project.ext.lwjglNatives = "natives-windows"
+project.ext.imguiNatives = "natives-windows"
 
 dependencies {
     testImplementation platform('org.junit:junit-bom:5.9.1')
     testImplementation 'org.junit.jupiter:junit-jupiter'
 
+    // ImGUI dependencies
+    implementation 'io.imgui.java:binding:1.75-0.7.2'
+    implementation 'io.imgui.java:lwjgl3:1.75-0.7.2'
+    runtimeOnly "io.imgui.java:$imguiNatives:1.75-0.7.2"
+
+    // LWJGL3 Dependencies
     implementation platform("org.lwjgl:lwjgl-bom:$lwjglVersion")
 
     implementation "org.lwjgl:lwjgl"
