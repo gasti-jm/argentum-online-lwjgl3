@@ -11,8 +11,8 @@ package org.aoclient.engine.scenes;
 public final class Camera {
     public static final int SCREEN_SIZE_X = 546;
     public static final int SCREEN_SIZE_Y = 416;
-    public static final int POS_SCREEN_X = 11;
-    public static final int POS_SCREEN_Y = 147;
+    public static final int POS_SCREEN_X = 11; // 11
+    public static final int POS_SCREEN_Y = 147; // 147
 
     public static final int TILE_PIXEL_SIZE = 32;
     public static final int TILE_BUFFER_SIZE = 7;
@@ -26,7 +26,6 @@ public final class Camera {
     // Tiles visibles segun la pantalla
     private int halfWindowTileWidth;
     private int halfWindowTileHeight;
-
 
     private int screenminY, screenmaxY;
     private int screenminX, screenmaxX;

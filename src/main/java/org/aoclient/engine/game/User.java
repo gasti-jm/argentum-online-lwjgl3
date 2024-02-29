@@ -3,7 +3,6 @@ package org.aoclient.engine.game;
 import org.aoclient.engine.game.inventory.UserInventory;
 import org.aoclient.engine.game.models.E_Heading;
 import org.aoclient.engine.game.models.Position;
-import org.aoclient.engine.gui.forms.FrmMain;
 
 import static org.aoclient.connection.Protocol.writeChangeHeading;
 import static org.aoclient.connection.Protocol.writeWalk;
@@ -359,8 +358,8 @@ public final class User {
             moveScreen(direction);
             moveCharbyHead(userCharIndex, direction);
 
-            FrmMain.get().lblCoords.setText(userMap +
-                    " X: " + userPos.getX() + " Y: " + userPos.getY());
+//            FrmMain.get().lblCoords.setText(userMap +
+//                    " X: " + userPos.getX() + " Y: " + userPos.getY());
 
         } else {
             if(charList[userCharIndex].getHeading() != direction) {

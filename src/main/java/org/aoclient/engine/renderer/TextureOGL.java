@@ -9,6 +9,10 @@ public class TextureOGL {
     int tex_width;
     int tex_height;
 
+    public TextureOGL() {
+
+    }
+
     public int getId() {
         return id;
     }

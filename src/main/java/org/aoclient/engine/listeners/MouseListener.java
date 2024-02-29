@@ -1,5 +1,8 @@
 package org.aoclient.engine.listeners;
 
+import imgui.ImGui;
+import imgui.ImGuiIO;
+
 import static org.lwjgl.glfw.GLFW.*;
 
 /**
@@ -16,6 +19,8 @@ public class MouseListener {
     private boolean isDragging;
     private static final double DOUBLE_CLICK_TIME = 0.2;
     private double lastTimeClick;
+
+    private static final ImGuiIO io = ImGui.getIO();
 
     /**
      * Constructor privado para nuestro Singleton.
@@ -57,6 +62,20 @@ public class MouseListener {
      * @desc: Funcion callBack para detectar los botones pulsados.
      */
     public static void mouseButtonCallback(long window, int button, int action, int mods) {
+        final boolean[] mouseDown = new boolean[5];
+
+        mouseDown[0] = button == GLFW_MOUSE_BUTTON_1 && action != GLFW_RELEASE;
+        mouseDown[1] = button == GLFW_MOUSE_BUTTON_2 && action != GLFW_RELEASE;
+        mouseDown[2] = button == GLFW_MOUSE_BUTTON_3 && action != GLFW_RELEASE;
+        mouseDown[3] = button == GLFW_MOUSE_BUTTON_4 && action != GLFW_RELEASE;
+        mouseDown[4] = button == GLFW_MOUSE_BUTTON_5 && action != GLFW_RELEASE;
+
+        io.setMouseDown(mouseDown);
+
+        if (!io.getWantCaptureMouse() && mouseDown[1]) {
+            ImGui.setWindowFocus(null);
+        }
+
         if (action == GLFW_PRESS) {
             if (button < get().mouseButtonPressed.length) {
                 get().mouseButtonPressed[button] = true;
@@ -85,6 +104,9 @@ public class MouseListener {
      * @desc: Funcion callBack para detectar el desplazamiento del mouse de una posicion a otra.
      */
     public static void mouseScrollCallback(long window, double xOffset, double yOffset) {
+        io.setMouseWheelH(io.getMouseWheelH() + (float) xOffset);
+        io.setMouseWheel(io.getMouseWheel() + (float) yOffset);
+
         get().scrollX = xOffset;
         get().scrollY = yOffset;
     }

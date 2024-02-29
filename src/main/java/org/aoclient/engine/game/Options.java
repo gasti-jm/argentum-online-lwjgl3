@@ -12,10 +12,13 @@ import java.io.IOException;
  * el sonido, la visualización del nombre, el nombre del jugador en el juego, etc.
  */
 public class Options {
-    private boolean Music;
-    private boolean Sound;
-    private boolean ShowName;
-    private String Name;
+    private boolean music;
+    private boolean sound;
+    private boolean showName;
+    private String nickName;
+    private String ipServer;
+    private String portServer;
+
 
     /**
      * Crea una instancia de Options con valores predeterminados.
@@ -23,10 +26,12 @@ public class Options {
      * y el nombre del jugador se inicializa como una cadena vacía.
      */
     public Options() {
-        Music = true;
-        Sound = true;
-        ShowName = true;
-        Name = "";
+        this.music = true;
+        this.sound = true;
+        this.showName = true;
+        this.nickName = "";
+        this.ipServer = "";
+        this.portServer = "";
     }
 
     /**
@@ -34,17 +39,17 @@ public class Options {
      *
      * @return El nombre del jugador.
      */
-    public String getName() {
-        return Name;
+    public String getNickName() {
+        return nickName;
     }
 
     /**
      * Establece el nombre del jugador.
      *
-     * @param name El nuevo nombre del jugador.
+     * @param nickName El nuevo nombre del jugador.
      */
-    public void setName(String name) {
-        Name = name;
+    public void setNickName(String nickName) {
+        this.nickName = nickName;
     }
 
     /**
@@ -53,7 +58,7 @@ public class Options {
      * @return `true` si la música está habilitada, de lo contrario `false`.
      */
     public boolean isMusic() {
-        return Music;
+        return music;
     }
 
     /**
@@ -62,7 +67,7 @@ public class Options {
      * @param music `true` para habilitar la música, `false` para deshabilitarla.
      */
     public void setMusic(boolean music) {
-        Music = music;
+        this.music = music;
     }
 
     /**
@@ -71,7 +76,7 @@ public class Options {
      * @return `true` si el sonido está habilitado, de lo contrario `false`.
      */
     public boolean isSound() {
-        return Sound;
+        return sound;
     }
 
     /**
@@ -80,7 +85,7 @@ public class Options {
      * @param sound `true` para habilitar el sonido, `false` para deshabilitarlo.
      */
     public void setSound(boolean sound) {
-        Sound = sound;
+        this.sound = sound;
     }
 
     /**
@@ -89,7 +94,7 @@ public class Options {
      * @return `true` si la visualización del nombre está habilitada, de lo contrario `false`.
      */
     public boolean isShowName() {
-        return ShowName;
+        return showName;
     }
 
     /**
@@ -98,7 +103,23 @@ public class Options {
      * @param showName `true` para habilitar la visualización del nombre, `false` para deshabilitarla.
      */
     public void setShowName(boolean showName) {
-        ShowName = showName;
+        showName = showName;
+    }
+
+    public String getIpServer() {
+        return ipServer;
+    }
+
+    public void setIpServer(String ipServer) {
+        this.ipServer = ipServer;
+    }
+
+    public String getPortServer() {
+        return portServer;
+    }
+
+    public void setPortServer(String portServer) {
+        this.portServer = portServer;
     }
 
     /**
@@ -125,13 +146,17 @@ public class Options {
      */
     public void SaveOptions() {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter("resources/inits/options.ini"))) {
-            writer.write("Music = " + Music);
+            writer.write("Music = " + music);
             writer.newLine();
-            writer.write("Sound = " + Sound);
+            writer.write("Sound = " + sound);
             writer.newLine();
-            writer.write("ShowName = " + ShowName);
+            writer.write("ShowName = " + showName);
             writer.newLine();
-            writer.write("Name = " + Name);
+            writer.write("Name = " + nickName);
+            writer.newLine();
+            writer.write("IP = " + ipServer);
+            writer.newLine();
+            writer.write("PORT = " + portServer);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -146,16 +171,23 @@ public class Options {
     private void updateOption(String option, String value) {
         switch (option) {
             case "Music":
-                Music = Boolean.parseBoolean(value);
+                music = Boolean.parseBoolean(value);
                 break;
             case "Sound":
-                Sound = Boolean.parseBoolean(value);
+                sound = Boolean.parseBoolean(value);
                 break;
             case "ShowName":
-                ShowName = Boolean.parseBoolean(value);
+                showName = Boolean.parseBoolean(value);
                 break;
             case "Name":
-                Name = value;
+                nickName = value;
+                break;
+            case "IP":
+                ipServer = value;
+                break;
+
+            case "PORT":
+                portServer = value;
                 break;
         }
     }

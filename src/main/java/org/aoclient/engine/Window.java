@@ -3,11 +3,14 @@ package org.aoclient.engine;
 import org.aoclient.engine.listeners.KeyListener;
 import org.aoclient.engine.listeners.MouseListener;
 import org.lwjgl.glfw.GLFWErrorCallback;
+import org.lwjgl.glfw.GLFWImage;
 import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.openal.*;
 import org.lwjgl.opengl.GL;
+import org.lwjgl.stb.STBImage;
 import org.lwjgl.system.MemoryStack;
 
+import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 
 import static org.lwjgl.glfw.Callbacks.glfwFreeCallbacks;
@@ -71,12 +74,18 @@ public final class Window {
 
         // Configure GLFW
         glfwDefaultWindowHints();
+
+        //glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+        //glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GLFW_TRUE);
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+
         glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
         glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
         glfwWindowHint(GLFW_MAXIMIZED, GLFW_FALSE);
         glfwWindowHint(GLFW_DECORATED, GLFW_FALSE);
 
-        // glfwGetPrimaryMonitor() permite pantalla completa.
+        //glfwGetPrimaryMonitor()// permite pantalla completa. (PRIMER PARAMETRO NULL)
         // Create the window
         window = glfwCreateWindow(this.width, this.height, this.title, NULL, NULL);
 
@@ -108,6 +117,8 @@ public final class Window {
             );
         } // the stack frame is popped automatically
 
+
+        loadIcon();
 
         // Make the OpenGL context current
         glfwMakeContextCurrent(window);
@@ -164,6 +175,25 @@ public final class Window {
         // Terminate GLFW and free the error callback
         glfwTerminate();
         glfwSetErrorCallback(null).free();
+    }
+
+    /**
+     * Carga una imagen y la agrega como icono a nuestra ventana GLFW.
+     */
+    private void loadIcon() {
+        try(MemoryStack stack = MemoryStack.stackPush()){
+            final IntBuffer ch       = stack.mallocInt(1), w = stack.mallocInt(1), h = stack.mallocInt(1);
+            final ByteBuffer imgBuff = STBImage.stbi_load("./resources/icon.png", w, h, ch, 4);
+
+            if(imgBuff == null) return;
+
+            GLFWImage image             = GLFWImage.malloc();
+            GLFWImage.Buffer imageBf    = GLFWImage.malloc(1);
+
+            image.set(w.get(), h.get(), imgBuff);
+            imageBf.put(0, image);
+            glfwSetWindowIcon(window, imageBf);
+        }
     }
 
     /**

@@ -1,22 +1,19 @@
 package org.aoclient.connection;
 
 
-import org.aoclient.engine.gui.forms.FrmMessage;
+import org.aoclient.engine.gui.FMessage;
+import org.aoclient.engine.gui.ImGUISystem;
 import java.net.*;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 
 import static org.aoclient.connection.Protocol.*;
-import static org.aoclient.engine.Engine.forms;
 
 /**
  * Clase que maneja el socket de conexion.
  */
 public class SocketConnection {
     private static SocketConnection instance;
-
-    private final static String IP_SERVER = "127.0.0.1";
-    private final static int PORT_SERVER = 7666;
 
     private Socket sock;
     private DataOutputStream writeData;
@@ -33,7 +30,7 @@ public class SocketConnection {
      *
      * @return Mismo objeto (Patron de diseño Singleton)
      */
-    public static SocketConnection getInstance() {
+    public static SocketConnection get() {
         if(instance == null) {
             instance = new SocketConnection();
         }
@@ -44,10 +41,10 @@ public class SocketConnection {
     /**
      * Intenta conectarse con el servidor segun la Ip y el puerto asignado.
      */
-    public void connect() {
+    public void connect(final String ip, final String port) {
         try {
             if(sock == null || sock.isClosed()) {
-                sock = new Socket(IP_SERVER, PORT_SERVER);
+                sock = new Socket(ip, Integer.parseInt(port));
                 writeData = new DataOutputStream(sock.getOutputStream()); // envio
                 handleData = new DataInputStream(sock.getInputStream()); // respuesta..
             }
@@ -56,7 +53,8 @@ public class SocketConnection {
             outgoingData.readASCIIStringFixed(outgoingData.length());
 
         } catch(Exception e) {
-            forms.add(new FrmMessage(e.getMessage()));
+            ImGUISystem.get().checkAddOrChange("frmMessage",
+                    new FMessage(e.getMessage()));
         }
     }
 
