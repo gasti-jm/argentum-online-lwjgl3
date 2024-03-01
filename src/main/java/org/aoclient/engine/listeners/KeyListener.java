@@ -1,5 +1,7 @@
 package org.aoclient.engine.listeners;
 
+import imgui.ImGui;
+import imgui.ImGuiIO;
 import org.aoclient.engine.game.BindKeys;
 
 import java.util.ArrayList;
@@ -15,8 +17,11 @@ import static org.lwjgl.glfw.GLFW.*;
  */
 public class KeyListener {
     private static KeyListener instance;
+    private static final ImGuiIO io = ImGui.getIO();
+
 
     private final BindKeys bindKeys = BindKeys.get();
+
     private final boolean[] keyPressed = new boolean[350];
     private int lastKeyMovedPressed;
     private int lastKeyPressed;
@@ -44,6 +49,8 @@ public class KeyListener {
     public static void keyCallback(long window, int key, int scancode, int action, int mods) {
         if (action == GLFW_PRESS) {
             get().keyPressed[key] = true;
+            io.setKeysDown(key, true);
+
             get().lastKeyPressed = key;
 
             if (key == get().bindKeys.getBindedKey(mKeyUp) || key == get().bindKeys.getBindedKey(mKeyLeft) ||
@@ -55,6 +62,7 @@ public class KeyListener {
 
         } else if (action == GLFW_RELEASE) {
             get().keyPressed[key] = false;
+            io.setKeysDown(key, false);
 
             if (key == get().bindKeys.getBindedKey(mKeyUp) || key == get().bindKeys.getBindedKey(mKeyLeft) ||
                     key == get().bindKeys.getBindedKey(mKeyDown) || key == get().bindKeys.getBindedKey(mKeyRight)) {
@@ -62,6 +70,11 @@ public class KeyListener {
                  lastKeysMovedPressed.remove(lastKeysMovedPressed.indexOf(key));
             }
         }
+
+        io.setKeyCtrl(io.getKeysDown(GLFW_KEY_LEFT_CONTROL) || io.getKeysDown(GLFW_KEY_RIGHT_CONTROL));
+        io.setKeyShift(io.getKeysDown(GLFW_KEY_LEFT_SHIFT) || io.getKeysDown(GLFW_KEY_RIGHT_SHIFT));
+        io.setKeyAlt(io.getKeysDown(GLFW_KEY_LEFT_ALT) || io.getKeysDown(GLFW_KEY_RIGHT_ALT));
+        io.setKeySuper(io.getKeysDown(GLFW_KEY_LEFT_SUPER) || io.getKeysDown(GLFW_KEY_RIGHT_SUPER));
     }
 
     /**

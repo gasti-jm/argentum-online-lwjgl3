@@ -1,9 +1,6 @@
 package org.aoclient.engine.scenes;
 
-import org.aoclient.engine.gui.ElementGUI;
-import org.aoclient.engine.gui.elements.ImageBox;
 import org.aoclient.engine.listeners.KeyListener;
-import org.aoclient.engine.listeners.MouseListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,25 +22,23 @@ public final class IntroScene extends Scene {
     private float alphaInterface;
     private int nextInterface = 1;
 
-    private List<ElementGUI> images;
 
     @Override
     public void init() {
         super.init();
         this.alphaInterface = 0.0f;
         this.canChangeTo = SceneType.MAIN_SCENE;
-        this.images = new ArrayList<>();
 
         // agregamos 4 interfaces
-        for(int i = 0; i < 4; i++){
-            this.images.add(new ImageBox());
-        }
+//        for(int i = 0; i < 4; i++){
+//            this.images.add(new ImageBox());
+//        }
 
         // le cargamos las texturas
-        this.images.get(0).loadTextures("noland.jpg"); // efecto
-        this.images.get(1).loadTextures("Presentacion5.jpg");
-        this.images.get(2).loadTextures("Presentacion6.jpg");
-        this.images.get(3).loadTextures("Presentacion7.jpg");
+//        this.images.get(0).loadTextures("noland.jpg"); // efecto
+//        this.images.get(1).loadTextures("Presentacion5.jpg");
+//        this.images.get(2).loadTextures("Presentacion6.jpg");
+//        this.images.get(3).loadTextures("Presentacion7.jpg");
     }
 
     @Override
@@ -87,7 +82,7 @@ public final class IntroScene extends Scene {
             nextInterface++;
         }
 
-        images.get(nextInterface).render();
+//        images.get(nextInterface).render();
 
         timePresentation -= deltaTime;
     }
@@ -109,7 +104,7 @@ public final class IntroScene extends Scene {
     @Override
     public void close() {
         this.visible = false;
-        images.forEach(ElementGUI::clear);
+
     }
 
     /**
@@ -117,8 +112,8 @@ public final class IntroScene extends Scene {
      */
     private void effectNoLandStudios() {
         alphaInterface += 0.3f * deltaTime;
-        images.get(0).setAlphaTexture(alphaInterface);
-        images.get(0).render();
+//        images.get(0).setAlphaTexture(alphaInterface);
+//        images.get(0).render();
 
         timeLogo -= deltaTime;
     }

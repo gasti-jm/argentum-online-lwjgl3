@@ -8,14 +8,15 @@ import org.aoclient.engine.game.Console;
 import org.aoclient.engine.game.User;
 import org.aoclient.engine.game.models.E_Heading;
 import org.aoclient.engine.game.models.E_ObjType;
-import org.aoclient.engine.gui.forms.FrmMain;
-import org.aoclient.engine.gui.forms.FrmMessage;
+import org.aoclient.engine.gui.forms.FMessage;
+import org.aoclient.engine.gui.ImGUISystem;
 import org.aoclient.engine.renderer.RGBColor;
 import org.aoclient.engine.utils.GameData;
 import org.aoclient.engine.utils.structs.GrhInfo;
 
+import java.util.Arrays;
+
 import static org.aoclient.connection.Messages.*;
-import static org.aoclient.engine.Engine.forms;
 import static org.aoclient.engine.game.models.Character.*;
 import static org.aoclient.engine.utils.GameData.*;
 
@@ -31,114 +32,115 @@ public class Protocol {
         System.out.println(packet + " #" + p);
 
         switch (packet) {
-            case logged: handleLogged(); break;
-            case RemoveDialogs: handleRemoveDialogs(); break;
-            case RemoveCharDialog: handleRemoveCharDialog(); break;
-            case NavigateToggle: handleNavigateToggle(); break;
-            case Disconnect: handleDisconnect(); break;
-            case CommerceEnd: handleCommerceEnd(); break;
-            case CommerceChat: handleCommerceChat(); break;
-            case BankEnd: handleBankEnd(); break;
-            case CommerceInit: handleCommerceInit(); break;
-            case BankInit: handleBankInit(); break;
-            case UserCommerceInit: handleUserCommerceInit(); break;
-            case UserCommerceEnd: handleUserCommerceEnd(); break;
-            case UserOfferConfirm: handleUserOfferConfirm(); break;
-            case ShowBlacksmithForm: handleShowBlacksmithForm(); break;
-            case ShowCarpenterForm: handleShowCarpenterForm(); break;
-            case UpdateSta: handleUpdateSta(); break;
-            case UpdateMana: handleUpdateMana(); break;
-            case UpdateHP: handleUpdateHP(); break;
-            case UpdateGold: handleUpdateGold(); break;
-            case UpdateBankGold: handleUpdateBankGold(); break;
-            case UpdateExp: handleUpdateExp(); break;
-            case ChangeMap: handleChangeMap(); break;
-            case PosUpdate: handlePosUpdate(); break;
-            case ChatOverHead: handleChatOverHead(); break;
-            case ConsoleMsg: handleConsoleMessage(); break;
-            case GuildChat: handleGuildChat(); break;
-            case ShowMessageBox: handleShowMessageBox(); break;
-            case UserIndexInServer: handleUserIndexInServer(); break;
-            case UserCharIndexInServer: handleUserCharIndexInServer(); break;
-            case CharacterCreate: handleCharacterCreate(); break;
-            case CharacterRemove: handleCharacterRemove(); break;
-            case CharacterChangeNick: handleCharacterChangeNick(); break;
-            case CharacterMove: handleCharacterMove(); break;
-            case ForceCharMove: handleForceCharMove(); break;
-            case CharacterChange: handleCharacterChange(); break;
-            case ObjectCreate: handleObjectCreate(); break;
-            case ObjectDelete: handleObjectDelete(); break;
-            case BlockPosition: handleBlockPosition(); break;
-            case PlayMIDI: handlePlayMIDI(); break;
-            case PlayWave: handlePlayWave(); break;
-            case guildList: handleGuildList(); break;
-            case AreaChanged: handleAreaChanged(); break;
-            case PauseToggle: handlePauseToggle(); break;
-            case RainToggle: handleRainToggle(); break;
-            case CreateFX: handleCreateFX(); break;
-            case UpdateUserStats: handleUpdateUserStats(); break;
-            case WorkRequestTarget: handleWorkRequestTarget(); break;
-            case ChangeInventorySlot: handleChangeInventorySlot(); break;
-            case ChangeBankSlot: handleChangeBankSlot(); break;
-            case ChangeSpellSlot: handleChangeSpellSlot(); break;
-            case Atributes: handleAtributes(); break;
-            case BlacksmithWeapons: handleBlacksmithWeapons(); break;
-            case BlacksmithArmors: handleBlacksmithArmors(); break;
-            case CarpenterObjects: handleCarpenterObjects(); break;
-            case RestOK: handleRestOK(); break;
-            case ErrorMsg: handleErrorMessage(); break;
-            case Blind: handleBlind(); break;
-            case Dumb: handleDumb(); break;
-            case ShowSignal: handleShowSignal(); break;
-            case ChangeNPCInventorySlot: handleChangeNPCInventorySlot(); break;
-            case UpdateHungerAndThirst: handleUpdateHungerAndThirst(); break;
-            case Fame: handleFame(); break;
-            case MiniStats: handleMiniStats(); break;
-            case LevelUp: handleLevelUp(); break;
-            case AddForumMsg: handleAddForumMessage(); break;
-            case ShowForumForm: handleShowForumForm(); break;
-            case SetInvisible: handleSetInvisible(); break;
-            case DiceRoll: handleDiceRoll(); break;
-            case MeditateToggle: handleMeditateToggle(); break;
-            case BlindNoMore: handleBlindNoMore(); break;
-            case DumbNoMore: handleDumbNoMore(); break;
-            case SendSkills: handleSendSkills(); break;
-            case TrainerCreatureList: handleTrainerCreatureList(); break;
-            case guildNews: handleGuildNews(); break;
-            case OfferDetails: handleOfferDetails(); break;
-            case AlianceProposalsList: handleAlianceProposalsList(); break;
-            case PeaceProposalsList: handlePeaceProposalsList(); break;
-            case CharacterInfo: handleCharacterInfo(); break;
-            case GuildLeaderInfo: handleGuildLeaderInfo(); break;
-            case GuildDetails: handleGuildDetails(); break;
-            case ShowGuildFundationForm: handleShowGuildFundationForm(); break;
-            case ParalizeOK: handleParalizeOK(); break;
-            case ShowUserRequest: handleShowUserRequest(); break;
-            case TradeOK: handleTradeOK(); break;
-            case BankOK: handleBankOK(); break;
-            case ChangeUserTradeSlot: handleChangeUserTradeSlot(); break;
-            case SendNight: handleSendNight(); break;
-            case Pong: handlePong(); break;
-            case UpdateTagAndStatus: handleUpdateTagAndStatus(); break;
-            case GuildMemberInfo: handleGuildMemberInfo(); break;
+            case logged:                    handleLogged();                             break;
+            case RemoveDialogs:             handleRemoveDialogs();                      break;
+            case RemoveCharDialog:          handleRemoveCharDialog();                   break;
+            case NavigateToggle:            handleNavigateToggle();                     break;
+            case Disconnect:                handleDisconnect();                         break;
+            case CommerceEnd:               handleCommerceEnd();                        break;
+            case CommerceChat:              handleCommerceChat();                       break;
+            case BankEnd:                   handleBankEnd();                            break;
+            case CommerceInit:              handleCommerceInit();                       break;
+            case BankInit:                  handleBankInit();                           break;
+            case UserCommerceInit:          handleUserCommerceInit();                   break;
+            case UserCommerceEnd:           handleUserCommerceEnd();                    break;
+            case UserOfferConfirm:          handleUserOfferConfirm();                   break;
+            case ShowBlacksmithForm:        handleShowBlacksmithForm();                 break;
+            case ShowCarpenterForm:         handleShowCarpenterForm();                  break;
+            case UpdateSta:                 handleUpdateSta();                          break;
+            case UpdateMana:                handleUpdateMana();                         break;
+            case UpdateHP:                  handleUpdateHP();                           break;
+            case UpdateGold:                handleUpdateGold();                         break;
+            case UpdateBankGold:            handleUpdateBankGold();                     break;
+            case UpdateExp:                 handleUpdateExp();                          break;
+            case ChangeMap:                 handleChangeMap();                          break;
+            case PosUpdate:                 handlePosUpdate();                          break;
+            case ChatOverHead:              handleChatOverHead();                       break;
+            case ConsoleMsg:                handleConsoleMessage();                     break;
+            case GuildChat:                 handleGuildChat();                          break;
+            case ShowMessageBox:            handleShowMessageBox();                     break;
+            case UserIndexInServer:         handleUserIndexInServer();                  break;
+            case UserCharIndexInServer:     handleUserCharIndexInServer();              break;
+            case CharacterCreate:           handleCharacterCreate();                    break;
+            case CharacterRemove:           handleCharacterRemove();                    break;
+            case CharacterChangeNick:       handleCharacterChangeNick();                break;
+            case CharacterMove:             handleCharacterMove();                      break;
+            case ForceCharMove:             handleForceCharMove();                      break;
+            case CharacterChange:           handleCharacterChange();                    break;
+            case ObjectCreate:              handleObjectCreate();                       break;
+            case ObjectDelete:              handleObjectDelete();                       break;
+            case BlockPosition:             handleBlockPosition();                      break;
+            case PlayMIDI:                  handlePlayMIDI();                           break;
+            case PlayWave:                  handlePlayWave();                           break;
+            case guildList:                 handleGuildList();                          break;
+            case AreaChanged:               handleAreaChanged();                        break;
+            case PauseToggle:               handlePauseToggle();                        break;
+            case RainToggle:                handleRainToggle();                         break;
+            case CreateFX:                  handleCreateFX();                           break;
+            case UpdateUserStats:           handleUpdateUserStats();                    break;
+            case WorkRequestTarget:         handleWorkRequestTarget();                  break;
+            case ChangeInventorySlot:       handleChangeInventorySlot();                break;
+            case ChangeBankSlot:            handleChangeBankSlot();                     break;
+            case ChangeSpellSlot:           handleChangeSpellSlot();                    break;
+            case Atributes:                 handleAtributes();                          break;
+            case BlacksmithWeapons:         handleBlacksmithWeapons();                  break;
+            case BlacksmithArmors:          handleBlacksmithArmors();                   break;
+            case CarpenterObjects:          handleCarpenterObjects();                   break;
+            case RestOK:                    handleRestOK();                             break;
+            case ErrorMsg:                  handleErrorMessage();                       break;
+            case Blind:                     handleBlind();                              break;
+            case Dumb:                      handleDumb();                               break;
+            case ShowSignal:                handleShowSignal();                         break;
+            case ChangeNPCInventorySlot:    handleChangeNPCInventorySlot();             break;
+            case UpdateHungerAndThirst:     handleUpdateHungerAndThirst();              break;
+            case Fame:                      handleFame();                               break;
+            case MiniStats:                 handleMiniStats();                          break;
+            case LevelUp:                   handleLevelUp();                            break;
+            case AddForumMsg:               handleAddForumMessage();                    break;
+            case ShowForumForm:             handleShowForumForm();                      break;
+            case SetInvisible:              handleSetInvisible();                       break;
+            case DiceRoll:                  handleDiceRoll();                           break;
+            case MeditateToggle:            handleMeditateToggle();                     break;
+            case BlindNoMore:               handleBlindNoMore();                        break;
+            case DumbNoMore:                handleDumbNoMore();                         break;
+            case SendSkills:                handleSendSkills();                         break;
+            case TrainerCreatureList:       handleTrainerCreatureList();                break;
+            case guildNews:                 handleGuildNews();                          break;
+            case OfferDetails:              handleOfferDetails();                       break;
+            case AlianceProposalsList:      handleAlianceProposalsList();               break;
+            case PeaceProposalsList:        handlePeaceProposalsList();                 break;
+            case CharacterInfo:             handleCharacterInfo();                      break;
+            case GuildLeaderInfo:           handleGuildLeaderInfo();                    break;
+            case GuildDetails:              handleGuildDetails();                       break;
+            case ShowGuildFundationForm:    handleShowGuildFundationForm();             break;
+            case ParalizeOK:                handleParalizeOK();                         break;
+            case ShowUserRequest:           handleShowUserRequest();                    break;
+            case TradeOK:                   handleTradeOK();                            break;
+            case BankOK:                    handleBankOK();                             break;
+            case ChangeUserTradeSlot:       handleChangeUserTradeSlot();                break;
+            case SendNight:                 handleSendNight();                          break;
+            case Pong:                      handlePong();                               break;
+            case UpdateTagAndStatus:        handleUpdateTagAndStatus();                 break;
+            case GuildMemberInfo:           handleGuildMemberInfo();                    break;
 
             //*******************
-            //GM messages
+            // GM messages
             //*******************
-            case SpawnList: handleSpawnList(); break;
-            case ShowSOSForm: handleShowSOSForm(); break;
-            case ShowMOTDEditionForm: handleShowMOTDEditionForm(); break;
-            case ShowGMPanelForm: handleShowGMPanelForm(); break;
-            case UserNameList: handleUserNameList(); break;
-            case ShowGuildAlign: handleShowGuildAlign(); break;
-            case ShowPartyForm: handleShowPartyForm(); break;
-            case UpdateStrenghtAndDexterity: handleUpdateStrenghtAndDexterity(); break;
-            case UpdateStrenght: handleUpdateStrenght(); break;
-            case UpdateDexterity: handleUpdateDexterity(); break;
-            case AddSlots: handleAddSlots(); break;
-            case MultiMessage: handleMultiMessage(); break;
-            case StopWorking: handleStopWorking(); break;
-            case CancelOfferItem: handleCancelOfferItem(); break;
+            case SpawnList:                     handleSpawnList();                      break;
+            case ShowSOSForm:                   handleShowSOSForm();                    break;
+            case ShowMOTDEditionForm:           handleShowMOTDEditionForm();            break;
+            case ShowGMPanelForm:               handleShowGMPanelForm();                break;
+            case UserNameList:                  handleUserNameList();                   break;
+            case ShowGuildAlign:                handleShowGuildAlign();                 break;
+            case ShowPartyForm:                 handleShowPartyForm();                  break;
+            case UpdateStrenghtAndDexterity:    handleUpdateStrenghtAndDexterity();     break;
+            case UpdateStrenght:                handleUpdateStrenght();                 break;
+            case UpdateDexterity:               handleUpdateDexterity();                break;
+            case AddSlots:                      handleAddSlots();                       break;
+            case MultiMessage:                  handleMultiMessage();                   break;
+            case StopWorking:                   handleStopWorking();                    break;
+            case CancelOfferItem:               handleCancelOfferItem();                break;
+
             default: return;
         }
 
@@ -184,7 +186,7 @@ public class Protocol {
         //        Call ShowConsoleMsg("¡Has terminado de trabajar!", .red, .green, .blue, .bold, .italic)
         //    End With
         //
-        //    If frmMain.macrotrabajo.Enabled Then Call frmMain.DesactivarMacroTrabajo
+        //    If //FrmMain.macrotrabajo.Enabled Then Call //FrmMain.DesactivarMacroTrabajo
     }
 
     private static void handleMultiMessage() {
@@ -226,19 +228,19 @@ public class Protocol {
                 break;
 
             case SafeModeOn:
-                System.out.println("MODO SEGURO ACTIVADO - frmMain");
+                System.out.println("MODO SEGURO ACTIVADO - //FrmMain");
                 break;
 
             case SafeModeOff:
-                System.out.println("MODO SEGURO DESACTIVADO - frmMain");
+                System.out.println("MODO SEGURO DESACTIVADO - //FrmMain");
                 break;
 
             case ResuscitationSafeOff:
-                System.out.println("MODO RESURECCION ACTIVADO - frmMain");
+                System.out.println("MODO RESURECCION ACTIVADO - //FrmMain");
                 break;
 
             case ResuscitationSafeOn:
-                System.out.println("MODO RESURECCION DESACTIVADO - frmMain");
+                System.out.println("MODO RESURECCION DESACTIVADO - //FrmMain");
                 break;
 
             case NobilityLost:
@@ -287,8 +289,8 @@ public class Protocol {
 
             case UserHittedByUser:
                 String attackerName = "<" + charList[incomingData.readInteger()].getName() + ">";
-                 bodyPart = incomingData.readByte();
-                 damage = incomingData.readInteger();
+                bodyPart = incomingData.readByte();
+                damage = incomingData.readInteger();
 
                 switch (bodyPart) {
                     case 1: // bCabeza
@@ -352,7 +354,7 @@ public class Protocol {
             case WorkRequestTarget:
                 short usingSkill = incomingData.readByte();
 
-                // frmmain.mousepointer = 2
+                // //FrmMain.mousepointer = 2
 
                 switch (usingSkill) {
                     case 0: // magia
@@ -434,7 +436,9 @@ public class Protocol {
         // Remove packet ID
         incomingData.readByte();
 
-        FrmMain.get().lblDext.setText(String.valueOf(incomingData.readByte()));
+        byte dext = incomingData.readByte();
+
+        //FrmMain.get().lblDext.setText(String.valueOf(incomingData.readByte()));
     }
 
     private static void handleUpdateStrenght() {
@@ -446,7 +450,9 @@ public class Protocol {
         // Remove packet ID
         incomingData.readByte();
 
-        FrmMain.get().lblStrg.setText(String.valueOf(incomingData.readByte()));
+        byte strg = incomingData.readByte();
+
+        //FrmMain.get().lblStrg.setText(String.valueOf(incomingData.readByte()));
     }
 
     private static void handleUpdateStrenghtAndDexterity() {
@@ -458,8 +464,11 @@ public class Protocol {
         // Remove packet ID
         incomingData.readByte();
 
-        FrmMain.get().lblStrg.setText(String.valueOf(incomingData.readByte()));
-        FrmMain.get().lblDext.setText(String.valueOf(incomingData.readByte()));
+        byte strg = incomingData.readByte();
+        byte dext = incomingData.readByte();
+
+        //FrmMain.get().lblStrg.setText(String.valueOf(incomingData.readByte()));
+        //FrmMain.get().lblDext.setText(String.valueOf(incomingData.readByte()));
     }
 
     private static void handleShowPartyForm() {
@@ -488,7 +497,7 @@ public class Protocol {
         //    Next i
         //
         //    frmParty.lblTotalExp.Caption = Buffer.ReadLong
-        //    frmParty.Show , frmMain
+        //    frmParty.Show , //FrmMain
 
         incomingData.copyBuffer(buffer);
         System.out.println("handleShowPartyForm Cargado! - FALTA TERMINAR!");
@@ -497,7 +506,7 @@ public class Protocol {
     private static void handleShowGuildAlign() {
         // Remove packet ID
         incomingData.readByte();
-        //frmEligeAlineacion.Show vbModeless, frmMain
+        //frmEligeAlineacion.Show vbModeless, //FrmMain
     }
 
     private static void handleUserNameList() {
@@ -535,7 +544,7 @@ public class Protocol {
     private static void handleShowGMPanelForm() {
         // Remove packet ID
         incomingData.readByte();
-        //frmPanelGm.Show vbModeless, frmMain
+        //frmPanelGm.Show vbModeless, //FrmMain
     }
 
     private static void handleShowMOTDEditionForm() {
@@ -553,7 +562,7 @@ public class Protocol {
         String txtMotd = buffer.readASCIIString();
 
         //frmCambiaMotd.txtMotd.Text = Buffer.ReadASCIIString()
-        //    frmCambiaMotd.Show , frmMain
+        //    frmCambiaMotd.Show , //FrmMain
         //
 
         incomingData.copyBuffer(buffer);
@@ -582,7 +591,7 @@ public class Protocol {
         //        Call frmMSG.List1.AddItem(sosList(i))
         //    Next i
         //
-        //    frmMSG.Show , frmMain
+        //    frmMSG.Show , //FrmMain
 
         incomingData.copyBuffer(buffer);
         System.out.println("handleShowSOSForm Cargado! - FALTA TERMINAR!");
@@ -610,7 +619,7 @@ public class Protocol {
         //    For i = 0 To UBound(creatureList())
         //        Call frmSpawnList.lstCriaturas.AddItem(creatureList(i))
         //    Next i
-        //    frmSpawnList.Show , frmMain
+        //    frmSpawnList.Show , //FrmMain
         //
 
         incomingData.copyBuffer(buffer);
@@ -658,7 +667,7 @@ public class Protocol {
         //        'If we got here then packet is complete, copy data back to original queue
         //        Call incomingData.CopyBuffer(Buffer)
         //
-        //        .Show vbModeless, frmMain
+        //        .Show vbModeless, //FrmMain
         //    End With
 
         incomingData.copyBuffer(buffer);
@@ -710,7 +719,7 @@ public class Protocol {
         // Remove packet ID
         incomingData.readByte();
 
-        //Call AddtoRichTextBox(frmMain.RecTxt, "El ping es " & (GetTickCount - pingTime) & " ms.", 255, 0, 0, True, False, True)
+        //Call AddtoRichTextBox(//FrmMain.RecTxt, "El ping es " & (GetTickCount - pingTime) & " ms.", 255, 0, 0, True, False, True)
         //
         //    pingTime = 0
     }
@@ -856,7 +865,7 @@ public class Protocol {
         String recievePeticion = buffer.readASCIIString();
 
         // Call frmUserRequest.recievePeticion(Buffer.ReadASCIIString())
-        //    Call frmUserRequest.Show(vbModeless, frmMain)
+        //    Call frmUserRequest.Show(vbModeless, //FrmMain)
         //
 
         incomingData.copyBuffer(buffer);
@@ -875,7 +884,7 @@ public class Protocol {
         incomingData.readByte();
 
         //CreandoClan = True
-        //    frmGuildFoundation.Show , frmMain
+        //    frmGuildFoundation.Show , //FrmMain
         System.out.println("handleShowGuildFundationForm Cargado! - FALTA TERMINAR!");
     }
 
@@ -999,7 +1008,7 @@ public class Protocol {
         //            Call .solicitudes.AddItem(List(i))
         //        Next i
         //
-        //        .Show , frmMain
+        //        .Show , //FrmMain
         //    End With
 
         incomingData.copyBuffer(buffer);
@@ -1096,7 +1105,7 @@ public class Protocol {
         //            .status.ForeColor = vbRed
         //        End If
         //
-        //        Call .Show(vbModeless, frmMain)
+        //        Call .Show(vbModeless, //FrmMain)
         //    End With
 
 
@@ -1129,7 +1138,7 @@ public class Protocol {
         //    Next i
         //
         //    frmPeaceProp.ProposalType = TIPO_PROPUESTA.PAZ
-        //    Call frmPeaceProp.Show(vbModeless, frmMain)
+        //    Call frmPeaceProp.Show(vbModeless, //FrmMain)
 
         incomingData.copyBuffer(buffer);
         System.out.println("handlePeaceProposalsList Cargado! - FALTA TERMINAR!");
@@ -1160,7 +1169,7 @@ public class Protocol {
         //    Next i
         //
         //    frmPeaceProp.ProposalType = TIPO_PROPUESTA.ALIANZA
-        //    Call frmPeaceProp.Show(vbModeless, frmMain)
+        //    Call frmPeaceProp.Show(vbModeless, //FrmMain)
 
         incomingData.copyBuffer(buffer);
         System.out.println("handleAlianceProposalsList Cargado! - FALTA TERMINAR!");
@@ -1219,7 +1228,7 @@ public class Protocol {
         //        frmGuildNews.txtClanesAliados.Text = sTemp & guildList(i) & vbCrLf
         //    Next i
         //
-        //    If ClientSetup.bGuildNews Then frmGuildNews.Show vbModeless, frmMain
+        //    If ClientSetup.bGuildNews Then frmGuildNews.Show vbModeless, //FrmMain
 
         incomingData.copyBuffer(buffer);
         System.out.println("handleGuildNews Cargado! - FALTA TERMINAR!");
@@ -1244,7 +1253,7 @@ public class Protocol {
         //    For i = 0 To UBound(creatures())
         //        Call frmEntrenador.lstCriaturas.AddItem(creatures(i))
         //    Next i
-        //    frmEntrenador.Show , frmMain
+        //    frmEntrenador.Show , //FrmMain
 
         incomingData.copyBuffer(buffer);
         System.out.println("handleTrainerCreatureList Cargado! - FALTA TERMINAR!");
@@ -1356,7 +1365,7 @@ public class Protocol {
         //    frmForo.CanPostSticky = incomingData.ReadByte
         //
         //    If Not MirandoForo Then
-        //        frmForo.Show , frmMain
+        //        frmForo.Show , //FrmMain
         //    End If
         System.out.println("handleShowForumForm Cargado! - FALTA TERMINAR!");
     }
@@ -1404,7 +1413,7 @@ public class Protocol {
         // skillPoints += incomingData.readInteger();
         short skillPoints = incomingData.readInteger();
 
-        // frmmain.lightskillstar
+        // //FrmMain.lightskillstar
         System.out.println("handleLevelUp Cargado! - FALTA TERMINAR!");
     }
 
@@ -1482,16 +1491,16 @@ public class Protocol {
         final short userMaxHAM = incomingData.readByte();
         final short userMinHAM = incomingData.readByte();
 
-        FrmMain.get().lblSed.setText(userMinAGU + "/" + userMaxAGU);
-        FrmMain.get().lblHambre.setText(userMinHAM + "/" + userMaxHAM);
+        //FrmMain.get().lblSed.setText(userMinAGU + "/" + userMaxAGU);
+        //FrmMain.get().lblHambre.setText(userMinHAM + "/" + userMaxHAM);
 
         float bWidth = (((float) (userMinAGU) / ((float) userMaxAGU)) * 75);
-        FrmMain.get().shpSed.setWidth((int) (75 - bWidth));
-        FrmMain.get().shpSed.setX(584 + (75 - FrmMain.get().shpSed.getWidth()));
+        //FrmMain.get().shpSed.setWidth((int) (75 - bWidth));
+        //FrmMain.get().shpSed.setX(584 + (75 - //FrmMain.get().shpSed.getWidth()));
 
         bWidth = (((float) (userMinHAM) / ((float) userMaxHAM)) * 75);
-        FrmMain.get().shpHambre.setWidth((int) (75 - bWidth));
-        FrmMain.get().shpHambre.setX(584 + (75 - FrmMain.get().shpHambre.getWidth()));
+        //FrmMain.get().shpHambre.setWidth((int) (75 - bWidth));
+        //FrmMain.get().shpHambre.setX(584 + (75 - //FrmMain.get().shpHambre.getWidth()));
     }
 
     private static void handleChangeNPCInventorySlot() {
@@ -1583,9 +1592,10 @@ public class Protocol {
         buffer.readByte();
 
         String errMsg = buffer.readASCIIString();
-        forms.add(new FrmMessage(errMsg));
+        ImGUISystem.get().checkAddOrChange("frmMessage",
+                new FMessage(errMsg));
 
-        SocketConnection.getInstance().disconnect();
+        SocketConnection.get().disconnect();
         User.get().setUserConected(false);
 
         incomingData.copyBuffer(buffer);
@@ -1947,7 +1957,7 @@ public class Protocol {
 
         final byte slot = buffer.readByte();
         final short objIndex = buffer.readInteger();
-        final String name = buffer.readASCIIString(); //(Hay que arreglar a este puto)
+        final String name = buffer.readASCIIString();
         final int amount = buffer.readInteger();
         final boolean equipped = buffer.readBoolean();
         final short grhIndex = buffer.readInteger();
@@ -1958,46 +1968,46 @@ public class Protocol {
         final short minDef = buffer.readInteger();
         final float value = buffer.readFloat();
 
-        User.get().getUserInventory().setItem( slot - 1, objIndex, amount, equipped, grhIndex, objType,
-                maxHit, minHit, maxDef, minDef, value, name);
-
         if(equipped) {
             switch (E_ObjType.values()[objType - 1]) {
                 case otWeapon:
-                    FrmMain.get().lblWeapon.setText(minHit + "/" + maxHit);
+                    //FrmMain.get().lblWeapon.setText(minHit + "/" + maxHit);
                     User.get().userWeaponEqpSlot = slot;
                     break;
 
                 case otArmor:
-                    FrmMain.get().lblArmor.setText(minDef + "/" + maxDef);
+                    //FrmMain.get().lblArmor.setText(minDef + "/" + maxDef);
                     User.get().userArmourEqpSlot = slot;
                     break;
 
                 case otShield:
-                    FrmMain.get().lblShielder.setText(minDef + "/" + maxDef);
+                    //FrmMain.get().lblShielder.setText(minDef + "/" + maxDef);
                     User.get().userShieldEqpSlot = slot;
                     break;
 
                 case otHelmet:
-                    FrmMain.get().lblHelm.setText(minDef + "/" + maxDef);
+                    //FrmMain.get().lblHelm.setText(minDef + "/" + maxDef);
                     User.get().userHelmEqpSlot = slot;
                     break;
             }
         } else {
             if(slot == User.get().userWeaponEqpSlot) {
-                FrmMain.get().lblWeapon.setText("0/0");
+                //FrmMain.get().lblWeapon.setText("0/0");
                 User.get().userWeaponEqpSlot = 0;
             } else if(slot == User.get().userArmourEqpSlot) {
-                FrmMain.get().lblArmor.setText("0/0");
+                //FrmMain.get().lblArmor.setText("0/0");
                 User.get().userArmourEqpSlot = 0;
             } else if(slot == User.get().userShieldEqpSlot) {
-                FrmMain.get().lblShielder.setText("0/0");
+                //FrmMain.get().lblShielder.setText("0/0");
                 User.get().userShieldEqpSlot = 0;
             } else if(slot == User.get().userHelmEqpSlot) {
-                FrmMain.get().lblHelm.setText("0/0");
+                //FrmMain.get().lblHelm.setText("0/0");
                 User.get().userHelmEqpSlot = 0;
             }
         }
+
+        User.get().getUserInventory().setItem( slot - 1, objIndex, amount, equipped, grhIndex, objType,
+                maxHit, minHit, maxDef, minDef, value, name);
 
         incomingData.copyBuffer(buffer);
     }
@@ -2015,23 +2025,23 @@ public class Protocol {
 
         //UsingSkill = incomingData.ReadByte()
         //
-        //    frmMain.MousePointer = 2
+        //    //FrmMain.MousePointer = 2
         //
         //    Select Case UsingSkill
         //        Case Magia
-        //            Call AddtoRichTextBox(frmMain.RecTxt, MENSAJE_TRABAJO_MAGIA, 100, 100, 120, 0, 0)
+        //            Call AddtoRichTextBox(//FrmMain.RecTxt, MENSAJE_TRABAJO_MAGIA, 100, 100, 120, 0, 0)
         //        Case Pesca
-        //            Call AddtoRichTextBox(frmMain.RecTxt, MENSAJE_TRABAJO_PESCA, 100, 100, 120, 0, 0)
+        //            Call AddtoRichTextBox(//FrmMain.RecTxt, MENSAJE_TRABAJO_PESCA, 100, 100, 120, 0, 0)
         //        Case Robar
-        //            Call AddtoRichTextBox(frmMain.RecTxt, MENSAJE_TRABAJO_ROBAR, 100, 100, 120, 0, 0)
+        //            Call AddtoRichTextBox(//FrmMain.RecTxt, MENSAJE_TRABAJO_ROBAR, 100, 100, 120, 0, 0)
         //        Case Talar
-        //            Call AddtoRichTextBox(frmMain.RecTxt, MENSAJE_TRABAJO_TALAR, 100, 100, 120, 0, 0)
+        //            Call AddtoRichTextBox(//FrmMain.RecTxt, MENSAJE_TRABAJO_TALAR, 100, 100, 120, 0, 0)
         //        Case Mineria
-        //            Call AddtoRichTextBox(frmMain.RecTxt, MENSAJE_TRABAJO_MINERIA, 100, 100, 120, 0, 0)
+        //            Call AddtoRichTextBox(//FrmMain.RecTxt, MENSAJE_TRABAJO_MINERIA, 100, 100, 120, 0, 0)
         //        Case FundirMetal
-        //            Call AddtoRichTextBox(frmMain.RecTxt, MENSAJE_TRABAJO_FUNDIRMETAL, 100, 100, 120, 0, 0)
+        //            Call AddtoRichTextBox(//FrmMain.RecTxt, MENSAJE_TRABAJO_FUNDIRMETAL, 100, 100, 120, 0, 0)
         //        Case Proyectiles
-        //            Call AddtoRichTextBox(frmMain.RecTxt, MENSAJE_TRABAJO_PROYECTILES, 100, 100, 120, 0, 0)
+        //            Call AddtoRichTextBox(//FrmMain.RecTxt, MENSAJE_TRABAJO_PROYECTILES, 100, 100, 120, 0, 0)
         //    End Select
 
         System.out.println("handleWorkRequestTarget Cargado! - FALTA TERMINAR");
@@ -2046,58 +2056,58 @@ public class Protocol {
         // Remove packet ID
         incomingData.readByte();
 
-        User.get().userMaxHP = incomingData.readInteger();
-        User.get().userMinHP = incomingData.readInteger();
-        User.get().userMaxMAN = incomingData.readInteger();
-        User.get().userMinMAN = incomingData.readInteger();
-        User.get().userMaxSTA = incomingData.readInteger();
-        User.get().userMinSTA = incomingData.readInteger();
-        final int userGLD = incomingData.readLong();
-        final byte userLvl = incomingData.readByte();
-        User.get().userPasarNivel = incomingData.readLong();
-        User.get().userExp = incomingData.readLong();
+        User.get().userMaxHP        = incomingData.readInteger();
+        User.get().userMinHP        = incomingData.readInteger();
+        User.get().userMaxMAN       = incomingData.readInteger();
+        User.get().userMinMAN       = incomingData.readInteger();
+        User.get().userMaxSTA       = incomingData.readInteger();
+        User.get().userMinSTA       = incomingData.readInteger();
+        final int userGLD           = incomingData.readLong();
+        final byte userLvl          = incomingData.readByte();
+        User.get().userPasarNivel   = incomingData.readLong();
+        User.get().userExp          = incomingData.readLong();
 
-        FrmMain.get().lblMana.setText(User.get().userMinMAN + "/" + User.get().userMaxMAN);
-        FrmMain.get().lblVida.setText(User.get().userMinHP + "/" + User.get().userMaxHP);
-        FrmMain.get().lblEnergia.setText(User.get().userMinSTA + "/" + User.get().userMaxSTA);
+        //FrmMain.get().lblMana.setText(User.get().userMinMAN + "/" + User.get().userMaxMAN);
+        //FrmMain.get().lblVida.setText(User.get().userMinHP + "/" + User.get().userMaxHP);
+        //FrmMain.get().lblEnergia.setText(User.get().userMinSTA + "/" + User.get().userMaxSTA);
 
         ///////// MANA
         float bWidth = (((float) (User.get().userMinMAN) / ((float) User.get().userMaxMAN)) * 75);
-        FrmMain.get().shpMana.setWidth((int) (75 - bWidth));
-        FrmMain.get().shpMana.setX(584 + (75 - FrmMain.get().shpMana.getWidth()));
+        //FrmMain.get().shpMana.setWidth((int) (75 - bWidth));
+        //FrmMain.get().shpMana.setX(584 + (75 - //FrmMain.get().shpMana.getWidth()));
 
         //////// VIDA
         bWidth = (((float) (User.get().userMinHP) / ((float) User.get().userMaxHP)) * 75);
-        FrmMain.get().shpVida.setWidth((int) (75 - bWidth));
-        FrmMain.get().shpVida.setX(584 + (75 - FrmMain.get().shpVida.getWidth()));
+        //FrmMain.get().shpVida.setWidth((int) (75 - bWidth));
+        //FrmMain.get().shpVida.setX(584 + (75 - //FrmMain.get().shpVida.getWidth()));
 
 
 
         //////// ENERGIA
         bWidth = (((float) (User.get().userMinSTA) / ((float) User.get().userMaxSTA)) * 75);
-        FrmMain.get().shpEnergia.setWidth((int) (75 - bWidth));
-        FrmMain.get().shpEnergia.setX(584 + (75 - FrmMain.get().shpEnergia.getWidth()));
+        //FrmMain.get().shpEnergia.setWidth((int) (75 - bWidth));
+        //FrmMain.get().shpEnergia.setX(584 + (75 - //FrmMain.get().shpEnergia.getWidth()));
 
-        FrmMain.get().lblExp.setText("Exp: " + User.get().userExp + "/" + User.get().userPasarNivel);
+        //FrmMain.get().lblExp.setText("Exp: " + User.get().userExp + "/" + User.get().userPasarNivel);
 
         if (User.get().userPasarNivel > 0) {
             final float percent = Math.round((float) (User.get().userExp * 100) / User.get().userPasarNivel);
-            FrmMain.get().lblPorcLvl.setText("[" + percent + "%]");
+            //FrmMain.get().lblPorcLvl.setText("[" + percent + "%]");
         } else {
-            FrmMain.get().lblPorcLvl.setText("[N/A]");
+            //FrmMain.get().lblPorcLvl.setText("[N/A]");
         }
 
-        FrmMain.get().lblLvl.setText("Nivel: " + userLvl);
+        //FrmMain.get().lblLvl.setText("Nivel: " + userLvl);
 
         charList[User.get().getUserCharIndex()].setDead(User.get().userMinHP <= 0);
 
-        FrmMain.get().gldLbl.setText(String.valueOf(userGLD));
+        //FrmMain.get().gldLbl.setText(String.valueOf(userGLD));
 
         //
         //    If UserMinHP = 0 Then
         //        UserEstado = 1
-        //        If frmMain.TrainingMacro Then Call frmMain.DesactivarMacroHechizos
-        //        If frmMain.macrotrabajo Then Call frmMain.DesactivarMacroTrabajo
+        //        If //FrmMain.TrainingMacro Then Call //FrmMain.DesactivarMacroHechizos
+        //        If //FrmMain.macrotrabajo Then Call //FrmMain.DesactivarMacroTrabajo
         //    Else
         //        UserEstado = 0
         //    End If
@@ -2122,10 +2132,6 @@ public class Protocol {
         }
 
         User.get().setCharacterFx(charIndex, fX, loops);
-
-
-
-        System.out.println("handleCreateFX Cargado!");
     }
 
     private static void handleRainToggle() {
@@ -2150,7 +2156,7 @@ public class Protocol {
         //            Else
         //                Call Audio.PlayWave("lluviaoutend.wav", 0, 0, LoopStyle.Disabled)
         //            End If
-        //            frmMain.IsPlaying = PlayLoop.plNone
+        //            //FrmMain.IsPlaying = PlayLoop.plNone
         //        End If
         //    End If
         //
@@ -2209,7 +2215,7 @@ public class Protocol {
         //        'If we got here then packet is complete, copy data back to original queue
         //        Call incomingData.CopyBuffer(Buffer)
         //
-        //        .Show vbModeless, frmMain
+        //        .Show vbModeless, //FrmMain
         //    End With
 
         incomingData.copyBuffer(buffer);
@@ -2248,6 +2254,7 @@ public class Protocol {
             incomingData.readInteger();
             // play midi
         } else {
+            //Remove the bytes to prevent errors
             incomingData.readInteger();
         }
 
@@ -2281,7 +2288,7 @@ public class Protocol {
         byte x = incomingData.readByte();
         byte y = incomingData.readByte();
 
-        mapData[x][y].getObjGrh().setGrhIndex(0);
+        mapData[x][y].getObjGrh().setGrhIndex((short) 0);
     }
 
     private static void handleObjectCreate() {
@@ -2295,8 +2302,9 @@ public class Protocol {
 
         byte x = incomingData.readByte();
         byte y = incomingData.readByte();
+        short grhIndex = incomingData.readInteger();
 
-        mapData[x][y].getObjGrh().setGrhIndex(incomingData.readInteger());
+        mapData[x][y].getObjGrh().setGrhIndex(grhIndex);
         initGrh(mapData[x][y].getObjGrh(), mapData[x][y].getObjGrh().getGrhIndex(), true);
     }
 
@@ -2363,7 +2371,7 @@ public class Protocol {
         incomingData.readByte();
 
         E_Heading direction = E_Heading.values()[incomingData.readByte() - 1];
-        int userCharIndex = User.get().getUserCharIndex();
+        short userCharIndex = User.get().getUserCharIndex();
         User.get().moveCharbyHead(userCharIndex, direction);
         User.get().moveScreen(direction);
 
@@ -2434,7 +2442,7 @@ public class Protocol {
         // Remove packet ID
         buffer.readByte();
 
-        int charIndex = buffer.readInteger();
+        short charIndex = buffer.readInteger();
         short body = buffer.readInteger();
         short head = buffer.readInteger();
         byte numHeading = buffer.readByte();
@@ -2533,13 +2541,13 @@ public class Protocol {
         //
 
         //'Update pos label
-        FrmMain.get().lblCoords.setText(User.get().userMap +
-                " X: " + User.get().getUserPos().getX() + " Y: " + User.get().getUserPos().getY());
+        //FrmMain.get().lblCoords.setText(User.get().userMap +
+                //" X: " + User.get().getUserPos().getX() + " Y: " + User.get().getUserPos().getY());
     }
 
     private static void handleUserIndexInServer() {
         if (incomingData.length() < 3) {
-            System.out.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handleChangeInventorySlot");
+            System.out.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handleUserIndexInServer");
             return;
         }
 
@@ -2563,8 +2571,8 @@ public class Protocol {
         buffer.readByte();
 
         String msg = buffer.readASCIIString();
-        forms.add(new FrmMessage(msg));
-        System.out.println(forms);
+        ImGUISystem.get().checkAddOrChange("frmMessage",
+                new FMessage(msg));
 
         incomingData.copyBuffer(buffer);
     }
@@ -2616,10 +2624,10 @@ public class Protocol {
         //                b = Val(str)
         //            End If
         //
-        //            Call AddtoRichTextBox(frmMain.RecTxt, Left$(chat, InStr(1, chat, "~") - 1), r, g, b, Val(ReadField(5, chat, 126)) <> 0, Val(ReadField(6, chat, 126)) <> 0)
+        //            Call AddtoRichTextBox(//FrmMain.RecTxt, Left$(chat, InStr(1, chat, "~") - 1), r, g, b, Val(ReadField(5, chat, 126)) <> 0, Val(ReadField(6, chat, 126)) <> 0)
         //        Else
         //            With FontTypes(FontTypeNames.FONTTYPE_GUILDMSG)
-        //                Call AddtoRichTextBox(frmMain.RecTxt, chat, .red, .green, .blue, .bold, .italic)
+        //                Call AddtoRichTextBox(//FrmMain.RecTxt, chat, .red, .green, .blue, .bold, .italic)
         //            End With
         //        End If
         //    Else
@@ -2669,10 +2677,10 @@ public class Protocol {
         //                b = Val(str)
         //            End If
         //
-        //        Call AddtoRichTextBox(frmMain.RecTxt, Left$(chat, InStr(1, chat, "~") - 1), r, g, b, Val(ReadField(5, chat, 126)) <> 0, Val(ReadField(6, chat, 126)) <> 0)
+        //        Call AddtoRichTextBox(//FrmMain.RecTxt, Left$(chat, InStr(1, chat, "~") - 1), r, g, b, Val(ReadField(5, chat, 126)) <> 0, Val(ReadField(6, chat, 126)) <> 0)
         //    Else
         //        With FontTypes(FontIndex)
-        //            Call AddtoRichTextBox(frmMain.RecTxt, chat, .red, .green, .blue, .bold, .italic)
+        //            Call AddtoRichTextBox(//FrmMain.RecTxt, chat, .red, .green, .blue, .bold, .italic)
         //        End With
         //
         //        ' Para no perder el foco cuando chatea por party
@@ -2743,8 +2751,8 @@ public class Protocol {
         charList[userCharIndex].getPos().setY(y);
 
         //'Update pos label
-        FrmMain.get().lblCoords.setText(User.get().userMap +
-                " X: " + User.get().getUserPos().getX() + " Y: " + User.get().getUserPos().getY());
+        //FrmMain.get().lblCoords.setText(User.get().userMap +
+                //" X: " + User.get().getUserPos().getX() + " Y: " + User.get().getUserPos().getY());
 
     }
 
@@ -2757,10 +2765,10 @@ public class Protocol {
         // Remove packet ID
         incomingData.readByte();
 
-        int userMap = incomingData.readInteger();
-        User.get().setUserMap( (short) userMap);
+        short userMap = incomingData.readInteger();
+        User.get().setUserMap(userMap);
 
-        // Todo: Once on-the-fly editor is implemented check for map version before loading....
+        // Once on-the-fly editor is implemented check for map version before loading....
         // For now we just drop it
         incomingData.readInteger();
 
@@ -2771,7 +2779,7 @@ public class Protocol {
             If bRain Then
                 Call Audio.StopWave(RainBufferIndex)
                 RainBufferIndex = 0
-                frmMain.IsPlaying = PlayLoop.plNone
+                //FrmMain.IsPlaying = PlayLoop.plNone
             End If
         End If
          */
@@ -2792,9 +2800,9 @@ public class Protocol {
         // Get data and update
         User.get().userExp = incomingData.readLong();
 
-        FrmMain.get().lblExp.setText("Exp: " + User.get().userExp + "/" + User.get().userPasarNivel);
+        //FrmMain.get().lblExp.setText("Exp: " + User.get().userExp + "/" + User.get().userPasarNivel);
         final float percent = Math.round((float) (User.get().userExp * 100) / User.get().userPasarNivel);
-        FrmMain.get().lblPorcLvl.setText("[" + percent + "%]");
+        //FrmMain.get().lblPorcLvl.setText("[" + percent + "%]");
 
     }
 
@@ -2821,7 +2829,7 @@ public class Protocol {
         incomingData.readByte();
 
         final int userGLD = incomingData.readLong();
-        FrmMain.get().gldLbl.setText(String.valueOf(userGLD));
+        //FrmMain.get().gldLbl.setText(String.valueOf(userGLD));
 
     }
 
@@ -2836,9 +2844,9 @@ public class Protocol {
 
         User.get().userMinHP = incomingData.readInteger();
 
-        FrmMain.get().lblVida.setText(User.get().userMinHP + "/" + User.get().userMaxHP);
-        FrmMain.get().shpVida.setWidth( (int) (((float) (User.get().userMinHP) / ((float) User.get().userMaxHP)) * 75) );
-        FrmMain.get().shpVida.setX(584 + (75 - FrmMain.get().shpVida.getWidth()));
+        //FrmMain.get().lblVida.setText(User.get().userMinHP + "/" + User.get().userMaxHP);
+        //FrmMain.get().shpVida.setWidth( (int) (((float) (User.get().userMinHP) / ((float) User.get().userMaxHP)) * 75) );
+        //FrmMain.get().shpVida.setX(584 + (75 - //FrmMain.get().shpVida.getWidth()));
 
         charList[User.get().getUserCharIndex()].setDead(User.get().userMinHP <= 0);
 
@@ -2846,8 +2854,8 @@ public class Protocol {
         //    'Is the user alive??
         //    If UserMinHP = 0 Then
         //        UserEstado = 1
-        //        If frmMain.TrainingMacro Then Call frmMain.DesactivarMacroHechizos
-        //        If frmMain.macrotrabajo Then Call frmMain.DesactivarMacroTrabajo
+        //        If //FrmMain.TrainingMacro Then Call //FrmMain.DesactivarMacroHechizos
+        //        If //FrmMain.macrotrabajo Then Call //FrmMain.DesactivarMacroTrabajo
         //    Else
         //        UserEstado = 0
         //    End If
@@ -2868,8 +2876,8 @@ public class Protocol {
         User.get().userMinMAN = incomingData.readInteger();
 
         float bWidth = (((float) (User.get().userMinMAN) / ((float) User.get().userMaxMAN)) * 75);
-        FrmMain.get().shpMana.setWidth((int) (75 - bWidth));
-        FrmMain.get().shpMana.setX(584 + (75 - FrmMain.get().shpMana.getWidth()));
+        //FrmMain.get().shpMana.setWidth((int) (75 - bWidth));
+        //FrmMain.get().shpMana.setX(584 + (75 - //FrmMain.get().shpMana.getWidth()));
 
     }
 
@@ -2885,11 +2893,11 @@ public class Protocol {
         // variable global
         User.get().userMinSTA = incomingData.readInteger();
 
-        FrmMain.get().lblEnergia.setText(User.get().userMinSTA + "/" + User.get().userMaxSTA);
+        //FrmMain.get().lblEnergia.setText(User.get().userMinSTA + "/" + User.get().userMaxSTA);
 
         float bWidth = (((float) (User.get().userMinSTA) / ((float) User.get().userMaxSTA)) * 75);
-        FrmMain.get().shpEnergia.setWidth((int) (75 - bWidth));
-        FrmMain.get().shpEnergia.setX(584 + (75 - FrmMain.get().shpEnergia.getWidth()));
+        //FrmMain.get().shpEnergia.setWidth((int) (75 - bWidth));
+        //FrmMain.get().shpEnergia.setX(584 + (75 - //FrmMain.get().shpEnergia.getWidth()));
 
 
 
@@ -2900,10 +2908,10 @@ public class Protocol {
         // Remove packet ID
         incomingData.readByte();
 
-        //If frmMain.macrotrabajo.Enabled And (MacroBltIndex > 0) Then
+        //If //FrmMain.macrotrabajo.Enabled And (MacroBltIndex > 0) Then
         //        Call WriteCraftCarpenter(MacroBltIndex)
         //    Else
-        //        frmCarp.Show , frmMain
+        //        frmCarp.Show , //FrmMain
         //    End If
 
         System.out.println("handleShowCarpenterForm CARGADO - FALTA TERMINAR!");
@@ -2913,10 +2921,10 @@ public class Protocol {
         // Remove packet ID
         incomingData.readByte();
 
-        //If frmMain.macrotrabajo.Enabled And (MacroBltIndex > 0) Then
+        //If //FrmMain.macrotrabajo.Enabled And (MacroBltIndex > 0) Then
         //        Call WriteCraftBlacksmith(MacroBltIndex)
         //    Else
-        //        frmHerrero.Show , frmMain
+        //        frmHerrero.Show , //FrmMain
         //    End If
 
         System.out.println("handleShowBlacksmithForm CARGADO - FALTA TERMINAR!");
@@ -2989,7 +2997,7 @@ public class Protocol {
         //
         //    'Set state and show form
         //    Comerciando = True
-        //    Call frmComerciarUsu.Show(vbModeless, frmMain)
+        //    Call frmComerciarUsu.Show(vbModeless, //FrmMain)
 
         System.out.println("handleUserCommerceInit CARGADO - FALTA TERMINAR!");
     }
@@ -3025,7 +3033,7 @@ public class Protocol {
         //
         //    frmBancoObj.lblUserGld.Caption = BankGold
         //
-        //    frmBancoObj.Show , frmMain
+        //    frmBancoObj.Show , //FrmMain
 
         System.out.println("handleBankInit CARGADO - FALTA TERMINAR!");
 
@@ -3066,7 +3074,7 @@ public class Protocol {
 
             'Set state and show form
             Comerciando = True
-            frmComerciar.Show , frmMain
+            frmComerciar.Show , //FrmMain
          */
 
         System.out.println("handleBankEnd CARGADO - FALTA TERMINAR!");
@@ -3155,15 +3163,15 @@ public class Protocol {
 
         User.get().setUserConected(false);
         eraseAllChars();
-        SocketConnection.getInstance().disconnect();
+        SocketConnection.get().disconnect();
 
         /*
         'Hide main form
-    frmMain.Visible = False
+    //FrmMain.Visible = False
 
     'Stop audio
     Call Audio.StopWave
-    frmMain.IsPlaying = PlayLoop.plNone
+    //FrmMain.IsPlaying = PlayLoop.plNone
 
     'Show connection form
     frmConnect.Visible = True

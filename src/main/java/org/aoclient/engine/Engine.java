@@ -3,18 +3,13 @@ package org.aoclient.engine;
 import org.aoclient.connection.SocketConnection;
 import org.aoclient.engine.game.BindKeys;
 import org.aoclient.engine.game.models.E_KeyType;
-import org.aoclient.engine.gui.forms.Form;
+import org.aoclient.engine.gui.ImGUISystem;
 import org.aoclient.engine.listeners.KeyListener;
 import org.aoclient.engine.renderer.Surface;
 import org.aoclient.engine.scenes.*;
 import org.aoclient.engine.utils.GameData;
 import org.aoclient.engine.utils.Time;
 import org.lwjgl.Version;
-
-import java.awt.*;
-import java.awt.event.KeyEvent;
-import java.util.ArrayList;
-import java.util.List;
 
 import static org.aoclient.engine.scenes.SceneType.INTRO_SCENE;
 import static org.aoclient.engine.utils.GameData.options;
@@ -26,10 +21,9 @@ public class Engine implements Runnable {
     private final Thread gameLoopThread;
     private static boolean prgRun = true;
     private Window window;
+    private ImGUISystem guiSystem;
     private Scene currentScene;
     private BindKeys bindKeys;
-    public static List<Form> forms = new ArrayList<>(); // formularios por encima de las escenas (por ejemplo: frmMensaje).
-    public static boolean capsState = Toolkit.getDefaultToolkit().getLockingKeyState(KeyEvent.VK_CAPS_LOCK);
 
     public Engine() {
         gameLoopThread = new Thread(this, "GAME_LOOP_THREAD");
@@ -40,6 +34,7 @@ public class Engine implements Runnable {
      * del motor.
      */
     private void close() {
+        guiSystem.destroy();
         window.close();
     }
 
@@ -65,10 +60,10 @@ public class Engine implements Runnable {
             }
 
             // Si hay algo para enviar, lo enviamos
-            SocketConnection.getInstance().flushBuffer();
+            SocketConnection.get().flushBuffer();
 
             // lo mismo para el handle data, leemos lo que nos envio el servidor.
-            SocketConnection.getInstance().readData();
+            SocketConnection.get().readData();
         }
     }
 
@@ -83,14 +78,19 @@ public class Engine implements Runnable {
      * @desc: Inicia nuestro motor grafico con su ventana, gestor de texturas (surface), inits (gamedata) y escenas.
      */
     public void init(){
-        System.out.println("Hello LWJGL " + Version.getVersion() + "!");
+        System.out.println("Starting LWJGL " + Version.getVersion() + "!");
+        System.out.println("Running on " + System.getProperty("os.name") + " / v" + System.getProperty("os.version") + " [" + System.getProperty("os.arch") + "]");
+        System.out.println("Java " + System.getProperty("java.version") + " (" + System.getProperty("java.home") + ")");
 
-        this.window = Window.get();
-        this.window.initialize();
+        window = Window.get();
+        window.initialize();
+
+        guiSystem = ImGUISystem.get();
+        guiSystem.init();
 
         Surface.get().initialize();
         GameData.initialize();
-        this.bindKeys = BindKeys.get();
+        bindKeys = BindKeys.get();
 
         changeScene(INTRO_SCENE);
     }
@@ -102,23 +102,24 @@ public class Engine implements Runnable {
      *         enumerador y segun el elegido realiza el cambio de escena.
      */
     private void changeScene(SceneType scene) {
+        //guiSystem.closeAllFrms();
+
         switch (scene) {
             case INTRO_SCENE:
                 currentScene = new IntroScene();
-                currentScene.init();
                 break;
 
             case GAME_SCENE:
                 currentScene = new GameScene();
-                currentScene.init();
                 break;
 
             case MAIN_SCENE:
                 currentScene = new MainScene();
-                currentScene.init();
                 break;
 
         }
+
+        currentScene.init();
     }
 
     /**
@@ -137,8 +138,6 @@ public class Engine implements Runnable {
     private void render() {
         if (KeyListener.isKeyPressed(bindKeys.getBindedKey(E_KeyType.mKeyExitGame))) {
             closeClient();
-        } else if(KeyListener.isKeyReadyForAction(GLFW_KEY_CAPS_LOCK)) {
-            capsState = !capsState;
         }
 
         // Check change screen
@@ -150,23 +149,7 @@ public class Engine implements Runnable {
         currentScene.keyEvents();
         currentScene.render();
 
-        // dibujado de formularios por encima de las escenas!
-        if(!forms.isEmpty()) {
-            // recorre la lista de formularios, los dibuja y si deja de ser visible los elimina.
-            for (Form frm : forms) {
-                if(frm.isVisible()) {
-                    frm.render();
-                } else {
-                    forms.remove(frm);
-                    break;
-                }
-            }
-
-            // siempre debe darle prioridad a la funcionalidad del ultimo formulario cargado.
-            if (!forms.isEmpty()) {
-                forms.get(forms.size() - 1).checkButtons();
-            }
-        }
+        guiSystem.renderGUI();
     }
 
     /**

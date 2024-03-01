@@ -4,6 +4,8 @@ import org.aoclient.engine.game.User;
 import org.aoclient.engine.renderer.RGBColor;
 import org.aoclient.engine.utils.structs.*;
 
+import java.util.Arrays;
+
 import static org.aoclient.engine.game.models.E_Heading.SOUTH;
 import static org.aoclient.engine.renderer.Drawn.drawTexture;
 import static org.aoclient.engine.renderer.FontText.drawText;
@@ -17,6 +19,9 @@ import static org.aoclient.engine.utils.Time.timerTicksPerFrame;
 public final class Character {
     public static final int CASPER_HEAD = 500;
     public static final int FRAGATA_FANTASMAL = 87;
+
+    // ultimo personaje del array
+    private static short lastChar = 0;
 
     private boolean active;
     private E_Heading heading;
@@ -64,51 +69,71 @@ public final class Character {
         weapon = new WeaponData();
         shield = new ShieldData();
         this.pos = new Position();
+
         this.heading = SOUTH;
         this.active = false;
+        this.criminal = false;
+        this.attackable = false;
+        this.fxIndex = 0;
+        this.invisible = false;
+        this.moving = false;
+        this.dead = false;
+        this.name = "";
+        this.pie = false;
+        this.pos.setX(0);
+        this.pos.setY(0);
+        this.usingArm = false;
+        this.clanName = "";
+
         this.walkingSpeed = 8;
     }
 
     /**
      * @desc Crea un nuevo personaje segun los parametros establecidos.
      */
-    public static void makeChar(int charIndex, int body, int head,  E_Heading heading, int x, int y, int weapon, int shield, int helmet) {
-        if (charIndex > User.get().getLastChar())
-            User.get().setLastChar(charIndex);
+    public static void makeChar(short charIndex, int body, int head,  E_Heading heading, int x, int y, int weapon, int shield, int helmet) {
+        // apuntamos al ultimo char
+        if (charIndex > lastChar) {
+            lastChar = charIndex;
+        }
 
-
-        if (weapon <= 0) weapon = 2;
-        if (shield <= 0) shield = 2;
-        if (helmet <= 0) helmet = 2;
+        if (weapon == 0) weapon = 2;
+        if (shield == 0) shield = 2;
+        if (helmet == 0) helmet = 2;
 
         char f = '<', u = '>';
-
-        charList[charIndex].setClanName("");
 
         if(charList[charIndex].priv != 0) {
             charList[charIndex].setClanName(f + "Argentum Online Staff" + u);
         }
 
+        charList[charIndex].setDead(head == CASPER_HEAD);
         charList[charIndex].setiHead(head);
         charList[charIndex].setiBody(body);
 
         charList[charIndex].setHead(new HeadData(headData[head]));
         charList[charIndex].setBody(new BodyData(bodyData[body]));
+
         charList[charIndex].setWeapon(new WeaponData(weaponData[weapon]));
+
         charList[charIndex].setShield(new ShieldData(shieldData[shield]));
         charList[charIndex].setHelmet(new HeadData(helmetsData[helmet]));
 
         charList[charIndex].setHeading(heading);
 
+        // reset moving stats
         charList[charIndex].setMoving(false);
         charList[charIndex].setMoveOffsetX(0);
         charList[charIndex].setMoveOffsetY(0);
 
+        // update position
         charList[charIndex].getPos().setX(x);
         charList[charIndex].getPos().setY(y);
 
+        // Make active
         charList[charIndex].setActive(true);
 
+        // plot on map
         mapData[x][y].setCharIndex(charIndex);
     }
 
@@ -117,19 +142,20 @@ public final class Character {
      * @param charIndex Numero de identificador de personaje
      * @desc Elimina un personaje del array de personajes.
      */
-    public static void eraseChar(int charIndex) {
+    public static void eraseChar(short charIndex) {
         charList[charIndex].setActive(false);
 
-        if (charIndex == User.get().getLastChar()) {
-            while (!charList[User.get().getLastChar()].isActive()) {
-                User.get().setLastChar(User.get().getLastChar() - 1);
-                if (User.get().getLastChar() == 0) {
+        if (charIndex == lastChar) {
+            while (!charList[lastChar].isActive()) {
+                lastChar--;
+                if (lastChar == 0) {
                     break;
                 }
             }
         }
 
         mapData[charList[charIndex].getPos().getX()][charList[charIndex].getPos().getY()].setCharIndex(0);
+
 
         /*
             'Remove char's dialog
@@ -143,11 +169,12 @@ public final class Character {
      * @desc elimina todos los personajes de nuestro array charList.
      */
     public static void eraseAllChars() {
-        for (int i = 0; i <= User.get().getLastChar(); i++) {
+        for (short i = 1; i < charList.length; i++) {
+            mapData[charList[i].getPos().getX()][charList[i].getPos().getY()].setCharIndex(0);
             resetCharInfo(i);
         }
 
-        User.get().setLastChar(0);
+        lastChar = 0;
     }
 
     /**
@@ -155,7 +182,7 @@ public final class Character {
      * @param charIndex Numero de identificador del personaje
      * @desc Resetea los atributos del personaje.
      */
-    private static void resetCharInfo(int charIndex) {
+    private static void resetCharInfo(short charIndex) {
         charList[charIndex] = new Character(); // al crear un obj nuevo, el viejo sera eliminado por el recolector de basura de java.
     }
 
@@ -163,9 +190,9 @@ public final class Character {
      * @desc Actualiza todos los personajes visibles.
      */
     public static void refreshAllChars() {
-        for (int LoopC = 1; LoopC <= User.get().getLastChar(); LoopC++) {
-            if (charList[LoopC].isActive()) {
-                mapData[charList[LoopC].getPos().getX()][charList[LoopC].getPos().getY()].setCharIndex(LoopC);
+        for (int loopC = 1; loopC <= lastChar; loopC++) {
+            if (charList[loopC].isActive()) {
+                mapData[charList[loopC].getPos().getX()][charList[loopC].getPos().getY()].setCharIndex(loopC);
             }
         }
     }

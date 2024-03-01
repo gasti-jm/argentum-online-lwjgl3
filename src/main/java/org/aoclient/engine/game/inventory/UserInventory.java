@@ -47,7 +47,7 @@ public final class UserInventory extends Inventory {
         intervalUseItem.update();
         intervalEquipItem.update();
 
-        if(slots.length == 0) return;
+        if (slots.length == 0) return;
 
         // posiciones por slot
         int iX = posX;
@@ -58,25 +58,26 @@ public final class UserInventory extends Inventory {
 
         for (int i = 0; i < slots.length; i++) {
             if (slots[i].grhIndex > 0) {
-                drawGrhIndex(slots[i].grhIndex, iX,  iY, null);
-                drawText(String.valueOf(slots[i].amount),  iX, iY + 20, null, 0, true, false, false);
+                drawGrhIndex(slots[i].grhIndex, iX, iY, null);
+                drawText(String.valueOf(slots[i].amount), iX, iY + 20, null, 0, true, false, false);
 
                 if (slots[i].equipped) {
-                    drawText("E",  iX + 23, iY, colorEquipped, 0, true, false, false);
+                    drawText("E", iX + 23, iY, colorEquipped, 0, true, false, false);
                 }
             }
 
-            if(i == slotSelected) {
-                drawGrhIndex(2, iX,  iY, null);
+            if (i == slotSelected) {
+                drawGrhIndex(2, iX, iY, null);
             }
 
             // actualizamos la posicion en forma de tabla.
             iX += TILE_PIXEL_SIZE;
-            if((iX - posX) / TILE_PIXEL_SIZE == this.cantColumns) {
+            if ((iX - posX) / TILE_PIXEL_SIZE == this.cantColumns) {
                 iY += TILE_PIXEL_SIZE;
                 iX = posX;
             }
         }
+
     }
 
     /**

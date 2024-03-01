@@ -2,14 +2,14 @@ package org.aoclient.engine.scenes;
 
 import org.aoclient.engine.game.BindKeys;
 import org.aoclient.engine.game.models.E_KeyType;
-import org.aoclient.engine.gui.forms.FrmMain;
+import org.aoclient.engine.gui.forms.FMain;
+import org.aoclient.engine.gui.ImGUISystem;
 import org.aoclient.engine.listeners.KeyListener;
 import org.aoclient.engine.game.User;
 import org.aoclient.engine.listeners.MouseListener;
 import org.aoclient.engine.renderer.RGBColor;
 
 import static org.aoclient.connection.Protocol.*;
-import static org.aoclient.engine.Engine.forms;
 import static org.aoclient.engine.game.models.E_KeyType.*;
 import static org.aoclient.engine.game.models.Character.*;
 import static org.aoclient.engine.game.models.E_Heading.*;
@@ -23,7 +23,7 @@ import static org.lwjgl.glfw.GLFW.*;
 
 
 /**
- * Esta es la escena donde el usuario jugara (frmMain).
+ * Esta es la escena donde el usuario jugara.
  *
  * Se recomienda leer el JavaDoc de la clase padre "Scene.java".
  */
@@ -37,22 +37,22 @@ public final class GameScene extends Scene {
 
     RGBColor ambientColor; // color de ambiente.
     private boolean autoMove = false;
-    private FrmMain frm; // formulario frmMain diseñado.
+    public FMain frmMain;
 
     @Override
     public void init() {
         super.init();
-        canChangeTo = SceneType.MAIN_SCENE;
 
-        bindKeys = BindKeys.get();
-        user = User.get();
-        ambientColor = new RGBColor(1.0f, 1.0f, 1.0f);
+        canChangeTo     = SceneType.MAIN_SCENE;
+        bindKeys        = BindKeys.get();
+        user            = User.get();
+        ambientColor    = new RGBColor(1.0f, 1.0f, 1.0f);
+        frmMain         = new FMain();
 
         camera.setHalfWindowTileWidth   (( (SCREEN_SIZE_X / TILE_PIXEL_SIZE) / 2 ));
         camera.setHalfWindowTileHeight  (( (SCREEN_SIZE_Y / TILE_PIXEL_SIZE) / 2 ));
 
-        frm = FrmMain.get();
-        frm.init();
+        ImGUISystem.get().addFrm(frmMain);
     }
 
     @Override
@@ -60,6 +60,7 @@ public final class GameScene extends Scene {
         // si el usuario se desconecta debe regresar al menu principal.
         if(!user.isUserConected()) {
             this.close();
+            frmMain.close();
         }
 
         if(!visible) return;
@@ -87,7 +88,6 @@ public final class GameScene extends Scene {
         renderScreen(user.getUserPos().getX() - user.getAddToUserPos().getX(),
                 user.getUserPos().getY() - user.getAddToUserPos().getY(),
                 (int)(offSetCounterX), (int)(offSetCounterY));
-
     }
 
     /**
@@ -95,11 +95,6 @@ public final class GameScene extends Scene {
      */
     @Override
     public void mouseEvents() {
-        if (!forms.isEmpty()) return; // prioridad a cualquier frm por encima.
-
-        // checkeamos el estado de los botones
-        frm.checkButtons();
-
         // Estamos haciendo click en el render?
         if(inGameArea()) {
             if (MouseListener.mouseButtonClick(GLFW_MOUSE_BUTTON_LEFT)) {
@@ -122,7 +117,6 @@ public final class GameScene extends Scene {
             writeDoubleClick(getTileMouseX((int) MouseListener.getX() - POS_SCREEN_X), getTileMouseY((int) MouseListener.getY() - POS_SCREEN_Y));
         }
 
-
     }
 
     /**
@@ -130,9 +124,6 @@ public final class GameScene extends Scene {
      */
     @Override
     public void keyEvents() {
-        // Si tenemos un formulario por encima del juego, le damos prioridad.
-        if (!forms.isEmpty()) return;
-
         checkBindedKeys();
     }
 
@@ -142,7 +133,6 @@ public final class GameScene extends Scene {
     @Override
     public void close() {
         this.visible = false;
-        frm.close();
     }
 
     /**
@@ -207,10 +197,10 @@ public final class GameScene extends Scene {
         if(keyPressed == null) return;
 
         switch(keyPressed) {
-            case mKeyUp: user.moveTo(NORTH); break;
-            case mKeyDown: user.moveTo(SOUTH); break;
-            case mKeyLeft: user.moveTo(WEST); break;
-            case mKeyRight: user.moveTo(EAST); break;
+            case mKeyUp:    user.moveTo(NORTH); break;
+            case mKeyDown:  user.moveTo(SOUTH); break;
+            case mKeyLeft:  user.moveTo(WEST);  break;
+            case mKeyRight: user.moveTo(EAST);  break;
         }
     }
 
@@ -305,26 +295,27 @@ public final class GameScene extends Scene {
 
         // LAYER 4
         checkEffectCeiling();
-        camera.setScreenY(camera.getMinYOffset() - TILE_BUFFER_SIZE);
-        for (int y = camera.getMinY(); y <= camera.getMaxY(); y++) {
-            camera.setScreenX(camera.getMinXOffset() - TILE_BUFFER_SIZE);
-            for (int x = camera.getMinX(); x <= camera.getMaxX(); x++) {
 
-                if (mapData[x][y].getLayer(4).getGrhIndex() > 0) {
-                    drawTexture(mapData[x][y].getLayer(4),
-                            POS_SCREEN_X + camera.getScreenX() * TILE_PIXEL_SIZE + PixelOffsetX,
-                            POS_SCREEN_Y + camera.getScreenY() * TILE_PIXEL_SIZE + PixelOffsetY,
-                            true, true, false, alphaCeiling, ambientColor);
+        if (alphaCeiling > 0.0f) {
+            camera.setScreenY(camera.getMinYOffset() - TILE_BUFFER_SIZE);
+            for (int y = camera.getMinY(); y <= camera.getMaxY(); y++) {
+                camera.setScreenX(camera.getMinXOffset() - TILE_BUFFER_SIZE);
+                for (int x = camera.getMinX(); x <= camera.getMaxX(); x++) {
+
+                    if (mapData[x][y].getLayer(4).getGrhIndex() > 0) {
+                        drawTexture(mapData[x][y].getLayer(4),
+                                POS_SCREEN_X + camera.getScreenX() * TILE_PIXEL_SIZE + PixelOffsetX,
+                                POS_SCREEN_Y + camera.getScreenY() * TILE_PIXEL_SIZE + PixelOffsetY,
+                                true, true, false, alphaCeiling, ambientColor);
+                    }
+
+                    camera.incrementScreenX();
                 }
-
-                camera.incrementScreenX();
+                camera.incrementScreenY();
             }
-            camera.incrementScreenY();
         }
 
-        frm.render();
-        user.getUserInventory().drawInventory();
-        showFPS();
+        //user.getUserInventory().drawInventory();
     }
 
     /**
@@ -341,14 +332,6 @@ public final class GameScene extends Scene {
                 alphaCeiling += 0.5f * deltaTime;
             }
         }
-    }
-
-    /**
-     * @desc: Mostramos y dibujamos en texto la cantidad de FPS que se van actualizando.
-     */
-    private void showFPS() {
-        final String txtFPS = String.valueOf(FPS);
-        drawText(txtFPS, (SCREEN_SIZE_X - getSizeText(txtFPS) / 2) - 88, 3, ambientColor, 0, true, false, false);
     }
 
     /**
