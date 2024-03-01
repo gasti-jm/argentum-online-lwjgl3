@@ -6,6 +6,7 @@ import imgui.callbacks.ImStrSupplier;
 import imgui.enums.*;
 import imgui.gl3.ImGuiImplGl3;
 import org.aoclient.engine.Window;
+import org.aoclient.engine.gui.forms.FormGUI;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,9 +1,8 @@
 package org.aoclient.engine.scenes;
 
-import org.aoclient.engine.Window;
 import org.aoclient.engine.game.BindKeys;
 import org.aoclient.engine.game.models.E_KeyType;
-import org.aoclient.engine.gui.FMain;
+import org.aoclient.engine.gui.forms.FMain;
 import org.aoclient.engine.gui.ImGUISystem;
 import org.aoclient.engine.listeners.KeyListener;
 import org.aoclient.engine.game.User;
@@ -38,22 +37,21 @@ public final class GameScene extends Scene {
 
     RGBColor ambientColor; // color de ambiente.
     private boolean autoMove = false;
-
     public FMain frmMain;
 
     @Override
     public void init() {
         super.init();
-        canChangeTo     = SceneType.MAIN_SCENE;
 
+        canChangeTo     = SceneType.MAIN_SCENE;
         bindKeys        = BindKeys.get();
         user            = User.get();
         ambientColor    = new RGBColor(1.0f, 1.0f, 1.0f);
+        frmMain         = new FMain();
 
         camera.setHalfWindowTileWidth   (( (SCREEN_SIZE_X / TILE_PIXEL_SIZE) / 2 ));
         camera.setHalfWindowTileHeight  (( (SCREEN_SIZE_Y / TILE_PIXEL_SIZE) / 2 ));
 
-        frmMain = new FMain();
         ImGUISystem.get().addFrm(frmMain);
     }
 
@@ -118,7 +116,6 @@ public final class GameScene extends Scene {
         } else if(MouseListener.mouseButtonDoubleClick(GLFW_MOUSE_BUTTON_RIGHT)) {
             writeDoubleClick(getTileMouseX((int) MouseListener.getX() - POS_SCREEN_X), getTileMouseY((int) MouseListener.getY() - POS_SCREEN_Y));
         }
-
 
     }
 
@@ -200,10 +197,10 @@ public final class GameScene extends Scene {
         if(keyPressed == null) return;
 
         switch(keyPressed) {
-            case mKeyUp: user.moveTo(NORTH); break;
-            case mKeyDown: user.moveTo(SOUTH); break;
-            case mKeyLeft: user.moveTo(WEST); break;
-            case mKeyRight: user.moveTo(EAST); break;
+            case mKeyUp:    user.moveTo(NORTH); break;
+            case mKeyDown:  user.moveTo(SOUTH); break;
+            case mKeyLeft:  user.moveTo(WEST);  break;
+            case mKeyRight: user.moveTo(EAST);  break;
         }
     }
 
@@ -298,27 +295,27 @@ public final class GameScene extends Scene {
 
         // LAYER 4
         checkEffectCeiling();
-        camera.setScreenY(camera.getMinYOffset() - TILE_BUFFER_SIZE);
-        for (int y = camera.getMinY(); y <= camera.getMaxY(); y++) {
-            camera.setScreenX(camera.getMinXOffset() - TILE_BUFFER_SIZE);
-            for (int x = camera.getMinX(); x <= camera.getMaxX(); x++) {
 
-                if (mapData[x][y].getLayer(4).getGrhIndex() > 0) {
-                    drawTexture(mapData[x][y].getLayer(4),
-                            POS_SCREEN_X + camera.getScreenX() * TILE_PIXEL_SIZE + PixelOffsetX,
-                            POS_SCREEN_Y + camera.getScreenY() * TILE_PIXEL_SIZE + PixelOffsetY,
-                            true, true, false, alphaCeiling, ambientColor);
+        if (alphaCeiling > 0.0f) {
+            camera.setScreenY(camera.getMinYOffset() - TILE_BUFFER_SIZE);
+            for (int y = camera.getMinY(); y <= camera.getMaxY(); y++) {
+                camera.setScreenX(camera.getMinXOffset() - TILE_BUFFER_SIZE);
+                for (int x = camera.getMinX(); x <= camera.getMaxX(); x++) {
+
+                    if (mapData[x][y].getLayer(4).getGrhIndex() > 0) {
+                        drawTexture(mapData[x][y].getLayer(4),
+                                POS_SCREEN_X + camera.getScreenX() * TILE_PIXEL_SIZE + PixelOffsetX,
+                                POS_SCREEN_Y + camera.getScreenY() * TILE_PIXEL_SIZE + PixelOffsetY,
+                                true, true, false, alphaCeiling, ambientColor);
+                    }
+
+                    camera.incrementScreenX();
                 }
-
-                camera.incrementScreenX();
+                camera.incrementScreenY();
             }
-            camera.incrementScreenY();
         }
 
-
-        //frm.render();
         //user.getUserInventory().drawInventory();
-        //showFPS();
     }
 
     /**
@@ -335,14 +332,6 @@ public final class GameScene extends Scene {
                 alphaCeiling += 0.5f * deltaTime;
             }
         }
-    }
-
-    /**
-     * @desc: Mostramos y dibujamos en texto la cantidad de FPS que se van actualizando.
-     */
-    private void showFPS() {
-        final String txtFPS = String.valueOf(FPS);
-        drawText(txtFPS, (SCREEN_SIZE_X - getSizeText(txtFPS) / 2) - 88, 3, ambientColor, 0, true, false, false);
     }
 
     /**

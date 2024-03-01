@@ -27,9 +27,6 @@ public final class User {
     private Position addToUserPos;
     private short userCharIndex;
 
-    // ultimo personaje del array
-    private int lastChar = 0;
-
     // conexion
     private boolean userConected;
 
@@ -119,7 +116,7 @@ public final class User {
      *
      * @desc Mueve el personaje segun la direccion establecida en "nHeading".
      */
-    public void moveCharbyHead(int charIndex, E_Heading nHeading) {
+    public void moveCharbyHead(short charIndex, E_Heading nHeading) {
         int addX = 0, addY = 0;
 
         switch (nHeading) {
@@ -281,7 +278,7 @@ public final class User {
      *
      * @desc Mueve el personaje segun la direccion establecida en "nX" y "nY".
      */
-    public void moveCharbyPos(int charIndex, int nX, int nY) {
+    public void moveCharbyPos(short charIndex, int nX, int nY) {
         final int x = charList[charIndex].getPos().getX();
         final int y = charList[charIndex].getPos().getY();
 
@@ -427,21 +424,7 @@ public final class User {
         return underCeiling;
     }
 
-    /**
-     *
-     * @return Getter del atributo lastChar
-     */
-    public int getLastChar() {
-        return lastChar;
-    }
 
-    /**
-     *
-     * @return Setter del atributo lastChar
-     */
-    public void setLastChar(int lastChar) {
-        this.lastChar = lastChar;
-    }
 
     /**
      *

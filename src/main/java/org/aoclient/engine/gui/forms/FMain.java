@@ -1,4 +1,4 @@
-package org.aoclient.engine.gui;
+package org.aoclient.engine.gui.forms;
 
 import imgui.ImGui;
 import imgui.enums.ImGuiCond;

@@ -1,10 +1,8 @@
 package org.aoclient.engine.scenes;
 
-import imgui.ImGui;
-import org.aoclient.connection.SocketConnection;
 import org.aoclient.engine.Window;
 import org.aoclient.engine.game.User;
-import org.aoclient.engine.gui.FConnect;
+import org.aoclient.engine.gui.forms.FConnect;
 import org.aoclient.engine.gui.ImGUISystem;
 import org.aoclient.engine.renderer.RGBColor;
 import org.aoclient.engine.utils.GameData;

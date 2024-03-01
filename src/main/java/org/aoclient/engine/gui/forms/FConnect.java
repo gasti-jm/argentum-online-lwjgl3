@@ -1,4 +1,4 @@
-package org.aoclient.engine.gui;
+package org.aoclient.engine.gui.forms;
 
 import imgui.ImGui;
 import imgui.ImString;
@@ -6,6 +6,7 @@ import imgui.enums.ImGuiCond;
 import imgui.enums.ImGuiInputTextFlags;
 import imgui.enums.ImGuiWindowFlags;
 import org.aoclient.connection.SocketConnection;
+import org.aoclient.engine.gui.ImGUISystem;
 
 import static org.aoclient.connection.Protocol.writeLoginExistingChar;
 import static org.aoclient.engine.utils.GameData.options;
@@ -27,9 +28,7 @@ public final class FConnect extends FormGUI {
         ImGui.setNextWindowSize(250, 135, ImGuiCond.Once);
 
         ImGui.begin(formName, ImGuiWindowFlags.NoTitleBar
-                | ImGuiWindowFlags.NoResize |
-                ImGuiWindowFlags.NoBringToFrontOnFocus | ImGuiWindowFlags.NoFocusOnAppearing
-                | ImGuiWindowFlags.NoNavFocus);
+                | ImGuiWindowFlags.NoResize);
 
         ImGui.inputText("Port", portStr, ImGuiInputTextFlags.CallbackResize);
         ImGui.inputText("IP Server", ipStr, ImGuiInputTextFlags.CallbackResize);

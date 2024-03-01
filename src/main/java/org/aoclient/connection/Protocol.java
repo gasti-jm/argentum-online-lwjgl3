@@ -8,11 +8,13 @@ import org.aoclient.engine.game.Console;
 import org.aoclient.engine.game.User;
 import org.aoclient.engine.game.models.E_Heading;
 import org.aoclient.engine.game.models.E_ObjType;
-import org.aoclient.engine.gui.FMessage;
+import org.aoclient.engine.gui.forms.FMessage;
 import org.aoclient.engine.gui.ImGUISystem;
 import org.aoclient.engine.renderer.RGBColor;
 import org.aoclient.engine.utils.GameData;
 import org.aoclient.engine.utils.structs.GrhInfo;
+
+import java.util.Arrays;
 
 import static org.aoclient.connection.Messages.*;
 import static org.aoclient.engine.game.models.Character.*;
@@ -30,114 +32,115 @@ public class Protocol {
         System.out.println(packet + " #" + p);
 
         switch (packet) {
-            case logged: handleLogged(); break;
-            case RemoveDialogs: handleRemoveDialogs(); break;
-            case RemoveCharDialog: handleRemoveCharDialog(); break;
-            case NavigateToggle: handleNavigateToggle(); break;
-            case Disconnect: handleDisconnect(); break;
-            case CommerceEnd: handleCommerceEnd(); break;
-            case CommerceChat: handleCommerceChat(); break;
-            case BankEnd: handleBankEnd(); break;
-            case CommerceInit: handleCommerceInit(); break;
-            case BankInit: handleBankInit(); break;
-            case UserCommerceInit: handleUserCommerceInit(); break;
-            case UserCommerceEnd: handleUserCommerceEnd(); break;
-            case UserOfferConfirm: handleUserOfferConfirm(); break;
-            case ShowBlacksmithForm: handleShowBlacksmithForm(); break;
-            case ShowCarpenterForm: handleShowCarpenterForm(); break;
-            case UpdateSta: handleUpdateSta(); break;
-            case UpdateMana: handleUpdateMana(); break;
-            case UpdateHP: handleUpdateHP(); break;
-            case UpdateGold: handleUpdateGold(); break;
-            case UpdateBankGold: handleUpdateBankGold(); break;
-            case UpdateExp: handleUpdateExp(); break;
-            case ChangeMap: handleChangeMap(); break;
-            case PosUpdate: handlePosUpdate(); break;
-            case ChatOverHead: handleChatOverHead(); break;
-            case ConsoleMsg: handleConsoleMessage(); break;
-            case GuildChat: handleGuildChat(); break;
-            case ShowMessageBox: handleShowMessageBox(); break;
-            case UserIndexInServer: handleUserIndexInServer(); break;
-            case UserCharIndexInServer: handleUserCharIndexInServer(); break;
-            case CharacterCreate: handleCharacterCreate(); break;
-            case CharacterRemove: handleCharacterRemove(); break;
-            case CharacterChangeNick: handleCharacterChangeNick(); break;
-            case CharacterMove: handleCharacterMove(); break;
-            case ForceCharMove: handleForceCharMove(); break;
-            case CharacterChange: handleCharacterChange(); break;
-            case ObjectCreate: handleObjectCreate(); break;
-            case ObjectDelete: handleObjectDelete(); break;
-            case BlockPosition: handleBlockPosition(); break;
-            case PlayMIDI: handlePlayMIDI(); break;
-            case PlayWave: handlePlayWave(); break;
-            case guildList: handleGuildList(); break;
-            case AreaChanged: handleAreaChanged(); break;
-            case PauseToggle: handlePauseToggle(); break;
-            case RainToggle: handleRainToggle(); break;
-            case CreateFX: handleCreateFX(); break;
-            case UpdateUserStats: handleUpdateUserStats(); break;
-            case WorkRequestTarget: handleWorkRequestTarget(); break;
-            case ChangeInventorySlot: handleChangeInventorySlot(); break;
-            case ChangeBankSlot: handleChangeBankSlot(); break;
-            case ChangeSpellSlot: handleChangeSpellSlot(); break;
-            case Atributes: handleAtributes(); break;
-            case BlacksmithWeapons: handleBlacksmithWeapons(); break;
-            case BlacksmithArmors: handleBlacksmithArmors(); break;
-            case CarpenterObjects: handleCarpenterObjects(); break;
-            case RestOK: handleRestOK(); break;
-            case ErrorMsg: handleErrorMessage(); break;
-            case Blind: handleBlind(); break;
-            case Dumb: handleDumb(); break;
-            case ShowSignal: handleShowSignal(); break;
-            case ChangeNPCInventorySlot: handleChangeNPCInventorySlot(); break;
-            case UpdateHungerAndThirst: handleUpdateHungerAndThirst(); break;
-            case Fame: handleFame(); break;
-            case MiniStats: handleMiniStats(); break;
-            case LevelUp: handleLevelUp(); break;
-            case AddForumMsg: handleAddForumMessage(); break;
-            case ShowForumForm: handleShowForumForm(); break;
-            case SetInvisible: handleSetInvisible(); break;
-            case DiceRoll: handleDiceRoll(); break;
-            case MeditateToggle: handleMeditateToggle(); break;
-            case BlindNoMore: handleBlindNoMore(); break;
-            case DumbNoMore: handleDumbNoMore(); break;
-            case SendSkills: handleSendSkills(); break;
-            case TrainerCreatureList: handleTrainerCreatureList(); break;
-            case guildNews: handleGuildNews(); break;
-            case OfferDetails: handleOfferDetails(); break;
-            case AlianceProposalsList: handleAlianceProposalsList(); break;
-            case PeaceProposalsList: handlePeaceProposalsList(); break;
-            case CharacterInfo: handleCharacterInfo(); break;
-            case GuildLeaderInfo: handleGuildLeaderInfo(); break;
-            case GuildDetails: handleGuildDetails(); break;
-            case ShowGuildFundationForm: handleShowGuildFundationForm(); break;
-            case ParalizeOK: handleParalizeOK(); break;
-            case ShowUserRequest: handleShowUserRequest(); break;
-            case TradeOK: handleTradeOK(); break;
-            case BankOK: handleBankOK(); break;
-            case ChangeUserTradeSlot: handleChangeUserTradeSlot(); break;
-            case SendNight: handleSendNight(); break;
-            case Pong: handlePong(); break;
-            case UpdateTagAndStatus: handleUpdateTagAndStatus(); break;
-            case GuildMemberInfo: handleGuildMemberInfo(); break;
+            case logged:                    handleLogged();                             break;
+            case RemoveDialogs:             handleRemoveDialogs();                      break;
+            case RemoveCharDialog:          handleRemoveCharDialog();                   break;
+            case NavigateToggle:            handleNavigateToggle();                     break;
+            case Disconnect:                handleDisconnect();                         break;
+            case CommerceEnd:               handleCommerceEnd();                        break;
+            case CommerceChat:              handleCommerceChat();                       break;
+            case BankEnd:                   handleBankEnd();                            break;
+            case CommerceInit:              handleCommerceInit();                       break;
+            case BankInit:                  handleBankInit();                           break;
+            case UserCommerceInit:          handleUserCommerceInit();                   break;
+            case UserCommerceEnd:           handleUserCommerceEnd();                    break;
+            case UserOfferConfirm:          handleUserOfferConfirm();                   break;
+            case ShowBlacksmithForm:        handleShowBlacksmithForm();                 break;
+            case ShowCarpenterForm:         handleShowCarpenterForm();                  break;
+            case UpdateSta:                 handleUpdateSta();                          break;
+            case UpdateMana:                handleUpdateMana();                         break;
+            case UpdateHP:                  handleUpdateHP();                           break;
+            case UpdateGold:                handleUpdateGold();                         break;
+            case UpdateBankGold:            handleUpdateBankGold();                     break;
+            case UpdateExp:                 handleUpdateExp();                          break;
+            case ChangeMap:                 handleChangeMap();                          break;
+            case PosUpdate:                 handlePosUpdate();                          break;
+            case ChatOverHead:              handleChatOverHead();                       break;
+            case ConsoleMsg:                handleConsoleMessage();                     break;
+            case GuildChat:                 handleGuildChat();                          break;
+            case ShowMessageBox:            handleShowMessageBox();                     break;
+            case UserIndexInServer:         handleUserIndexInServer();                  break;
+            case UserCharIndexInServer:     handleUserCharIndexInServer();              break;
+            case CharacterCreate:           handleCharacterCreate();                    break;
+            case CharacterRemove:           handleCharacterRemove();                    break;
+            case CharacterChangeNick:       handleCharacterChangeNick();                break;
+            case CharacterMove:             handleCharacterMove();                      break;
+            case ForceCharMove:             handleForceCharMove();                      break;
+            case CharacterChange:           handleCharacterChange();                    break;
+            case ObjectCreate:              handleObjectCreate();                       break;
+            case ObjectDelete:              handleObjectDelete();                       break;
+            case BlockPosition:             handleBlockPosition();                      break;
+            case PlayMIDI:                  handlePlayMIDI();                           break;
+            case PlayWave:                  handlePlayWave();                           break;
+            case guildList:                 handleGuildList();                          break;
+            case AreaChanged:               handleAreaChanged();                        break;
+            case PauseToggle:               handlePauseToggle();                        break;
+            case RainToggle:                handleRainToggle();                         break;
+            case CreateFX:                  handleCreateFX();                           break;
+            case UpdateUserStats:           handleUpdateUserStats();                    break;
+            case WorkRequestTarget:         handleWorkRequestTarget();                  break;
+            case ChangeInventorySlot:       handleChangeInventorySlot();                break;
+            case ChangeBankSlot:            handleChangeBankSlot();                     break;
+            case ChangeSpellSlot:           handleChangeSpellSlot();                    break;
+            case Atributes:                 handleAtributes();                          break;
+            case BlacksmithWeapons:         handleBlacksmithWeapons();                  break;
+            case BlacksmithArmors:          handleBlacksmithArmors();                   break;
+            case CarpenterObjects:          handleCarpenterObjects();                   break;
+            case RestOK:                    handleRestOK();                             break;
+            case ErrorMsg:                  handleErrorMessage();                       break;
+            case Blind:                     handleBlind();                              break;
+            case Dumb:                      handleDumb();                               break;
+            case ShowSignal:                handleShowSignal();                         break;
+            case ChangeNPCInventorySlot:    handleChangeNPCInventorySlot();             break;
+            case UpdateHungerAndThirst:     handleUpdateHungerAndThirst();              break;
+            case Fame:                      handleFame();                               break;
+            case MiniStats:                 handleMiniStats();                          break;
+            case LevelUp:                   handleLevelUp();                            break;
+            case AddForumMsg:               handleAddForumMessage();                    break;
+            case ShowForumForm:             handleShowForumForm();                      break;
+            case SetInvisible:              handleSetInvisible();                       break;
+            case DiceRoll:                  handleDiceRoll();                           break;
+            case MeditateToggle:            handleMeditateToggle();                     break;
+            case BlindNoMore:               handleBlindNoMore();                        break;
+            case DumbNoMore:                handleDumbNoMore();                         break;
+            case SendSkills:                handleSendSkills();                         break;
+            case TrainerCreatureList:       handleTrainerCreatureList();                break;
+            case guildNews:                 handleGuildNews();                          break;
+            case OfferDetails:              handleOfferDetails();                       break;
+            case AlianceProposalsList:      handleAlianceProposalsList();               break;
+            case PeaceProposalsList:        handlePeaceProposalsList();                 break;
+            case CharacterInfo:             handleCharacterInfo();                      break;
+            case GuildLeaderInfo:           handleGuildLeaderInfo();                    break;
+            case GuildDetails:              handleGuildDetails();                       break;
+            case ShowGuildFundationForm:    handleShowGuildFundationForm();             break;
+            case ParalizeOK:                handleParalizeOK();                         break;
+            case ShowUserRequest:           handleShowUserRequest();                    break;
+            case TradeOK:                   handleTradeOK();                            break;
+            case BankOK:                    handleBankOK();                             break;
+            case ChangeUserTradeSlot:       handleChangeUserTradeSlot();                break;
+            case SendNight:                 handleSendNight();                          break;
+            case Pong:                      handlePong();                               break;
+            case UpdateTagAndStatus:        handleUpdateTagAndStatus();                 break;
+            case GuildMemberInfo:           handleGuildMemberInfo();                    break;
 
             //*******************
-            //GM messages
+            // GM messages
             //*******************
-            case SpawnList: handleSpawnList(); break;
-            case ShowSOSForm: handleShowSOSForm(); break;
-            case ShowMOTDEditionForm: handleShowMOTDEditionForm(); break;
-            case ShowGMPanelForm: handleShowGMPanelForm(); break;
-            case UserNameList: handleUserNameList(); break;
-            case ShowGuildAlign: handleShowGuildAlign(); break;
-            case ShowPartyForm: handleShowPartyForm(); break;
-            case UpdateStrenghtAndDexterity: handleUpdateStrenghtAndDexterity(); break;
-            case UpdateStrenght: handleUpdateStrenght(); break;
-            case UpdateDexterity: handleUpdateDexterity(); break;
-            case AddSlots: handleAddSlots(); break;
-            case MultiMessage: handleMultiMessage(); break;
-            case StopWorking: handleStopWorking(); break;
-            case CancelOfferItem: handleCancelOfferItem(); break;
+            case SpawnList:                     handleSpawnList();                      break;
+            case ShowSOSForm:                   handleShowSOSForm();                    break;
+            case ShowMOTDEditionForm:           handleShowMOTDEditionForm();            break;
+            case ShowGMPanelForm:               handleShowGMPanelForm();                break;
+            case UserNameList:                  handleUserNameList();                   break;
+            case ShowGuildAlign:                handleShowGuildAlign();                 break;
+            case ShowPartyForm:                 handleShowPartyForm();                  break;
+            case UpdateStrenghtAndDexterity:    handleUpdateStrenghtAndDexterity();     break;
+            case UpdateStrenght:                handleUpdateStrenght();                 break;
+            case UpdateDexterity:               handleUpdateDexterity();                break;
+            case AddSlots:                      handleAddSlots();                       break;
+            case MultiMessage:                  handleMultiMessage();                   break;
+            case StopWorking:                   handleStopWorking();                    break;
+            case CancelOfferItem:               handleCancelOfferItem();                break;
+
             default: return;
         }
 
@@ -286,8 +289,8 @@ public class Protocol {
 
             case UserHittedByUser:
                 String attackerName = "<" + charList[incomingData.readInteger()].getName() + ">";
-                 bodyPart = incomingData.readByte();
-                 damage = incomingData.readInteger();
+                bodyPart = incomingData.readByte();
+                damage = incomingData.readInteger();
 
                 switch (bodyPart) {
                     case 1: // bCabeza
@@ -1954,7 +1957,7 @@ public class Protocol {
 
         final byte slot = buffer.readByte();
         final short objIndex = buffer.readInteger();
-        final String name = buffer.readASCIIString(); //(Hay que arreglar a este puto)
+        final String name = buffer.readASCIIString();
         final int amount = buffer.readInteger();
         final boolean equipped = buffer.readBoolean();
         final short grhIndex = buffer.readInteger();
@@ -1964,9 +1967,6 @@ public class Protocol {
         final short maxDef = buffer.readInteger();
         final short minDef = buffer.readInteger();
         final float value = buffer.readFloat();
-
-        User.get().getUserInventory().setItem( slot - 1, objIndex, amount, equipped, grhIndex, objType,
-                maxHit, minHit, maxDef, minDef, value, name);
 
         if(equipped) {
             switch (E_ObjType.values()[objType - 1]) {
@@ -2005,6 +2005,9 @@ public class Protocol {
                 User.get().userHelmEqpSlot = 0;
             }
         }
+
+        User.get().getUserInventory().setItem( slot - 1, objIndex, amount, equipped, grhIndex, objType,
+                maxHit, minHit, maxDef, minDef, value, name);
 
         incomingData.copyBuffer(buffer);
     }
@@ -2129,10 +2132,6 @@ public class Protocol {
         }
 
         User.get().setCharacterFx(charIndex, fX, loops);
-
-
-
-        System.out.println("handleCreateFX Cargado!");
     }
 
     private static void handleRainToggle() {
@@ -2255,6 +2254,7 @@ public class Protocol {
             incomingData.readInteger();
             // play midi
         } else {
+            //Remove the bytes to prevent errors
             incomingData.readInteger();
         }
 
@@ -2288,7 +2288,7 @@ public class Protocol {
         byte x = incomingData.readByte();
         byte y = incomingData.readByte();
 
-        mapData[x][y].getObjGrh().setGrhIndex(0);
+        mapData[x][y].getObjGrh().setGrhIndex((short) 0);
     }
 
     private static void handleObjectCreate() {
@@ -2302,8 +2302,9 @@ public class Protocol {
 
         byte x = incomingData.readByte();
         byte y = incomingData.readByte();
+        short grhIndex = incomingData.readInteger();
 
-        mapData[x][y].getObjGrh().setGrhIndex(incomingData.readInteger());
+        mapData[x][y].getObjGrh().setGrhIndex(grhIndex);
         initGrh(mapData[x][y].getObjGrh(), mapData[x][y].getObjGrh().getGrhIndex(), true);
     }
 
@@ -2370,7 +2371,7 @@ public class Protocol {
         incomingData.readByte();
 
         E_Heading direction = E_Heading.values()[incomingData.readByte() - 1];
-        int userCharIndex = User.get().getUserCharIndex();
+        short userCharIndex = User.get().getUserCharIndex();
         User.get().moveCharbyHead(userCharIndex, direction);
         User.get().moveScreen(direction);
 
@@ -2441,7 +2442,7 @@ public class Protocol {
         // Remove packet ID
         buffer.readByte();
 
-        int charIndex = buffer.readInteger();
+        short charIndex = buffer.readInteger();
         short body = buffer.readInteger();
         short head = buffer.readInteger();
         byte numHeading = buffer.readByte();
@@ -2546,7 +2547,7 @@ public class Protocol {
 
     private static void handleUserIndexInServer() {
         if (incomingData.length() < 3) {
-            System.out.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handleChangeInventorySlot");
+            System.out.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handleUserIndexInServer");
             return;
         }
 
@@ -2764,10 +2765,10 @@ public class Protocol {
         // Remove packet ID
         incomingData.readByte();
 
-        int userMap = incomingData.readInteger();
-        User.get().setUserMap( (short) userMap);
+        short userMap = incomingData.readInteger();
+        User.get().setUserMap(userMap);
 
-        // Todo: Once on-the-fly editor is implemented check for map version before loading....
+        // Once on-the-fly editor is implemented check for map version before loading....
         // For now we just drop it
         incomingData.readInteger();
 

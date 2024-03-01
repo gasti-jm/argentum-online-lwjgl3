@@ -1,11 +1,12 @@
 package org.aoclient.connection;
 
 
-import org.aoclient.engine.gui.FMessage;
+import org.aoclient.engine.gui.forms.FMessage;
 import org.aoclient.engine.gui.ImGUISystem;
 import java.net.*;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 
 import static org.aoclient.connection.Protocol.*;
 
@@ -101,15 +102,15 @@ public class SocketConnection {
                 //System.out.println("Bytes Read: " + bytesRead);
 
                 if (bytesRead > 0) {
-                    //final String RD = new String(dataBuffer, 0 , bytesRead, "Cp1252");
-                    final String RD = convertVBUnicodeToUTF8(dataBuffer, bytesRead); // leemos la informacion
-                    if (RD.isEmpty()) return;
-
-                    byte[] data = RD.getBytes(); // la convertimos en bytes
-                    //System.out.println("Received data: " + RD);
+                    //System.err.println(Arrays.toString(dataBuffer));
+                    //final String RD = new String(dataBuffer, 0 , bytesRead);
+                    //final String RD = convertVBUnicodeToUTF8(dataBuffer, bytesRead); // leemos la informacion
+                    //System.out.println(RD);
+                    //if (RD.isEmpty()) return;
+                    //byte[] data = RD.getBytes(); // la convertimos en bytes
 
                     // Put data in the buffer
-                    incomingData.writeBlock(data, -1);
+                    incomingData.writeBlock(dataBuffer, -1);
 
                     //Send buffer to handle data
                     handleIncomingData();

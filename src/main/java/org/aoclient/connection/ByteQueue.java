@@ -2,7 +2,9 @@ package org.aoclient.connection;
 
 import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
+import java.nio.IntBuffer;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 
 import static org.aoclient.engine.utils.ByteMigration.*;
 
@@ -15,7 +17,7 @@ public class ByteQueue {
     private static final int NOT_ENOUGH_SPACE = 10001;
     private static final int DATA_BUFFER = 10240;
 
-    private byte[] data;
+    public byte[] data; // is private...
     private int queueCapacity;
     private int queueLength;
 
@@ -51,11 +53,7 @@ public class ByteQueue {
      * Recupera el valor minimo entre 2 numeros
      */
     private int min(int val1, int val2) {
-        if(val1 < val2) {
-            return val1;
-        } else {
-            return val2;
-        }
+        return Math.min(val1, val2);
     }
 
     private int writeData(byte[] buf, int dataLength) {
@@ -169,6 +167,11 @@ public class ByteQueue {
     public byte readByte() {
         byte[] buf = new byte[1];
         removeData(readData(buf, 1));
+
+
+
+
+
         return bigToLittle_Byte(ByteBuffer.wrap(buf).get());
     }
 
@@ -190,12 +193,6 @@ public class ByteQueue {
         return bigToLittle_Float(ByteBuffer.wrap(buf).getFloat());
     }
 
-    public double readDouble() {
-        byte[] buf = new byte[8];
-        removeData(readData(buf, 8));
-        return bigToLittle_Double(ByteBuffer.wrap(buf).getDouble());
-    }
-
     public boolean readBoolean() {
         byte[] buf = new byte[1];
         removeData(readData(buf, 1));
@@ -210,7 +207,12 @@ public class ByteQueue {
         if (queueLength >= length) {
             byte[] buf = new byte[length];
             removeData(readData(buf, length));
-            return new String(buf, StandardCharsets.UTF_8);
+
+            try {
+                return new String(buf, "Cp1252");
+            } catch (UnsupportedEncodingException e) {
+                throw new RuntimeException(e);
+            }
         } else {
             throw new RuntimeException("Not enough data");
         }
@@ -224,6 +226,7 @@ public class ByteQueue {
         if (queueLength >= length * 2) {
             byte[] buf = new byte[length * 2];
             removeData(readData(buf, length * 2));
+
             return new String(buf, StandardCharsets.UTF_16LE);
         } else {
             throw new RuntimeException("Not enough data");

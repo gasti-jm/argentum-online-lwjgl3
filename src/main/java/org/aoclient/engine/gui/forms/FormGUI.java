@@ -1,5 +1,6 @@
-package org.aoclient.engine.gui;
+package org.aoclient.engine.gui.forms;
 
+import org.aoclient.engine.gui.ImGUISystem;
 import org.lwjgl.BufferUtils;
 
 import java.awt.image.BufferedImage;

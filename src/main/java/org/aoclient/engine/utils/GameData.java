@@ -13,6 +13,7 @@ import org.aoclient.engine.renderer.Surface;
 import org.aoclient.engine.utils.structs.*;
 
 import static org.aoclient.engine.Sound.*;
+import static org.aoclient.engine.game.models.Character.eraseAllChars;
 import static org.aoclient.engine.game.models.Character.eraseChar;
 import static org.aoclient.engine.renderer.FontText.loadCSV;
 import static org.aoclient.engine.utils.ByteMigration.*;
@@ -349,6 +350,8 @@ public final class GameData {
 
             byte bloq;
 
+            mapData[0][0] = new MapData();
+
             for (int y = 1; y <= 100; y++) {
                 for (int x = 1; x <= 100; x++) {
                     mapData[x][y] = new MapData();
@@ -388,10 +391,9 @@ public final class GameData {
                         mapData[x][y].setTrigger(0);
                     }
 
-                    if (mapData[x][y].getCharIndex() > 0) {
-                        eraseChar(mapData[x][y].getCharIndex());
-                    }
-
+//                    if (mapData[x][y].getCharIndex() > 0) {
+//                        eraseChar(mapData[x][y].getCharIndex());
+//                    }
                     mapData[x][y].getObjGrh().setGrhIndex(0);
                 }
             }
@@ -399,6 +401,7 @@ public final class GameData {
             // Liberar memoria
             clearSounds();
             Surface.get().deleteAllTextures();
+            eraseAllChars();
 
         } catch (IOException ex) {
             ex.printStackTrace();
