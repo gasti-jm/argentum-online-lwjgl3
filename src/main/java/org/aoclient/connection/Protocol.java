@@ -14,8 +14,6 @@ import org.aoclient.engine.renderer.RGBColor;
 import org.aoclient.engine.utils.GameData;
 import org.aoclient.engine.utils.structs.GrhInfo;
 
-import java.util.Arrays;
-
 import static org.aoclient.connection.Messages.*;
 import static org.aoclient.engine.game.models.Character.*;
 import static org.aoclient.engine.utils.GameData.*;
@@ -29,7 +27,7 @@ public class Protocol {
 
         if (p > ServerPacketID.values().length) return;
         ServerPacketID packet = ServerPacketID.values()[p];
-        System.out.println(packet + " #" + p);
+        //System.out.println(packet + " #" + p);
 
         switch (packet) {
             case logged:                    handleLogged();                             break;
@@ -436,9 +434,7 @@ public class Protocol {
         // Remove packet ID
         incomingData.readByte();
 
-        byte dext = incomingData.readByte();
-
-        //FrmMain.get().lblDext.setText(String.valueOf(incomingData.readByte()));
+        User.get().setUserDext(incomingData.readByte());
     }
 
     private static void handleUpdateStrenght() {
@@ -450,9 +446,7 @@ public class Protocol {
         // Remove packet ID
         incomingData.readByte();
 
-        byte strg = incomingData.readByte();
-
-        //FrmMain.get().lblStrg.setText(String.valueOf(incomingData.readByte()));
+        User.get().setUserStrg(incomingData.readByte());
     }
 
     private static void handleUpdateStrenghtAndDexterity() {
@@ -464,11 +458,8 @@ public class Protocol {
         // Remove packet ID
         incomingData.readByte();
 
-        byte strg = incomingData.readByte();
-        byte dext = incomingData.readByte();
-
-        //FrmMain.get().lblStrg.setText(String.valueOf(incomingData.readByte()));
-        //FrmMain.get().lblDext.setText(String.valueOf(incomingData.readByte()));
+        User.get().setUserStrg(incomingData.readByte());
+        User.get().setUserDext(incomingData.readByte());
     }
 
     private static void handleShowPartyForm() {
@@ -1486,21 +1477,18 @@ public class Protocol {
         // Remove packet ID
         incomingData.readByte();
 
-        final short userMaxAGU = incomingData.readByte();
-        final short userMinAGU = incomingData.readByte();
-        final short userMaxHAM = incomingData.readByte();
-        final short userMinHAM = incomingData.readByte();
+        User.get().setUserMaxAGU(incomingData.readByte());
+        User.get().setUserMinAGU(incomingData.readByte());
+        User.get().setUserMaxHAM(incomingData.readByte());
+        User.get().setUserMinHAM(incomingData.readByte());
 
-        //FrmMain.get().lblSed.setText(userMinAGU + "/" + userMaxAGU);
-        //FrmMain.get().lblHambre.setText(userMinHAM + "/" + userMaxHAM);
-
-        float bWidth = (((float) (userMinAGU) / ((float) userMaxAGU)) * 75);
-        //FrmMain.get().shpSed.setWidth((int) (75 - bWidth));
-        //FrmMain.get().shpSed.setX(584 + (75 - //FrmMain.get().shpSed.getWidth()));
-
-        bWidth = (((float) (userMinHAM) / ((float) userMaxHAM)) * 75);
-        //FrmMain.get().shpHambre.setWidth((int) (75 - bWidth));
-        //FrmMain.get().shpHambre.setX(584 + (75 - //FrmMain.get().shpHambre.getWidth()));
+//        float bWidth = (((float) (userMinAGU) / ((float) userMaxAGU)) * 75);
+//        //FrmMain.get().shpSed.setWidth((int) (75 - bWidth));
+//        //FrmMain.get().shpSed.setX(584 + (75 - //FrmMain.get().shpSed.getWidth()));
+//
+//        bWidth = (((float) (userMinHAM) / ((float) userMaxHAM)) * 75);
+//        //FrmMain.get().shpHambre.setWidth((int) (75 - bWidth));
+//        //FrmMain.get().shpHambre.setX(584 + (75 - //FrmMain.get().shpHambre.getWidth()));
     }
 
     private static void handleChangeNPCInventorySlot() {
@@ -1971,38 +1959,42 @@ public class Protocol {
         if(equipped) {
             switch (E_ObjType.values()[objType - 1]) {
                 case otWeapon:
-                    //FrmMain.get().lblWeapon.setText(minHit + "/" + maxHit);
-                    User.get().userWeaponEqpSlot = slot;
+                    User.get().setUserWeaponEqpHit(minHit + "/" + maxHit);
+                    User.get().setUserWeaponEqpSlot(slot);
                     break;
 
                 case otArmor:
-                    //FrmMain.get().lblArmor.setText(minDef + "/" + maxDef);
-                    User.get().userArmourEqpSlot = slot;
+                    User.get().setUserArmourEqpDef(minDef + "/" + maxDef);
+                    User.get().setUserArmourEqpSlot(slot);
                     break;
 
                 case otShield:
-                    //FrmMain.get().lblShielder.setText(minDef + "/" + maxDef);
-                    User.get().userShieldEqpSlot = slot;
+                    User.get().setUserShieldEqpDef(minDef + "/" + maxDef);
+                    User.get().setUserShieldEqpSlot(slot);
                     break;
 
                 case otHelmet:
-                    //FrmMain.get().lblHelm.setText(minDef + "/" + maxDef);
-                    User.get().userHelmEqpSlot = slot;
+                    User.get().setUserHelmEqpDef(minDef + "/" + maxDef);
+                    User.get().setUserHelmEqpSlot(slot);
                     break;
             }
         } else {
-            if(slot == User.get().userWeaponEqpSlot) {
-                //FrmMain.get().lblWeapon.setText("0/0");
-                User.get().userWeaponEqpSlot = 0;
-            } else if(slot == User.get().userArmourEqpSlot) {
-                //FrmMain.get().lblArmor.setText("0/0");
-                User.get().userArmourEqpSlot = 0;
-            } else if(slot == User.get().userShieldEqpSlot) {
-                //FrmMain.get().lblShielder.setText("0/0");
-                User.get().userShieldEqpSlot = 0;
-            } else if(slot == User.get().userHelmEqpSlot) {
-                //FrmMain.get().lblHelm.setText("0/0");
-                User.get().userHelmEqpSlot = 0;
+            if(slot == User.get().getUserWeaponEqpSlot()) {
+                User.get().setUserWeaponEqpHit("0/0");
+                User.get().setUserWeaponEqpSlot( (byte) 0);
+
+            } else if(slot == User.get().getUserArmourEqpSlot()) {
+                User.get().setUserArmourEqpDef("0/0");
+                User.get().setUserArmourEqpSlot( (byte) 0);
+
+            } else if(slot == User.get().getUserShieldEqpSlot()) {
+                User.get().setUserShieldEqpDef("0/0");
+                User.get().setUserShieldEqpSlot( (byte) 0);
+
+            } else if(slot == User.get().getUserHelmEqpSlot()) {
+                User.get().setUserHelmEqpDef("0/0");
+                User.get().setUserHelmEqpSlot( (byte) 0);
+
             }
         }
 
@@ -2056,52 +2048,35 @@ public class Protocol {
         // Remove packet ID
         incomingData.readByte();
 
-        User.get().userMaxHP        = incomingData.readInteger();
-        User.get().userMinHP        = incomingData.readInteger();
-        User.get().userMaxMAN       = incomingData.readInteger();
-        User.get().userMinMAN       = incomingData.readInteger();
-        User.get().userMaxSTA       = incomingData.readInteger();
-        User.get().userMinSTA       = incomingData.readInteger();
-        final int userGLD           = incomingData.readLong();
-        final byte userLvl          = incomingData.readByte();
-        User.get().userPasarNivel   = incomingData.readLong();
-        User.get().userExp          = incomingData.readLong();
+        User.get().setUserMaxHP(incomingData.readInteger());
+        User.get().setUserMinHP(incomingData.readInteger());
+        User.get().setUserMaxMAN(incomingData.readInteger());
+        User.get().setUserMinMAN(incomingData.readInteger());
+        User.get().setUserMaxSTA(incomingData.readInteger());
+        User.get().setUserMinSTA(incomingData.readInteger());
+        User.get().setUserGLD(incomingData.readLong());
+        User.get().setUserLvl(incomingData.readByte());
+        User.get().setUserPasarNivel(incomingData.readLong());
+        User.get().setUserExp(incomingData.readLong());
 
-        //FrmMain.get().lblMana.setText(User.get().userMinMAN + "/" + User.get().userMaxMAN);
-        //FrmMain.get().lblVida.setText(User.get().userMinHP + "/" + User.get().userMaxHP);
-        //FrmMain.get().lblEnergia.setText(User.get().userMinSTA + "/" + User.get().userMaxSTA);
+//        ///////// MANA
+//        float bWidth = (((float) (User.get().userMinMAN) / ((float) User.get().userMaxMAN)) * 75);
+//        //FrmMain.get().shpMana.setWidth((int) (75 - bWidth));
+//        //FrmMain.get().shpMana.setX(584 + (75 - //FrmMain.get().shpMana.getWidth()));
+//
+//        //////// VIDA
+//        bWidth = (((float) (User.get().userMinHP) / ((float) User.get().userMaxHP)) * 75);
+//        //FrmMain.get().shpVida.setWidth((int) (75 - bWidth));
+//        //FrmMain.get().shpVida.setX(584 + (75 - //FrmMain.get().shpVida.getWidth()));
+//
+//
+//        //////// ENERGIA
+//        bWidth = (((float) (User.get().userMinSTA) / ((float) User.get().userMaxSTA)) * 75);
+//        //FrmMain.get().shpEnergia.setWidth((int) (75 - bWidth));
+//        //FrmMain.get().shpEnergia.setX(584 + (75 - //FrmMain.get().shpEnergia.getWidth()));
 
-        ///////// MANA
-        float bWidth = (((float) (User.get().userMinMAN) / ((float) User.get().userMaxMAN)) * 75);
-        //FrmMain.get().shpMana.setWidth((int) (75 - bWidth));
-        //FrmMain.get().shpMana.setX(584 + (75 - //FrmMain.get().shpMana.getWidth()));
 
-        //////// VIDA
-        bWidth = (((float) (User.get().userMinHP) / ((float) User.get().userMaxHP)) * 75);
-        //FrmMain.get().shpVida.setWidth((int) (75 - bWidth));
-        //FrmMain.get().shpVida.setX(584 + (75 - //FrmMain.get().shpVida.getWidth()));
-
-
-
-        //////// ENERGIA
-        bWidth = (((float) (User.get().userMinSTA) / ((float) User.get().userMaxSTA)) * 75);
-        //FrmMain.get().shpEnergia.setWidth((int) (75 - bWidth));
-        //FrmMain.get().shpEnergia.setX(584 + (75 - //FrmMain.get().shpEnergia.getWidth()));
-
-        //FrmMain.get().lblExp.setText("Exp: " + User.get().userExp + "/" + User.get().userPasarNivel);
-
-        if (User.get().userPasarNivel > 0) {
-            final float percent = Math.round((float) (User.get().userExp * 100) / User.get().userPasarNivel);
-            //FrmMain.get().lblPorcLvl.setText("[" + percent + "%]");
-        } else {
-            //FrmMain.get().lblPorcLvl.setText("[N/A]");
-        }
-
-        //FrmMain.get().lblLvl.setText("Nivel: " + userLvl);
-
-        charList[User.get().getUserCharIndex()].setDead(User.get().userMinHP <= 0);
-
-        //FrmMain.get().gldLbl.setText(String.valueOf(userGLD));
+        charList[User.get().getUserCharIndex()].setDead(User.get().getUserMinHP() <= 0);
 
         //
         //    If UserMinHP = 0 Then
@@ -2540,9 +2515,6 @@ public class Protocol {
         //            MapData(UserPos.X, UserPos.Y).Trigger = 4, True, False)
         //
 
-        //'Update pos label
-        //FrmMain.get().lblCoords.setText(User.get().userMap +
-                //" X: " + User.get().getUserPos().getX() + " Y: " + User.get().getUserPos().getY());
     }
 
     private static void handleUserIndexInServer() {
@@ -2749,11 +2721,6 @@ public class Protocol {
         mapData[x][y].setCharIndex(userCharIndex);
         charList[userCharIndex].getPos().setX(x);
         charList[userCharIndex].getPos().setY(y);
-
-        //'Update pos label
-        //FrmMain.get().lblCoords.setText(User.get().userMap +
-                //" X: " + User.get().getUserPos().getX() + " Y: " + User.get().getUserPos().getY());
-
     }
 
     private static void handleChangeMap() {
@@ -2798,12 +2765,7 @@ public class Protocol {
         incomingData.readByte();
 
         // Get data and update
-        User.get().userExp = incomingData.readLong();
-
-        //FrmMain.get().lblExp.setText("Exp: " + User.get().userExp + "/" + User.get().userPasarNivel);
-        final float percent = Math.round((float) (User.get().userExp * 100) / User.get().userPasarNivel);
-        //FrmMain.get().lblPorcLvl.setText("[" + percent + "%]");
-
+        User.get().setUserExp(incomingData.readLong());
     }
 
     private static void handleUpdateBankGold() {
@@ -2828,9 +2790,7 @@ public class Protocol {
         // Remove packet ID
         incomingData.readByte();
 
-        final int userGLD = incomingData.readLong();
-        //FrmMain.get().gldLbl.setText(String.valueOf(userGLD));
-
+        User.get().setUserGLD(incomingData.readLong());
     }
 
     private static void handleUpdateHP() {
@@ -2842,13 +2802,12 @@ public class Protocol {
         // Remove packet ID
         incomingData.readByte();
 
-        User.get().userMinHP = incomingData.readInteger();
+        User.get().setUserMinHP(incomingData.readInteger());
 
-        //FrmMain.get().lblVida.setText(User.get().userMinHP + "/" + User.get().userMaxHP);
         //FrmMain.get().shpVida.setWidth( (int) (((float) (User.get().userMinHP) / ((float) User.get().userMaxHP)) * 75) );
         //FrmMain.get().shpVida.setX(584 + (75 - //FrmMain.get().shpVida.getWidth()));
 
-        charList[User.get().getUserCharIndex()].setDead(User.get().userMinHP <= 0);
+        charList[User.get().getUserCharIndex()].setDead(User.get().getUserMinHP() <= 0);
 
         //
         //    'Is the user alive??
@@ -2860,7 +2819,7 @@ public class Protocol {
         //        UserEstado = 0
         //    End If
 
-        System.out.println("handleUpdateHP CARGADO - FALTA TERMINAR!");
+        System.out.println("handleUpdateHP CARGADO - FALTA DESACTIVAR MACROS DE TRABAJO!");
     }
 
     private static void handleUpdateMana() {
@@ -2873,9 +2832,9 @@ public class Protocol {
         incomingData.readByte();
 
         // variable global
-        User.get().userMinMAN = incomingData.readInteger();
+        User.get().setUserMinMAN(incomingData.readInteger());
 
-        float bWidth = (((float) (User.get().userMinMAN) / ((float) User.get().userMaxMAN)) * 75);
+        //float bWidth = (((float) (User.get().getUserMinMAN()) / ((float) User.get().getUserMaxMAN())) * 75);
         //FrmMain.get().shpMana.setWidth((int) (75 - bWidth));
         //FrmMain.get().shpMana.setX(584 + (75 - //FrmMain.get().shpMana.getWidth()));
 
@@ -2891,15 +2850,11 @@ public class Protocol {
         incomingData.readByte();
 
         // variable global
-        User.get().userMinSTA = incomingData.readInteger();
+        User.get().setUserMinSTA(incomingData.readInteger());
 
-        //FrmMain.get().lblEnergia.setText(User.get().userMinSTA + "/" + User.get().userMaxSTA);
-
-        float bWidth = (((float) (User.get().userMinSTA) / ((float) User.get().userMaxSTA)) * 75);
+        //float bWidth = (((float) (User.get().getUserMinSTA()) / ((float) User.get().getUserMaxSTA())) * 75);
         //FrmMain.get().shpEnergia.setWidth((int) (75 - bWidth));
         //FrmMain.get().shpEnergia.setX(584 + (75 - //FrmMain.get().shpEnergia.getWidth()));
-
-
 
         System.out.println("handleUpdateSta CARGADO - FALTA TERMINAR!");
     }

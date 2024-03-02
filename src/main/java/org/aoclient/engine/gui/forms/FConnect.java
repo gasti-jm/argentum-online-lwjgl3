@@ -6,13 +6,14 @@ import imgui.enums.ImGuiCond;
 import imgui.enums.ImGuiInputTextFlags;
 import imgui.enums.ImGuiWindowFlags;
 import org.aoclient.connection.SocketConnection;
+import org.aoclient.engine.game.User;
 import org.aoclient.engine.gui.ImGUISystem;
 
 import static org.aoclient.connection.Protocol.writeLoginExistingChar;
 import static org.aoclient.engine.utils.GameData.options;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_ENTER;
 
-public final class FConnect extends FormGUI {
+public final class FConnect extends Form {
     private final ImString portStr = new ImString(options.getPortServer());
     private final ImString ipStr = new ImString(options.getIpServer());
 
@@ -28,7 +29,8 @@ public final class FConnect extends FormGUI {
         ImGui.setNextWindowSize(250, 135, ImGuiCond.Once);
 
         ImGui.begin(formName, ImGuiWindowFlags.NoTitleBar
-                | ImGuiWindowFlags.NoResize);
+                | ImGuiWindowFlags.NoResize
+                | ImGuiWindowFlags.NoBringToFrontOnFocus);
 
         ImGui.inputText("Port", portStr, ImGuiInputTextFlags.CallbackResize);
         ImGui.inputText("IP Server", ipStr, ImGuiInputTextFlags.CallbackResize);
@@ -55,6 +57,7 @@ public final class FConnect extends FormGUI {
                 writeLoginExistingChar(nickStr.get(), passStr.get());
 
                 options.setNickName(nickStr.get());
+                User.get().setUserName(nickStr.get());
             } else {
                 ImGUISystem.get().checkAddOrChange("frmMessage",
                         new FMessage("Por favor, ingrese un nombre de usuario y/o contraseña valida."));

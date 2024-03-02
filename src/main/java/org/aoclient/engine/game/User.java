@@ -23,8 +23,8 @@ public final class User {
 
     // mapa
     public short userMap;
-    private Position userPos;
-    private Position addToUserPos;
+    private final Position userPos;
+    private final Position addToUserPos;
     private short userCharIndex;
 
     // conexion
@@ -35,19 +35,35 @@ public final class User {
     private int minLimiteY, maxLimiteY;
 
     // stats del usuario
-    public short userMaxHP;
-    public short userMinHP;
-    public short userMaxMAN;
-    public short userMinMAN;
-    public short userMaxSTA;
-    public short userMinSTA;
-    public int userPasarNivel;
-    public int userExp;
+    private String userName;
+    private short userMaxHP;
+    private short userMinHP;
+    private short userMaxMAN;
+    private short userMinMAN;
+    private short userMaxSTA;
+    private short userMinSTA;
+    private int userPasarNivel;
+    private int userExp;
+    private int userGLD;
+    private byte userLvl;
+    private byte userDext;
+    private byte userStrg;
+    private short userMaxAGU;
+    private short userMinAGU;
+    private short userMaxHAM;
+    private short userMinHAM;
 
-    public byte userWeaponEqpSlot;
-    public byte userArmourEqpSlot;
-    public byte userHelmEqpSlot;
-    public byte userShieldEqpSlot;
+    private String userWeaponEqpHit  = "0/0";
+    private String userArmourEqpDef  = "0/0";
+    private String userHelmEqpDef    = "0/0";
+    private String userShieldEqpDef  = "0/0";
+
+    private byte userWeaponEqpSlot;
+    private byte userArmourEqpSlot;
+    private byte userHelmEqpSlot;
+    private byte userShieldEqpSlot;
+
+    private boolean talking;
 
     /**
      * @desc: Constructor privado por singleton.
@@ -56,6 +72,7 @@ public final class User {
         userPos = new Position();
         addToUserPos = new Position();
         userInventory = new UserInventory();
+        this.talking = false;
     }
 
     /**
@@ -384,94 +401,255 @@ public final class User {
         }
     }
 
-    /**
-     *
-     * @return Getter del atributo userMoving
-     */
     public boolean isUserMoving() {
         return userMoving;
     }
 
-    /**
-     *
-     * @return Setter del atributo userMoving
-     */
     public void setUserMoving(boolean userMoving) {
         this.userMoving = userMoving;
     }
 
-    /**
-     *
-     * @return Getter del atributo userPos
-     */
     public Position getUserPos() {
         return userPos;
     }
 
-    /**
-     *
-     * @return Getter del atributo addToUserPos
-     */
     public Position getAddToUserPos() {
         return addToUserPos;
     }
 
-    /**
-     *
-     * @return Getter del atributo underCeiling
-     */
     public boolean isUnderCeiling() {
         return underCeiling;
     }
 
-
-
-    /**
-     *
-     * @return Setter del atributo userMap
-     */
     public void setUserMap(short userMap) {
         this.userMap = userMap;
     }
 
-
-    /**
-     *
-     * @return Getter del atributo userConected
-     */
     public boolean isUserConected() {
         return userConected;
     }
 
-    /**
-     *
-     * @return Setter del atributo userConected
-     */
     public void setUserConected(boolean userConected) {
         this.userConected = userConected;
     }
 
-    /**
-     *
-     * @return Getter del atributo userCharIndex
-     */
     public short getUserCharIndex() {
         return userCharIndex;
     }
 
-    /**
-     *
-     * @return Setter del atributo userCharIndex
-     */
     public void setUserCharIndex(short userCharIndex) {
         this.userCharIndex = userCharIndex;
     }
 
-    /**
-     *
-     * @return Getter del atributo userInventory
-     */
     public UserInventory getUserInventory() {
         return userInventory;
+    }
+
+    public String getUserName() {
+        return userName.toUpperCase();
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public short getUserMaxHP() {
+        return userMaxHP;
+    }
+
+    public void setUserMaxHP(short userMaxHP) {
+        this.userMaxHP = userMaxHP;
+    }
+
+    public short getUserMinHP() {
+        return userMinHP;
+    }
+
+    public void setUserMinHP(short userMinHP) {
+        this.userMinHP = userMinHP;
+    }
+
+    public short getUserMaxMAN() {
+        return userMaxMAN;
+    }
+
+    public void setUserMaxMAN(short userMaxMAN) {
+        this.userMaxMAN = userMaxMAN;
+    }
+
+    public short getUserMinMAN() {
+        return userMinMAN;
+    }
+
+    public void setUserMinMAN(short userMinMAN) {
+        this.userMinMAN = userMinMAN;
+    }
+
+    public short getUserMaxSTA() {
+        return userMaxSTA;
+    }
+
+    public void setUserMaxSTA(short userMaxSTA) {
+        this.userMaxSTA = userMaxSTA;
+    }
+
+    public short getUserMinSTA() {
+        return userMinSTA;
+    }
+
+    public void setUserMinSTA(short userMinSTA) {
+        this.userMinSTA = userMinSTA;
+    }
+
+    public int getUserPasarNivel() {
+        return userPasarNivel;
+    }
+
+    public void setUserPasarNivel(int userPasarNivel) {
+        this.userPasarNivel = userPasarNivel;
+    }
+
+    public int getUserExp() {
+        return userExp;
+    }
+
+    public void setUserExp(int userExp) {
+        this.userExp = userExp;
+    }
+
+    public int getUserGLD() {
+        return userGLD;
+    }
+
+    public void setUserGLD(int userGLD) {
+        this.userGLD = userGLD;
+    }
+
+    public byte getUserLvl() {
+        return userLvl;
+    }
+
+    public void setUserLvl(byte userLvl) {
+        this.userLvl = userLvl;
+    }
+
+    public byte getUserDext() {
+        return userDext;
+    }
+
+    public void setUserDext(byte userDext) {
+        this.userDext = userDext;
+    }
+
+    public byte getUserStrg() {
+        return userStrg;
+    }
+
+    public void setUserStrg(byte userStrg) {
+        this.userStrg = userStrg;
+    }
+
+    public short getUserMaxAGU() {
+        return userMaxAGU;
+    }
+
+    public void setUserMaxAGU(short userMaxAGU) {
+        this.userMaxAGU = userMaxAGU;
+    }
+
+    public short getUserMinAGU() {
+        return userMinAGU;
+    }
+
+    public void setUserMinAGU(short userMinAGU) {
+        this.userMinAGU = userMinAGU;
+    }
+
+    public short getUserMaxHAM() {
+        return userMaxHAM;
+    }
+
+    public void setUserMaxHAM(short userMaxHAM) {
+        this.userMaxHAM = userMaxHAM;
+    }
+
+    public short getUserMinHAM() {
+        return userMinHAM;
+    }
+
+    public void setUserMinHAM(short userMinHAM) {
+        this.userMinHAM = userMinHAM;
+    }
+
+    public String getUserWeaponEqpHit() {
+        return userWeaponEqpHit;
+    }
+
+    public void setUserWeaponEqpHit(String userWeaponEqpHit) {
+        this.userWeaponEqpHit = userWeaponEqpHit;
+    }
+
+    public String getUserArmourEqpDef() {
+        return userArmourEqpDef;
+    }
+
+    public void setUserArmourEqpDef(String userArmourEqpDef) {
+        this.userArmourEqpDef = userArmourEqpDef;
+    }
+
+    public String getUserHelmEqpDef() {
+        return userHelmEqpDef;
+    }
+
+    public void setUserHelmEqpDef(String userHelmEqpDef) {
+        this.userHelmEqpDef = userHelmEqpDef;
+    }
+
+    public String getUserShieldEqpDef() {
+        return userShieldEqpDef;
+    }
+
+    public void setUserShieldEqpDef(String userShieldEqpDef) {
+        this.userShieldEqpDef = userShieldEqpDef;
+    }
+
+    public byte getUserWeaponEqpSlot() {
+        return userWeaponEqpSlot;
+    }
+
+    public void setUserWeaponEqpSlot(byte userWeaponEqpSlot) {
+        this.userWeaponEqpSlot = userWeaponEqpSlot;
+    }
+
+    public byte getUserArmourEqpSlot() {
+        return userArmourEqpSlot;
+    }
+
+    public void setUserArmourEqpSlot(byte userArmourEqpSlot) {
+        this.userArmourEqpSlot = userArmourEqpSlot;
+    }
+
+    public byte getUserHelmEqpSlot() {
+        return userHelmEqpSlot;
+    }
+
+    public void setUserHelmEqpSlot(byte userHelmEqpSlot) {
+        this.userHelmEqpSlot = userHelmEqpSlot;
+    }
+
+    public byte getUserShieldEqpSlot() {
+        return userShieldEqpSlot;
+    }
+
+    public void setUserShieldEqpSlot(byte userShieldEqpSlot) {
+        this.userShieldEqpSlot = userShieldEqpSlot;
+    }
+
+    public boolean isTalking() {
+        return talking;
+    }
+
+    public void setTalking(boolean talking) {
+        this.talking = talking;
     }
 }

@@ -6,7 +6,7 @@ import imgui.callbacks.ImStrSupplier;
 import imgui.enums.*;
 import imgui.gl3.ImGuiImplGl3;
 import org.aoclient.engine.Window;
-import org.aoclient.engine.gui.forms.FormGUI;
+import org.aoclient.engine.gui.forms.Form;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,7 +36,7 @@ public class ImGUISystem {
     private final double[] mousePosY = new double[1];
 
     // arreglo de ventanas gui
-    private List<FormGUI> frms = new ArrayList<>();
+    private List<Form> frms = new ArrayList<>();
 
 
     // Local variables for application goes here
@@ -331,9 +331,11 @@ public class ImGUISystem {
         for(int i = 0; i < frms.size(); i++) {
             frms.get(i).render();
         }
+
+        ImGui.showDemoWindow();
     }
 
-    public void checkAddOrChange(String formName, FormGUI frm) {
+    public void checkAddOrChange(String formName, Form frm) {
         boolean exits = false;
 
         for(int i = 0; i < frms.size(); i++) {
@@ -349,11 +351,11 @@ public class ImGUISystem {
         }
     }
 
-    public void deleteFrmArray(FormGUI frm) {
+    public void deleteFrmArray(Form frm) {
         frms.remove(frm);
     }
 
-    public void addFrm(FormGUI e) {
+    public void addFrm(Form e) {
         frms.add(e);
     }
 

@@ -81,7 +81,6 @@ public class SocketConnection {
                 writeData.write(sdData.getBytes());
             } catch (IOException e) {
                 disconnect();
-                //throw new RuntimeException(e);
             }
         }
     }
@@ -96,19 +95,10 @@ public class SocketConnection {
             final int availableBytes = handleData.available(); // cantidad de bytes que devolvio el servidor.
 
             if (availableBytes > 0) {
-                //System.out.println("Available Bytes: " + availableBytes);
                 final byte[] dataBuffer = new byte[availableBytes];
                 final int bytesRead = handleData.read(dataBuffer); // leemos los bytes que devolvio
-                //System.out.println("Bytes Read: " + bytesRead);
 
                 if (bytesRead > 0) {
-                    //System.err.println(Arrays.toString(dataBuffer));
-                    //final String RD = new String(dataBuffer, 0 , bytesRead);
-                    //final String RD = convertVBUnicodeToUTF8(dataBuffer, bytesRead); // leemos la informacion
-                    //System.out.println(RD);
-                    //if (RD.isEmpty()) return;
-                    //byte[] data = RD.getBytes(); // la convertimos en bytes
-
                     // Put data in the buffer
                     incomingData.writeBlock(dataBuffer, -1);
 
@@ -119,21 +109,6 @@ public class SocketConnection {
 
         } catch (IOException e) {
             e.printStackTrace();
-        }
-    }
-
-    /**
-     * @return Covierte una string al formato de "vbUnicode" (Cp1252). Esto es para que pueda leer los caracteres
-     *         especiales que devuleve el servidor.
-     */
-    public String convertVBUnicodeToUTF8(byte[] dataBuffer, int bytesRead) {
-        try {
-            String rawData = new String(dataBuffer, 0, bytesRead, "Cp1252"); // Assuming Windows-1252 encoding
-            byte[] utf8Bytes = rawData.getBytes(StandardCharsets.UTF_8);
-            return new String(utf8Bytes, StandardCharsets.UTF_8);
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-            return "";
         }
     }
 

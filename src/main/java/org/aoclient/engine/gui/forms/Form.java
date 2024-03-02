@@ -1,5 +1,6 @@
 package org.aoclient.engine.gui.forms;
 
+import imgui.ImGui;
 import org.aoclient.engine.gui.ImGUISystem;
 import org.lwjgl.BufferUtils;
 
@@ -10,7 +11,7 @@ import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL11.GL_UNSIGNED_BYTE;
 import static org.lwjgl.opengl.GL12.GL_CLAMP_TO_EDGE;
 
-public abstract class FormGUI {
+public abstract class Form {
     protected int backgroundImage;
     protected String formName = "";
     protected boolean visible = true;
@@ -60,5 +61,12 @@ public abstract class FormGUI {
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, image.getWidth(), image.getHeight(), 0, GL_RGBA, GL_UNSIGNED_BYTE, buffer);
 
         return textureID;
+    }
+
+    public int centerTextValue(int pos, int strLen) {
+        //final int midLen = strLen / 2;
+        final int midTotalSizePerLetter = (strLen * ImGui.getFontSize()) / 2;
+
+        return pos - midTotalSizePerLetter;
     }
 }

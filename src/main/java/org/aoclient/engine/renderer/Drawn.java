@@ -74,46 +74,6 @@ public final class Drawn {
             glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     }
 
-    /**
-     *
-     * @desc: Lo mismo pero para interfaces de usuario.
-     */
-    public static void geometryBoxRenderGUI(TextureOGL texture, int x, int y, float alpha) {
-        glBindTexture(GL_TEXTURE_2D, texture.id);
-        glBegin(GL_QUADS);
-
-        {
-            //  0----0
-            //  |    |
-            //  1----0
-            glColor4f(1.0f, 1.0f, 1.0f, alpha);
-            glTexCoord2f (0, 1);
-            glVertex2d(x, y + texture.tex_height);
-
-            //  1----0
-            //  |    |
-            //  0----0
-            glColor4f(1.0f, 1.0f, 1.0f, alpha);
-            glTexCoord2f(0, 0);
-            glVertex2d(x, y);
-
-            //  0----1
-            //  |    |
-            //  0----0
-            glColor4f(1.0f, 1.0f, 1.0f, alpha);
-            glTexCoord2f(1, 0);
-            glVertex2d(x + texture.tex_width, y);
-
-            //  0----0
-            //  |    |
-            //  0----1
-            glColor4f(1.0f, 1.0f, 1.0f, alpha);
-            glTexCoord2f(1, 1);
-            glVertex2d(x + texture.tex_width, y + texture.tex_height);
-        }
-
-        glEnd();
-    }
 
     /**
      * @desc: Dibuja un cuadrado o rectangulo segun la dimencion que le asignemos.

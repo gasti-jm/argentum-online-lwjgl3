@@ -4,9 +4,11 @@ import imgui.ImGui;
 import imgui.enums.ImGuiCond;
 import imgui.enums.ImGuiWindowFlags;
 
+import java.nio.charset.StandardCharsets;
+
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_ENTER;
 
-public final class FMessage extends FormGUI {
+public final class FMessage extends Form {
     private final String txtMessage;
 
     public FMessage() {
@@ -16,7 +18,7 @@ public final class FMessage extends FormGUI {
 
     public FMessage(String text) {
         this.formName = "frmMessage";
-        this.txtMessage = text;
+        this.txtMessage = new String(text.getBytes(), StandardCharsets.UTF_8);
     }
 
     @Override

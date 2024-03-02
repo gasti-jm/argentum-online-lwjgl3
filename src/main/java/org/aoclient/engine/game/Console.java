@@ -1,40 +1,25 @@
 package org.aoclient.engine.game;
 
+import imgui.ImGui;
+import imgui.enums.ImGuiCond;
+import imgui.enums.ImGuiWindowFlags;
 import org.aoclient.engine.renderer.RGBColor;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import static org.aoclient.engine.renderer.FontText.drawConsoleText;
 
 public class Console {
     private static Console instance;
 
-    // Posicion original en la interface del juego.
-    private static final int POS_X = 12;
-    private static final int POS_Y = 24;
+    private String consoleText;
+    private boolean autoScroll;
+    private boolean scrollToBottom;
 
-    static class TextConsole {
-        String text;
-        boolean bold, italic;
-        RGBColor color;
-
-        public TextConsole(String text, boolean bold, boolean italic, RGBColor color) {
-            this.text = text;
-            this.bold = bold;
-            this.italic = italic;
-            this.color = color;
-        }
-    }
-
-    private final List<TextConsole> dataConsole = new ArrayList<>();
-    private int posList;
 
     /**
      * Constructor privado por singleton.
      */
     private Console() {
-        this.posList = 0;
+        this.consoleText = "";
+        this.autoScroll = true;
+        this.scrollToBottom = false;
     }
 
     /**
@@ -59,31 +44,41 @@ public class Console {
      * Agrega un nuevo mensaje en la consola.
      */
     public void addMessageToConsole(String text, boolean bold, boolean italic, RGBColor color) {
-        if(dataConsole.size() > 100) {
-            dataConsole.clear();
-            posList = 0;
-        }
+        consoleText += text + "\n";
+    }
 
-        // si superamos la cantidad de filas que puede mostrar nuestra interface vamos bajando de puntero para mostrar
-        // los nuevos.
-        if(dataConsole.size() >= 7) {
-            posList++;
-        }
-
-        dataConsole.add(new TextConsole(text, bold, italic, color));
+    public void clearConsole() {
+        consoleText = "";
     }
 
     /**
      * Dibujamos la consola
      */
     public void drawConsole() {
-        // Tenemos que mostrar siempre los ultimos mensajes.
-        if (!dataConsole.isEmpty()) {
-            for (int i = this.posList; i < dataConsole.size(); i++) {
-                TextConsole data = dataConsole.get(i);
-                drawConsoleText(data.text, POS_X, POS_Y + ((i - this.posList) * 12), data.color, 0, data.bold, data.italic);
-            }
-        }
+        ImGui.setNextWindowPos(10, 24);
+        ImGui.setNextWindowSize(555, 98, ImGuiCond.Once);
+        ImGui.begin("console", ImGuiWindowFlags.NoTitleBar
+                | ImGuiWindowFlags.NoBackground
+                | ImGuiWindowFlags.NoResize
+                | ImGuiWindowFlags.NoSavedSettings);
+
+        ImGui.setCursorPos(5, 0);
+
+
+        ImGui.beginChild("ScrollingRegion", 0, 0, false,  ImGuiWindowFlags.HorizontalScrollbar);
+        ImGui.textUnformatted(consoleText);
+
+        if (scrollToBottom || (autoScroll && ImGui.getScrollY() >= ImGui.getScrollMaxY()))
+                ImGui.setScrollHereY(1.0f);
+
+        scrollToBottom = false;
+
+
+        //ImGui.popStyleVar();
+        ImGui.endChild();
+
+
+        ImGui.end();
     }
 
 }

@@ -37,7 +37,7 @@ public final class GameScene extends Scene {
 
     RGBColor ambientColor; // color de ambiente.
     private boolean autoMove = false;
-    public FMain frmMain;
+    private FMain frmMain;
 
     @Override
     public void init() {
@@ -184,6 +184,19 @@ public final class GameScene extends Scene {
                     autoMove = !autoMove;
                     break;
 
+                case mKeyTalk:
+                    if(User.get().isTalking()) {
+                        // send msg
+                        writeTalk(frmMain.getSendText());
+                        User.get().setTalking(false);
+                    } else {
+                        User.get().setTalking(true);
+                    }
+
+                    frmMain.clearSendTxt();
+
+                    break;
+
             }
         }
 
@@ -315,7 +328,7 @@ public final class GameScene extends Scene {
             }
         }
 
-        //user.getUserInventory().drawInventory();
+        user.getUserInventory().drawInventory();
     }
 
     /**
