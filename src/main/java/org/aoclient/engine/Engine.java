@@ -17,7 +17,7 @@ import static org.aoclient.engine.utils.Time.deltaTime;
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.*;
 
-public class Engine implements Runnable {
+public final class Engine implements Runnable {
     private final Thread gameLoopThread;
     private static boolean prgRun = true;
     private Window window;

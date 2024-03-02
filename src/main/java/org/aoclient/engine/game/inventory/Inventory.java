@@ -144,4 +144,8 @@ public class Inventory {
         slotSelected = slot;
     }
 
+    public int getAmountSlotSelected() {
+        return slots[slotSelected].amount;
+    }
+
 }

@@ -202,7 +202,7 @@ public class Protocol {
 
         switch (msg) {
             case DontSeeAnything:
-                Console.get().addMessageToConsole(MENSAJE_NO_VES_NADA_INTERESANTE, false, false, new RGBColor(0.25f, 0.75f, 0.60f));
+                Console.get().addMsgToConsole(MENSAJE_NO_VES_NADA_INTERESANTE, false, false, new RGBColor(0.25f, 0.75f, 0.60f));
                 break;
 
             case NPCSwing:
@@ -2625,7 +2625,7 @@ public class Protocol {
         String chat = buffer.readASCIIString();
         short fontIndex = buffer.readByte();
 
-        Console.get().addMessageToConsole(chat, false, false, new RGBColor(1.0f, 1.0f, 1.0f));
+        Console.get().addMsgToConsole(chat, false, false, new RGBColor(1.0f, 1.0f, 1.0f));
 
         //If InStr(1, chat, "~") Then
         //        str = ReadField(2, chat, 126)
@@ -3247,6 +3247,12 @@ public class Protocol {
     public static void writeWalk(E_Heading direction) {
         outgoingData.writeByte(ClientPacketID.Walk.ordinal());
         outgoingData.writeByte(direction.value);
+    }
+
+    public static void writeDrop(int slot, int amount) {
+        outgoingData.writeByte(ClientPacketID.Drop.ordinal());
+        outgoingData.writeByte((byte) slot);
+        outgoingData.writeInteger((short) amount);
     }
 
     public static void writeRequestPositionUpdate() {

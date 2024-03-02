@@ -12,7 +12,6 @@ public class Console {
     private boolean autoScroll;
     private boolean scrollToBottom;
 
-
     /**
      * Constructor privado por singleton.
      */
@@ -35,15 +34,9 @@ public class Console {
     }
 
     /**
-     *
-     * @param text Texto a agregar.
-     * @param bold efecto negrita.
-     * @param italic efecto italica.
-     * @param color color de letra.
-     *
      * Agrega un nuevo mensaje en la consola.
      */
-    public void addMessageToConsole(String text, boolean bold, boolean italic, RGBColor color) {
+    public void addMsgToConsole(String text, boolean bold, boolean italic, RGBColor color) {
         consoleText += text + "\n";
     }
 
@@ -63,8 +56,6 @@ public class Console {
                 | ImGuiWindowFlags.NoSavedSettings);
 
         ImGui.setCursorPos(5, 0);
-
-
         ImGui.beginChild("ScrollingRegion", 0, 0, false,  ImGuiWindowFlags.HorizontalScrollbar);
         ImGui.textUnformatted(consoleText);
 
@@ -73,11 +64,7 @@ public class Console {
 
         scrollToBottom = false;
 
-
-        //ImGui.popStyleVar();
         ImGui.endChild();
-
-
         ImGui.end();
     }
 

@@ -296,7 +296,6 @@ public class ImGUISystem {
         ImGui.separator();
 
 
-
         // Input field with auto-resize ability
         ImGui.text("You can use text inputs with auto-resizable strings!");
         ImGui.inputText("Resizable input", resizableStr, ImGuiInputTextFlags.CallbackResize);
@@ -349,6 +348,20 @@ public class ImGUISystem {
         if (!exits) {
             addFrm(frm);
         }
+
+    }
+
+    public boolean isFormVisible(String formName) {
+        boolean visible = false;
+
+        for(int i = 0; i < frms.size(); i++) {
+            if (frms.get(i).getFormName().equals(formName)) {
+                visible = true;
+                break;
+            }
+        }
+
+        return visible;
     }
 
     public void deleteFrmArray(Form frm) {

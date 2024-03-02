@@ -22,6 +22,7 @@ public final class UserInventory extends Inventory {
     private static final int MAIN_SIZE_WIDTH = 160;
     private static final int MAIN_SIZE_HEIGHT = 128;
     private static final int MAX_INVENTORY_SLOTS = 30;
+    public static final int FLAGORO = MAX_INVENTORY_SLOTS + 1;
 
     // Intervalos del inventario.
     private static final float INT_USE_ITEM = 0.240f;

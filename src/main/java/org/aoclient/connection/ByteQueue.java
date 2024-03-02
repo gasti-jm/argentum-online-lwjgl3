@@ -97,25 +97,25 @@ public class ByteQueue {
 
     public int writeInteger(short value) {
         byte[] buf = new byte[2];
-        ByteBuffer.wrap(buf).putShort(value);
+        ByteBuffer.wrap(buf).putShort(bigToLittle_Short(value));
         return writeData(buf, 2);
     }
 
     public int writeLong(int value) {
         byte[] buf = new byte[4];
-        ByteBuffer.wrap(buf).putInt(value);
+        ByteBuffer.wrap(buf).putInt(bigToLittle_Int(value));
         return writeData(buf, 4);
     }
 
     public int writeSingle(float value) {
         byte[] buf = new byte[4];
-        ByteBuffer.wrap(buf).putFloat(value);
+        ByteBuffer.wrap(buf).putFloat(bigToLittle_Float(value));
         return writeData(buf, 4);
     }
 
     public long writeDouble(double value) {
         byte[] buf = new byte[8];
-        ByteBuffer.wrap(buf).putDouble(value);
+        ByteBuffer.wrap(buf).putDouble(bigToLittle_Double(value));
         return writeData(buf, 8);
     }
 

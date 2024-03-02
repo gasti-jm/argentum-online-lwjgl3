@@ -2,6 +2,7 @@ package org.aoclient.engine.scenes;
 
 import org.aoclient.engine.game.BindKeys;
 import org.aoclient.engine.game.models.E_KeyType;
+import org.aoclient.engine.gui.forms.FCantidad;
 import org.aoclient.engine.gui.forms.FMain;
 import org.aoclient.engine.gui.ImGUISystem;
 import org.aoclient.engine.listeners.KeyListener;
@@ -184,17 +185,22 @@ public final class GameScene extends Scene {
                     autoMove = !autoMove;
                     break;
 
+                case mKeyDropObject:
+                    ImGUISystem.get().checkAddOrChange("frmCantidad", new FCantidad());
+                    break;
+
                 case mKeyTalk:
-                    if(User.get().isTalking()) {
-                        // send msg
-                        writeTalk(frmMain.getSendText());
-                        User.get().setTalking(false);
-                    } else {
-                        User.get().setTalking(true);
+                    if(!ImGUISystem.get().isFormVisible("frmCantidad")) {
+                        if(User.get().isTalking()) {
+                            // send msg
+                            writeTalk(frmMain.getSendText());
+                            User.get().setTalking(false);
+                        } else {
+                            User.get().setTalking(true);
+                        }
+
+                        frmMain.clearSendTxt();
                     }
-
-                    frmMain.clearSendTxt();
-
                     break;
 
             }

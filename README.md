@@ -1,6 +1,6 @@
 
 <div align='center'>
-    <h1>Argentum Online Java LWJGL3</h1> <br/>
+    <br/>
     <img src="https://github.com/gasti-jm/argentum-online-lwjgl3/assets/82490615/0ad2c3a1-c512-464c-a0a8-2cfc9f06c0f8" width= "300px"/> <br/> <br/>
     <a target="_blank"><img src="https://img.shields.io/badge/Built%20in-Java_8-43ca1f.svg?style=flat-square"></img></a>
     <a target="_blank"><img src="https://img.shields.io/badge/Made%20in-IntelliJ%20Community-be27e9.svg?style=flat-square"></img></a>
@@ -8,8 +8,10 @@
 </div>
 <br/>
 
+<h1>Argentum Online Java LWJGL3</h1>
+
 <p>
-  MMORPG Video Game of the year 1999 created in Visual Basic 6.0 by Pablo Marquez (Morgolock), this game is open source. <br/> <br/>
+  <a target="_blank" href="https://es.wikipedia.org/wiki/Argentum_Online">Argentum Online</a> is a MMORPG Video Game of the year 1999 created in Visual Basic 6.0 by Pablo Marquez (Morgolock), this game is open source. <br/> <br/>
   I have translated it to Java with LWJGL3, this game would be the base client, the connection to the server is being implemented with Java sockets. The java server has not been developed yet, but you can use the Argentum Online Alkon v13.0 server from VB6.
 </p>
 
@@ -35,7 +37,7 @@ For those who want to collaborate with the project, they are more than welcome! 
 
 <p>
   <b>Pablo Marquez (Morgolock) creator of Argentum Online</b> <br/>
-  <b>Lord Fers</b> - GS-Zone user who released a base client offline in LWJGL2 <br/>
+  <a target="_blank" href="https://www.gs-zone.org/temas/argentum-online-en-java-opengl.92672/#post-785702"><b>Lord Fers</b> - GS-Zone user who released a base client offline in LWJGL2</a> <br/>
   And the GS-Zone people <br/>
   <a target="_blank" href="https://www.gs-zone.org/"><img src="https://user-images.githubusercontent.com/82490615/187148671-1d7f92b9-7ea1-45f2-b6f1-f53b07454d93.png"></img></a>
 </p>

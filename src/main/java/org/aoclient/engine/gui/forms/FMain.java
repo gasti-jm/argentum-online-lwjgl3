@@ -17,7 +17,7 @@ import java.io.IOException;
 
 import static org.aoclient.engine.utils.Time.FPS;
 
-public class FMain extends Form {
+public final class FMain extends Form {
     private final ImString sendText = new ImString();
 
 
@@ -90,7 +90,6 @@ public class FMain extends Form {
         } else {
             ImGui.textColored(0.5f, 1, 1, 1,"[N/A]");
         }
-
 
         //lblExp
         ImGui.setCursorPos(615, 102);

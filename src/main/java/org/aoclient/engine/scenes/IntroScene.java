@@ -1,44 +1,42 @@
 package org.aoclient.engine.scenes;
 
 import org.aoclient.engine.listeners.KeyListener;
+import org.aoclient.engine.renderer.Surface;
+import org.aoclient.engine.renderer.TextureOGL;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.aoclient.engine.renderer.Drawn.geometryBoxRenderGUI;
 import static org.aoclient.engine.utils.Time.*;
 import static org.lwjgl.glfw.GLFW.*;
 
 
 /**
- * Escena de presentacion (frmCargando - frmPresentacion).
+ * Escena de presentacion
  *
  * Se recomienda leer el JavaDoc de la clase padre "Scene.java".
  */
 public final class IntroScene extends Scene {
-    private static float timeScene = 15.0f; // 15 segundos de intro.
-    private static float timeLogo = 5.0f; // 5seg
-    private static float timePresentation = 3.33f;
-
+    private float timeScene = 15.0f; // 15 segundos de intro.
+    private float timeLogo = 5.0f; // 5seg
+    private float timePresentation = 3.33f;
     private float alphaInterface;
     private int nextInterface = 1;
 
+    private TextureOGL[] imgs;
 
     @Override
     public void init() {
         super.init();
         this.alphaInterface = 0.0f;
         this.canChangeTo = SceneType.MAIN_SCENE;
+        this.imgs = new TextureOGL[4];
 
-        // agregamos 4 interfaces
-//        for(int i = 0; i < 4; i++){
-//            this.images.add(new ImageBox());
-//        }
-
-        // le cargamos las texturas
-//        this.images.get(0).loadTextures("noland.jpg"); // efecto
-//        this.images.get(1).loadTextures("Presentacion5.jpg");
-//        this.images.get(2).loadTextures("Presentacion6.jpg");
-//        this.images.get(3).loadTextures("Presentacion7.jpg");
+        this.imgs[0] = Surface.get().createTexture("noland.jpg");
+        this.imgs[1] = Surface.get().createTexture("Presentacion5.jpg");
+        this.imgs[2] = Surface.get().createTexture("Presentacion6.jpg");
+        this.imgs[3] = Surface.get().createTexture("Presentacion7.jpg");
     }
 
     @Override
@@ -82,7 +80,7 @@ public final class IntroScene extends Scene {
             nextInterface++;
         }
 
-//        images.get(nextInterface).render();
+        geometryBoxRenderGUI(imgs[nextInterface], 0, 0, alphaInterface);
 
         timePresentation -= deltaTime;
     }
@@ -104,7 +102,6 @@ public final class IntroScene extends Scene {
     @Override
     public void close() {
         this.visible = false;
-
     }
 
     /**
@@ -112,12 +109,8 @@ public final class IntroScene extends Scene {
      */
     private void effectNoLandStudios() {
         alphaInterface += 0.3f * deltaTime;
-//        images.get(0).setAlphaTexture(alphaInterface);
-//        images.get(0).render();
-
+        geometryBoxRenderGUI(imgs[0], 0, 0, alphaInterface);
         timeLogo -= deltaTime;
     }
-
-
 
 }

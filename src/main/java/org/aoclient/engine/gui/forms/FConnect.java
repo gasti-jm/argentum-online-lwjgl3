@@ -16,9 +16,8 @@ import static org.lwjgl.glfw.GLFW.GLFW_KEY_ENTER;
 public final class FConnect extends Form {
     private final ImString portStr = new ImString(options.getPortServer());
     private final ImString ipStr = new ImString(options.getIpServer());
-
     private final ImString nickStr = new ImString(options.getNickName());
-    private final ImString passStr = new ImString(128);
+    private final ImString passStr = new ImString();
 
     public FConnect(){
         this.formName = "frmConnect";
