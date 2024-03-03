@@ -15,14 +15,14 @@ import static org.aoclient.engine.utils.GameData.*;
 public final class User {
     private static User instance;
 
-    private UserInventory userInventory;
+    private final UserInventory userInventory;
     // private InventorySpells inventorySpells;
 
     private boolean underCeiling;
     private boolean userMoving;
 
     // mapa
-    public short userMap;
+    private short userMap;
     private final Position userPos;
     private final Position addToUserPos;
     private short userCharIndex;
@@ -437,6 +437,10 @@ public final class User {
         return userCharIndex;
     }
 
+    public boolean isDead() {
+        return charList[userCharIndex].isDead();
+    }
+
     public void setUserCharIndex(short userCharIndex) {
         this.userCharIndex = userCharIndex;
     }
@@ -651,5 +655,9 @@ public final class User {
 
     public void setTalking(boolean talking) {
         this.talking = talking;
+    }
+
+    public short getUserMap() {
+        return userMap;
     }
 }

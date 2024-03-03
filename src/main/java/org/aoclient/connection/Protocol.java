@@ -5,14 +5,19 @@ import org.aoclient.connection.packets.E_Messages;
 import org.aoclient.connection.packets.ServerPacketID;
 import org.aoclient.engine.Sound;
 import org.aoclient.engine.game.Console;
+import org.aoclient.engine.game.Rain;
 import org.aoclient.engine.game.User;
 import org.aoclient.engine.game.models.E_Heading;
 import org.aoclient.engine.game.models.E_ObjType;
+import org.aoclient.engine.game.models.E_Skills;
 import org.aoclient.engine.gui.forms.FMessage;
 import org.aoclient.engine.gui.ImGUISystem;
 import org.aoclient.engine.renderer.RGBColor;
 import org.aoclient.engine.utils.GameData;
 import org.aoclient.engine.utils.structs.GrhInfo;
+
+import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 
 import static org.aoclient.connection.Messages.*;
 import static org.aoclient.engine.game.models.Character.*;
@@ -198,7 +203,6 @@ public class Protocol {
 
         if (m > E_Messages.values().length) return;
         E_Messages msg = E_Messages.values()[m];
-
 
         switch (msg) {
             case DontSeeAnything:
@@ -2134,8 +2138,24 @@ public class Protocol {
         //            //FrmMain.IsPlaying = PlayLoop.plNone
         //        End If
         //    End If
-        //
-        //    bRain = Not bRain
+
+
+        if(Rain.get().isRaining()) {
+            Rain.get().setRainValue(false);
+
+            // stop rain sound...... (FALTA)
+
+            if(bLluvia[User.get().getUserMap()]) {
+                if(User.get().isUnderCeiling()) {
+                    // play "lluviainend.wav"
+                } else {
+                    // play "lluviaoutend.wav"
+                }
+            }
+        } else {
+            Rain.get().setRainValue(true);
+        }
+
 
         System.out.println("handleRainToggle CARGADO - FALTA TERMINAR!");
     }
@@ -3120,6 +3140,8 @@ public class Protocol {
         eraseAllChars();
         SocketConnection.get().disconnect();
 
+        Rain.get().setRainValue(false);
+
         /*
         'Hide main form
     //FrmMain.Visible = False
@@ -3304,6 +3326,19 @@ public class Protocol {
     public static void writeEquipItem(int slot) {
         outgoingData.writeByte(ClientPacketID.EquipItem.ordinal());
         outgoingData.writeByte(slot);
+    }
+
+    public static void writeWork(byte skill) {
+        if(User.get().isDead()) {
+            Console.get().addMsgToConsole(new String("¡¡Estás muerto!!".getBytes(), StandardCharsets.UTF_8),
+                    false, true, new RGBColor());
+
+            return;
+        }
+
+
+        outgoingData.writeByte(ClientPacketID.Work.ordinal());
+        outgoingData.writeByte(skill);
     }
 
 }

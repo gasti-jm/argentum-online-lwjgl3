@@ -1,0 +1,108 @@
+package org.aoclient.engine.game;
+
+import org.aoclient.engine.renderer.RGBColor;
+import org.aoclient.engine.renderer.Surface;
+import org.aoclient.engine.renderer.TextureOGL;
+
+import static org.aoclient.engine.renderer.Drawn.geometryBoxRender;
+import static org.aoclient.engine.utils.GameData.bLluvia;
+import static org.aoclient.engine.utils.Time.deltaTime;
+
+public class Rain {
+    private static Rain instance;
+
+    static class RECT {
+        int top, left, right, bottom;
+    }
+
+
+    // dios mio.
+    private final String graphic = "resources/graphics/15168.bmp";
+    private TextureOGL rainTexture;
+
+    private boolean bRain;
+    private final RECT[] RLluvia;
+    private final int[] LTLluvia;
+
+    private float timeChange;
+    private int iFrameIndex;
+
+
+    private Rain() {
+        this.bRain = false;
+        this.RLluvia = new RECT[8];
+        this.LTLluvia = new int[5];
+
+        // tiempo para cambiar el frame
+        this.timeChange = 0.1f;
+        this.iFrameIndex = 0;
+
+
+
+        this.loadData();
+        this.rainTexture = Surface.get().createTexture(graphic);
+    }
+
+    public static Rain get() {
+        if (instance == null) {
+            instance = new Rain();
+        }
+
+        return instance;
+    }
+
+    private void loadData() {
+        //Set up te rain rects
+        for (int i = 0; i < 8; i++) {
+            RLluvia[i] = new RECT();
+        }
+
+        RLluvia[0].top = 0;      RLluvia[1].top = 0;      RLluvia[2].top = 0;      RLluvia[3].top = 0;
+        RLluvia[0].left = 0;     RLluvia[1].left = 128;   RLluvia[2].left = 256;   RLluvia[3].left = 384;
+        RLluvia[0].right = 128;  RLluvia[1].right = 256;  RLluvia[2].right = 384;  RLluvia[3].right = 512;
+        RLluvia[0].bottom = 128; RLluvia[1].bottom = 128; RLluvia[2].bottom = 128; RLluvia[3].bottom = 128;
+
+        RLluvia[4].top = 128;    RLluvia[5].top = 128;    RLluvia[6].top = 128;    RLluvia[7].top = 128;
+        RLluvia[4].left = 0;     RLluvia[5].left = 128;   RLluvia[6].left = 256;   RLluvia[7].left = 384;
+        RLluvia[4].right = 128;  RLluvia[5].right = 256;  RLluvia[6].right = 384;  RLluvia[7].right = 512;
+        RLluvia[4].bottom = 256; RLluvia[5].bottom = 256; RLluvia[6].bottom = 256; RLluvia[7].bottom = 256;
+
+
+        LTLluvia[0] = 224;
+        LTLluvia[1] = 352;
+        LTLluvia[2] = 480;
+        LTLluvia[3] = 608;
+        LTLluvia[4] = 736;
+    }
+
+    public void render(RGBColor color) {
+        if (!bLluvia[User.get().getUserMap()] || !bRain) return;
+
+        // actualizacion de index para RLluvia
+        if (timeChange <= 0) {
+            timeChange = 0.1f;
+            iFrameIndex++;
+            if (iFrameIndex > 7) iFrameIndex = 0;
+        }
+
+        for (int y = 0; y < 5; y++) {
+            for (int x = 0; x < 5; x++) {
+                geometryBoxRender(rainTexture, LTLluvia[y] - 213, LTLluvia[x] - 77, // hay que arreglar esto pq sino se ve mal la lluvia
+                        RLluvia[iFrameIndex].right,
+                        RLluvia[iFrameIndex].bottom,
+                        RLluvia[iFrameIndex].left,
+                        RLluvia[iFrameIndex].top, true, 1.0f, color);
+            }
+        }
+
+        timeChange -= deltaTime;
+    }
+
+    public boolean isRaining() {
+        return bRain;
+    }
+
+    public void setRainValue(boolean bRain) {
+        this.bRain = bRain;
+    }
+}

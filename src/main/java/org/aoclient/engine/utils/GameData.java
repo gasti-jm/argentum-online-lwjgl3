@@ -14,7 +14,6 @@ import org.aoclient.engine.utils.structs.*;
 
 import static org.aoclient.engine.Sound.*;
 import static org.aoclient.engine.game.models.Character.eraseAllChars;
-import static org.aoclient.engine.game.models.Character.eraseChar;
 import static org.aoclient.engine.renderer.FontText.loadCSV;
 import static org.aoclient.engine.utils.ByteMigration.*;
 
@@ -30,8 +29,9 @@ public final class GameData {
     public static FxData[] fxData;
     public static GrhData[] grhData;
     public static MapData[][] mapData;
+    public static boolean[] bLluvia;
 
-    public static Character charList[] = new Character[10000+1]; // se agrega aca porque hay mapas que tienen NPCs.
+    public static Character[] charList = new Character[10000+1]; // se agrega aca porque hay mapas que tienen NPCs.
     public static Sound music;
     public static Map<String, Sound> sounds = new HashMap<>();
     public static Options options;
@@ -54,7 +54,8 @@ public final class GameData {
         loadBodys();
         loadArms();
         loadShields();
-        LoadFXs();
+        loadFxs();
+        loadFK();
         loadCSV();
 
         playMusic("intro.ogg");
@@ -411,7 +412,7 @@ public final class GameData {
     /**
      * Cargamos los indices de animaciones FXs del archivo "fxs.ind"
      */
-    private static void LoadFXs() {
+    private static void loadFxs() {
         try (RandomAccessFile f = new RandomAccessFile("resources/inits/fxs.ind", "rw")) {
             f.seek(0);
 
@@ -426,6 +427,29 @@ public final class GameData {
                 fxData[i].setAnimacion( bigToLittle_Short(f.readShort()) );
                 fxData[i].setOffsetX( bigToLittle_Short(f.readShort()) );
                 fxData[i].setOffsetY( bigToLittle_Short(f.readShort()) );
+            }
+
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    /**
+     * Cargamos los indices de mapas donde se puede visualizar la lluvia en el archivo "fk.ind"
+     */
+    private static void loadFK() {
+        try (RandomAccessFile f = new RandomAccessFile("resources/inits/fk.ind", "rw")) {
+            f.seek(0);
+
+            final byte[] cabecera = new byte[263];
+
+            f.read(cabecera);
+            final short Nu = bigToLittle_Short(f.readShort());
+            bLluvia = new boolean[Nu + 1];
+
+            bLluvia[0] = false;
+            for (int i = 1; i <= Nu; i++) {
+                bLluvia[i] = bigToLittle_Byte(f.readByte()) == 1;
             }
 
         } catch (IOException ex) {

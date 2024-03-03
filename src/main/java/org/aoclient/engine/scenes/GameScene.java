@@ -1,7 +1,10 @@
 package org.aoclient.engine.scenes;
 
 import org.aoclient.engine.game.BindKeys;
+import org.aoclient.engine.game.Console;
+import org.aoclient.engine.game.Rain;
 import org.aoclient.engine.game.models.E_KeyType;
+import org.aoclient.engine.game.models.E_Skills;
 import org.aoclient.engine.gui.forms.FCantidad;
 import org.aoclient.engine.gui.forms.FMain;
 import org.aoclient.engine.gui.ImGUISystem;
@@ -15,8 +18,6 @@ import static org.aoclient.engine.game.models.E_KeyType.*;
 import static org.aoclient.engine.game.models.Character.*;
 import static org.aoclient.engine.game.models.E_Heading.*;
 import static org.aoclient.engine.renderer.Drawn.*;
-import static org.aoclient.engine.renderer.FontText.drawText;
-import static org.aoclient.engine.renderer.FontText.getSizeText;
 import static org.aoclient.engine.scenes.Camera.*;
 import static org.aoclient.engine.utils.GameData.*;
 import static org.aoclient.engine.utils.Time.*;
@@ -31,13 +32,14 @@ import static org.lwjgl.glfw.GLFW.*;
 public final class GameScene extends Scene {
     private BindKeys bindKeys;
     private User user;
+    private Rain rain;
 
-    private float offSetCounterX = 0;
-    private float offSetCounterY = 0;
-    private float alphaCeiling = 1.0f;
+    private float offSetCounterX    = 0;
+    private float offSetCounterY    = 0;
+    private float alphaCeiling      = 1.0f;
 
     RGBColor ambientColor; // color de ambiente.
-    private boolean autoMove = false;
+    private boolean autoMove        = false;
     private FMain frmMain;
 
     @Override
@@ -47,6 +49,7 @@ public final class GameScene extends Scene {
         canChangeTo     = SceneType.MAIN_SCENE;
         bindKeys        = BindKeys.get();
         user            = User.get();
+        rain            = Rain.get();
         ambientColor    = new RGBColor(1.0f, 1.0f, 1.0f);
         frmMain         = new FMain();
 
@@ -60,8 +63,8 @@ public final class GameScene extends Scene {
     public void render() {
         // si el usuario se desconecta debe regresar al menu principal.
         if(!user.isUserConected()) {
-            this.close();
             frmMain.close();
+            this.close();
         }
 
         if(!visible) return;
@@ -203,6 +206,10 @@ public final class GameScene extends Scene {
                     }
                     break;
 
+                case mKeyHide:
+                    writeWork(E_Skills.Ocultarse.value);
+                    break;
+
             }
         }
 
@@ -334,12 +341,13 @@ public final class GameScene extends Scene {
             }
         }
 
+        rain.render(ambientColor);
         user.getUserInventory().drawInventory();
     }
 
     /**
-     * @desc: Detecta si el usuario esta debajo del techo, si es asi se desvanecera
-     *        el techo, caso contrario re aparece.
+     * @desc: Detecta si el usuario esta debajo del techo. Si es asi, se desvanecera
+     *        y en caso contrario re aparece.
      */
     private void checkEffectCeiling(){
         if(user.isUnderCeiling()) {

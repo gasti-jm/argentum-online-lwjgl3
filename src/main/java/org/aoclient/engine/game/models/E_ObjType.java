@@ -41,7 +41,7 @@ public enum E_ObjType {
     otCualquiera(1000);
 
     public final int value;
-    public boolean equippable;
+    public final boolean equippable;
 
 
     E_ObjType(int value, boolean equippable) {

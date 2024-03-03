@@ -115,6 +115,52 @@ public final class Drawn {
         glEnd();
     }
 
+    public static void geometryBoxRender(TextureOGL texture, int x, int y, int src_width, int src_height, float sX, float sY, boolean blend, float alpha, RGBColor color) {
+        if (blend)
+            glBlendFunc(GL_SRC_ALPHA, GL_ONE);
+
+        final float src_right = sX + src_width;
+        final float src_bottom = sY + src_height;
+
+        glBindTexture(GL_TEXTURE_2D, texture.id);
+        glBegin(GL_QUADS);
+
+        {
+            //  0----0
+            //  |    |
+            //  1----0
+            glColor4f(color.getRed(), color.getGreen(), color.getBlue(), alpha);
+            glTexCoord2f (sX / texture.tex_width, (src_bottom) / texture.tex_height);
+            glVertex2d(x, y + src_height);
+
+            //  1----0
+            //  |    |
+            //  0----0
+            glColor4f(color.getRed(), color.getGreen(), color.getBlue(), alpha);
+            glTexCoord2f(sX / texture.tex_width, sY / texture.tex_height);
+            glVertex2d(x, y);
+
+            //  0----1
+            //  |    |
+            //  0----0
+            glColor4f(color.getRed(), color.getGreen(), color.getBlue(), alpha);
+            glTexCoord2f((src_right) / texture.tex_width, sY / texture.tex_height);
+            glVertex2d(x + src_width, y);
+
+            //  0----0
+            //  |    |
+            //  0----1
+            glColor4f(color.getRed(), color.getGreen(), color.getBlue(), alpha);
+            glTexCoord2f((src_right) / texture.tex_width, (src_bottom) / texture.tex_height);
+            glVertex2d(x + src_width, y + src_height);
+        }
+
+        glEnd();
+
+        if (blend)
+            glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    }
+
     /**
      * @desc: Dibuja un cuadrado o rectangulo segun la dimencion que le asignemos.
      */

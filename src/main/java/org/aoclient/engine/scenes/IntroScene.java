@@ -33,10 +33,10 @@ public final class IntroScene extends Scene {
         this.canChangeTo = SceneType.MAIN_SCENE;
         this.imgs = new TextureOGL[4];
 
-        this.imgs[0] = Surface.get().createTexture("noland.jpg");
-        this.imgs[1] = Surface.get().createTexture("Presentacion5.jpg");
-        this.imgs[2] = Surface.get().createTexture("Presentacion6.jpg");
-        this.imgs[3] = Surface.get().createTexture("Presentacion7.jpg");
+        this.imgs[0] = Surface.get().createTexture("resources/gui/noland.jpg");
+        this.imgs[1] = Surface.get().createTexture("resources/gui/Presentacion5.jpg");
+        this.imgs[2] = Surface.get().createTexture("resources/gui/Presentacion6.jpg");
+        this.imgs[3] = Surface.get().createTexture("resources/gui/Presentacion7.jpg");
     }
 
     @Override

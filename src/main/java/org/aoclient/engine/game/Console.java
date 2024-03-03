@@ -5,6 +5,9 @@ import imgui.enums.ImGuiCond;
 import imgui.enums.ImGuiWindowFlags;
 import org.aoclient.engine.renderer.RGBColor;
 
+import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
+
 public class Console {
     private static Console instance;
 

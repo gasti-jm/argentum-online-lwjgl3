@@ -34,6 +34,9 @@ public final class FCantidad extends Form {
 
 
         //input text
+        ImGui.setCursorPos(30, 15);
+        ImGui.text("Cantidad:");
+
         ImGui.setCursorPos(30, 30);
         ImGui.pushItemWidth(150);
             ImGui.inputText("", cant, ImGuiInputTextFlags.CharsDecimal | ImGuiInputTextFlags.CallbackResize);

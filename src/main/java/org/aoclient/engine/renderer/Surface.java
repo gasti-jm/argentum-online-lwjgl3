@@ -108,7 +108,7 @@ public class Surface {
         if (file.isEmpty()) return null;
 
         TextureOGL texture = new TextureOGL();
-        texture.id = loadTexture(texture,"resources/gui/" + file, true);
+        texture.id = loadTexture(texture, file, true);
         return texture;
     }
 

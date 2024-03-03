@@ -10,6 +10,7 @@ import org.aoclient.engine.Engine;
 import org.aoclient.engine.Window;
 import org.aoclient.engine.game.Console;
 import org.aoclient.engine.game.User;
+import org.aoclient.engine.gui.ImGUISystem;
 
 import javax.imageio.ImageIO;
 import java.io.File;
@@ -126,7 +127,7 @@ public final class FMain extends Form {
         // lblCoords (color)
         ImGui.setCursorPos(630, 571);
         ImGui.textColored(1, 1, 0.0f, 1,
-                dataUser.userMap + " X: " + User.get().getUserPos().getX() + " Y: " + User.get().getUserPos().getY());
+                dataUser.getUserMap() + " X: " + User.get().getUserPos().getX() + " Y: " + User.get().getUserPos().getY());
 
         // lblName
         ImGui.setCursorPos(584, 24);
@@ -142,6 +143,16 @@ public final class FMain extends Form {
         ImGui.setCursorPos(755, 3);
         if(ImGui.invisibleButton("minimizar", 17, 17)) {
             Window.get().minimizar();
+        }
+
+        // btnGLD
+        ImGui.setCursorPos(710, 417);
+        ImGui.invisibleButton("Tirar Oro", 17, 17);
+
+        // para hacer click derecho y abrir el frm
+        if (ImGui.beginPopupContextItem("Tirar Oro")) {
+            ImGUISystem.get().checkAddOrChange("frmCantidad", new FCantidad(true));
+            ImGui.endPopup();
         }
 
         // txtSend
