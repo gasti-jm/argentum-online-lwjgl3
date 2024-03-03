@@ -102,13 +102,13 @@ public class Surface {
 
     /**
      *
-     * @desc: Crea y retorna una textura (en este caso una interfaz de usuario).
+     * @desc: Crea y retorna una textura
      */
-    public TextureOGL createTexture(String file) {
+    public TextureOGL createTexture(String file, boolean isGUI) {
         if (file.isEmpty()) return null;
 
         TextureOGL texture = new TextureOGL();
-        texture.id = loadTexture(texture, file, true);
+        texture.id = loadTexture(texture, file, isGUI);
         return texture;
     }
 

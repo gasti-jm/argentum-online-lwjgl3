@@ -40,7 +40,7 @@ public class Rain {
 
 
         this.loadData();
-        this.rainTexture = Surface.get().createTexture(graphic);
+        this.rainTexture = Surface.get().createTexture(graphic, false);
     }
 
     public static Rain get() {
@@ -87,11 +87,11 @@ public class Rain {
 
         for (int y = 0; y < 5; y++) {
             for (int x = 0; x < 5; x++) {
-                geometryBoxRender(rainTexture, LTLluvia[y] - 213, LTLluvia[x] - 77, // hay que arreglar esto pq sino se ve mal la lluvia
-                        RLluvia[iFrameIndex].right,
-                        RLluvia[iFrameIndex].bottom,
+                geometryBoxRender(rainTexture, LTLluvia[y] - 213, LTLluvia[x] - 77,
+                        128,
+                        128,
                         RLluvia[iFrameIndex].left,
-                        RLluvia[iFrameIndex].top, true, 1.0f, color);
+                        RLluvia[iFrameIndex].top, false, 1.0f, color);
             }
         }
 
