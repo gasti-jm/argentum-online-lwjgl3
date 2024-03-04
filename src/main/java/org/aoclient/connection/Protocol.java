@@ -2122,21 +2122,7 @@ public class Protocol {
         final int userY = User.get().getUserPos().getY();
         if (User.get().inMapBounds(userX, userY)) return;
 
-        User.get().setUnderCeiling(User.get().checkUnderCeiling());
-
-        //If bRain Then
-        //        If bLluvia(UserMap) Then
-        //            'Stop playing the rain sound
-        //            Call Audio.StopWave(RainBufferIndex)
-        //            RainBufferIndex = 0
-        //            If bTecho Then
-        //                Call Audio.PlayWave("lluviainend.wav", 0, 0, LoopStyle.Disabled)
-        //            Else
-        //                Call Audio.PlayWave("lluviaoutend.wav", 0, 0, LoopStyle.Disabled)
-        //            End If
-        //            //FrmMain.IsPlaying = PlayLoop.plNone
-        //        End If
-        //    End If
+        User.get().setUnderCeiling(User.get().checkUnderCeiling()
 
         if(Rain.get().isRaining()) {
             Rain.get().setRainValue(false);

@@ -412,7 +412,6 @@ public final class User {
                     && estaPCarea(charIndex)
                     && (charList[charIndex].getPriv() == 0 || charList[charIndex].getPriv() > 5)) {
 
-                
                 if (charList[charIndex].isPie()) {
                     playSound(SND_PASOS1);
                     charList[charIndex].setPie(false);
