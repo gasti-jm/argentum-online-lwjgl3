@@ -20,6 +20,7 @@ public final class User {
 
     private boolean underCeiling;
     private boolean userMoving;
+    private boolean userNavegando;
 
     // mapa
     private short userMap;
@@ -73,6 +74,7 @@ public final class User {
         addToUserPos = new Position();
         userInventory = new UserInventory();
         this.talking = false;
+        this.userNavegando = false;
     }
 
     /**
@@ -215,6 +217,13 @@ public final class User {
                 y < TILE_BUFFER_SIZE || y > YMaxMapSize - TILE_BUFFER_SIZE);
     }
 
+    public boolean estaPCarea(int charIndex) {
+        return charList[charIndex].getPos().getX() > userPos.getX() - minXBorder &&
+                charList[charIndex].getPos().getX() < userPos.getX() + minXBorder &&
+                charList[charIndex].getPos().getY() > userPos.getY() - minYBorder &&
+                charList[charIndex].getPos().getY() < userPos.getY() + minYBorder;
+    }
+
     /**
      *
      * @param x Posicion X del usuario.
@@ -238,35 +247,40 @@ public final class User {
                 return false;
             }
 
-            return false;
-            /*
-            If .iHead <> CASPER_HEAD And .iBody <> FRAGATA_FANTASMAL Then
-                Exit Function
-            Else
-                ' No puedo intercambiar con un casper que este en la orilla (Lado tierra)
-                If HayAgua(UserPos.X, UserPos.Y) Then
-                    If Not HayAgua(X, Y) Then Exit Function
-                Else
-                    ' No puedo intercambiar con un casper que este en la orilla (Lado agua)
-                    If HayAgua(X, Y) Then Exit Function
-                End If
+            if(charList[charIndex].getiHead() != CASPER_HEAD &&
+                    charList[charIndex].getiBody() != FRAGATA_FANTASMAL) {
+                return false;
+            } else {
 
-                ' Los admins no pueden intercambiar pos con caspers cuando estan invisibles
-                If charlist(UserCharIndex).priv > 0 And charlist(UserCharIndex).priv < 6 Then
-                    If charlist(UserCharIndex).invisible = True Then Exit Function
-                End If
-            End If
-             */
+                // No puedo intercambiar con un casper que este en la orilla (Lado tierra)
+                if(hayAgua(userPos.getX(), userPos.getY())) {
+                    if(!hayAgua(x, y)) return false;
+                } else {
+                    // No puedo intercambiar con un casper que este en la orilla (Lado agua)
+                    if(hayAgua(x, y)) return false;
+                }
+
+                // Los admins no pueden intercambiar pos con caspers cuando estan invisibles
+                if(charList[userCharIndex].getPriv() > 0 && charList[userCharIndex].getPriv() < 6) {
+                    if(charList[userCharIndex].isInvisible()) return false;
+                }
+
+            }
 
         }
 
-        /*
-            If UserNavegando <> HayAgua(X, Y) Then
-                Exit Function
-            End If
-         */
+        if(User.get().isUserNavegando() != hayAgua(x, y))
+            return false;
+
 
         return true;
+    }
+
+    public boolean hayAgua(int x, int y) {
+        return ((mapData[x][y].getLayer(1).getGrhIndex() >= 1505 && mapData[x][y].getLayer(1).getGrhIndex() <= 1520) ||
+                (mapData[x][y].getLayer(1).getGrhIndex() >= 5665 && mapData[x][y].getLayer(1).getGrhIndex() <= 5680) ||
+                (mapData[x][y].getLayer(1).getGrhIndex() >= 13547 && mapData[x][y].getLayer(1).getGrhIndex() <= 13562)) &&
+                mapData[x][y].getLayer(2).getGrhIndex() == 0;
     }
 
     /**
@@ -390,14 +404,23 @@ public final class User {
      * EN PROGRESO....
      */
     public void doPasosFx(int charIndex) {
-        if (!charList[charIndex].isDead()) {
-            if(charList[charIndex].isPie()) {
-                playSound(SND_PASOS1);
-                charList[charIndex].setPie(false);
-            } else {
-                playSound(SND_PASOS2);
-                charList[charIndex].setPie(true);
+        if(!User.get().isUserNavegando()) {
+
+            if (!charList[charIndex].isDead()
+                    && estaPCarea(charIndex)
+                    && (charList[charIndex].getPriv() == 0 || charList[charIndex].getPriv() > 5)) {
+
+
+
+                if (charList[charIndex].isPie()) {
+                    playSound(SND_PASOS1);
+                    charList[charIndex].setPie(false);
+                } else {
+                    playSound(SND_PASOS2);
+                    charList[charIndex].setPie(true);
+                }
             }
+
         }
     }
 
@@ -659,5 +682,13 @@ public final class User {
 
     public short getUserMap() {
         return userMap;
+    }
+
+    public boolean isUserNavegando() {
+        return userNavegando;
+    }
+
+    public void setUserNavegando(boolean userNavegando) {
+        this.userNavegando = userNavegando;
     }
 }

@@ -3141,6 +3141,7 @@ public class Protocol {
         SocketConnection.get().disconnect();
 
         Rain.get().setRainValue(false);
+        User.get().setUserNavegando(false);
 
         /*
         'Hide main form
@@ -3189,9 +3190,11 @@ public class Protocol {
         // Remove packet ID
         incomingData.readByte();
 
-        // userNavegando = !userNavegando
-
-        System.out.println("handleNavigateToggle CARGADO - FALTA TERMINAR!");
+        if(User.get().isUserNavegando()) {
+            User.get().setUserNavegando(false);
+        } else {
+            User.get().setUserNavegando(true);
+        }
     }
 
     private static void handleRemoveCharDialog() {

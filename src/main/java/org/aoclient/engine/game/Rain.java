@@ -15,16 +15,13 @@ public class Rain {
         int top, left, right, bottom;
     }
 
-
-    // dios mio.
-    private final String graphic = "resources/graphics/15168.bmp";
-    private TextureOGL rainTexture;
+    private final TextureOGL rainTexture;
 
     private boolean bRain;
     private final RECT[] RLluvia;
     private final int[] LTLluvia;
 
-    private float timeChange;
+    private float timeToChangeFrame;
     private int iFrameIndex;
 
 
@@ -34,13 +31,13 @@ public class Rain {
         this.LTLluvia = new int[5];
 
         // tiempo para cambiar el frame
-        this.timeChange = 0.1f;
+        this.timeToChangeFrame = 0.1f;
         this.iFrameIndex = 0;
 
-
-
         this.loadData();
-        this.rainTexture = Surface.get().createTexture(graphic, false);
+
+        // dios mio.
+        this.rainTexture = Surface.get().createTexture("resources/graphics/15168.bmp", false);
     }
 
     public static Rain get() {
@@ -67,7 +64,6 @@ public class Rain {
         RLluvia[4].right = 128;  RLluvia[5].right = 256;  RLluvia[6].right = 384;  RLluvia[7].right = 512;
         RLluvia[4].bottom = 256; RLluvia[5].bottom = 256; RLluvia[6].bottom = 256; RLluvia[7].bottom = 256;
 
-
         LTLluvia[0] = 224;
         LTLluvia[1] = 352;
         LTLluvia[2] = 480;
@@ -79,8 +75,8 @@ public class Rain {
         if (!bLluvia[User.get().getUserMap()] || !bRain) return;
 
         // actualizacion de index para RLluvia
-        if (timeChange <= 0) {
-            timeChange = 0.1f;
+        if (timeToChangeFrame <= 0) {
+            timeToChangeFrame = 0.1f;
             iFrameIndex++;
             if (iFrameIndex > 7) iFrameIndex = 0;
         }
@@ -95,7 +91,7 @@ public class Rain {
             }
         }
 
-        timeChange -= deltaTime;
+        timeToChangeFrame -= deltaTime;
     }
 
     public boolean isRaining() {
