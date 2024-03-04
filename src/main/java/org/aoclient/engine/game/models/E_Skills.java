@@ -22,7 +22,7 @@ public enum E_Skills {
     Wrestling(19),
     Navegacion(20);
 
-
+    public static final int FundirMetal = 88;
     public final byte value;
 
     E_Skills(int value) {

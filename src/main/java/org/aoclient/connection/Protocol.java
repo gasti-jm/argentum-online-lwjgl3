@@ -3,7 +3,6 @@ package org.aoclient.connection;
 import org.aoclient.connection.packets.ClientPacketID;
 import org.aoclient.connection.packets.E_Messages;
 import org.aoclient.connection.packets.ServerPacketID;
-import org.aoclient.engine.Sound;
 import org.aoclient.engine.game.Console;
 import org.aoclient.engine.game.Rain;
 import org.aoclient.engine.game.User;
@@ -16,12 +15,12 @@ import org.aoclient.engine.renderer.RGBColor;
 import org.aoclient.engine.utils.GameData;
 import org.aoclient.engine.utils.structs.GrhInfo;
 
-import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 
 import static org.aoclient.connection.Messages.*;
 import static org.aoclient.engine.Sound.*;
 import static org.aoclient.engine.game.models.Character.*;
+import static org.aoclient.engine.game.models.E_Skills.FundirMetal;
 import static org.aoclient.engine.utils.GameData.*;
 
 public class Protocol {
@@ -211,83 +210,91 @@ public class Protocol {
                 break;
 
             case NPCSwing:
-                System.out.println(MENSAJE_CRIATURA_FALLA_GOLPE);
+                Console.get().addMsgToConsole(MENSAJE_CRIATURA_FALLA_GOLPE, false, false, new RGBColor());
                 break;
 
             case NPCKillUser:
-                System.out.println(MENSAJE_CRIATURA_MATADO);
+                Console.get().addMsgToConsole(MENSAJE_CRIATURA_MATADO, false, false, new RGBColor());
                 break;
 
             case BlockedWithShieldUser:
-                System.out.println(MENSAJE_RECHAZO_ATAQUE_ESCUDO);
+                Console.get().addMsgToConsole(MENSAJE_RECHAZO_ATAQUE_ESCUDO, false, false, new RGBColor());
                 break;
 
             case BlockedWithShieldOther:
-                System.out.println(MENSAJE_USUARIO_RECHAZO_ATAQUE_ESCUDO);
+                Console.get().addMsgToConsole(MENSAJE_USUARIO_RECHAZO_ATAQUE_ESCUDO, false, false, new RGBColor());
                 break;
 
             case UserSwing:
-                System.out.println(MENSAJE_FALLADO_GOLPE);
+                Console.get().addMsgToConsole(MENSAJE_FALLADO_GOLPE, false, false, new RGBColor());
                 break;
 
             case SafeModeOn:
-                System.out.println("MODO SEGURO ACTIVADO - //FrmMain");
+                Console.get().addMsgToConsole("MODO SEGURO ACTIVADO", false, false, new RGBColor());
                 break;
 
             case SafeModeOff:
-                System.out.println("MODO SEGURO DESACTIVADO - //FrmMain");
+                Console.get().addMsgToConsole("MODO SEGURO DESACTIVADO", false, false, new RGBColor());
                 break;
 
             case ResuscitationSafeOff:
-                System.out.println("MODO RESURECCION ACTIVADO - //FrmMain");
+                Console.get().addMsgToConsole("MODO RESURECCION ACTIVADO", false, false, new RGBColor());
                 break;
 
             case ResuscitationSafeOn:
-                System.out.println("MODO RESURECCION DESACTIVADO - //FrmMain");
+                Console.get().addMsgToConsole("MODO RESURECCION DESACTIVADO", false, false, new RGBColor());
                 break;
 
             case NobilityLost:
-                System.out.println(MENSAJE_PIERDE_NOBLEZA);
+                Console.get().addMsgToConsole(MENSAJE_PIERDE_NOBLEZA, false, false, new RGBColor());
                 break;
 
             case CantUseWhileMeditating:
-                System.out.println(MENSAJE_USAR_MEDITANDO);
+                Console.get().addMsgToConsole(MENSAJE_USAR_MEDITANDO, false, false, new RGBColor());
                 break;
 
             case NPCHitUser:
                 switch (incomingData.readByte()) {
                     case 1: // bCabeza
-                        System.out.println(MENSAJE_GOLPE_CABEZA + " " + incomingData.readInteger());
+                        Console.get().addMsgToConsole(MENSAJE_GOLPE_CABEZA + " " + incomingData.readInteger(),
+                                false, false, new RGBColor());
                         break;
 
                     case 2: // bBrazoIzquierdo
-                        System.out.println(MENSAJE_GOLPE_BRAZO_IZQ + " " + incomingData.readInteger());
+                        Console.get().addMsgToConsole(MENSAJE_GOLPE_BRAZO_IZQ + " " + incomingData.readInteger(),
+                                false, false, new RGBColor());
                         break;
 
                     case 3: // bBrazoDerecho
-                        System.out.println(MENSAJE_GOLPE_BRAZO_DER + " " + incomingData.readInteger());
+                        Console.get().addMsgToConsole(MENSAJE_GOLPE_BRAZO_DER + " " + incomingData.readInteger(),
+                                false, false, new RGBColor());
                         break;
 
                     case 4: // bPiernaIzquierda
-                        System.out.println(MENSAJE_GOLPE_PIERNA_IZQ + " " + incomingData.readInteger());
+                        Console.get().addMsgToConsole(MENSAJE_GOLPE_PIERNA_IZQ + " " + incomingData.readInteger(),
+                                false, false, new RGBColor());
                         break;
 
                     case 5: // bPiernaDerecha
-                        System.out.println(MENSAJE_GOLPE_PIERNA_DER + " " + incomingData.readInteger());
+                        Console.get().addMsgToConsole(MENSAJE_GOLPE_PIERNA_DER + " " + incomingData.readInteger(),
+                                false, false, new RGBColor());
                         break;
 
                     case 6: // bTorso
-                        System.out.println(MENSAJE_GOLPE_TORSO + " " + incomingData.readInteger());
+                        Console.get().addMsgToConsole(MENSAJE_GOLPE_TORSO + " " + incomingData.readInteger(),
+                                false, false, new RGBColor());
                         break;
                 }
                 break;
 
             case UserHitNPC:
-                System.out.println(MENSAJE_GOLPE_CRIATURA_1 + " " + incomingData.readLong());
+                Console.get().addMsgToConsole(MENSAJE_GOLPE_CRIATURA_1 + " " + incomingData.readLong(),
+                        false, false, new RGBColor());
                 break;
 
             case UserAttackedSwing:
-                System.out.println(MENSAJE_1 + " " + charList[incomingData.readInteger()].getName() +  MENSAJE_ATAQUE_FALLO);
+                Console.get().addMsgToConsole(MENSAJE_1 + " " + charList[incomingData.readInteger()].getName() +  MENSAJE_ATAQUE_FALLO,
+                        false, false, new RGBColor());
                 break;
 
             case UserHittedByUser:
@@ -297,29 +304,36 @@ public class Protocol {
 
                 switch (bodyPart) {
                     case 1: // bCabeza
-                        System.out.println(MENSAJE_1 + attackerName  + MENSAJE_RECIVE_IMPACTO_CABEZA + damage + MENSAJE_2);
+                        Console.get().addMsgToConsole(MENSAJE_1 + attackerName  + MENSAJE_RECIVE_IMPACTO_CABEZA + damage + MENSAJE_2,
+                                false, false, new RGBColor());
                         break;
 
                     case 2: // bBrazoIzquierdo
-                        System.out.println(MENSAJE_1 + attackerName  + MENSAJE_RECIVE_IMPACTO_BRAZO_IZQ + damage + MENSAJE_2);
+                        Console.get().addMsgToConsole(MENSAJE_1 + attackerName  + MENSAJE_RECIVE_IMPACTO_BRAZO_IZQ + damage + MENSAJE_2,
+                                false, false, new RGBColor());
                         break;
 
                     case 3: // bBrazoDerecho
-                        System.out.println(MENSAJE_1 + attackerName  + MENSAJE_RECIVE_IMPACTO_BRAZO_DER + damage + MENSAJE_2);
+                        Console.get().addMsgToConsole(MENSAJE_1 + attackerName  + MENSAJE_RECIVE_IMPACTO_BRAZO_DER + damage + MENSAJE_2,
+                                false, false, new RGBColor());
                         break;
 
                     case 4: // bPiernaIzquierda
-                        System.out.println(MENSAJE_1 + attackerName  + MENSAJE_RECIVE_IMPACTO_PIERNA_IZQ + damage + MENSAJE_2);
+                        Console.get().addMsgToConsole(MENSAJE_1 + attackerName  + MENSAJE_RECIVE_IMPACTO_PIERNA_IZQ + damage + MENSAJE_2,
+                                false, false, new RGBColor());
                         break;
 
                     case 5: // bPiernaDerecha
-                        System.out.println(MENSAJE_1 + attackerName  + MENSAJE_RECIVE_IMPACTO_PIERNA_DER + damage + MENSAJE_2);
+                        Console.get().addMsgToConsole(MENSAJE_1 + attackerName  + MENSAJE_RECIVE_IMPACTO_PIERNA_DER + damage + MENSAJE_2,
+                                false, false, new RGBColor());
                         break;
 
                     case 6: // bTorso
-                        System.out.println(MENSAJE_1 + attackerName  + MENSAJE_RECIVE_IMPACTO_TORSO + damage + MENSAJE_2);
+                        Console.get().addMsgToConsole(MENSAJE_1 + attackerName  + MENSAJE_RECIVE_IMPACTO_TORSO + damage + MENSAJE_2,
+                                false, false, new RGBColor());
                         break;
                 }
+
                 break;
 
             case UserHittedUser:
@@ -329,27 +343,33 @@ public class Protocol {
 
                 switch (bodyPart) {
                     case 1: // bCabeza
-                        System.out.println(MENSAJE_PRODUCE_IMPACTO_1 + victimName  + MENSAJE_PRODUCE_IMPACTO_CABEZA + damage + MENSAJE_2);
+                        Console.get().addMsgToConsole(MENSAJE_PRODUCE_IMPACTO_1 + victimName  + MENSAJE_PRODUCE_IMPACTO_CABEZA + damage + MENSAJE_2,
+                                false, false, new RGBColor());
                         break;
 
                     case 2: // bBrazoIzquierdo
-                        System.out.println(MENSAJE_PRODUCE_IMPACTO_1 + victimName  + MENSAJE_PRODUCE_IMPACTO_BRAZO_IZQ + damage + MENSAJE_2);
+                        Console.get().addMsgToConsole(MENSAJE_PRODUCE_IMPACTO_1 + victimName  + MENSAJE_PRODUCE_IMPACTO_BRAZO_IZQ + damage + MENSAJE_2,
+                                false, false, new RGBColor());
                         break;
 
                     case 3: // bBrazoDerecho
-                        System.out.println(MENSAJE_PRODUCE_IMPACTO_1 + victimName  + MENSAJE_RECIVE_IMPACTO_BRAZO_DER + damage + MENSAJE_2);
+                        Console.get().addMsgToConsole(MENSAJE_PRODUCE_IMPACTO_1 + victimName  + MENSAJE_RECIVE_IMPACTO_BRAZO_DER + damage + MENSAJE_2,
+                                false, false, new RGBColor());
                         break;
 
                     case 4: // bPiernaIzquierda
-                        System.out.println(MENSAJE_PRODUCE_IMPACTO_1 + victimName  + MENSAJE_RECIVE_IMPACTO_PIERNA_IZQ + damage + MENSAJE_2);
+                        Console.get().addMsgToConsole(MENSAJE_PRODUCE_IMPACTO_1 + victimName  + MENSAJE_RECIVE_IMPACTO_PIERNA_IZQ + damage + MENSAJE_2,
+                                false, false, new RGBColor());
                         break;
 
                     case 5: // bPiernaDerecha
-                        System.out.println(MENSAJE_PRODUCE_IMPACTO_1 + victimName  + MENSAJE_RECIVE_IMPACTO_PIERNA_DER + damage + MENSAJE_2);
+                        Console.get().addMsgToConsole(MENSAJE_PRODUCE_IMPACTO_1 + victimName  + MENSAJE_RECIVE_IMPACTO_PIERNA_DER + damage + MENSAJE_2,
+                                false, false, new RGBColor());
                         break;
 
                     case 6: // bTorso
-                        System.out.println(MENSAJE_PRODUCE_IMPACTO_1 + victimName  + MENSAJE_RECIVE_IMPACTO_TORSO + damage + MENSAJE_2);
+                        Console.get().addMsgToConsole(MENSAJE_PRODUCE_IMPACTO_1 + victimName  + MENSAJE_RECIVE_IMPACTO_TORSO + damage + MENSAJE_2,
+                                false, false, new RGBColor());
                         break;
                 }
                 break;
@@ -361,63 +381,72 @@ public class Protocol {
 
                 switch (usingSkill) {
                     case 0: // magia
-                        System.out.println(MENSAJE_TRABAJO_MAGIA);
+                        Console.get().addMsgToConsole(MENSAJE_TRABAJO_MAGIA, false, false, new RGBColor());
                         break;
 
                     case 1:
-                        System.out.println(MENSAJE_TRABAJO_PESCA);
+                        Console.get().addMsgToConsole(MENSAJE_TRABAJO_PESCA, false, false, new RGBColor());
                         break;
 
                     case 2:
-                        System.out.println(MENSAJE_TRABAJO_ROBAR);
+                        Console.get().addMsgToConsole(MENSAJE_TRABAJO_ROBAR, false, false, new RGBColor());
                         break;
 
                     case 3:
-                        System.out.println(MENSAJE_TRABAJO_TALAR);
+                        Console.get().addMsgToConsole(MENSAJE_TRABAJO_TALAR, false, false, new RGBColor());
                         break;
 
                     case 4:
-                        System.out.println(MENSAJE_TRABAJO_MINERIA);
+                        Console.get().addMsgToConsole(MENSAJE_TRABAJO_MINERIA, false, false, new RGBColor());
                         break;
 
                     case 5:
-                        System.out.println(MENSAJE_TRABAJO_FUNDIRMETAL);
+                        Console.get().addMsgToConsole(MENSAJE_TRABAJO_FUNDIRMETAL, false, false, new RGBColor());
                         break;
 
                     case 6:
-                        System.out.println(MENSAJE_TRABAJO_PROYECTILES);
+                        Console.get().addMsgToConsole(MENSAJE_TRABAJO_PROYECTILES, false, false, new RGBColor());
                         break;
                 }
                 break;
 
             case HaveKilledUser:
-                System.out.println(MENSAJE_HAS_MATADO_A + charList[incomingData.readInteger()].getName() + MENSAJE_22);
-                int level = incomingData.readLong();
-                System.out.println(MENSAJE_HAS_GANADO_EXPE_1 + level + MENSAJE_HAS_GANADO_EXPE_2);
+                Console.get().addMsgToConsole(MENSAJE_HAS_MATADO_A + charList[incomingData.readInteger()].getName() + MENSAJE_22,
+                        false, false, new RGBColor());
+
+                final int level = incomingData.readLong();
+
+                Console.get().addMsgToConsole(MENSAJE_HAS_GANADO_EXPE_1 + level + MENSAJE_HAS_GANADO_EXPE_2,
+                        false, false, new RGBColor());
+
                 // sistema de captura al matar.
                 break;
 
             case UserKill:
-                System.out.println(charList[incomingData.readInteger()].getName() + MENSAJE_TE_HA_MATADO);
+                Console.get().addMsgToConsole(charList[incomingData.readInteger()].getName() + MENSAJE_TE_HA_MATADO,
+                        false, false, new RGBColor());
                 break;
 
             case EarnExp:
-                System.out.println(MENSAJE_HAS_GANADO_EXPE_1 + incomingData.readLong() + MENSAJE_HAS_GANADO_EXPE_2);
+                Console.get().addMsgToConsole(MENSAJE_HAS_GANADO_EXPE_1 + incomingData.readLong() + MENSAJE_HAS_GANADO_EXPE_2,
+                        false, false, new RGBColor());
                 break;
 
             case GoHome:
                 byte distance = incomingData.readByte();
                 short time = incomingData.readInteger();
                 String hogar = incomingData.readASCIIString();
-                System.out.println("Estas a " + distance + " mapas de distancia de " + hogar + ", este viaje durara " + time + " segundos.");
+
+                Console.get().addMsgToConsole("Estas a " + distance + " mapas de distancia de " + hogar + ", este viaje durara " + time + " segundos.",
+                        false, false, new RGBColor());
                 break;
 
             case FinishHome:
-                System.out.println(MENSAJE_HOGAR);
+                Console.get().addMsgToConsole(MENSAJE_HOGAR, false, false, new RGBColor());
                 break;
 
             case CancelGoHome:
-                System.out.println(MENSAJE_HOGAR_CANCEL);
+                Console.get().addMsgToConsole(MENSAJE_HOGAR_CANCEL, false, false, new RGBColor());
                 break;
         }
 
@@ -432,7 +461,7 @@ public class Protocol {
 
     private static void handleUpdateDexterity() {
         if (incomingData.length() < 2) {
-            System.out.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handleUpdateDexterity");
+            System.err.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handleUpdateDexterity");
             return;
         }
 
@@ -444,7 +473,7 @@ public class Protocol {
 
     private static void handleUpdateStrenght() {
         if (incomingData.length() < 2) {
-            System.out.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handleUpdateStrenght");
+            System.err.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handleUpdateStrenght");
             return;
         }
 
@@ -456,7 +485,7 @@ public class Protocol {
 
     private static void handleUpdateStrenghtAndDexterity() {
         if (incomingData.length() < 3) {
-            System.out.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handleUpdateStrenghtAndDexterity");
+            System.err.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handleUpdateStrenghtAndDexterity");
             return;
         }
 
@@ -469,7 +498,7 @@ public class Protocol {
 
     private static void handleShowPartyForm() {
         if (incomingData.length() < 4) {
-            System.out.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handleShowPartyForm");
+            System.err.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handleShowPartyForm");
             return;
         }
 
@@ -507,7 +536,7 @@ public class Protocol {
 
     private static void handleUserNameList() {
         if (incomingData.length() < 3) {
-            System.out.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handleUserNameList");
+            System.err.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handleUserNameList");
             return;
         }
 
@@ -545,7 +574,7 @@ public class Protocol {
 
     private static void handleShowMOTDEditionForm() {
         if (incomingData.length() < 3) {
-            System.out.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handleShowMOTDEditionForm");
+            System.err.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handleShowMOTDEditionForm");
             return;
         }
 
@@ -567,7 +596,7 @@ public class Protocol {
 
     private static void handleShowSOSForm() {
         if (incomingData.length() < 3) {
-            System.out.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handleShowSOSForm");
+            System.err.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handleShowSOSForm");
             return;
         }
 
@@ -595,7 +624,7 @@ public class Protocol {
 
     private static void handleSpawnList() {
         if (incomingData.length() < 3) {
-            System.out.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handleSpawnList");
+            System.err.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handleSpawnList");
             return;
         }
 
@@ -624,7 +653,7 @@ public class Protocol {
 
     private static void handleGuildMemberInfo() {
         if (incomingData.length() < 5) {
-            System.out.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handleGuildMemberInfo");
+            System.err.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handleGuildMemberInfo");
             return;
         }
 
@@ -672,7 +701,7 @@ public class Protocol {
 
     private static void handleUpdateTagAndStatus() {
         if (incomingData.length() < 6) {
-            System.out.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handleUpdateTagAndStatus");
+            System.err.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handleUpdateTagAndStatus");
             return;
         }
 
@@ -722,7 +751,7 @@ public class Protocol {
 
     private static void handleSendNight() {
         if (incomingData.length() < 2) {
-            System.out.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handleSendNight");
+            System.err.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handleSendNight");
             return;
         }
 
@@ -735,7 +764,7 @@ public class Protocol {
 
     private static void handleChangeUserTradeSlot() {
         if (incomingData.length() < 22) {
-            System.out.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handleChangeUserTradeSlot");
+            System.err.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handleChangeUserTradeSlot");
             return;
         }
 
@@ -848,7 +877,7 @@ public class Protocol {
 
     private static void handleShowUserRequest() {
         if (incomingData.length() < 3) {
-            System.out.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handleShowUserRequest");
+            System.err.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handleShowUserRequest");
             return;
         }
 
@@ -886,7 +915,7 @@ public class Protocol {
 
     private static void handleGuildDetails() {
         if (incomingData.length() < 26) {
-            System.out.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handleGuildDetails");
+            System.err.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handleGuildDetails");
             return;
         }
 
@@ -955,7 +984,7 @@ public class Protocol {
 
     private static void handleGuildLeaderInfo() {
         if (incomingData.length() < 9) {
-            System.out.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handleGuildLeaderInfo");
+            System.err.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handleGuildLeaderInfo");
             return;
         }
 
@@ -1013,7 +1042,7 @@ public class Protocol {
 
     private static void handleCharacterInfo() {
         if (incomingData.length() < 35) {
-            System.out.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handleCharacterInfo");
+            System.err.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handleCharacterInfo");
             return;
         }
 
@@ -1111,7 +1140,7 @@ public class Protocol {
 
     private static void handlePeaceProposalsList() {
         if (incomingData.length() < 3) {
-            System.out.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handlePeaceProposalsList");
+            System.err.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handlePeaceProposalsList");
             return;
         }
 
@@ -1142,7 +1171,7 @@ public class Protocol {
 
     private static void handleAlianceProposalsList() {
         if (incomingData.length() < 3) {
-            System.out.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handleAlianceProposalsList");
+            System.err.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handleAlianceProposalsList");
             return;
         }
 
@@ -1173,7 +1202,7 @@ public class Protocol {
 
     private static void handleOfferDetails() {
         if (incomingData.length() < 3) {
-            System.out.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handleOfferDetails");
+            System.err.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handleOfferDetails");
             return;
         }
 
@@ -1191,7 +1220,7 @@ public class Protocol {
 
     private static void handleGuildNews() {
         if (incomingData.length() < 7) {
-            System.out.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handleGuildNews");
+            System.err.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handleGuildNews");
             return;
         }
 
@@ -1232,7 +1261,7 @@ public class Protocol {
 
     private static void handleTrainerCreatureList() {
         if (incomingData.length() < 3) {
-            System.out.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handleTrainerCreatureList");
+            System.err.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handleTrainerCreatureList");
             return;
         }
 
@@ -1257,7 +1286,7 @@ public class Protocol {
 
     private static void handleSendSkills() {
         if (incomingData.length() < 2 + 20 * 2) {
-            System.out.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handleSendSkills");
+            System.err.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handleSendSkills");
             return;
         }
 
@@ -1306,7 +1335,7 @@ public class Protocol {
 
     private static void handleDiceRoll() {
         if (incomingData.length() < 6) {
-            System.out.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handleDiceRoll");
+            System.err.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handleDiceRoll");
             return;
         }
 
@@ -1340,7 +1369,7 @@ public class Protocol {
 
     private static void handleSetInvisible() {
         if (incomingData.length() < 4) {
-            System.out.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handleSetInvisible");
+            System.err.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handleSetInvisible");
             return;
         }
 
@@ -1368,7 +1397,7 @@ public class Protocol {
 
     private static void handleAddForumMessage() {
         if (incomingData.length() < 8) {
-            System.out.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handleAddForumMessage");
+            System.err.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handleAddForumMessage");
             return;
         }
 
@@ -1398,7 +1427,7 @@ public class Protocol {
 
     private static void handleLevelUp() {
         if (incomingData.length() < 3) {
-            System.out.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handleLevelUp");
+            System.err.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handleLevelUp");
             return;
         }
 
@@ -1415,7 +1444,7 @@ public class Protocol {
 
     private static void handleMiniStats() {
         if (incomingData.length() < 20) {
-            System.out.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handleMiniStats");
+            System.err.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handleMiniStats");
             return;
         }
 
@@ -1443,7 +1472,7 @@ public class Protocol {
 
     private static void handleFame() {
         if (incomingData.length() < 29) {
-            System.out.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handleFame");
+            System.err.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handleFame");
             return;
         }
 
@@ -1475,7 +1504,7 @@ public class Protocol {
 
     private static void handleUpdateHungerAndThirst() {
         if (incomingData.length() < 5) {
-            System.out.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handleUpdateHungerAndThirst");
+            System.err.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handleUpdateHungerAndThirst");
             return;
         }
 
@@ -1498,7 +1527,7 @@ public class Protocol {
 
     private static void handleChangeNPCInventorySlot() {
         if (incomingData.length() < 21) {
-            System.out.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handleChangeNPCInventorySlot");
+            System.err.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handleChangeNPCInventorySlot");
             return;
         }
 
@@ -1540,7 +1569,7 @@ public class Protocol {
 
     private static void handleShowSignal() {
         if (incomingData.length() < 5) {
-            System.out.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handleShowSignal");
+            System.err.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handleShowSignal");
             return;
         }
 
@@ -1574,7 +1603,7 @@ public class Protocol {
 
     private static void handleErrorMessage() {
         if (incomingData.length() < 3) {
-            System.out.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handleErrorMessage");
+            System.err.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handleErrorMessage");
             return;
         }
 
@@ -1604,7 +1633,7 @@ public class Protocol {
 
     private static void handleCarpenterObjects() {
         if (incomingData.length() < 3) {
-            System.out.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handleCarpenterObjects");
+            System.err.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handleCarpenterObjects");
             return;
         }
 
@@ -1680,7 +1709,7 @@ public class Protocol {
 
     private static void handleBlacksmithArmors() {
         if (incomingData.length() < 3) {
-            System.out.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handleBlacksmithArmors");
+            System.err.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handleBlacksmithArmors");
             return;
         }
 
@@ -1750,7 +1779,7 @@ public class Protocol {
 
     private static void handleBlacksmithWeapons() {
         if (incomingData.length() < 3) {
-            System.out.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handleBlacksmithWeapons");
+            System.err.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handleBlacksmithWeapons");
             return;
         }
 
@@ -1831,7 +1860,7 @@ public class Protocol {
     private static void handleAtributes() {
         // NUMATRIBUTES
         if (incomingData.length() < 1 + 5) {
-            System.out.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handleAtributes");
+            System.err.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handleAtributes");
             return;
         }
 
@@ -1869,7 +1898,7 @@ public class Protocol {
 
     private static void handleChangeSpellSlot() {
         if (incomingData.length() < 6) {
-            System.out.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handleChangeSpellSlot");
+            System.err.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handleChangeSpellSlot");
             return;
         }
 
@@ -1889,7 +1918,7 @@ public class Protocol {
 
     private static void handleChangeBankSlot() {
         if (incomingData.length() < 5) {
-            System.out.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handleChangeBankSlot");
+            System.err.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handleChangeBankSlot");
             return;
         }
 
@@ -1938,7 +1967,7 @@ public class Protocol {
 
     private static void handleChangeInventorySlot() {
         if (incomingData.length() < 22) {
-            System.out.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handleChangeInventorySlot");
+            System.err.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handleChangeInventorySlot");
             return;
         }
 
@@ -2011,7 +2040,7 @@ public class Protocol {
 
     private static void handleWorkRequestTarget() {
         if (incomingData.length() < 2) {
-            System.out.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handleWorkRequestTarget");
+            System.err.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handleWorkRequestTarget");
             return;
         }
 
@@ -2020,33 +2049,42 @@ public class Protocol {
 
         byte usingSkills = incomingData.readByte();
 
-        //UsingSkill = incomingData.ReadByte()
-        //
-        //    //FrmMain.MousePointer = 2
-        //
-        //    Select Case UsingSkill
-        //        Case Magia
-        //            Call AddtoRichTextBox(//FrmMain.RecTxt, MENSAJE_TRABAJO_MAGIA, 100, 100, 120, 0, 0)
-        //        Case Pesca
-        //            Call AddtoRichTextBox(//FrmMain.RecTxt, MENSAJE_TRABAJO_PESCA, 100, 100, 120, 0, 0)
-        //        Case Robar
-        //            Call AddtoRichTextBox(//FrmMain.RecTxt, MENSAJE_TRABAJO_ROBAR, 100, 100, 120, 0, 0)
-        //        Case Talar
-        //            Call AddtoRichTextBox(//FrmMain.RecTxt, MENSAJE_TRABAJO_TALAR, 100, 100, 120, 0, 0)
-        //        Case Mineria
-        //            Call AddtoRichTextBox(//FrmMain.RecTxt, MENSAJE_TRABAJO_MINERIA, 100, 100, 120, 0, 0)
-        //        Case FundirMetal
-        //            Call AddtoRichTextBox(//FrmMain.RecTxt, MENSAJE_TRABAJO_FUNDIRMETAL, 100, 100, 120, 0, 0)
-        //        Case Proyectiles
-        //            Call AddtoRichTextBox(//FrmMain.RecTxt, MENSAJE_TRABAJO_PROYECTILES, 100, 100, 120, 0, 0)
-        //    End Select
+        switch(E_Skills.values()[usingSkills - 1]){
+            case Magia:
+                Console.get().addMsgToConsole(MENSAJE_TRABAJO_MAGIA, false, false, new RGBColor());
+                break;
 
-        System.out.println("handleWorkRequestTarget Cargado! - FALTA TERMINAR");
+            case Pesca:
+                Console.get().addMsgToConsole(MENSAJE_TRABAJO_PESCA, false, false, new RGBColor());
+                break;
+
+            case Robar:
+                Console.get().addMsgToConsole(MENSAJE_TRABAJO_ROBAR, false, false, new RGBColor());
+                break;
+
+            case Talar:
+                Console.get().addMsgToConsole(MENSAJE_TRABAJO_TALAR, false, false, new RGBColor());
+                break;
+
+            case Mineria:
+                Console.get().addMsgToConsole(MENSAJE_TRABAJO_MINERIA, false, false, new RGBColor());
+                break;
+
+            case Proyectiles:
+                Console.get().addMsgToConsole(MENSAJE_TRABAJO_PROYECTILES, false, false, new RGBColor());
+                break;
+        }
+
+        if (usingSkills == FundirMetal) {
+            Console.get().addMsgToConsole(MENSAJE_TRABAJO_FUNDIRMETAL, false, false, new RGBColor());
+        }
+
+        System.out.println("handleWorkRequestTarget Cargado! - FALTA TESTIAR!");
     }
 
     private static void handleUpdateUserStats() {
         if (incomingData.length() < 26) {
-            System.out.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handleUpdateUserStats");
+            System.err.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handleUpdateUserStats");
             return;
         }
 
@@ -2096,7 +2134,7 @@ public class Protocol {
 
     private static void handleCreateFX() {
         if (incomingData.length() < 7) {
-            System.out.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handleCreateFX");
+            System.err.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handleCreateFX");
             return;
         }
 
@@ -2122,7 +2160,7 @@ public class Protocol {
         final int userY = User.get().getUserPos().getY();
         if (User.get().inMapBounds(userX, userY)) return;
 
-        User.get().setUnderCeiling(User.get().checkUnderCeiling()
+        User.get().setUnderCeiling(User.get().checkUnderCeiling());
 
         if(Rain.get().isRaining()) {
             Rain.get().setRainValue(false);
@@ -2143,7 +2181,7 @@ public class Protocol {
 
     private static void handleAreaChanged() {
         if (incomingData.length() < 3) {
-            System.out.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handleAreaChanged");
+            System.err.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handleAreaChanged");
             return;
         }
 
@@ -2158,7 +2196,7 @@ public class Protocol {
 
     private static void handleGuildList() {
         if (incomingData.length() < 3) {
-            System.out.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handleGuildList");
+            System.err.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handleGuildList");
             return;
         }
 
@@ -2193,7 +2231,7 @@ public class Protocol {
 
     private static void handlePlayWave() {
         if (incomingData.length() < 3) {
-            System.out.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handlePlayWave");
+            System.err.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handlePlayWave");
             return;
         }
 
@@ -2210,7 +2248,7 @@ public class Protocol {
 
     private static void handlePlayMIDI() {
         if (incomingData.length() < 4) {
-            System.out.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handlePlayMIDI");
+            System.err.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handlePlayMIDI");
             return;
         }
 
@@ -2232,7 +2270,7 @@ public class Protocol {
 
     private static void handleBlockPosition() {
         if (incomingData.length() < 4) {
-            System.out.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handleBlockPosition");
+            System.err.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handleBlockPosition");
             return;
         }
 
@@ -2247,7 +2285,7 @@ public class Protocol {
 
     private static void handleObjectDelete() {
         if (incomingData.length() < 3) {
-            System.out.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handleObjectDelete");
+            System.err.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handleObjectDelete");
             return;
         }
 
@@ -2262,7 +2300,7 @@ public class Protocol {
 
     private static void handleObjectCreate() {
         if (incomingData.length() < 5) {
-            System.out.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handleObjectCreate");
+            System.err.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handleObjectCreate");
             return;
         }
 
@@ -2279,7 +2317,7 @@ public class Protocol {
 
     private static void handleCharacterChange() {
         if (incomingData.length() < 18) {
-            System.out.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handleCharacterMove");
+            System.err.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handleCharacterMove");
             return;
         }
 
@@ -2332,7 +2370,7 @@ public class Protocol {
 
     private static void handleForceCharMove() {
         if (incomingData.length() < 2) {
-            System.out.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handleCharacterMove");
+            System.err.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handleCharacterMove");
             return;
         }
 
@@ -2349,7 +2387,7 @@ public class Protocol {
 
     private static void handleCharacterMove() {
         if (incomingData.length() < 5) {
-            System.out.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handleCharacterMove");
+            System.err.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handleCharacterMove");
             return;
         }
 
@@ -2401,7 +2439,7 @@ public class Protocol {
 
     private static void handleCharacterCreate() {
         if (incomingData.length() < 24) {
-            System.out.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handleCharacterCreate");
+            System.err.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handleCharacterCreate");
             return;
         }
 
@@ -2492,7 +2530,7 @@ public class Protocol {
 
     private static void handleUserCharIndexInServer() {
         if (incomingData.length() < 3) {
-            System.out.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handleUserCharIndexInServer");
+            System.err.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handleUserCharIndexInServer");
             return;
         }
 
@@ -2507,7 +2545,7 @@ public class Protocol {
 
     private static void handleUserIndexInServer() {
         if (incomingData.length() < 3) {
-            System.out.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handleUserIndexInServer");
+            System.err.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handleUserIndexInServer");
             return;
         }
 
@@ -2520,7 +2558,7 @@ public class Protocol {
 
     private static void handleShowMessageBox() {
         if (incomingData.length() < 3) {
-            System.out.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handleShowMessageBox");
+            System.err.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handleShowMessageBox");
             return;
         }
 
@@ -2539,7 +2577,7 @@ public class Protocol {
 
     private static void handleGuildChat() {
         if (incomingData.length() < 3) {
-            System.out.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handleGuildChat");
+            System.err.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handleGuildChat");
             return;
         }
 
@@ -2713,7 +2751,7 @@ public class Protocol {
 
     private static void handleChangeMap() {
         if (incomingData.length() < 5) {
-            System.out.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handleChangeMap");
+            System.err.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handleChangeMap");
             return;
         }
 

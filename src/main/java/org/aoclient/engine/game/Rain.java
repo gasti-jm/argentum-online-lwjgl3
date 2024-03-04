@@ -30,8 +30,7 @@ public class Rain {
     public static final String SND_LLUVIAOUT = "resources/sounds/lluviaout.ogg";
     public static final String SND_LLUVIAINEND = "resources/sounds/lluviainend.ogg";
     public static final String SND_LLUVIAOUTEND = "resources/sounds/lluviaoutend.ogg";
-    private Sound[] rainSounds;
-
+    private final Sound[] rainSounds;
 
 
     private Rain() {
@@ -44,7 +43,6 @@ public class Rain {
         this.rainSounds[1] = new Sound(SND_LLUVIAOUT, true);
         this.rainSounds[2] = new Sound(SND_LLUVIAINEND, false);
         this.rainSounds[3] = new Sound(SND_LLUVIAOUTEND, false);
-
 
         // tiempo para cambiar el frame
         this.timeToChangeFrame = 0.1f;
@@ -90,7 +88,7 @@ public class Rain {
     public void render(RGBColor color) {
         if (!bLluvia[User.get().getUserMap()] || !bRain) return;
 
-        renderSound();
+        this.renderSound();
 
         // actualizacion de index para RLluvia
         if (timeToChangeFrame <= 0) {
@@ -113,26 +111,16 @@ public class Rain {
     }
 
     private void renderSound() {
-        if(bLluvia[User.get().getUserMap()]) {
-            if(bRain) {
-                if(User.get().isUnderCeiling()) {
-                    if(rainSounds[1].isPlaying())
-                        rainSounds[1].stop();
-
-
-                    if(!rainSounds[0].isPlaying()) rainSounds[0].play();
-                } else {
-                    if(rainSounds[0].isPlaying())
-                        rainSounds[0].stop();
-
-
-                    if(!rainSounds[1].isPlaying()) rainSounds[1].play();
-                }
+        if(bLluvia[User.get().getUserMap()] && bRain) {
+            if(User.get().isUnderCeiling()) {
+                if(rainSounds[1].isPlaying()) rainSounds[1].stop();
+                if(!rainSounds[0].isPlaying()) rainSounds[0].play();
+            } else {
+                if(rainSounds[0].isPlaying()) rainSounds[0].stop();
+                if(!rainSounds[1].isPlaying()) rainSounds[1].play();
             }
         }
     }
-
-
 
     public void stopRainingSoundLoop() {
         if(User.get().isUnderCeiling()) {
