@@ -1,5 +1,6 @@
 package org.aoclient.engine.game;
 
+import org.aoclient.engine.Sound;
 import org.aoclient.engine.renderer.RGBColor;
 import org.aoclient.engine.renderer.Surface;
 import org.aoclient.engine.renderer.TextureOGL;
@@ -24,11 +25,26 @@ public class Rain {
     private float timeToChangeFrame;
     private int iFrameIndex;
 
+    // sonidos de la lluvia
+    public static final String SND_LLUVIAIN = "resources/sounds/lluviain.ogg";
+    public static final String SND_LLUVIAOUT = "resources/sounds/lluviaout.ogg";
+    public static final String SND_LLUVIAINEND = "resources/sounds/lluviainend.ogg";
+    public static final String SND_LLUVIAOUTEND = "resources/sounds/lluviaoutend.ogg";
+    private Sound[] rainSounds;
+
+
 
     private Rain() {
         this.bRain = false;
         this.RLluvia = new RECT[8];
         this.LTLluvia = new int[5];
+        this.rainSounds = new Sound[4];
+
+        this.rainSounds[0] = new Sound(SND_LLUVIAIN, true);
+        this.rainSounds[1] = new Sound(SND_LLUVIAOUT, true);
+        this.rainSounds[2] = new Sound(SND_LLUVIAINEND, false);
+        this.rainSounds[3] = new Sound(SND_LLUVIAOUTEND, false);
+
 
         // tiempo para cambiar el frame
         this.timeToChangeFrame = 0.1f;
@@ -74,6 +90,8 @@ public class Rain {
     public void render(RGBColor color) {
         if (!bLluvia[User.get().getUserMap()] || !bRain) return;
 
+        renderSound();
+
         // actualizacion de index para RLluvia
         if (timeToChangeFrame <= 0) {
             timeToChangeFrame = 0.1f;
@@ -92,6 +110,46 @@ public class Rain {
         }
 
         timeToChangeFrame -= deltaTime;
+    }
+
+    private void renderSound() {
+        if(bLluvia[User.get().getUserMap()]) {
+            if(bRain) {
+                if(User.get().isUnderCeiling()) {
+                    if(rainSounds[1].isPlaying())
+                        rainSounds[1].stop();
+
+
+                    if(!rainSounds[0].isPlaying()) rainSounds[0].play();
+                } else {
+                    if(rainSounds[0].isPlaying())
+                        rainSounds[0].stop();
+
+
+                    if(!rainSounds[1].isPlaying()) rainSounds[1].play();
+                }
+            }
+        }
+    }
+
+
+
+    public void stopRainingSoundLoop() {
+        if(User.get().isUnderCeiling()) {
+            rainSounds[0].stop();
+        } else {
+            rainSounds[1].stop();
+        }
+    }
+
+    public void playEndRainSound() {
+        if(bLluvia[User.get().getUserMap()]) {
+            if(User.get().isUnderCeiling()) {
+                rainSounds[2].play();
+            } else {
+                rainSounds[3].play();
+            }
+        }
     }
 
     public boolean isRaining() {

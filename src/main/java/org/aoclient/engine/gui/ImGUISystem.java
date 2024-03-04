@@ -36,19 +36,7 @@ public class ImGUISystem {
     private final double[] mousePosY = new double[1];
 
     // arreglo de ventanas gui
-    private List<Form> frms = new ArrayList<>();
-
-
-    // Local variables for application goes here
-    private final String imguiDemoLink = "https://raw.githubusercontent.com/ocornut/imgui/v1.75/imgui_demo.cpp"; // Link to put into clipboard
-    private final byte[] testPayload = "Test Payload".getBytes(); // Test data for payload. Should be represented as raw byt array.
-    private String dropTargetText = "Drop Here";
-    private float[] backgroundColor = {0.5f, 0, 0}; // To modify background color dynamically
-    private int clickCount = 0;
-    private final ImString resizableStr = new ImString(5);
-    private final ImBool showDemoWindow = new ImBool();
-    private ImVec2 windowSize = new ImVec2(); // Vector to store "Custom Window" size
-    private ImVec2 windowPos = new ImVec2(); // Vector to store "Custom Window" position
+    private final List<Form> frms = new ArrayList<>();
 
 
     private ImGUISystem() {
@@ -231,99 +219,6 @@ public class ImGUISystem {
         // After ImGui#render call we provide draw data into LWJGL3 renderer.
         // At that moment ImGui will be rendered to the current OpenGL context.
         imGuiGl3.render(ImGui.getDrawData());
-    }
-
-    private void showUi() {
-        ImGui.setNextWindowSize(810, 605, ImGuiCond.Once);
-        ImGui.setNextWindowPos(-5, -1, ImGuiCond.Once);
-
-        ImGui.begin("Conectar", ImGuiWindowFlags.NoTitleBar |
-                ImGuiWindowFlags.NoMove |
-                ImGuiWindowFlags.NoFocusOnAppearing |
-                ImGuiWindowFlags.NoDecoration |
-                ImGuiWindowFlags.NoBackground |
-                ImGuiWindowFlags.NoResize |
-                ImGuiWindowFlags.NoCollapse |
-                ImGuiWindowFlags.NoSavedSettings |
-                ImGuiWindowFlags.NoBringToFrontOnFocus);  // Start Custom window
-
-        // Example of how to draw an image in the bottom-right corner of the window
-        ImGui.getWindowSize(windowSize);
-        ImGui.getWindowPos(windowPos);
-        final float xPoint = windowPos.x + windowSize.x;
-        final float yPoint = windowPos.y + windowSize.y;
-
-        //ImGui.image(backgroundImage, 800, 600);
-        //ImGui.getWindowDrawList().addImage(backgroundImage, 0, 0, 800, 600);
-
-        // Simple checkbox to show demo window
-        //ImGui.checkbox("Show demo window", showDemoWindow);
-        //ImGui.separator();
-
-        // Drag'n'Drop functionality
-        ImGui.button("Drag me");
-        if (ImGui.beginDragDropSource()) {
-            ImGui.setDragDropPayload("payload_type", testPayload, testPayload.length);
-            ImGui.text("Drag started");
-            ImGui.endDragDropSource();
-        }
-        ImGui.sameLine();
-        ImGui.text(dropTargetText);
-        if (ImGui.beginDragDropTarget()) {
-            final byte[] payload = ImGui.acceptDragDropPayload("payload_type");
-            if (payload != null) {
-                dropTargetText = new String(payload);
-            }
-            ImGui.endDragDropTarget();
-        }
-
-        // Color picker
-        ImGui.alignTextToFramePadding();
-        ImGui.text("Background color:");
-        ImGui.sameLine();
-        ImGui.colorEdit3("##click_counter_col", backgroundColor, ImGuiColorEditFlags.NoInputs | ImGuiColorEditFlags.NoDragDrop);
-
-        // Simple click counter
-        if (ImGui.button("Click")) {
-            clickCount++;
-        }
-        if (ImGui.isItemHovered()) {
-            ImGui.setMouseCursor(ImGuiMouseCursor.Hand);
-        }
-        ImGui.sameLine();
-        ImGui.text("Count: " + clickCount);
-
-        ImGui.separator();
-
-
-        // Input field with auto-resize ability
-        ImGui.text("You can use text inputs with auto-resizable strings!");
-        ImGui.inputText("Resizable input", resizableStr, ImGuiInputTextFlags.CallbackResize);
-        ImGui.text("text len:");
-        ImGui.sameLine();
-        ImGui.textColored(.12f, .6f, 1, 1, Integer.toString(resizableStr.getLength()));
-        ImGui.sameLine();
-        ImGui.text("| buffer size:");
-        ImGui.sameLine();
-        ImGui.textColored(1, .6f, 0, 1, Integer.toString(resizableStr.getBufferSize()));
-
-        ImGui.separator();
-        ImGui.newLine();
-
-        // Link to the original demo file
-        ImGui.text("Consider to look the original ImGui demo: ");
-        ImGui.setNextItemWidth(500);
-        ImGui.textColored(0, .8f, 0, 1, imguiDemoLink);
-        ImGui.sameLine();
-        if (ImGui.button("Copy")) {
-            ImGui.setClipboardText(imguiDemoLink);
-        }
-
-        ImGui.end();  // End Custom window
-
-        if (showDemoWindow.get()) {
-            ImGui.showDemoWindow(showDemoWindow);
-        }
     }
 
     private void showFrms() {

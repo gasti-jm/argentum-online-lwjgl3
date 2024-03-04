@@ -20,6 +20,7 @@ import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 
 import static org.aoclient.connection.Messages.*;
+import static org.aoclient.engine.Sound.*;
 import static org.aoclient.engine.game.models.Character.*;
 import static org.aoclient.engine.utils.GameData.*;
 
@@ -2121,9 +2122,7 @@ public class Protocol {
         final int userY = User.get().getUserPos().getY();
         if (User.get().inMapBounds(userX, userY)) return;
 
-        //bTecho = (MapData(UserPos.X, UserPos.Y).Trigger = 1 Or _
-        //            MapData(UserPos.X, UserPos.Y).Trigger = 2 Or _
-        //            MapData(UserPos.X, UserPos.Y).Trigger = 4)
+        User.get().setUnderCeiling(User.get().checkUnderCeiling());
 
         //If bRain Then
         //        If bLluvia(UserMap) Then
@@ -2139,25 +2138,14 @@ public class Protocol {
         //        End If
         //    End If
 
-
         if(Rain.get().isRaining()) {
             Rain.get().setRainValue(false);
-
-            // stop rain sound...... (FALTA)
-
-            if(bLluvia[User.get().getUserMap()]) {
-                if(User.get().isUnderCeiling()) {
-                    // play "lluviainend.wav"
-                } else {
-                    // play "lluviaoutend.wav"
-                }
-            }
+            Rain.get().stopRainingSoundLoop();
+            Rain.get().playEndRainSound();
         } else {
             Rain.get().setRainValue(true);
         }
 
-
-        System.out.println("handleRainToggle CARGADO - FALTA TERMINAR!");
     }
 
     private static void handlePauseToggle() {
@@ -2231,7 +2219,7 @@ public class Protocol {
         byte srcY = incomingData.readByte();
 
         // Call Audio.PlayWave(CStr(wave) & ".wav", srcX, srcY)
-        Sound.playSound(String.valueOf(wave) + ".ogg");
+        playSound(String.valueOf(wave) + ".ogg");
     }
 
     private static void handlePlayMIDI() {
@@ -2528,13 +2516,7 @@ public class Protocol {
         User.get().setUserCharIndex(incomingData.readInteger());
         User.get().getUserPos().setX(charList[User.get().getUserCharIndex()].getPos().getX());
         User.get().getUserPos().setY(charList[User.get().getUserCharIndex()].getPos().getY());
-
-        //'Are we under a roof?
-        //    bTecho = IIf(MapData(UserPos.X, UserPos.Y).Trigger = 1 Or _
-        //            MapData(UserPos.X, UserPos.Y).Trigger = 2 Or _
-        //            MapData(UserPos.X, UserPos.Y).Trigger = 4, True, False)
-        //
-
+        User.get().setUnderCeiling(User.get().checkUnderCeiling());
     }
 
     private static void handleUserIndexInServer() {

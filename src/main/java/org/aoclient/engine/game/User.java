@@ -116,7 +116,7 @@ public final class User {
 
             userMoving = true;
 
-            underCeiling = checkUnderCeiling(mapData[userPos.getX()][userPos.getY()].getTrigger());
+            underCeiling = checkUnderCeiling();
         }
     }
 
@@ -124,8 +124,10 @@ public final class User {
      *
      * @desc: Checkea si estamos bajo techo segun el trigger en donde esta parado el usuario.
      */
-    private boolean checkUnderCeiling(short trigger) {
-        return trigger == 1 || trigger == 2 || trigger == 4;
+    public boolean checkUnderCeiling() {
+        return mapData[userPos.getX()][userPos.getY()].getTrigger() == 1 ||
+                mapData[userPos.getX()][userPos.getY()].getTrigger() == 2 ||
+                mapData[userPos.getX()][userPos.getY()].getTrigger() == 4;
     }
 
     /**
@@ -410,8 +412,7 @@ public final class User {
                     && estaPCarea(charIndex)
                     && (charList[charIndex].getPriv() == 0 || charList[charIndex].getPriv() > 5)) {
 
-
-
+                
                 if (charList[charIndex].isPie()) {
                     playSound(SND_PASOS1);
                     charList[charIndex].setPie(false);
@@ -442,6 +443,10 @@ public final class User {
 
     public boolean isUnderCeiling() {
         return underCeiling;
+    }
+
+    public void setUnderCeiling(boolean underCeiling) {
+        this.underCeiling = underCeiling;
     }
 
     public void setUserMap(short userMap) {

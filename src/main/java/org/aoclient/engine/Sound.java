@@ -1,5 +1,8 @@
 package org.aoclient.engine;
 
+import org.aoclient.engine.game.Rain;
+import org.aoclient.engine.game.User;
+
 import java.io.File;
 import java.nio.IntBuffer;
 import java.nio.ShortBuffer;
@@ -18,12 +21,11 @@ public final class Sound {
     public static final String SND_NAVEGANDO = "50.ogg";
     public static final String SND_OVER = "click2.ogg";
     public static final String SND_DICE = "cupdice.ogg";
-    public static final String SND_LLUVIAINEND = "lluviainend.ogg";
-    public static final String SND_LLUVIAOUTEND = "lluviaoutend.ogg";
+
 
     private int bufferId;
     private int sourceId;
-    private String filepath;
+    private final String filepath;
     private boolean isPlaying = false;
 
     /**
@@ -214,4 +216,5 @@ public final class Sound {
         sounds.forEach((s, sound) -> sound.delete());
         sounds.clear();
     }
+
 }
