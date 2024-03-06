@@ -1515,14 +1515,6 @@ public class Protocol {
         User.get().setUserMinAGU(incomingData.readByte());
         User.get().setUserMaxHAM(incomingData.readByte());
         User.get().setUserMinHAM(incomingData.readByte());
-
-//        float bWidth = (((float) (userMinAGU) / ((float) userMaxAGU)) * 75);
-//        //FrmMain.get().shpSed.setWidth((int) (75 - bWidth));
-//        //FrmMain.get().shpSed.setX(584 + (75 - //FrmMain.get().shpSed.getWidth()));
-//
-//        bWidth = (((float) (userMinHAM) / ((float) userMaxHAM)) * 75);
-//        //FrmMain.get().shpHambre.setWidth((int) (75 - bWidth));
-//        //FrmMain.get().shpHambre.setX(584 + (75 - //FrmMain.get().shpHambre.getWidth()));
     }
 
     private static void handleChangeNPCInventorySlot() {
@@ -2101,22 +2093,6 @@ public class Protocol {
         User.get().setUserLvl(incomingData.readByte());
         User.get().setUserPasarNivel(incomingData.readLong());
         User.get().setUserExp(incomingData.readLong());
-
-//        ///////// MANA
-//        float bWidth = (((float) (User.get().userMinMAN) / ((float) User.get().userMaxMAN)) * 75);
-//        //FrmMain.get().shpMana.setWidth((int) (75 - bWidth));
-//        //FrmMain.get().shpMana.setX(584 + (75 - //FrmMain.get().shpMana.getWidth()));
-//
-//        //////// VIDA
-//        bWidth = (((float) (User.get().userMinHP) / ((float) User.get().userMaxHP)) * 75);
-//        //FrmMain.get().shpVida.setWidth((int) (75 - bWidth));
-//        //FrmMain.get().shpVida.setX(584 + (75 - //FrmMain.get().shpVida.getWidth()));
-//
-//
-//        //////// ENERGIA
-//        bWidth = (((float) (User.get().userMinSTA) / ((float) User.get().userMaxSTA)) * 75);
-//        //FrmMain.get().shpEnergia.setWidth((int) (75 - bWidth));
-//        //FrmMain.get().shpEnergia.setX(584 + (75 - //FrmMain.get().shpEnergia.getWidth()));
 
 
         charList[User.get().getUserCharIndex()].setDead(User.get().getUserMinHP() <= 0);
@@ -2830,9 +2806,6 @@ public class Protocol {
 
         User.get().setUserMinHP(incomingData.readInteger());
 
-        //FrmMain.get().shpVida.setWidth( (int) (((float) (User.get().userMinHP) / ((float) User.get().userMaxHP)) * 75) );
-        //FrmMain.get().shpVida.setX(584 + (75 - //FrmMain.get().shpVida.getWidth()));
-
         charList[User.get().getUserCharIndex()].setDead(User.get().getUserMinHP() <= 0);
 
         //
@@ -2859,11 +2832,6 @@ public class Protocol {
 
         // variable global
         User.get().setUserMinMAN(incomingData.readInteger());
-
-        //float bWidth = (((float) (User.get().getUserMinMAN()) / ((float) User.get().getUserMaxMAN())) * 75);
-        //FrmMain.get().shpMana.setWidth((int) (75 - bWidth));
-        //FrmMain.get().shpMana.setX(584 + (75 - //FrmMain.get().shpMana.getWidth()));
-
     }
 
     private static void handleUpdateSta() {
@@ -2877,12 +2845,6 @@ public class Protocol {
 
         // variable global
         User.get().setUserMinSTA(incomingData.readInteger());
-
-        //float bWidth = (((float) (User.get().getUserMinSTA()) / ((float) User.get().getUserMaxSTA())) * 75);
-        //FrmMain.get().shpEnergia.setWidth((int) (75 - bWidth));
-        //FrmMain.get().shpEnergia.setX(584 + (75 - //FrmMain.get().shpEnergia.getWidth()));
-
-        System.out.println("handleUpdateSta CARGADO - FALTA TERMINAR!");
     }
 
     private static void handleShowCarpenterForm() {

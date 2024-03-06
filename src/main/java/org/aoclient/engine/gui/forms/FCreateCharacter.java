@@ -31,7 +31,6 @@ public final class FCreateCharacter extends Form{
     // Necesito hacer esto para dibujar despues el cuerpo y cabeza por encima de la interfaz
     private final TextureOGL background;
 
-
     // Text Boxes
     private final ImString txtNombre = new ImString();
     private final ImString txtPassword = new ImString();
@@ -51,14 +50,18 @@ public final class FCreateCharacter extends Form{
     private final ImInt currentItemGenero = new ImInt(0);
     private final String[] strGenero = {"Hombre", "Mujer"};
 
-
     public FCreateCharacter(){
         this.formName = "frmCreateCharacter";
         this.background = Surface.get().createTexture("resources/gui/VentanaCrearPersonaje.jpg", true);
         this.loadComboBoxes();
     }
 
+    /**
+     * Carga los datos que tendran almacenados los combo boxes.
+     */
     private void loadComboBoxes() {
+        // Esto hay que internacionalizarlo en algun momento, es puro hardcodeo.
+
         // Hogar
         for (int i = 0; i < E_Cities.values().length; i++){
             strCities[i] = E_Cities.values()[i].name();
@@ -66,7 +69,7 @@ public final class FCreateCharacter extends Form{
 
         // Raza
         for (int i = 0; i < E_Raza.values().length; i++){
-            strRazas[i] = E_Raza.values()[i].name();
+            strRazas[i] = E_Raza.values()[i].name().replace("_", " "); // para quitar el "_" del enum
         }
 
         // Clases
@@ -95,28 +98,23 @@ public final class FCreateCharacter extends Form{
                 ImGuiWindowFlags.NoSavedSettings |
                 ImGuiWindowFlags.NoBringToFrontOnFocus);
 
-        //ImGui.getWindowDrawList().addImage(backgroundImage, 0, 0, Window.get().getWidth(), Window.get().getHeight());
 
         // btnVolver
         ImGui.setCursorPos(92, 548);
         if (ImGui.invisibleButton("btnVolver", 86, 30)) {
-            ImGUISystem.get().checkAddOrChange("frmConnect", new FConnect());
-            music.stop();
-            this.close();
+            this.buttonGoBack();
         }
 
         // btnCreateCharacter
         ImGui.setCursorPos(610,546);
         if(ImGui.invisibleButton("btnCreate", 174, 29)) {
-            this.createCharacter();
+            this.buttonCreateCharacter();
         }
 
         //  btnTirarDados
         ImGui.setCursorPos(13, 185);
         if (ImGui.invisibleButton("btnTirarDados", 60, 60)) {
-            SocketConnection.get().connect(options.getIpServer(), options.getPortServer());
-            writeThrowDices();
-            playSound(SND_DICE);
+            this.buttonThrowDices();
         }
 
 
@@ -195,7 +193,7 @@ public final class FCreateCharacter extends Form{
         ImGui.end();
     }
 
-    private void createCharacter() {
+    private void buttonCreateCharacter() {
         if(txtNombre.get().contains(" ")) {
            ImGUISystem.get().checkAddOrChange("frmMessage", new FMessage("Nombre invalido, remueva los espacios en blanco."));
            return;
@@ -275,5 +273,18 @@ public final class FCreateCharacter extends Form{
 
     bShowTutorial = True
          */
+    }
+
+    private void buttonThrowDices() {
+        SocketConnection.get().connect(options.getIpServer(), options.getPortServer());
+        writeThrowDices();
+        playSound(SND_DICE);
+    }
+
+    private void buttonGoBack() {
+        ImGUISystem.get().checkAddOrChange("frmConnect", new FConnect());
+        music.stop();
+
+        this.close();
     }
 }

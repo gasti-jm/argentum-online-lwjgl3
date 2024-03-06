@@ -1,5 +1,6 @@
 package org.aoclient.engine.gui.forms;
 
+import imgui.ImDrawList;
 import imgui.ImGui;
 import imgui.ImString;
 import imgui.enums.ImGuiCol;
@@ -19,8 +20,8 @@ import java.io.IOException;
 import static org.aoclient.engine.utils.Time.FPS;
 
 public final class FMain extends Form {
-    private final ImString sendText = new ImString();
-
+    private final ImString sendText     = new ImString();
+    private final User dataUser         = User.get();
 
     public FMain() {
         this.formName = "frmMain";
@@ -36,8 +37,6 @@ public final class FMain extends Form {
 
     @Override
     public void render() {
-        final User dataUser = User.get();
-
         ImGui.setNextWindowSize(Window.get().getWidth() + 10, Window.get().getHeight() + 5, ImGuiCond.Once);
         ImGui.setNextWindowPos(-5, -1, ImGuiCond.Once);
 
@@ -52,8 +51,11 @@ public final class FMain extends Form {
                 ImGuiWindowFlags.NoSavedSettings |
                 ImGuiWindowFlags.NoBringToFrontOnFocus);
 
+
         ImGui.setWindowFocus();
         ImGui.getWindowDrawList().addImage(backgroundImage, 0, 0, Window.get().getWidth(), Window.get().getHeight());
+
+        this.drawShapes();
 
         // LBL FPS
         final String txtFPS = String.valueOf(FPS);
@@ -181,6 +183,52 @@ public final class FMain extends Form {
         Console.get().drawConsole();
 
         ImGui.end();
+    }
+
+    private void drawShapes() {
+        final ImDrawList drawList   = ImGui.getWindowDrawList();
+        final int shpColor          = ImGui.getColorU32(0, 0, 0, 1);
+
+        // shpEnergia
+        float bWidth = (((float) (dataUser.getUserMinSTA()) / ((float) dataUser.getUserMaxSTA())) * 75);
+        drawList.addRectFilled(
+                (584 + bWidth), 453,
+                584 + 75,
+                453 + 12, shpColor
+        );
+
+        // shpMana
+        bWidth = (((float) (dataUser.getUserMinMAN()) / ((float) dataUser.getUserMaxMAN())) * 75);
+        drawList.addRectFilled(
+                (584 + bWidth), 477,
+                584 + 75,
+                477 + 12, shpColor
+        );
+
+        // shpVida
+        bWidth = (((float) (dataUser.getUserMinHP()) / ((float) dataUser.getUserMaxHP())) * 75);
+        drawList.addRectFilled(
+                (584 + bWidth), 498,
+                584 + 75,
+                498 + 12, shpColor
+        );
+
+        // shpHambre
+        bWidth = (((float) (dataUser.getUserMinHAM()) / ((float) dataUser.getUserMaxHAM())) * 75);
+        drawList.addRectFilled(
+                (584 + bWidth), 521,
+                584 + 75,
+                521 + 12, shpColor
+        );
+
+        // shpSed
+        bWidth = (((float) (dataUser.getUserMinAGU()) / ((float) dataUser.getUserMaxAGU())) * 75);
+        drawList.addRectFilled(
+                (584 + bWidth), 544,
+                584 + 75,
+                544 + 12, shpColor
+        );
+
     }
 
     public void clearSendTxt() {
