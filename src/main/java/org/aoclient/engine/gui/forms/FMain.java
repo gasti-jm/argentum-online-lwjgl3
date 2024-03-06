@@ -38,7 +38,7 @@ public final class FMain extends Form {
     public void render() {
         final User dataUser = User.get();
 
-        ImGui.setNextWindowSize(810, 605, ImGuiCond.Once);
+        ImGui.setNextWindowSize(Window.get().getWidth() + 10, Window.get().getHeight() + 5, ImGuiCond.Once);
         ImGui.setNextWindowPos(-5, -1, ImGuiCond.Once);
 
         // Start Custom window
@@ -52,7 +52,8 @@ public final class FMain extends Form {
                 ImGuiWindowFlags.NoSavedSettings |
                 ImGuiWindowFlags.NoBringToFrontOnFocus);
 
-        ImGui.getWindowDrawList().addImage(backgroundImage, 0, 0, 800, 600);
+        ImGui.setWindowFocus();
+        ImGui.getWindowDrawList().addImage(backgroundImage, 0, 0, Window.get().getWidth(), Window.get().getHeight());
 
         // LBL FPS
         final String txtFPS = String.valueOf(FPS);
@@ -162,8 +163,17 @@ public final class FMain extends Form {
             ImGui.pushItemWidth(546);
                 ImGui.pushStyleColor(ImGuiCol.FrameBg, 0, 0,0, 1);
 
+                    ImGui.pushID("sendText");
                     ImGui.inputText("", sendText, ImGuiInputTextFlags.CallbackResize);
-                    ImGui.setKeyboardFocusHere();
+                    ImGui.popID();
+
+                    if(ImGui.isWindowFocused()) {
+                        ImGui.setKeyboardFocusHere();
+                    } else {
+                        dataUser.setTalking(false);
+                    }
+
+
 
                 ImGui.popStyleColor();
             ImGui.popItemWidth();

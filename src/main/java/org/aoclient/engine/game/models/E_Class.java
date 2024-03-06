@@ -1,22 +1,26 @@
 package org.aoclient.engine.game.models;
 
 public enum E_Class {
-    MAGE(1),
-    CLERIC(2),       //Clérigo
-    WARRIOR(3),      //Guerrero
-    ASSASIN(4),      //Asesino
-    THIEF(5),        //Ladrón
-    BARD(6),         //Bardo
-    DRUID(7),        //Druida
-    BANDIT(8),       //Bandido
-    PALADIN(9),      //Paladín
-    HUNTER(10),      //Cazador
-    WORKER(11),      //Trabajador
-    PIRAT(12);       //Pirata
+    Mago(1),
+    Clerigo(2),
+    Guerrero(3),
+    Asesino(4),
+    Ladron(5),
+    Bardo(6),
+    Druida(7),
+    Bandido(8),
+    Paladin(9),
+    Cazador(10),
+    Trabajador(11),
+    Pirata(12);
 
-    public final int value;
+    private final int value;
 
     E_Class(int value) {
         this.value = value;
+    }
+
+    public int getValue() {
+        return value;
     }
 }

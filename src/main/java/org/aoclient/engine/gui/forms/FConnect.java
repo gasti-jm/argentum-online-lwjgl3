@@ -10,6 +10,7 @@ import org.aoclient.engine.game.User;
 import org.aoclient.engine.gui.ImGUISystem;
 
 import static org.aoclient.connection.Protocol.writeLoginExistingChar;
+import static org.aoclient.engine.Sound.playMusic;
 import static org.aoclient.engine.utils.GameData.options;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_ENTER;
 
@@ -42,7 +43,9 @@ public final class FConnect extends Form {
         ImGui.separator();
 
         if(ImGui.button("Create Character")) {
-            close();
+            ImGUISystem.get().checkAddOrChange("frmCreateCharacter", new FCreateCharacter());
+            playMusic("7.ogg");
+            this.close();
         }
 
         ImGui.sameLine();

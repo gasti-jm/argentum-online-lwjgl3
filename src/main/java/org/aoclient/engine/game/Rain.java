@@ -13,7 +13,7 @@ public class Rain {
     private static Rain instance;
 
     static class RECT {
-        int top, left, right, bottom;
+        private int top, left, right, bottom;
     }
 
     private final TextureOGL rainTexture;
@@ -26,10 +26,10 @@ public class Rain {
     private int iFrameIndex;
 
     // sonidos de la lluvia
-    public static final String SND_LLUVIAIN = "resources/sounds/lluviain.ogg";
-    public static final String SND_LLUVIAOUT = "resources/sounds/lluviaout.ogg";
-    public static final String SND_LLUVIAINEND = "resources/sounds/lluviainend.ogg";
-    public static final String SND_LLUVIAOUTEND = "resources/sounds/lluviaoutend.ogg";
+    private static final String SND_LLUVIAIN = "resources/sounds/lluviain.ogg";
+    private static final String SND_LLUVIAOUT = "resources/sounds/lluviaout.ogg";
+    private static final String SND_LLUVIAINEND = "resources/sounds/lluviainend.ogg";
+    private static final String SND_LLUVIAOUTEND = "resources/sounds/lluviaoutend.ogg";
     private final Sound[] rainSounds;
 
 

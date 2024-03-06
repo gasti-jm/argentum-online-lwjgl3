@@ -17,7 +17,7 @@ public class ByteQueue {
     private static final int NOT_ENOUGH_SPACE = 10001;
     private static final int DATA_BUFFER = 10240;
 
-    public byte[] data; // is private...
+    private byte[] data;
     private int queueCapacity;
     private int queueLength;
 
@@ -167,11 +167,6 @@ public class ByteQueue {
     public byte readByte() {
         byte[] buf = new byte[1];
         removeData(readData(buf, 1));
-
-
-
-
-
         return bigToLittle_Byte(ByteBuffer.wrap(buf).get());
     }
 
