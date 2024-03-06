@@ -13,6 +13,8 @@ import org.aoclient.engine.game.models.E_Cities;
 import org.aoclient.engine.game.models.E_Class;
 import org.aoclient.engine.game.models.E_Raza;
 import org.aoclient.engine.gui.ImGUISystem;
+import org.aoclient.engine.renderer.Surface;
+import org.aoclient.engine.renderer.TextureOGL;
 
 import javax.imageio.ImageIO;
 import java.io.File;
@@ -21,10 +23,14 @@ import java.io.IOException;
 import static org.aoclient.connection.Protocol.writeThrowDices;
 import static org.aoclient.engine.Sound.SND_DICE;
 import static org.aoclient.engine.Sound.playSound;
+import static org.aoclient.engine.renderer.Drawn.geometryBoxRenderGUI;
 import static org.aoclient.engine.utils.GameData.music;
 import static org.aoclient.engine.utils.GameData.options;
 
 public final class FCreateCharacter extends Form{
+    // Necesito hacer esto para dibujar despues el cuerpo y cabeza por encima de la interfaz
+    private final TextureOGL background;
+
 
     // Text Boxes
     private final ImString txtNombre = new ImString();
@@ -48,18 +54,11 @@ public final class FCreateCharacter extends Form{
 
     public FCreateCharacter(){
         this.formName = "frmCreateCharacter";
-
-        try {
-            this.backgroundImage = loadTexture(ImageIO.read(new File("resources/gui/VentanaCrearPersonaje.jpg")));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-
+        this.background = Surface.get().createTexture("resources/gui/VentanaCrearPersonaje.jpg", true);
         this.loadComboBoxes();
     }
 
     private void loadComboBoxes() {
-
         // Hogar
         for (int i = 0; i < E_Cities.values().length; i++){
             strCities[i] = E_Cities.values()[i].name();
@@ -80,6 +79,8 @@ public final class FCreateCharacter extends Form{
 
     @Override
     public void render() {
+        geometryBoxRenderGUI(background, 0, 0, 1.0f);
+
         ImGui.setNextWindowSize(Window.get().getWidth() + 10, Window.get().getHeight() + 5, ImGuiCond.Once);
         ImGui.setNextWindowPos(-5, -1, ImGuiCond.Once);
 
@@ -94,7 +95,7 @@ public final class FCreateCharacter extends Form{
                 ImGuiWindowFlags.NoSavedSettings |
                 ImGuiWindowFlags.NoBringToFrontOnFocus);
 
-        ImGui.getWindowDrawList().addImage(backgroundImage, 0, 0, Window.get().getWidth(), Window.get().getHeight());
+        //ImGui.getWindowDrawList().addImage(backgroundImage, 0, 0, Window.get().getWidth(), Window.get().getHeight());
 
         // btnVolver
         ImGui.setCursorPos(92, 548);
@@ -124,7 +125,7 @@ public final class FCreateCharacter extends Form{
         ImGui.pushItemWidth(337);
             ImGui.pushStyleColor(ImGuiCol.FrameBg, 0, 0,0, 1);
                 ImGui.pushID("txtNombre");
-                    ImGui.inputText("", txtNombre, ImGuiInputTextFlags.CallbackResize);
+                    ImGui.inputText("", txtNombre, ImGuiInputTextFlags.CallbackResize | ImGuiInputTextFlags.CallbackCharFilter);
                 ImGui.popID();
             ImGui.popStyleColor();
         ImGui.popItemWidth();

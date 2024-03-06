@@ -18,11 +18,11 @@ import static org.lwjgl.glfw.GLFW.*;
  * Se recomienda leer el JavaDoc de la clase padre "Scene.java".
  */
 public final class IntroScene extends Scene {
-    private float timeScene = 15.0f; // 15 segundos de intro.
-    private float timeLogo = 5.0f; // 5seg
-    private float timePresentation = 3.33f;
+    private float timeScene         = 15.0f; // 15 segundos de intro.
+    private float timeLogo          = 5.0f; // 5seg
+    private float timePresentation  = 3.33f;
+    private int nextInterface       = 1;
     private float alphaInterface;
-    private int nextInterface = 1;
 
     private TextureOGL[] imgs;
 

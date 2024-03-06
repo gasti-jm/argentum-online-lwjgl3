@@ -81,11 +81,11 @@ public final class FMain extends Form {
         ImGui.text(dataUser.getUserMinAGU() + "/" + dataUser.getUserMaxAGU());
 
         // lblLvl
-        ImGui.setCursorPos(615, 78);
+        ImGui.setCursorPos(625, 78);
         ImGui.text("Nivel: " + dataUser.getUserLvl());
 
         //lblPorcLvl
-        ImGui.setCursorPos(615, 90);
+        ImGui.setCursorPos(624, 90);
         if (dataUser.getUserPasarNivel() > 0) {
             ImGui.textColored(0.5f, 1, 1, 1,
                     "[" + Math.round((float) (dataUser.getUserExp() * 100) / dataUser.getUserPasarNivel()) + "%]");
@@ -94,7 +94,7 @@ public final class FMain extends Form {
         }
 
         //lblExp
-        ImGui.setCursorPos(615, 102);
+        ImGui.setCursorPos(625, 102);
         ImGui.text("Exp: " + dataUser.getUserExp() + "/" + dataUser.getUserPasarNivel());
 
         // gldLbl (color)
@@ -150,12 +150,6 @@ public final class FMain extends Form {
         ImGui.setCursorPos(710, 417);
         ImGui.invisibleButton("Tirar Oro", 17, 17);
 
-        // para hacer click derecho y abrir el frm
-        if (ImGui.beginPopupContextItem("Tirar Oro")) {
-            ImGUISystem.get().checkAddOrChange("frmCantidad", new FCantidad(true));
-            ImGui.endPopup();
-        }
-
         // txtSend
         if(dataUser.isTalking()) {
             ImGui.setCursorPos(15, 123);
@@ -173,12 +167,15 @@ public final class FMain extends Form {
                         dataUser.setTalking(false);
                     }
 
-
-
                 ImGui.popStyleColor();
             ImGui.popItemWidth();
         }
 
+        // para hacer click derecho y abrir el frm
+        if (ImGui.beginPopupContextItem("Tirar Oro")) {
+            ImGUISystem.get().checkAddOrChange("frmCantidad", new FCantidad(true));
+            ImGui.endPopup();
+        }
 
         /////// console
         Console.get().drawConsole();
