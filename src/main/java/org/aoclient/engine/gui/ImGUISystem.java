@@ -58,7 +58,7 @@ public class ImGUISystem {
           ImGui proporciona 3 esquemas de color diferentes para diseñar. Usaremos el clásico aquí.
           Pruebe otros con los métodos ImGui.styleColors().
          */
-        ImGui.styleColorsClassic();
+        ImGui.styleColorsDark();
 
         // Iniciamos la configuracion de ImGuiIO
         final ImGuiIO io = ImGui.getIO();
@@ -202,10 +202,14 @@ public class ImGUISystem {
         io.setMousePos((float) mousePosX[0], (float) mousePosY[0]);
         io.setDeltaTime(deltaTime);
 
-        // Update mouse cursor
-        final int imguiCursor = ImGui.getMouseCursor();
-        glfwSetCursor(Window.get().getWindow(), mouseCursors[imguiCursor]);
-        glfwSetInputMode(Window.get().getWindow(), GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+        // ACA HAY QUE LABURAR CON LOS CURSORES.
+        if (Window.get().isCursorSpells()){
+            glfwSetCursor(Window.get().getWindow(), glfwCreateStandardCursor(GLFW_CROSSHAIR_CURSOR));
+        } else {
+            glfwSetCursor(Window.get().getWindow(), mouseCursors[ImGui.getMouseCursor()]);
+            glfwSetInputMode(Window.get().getWindow(), GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+        }
+
 
         // IMPORTANT!!
         // Any Dear ImGui code SHOULD go between NewFrame()/Render() methods

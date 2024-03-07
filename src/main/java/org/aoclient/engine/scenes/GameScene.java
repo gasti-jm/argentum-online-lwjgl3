@@ -1,19 +1,19 @@
 package org.aoclient.engine.scenes;
 
-import org.aoclient.engine.game.BindKeys;
-import org.aoclient.engine.game.Console;
-import org.aoclient.engine.game.Rain;
+import imgui.enums.ImGuiMouseCursor;
+import org.aoclient.engine.Window;
+import org.aoclient.engine.game.*;
 import org.aoclient.engine.game.models.E_KeyType;
 import org.aoclient.engine.game.models.E_Skills;
 import org.aoclient.engine.gui.forms.FCantidad;
 import org.aoclient.engine.gui.forms.FMain;
 import org.aoclient.engine.gui.ImGUISystem;
 import org.aoclient.engine.listeners.KeyListener;
-import org.aoclient.engine.game.User;
 import org.aoclient.engine.listeners.MouseListener;
 import org.aoclient.engine.renderer.RGBColor;
 
 import static org.aoclient.connection.Protocol.*;
+import static org.aoclient.engine.game.IntervalTimer.INT_SENTRPU;
 import static org.aoclient.engine.game.models.E_KeyType.*;
 import static org.aoclient.engine.game.models.Character.*;
 import static org.aoclient.engine.game.models.E_Heading.*;
@@ -37,10 +37,11 @@ public final class GameScene extends Scene {
     private float offSetCounterX    = 0;
     private float offSetCounterY    = 0;
     private float alphaCeiling      = 1.0f;
+    private boolean autoMove        = false;
 
     RGBColor ambientColor; // color de ambiente.
-    private boolean autoMove        = false;
     private FMain frmMain;
+    private final IntervalTimer intervalToUpdatePos = new IntervalTimer(INT_SENTRPU);
 
     @Override
     public void init() {
@@ -68,6 +69,8 @@ public final class GameScene extends Scene {
         }
 
         if(!visible) return;
+
+        intervalToUpdatePos.update();
 
         if (user.isUserMoving()) {
             if (user.getAddToUserPos().getX() != 0) {
@@ -102,6 +105,8 @@ public final class GameScene extends Scene {
         // Estamos haciendo click en el render?
         if(inGameArea()) {
             if (MouseListener.mouseButtonClick(GLFW_MOUSE_BUTTON_LEFT)) {
+                Window.get().setCursorSpells(false);
+
                 writeLeftClick(getTileMouseX((int) MouseListener.getX() - POS_SCREEN_X), getTileMouseY((int) MouseListener.getY() - POS_SCREEN_Y));
             }
         }
@@ -143,7 +148,7 @@ public final class GameScene extends Scene {
      * Chequea y ejecuta la tecla que fue bindeada.
      */
     private void checkBindedKeys() {
-        E_KeyType keyPressed = bindKeys.getKeyPressed(KeyListener.getLastKeyPressed());
+        final E_KeyType keyPressed = bindKeys.getKeyPressed(KeyListener.getLastKeyPressed());
 
         // Caminata!
         if(!user.isUserMoving()) {
@@ -164,8 +169,14 @@ public final class GameScene extends Scene {
             }
         }
 
-        if(keyPressed == null) return; // ni me gasto si la tecla presionada no existe en nuestro bind.
+        if(keyPressed == null)
+            return; // ni me gasto si la tecla presionada no existe en nuestro bind.
+
         if (KeyListener.isKeyReadyForAction(bindKeys.getBindedKey(keyPressed))) {
+
+            // Para que al hablar no ejecute teclas bindeadas y solo permita cerrar nuevamente el sendText
+            if(User.get().isTalking() && keyPressed != mKeyTalk) return;
+
             switch (keyPressed) {
                 case mKeyUseObject:
                     user.getUserInventory().useItem();
@@ -208,6 +219,16 @@ public final class GameScene extends Scene {
 
                 case mKeyHide:
                     writeWork(E_Skills.Ocultarse.value);
+                    break;
+
+                case mKeySteal:
+                    writeWork(E_Skills.Robar.value);
+                    break;
+
+                case mKeyRequestRefresh:
+                    if(intervalToUpdatePos.check()) {
+                        writeRequestPositionUpdate();
+                    }
                     break;
 
             }
@@ -253,7 +274,6 @@ public final class GameScene extends Scene {
             camera.setScreenX(camera.getScreenX() - x + camera.getScreenminX() );
             camera.incrementScreenY();
         }
-
 
         // LAYER 2 & OBJECTS 32x32
         camera.setScreenY(camera.getMinYOffset() - TILE_BUFFER_SIZE);
@@ -320,7 +340,7 @@ public final class GameScene extends Scene {
         }
 
         // LAYER 4
-        checkEffectCeiling();
+        this.checkEffectCeiling();
 
         if (alphaCeiling > 0.0f) {
             camera.setScreenY(camera.getMinYOffset() - TILE_BUFFER_SIZE);

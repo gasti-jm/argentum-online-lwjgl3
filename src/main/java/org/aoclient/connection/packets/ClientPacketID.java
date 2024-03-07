@@ -21,7 +21,7 @@ public enum ClientPacketID {
     CommerceEnd,             //FINCOM
     UserCommerceEnd,         //FINCOMUSU
     UserCommerceConfirm,
-            CommerceChat,
+    CommerceChat,
     BankEnd,                 //FINBAN
     UserCommerceOk,          //COMUSUOK
     UserCommerceReject,      //COMUSUNO

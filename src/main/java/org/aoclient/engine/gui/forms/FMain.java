@@ -3,10 +3,7 @@ package org.aoclient.engine.gui.forms;
 import imgui.ImDrawList;
 import imgui.ImGui;
 import imgui.ImString;
-import imgui.enums.ImGuiCol;
-import imgui.enums.ImGuiCond;
-import imgui.enums.ImGuiInputTextFlags;
-import imgui.enums.ImGuiWindowFlags;
+import imgui.enums.*;
 import org.aoclient.engine.Engine;
 import org.aoclient.engine.Window;
 import org.aoclient.engine.game.Console;
@@ -181,6 +178,7 @@ public final class FMain extends Form {
 
         /////// console
         Console.get().drawConsole();
+
 
         ImGui.end();
     }

@@ -1,6 +1,7 @@
 package org.aoclient.engine.gui.forms;
 
 import imgui.ImGui;
+import imgui.enums.ImGuiMouseCursor;
 import org.aoclient.engine.gui.ImGUISystem;
 import org.lwjgl.BufferUtils;
 

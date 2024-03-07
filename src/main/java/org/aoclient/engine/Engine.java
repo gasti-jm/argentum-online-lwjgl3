@@ -1,5 +1,6 @@
 package org.aoclient.engine;
 
+import imgui.ImGui;
 import org.aoclient.connection.SocketConnection;
 import org.aoclient.engine.game.BindKeys;
 import org.aoclient.engine.game.models.E_KeyType;
@@ -80,7 +81,7 @@ public final class Engine implements Runnable {
     public void init(){
         System.out.println("Starting LWJGL " + Version.getVersion() + "!");
         System.out.println("Running on " + System.getProperty("os.name") + " / v" + System.getProperty("os.version") + " [" + System.getProperty("os.arch") + "]");
-        System.out.println("Java " + System.getProperty("java.version") + " (" + System.getProperty("java.home") + ")");
+        System.out.println("Java " + System.getProperty("java.version"));
 
         window = Window.get();
         window.initialize();
@@ -123,8 +124,7 @@ public final class Engine implements Runnable {
     }
 
     /**
-     * @desc: Renderizado general, primero checkea algunas teclas claves que es para salir del juego con ESC y
-     *        el cambio de mayusculas (Bloq mayus) para ser detectado en cualquier momento por el programa.
+     * @desc: Renderizado general, primero checkea algunas teclas claves que es para salir del juego con ESC
      *
      *        Luego checkea si nuestra escena es visible, todas las escenas guardan un atributo de la posible escena
      *        en la que deba ir cada una. Por ejemplo: En la escena de "IntroScene.java" tiene guardado para que su
@@ -132,8 +132,7 @@ public final class Engine implements Runnable {
      *        Si estas escenas no son visibles, quiere decir que estan listas para ser cambiadas a otra, por eso se
      *        llama a la funcion "changeScene".
      *
-     *        Por ultimo, dibuja la escena en la que estemos y renderiza cualquier formulario que pueda estar por encima
-     *        en cualquier escena. Por ejemplo un "frmMensaje".
+     *        Por ultimo, dibuja la escena en la que estemos y renderiza nuestra GUI del framework "Dear ImGUI".
      */
     private void render() {
         if (KeyListener.isKeyPressed(bindKeys.getBindedKey(E_KeyType.mKeyExitGame))) {

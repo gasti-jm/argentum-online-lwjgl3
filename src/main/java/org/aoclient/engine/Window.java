@@ -2,6 +2,7 @@ package org.aoclient.engine;
 
 import org.aoclient.engine.listeners.KeyListener;
 import org.aoclient.engine.listeners.MouseListener;
+import org.lwjgl.BufferUtils;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.glfw.GLFWImage;
 import org.lwjgl.glfw.GLFWVidMode;
@@ -10,6 +11,9 @@ import org.lwjgl.opengl.GL;
 import org.lwjgl.stb.STBImage;
 import org.lwjgl.system.MemoryStack;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.*;
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 
@@ -38,14 +42,16 @@ public final class Window {
 
     private final String title;
     private final int width, height;
+    private boolean cursorSpells;
 
     /**
      * @desc: Constructor privado por singleton.
      */
     private Window() {
-        this.title = "Argentum Online";
+        this.title = "Argentum Online Java";
         this.width = SCREEN_WIDTH;
         this.height = SCREEN_HEIGHT;
+        this.cursorSpells = false;
     }
 
     /**
@@ -118,7 +124,7 @@ public final class Window {
         } // the stack frame is popped automatically
 
 
-        loadIcon();
+        this.loadIcon();
 
         // Make the OpenGL context current
         glfwMakeContextCurrent(window);
@@ -128,6 +134,8 @@ public final class Window {
 
         // Make the window visible
         glfwShowWindow(window);
+
+        //this.loadCursor();
 
         // Initialize the audio device
         String defaultDeviceName = alcGetString(0, ALC_DEFAULT_DEVICE_SPECIFIER);
@@ -197,6 +205,36 @@ public final class Window {
     }
 
     /**
+     * Carga un cursor grafico, por ahora no lo vamos a usar.
+     */
+    @Deprecated
+    private void loadCursor() {
+        try(MemoryStack stack = MemoryStack.stackPush()) {
+            final IntBuffer ch = stack.mallocInt(1), w = stack.mallocInt(1), h = stack.mallocInt(1);
+            final ByteBuffer imgBuff = STBImage.stbi_load("./resources/MAIN.png", w, h, ch, 4);
+
+            if (imgBuff == null) return;
+
+            GLFWImage image = GLFWImage.malloc();
+            GLFWImage.Buffer imageBf = GLFWImage.malloc(1);
+
+            image.set(w.get(), h.get(), imgBuff);
+            imageBf.put(0, image);
+
+            // the hotspot indicates the displacement of the sprite to the
+            // position where mouse clicks are registered (see image below)
+            int hotspotX = 3;
+            int hotspotY = 6;
+
+            // create custom cursor and store its ID
+            long cursorID = glfwCreateCursor(image, hotspotX, hotspotY);
+
+            // set current cursor
+            glfwSetCursor(window, cursorID);
+        }
+    }
+
+    /**
      * @desc Minimiza nuestra ventana
      */
     public void minimizar(){
@@ -209,6 +247,10 @@ public final class Window {
      */
     public boolean isMinimized() {
         return glfwGetWindowAttrib(window, GLFW_ICONIFIED) == GLFW_TRUE;
+    }
+
+    public void changeCursor(int cursor) {
+        glfwSetCursor(window, glfwCreateStandardCursor(cursor));
     }
 
     /**
@@ -235,4 +277,11 @@ public final class Window {
         return height;
     }
 
+    public boolean isCursorSpells() {
+        return cursorSpells;
+    }
+
+    public void setCursorSpells(boolean cursorSpells) {
+        this.cursorSpells = cursorSpells;
+    }
 }

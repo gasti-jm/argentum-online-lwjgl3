@@ -3,6 +3,7 @@ package org.aoclient.connection;
 import org.aoclient.connection.packets.ClientPacketID;
 import org.aoclient.connection.packets.E_Messages;
 import org.aoclient.connection.packets.ServerPacketID;
+import org.aoclient.engine.Window;
 import org.aoclient.engine.game.Console;
 import org.aoclient.engine.game.Rain;
 import org.aoclient.engine.game.User;
@@ -22,6 +23,7 @@ import static org.aoclient.engine.Sound.*;
 import static org.aoclient.engine.game.models.Character.*;
 import static org.aoclient.engine.game.models.E_Skills.FundirMetal;
 import static org.aoclient.engine.utils.GameData.*;
+import static org.lwjgl.glfw.GLFW.*;
 
 public class Protocol {
     static ByteQueue incomingData = new ByteQueue();
@@ -377,7 +379,7 @@ public class Protocol {
             case WorkRequestTarget:
                 short usingSkill = incomingData.readByte();
 
-                // //FrmMain.mousepointer = 2
+                Window.get().setCursorSpells(true);
 
                 switch (usingSkill) {
                     case 0: // magia
@@ -2039,7 +2041,9 @@ public class Protocol {
         // Remove packet ID
         incomingData.readByte();
 
-        byte usingSkills = incomingData.readByte();
+        final byte usingSkills = incomingData.readByte();
+
+        Window.get().setCursorSpells(true);
 
         switch(E_Skills.values()[usingSkills - 1]){
             case Magia:
@@ -3306,7 +3310,6 @@ public class Protocol {
 
             return;
         }
-
 
         outgoingData.writeByte(ClientPacketID.Work.ordinal());
         outgoingData.writeByte(skill);

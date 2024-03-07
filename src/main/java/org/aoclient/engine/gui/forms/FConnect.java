@@ -123,7 +123,6 @@ public final class FConnect extends Form {
             this.buttonExitGame();
         }
 
-
         ImGui.end();
     }
 
