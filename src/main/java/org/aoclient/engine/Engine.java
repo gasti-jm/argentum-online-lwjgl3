@@ -124,7 +124,7 @@ public final class Engine implements Runnable {
     }
 
     /**
-     * @desc: Renderizado general, primero checkea algunas teclas claves que es para salir del juego con ESC
+     * @desc: Renderizado general
      *
      *        Luego checkea si nuestra escena es visible, todas las escenas guardan un atributo de la posible escena
      *        en la que deba ir cada una. Por ejemplo: En la escena de "IntroScene.java" tiene guardado para que su
@@ -135,10 +135,6 @@ public final class Engine implements Runnable {
      *        Por ultimo, dibuja la escena en la que estemos y renderiza nuestra GUI del framework "Dear ImGUI".
      */
     private void render() {
-        if (KeyListener.isKeyPressed(bindKeys.getBindedKey(E_KeyType.mKeyExitGame))) {
-            closeClient();
-        }
-
         // Check change screen
         if (!currentScene.isVisible()) {
             changeScene(currentScene.getChangeScene());

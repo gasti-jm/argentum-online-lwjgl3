@@ -59,6 +59,7 @@ public final class Character {
     private boolean pie;
     private boolean dead;
     private boolean invisible;
+    private boolean paralizado;
     private byte priv;
 
 
@@ -76,6 +77,7 @@ public final class Character {
         this.attackable = false;
         this.fxIndex = 0;
         this.invisible = false;
+        this.paralizado = false;
         this.moving = false;
         this.dead = false;
         this.name = "";
@@ -395,6 +397,14 @@ public final class Character {
 
     public void setInvisible(boolean invisible) {
         this.invisible = invisible;
+    }
+
+    public boolean isParalizado() {
+        return paralizado;
+    }
+
+    public void setParalizado(boolean paralizado) {
+        this.paralizado = paralizado;
     }
 
     public byte getPriv() {

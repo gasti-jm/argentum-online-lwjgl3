@@ -2,7 +2,6 @@ package org.aoclient.engine;
 
 import org.aoclient.engine.listeners.KeyListener;
 import org.aoclient.engine.listeners.MouseListener;
-import org.lwjgl.BufferUtils;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.glfw.GLFWImage;
 import org.lwjgl.glfw.GLFWVidMode;
@@ -11,9 +10,6 @@ import org.lwjgl.opengl.GL;
 import org.lwjgl.stb.STBImage;
 import org.lwjgl.system.MemoryStack;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-import java.io.*;
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 
@@ -42,7 +38,7 @@ public final class Window {
 
     private final String title;
     private final int width, height;
-    private boolean cursorSpells;
+    private boolean cursorCrosshair;
 
     /**
      * @desc: Constructor privado por singleton.
@@ -51,7 +47,7 @@ public final class Window {
         this.title = "Argentum Online Java";
         this.width = SCREEN_WIDTH;
         this.height = SCREEN_HEIGHT;
-        this.cursorSpells = false;
+        this.cursorCrosshair = false;
     }
 
     /**
@@ -223,8 +219,8 @@ public final class Window {
 
             // the hotspot indicates the displacement of the sprite to the
             // position where mouse clicks are registered (see image below)
-            int hotspotX = 3;
-            int hotspotY = 6;
+            final int hotspotX = 3;
+            final int hotspotY = 6;
 
             // create custom cursor and store its ID
             long cursorID = glfwCreateCursor(image, hotspotX, hotspotY);
@@ -277,11 +273,11 @@ public final class Window {
         return height;
     }
 
-    public boolean isCursorSpells() {
-        return cursorSpells;
+    public boolean isCursorCrosshair() {
+        return cursorCrosshair;
     }
 
-    public void setCursorSpells(boolean cursorSpells) {
-        this.cursorSpells = cursorSpells;
+    public void setCursorCrosshair(boolean cursorCrosshair) {
+        this.cursorCrosshair = cursorCrosshair;
     }
 }

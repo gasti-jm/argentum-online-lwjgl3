@@ -1,13 +1,17 @@
 package org.aoclient.engine.scenes;
 
 import org.aoclient.engine.Window;
+import org.aoclient.engine.game.BindKeys;
 import org.aoclient.engine.game.User;
+import org.aoclient.engine.game.models.E_KeyType;
 import org.aoclient.engine.gui.forms.FConnect;
 import org.aoclient.engine.gui.ImGUISystem;
+import org.aoclient.engine.listeners.KeyListener;
 import org.aoclient.engine.renderer.RGBColor;
 import org.aoclient.engine.utils.GameData;
 
 
+import static org.aoclient.engine.Engine.closeClient;
 import static org.aoclient.engine.game.models.Character.drawCharacter;
 import static org.aoclient.engine.renderer.Drawn.drawTexture;
 import static org.aoclient.engine.scenes.Camera.TILE_BUFFER_SIZE;
@@ -23,12 +27,14 @@ import static org.aoclient.engine.utils.GameData.music;
 public final class MainScene extends Scene {
     private RGBColor ambientColor;
     private final FConnect frmConnect = new FConnect();
+    private BindKeys bindKeys;
 
     @Override
     public void init() {
         super.init();
-        canChangeTo = SceneType.GAME_SCENE;
-        ambientColor = new RGBColor(1.0f, 1.0f, 1.0f);
+        canChangeTo     = SceneType.GAME_SCENE;
+        bindKeys        = BindKeys.get();
+        ambientColor    = new RGBColor(1.0f, 1.0f, 1.0f);
 
         camera.setHalfWindowTileWidth(((Window.get().getWidth() / TILE_PIXEL_SIZE) / 2));
         camera.setHalfWindowTileHeight(((Window.get().getHeight() / TILE_PIXEL_SIZE) / 2));
@@ -43,7 +49,9 @@ public final class MainScene extends Scene {
 
     @Override
     public void keyEvents() {
-
+        if (KeyListener.isKeyPressed(bindKeys.getBindedKey(E_KeyType.mKeyExitGame))) {
+            closeClient();
+        }
     }
 
     /**

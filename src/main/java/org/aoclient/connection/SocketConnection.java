@@ -1,6 +1,8 @@
 package org.aoclient.connection;
 
 
+import org.aoclient.engine.game.Rain;
+import org.aoclient.engine.game.User;
 import org.aoclient.engine.gui.forms.FMessage;
 import org.aoclient.engine.gui.ImGUISystem;
 import java.net.*;
@@ -9,6 +11,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 
 import static org.aoclient.connection.Protocol.*;
+import static org.aoclient.engine.game.models.Character.eraseAllChars;
 
 /**
  * Clase que maneja el socket de conexion.
@@ -121,8 +124,17 @@ public class SocketConnection {
             handleData.close();
             sock.close();
 
+            this.setDisconnected();
+
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private void setDisconnected() {
+        User.get().setUserConected(false);
+        eraseAllChars();
+        Rain.get().setRainValue(false);
+        User.get().setUserNavegando(false);
     }
 }

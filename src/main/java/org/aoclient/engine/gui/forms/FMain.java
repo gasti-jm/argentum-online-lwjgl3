@@ -179,7 +179,6 @@ public final class FMain extends Form {
         /////// console
         Console.get().drawConsole();
 
-
         ImGui.end();
     }
 
@@ -222,9 +221,9 @@ public final class FMain extends Form {
         // shpSed
         bWidth = (((float) (dataUser.getUserMinAGU()) / ((float) dataUser.getUserMaxAGU())) * 75);
         drawList.addRectFilled(
-                (584 + bWidth), 544,
+                (584 + bWidth), 542,
                 584 + 75,
-                544 + 12, shpColor
+                542 + 12, shpColor
         );
 
     }

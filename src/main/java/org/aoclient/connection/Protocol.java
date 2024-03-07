@@ -23,7 +23,6 @@ import static org.aoclient.engine.Sound.*;
 import static org.aoclient.engine.game.models.Character.*;
 import static org.aoclient.engine.game.models.E_Skills.FundirMetal;
 import static org.aoclient.engine.utils.GameData.*;
-import static org.lwjgl.glfw.GLFW.*;
 
 public class Protocol {
     static ByteQueue incomingData = new ByteQueue();
@@ -379,7 +378,7 @@ public class Protocol {
             case WorkRequestTarget:
                 short usingSkill = incomingData.readByte();
 
-                Window.get().setCursorSpells(true);
+                Window.get().setCursorCrosshair(true);
 
                 switch (usingSkill) {
                     case 0: // magia
@@ -902,8 +901,12 @@ public class Protocol {
     private static void handleParalizeOK() {
         // Remove packet ID
         incomingData.readByte();
-        //UserParalizado = Not UserParalizado
-        System.out.println("handleParalizeOK Cargado! - FALTA TERMINAR!");
+
+        if (charList[User.get().getUserCharIndex()].isParalizado()) {
+            charList[User.get().getUserCharIndex()].setParalizado(false);
+        } else {
+            charList[User.get().getUserCharIndex()].setParalizado(true);
+        }
     }
 
     private static void handleShowGuildFundationForm() {
@@ -2043,7 +2046,7 @@ public class Protocol {
 
         final byte usingSkills = incomingData.readByte();
 
-        Window.get().setCursorSpells(true);
+        Window.get().setCursorCrosshair(true);
 
         switch(E_Skills.values()[usingSkills - 1]){
             case Magia:
@@ -3108,12 +3111,8 @@ public class Protocol {
         // Remove packet ID
         incomingData.readByte();
 
-        User.get().setUserConected(false);
-        eraseAllChars();
         SocketConnection.get().disconnect();
 
-        Rain.get().setRainValue(false);
-        User.get().setUserNavegando(false);
 
         /*
         'Hide main form
@@ -3313,6 +3312,18 @@ public class Protocol {
 
         outgoingData.writeByte(ClientPacketID.Work.ordinal());
         outgoingData.writeByte(skill);
+    }
+
+    public static void writeQuit() {
+
+        if(charList[User.get().getUserCharIndex()].isParalizado()) {
+            Console.get().addMsgToConsole(new String("No puedes salir estando paralizado.".getBytes(), StandardCharsets.UTF_8),
+                    false, true, new RGBColor());
+
+            return;
+        }
+
+        outgoingData.writeByte(ClientPacketID.Quit.ordinal());
     }
 
 }

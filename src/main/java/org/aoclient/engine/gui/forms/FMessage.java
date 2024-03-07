@@ -5,7 +5,6 @@ import imgui.enums.ImGuiCond;
 import imgui.enums.ImGuiWindowFlags;
 
 import java.nio.charset.StandardCharsets;
-
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_ENTER;
 
 public final class FMessage extends Form {

@@ -5,9 +5,6 @@ import imgui.enums.ImGuiCond;
 import imgui.enums.ImGuiWindowFlags;
 import org.aoclient.engine.renderer.RGBColor;
 
-import java.io.UnsupportedEncodingException;
-import java.nio.charset.StandardCharsets;
-
 public class Console {
     private static Console instance;
 
@@ -48,7 +45,7 @@ public class Console {
     }
 
     /**
-     * Dibujamos la consola
+     * Dibujamos la consola (esta es una porcion de GUI del frmMain).
      */
     public void drawConsole() {
         ImGui.setNextWindowPos(10, 24);

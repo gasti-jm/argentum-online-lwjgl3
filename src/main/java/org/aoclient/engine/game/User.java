@@ -383,13 +383,10 @@ public final class User {
                 break;
         }
 
-        if (legalOk){
+        if (legalOk && !charList[userCharIndex].isParalizado()){
             writeWalk(direction);
             moveScreen(direction);
             moveCharbyHead(userCharIndex, direction);
-
-//            FrmMain.get().lblCoords.setText(userMap +
-//                    " X: " + userPos.getX() + " Y: " + userPos.getY());
 
         } else {
             if(charList[userCharIndex].getHeading() != direction) {

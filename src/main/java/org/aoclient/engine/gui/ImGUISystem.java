@@ -58,7 +58,7 @@ public class ImGUISystem {
           ImGui proporciona 3 esquemas de color diferentes para diseñar. Usaremos el clásico aquí.
           Pruebe otros con los métodos ImGui.styleColors().
          */
-        ImGui.styleColorsDark();
+        ImGui.styleColorsClassic();
 
         // Iniciamos la configuracion de ImGuiIO
         final ImGuiIO io = ImGui.getIO();
@@ -203,7 +203,7 @@ public class ImGUISystem {
         io.setDeltaTime(deltaTime);
 
         // ACA HAY QUE LABURAR CON LOS CURSORES.
-        if (Window.get().isCursorSpells()){
+        if (Window.get().isCursorCrosshair()){
             glfwSetCursor(Window.get().getWindow(), glfwCreateStandardCursor(GLFW_CROSSHAIR_CURSOR));
         } else {
             glfwSetCursor(Window.get().getWindow(), mouseCursors[ImGui.getMouseCursor()]);
@@ -215,7 +215,6 @@ public class ImGUISystem {
         // Any Dear ImGui code SHOULD go between NewFrame()/Render() methods
         ImGui.newFrame();
 
-        //this.showUi();
         showFrms();
 
         ImGui.render();

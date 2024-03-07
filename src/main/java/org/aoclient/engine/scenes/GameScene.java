@@ -1,6 +1,5 @@
 package org.aoclient.engine.scenes;
 
-import imgui.enums.ImGuiMouseCursor;
 import org.aoclient.engine.Window;
 import org.aoclient.engine.game.*;
 import org.aoclient.engine.game.models.E_KeyType;
@@ -26,7 +25,6 @@ import static org.lwjgl.glfw.GLFW.*;
 
 /**
  * Esta es la escena donde el usuario jugara.
- *
  * Se recomienda leer el JavaDoc de la clase padre "Scene.java".
  */
 public final class GameScene extends Scene {
@@ -105,7 +103,7 @@ public final class GameScene extends Scene {
         // Estamos haciendo click en el render?
         if(inGameArea()) {
             if (MouseListener.mouseButtonClick(GLFW_MOUSE_BUTTON_LEFT)) {
-                Window.get().setCursorSpells(false);
+                Window.get().setCursorCrosshair(false);
 
                 writeLeftClick(getTileMouseX((int) MouseListener.getX() - POS_SCREEN_X), getTileMouseY((int) MouseListener.getY() - POS_SCREEN_Y));
             }
@@ -133,7 +131,11 @@ public final class GameScene extends Scene {
      */
     @Override
     public void keyEvents() {
-        checkBindedKeys();
+        if (KeyListener.isKeyPressed(bindKeys.getBindedKey(E_KeyType.mKeyExitGame))) {
+            writeQuit();
+        }
+
+        this.checkBindedKeys();
     }
 
     /**
@@ -150,24 +152,7 @@ public final class GameScene extends Scene {
     private void checkBindedKeys() {
         final E_KeyType keyPressed = bindKeys.getKeyPressed(KeyListener.getLastKeyPressed());
 
-        // Caminata!
-        if(!user.isUserMoving()) {
-            if(!autoMove){
-                if (!KeyListener.lastKeysMovedPressed.isEmpty()) {
-                    if (KeyListener.lastKeysMovedPressed.get(KeyListener.lastKeysMovedPressed.size() - 1) == bindKeys.getBindedKey(mKeyUp)) {
-                        user.moveTo(NORTH);
-                    } else if (KeyListener.lastKeysMovedPressed.get(KeyListener.lastKeysMovedPressed.size() - 1) == bindKeys.getBindedKey(mKeyDown)) {
-                        user.moveTo(SOUTH);
-                    } else if (KeyListener.lastKeysMovedPressed.get(KeyListener.lastKeysMovedPressed.size() - 1) == bindKeys.getBindedKey(mKeyLeft)) {
-                        user.moveTo(WEST);
-                    } else if (KeyListener.lastKeysMovedPressed.get(KeyListener.lastKeysMovedPressed.size() - 1) == bindKeys.getBindedKey(mKeyRight)) {
-                        user.moveTo(EAST);
-                    }
-                }
-            } else {
-                autoWalk();
-            }
-        }
+        this.checkWalkKeys();
 
         if(keyPressed == null)
             return; // ni me gasto si la tecla presionada no existe en nuestro bind.
@@ -234,6 +219,27 @@ public final class GameScene extends Scene {
             }
         }
 
+    }
+
+    private void checkWalkKeys() {
+        // Caminata!
+        if(!user.isUserMoving()) {
+            if(!autoMove){
+                if (!KeyListener.lastKeysMovedPressed.isEmpty()) {
+                    if (KeyListener.lastKeysMovedPressed.get(KeyListener.lastKeysMovedPressed.size() - 1) == bindKeys.getBindedKey(mKeyUp)) {
+                        user.moveTo(NORTH);
+                    } else if (KeyListener.lastKeysMovedPressed.get(KeyListener.lastKeysMovedPressed.size() - 1) == bindKeys.getBindedKey(mKeyDown)) {
+                        user.moveTo(SOUTH);
+                    } else if (KeyListener.lastKeysMovedPressed.get(KeyListener.lastKeysMovedPressed.size() - 1) == bindKeys.getBindedKey(mKeyLeft)) {
+                        user.moveTo(WEST);
+                    } else if (KeyListener.lastKeysMovedPressed.get(KeyListener.lastKeysMovedPressed.size() - 1) == bindKeys.getBindedKey(mKeyRight)) {
+                        user.moveTo(EAST);
+                    }
+                }
+            } else {
+                autoWalk();
+            }
+        }
     }
 
     /**
