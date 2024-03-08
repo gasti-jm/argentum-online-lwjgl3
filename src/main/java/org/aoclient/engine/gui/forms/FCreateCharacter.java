@@ -1,5 +1,6 @@
 package org.aoclient.engine.gui.forms;
 
+import imgui.ImDrawList;
 import imgui.ImGui;
 import imgui.ImInt;
 import imgui.ImString;
@@ -14,12 +15,10 @@ import org.aoclient.engine.game.models.E_Cities;
 import org.aoclient.engine.game.models.E_Class;
 import org.aoclient.engine.game.models.E_Raza;
 import org.aoclient.engine.gui.ImGUISystem;
+import org.aoclient.engine.renderer.RGBColor;
 import org.aoclient.engine.renderer.Surface;
 import org.aoclient.engine.renderer.TextureOGL;
 
-import javax.imageio.ImageIO;
-import java.io.File;
-import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -27,16 +26,16 @@ import static org.aoclient.connection.Protocol.writeLoginNewChar;
 import static org.aoclient.connection.Protocol.writeThrowDices;
 import static org.aoclient.engine.Sound.SND_DICE;
 import static org.aoclient.engine.Sound.playSound;
-import static org.aoclient.engine.renderer.Drawn.geometryBoxRenderGUI;
-import static org.aoclient.engine.utils.GameData.music;
-import static org.aoclient.engine.utils.GameData.options;
+import static org.aoclient.engine.game.models.Character.*;
+import static org.aoclient.engine.renderer.Drawn.*;
+import static org.aoclient.engine.utils.GameData.*;
 
 public final class FCreateCharacter extends Form{
     // Necesito hacer esto para dibujar despues el cuerpo y cabeza por encima de la interfaz
     private final TextureOGL background;
 
     // Text Boxes
-    private final ImString txtNombre = new ImString();
+    private final ImString txtNombre = new ImString(20);
     private final ImString txtPassword = new ImString();
     private final ImString txtConfirmPassword = new ImString();
     private final ImString txtMail = new ImString();
@@ -54,10 +53,22 @@ public final class FCreateCharacter extends Form{
     private final ImInt currentItemGenero = new ImInt(0);
     private final String[] strGenero = {"Hombre", "Mujer"};
 
+    private final RGBColor color;
+    private final int shpColor;
+
+    private int userHead;
+    private int userBody;
+
     public FCreateCharacter(){
-        this.formName = "frmCreateCharacter";
-        this.background = Surface.get().createTexture("resources/gui/VentanaCrearPersonaje.jpg", true);
+        this.formName       = "frmCreateCharacter";
+        this.background     = Surface.get().createTexture("resources/gui/VentanaCrearPersonaje.jpg", true);
+        this.userHead       = HUMANO_H_PRIMER_CABEZA;
+        this.userBody       = HUMANO_H_CUERPO_DESNUDO;
+        this.color          = new RGBColor(1,1,1);
+        this.shpColor       = ImGui.getColorU32(1, 0, 0, 1);
+
         this.loadComboBoxes();
+        this.giveBodyAndHead();
     }
 
     /**
@@ -83,11 +94,11 @@ public final class FCreateCharacter extends Form{
 
     }
 
-
     @Override
     public void render() {
-        geometryBoxRenderGUI(background, 0, 0, 1.0f);
+        final ImDrawList drawList = ImGui.getWindowDrawList();
 
+        geometryBoxRenderGUI(background, 0, 0, 1.0f);
         ImGui.setNextWindowSize(Window.get().getWidth() + 10, Window.get().getHeight() + 5, ImGuiCond.Once);
         ImGui.setNextWindowPos(-5, -1, ImGuiCond.Once);
 
@@ -127,7 +138,7 @@ public final class FCreateCharacter extends Form{
         ImGui.pushItemWidth(337);
             ImGui.pushStyleColor(ImGuiCol.FrameBg, 0, 0,0, 1);
                 ImGui.pushID("txtNombre");
-                    ImGui.inputText("", txtNombre, ImGuiInputTextFlags.CallbackResize | ImGuiInputTextFlags.CallbackCharFilter);
+                    ImGui.inputText("", txtNombre, ImGuiInputTextFlags.CallbackCharFilter);
                 ImGui.popID();
             ImGui.popStyleColor();
         ImGui.popItemWidth();
@@ -174,7 +185,9 @@ public final class FCreateCharacter extends Form{
         ImGui.setCursorPos(408, 233);
         ImGui.pushItemWidth(175);
             ImGui.pushID("cbRaza");
-                ImGui.combo("", currentItemRaza, strRazas, strRazas.length);
+                if(ImGui.combo("", currentItemRaza, strRazas, strRazas.length)) {
+                    this.giveBodyAndHead();
+                }
             ImGui.popID();
         ImGui.popItemWidth();
 
@@ -190,11 +203,173 @@ public final class FCreateCharacter extends Form{
         ImGui.setCursorPos(408, 304);
         ImGui.pushItemWidth(175);
             ImGui.pushID("cbGenero");
-                ImGui.combo("", currentItemGenero, strGenero, strGenero.length);
+                if(ImGui.combo("", currentItemGenero, strGenero, strGenero.length)) {
+                    this.giveBodyAndHead();
+                }
             ImGui.popID();
         ImGui.popItemWidth();
 
+        // HeadPJ(0)
+        ImGui.setCursorPos(410, 395);
+        if(ImGui.invisibleButton("leftChangeHead", 16, 15)) {
+            this.headPJButton(0);
+        }
+
+        // HeadPJ(1)
+        ImGui.setCursorPos(569, 395);
+        if(ImGui.invisibleButton("rightChangeHead", 16, 15)) {
+            this.headPJButton(1);
+        }
+
+        //480, 392
+        drawList.addRect(
+                479, 391,
+                505,
+                418, shpColor
+        );
+
         ImGui.end();
+
+        this.updateHeadSelection();
+    }
+
+    private void headPJButton(int index) {
+        switch (index) {
+            case 0:
+                this.userHead = checkCabeza(userHead + 1);
+                break;
+
+            case 1:
+                this.userHead = checkCabeza(userHead - 1);
+        }
+    }
+
+    private void updateHeadSelection () {
+        int head = this.userHead;
+        drawHead(checkCabeza(head), 2); head++;
+        drawHead(checkCabeza(head), 3); head++;
+        drawHead(checkCabeza(head), 4);
+
+        head = this.userHead; head--;
+        drawHead(checkCabeza(head), 1); head--;
+        drawHead(checkCabeza(head), 0);
+    }
+
+    private void drawHead(int head, int index) {
+        final int headGraphic = headData[head].getHead(3).getGrhIndex();
+
+        switch (index) {
+            case 0:
+                drawGrhIndex(headGraphic, 429, 395, color);
+                break;
+            case 1:
+                drawGrhIndex(headGraphic, 456, 395, color);
+                break;
+            case 2:
+                drawGrhIndex(headGraphic, 483, 395, color);
+                break;
+            case 3:
+                drawGrhIndex(headGraphic, 510, 395, color);
+                break;
+
+            case 4:
+                drawGrhIndex(headGraphic, 537, 395, color);
+                break;
+        }
+    }
+
+    private int checkCabeza(int head) {
+        int retHead = head;
+        E_Raza razaSelected = E_Raza.values()[currentItemRaza.get()];
+
+        switch (currentItemGenero.get()) {
+            case 0: // hombre
+                switch (razaSelected) {
+                    case Humano:
+                        if(head > HUMANO_H_ULTIMA_CABEZA) {
+                            retHead = HUMANO_H_PRIMER_CABEZA + (head - HUMANO_H_ULTIMA_CABEZA) - 1;
+                        } else if(head < HUMANO_H_PRIMER_CABEZA) {
+                            retHead =  HUMANO_H_ULTIMA_CABEZA - (HUMANO_H_PRIMER_CABEZA - head) + 1;
+                        }
+                        break;
+
+                    case Elfo:
+                        if (head > ELFO_H_ULTIMA_CABEZA) {
+                            retHead = ELFO_H_PRIMER_CABEZA + (head - ELFO_H_ULTIMA_CABEZA) - 1;
+                        } else if(head < ELFO_H_PRIMER_CABEZA) {
+                            retHead = ELFO_H_ULTIMA_CABEZA - (ELFO_H_PRIMER_CABEZA - head) + 1;
+                        }
+                        break;
+
+                    case Elfo_Drow:
+                        if (head > DROW_H_ULTIMA_CABEZA) {
+                            retHead = DROW_H_PRIMER_CABEZA + (head - DROW_H_ULTIMA_CABEZA) - 1;
+                        } else if (head < DROW_H_PRIMER_CABEZA) {
+                            retHead = DROW_H_ULTIMA_CABEZA - (DROW_H_PRIMER_CABEZA - head) + 1;
+                        }
+                        break;
+
+                    case Enano:
+                        if (head > ENANO_H_ULTIMA_CABEZA) {
+                            retHead = ENANO_H_PRIMER_CABEZA + (head - ENANO_H_ULTIMA_CABEZA) - 1;
+                        } else if (head < ENANO_H_PRIMER_CABEZA) {
+                            retHead = ENANO_H_ULTIMA_CABEZA - (ENANO_H_PRIMER_CABEZA - head) + 1;
+                        }
+                        break;
+
+                    case Gnomo:
+                        if (head > GNOMO_H_ULTIMA_CABEZA) {
+                            retHead = GNOMO_H_PRIMER_CABEZA + (head - GNOMO_H_ULTIMA_CABEZA) - 1;
+                        } else if (head < GNOMO_H_PRIMER_CABEZA) {
+                            retHead = GNOMO_H_ULTIMA_CABEZA - (GNOMO_H_PRIMER_CABEZA - head) + 1;
+                        }
+                }
+                break;
+
+            case 1: // mujer
+                switch (razaSelected) {
+                    case Humano:
+                        if(head > HUMANO_M_ULTIMA_CABEZA) {
+                            retHead = HUMANO_M_PRIMER_CABEZA + (head - HUMANO_M_ULTIMA_CABEZA) - 1;
+                        } else if(head < HUMANO_M_PRIMER_CABEZA) {
+                            retHead =  HUMANO_M_ULTIMA_CABEZA - (HUMANO_M_PRIMER_CABEZA - head) + 1;
+                        }
+                        break;
+
+                    case Elfo:
+                        if (head > ELFO_M_ULTIMA_CABEZA) {
+                            retHead = ELFO_M_PRIMER_CABEZA + (head - ELFO_M_ULTIMA_CABEZA) - 1;
+                        } else if(head < ELFO_M_PRIMER_CABEZA) {
+                            retHead = ELFO_M_ULTIMA_CABEZA - (ELFO_M_PRIMER_CABEZA - head) + 1;
+                        }
+                        break;
+
+                    case Elfo_Drow:
+                        if (head > DROW_M_ULTIMA_CABEZA) {
+                            retHead = DROW_M_PRIMER_CABEZA + (head - DROW_M_ULTIMA_CABEZA) - 1;
+                        } else if (head < DROW_M_PRIMER_CABEZA) {
+                            retHead = DROW_M_ULTIMA_CABEZA - (DROW_M_PRIMER_CABEZA - head) + 1;
+                        }
+                        break;
+
+                    case Enano:
+                        if (head > ENANO_M_ULTIMA_CABEZA) {
+                            retHead = ENANO_M_PRIMER_CABEZA + (head - ENANO_M_ULTIMA_CABEZA) - 1;
+                        } else if (head < ENANO_M_PRIMER_CABEZA) {
+                            retHead = ENANO_M_ULTIMA_CABEZA - (ENANO_M_PRIMER_CABEZA - head) + 1;
+                        }
+                        break;
+
+                    case Gnomo:
+                        if (head > GNOMO_M_ULTIMA_CABEZA) {
+                            retHead = GNOMO_M_PRIMER_CABEZA + (head - GNOMO_M_ULTIMA_CABEZA) - 1;
+                        } else if (head < GNOMO_M_PRIMER_CABEZA) {
+                            retHead = GNOMO_M_ULTIMA_CABEZA - (GNOMO_M_PRIMER_CABEZA - head) + 1;
+                        }
+                }
+        }
+
+        return retHead;
     }
 
     private void buttonCreateCharacter() {
@@ -202,7 +377,6 @@ public final class FCreateCharacter extends Form{
         final int userSexo = currentItemGenero.get() + 1;
         final int userClase = currentItemClass.get() + 1;
         final int userHogar = currentItemHogar.get() + 1;
-        final int userHead = 1; // prueba
 
         if(!checkData()) return;
 
@@ -222,6 +396,84 @@ public final class FCreateCharacter extends Form{
         music.stop();
 
         this.close();
+    }
+
+    private void giveBodyAndHead(){
+        E_Raza razaSelected = E_Raza.values()[currentItemRaza.get()];
+
+        switch (currentItemGenero.get()) {
+            case 0: // hombre
+                switch (razaSelected){
+                    case Humano:
+                        this.userHead = HUMANO_H_PRIMER_CABEZA;
+                        this.userBody = HUMANO_H_CUERPO_DESNUDO;
+                        break;
+
+                    case Elfo:
+                        this.userHead = ELFO_H_PRIMER_CABEZA;
+                        this.userBody = ELFO_H_CUERPO_DESNUDO;
+                        break;
+
+                    case Elfo_Drow:
+                        this.userHead = DROW_H_PRIMER_CABEZA;
+                        this.userBody = DROW_H_CUERPO_DESNUDO;
+                        break;
+
+                    case Enano:
+                        this.userHead = ENANO_H_PRIMER_CABEZA;
+                        this.userBody = ENANO_H_CUERPO_DESNUDO;
+                        break;
+
+                    case Gnomo:
+                        this.userHead = GNOMO_H_PRIMER_CABEZA;
+                        this.userBody = GNOMO_H_CUERPO_DESNUDO;
+                        break;
+
+                    default:
+                        this.userHead = 0;
+                        this.userBody = 0;
+
+                }
+                break;
+
+
+            case 1: // mujer
+                switch (razaSelected){
+                    case Humano:
+                        this.userHead = HUMANO_M_PRIMER_CABEZA;
+                        this.userBody = HUMANO_M_CUERPO_DESNUDO;
+                        break;
+
+                    case Elfo:
+                        this.userHead = ELFO_M_PRIMER_CABEZA;
+                        this.userBody = ELFO_M_CUERPO_DESNUDO;
+                        break;
+
+                    case Elfo_Drow:
+                        this.userHead = DROW_M_PRIMER_CABEZA;
+                        this.userBody = DROW_M_CUERPO_DESNUDO;
+                        break;
+
+                    case Enano:
+                        this.userHead = ENANO_M_PRIMER_CABEZA;
+                        this.userBody = ENANO_M_CUERPO_DESNUDO;
+                        break;
+
+                    case Gnomo:
+                        this.userHead = GNOMO_M_PRIMER_CABEZA;
+                        this.userBody = GNOMO_M_CUERPO_DESNUDO;
+                        break;
+
+                    default:
+                        this.userHead = 0;
+                        this.userBody = 0;
+                }
+                break;
+
+            default:
+                this.userHead = 0;
+                this.userBody = 0;
+        }
     }
 
     private boolean checkData() {

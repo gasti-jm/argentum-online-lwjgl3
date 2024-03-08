@@ -3,6 +3,7 @@ package org.aoclient.connection;
 import org.aoclient.connection.packets.ClientPacketID;
 import org.aoclient.connection.packets.E_Messages;
 import org.aoclient.connection.packets.ServerPacketID;
+import org.aoclient.engine.Sound;
 import org.aoclient.engine.Window;
 import org.aoclient.engine.game.Console;
 import org.aoclient.engine.game.Rain;
@@ -3112,7 +3113,9 @@ public class Protocol {
         incomingData.readByte();
 
         SocketConnection.get().disconnect();
+        eraseAllChars();
 
+        Sound.clearSounds();
 
         /*
         'Hide main form

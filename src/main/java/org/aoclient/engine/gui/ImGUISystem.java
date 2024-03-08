@@ -214,9 +214,7 @@ public class ImGUISystem {
         // IMPORTANT!!
         // Any Dear ImGui code SHOULD go between NewFrame()/Render() methods
         ImGui.newFrame();
-
-        showFrms();
-
+        this.showFrms();
         ImGui.render();
 
         // After ImGui#render call we provide draw data into LWJGL3 renderer.

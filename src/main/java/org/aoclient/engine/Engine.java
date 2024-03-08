@@ -24,7 +24,6 @@ public final class Engine implements Runnable {
     private Window window;
     private ImGUISystem guiSystem;
     private Scene currentScene;
-    private BindKeys bindKeys;
 
     public Engine() {
         gameLoopThread = new Thread(this, "GAME_LOOP_THREAD");
@@ -91,7 +90,7 @@ public final class Engine implements Runnable {
 
         Surface.get().initialize();
         GameData.initialize();
-        bindKeys = BindKeys.get();
+        BindKeys bindKeys = BindKeys.get();
 
         changeScene(INTRO_SCENE);
     }
