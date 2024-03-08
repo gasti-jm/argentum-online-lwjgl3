@@ -133,8 +133,7 @@ public class SocketConnection {
 
     private void setDisconnected() {
         User.get().setUserConected(false);
-        eraseAllChars();
-        Rain.get().setRainValue(false);
         User.get().setUserNavegando(false);
+        Rain.get().setRainValue(false);
     }
 }

@@ -3206,7 +3206,7 @@ public class Protocol {
         outgoingData.writeByte(ClientPacketID.ThrowDices.ordinal());
     }
 
-    public static void writeLoginNewChar(String userName, String userPassword, int userRaza, int userSexo, int userClase, short userHead, String userEmail, int userHogar){
+    public static void writeLoginNewChar(String userName, String userPassword, int userRaza, int userSexo, int userClase, int userHead, String userEmail, int userHogar){
         outgoingData.writeByte(ClientPacketID.LoginNewChar.ordinal());
         outgoingData.writeASCIIString(userName);
         outgoingData.writeASCIIString(userPassword);
@@ -3218,7 +3218,7 @@ public class Protocol {
         outgoingData.writeByte(userRaza);
         outgoingData.writeByte(userSexo);
         outgoingData.writeByte(userClase);
-        outgoingData.writeInteger(userHead);
+        outgoingData.writeInteger((short) userHead);
 
         outgoingData.writeASCIIString(userEmail);
         outgoingData.writeByte(userHogar);
@@ -3315,7 +3315,6 @@ public class Protocol {
     }
 
     public static void writeQuit() {
-
         if(charList[User.get().getUserCharIndex()].isParalizado()) {
             Console.get().addMsgToConsole(new String("No puedes salir estando paralizado.".getBytes(), StandardCharsets.UTF_8),
                     false, true, new RGBColor());

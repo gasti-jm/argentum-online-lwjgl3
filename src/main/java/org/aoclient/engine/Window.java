@@ -154,7 +154,7 @@ public final class Window {
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
         glViewport(0, 0, width, height);
-        glOrtho(0, width, height, 0, 1, -1);
+        glOrtho(0, 800, 600, 0, 1, -1);
 
         glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
         glEnable(GL_ALPHA);
@@ -245,30 +245,14 @@ public final class Window {
         return glfwGetWindowAttrib(window, GLFW_ICONIFIED) == GLFW_TRUE;
     }
 
-    public void changeCursor(int cursor) {
-        glfwSetCursor(window, glfwCreateStandardCursor(cursor));
-    }
-
-    /**
-     *
-     * @return Getter del atributo Window (Contexto de nuestra ventana)
-     */
     public long getWindow() {
         return this.window;
     }
 
-    /**
-     *
-     * @return Getter del atributo width
-     */
     public int getWidth() {
         return width;
     }
 
-    /**
-     *
-     * @return Getter del atributo height
-     */
     public int getHeight() {
         return height;
     }

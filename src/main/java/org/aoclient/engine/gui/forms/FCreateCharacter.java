@@ -9,6 +9,7 @@ import imgui.enums.ImGuiInputTextFlags;
 import imgui.enums.ImGuiWindowFlags;
 import org.aoclient.connection.SocketConnection;
 import org.aoclient.engine.Window;
+import org.aoclient.engine.game.User;
 import org.aoclient.engine.game.models.E_Cities;
 import org.aoclient.engine.game.models.E_Class;
 import org.aoclient.engine.game.models.E_Raza;
@@ -19,7 +20,10 @@ import org.aoclient.engine.renderer.TextureOGL;
 import javax.imageio.ImageIO;
 import java.io.File;
 import java.io.IOException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
+import static org.aoclient.connection.Protocol.writeLoginNewChar;
 import static org.aoclient.connection.Protocol.writeThrowDices;
 import static org.aoclient.engine.Sound.SND_DICE;
 import static org.aoclient.engine.Sound.playSound;
@@ -194,85 +198,17 @@ public final class FCreateCharacter extends Form{
     }
 
     private void buttonCreateCharacter() {
-        if(txtNombre.get().contains(" ")) {
-           ImGUISystem.get().checkAddOrChange("frmMessage", new FMessage("Nombre invalido, remueva los espacios en blanco."));
-           return;
-        }
-
         final int userRaza = currentItemRaza.get() + 1;
         final int userSexo = currentItemGenero.get() + 1;
         final int userClase = currentItemClass.get() + 1;
         final int userHogar = currentItemHogar.get() + 1;
-        final String userMail = txtMail.get();
+        final int userHead = 1; // prueba
 
+        if(!checkData()) return;
 
-        if(!txtPassword.get().equals(txtConfirmPassword.get())) {
-            ImGUISystem.get().checkAddOrChange("frmMessage", new FMessage("Las contraseñas no son iguales. Recuerde que no se permite caracteres especiales."));
-            return;
-        }
-
-        /*
-
-    Dim i As Integer
-    Dim CharAscii As Byte
-
-    UserName = txtNombre.Text
-
-    If Right$(UserName, 1) = " " Then
-        UserName = RTrim$(UserName)
-        MsgBox "Nombre invalido, se han removido los espacios al final del nombre"
-    End If
-
-    UserRaza = lstRaza.ListIndex + 1
-    UserSexo = lstGenero.ListIndex + 1
-    UserClase = lstProfesion.ListIndex + 1
-
-    For i = 1 To NUMATRIBUTES
-        UserAtributos(i) = Val(lblAtributos(i).Caption)
-    Next i
-
-    UserHogar = lstHogar.ListIndex + 1
-
-    If Not CheckData Then Exit Sub
-
-#If SeguridadAlkon Then
-    UserPassword = md5.GetMD5String(txtPasswd.Text)
-    Call md5.MD5Reset
-#Else
-    UserPassword = txtPasswd.Text
-#End If
-
-    For i = 1 To Len(UserPassword)
-        CharAscii = Asc(mid$(UserPassword, i, 1))
-        If Not LegalCharacter(CharAscii) Then
-            MsgBox ("Password inválido. El caractér " & Chr$(CharAscii) & " no está permitido.")
-            Exit Sub
-        End If
-    Next i
-
-    UserEmail = txtMail.Text
-
-#If UsarWrench = 1 Then
-    frmMain.Socket1.HostName = CurServerIp
-    frmMain.Socket1.RemotePort = CurServerPort
-#End If
-
-    EstadoLogin = E_MODO.CrearNuevoPj
-
-#If UsarWrench = 1 Then
-    If Not frmMain.Socket1.Connected Then
-#Else
-    If frmMain.Winsock1.State <> sckConnected Then
-#End If
-        MsgBox "Error: Se ha perdido la conexion con el server."
-        Unload Me
-
-    Else
-        Call Login
-    End If
-
-    bShowTutorial = True
-         */
+        SocketConnection.get().connect(options.getIpServer(), options.getPortServer());
+        writeLoginNewChar(txtNombre.get(), txtPassword.get(), userRaza, userSexo, userClase, userHead, txtMail.get(), userHogar);
+        User.get().setUserName(txtNombre.get());
     }
 
     private void buttonThrowDices() {
@@ -286,5 +222,47 @@ public final class FCreateCharacter extends Form{
         music.stop();
 
         this.close();
+    }
+
+    private boolean checkData() {
+        if(txtNombre.get().isEmpty() || txtPassword.get().isEmpty() || txtMail.get().isEmpty()) {
+            ImGUISystem.get().checkAddOrChange("frmMessage", new FMessage("Por favor, rellene todos los campos."));
+            return false;
+        }
+
+        if(txtNombre.get().endsWith(" ")) {
+            ImGUISystem.get().checkAddOrChange("frmMessage", new FMessage("Nombre invalido, se ha removido un espacio en blanco al final del nombre."));
+            txtNombre.set(txtNombre.get().substring(0, txtNombre.get().length() - 1));
+            return false;
+        }
+
+        if(!txtPassword.get().equals(txtConfirmPassword.get())) {
+            ImGUISystem.get().checkAddOrChange("frmMessage", new FMessage("Las contraseñas no son iguales. Recuerde que no se permite caracteres especiales."));
+            return false;
+        }
+
+        if(!checkEmail(txtMail.get())) {
+            ImGUISystem.get().checkAddOrChange("frmMessage", new FMessage("Direccion de correo electronico invalido."));
+            return false;
+        }
+
+        if (checkSpecialChar(txtPassword.get()) || txtPassword.get().contains(" ")) {
+            ImGUISystem.get().checkAddOrChange("frmMessage", new FMessage("Password invalido, no puede contener caracteres especiales ni espacios en blanco."));
+            return false;
+        }
+
+        return true;
+    }
+
+    private boolean checkEmail(String email) {
+        String regex = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(email);
+        return matcher.matches();
+    }
+
+    private boolean checkSpecialChar(String text) {
+        String regex = "[^\\p{L}0-9\\s]";
+        return text.matches(".*" + regex + ".*");
     }
 }

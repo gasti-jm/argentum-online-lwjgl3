@@ -115,6 +115,9 @@ public final class Drawn {
         glEnd();
     }
 
+    /**
+     * Lo mismo pero con una textura ya cargada.
+     */
     public static void geometryBoxRender(TextureOGL texture, int x, int y, int src_width, int src_height, float sX, float sY, boolean blend, float alpha, RGBColor color) {
         if (blend)
             glBlendFunc(GL_SRC_ALPHA, GL_ONE);

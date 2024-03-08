@@ -20,6 +20,46 @@ public final class Character {
     public static final int CASPER_HEAD = 500;
     public static final int FRAGATA_FANTASMAL = 87;
 
+    public static final int HUMANO_H_PRIMER_CABEZA = 1;
+    public static final int HUMANO_H_ULTIMA_CABEZA = 40; //En verdad es hasta la 51, pero como son muchas estas las dejamos no seleccionables
+    public static final int HUMANO_H_CUERPO_DESNUDO = 21;
+
+    public static final int ELFO_H_PRIMER_CABEZA = 101;
+    public static final int ELFO_H_ULTIMA_CABEZA = 122;
+    public static final int ELFO_H_CUERPO_DESNUDO = 210;
+
+    public static final int DROW_H_PRIMER_CABEZA = 201;
+    public static final int DROW_H_ULTIMA_CABEZA = 221;
+    public static final int DROW_H_CUERPO_DESNUDO = 32;
+
+    public static final int ENANO_H_PRIMER_CABEZA = 301;
+    public static final int ENANO_H_ULTIMA_CABEZA = 319;
+    public static final int ENANO_H_CUERPO_DESNUDO = 53;
+
+    public static final int GNOMO_H_PRIMER_CABEZA = 401;
+    public static final int GNOMO_H_ULTIMA_CABEZA = 416;
+    public static final int GNOMO_H_CUERPO_DESNUDO = 222;
+
+    public static final int HUMANO_M_PRIMER_CABEZA = 70;
+    public static final int HUMANO_M_ULTIMA_CABEZA = 89;
+    public static final int HUMANO_M_CUERPO_DESNUDO = 39;
+
+    public static final int ELFO_M_PRIMER_CABEZA = 170;
+    public static final int ELFO_M_ULTIMA_CABEZA = 188;
+    public static final int ELFO_M_CUERPO_DESNUDO = 259;
+
+    public static final int DROW_M_PRIMER_CABEZA = 270;
+    public static final int DROW_M_ULTIMA_CABEZA = 288;
+    public static final int DROW_M_CUERPO_DESNUDO = 40;
+
+    public static final int ENANO_M_PRIMER_CABEZA = 370;
+    public static final int ENANO_M_ULTIMA_CABEZA = 384;
+    public static final int ENANO_M_CUERPO_DESNUDO = 60;
+
+    public static final int GNOMO_M_PRIMER_CABEZA = 470;
+    public static final int GNOMO_M_ULTIMA_CABEZA = 484;
+    public static final int GNOMO_M_CUERPO_DESNUDO = 260;
+
     // ultimo personaje del array
     private static short lastChar = 0;
 
