@@ -10,11 +10,11 @@ import org.gradle.internal.os.OperatingSystem
 project.ext.lwjglVersion = "3.3.3"
 project.ext.jomlVersion = "1.10.5"
 project.ext.legui_version = "3.3.1-SNAPSHOT"
-project.ext.imguiNatives = "natives-windows"
 
 switch (OperatingSystem.current()) {
     case OperatingSystem.LINUX:
         project.ext.lwjglNatives = "natives-linux"
+        project.ext.imguiNatives = "natives-linux"
         def osArch = System.getProperty("os.arch")
         if (osArch.startsWith("arm") || osArch.startsWith("aarch64")) {
             project.ext.lwjglNatives += osArch.contains("64") || osArch.startsWith("armv8") ? "-arm64" : "-arm32"
@@ -25,13 +25,12 @@ switch (OperatingSystem.current()) {
         }
         break
     case OperatingSystem.MAC_OS:
-        project.ext.lwjglNatives = System.getProperty("os.arch").startsWith("aarch64") ? "natives-macos-arm64" : "natives-macos"
+        project.ext.lwjglNatives = "natives-macos"
+        project.ext.imguiNatives = "natives-macos"
         break
     case OperatingSystem.WINDOWS:
-        def osArch = System.getProperty("os.arch")
-        project.ext.lwjglNatives = osArch.contains("64")
-                ? "natives-windows${osArch.startsWith("aarch64") ? "-arm64" : ""}"
-                : "natives-windows-x86"
+        project.ext.lwjglNatives = "natives-windows"
+        project.ext.imguiNatives = "natives-windows"
         break
 }
 

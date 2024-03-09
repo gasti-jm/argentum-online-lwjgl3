@@ -63,7 +63,7 @@ public final class FCreateCharacter extends Form{
 
     private int userHead;
     private int userBody;
-    //private BodyData bodyGraphic;
+    private BodyData bodyGraphic;
 
     public FCreateCharacter(){
         this.formName       = "frmCreateCharacter";
@@ -72,12 +72,11 @@ public final class FCreateCharacter extends Form{
         this.userBody       = HUMANO_H_CUERPO_DESNUDO;
         this.dir            = E_Heading.SOUTH.value;
 
-        //this.bodyGraphic    = new BodyData(bodyData[userBody]);
-        //this.bodyGraphic.getWalk(dir).setStarted(true);
+        this.bodyGraphic    = new BodyData(bodyData[userBody]);
+
 
         this.color          = new RGBColor(1,1,1);
         this.shpColor       = ImGui.getColorU32(1, 0, 0, 1);
-
 
         this.loadComboBoxes();
         this.giveBodyAndHead();
@@ -111,6 +110,8 @@ public final class FCreateCharacter extends Form{
         final ImDrawList drawList = ImGui.getWindowDrawList();
 
         geometryBoxRenderGUI(background, 0, 0, 1.0f);
+        this.updateHeadSelection();
+
         ImGui.setNextWindowSize(Window.get().getWidth() + 10, Window.get().getHeight() + 5, ImGuiCond.Once);
         ImGui.setNextWindowPos(-5, -1, ImGuiCond.Once);
 
@@ -254,8 +255,6 @@ public final class FCreateCharacter extends Form{
         );
 
         ImGui.end();
-
-        this.updateHeadSelection();
     }
 
     private void dirPJButton(int index) {
@@ -272,6 +271,9 @@ public final class FCreateCharacter extends Form{
         if(direction > E_Heading.WEST.value) direction = E_Heading.NORTH.value;
         if(direction < E_Heading.NORTH.value) direction = E_Heading.WEST.value;
 
+        this.bodyGraphic.getWalk(dir).setFrameCounter(1);
+        this.bodyGraphic.getWalk(dir).setStarted(false);
+
         return direction;
     }
 
@@ -286,7 +288,7 @@ public final class FCreateCharacter extends Form{
         }
     }
 
-    private void updateHeadSelection () {
+    private void updateHeadSelection() {
         int head = this.userHead;
         drawHead(checkCabeza(head), 2); head++;
         drawHead(checkCabeza(head), 3); head++;
@@ -300,11 +302,9 @@ public final class FCreateCharacter extends Form{
     private void drawHead(int head, int index) {
         final int headGraphic = headData[head].getHead(dir).getGrhIndex();
 
-//        if(bodyGraphic.getWalk(dir).getSpeed() > 0.0f) {
-//            this.bodyGraphic.getWalk(dir).setStarted(true);
-//        }
-//
-//        drawTexture(bodyGraphic.getWalk(dir), 0, 0, true, true, false, 1.0f, color);
+        this.bodyGraphic.getWalk(dir).setStarted(true);
+        drawTexture(bodyGraphic.getWalk(dir), 472, 450, true, true, false, 1.0f, color);
+        drawGrhIndex(headGraphic, 472, 430, color);
 
         switch (index) {
             case 0:
@@ -522,6 +522,10 @@ public final class FCreateCharacter extends Form{
                 this.userHead = 0;
                 this.userBody = 0;
         }
+
+        this.bodyGraphic = new BodyData(bodyData[userBody]);
+        this.bodyGraphic.getWalk(dir).setFrameCounter(1);
+        this.bodyGraphic.getWalk(dir).setStarted(false);
     }
 
     private boolean checkData() {

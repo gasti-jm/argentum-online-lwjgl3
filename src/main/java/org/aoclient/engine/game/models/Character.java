@@ -147,7 +147,7 @@ public final class Character {
         char f = '<', u = '>';
 
         if(charList[charIndex].priv != 0) {
-            charList[charIndex].setClanName(f + "Argentum Online Staff" + u);
+            charList[charIndex].setClanName(f + "Game Master" + u);
         }
 
         charList[charIndex].setDead(head == CASPER_HEAD);

@@ -77,10 +77,10 @@ public class Surface {
      */
     private TextureOGL createTexture(int fileNum) {
         TextureOGL texture = new TextureOGL();
-        File file = new File("resources/graphics/" + fileNum + ".bmp");
+        File file = new File("resources/graphics/" + fileNum + ".BMP");
 
         if (file.exists()) {
-            texture.id = loadTexture(texture, "resources/graphics/" + fileNum + ".bmp", false);
+            texture.id = loadTexture(texture, "resources/graphics/" + fileNum + ".BMP", false);
         } else {
             texture.id = loadTexture(texture, "resources/graphics/" + fileNum + ".png", false);
         }
