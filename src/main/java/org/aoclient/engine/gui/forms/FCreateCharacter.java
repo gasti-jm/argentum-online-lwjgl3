@@ -13,11 +13,14 @@ import org.aoclient.engine.Window;
 import org.aoclient.engine.game.User;
 import org.aoclient.engine.game.models.E_Cities;
 import org.aoclient.engine.game.models.E_Class;
+import org.aoclient.engine.game.models.E_Heading;
 import org.aoclient.engine.game.models.E_Raza;
 import org.aoclient.engine.gui.ImGUISystem;
 import org.aoclient.engine.renderer.RGBColor;
 import org.aoclient.engine.renderer.Surface;
 import org.aoclient.engine.renderer.TextureOGL;
+import org.aoclient.engine.utils.structs.BodyData;
+import org.aoclient.engine.utils.structs.GrhInfo;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -53,19 +56,28 @@ public final class FCreateCharacter extends Form{
     private final ImInt currentItemGenero = new ImInt(0);
     private final String[] strGenero = {"Hombre", "Mujer"};
 
+    // para el dibujado
+    private int dir;
     private final RGBColor color;
     private final int shpColor;
 
     private int userHead;
     private int userBody;
+    //private BodyData bodyGraphic;
 
     public FCreateCharacter(){
         this.formName       = "frmCreateCharacter";
         this.background     = Surface.get().createTexture("resources/gui/VentanaCrearPersonaje.jpg", true);
         this.userHead       = HUMANO_H_PRIMER_CABEZA;
         this.userBody       = HUMANO_H_CUERPO_DESNUDO;
+        this.dir            = E_Heading.SOUTH.value;
+
+        //this.bodyGraphic    = new BodyData(bodyData[userBody]);
+        //this.bodyGraphic.getWalk(dir).setStarted(true);
+
         this.color          = new RGBColor(1,1,1);
         this.shpColor       = ImGui.getColorU32(1, 0, 0, 1);
+
 
         this.loadComboBoxes();
         this.giveBodyAndHead();
@@ -221,6 +233,19 @@ public final class FCreateCharacter extends Form{
             this.headPJButton(1);
         }
 
+
+        // DirPJ(0)
+        ImGui.setCursorPos(477, 488);
+        if(ImGui.invisibleButton("leftDir", 16, 15)) {
+            dirPJButton(0);
+        }
+
+        // DirPJ(1)
+        ImGui.setCursorPos(502, 488);
+        if(ImGui.invisibleButton("rightDir", 16, 15)) {
+            dirPJButton(1);
+        }
+
         //480, 392
         drawList.addRect(
                 479, 391,
@@ -231,6 +256,23 @@ public final class FCreateCharacter extends Form{
         ImGui.end();
 
         this.updateHeadSelection();
+    }
+
+    private void dirPJButton(int index) {
+        switch (index) {
+            case 0:
+                this.dir = checkDir(dir + 1);
+                break;
+            case 1:
+                this.dir = checkDir(dir - 1);
+        }
+    }
+
+    private int checkDir(int direction) {
+        if(direction > E_Heading.WEST.value) direction = E_Heading.NORTH.value;
+        if(direction < E_Heading.NORTH.value) direction = E_Heading.WEST.value;
+
+        return direction;
     }
 
     private void headPJButton(int index) {
@@ -256,7 +298,13 @@ public final class FCreateCharacter extends Form{
     }
 
     private void drawHead(int head, int index) {
-        final int headGraphic = headData[head].getHead(3).getGrhIndex();
+        final int headGraphic = headData[head].getHead(dir).getGrhIndex();
+
+//        if(bodyGraphic.getWalk(dir).getSpeed() > 0.0f) {
+//            this.bodyGraphic.getWalk(dir).setStarted(true);
+//        }
+//
+//        drawTexture(bodyGraphic.getWalk(dir), 0, 0, true, true, false, 1.0f, color);
 
         switch (index) {
             case 0:

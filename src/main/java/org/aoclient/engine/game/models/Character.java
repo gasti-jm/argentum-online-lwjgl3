@@ -110,6 +110,7 @@ public final class Character {
         weapon = new WeaponData();
         shield = new ShieldData();
         this.pos = new Position();
+        this.fX = new GrhInfo();
 
         this.heading = SOUTH;
         this.active = false;
@@ -593,24 +594,24 @@ public final class Character {
                 }
             }
 
-            // Draw FX
-            if (charList[charIndex].fxIndex != 0) {
-                drawTexture(charList[charIndex].fX,
-                        PixelOffsetX + fxData[charList[charIndex].fxIndex].getOffsetX(),
-                        PixelOffsetY + fxData[charList[charIndex].fxIndex].getOffsetY(),
-                        true, true, true,1.0f, ambientcolor);
-
-                // Check if animation is over
-                if (!charList[charIndex].fX.isStarted())
-                    charList[charIndex].setFxIndex(0);
-            }
 
         } else {
             if (charList[charIndex].getBody().getWalk(charList[charIndex].getHeading().value).getGrhIndex() > 0) {
                 drawTexture(charList[charIndex].getBody().getWalk(charList[charIndex].getHeading().value),
                         PixelOffsetX, PixelOffsetY, true, true, false, 1.0f, ambientcolor);
             }
+        }
 
+        // Draw FX
+        if (charList[charIndex].fxIndex != 0) {
+            drawTexture(charList[charIndex].fX,
+                    PixelOffsetX + fxData[charList[charIndex].fxIndex].getOffsetX(),
+                    PixelOffsetY + fxData[charList[charIndex].fxIndex].getOffsetY(),
+                    true, true, true,1.0f, ambientcolor);
+
+            // Check if animation is over
+            if (!charList[charIndex].fX.isStarted())
+                charList[charIndex].setFxIndex(0);
         }
     }
 

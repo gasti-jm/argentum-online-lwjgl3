@@ -15,7 +15,7 @@ import org.aoclient.engine.gui.forms.FMessage;
 import org.aoclient.engine.gui.ImGUISystem;
 import org.aoclient.engine.renderer.RGBColor;
 import org.aoclient.engine.utils.GameData;
-import org.aoclient.engine.utils.structs.GrhInfo;
+import org.aoclient.engine.utils.structs.*;
 
 import java.nio.charset.StandardCharsets;
 
@@ -2129,10 +2129,6 @@ public class Protocol {
         short fX = incomingData.readInteger();
         short loops = incomingData.readInteger();
 
-        if(charList[charIndex].getfX() == null) {
-            charList[charIndex].setfX(new GrhInfo());
-        }
-
         User.get().setCharacterFx(charIndex, fX, loops);
     }
 
@@ -2313,10 +2309,10 @@ public class Protocol {
 
         // esta dentro del rango del array de bodydata?
         if (tempint < 1 || tempint > bodyData.length) {
-            charList[charIndex].setBody(bodyData[0]);
+            charList[charIndex].setBody(new BodyData(bodyData[0]));
             charList[charIndex].setiBody(0);
         } else {
-            charList[charIndex].setBody(bodyData[tempint]);
+            charList[charIndex].setBody(new BodyData(bodyData[tempint]));
             charList[charIndex].setiBody(tempint);
         }
 
@@ -2335,21 +2331,23 @@ public class Protocol {
 
         tempint = incomingData.readInteger();
         if (tempint != 0) {
-            charList[charIndex].setWeapon(weaponData[tempint]);
+            charList[charIndex].setWeapon(new WeaponData(weaponData[tempint]));
         }
 
         tempint = incomingData.readInteger();
         if (tempint != 0) {
-            charList[charIndex].setShield(shieldData[tempint]);
+            charList[charIndex].setShield(new ShieldData(shieldData[tempint]));
         }
 
         tempint = incomingData.readInteger();
         if (tempint != 0) {
-            charList[charIndex].setHelmet(helmetsData[tempint]);
+            charList[charIndex].setHelmet(new HeadData(helmetsData[tempint]));
         }
 
         User.get().setCharacterFx(charIndex, incomingData.readInteger(), incomingData.readInteger());
+
         refreshAllChars();
+        System.out.println("handleCharacterChange Cargado! - FALTA TERMINAR!");
     }
 
     private static void handleForceCharMove() {
@@ -2445,8 +2443,8 @@ public class Protocol {
         short helmet = buffer.readInteger();
 
 
-        charList[charIndex].setfX(new GrhInfo());
         User.get().setCharacterFx(charIndex, buffer.readInteger(), buffer.readInteger());
+
         charList[charIndex].setName(buffer.readASCIIString());
 
         byte nickColor = buffer.readByte();
