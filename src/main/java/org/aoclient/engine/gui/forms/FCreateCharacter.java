@@ -27,8 +27,7 @@ import java.util.regex.Pattern;
 
 import static org.aoclient.connection.Protocol.writeLoginNewChar;
 import static org.aoclient.connection.Protocol.writeThrowDices;
-import static org.aoclient.engine.Sound.SND_DICE;
-import static org.aoclient.engine.Sound.playSound;
+import static org.aoclient.engine.Sound.*;
 import static org.aoclient.engine.game.models.Character.*;
 import static org.aoclient.engine.renderer.Drawn.*;
 import static org.aoclient.engine.utils.GameData.*;
@@ -442,7 +441,7 @@ public final class FCreateCharacter extends Form{
     private void buttonGoBack() {
         ImGUISystem.get().checkAddOrChange("frmConnect", new FConnect());
         music.stop();
-
+        playMusic("6.ogg");
         this.close();
     }
 
