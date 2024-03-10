@@ -1,6 +1,7 @@
 package org.aoclient.engine.utils;
 
 
+import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.util.HashMap;
@@ -331,8 +332,8 @@ public final class GameData {
     /**
      * Cargamos el mapa.
      */
-    public static void loadMap(int map) {
-        try (RandomAccessFile f = new RandomAccessFile("resources/maps/mapa" + map + ".map", "rw")) {
+    public static void loadMap(int numMap) {
+        try (RandomAccessFile f = new RandomAccessFile("resources/maps/mapa" + numMap + ".map", "rw")) {
             f.seek(0);
 
             mapData = new MapData[101][101];
