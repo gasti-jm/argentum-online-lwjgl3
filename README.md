@@ -12,7 +12,7 @@
 
 <p>
   <a target="_blank" href="https://es.wikipedia.org/wiki/Argentum_Online">Argentum Online</a> is a MMORPG Video Game of the year 1999 created in Visual Basic 6.0 by Pablo Marquez (Morgolock), this game is open source. <br/> <br/>
-  I have translated it to Java with LWJGL3, this game would be the base client, the connection to the server is being implemented with Java sockets. The java server has not been developed yet, but you can use the Argentum Online Alkon v13.0 server from VB6.
+  I have translated it to Java with LWJGL3, this game would be the base client, the connection to the server is being implemented with Java sockets. The java server has not been developed yet, but you can use the <a target="_blank" href="https://www.gs-zone.org/temas/cliente-servidor-v0-13-0-completos-y-funcionales.36521/">Argentum Online Alkon v13.0 server from Visual Basic 6.0</a>.
 </p>
 
 # Discord
@@ -21,7 +21,7 @@ For those who want to collaborate with the project, they are more than welcome! 
 # How to compile
 <p>
   <a href="https://www.jetbrains.com/es-es/idea/" target="_blank">IntelliJ IDEA</a> is needed (although with <a href="https://netbeans.apache.org/" target="_blank">NetBeans</a>, <a href="https://www.eclipse.org/downloads/" target="_blank">Eclipse</a> or any other IDE you can use it, if you know how to build the project). 
-  You will also need to install <a href="https://www.oracle.com/ar/java/technologies/javase/javase8-archive-downloads.html" target="_blank">Java SE 8 JDK</a> to use in your IDE. <br/> <br/>
+  You will also need to install <a href="https://www.oracle.com/ar/java/technologies/javase/jdk11-archive-downloads.html" target="_blank">Java SE 11 JDK</a> to use in your IDE. <br/> <br/>
 
   If you use IntelliJ, opening the project will be enough to start working, since Gradle will take care of downloading and installing the dependencies.
 

@@ -15,15 +15,14 @@ import static org.aoclient.engine.utils.Time.deltaTime;
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.*;
 
-public final class Engine implements Runnable {
-    private final Thread gameLoopThread;
+public final class Engine{
     private static boolean prgRun = true;
     private Window window;
     private ImGUISystem guiSystem;
     private Scene currentScene;
 
     public Engine() {
-        gameLoopThread = new Thread(this, "GAME_LOOP_THREAD");
+
     }
 
     /**
@@ -62,13 +61,6 @@ public final class Engine implements Runnable {
             // lo mismo para el handle data, leemos lo que nos envio el servidor.
             SocketConnection.get().readData();
         }
-    }
-
-    /**
-     * @desc: Inicia nuestro Thread principal.
-     */
-    public void start() {
-        gameLoopThread.start();
     }
 
     /**
@@ -153,11 +145,9 @@ public final class Engine implements Runnable {
     }
 
     /**
-     * @desc: Funcion sobreescrita de la interface Runnable, permite ejecutar nuestro Thread principal y inicializar
-     *        nuestro motor grafico.
+     * @desc: Inicia nuestro motor grafico.
      */
-    @Override
-    public void run() {
+    public void start() {
         init();
         loop();
         close();
