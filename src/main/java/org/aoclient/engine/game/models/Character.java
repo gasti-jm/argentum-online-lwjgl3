@@ -104,31 +104,31 @@ public final class Character {
 
 
     public Character() {
-        body = new BodyData();
-        head = new HeadData();
-        helmet = new HeadData();
-        weapon = new WeaponData();
-        shield = new ShieldData();
-        this.pos = new Position();
-        this.fX = new GrhInfo();
+        body                = new BodyData();
+        head                = new HeadData();
+        helmet              = new HeadData();
+        weapon              = new WeaponData();
+        shield              = new ShieldData();
+        this.pos            = new Position();
+        this.fX             = new GrhInfo();
 
-        this.heading = SOUTH;
-        this.active = false;
-        this.criminal = false;
-        this.attackable = false;
-        this.fxIndex = 0;
-        this.invisible = false;
-        this.paralizado = false;
-        this.moving = false;
-        this.dead = false;
-        this.name = "";
-        this.pie = false;
+        this.heading        = SOUTH;
+        this.active         = false;
+        this.criminal       = false;
+        this.attackable     = false;
+        this.fxIndex        = 0;
+        this.invisible      = false;
+        this.paralizado     = false;
+        this.moving         = false;
+        this.dead           = false;
+        this.name           = "";
+        this.pie            = false;
         this.pos.setX(0);
         this.pos.setY(0);
-        this.usingArm = false;
-        this.clanName = "";
 
-        this.walkingSpeed = 8;
+        this.usingArm       = false;
+        this.clanName       = "";
+        this.walkingSpeed   = 8;
     }
 
     /**

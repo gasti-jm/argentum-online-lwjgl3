@@ -1,8 +1,8 @@
 package org.aoclient.engine.game;
 
 import imgui.ImGui;
-import imgui.enums.ImGuiCond;
-import imgui.enums.ImGuiWindowFlags;
+import imgui.flag.ImGuiCond;
+import imgui.flag.ImGuiWindowFlags;
 import org.aoclient.engine.renderer.RGBColor;
 
 public class Console {
@@ -16,9 +16,9 @@ public class Console {
      * Constructor privado por singleton.
      */
     private Console() {
-        this.consoleText = "";
-        this.autoScroll = true;
-        this.scrollToBottom = false;
+        this.consoleText        = "";
+        this.autoScroll         = true;
+        this.scrollToBottom     = false;
     }
 
     /**

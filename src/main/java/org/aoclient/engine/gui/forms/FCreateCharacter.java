@@ -2,13 +2,14 @@ package org.aoclient.engine.gui.forms;
 
 import imgui.ImDrawList;
 import imgui.ImGui;
-import imgui.ImInt;
-import imgui.ImString;
-import imgui.enums.ImGuiCol;
-import imgui.enums.ImGuiCond;
-import imgui.enums.ImGuiInputTextFlags;
-import imgui.enums.ImGuiWindowFlags;
-import org.aoclient.connection.SocketConnection;
+
+import imgui.flag.ImGuiCol;
+import imgui.flag.ImGuiCond;
+import imgui.flag.ImGuiInputTextFlags;
+import imgui.flag.ImGuiWindowFlags;
+import imgui.type.ImInt;
+import imgui.type.ImString;
+import org.aoclient.network.SocketConnection;
 import org.aoclient.engine.Window;
 import org.aoclient.engine.game.User;
 import org.aoclient.engine.game.models.E_Cities;
@@ -20,13 +21,12 @@ import org.aoclient.engine.renderer.RGBColor;
 import org.aoclient.engine.renderer.Surface;
 import org.aoclient.engine.renderer.TextureOGL;
 import org.aoclient.engine.utils.structs.BodyData;
-import org.aoclient.engine.utils.structs.GrhInfo;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static org.aoclient.connection.Protocol.writeLoginNewChar;
-import static org.aoclient.connection.Protocol.writeThrowDices;
+import static org.aoclient.network.Protocol.writeLoginNewChar;
+import static org.aoclient.network.Protocol.writeThrowDices;
 import static org.aoclient.engine.Sound.SND_DICE;
 import static org.aoclient.engine.Sound.playSound;
 import static org.aoclient.engine.game.models.Character.*;
@@ -59,7 +59,6 @@ public final class FCreateCharacter extends Form{
     // para el dibujado
     private int dir;
     private final RGBColor color;
-    private final int shpColor;
 
     private int userHead;
     private int userBody;
@@ -76,7 +75,6 @@ public final class FCreateCharacter extends Form{
 
 
         this.color          = new RGBColor(1,1,1);
-        this.shpColor       = ImGui.getColorU32(1, 0, 0, 1);
 
         this.loadComboBoxes();
         this.giveBodyAndHead();
@@ -107,7 +105,6 @@ public final class FCreateCharacter extends Form{
 
     @Override
     public void render() {
-        final ImDrawList drawList = ImGui.getWindowDrawList();
 
         geometryBoxRenderGUI(background, 0, 0, 1.0f);
         this.updateHeadSelection();
@@ -126,6 +123,9 @@ public final class FCreateCharacter extends Form{
                 ImGuiWindowFlags.NoSavedSettings |
                 ImGuiWindowFlags.NoBringToFrontOnFocus);
 
+
+        final ImDrawList drawList   = ImGui.getWindowDrawList();
+        final int shpColor          = ImGui.getColorU32(1f, 0f, 0f, 1f);
 
         // btnVolver
         ImGui.setCursorPos(92, 548);
@@ -254,6 +254,7 @@ public final class FCreateCharacter extends Form{
                 418, shpColor
         );
 
+
         ImGui.end();
     }
 
@@ -304,7 +305,6 @@ public final class FCreateCharacter extends Form{
 
         this.bodyGraphic.getWalk(dir).setStarted(true);
         drawTexture(bodyGraphic.getWalk(dir), 472, 450, true, true, false, 1.0f, color);
-        drawGrhIndex(headGraphic, 472, 430, color);
 
         switch (index) {
             case 0:
@@ -315,6 +315,7 @@ public final class FCreateCharacter extends Form{
                 break;
             case 2:
                 drawGrhIndex(headGraphic, 483, 395, color);
+                drawGrhIndex(headGraphic, 472, 430, color);
                 break;
             case 3:
                 drawGrhIndex(headGraphic, 510, 395, color);

@@ -46,5 +46,4 @@ public final class IntervalTimer {
         return false;
     }
 
-
 }

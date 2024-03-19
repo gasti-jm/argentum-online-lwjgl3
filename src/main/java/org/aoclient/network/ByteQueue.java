@@ -1,10 +1,8 @@
-package org.aoclient.connection;
+package org.aoclient.network;
 
 import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
-import java.nio.IntBuffer;
 import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
 
 import static org.aoclient.engine.utils.ByteMigration.*;
 

@@ -1,4 +1,4 @@
-package org.aoclient.connection;
+package org.aoclient.network;
 
 
 import org.aoclient.engine.game.Rain;
@@ -7,11 +7,8 @@ import org.aoclient.engine.gui.forms.FMessage;
 import org.aoclient.engine.gui.ImGUISystem;
 import java.net.*;
 import java.io.*;
-import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
 
-import static org.aoclient.connection.Protocol.*;
-import static org.aoclient.engine.game.models.Character.eraseAllChars;
+import static org.aoclient.network.Protocol.*;
 
 /**
  * Clase que maneja el socket de conexion.
@@ -135,5 +132,6 @@ public class SocketConnection {
         User.get().setUserConected(false);
         User.get().setUserNavegando(false);
         Rain.get().setRainValue(false);
+        Rain.get().stopRainingSoundLoop();
     }
 }

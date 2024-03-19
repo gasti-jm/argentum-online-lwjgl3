@@ -1,13 +1,14 @@
 package org.aoclient.engine.gui.forms;
 
 import imgui.ImGui;
-import imgui.ImString;
-import imgui.enums.ImGuiCond;
-import imgui.enums.ImGuiInputTextFlags;
-import imgui.enums.ImGuiWindowFlags;
+
+import imgui.flag.ImGuiCond;
+import imgui.flag.ImGuiInputTextFlags;
+import imgui.flag.ImGuiWindowFlags;
+import imgui.type.ImString;
 import org.aoclient.engine.game.User;
 
-import static org.aoclient.connection.Protocol.writeDrop;
+import static org.aoclient.network.Protocol.writeDrop;
 import static org.aoclient.engine.game.inventory.UserInventory.FLAGORO;
 
 public final class FCantidad extends Form {
@@ -28,9 +29,8 @@ public final class FCantidad extends Form {
     public void render() {
         ImGui.setNextWindowSize(216, 98, ImGuiCond.Always);
 
-        ImGui.begin(formName, ImGuiWindowFlags.NoTitleBar |
-                ImGuiWindowFlags.NoResize |
-                ImGuiWindowFlags.NoCollapse);
+        ImGui.begin(formName, ImGuiWindowFlags.NoTitleBar | ImGuiWindowFlags.NoResize);
+
 
 
         //input text
@@ -39,7 +39,9 @@ public final class FCantidad extends Form {
 
         ImGui.setCursorPos(30, 30);
         ImGui.pushItemWidth(150);
-            ImGui.inputText("", cant, ImGuiInputTextFlags.CharsDecimal | ImGuiInputTextFlags.CallbackResize);
+            ImGui.pushID("cantidad");
+                ImGui.inputText("", cant, ImGuiInputTextFlags.CharsDecimal | ImGuiInputTextFlags.CallbackResize);
+            ImGui.popID();
         ImGui.popItemWidth();
 
 

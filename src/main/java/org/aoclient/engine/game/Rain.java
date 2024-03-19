@@ -63,7 +63,7 @@ public class Rain {
     }
 
     private void loadData() {
-        //Set up te rain rects
+        // Set up te rain rects
         for (int i = 0; i < 8; i++) {
             RLluvia[i] = new RECT();
         }

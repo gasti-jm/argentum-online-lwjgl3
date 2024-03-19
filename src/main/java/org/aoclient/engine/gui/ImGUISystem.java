@@ -1,9 +1,13 @@
 package org.aoclient.engine.gui;
 
 import imgui.*;
-import imgui.callbacks.ImStrConsumer;
-import imgui.callbacks.ImStrSupplier;
-import imgui.enums.*;
+
+import imgui.callback.ImStrConsumer;
+import imgui.callback.ImStrSupplier;
+import imgui.flag.ImGuiBackendFlags;
+import imgui.flag.ImGuiConfigFlags;
+import imgui.flag.ImGuiKey;
+import imgui.flag.ImGuiMouseCursor;
 import imgui.gl3.ImGuiImplGl3;
 import org.aoclient.engine.Window;
 import org.aoclient.engine.gui.forms.Form;
@@ -97,7 +101,7 @@ public class ImGUISystem {
         keyMap[ImGuiKey.Delete]         = GLFW_KEY_DELETE;
         keyMap[ImGuiKey.Backspace]      = GLFW_KEY_BACKSPACE;
         keyMap[ImGuiKey.Space]          = GLFW_KEY_SPACE;
-        keyMap[ImGuiKey.Enter]          = GLFW_KEY_ENTER;
+        //keyMap[ImGuiKey.Enter]          = GLFW_KEY_ENTER;
         keyMap[ImGuiKey.Escape]         = GLFW_KEY_ESCAPE;
         keyMap[ImGuiKey.KeyPadEnter]    = GLFW_KEY_KP_ENTER;
         keyMap[ImGuiKey.A]              = GLFW_KEY_A;
@@ -219,7 +223,7 @@ public class ImGUISystem {
 
         // After ImGui#render call we provide draw data into LWJGL3 renderer.
         // At that moment ImGui will be rendered to the current OpenGL context.
-        imGuiGl3.render(ImGui.getDrawData());
+        imGuiGl3.renderDrawData(ImGui.getDrawData());
     }
 
     private void showFrms() {
@@ -227,7 +231,7 @@ public class ImGUISystem {
             frms.get(i).render();
         }
 
-        ImGui.showDemoWindow();
+        //ImGui.showDemoWindow();
     }
 
     public void checkAddOrChange(String formName, Form frm) {

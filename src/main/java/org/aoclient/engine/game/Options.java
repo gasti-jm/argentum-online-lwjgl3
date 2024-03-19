@@ -26,12 +26,12 @@ public class Options {
      * y el nombre del jugador se inicializa como una cadena vacía.
      */
     public Options() {
-        this.music = true;
-        this.sound = true;
-        this.showName = true;
-        this.nickName = "";
-        this.ipServer = "";
-        this.portServer = "";
+        this.music          = true;
+        this.sound          = true;
+        this.showName       = true;
+        this.nickName       = "";
+        this.ipServer       = "";
+        this.portServer     = "";
     }
 
     /**

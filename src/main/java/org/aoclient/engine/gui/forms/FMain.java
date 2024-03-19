@@ -2,8 +2,12 @@ package org.aoclient.engine.gui.forms;
 
 import imgui.ImDrawList;
 import imgui.ImGui;
-import imgui.ImString;
-import imgui.enums.*;
+
+import imgui.flag.ImGuiCol;
+import imgui.flag.ImGuiCond;
+import imgui.flag.ImGuiInputTextFlags;
+import imgui.flag.ImGuiWindowFlags;
+import imgui.type.ImString;
 import org.aoclient.engine.Engine;
 import org.aoclient.engine.Window;
 import org.aoclient.engine.game.Console;
@@ -44,12 +48,11 @@ public final class FMain extends Form {
                 ImGuiWindowFlags.NoDecoration |
                 ImGuiWindowFlags.NoBackground |
                 ImGuiWindowFlags.NoResize |
-                ImGuiWindowFlags.NoCollapse |
                 ImGuiWindowFlags.NoSavedSettings |
                 ImGuiWindowFlags.NoBringToFrontOnFocus);
 
 
-        ImGui.setWindowFocus();
+        //ImGui.setWindowFocus();
         ImGui.getWindowDrawList().addImage(backgroundImage, 0, 0, Window.get().getWidth(), Window.get().getHeight());
 
         this.drawShapes();
@@ -154,10 +157,11 @@ public final class FMain extends Form {
             ImGui.setCursorPos(15, 123);
 
             ImGui.pushItemWidth(546);
-                ImGui.pushStyleColor(ImGuiCol.FrameBg, 0, 0,0, 1);
+                ImGui.pushStyleColor(ImGuiCol.FrameBg, 0f, 0f,0f, 1);
 
                     ImGui.pushID("sendText");
-                    ImGui.inputText("", sendText, ImGuiInputTextFlags.CallbackResize);
+                        ImGui.setKeyboardFocusHere();
+                        ImGui.inputText("", sendText, ImGuiInputTextFlags.CallbackResize);
                     ImGui.popID();
 
                     if(ImGui.isWindowFocused()) {

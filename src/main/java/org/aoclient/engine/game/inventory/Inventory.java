@@ -16,7 +16,7 @@ public class Inventory {
     protected int cantRows, cantColumns;
     protected boolean visible;
 
-    class Slot {
+    static class Slot {
         short objIndex;
         String name;
         short grhIndex;
@@ -30,7 +30,7 @@ public class Inventory {
         short minHit;
     }
 
-    protected Slot slots[];
+    protected Slot[] slots;
     protected int slotSelected;
 
     public Inventory(int posX, int posY, int width, int heigth, int cantSlots){

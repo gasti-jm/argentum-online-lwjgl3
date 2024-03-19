@@ -1,12 +1,13 @@
 package org.aoclient.engine.gui.forms;
 
 import imgui.ImGui;
-import imgui.ImString;
-import imgui.enums.ImGuiCol;
-import imgui.enums.ImGuiCond;
-import imgui.enums.ImGuiInputTextFlags;
-import imgui.enums.ImGuiWindowFlags;
-import org.aoclient.connection.SocketConnection;
+
+import imgui.flag.ImGuiCol;
+import imgui.flag.ImGuiCond;
+import imgui.flag.ImGuiInputTextFlags;
+import imgui.flag.ImGuiWindowFlags;
+import imgui.type.ImString;
+import org.aoclient.network.SocketConnection;
 import org.aoclient.engine.Engine;
 import org.aoclient.engine.Window;
 import org.aoclient.engine.game.User;
@@ -16,7 +17,7 @@ import javax.imageio.ImageIO;
 import java.io.File;
 import java.io.IOException;
 
-import static org.aoclient.connection.Protocol.writeLoginExistingChar;
+import static org.aoclient.network.Protocol.writeLoginExistingChar;
 import static org.aoclient.engine.Sound.playMusic;
 import static org.aoclient.engine.utils.GameData.options;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_ENTER;
@@ -49,7 +50,6 @@ public final class FConnect extends Form {
                 ImGuiWindowFlags.NoDecoration |
                 ImGuiWindowFlags.NoBackground |
                 ImGuiWindowFlags.NoResize |
-                ImGuiWindowFlags.NoCollapse |
                 ImGuiWindowFlags.NoSavedSettings |
                 ImGuiWindowFlags.NoBringToFrontOnFocus);
 
@@ -58,8 +58,8 @@ public final class FConnect extends Form {
         //txtPort
         ImGui.setCursorPos(329, 180);
         ImGui.pushItemWidth(58);
-            ImGui.pushStyleColor(ImGuiCol.FrameBg, 0, 0,0, 1);
-            ImGui.pushStyleColor(ImGuiCol.Text, 0, 1, 0, 1);
+            ImGui.pushStyleColor(ImGuiCol.FrameBg, 0f, 0f,0f, 1f);
+            ImGui.pushStyleColor(ImGuiCol.Text, 0f, 1f, 0f, 1f);
 
                 ImGui.pushID("Port");
                     ImGui.inputText("", portStr,  ImGuiInputTextFlags.CharsDecimal);
@@ -72,8 +72,8 @@ public final class FConnect extends Form {
         //txtIP
         ImGui.setCursorPos(389, 180);
         ImGui.pushItemWidth(107);
-            ImGui.pushStyleColor(ImGuiCol.FrameBg, 0, 0,0, 1);
-            ImGui.pushStyleColor(ImGuiCol.Text, 0, 1, 0, 1);
+            ImGui.pushStyleColor(ImGuiCol.FrameBg, 0f, 0f,0f, 1f);
+            ImGui.pushStyleColor(ImGuiCol.Text, 0f, 1f, 0f, 1f);
 
                 ImGui.pushID("IP Server");
                     ImGui.inputText("", ipStr, ImGuiInputTextFlags.CallbackResize);

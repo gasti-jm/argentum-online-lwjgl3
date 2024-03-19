@@ -1,11 +1,8 @@
 package org.aoclient.engine;
 
-import imgui.ImGui;
-import org.aoclient.connection.SocketConnection;
+import org.aoclient.network.SocketConnection;
 import org.aoclient.engine.game.BindKeys;
-import org.aoclient.engine.game.models.E_KeyType;
 import org.aoclient.engine.gui.ImGUISystem;
-import org.aoclient.engine.listeners.KeyListener;
 import org.aoclient.engine.renderer.Surface;
 import org.aoclient.engine.scenes.*;
 import org.aoclient.engine.utils.GameData;

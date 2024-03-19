@@ -1,8 +1,9 @@
 package org.aoclient.engine.gui.forms;
 
 import imgui.ImGui;
-import imgui.enums.ImGuiCond;
-import imgui.enums.ImGuiWindowFlags;
+import imgui.flag.ImGuiCond;
+import imgui.flag.ImGuiWindowFlags;
+
 
 import java.nio.charset.StandardCharsets;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_ENTER;
