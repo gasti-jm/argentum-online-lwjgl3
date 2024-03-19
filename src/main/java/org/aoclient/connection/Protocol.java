@@ -2235,17 +2235,16 @@ public class Protocol {
         // Remove packet ID
         incomingData.readByte();
 
-        byte currentMidi = incomingData.readByte();
+        byte currentMusic = incomingData.readByte();
 
-        if(currentMidi > 0) {
+        if(currentMusic > 0) {
             incomingData.readInteger();
-            // play midi
+            // play music
+            playMusic(currentMusic + ".ogg");
         } else {
             //Remove the bytes to prevent errors
             incomingData.readInteger();
         }
-
-        System.out.println("handlePlayMIDI Cargado! - FALTA TERMINAR!");
     }
 
     private static void handleBlockPosition() {
