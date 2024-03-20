@@ -16,6 +16,7 @@ import org.aoclient.engine.gui.ImGUISystem;
 import org.aoclient.engine.renderer.RGBColor;
 import org.aoclient.engine.utils.GameData;
 import org.aoclient.engine.utils.structs.*;
+import org.tinylog.Logger;
 
 import java.nio.charset.StandardCharsets;
 
@@ -34,7 +35,7 @@ public class Protocol {
 
         if (p > ServerPacketID.values().length) return;
         ServerPacketID packet = ServerPacketID.values()[p];
-        //System.out.println(packet + " #" + p);
+        //Logger.debug(packet + " #" + p);
 
         switch (packet) {
             case logged:                    handleLogged();                             break;
@@ -527,7 +528,7 @@ public class Protocol {
         //    frmParty.Show , //FrmMain
 
         incomingData.copyBuffer(buffer);
-        System.out.println("handleShowPartyForm Cargado! - FALTA TERMINAR!");
+        Logger.debug("handleShowPartyForm Cargado! - FALTA TERMINAR!");
     }
 
     private static void handleShowGuildAlign() {
@@ -565,7 +566,7 @@ public class Protocol {
 
 
         incomingData.copyBuffer(buffer);
-        System.out.println("handleUserNameList Cargado! - FALTA TERMINAR!");
+        Logger.debug("handleUserNameList Cargado! - FALTA TERMINAR!");
     }
 
     private static void handleShowGMPanelForm() {
@@ -593,7 +594,7 @@ public class Protocol {
         //
 
         incomingData.copyBuffer(buffer);
-        System.out.println("handleShowMOTDEditionForm Cargado! - FALTA TERMINAR!");
+        Logger.debug("handleShowMOTDEditionForm Cargado! - FALTA TERMINAR!");
     }
 
     private static void handleShowSOSForm() {
@@ -621,7 +622,7 @@ public class Protocol {
         //    frmMSG.Show , //FrmMain
 
         incomingData.copyBuffer(buffer);
-        System.out.println("handleShowSOSForm Cargado! - FALTA TERMINAR!");
+        Logger.debug("handleShowSOSForm Cargado! - FALTA TERMINAR!");
     }
 
     private static void handleSpawnList() {
@@ -650,7 +651,7 @@ public class Protocol {
         //
 
         incomingData.copyBuffer(buffer);
-        System.out.println("handleSpawnList Cargado! - FALTA TERMINAR!");
+        Logger.debug("handleSpawnList Cargado! - FALTA TERMINAR!");
     }
 
     private static void handleGuildMemberInfo() {
@@ -698,7 +699,7 @@ public class Protocol {
         //    End With
 
         incomingData.copyBuffer(buffer);
-        System.out.println("handleGuildMemberInfo Cargado! - FALTA TERMINAR!");
+        Logger.debug("handleGuildMemberInfo Cargado! - FALTA TERMINAR!");
     }
 
     private static void handleUpdateTagAndStatus() {
@@ -739,7 +740,7 @@ public class Protocol {
         //    End With
 
         incomingData.copyBuffer(buffer);
-        System.out.println("handleUpdateTagAndStatus Cargado! - FALTA TERMINAR!");
+        Logger.debug("handleUpdateTagAndStatus Cargado! - FALTA TERMINAR!");
     }
 
     private static void handlePong() {
@@ -761,7 +762,7 @@ public class Protocol {
         incomingData.readByte();
 
         boolean tBool = incomingData.readBoolean();
-        System.out.println("handleSendNight Cargado! - FALTA TERMINAR!");
+        Logger.debug("handleSendNight Cargado! - FALTA TERMINAR!");
     }
 
     private static void handleChangeUserTradeSlot() {
@@ -803,7 +804,7 @@ public class Protocol {
         //    Call frmComerciarUsu.PrintCommerceMsg(TradingUserName & " ha modificado su oferta.", FontTypeNames.FONTTYPE_VENENO)
 
         incomingData.copyBuffer(buffer);
-        System.out.println("handleChangeUserTradeSlot Cargado! - FALTA TERMINAR!");
+        Logger.debug("handleChangeUserTradeSlot Cargado! - FALTA TERMINAR!");
     }
 
     private static void handleBankOK() {
@@ -896,7 +897,7 @@ public class Protocol {
         //
 
         incomingData.copyBuffer(buffer);
-        System.out.println("handleShowUserRequest Cargado! - FALTA TERMINAR!");
+        Logger.debug("handleShowUserRequest Cargado! - FALTA TERMINAR!");
     }
 
     private static void handleParalizeOK() {
@@ -916,7 +917,7 @@ public class Protocol {
 
         //CreandoClan = True
         //    frmGuildFoundation.Show , //FrmMain
-        System.out.println("handleShowGuildFundationForm Cargado! - FALTA TERMINAR!");
+        Logger.debug("handleShowGuildFundationForm Cargado! - FALTA TERMINAR!");
     }
 
     private static void handleGuildDetails() {
@@ -985,7 +986,7 @@ public class Protocol {
         //    End With
 
         incomingData.copyBuffer(buffer);
-        System.out.println("handleGuildDetails Cargado! - FALTA TERMINAR!");
+        Logger.debug("handleGuildDetails Cargado! - FALTA TERMINAR!");
     }
 
     private static void handleGuildLeaderInfo() {
@@ -1043,7 +1044,7 @@ public class Protocol {
         //    End With
 
         incomingData.copyBuffer(buffer);
-        System.out.println("handleGuildLeaderInfo Cargado! - FALTA TERMINAR!");
+        Logger.debug("handleGuildLeaderInfo Cargado! - FALTA TERMINAR!");
     }
 
     private static void handleCharacterInfo() {
@@ -1141,7 +1142,7 @@ public class Protocol {
 
 
         incomingData.copyBuffer(buffer);
-        System.out.println("handleCharacterInfo Cargado! - FALTA TERMINAR!");
+        Logger.debug("handleCharacterInfo Cargado! - FALTA TERMINAR!");
     }
 
     private static void handlePeaceProposalsList() {
@@ -1172,7 +1173,7 @@ public class Protocol {
         //    Call frmPeaceProp.Show(vbModeless, //FrmMain)
 
         incomingData.copyBuffer(buffer);
-        System.out.println("handlePeaceProposalsList Cargado! - FALTA TERMINAR!");
+        Logger.debug("handlePeaceProposalsList Cargado! - FALTA TERMINAR!");
     }
 
     private static void handleAlianceProposalsList() {
@@ -1203,7 +1204,7 @@ public class Protocol {
         //    Call frmPeaceProp.Show(vbModeless, //FrmMain)
 
         incomingData.copyBuffer(buffer);
-        System.out.println("handleAlianceProposalsList Cargado! - FALTA TERMINAR!");
+        Logger.debug("handleAlianceProposalsList Cargado! - FALTA TERMINAR!");
     }
 
     private static void handleOfferDetails() {
@@ -1221,7 +1222,7 @@ public class Protocol {
         String recievePeticion = buffer.readASCIIString();
 
         incomingData.copyBuffer(buffer);
-        System.out.println("handleOfferDetails Cargado! - FALTA TERMINAR!");
+        Logger.debug("handleOfferDetails Cargado! - FALTA TERMINAR!");
     }
 
     private static void handleGuildNews() {
@@ -1262,7 +1263,7 @@ public class Protocol {
         //    If ClientSetup.bGuildNews Then frmGuildNews.Show vbModeless, //FrmMain
 
         incomingData.copyBuffer(buffer);
-        System.out.println("handleGuildNews Cargado! - FALTA TERMINAR!");
+        Logger.debug("handleGuildNews Cargado! - FALTA TERMINAR!");
     }
 
     private static void handleTrainerCreatureList() {
@@ -1287,7 +1288,7 @@ public class Protocol {
         //    frmEntrenador.Show , //FrmMain
 
         incomingData.copyBuffer(buffer);
-        System.out.println("handleTrainerCreatureList Cargado! - FALTA TERMINAR!");
+        Logger.debug("handleTrainerCreatureList Cargado! - FALTA TERMINAR!");
     }
 
     private static void handleSendSkills() {
@@ -1312,7 +1313,7 @@ public class Protocol {
 
         // LlegaronSkills = true;
 
-        System.out.println("handleSendSkills Cargado! - FALTA TERMINAR!");
+        Logger.debug("handleSendSkills Cargado! - FALTA TERMINAR!");
     }
 
     private static void handleDumbNoMore() {
@@ -1320,7 +1321,7 @@ public class Protocol {
         incomingData.readByte();
 
         // userEstupido = false;
-        System.out.println("handleDumbNoMore Cargado! - FALTA TERMINAR!");
+        Logger.debug("handleDumbNoMore Cargado! - FALTA TERMINAR!");
     }
 
     private static void handleBlindNoMore() {
@@ -1328,7 +1329,7 @@ public class Protocol {
         incomingData.readByte();
 
         //UserCiego = False
-        System.out.println("handleBlindNoMore Cargado! - FALTA TERMINAR!");
+        Logger.debug("handleBlindNoMore Cargado! - FALTA TERMINAR!");
     }
 
     private static void handleMeditateToggle() {
@@ -1336,7 +1337,7 @@ public class Protocol {
         incomingData.readByte();
 
         //UserMeditar = Not UserMeditar
-        System.out.println("handleMeditateToggle Cargado! - FALTA TERMINAR!");
+        Logger.debug("handleMeditateToggle Cargado! - FALTA TERMINAR!");
     }
 
     private static void handleDiceRoll() {
@@ -1370,7 +1371,9 @@ public class Protocol {
         //        .UpdateStats
         //    End With
 
-        System.out.println("handleDiceRoll Cargado! - FALTA TERMINAR!");
+        playSound(SND_DICE);
+
+        Logger.debug("handleDiceRoll Cargado! - FALTA TERMINAR!");
     }
 
     private static void handleSetInvisible() {
@@ -1382,7 +1385,7 @@ public class Protocol {
         // Remove packet ID
         incomingData.readByte();
         charList[incomingData.readInteger()].setInvisible(incomingData.readBoolean());
-        System.out.println("handleSetInvisible Cargado!");
+        Logger.debug("handleSetInvisible Cargado!");
     }
 
     private static void handleShowForumForm() {
@@ -1398,7 +1401,7 @@ public class Protocol {
         //    If Not MirandoForo Then
         //        frmForo.Show , //FrmMain
         //    End If
-        System.out.println("handleShowForumForm Cargado! - FALTA TERMINAR!");
+        Logger.debug("handleShowForumForm Cargado! - FALTA TERMINAR!");
     }
 
     private static void handleAddForumMessage() {
@@ -1428,7 +1431,7 @@ public class Protocol {
 
 
         incomingData.copyBuffer(buffer);
-        System.out.println("handleAddForumMessage Cargado! - FALTA TERMINAR!");
+        Logger.debug("handleAddForumMessage Cargado! - FALTA TERMINAR!");
     }
 
     private static void handleLevelUp() {
@@ -1445,7 +1448,7 @@ public class Protocol {
         short skillPoints = incomingData.readInteger();
 
         // //FrmMain.lightskillstar
-        System.out.println("handleLevelUp Cargado! - FALTA TERMINAR!");
+        Logger.debug("handleLevelUp Cargado! - FALTA TERMINAR!");
     }
 
     private static void handleMiniStats() {
@@ -1473,7 +1476,7 @@ public class Protocol {
         //        .PenaCarcel = incomingData.ReadLong()
         //    End With
 
-        System.out.println("handleMiniStats Cargado! - FALTA TERMINAR!");
+        Logger.debug("handleMiniStats Cargado! - FALTA TERMINAR!");
     }
 
     private static void handleFame() {
@@ -1505,7 +1508,7 @@ public class Protocol {
         //    End With
         // LlegoFama = True
 
-        System.out.println("handleFame Cargado! - FALTA TERMINAR!");
+        Logger.debug("handleFame Cargado! - FALTA TERMINAR!");
     }
 
     private static void handleUpdateHungerAndThirst() {
@@ -1562,7 +1565,7 @@ public class Protocol {
         //    End With
 
         incomingData.copyBuffer(buffer);
-        System.out.println("handleChangeNPCInventorySlot Cargado! - FALTA TERMINAR!");
+        Logger.debug("handleChangeNPCInventorySlot Cargado! - FALTA TERMINAR!");
     }
 
     private static void handleShowSignal() {
@@ -1582,21 +1585,21 @@ public class Protocol {
         // Call InitCartel(tmp, Buffer.ReadInteger())
 
         incomingData.copyBuffer(buffer);
-        System.out.println("handleShowSignal Cargado! - FALTA TERMINAR!");
+        Logger.debug("handleShowSignal Cargado! - FALTA TERMINAR!");
     }
 
     private static void handleDumb() {
         // Remove packet ID
         incomingData.readByte();
         //UserEstupido = True
-        System.out.println("handleDumb Cargado! - FALTA TERMINAR!");
+        Logger.debug("handleDumb Cargado! - FALTA TERMINAR!");
     }
 
     private static void handleBlind() {
         // Remove packet ID
         incomingData.readByte();
         //UserCiego = True
-        System.out.println("handleBlind Cargado! - FALTA TERMINAR!");
+        Logger.debug("handleBlind Cargado! - FALTA TERMINAR!");
     }
 
     private static void handleErrorMessage() {
@@ -1626,7 +1629,7 @@ public class Protocol {
         incomingData.readByte();
 
         //UserDescansar = Not UserDescansar
-        System.out.println("handleCarpenterObjects Cargado! - FALTA TERMINAR!");
+        Logger.debug("handleCarpenterObjects Cargado! - FALTA TERMINAR!");
     }
 
     private static void handleCarpenterObjects() {
@@ -1702,7 +1705,7 @@ public class Protocol {
         //    Next i
 
         incomingData.copyBuffer(buffer);
-        System.out.println("handleCarpenterObjects Cargado! - FALTA TERMINAR!");
+        Logger.debug("handleCarpenterObjects Cargado! - FALTA TERMINAR!");
     }
 
     private static void handleBlacksmithArmors() {
@@ -1771,7 +1774,7 @@ public class Protocol {
         //    Next i
 
         incomingData.copyBuffer(buffer);
-        System.out.println("handleBlacksmithArmors Cargado! - FALTA TERMINAR!");
+        Logger.debug("handleBlacksmithArmors Cargado! - FALTA TERMINAR!");
 
     }
 
@@ -1852,7 +1855,7 @@ public class Protocol {
         //    Next i
 
         incomingData.copyBuffer(buffer);
-        System.out.println("handleBlacksmithWeapons Cargado! - FALTA TERMINAR!");
+        Logger.debug("handleBlacksmithWeapons Cargado! - FALTA TERMINAR!");
     }
 
     private static void handleAtributes() {
@@ -1891,7 +1894,7 @@ public class Protocol {
         //        LlegaronAtrib = True
         //    End If
 
-        System.out.println("handleAtributes Cargado! - FALTA TERMINAR!");
+        Logger.debug("handleAtributes Cargado! - FALTA TERMINAR!");
     }
 
     private static void handleChangeSpellSlot() {
@@ -1911,7 +1914,7 @@ public class Protocol {
         String hechizoName = buffer.readASCIIString();
 
         incomingData.copyBuffer(buffer);
-        System.out.println("ChangeSpellSlot Cargado! - FALTA TERMINAR!");
+        Logger.debug("ChangeSpellSlot Cargado! - FALTA TERMINAR!");
     }
 
     private static void handleChangeBankSlot() {
@@ -1960,7 +1963,7 @@ public class Protocol {
 
 
         incomingData.copyBuffer(buffer);
-        System.out.println("handleChangeBankSlot Cargado! - FALTA TERMINAR!");
+        Logger.debug("handleChangeBankSlot Cargado! - FALTA TERMINAR!");
     }
 
     private static void handleChangeInventorySlot() {
@@ -2079,7 +2082,7 @@ public class Protocol {
             Console.get().addMsgToConsole(MENSAJE_TRABAJO_FUNDIRMETAL, false, false, new RGBColor());
         }
 
-        System.out.println("handleWorkRequestTarget Cargado! - FALTA TESTIAR!");
+        Logger.debug("handleWorkRequestTarget Cargado! - FALTA TESTIAR!");
     }
 
     private static void handleUpdateUserStats() {
@@ -2156,7 +2159,7 @@ public class Protocol {
         // Remove packet ID
         incomingData.readByte();
         //pausa = Not pausa
-        System.out.println("handlePauseToggle CARGADO - FALTA TERMINAR!");
+        Logger.debug("handlePauseToggle CARGADO - FALTA TERMINAR!");
     }
 
     private static void handleAreaChanged() {
@@ -2206,7 +2209,7 @@ public class Protocol {
         //    End With
 
         incomingData.copyBuffer(buffer);
-        System.out.println("handleGuildList CARGADO - FALTA TERMINAR!");
+        Logger.debug("handleGuildList CARGADO - FALTA TERMINAR!");
     }
 
     private static void handlePlayWave() {
@@ -2245,7 +2248,7 @@ public class Protocol {
             incomingData.readInteger();
         }
 
-        System.out.println("handlePlayMIDI Cargado! - FALTA TERMINAR!");
+        Logger.debug("handlePlayMIDI Cargado! - FALTA TERMINAR!");
     }
 
     private static void handleBlockPosition() {
@@ -2347,7 +2350,7 @@ public class Protocol {
         User.get().setCharacterFx(charIndex, incomingData.readInteger(), incomingData.readInteger());
 
         refreshAllChars();
-        System.out.println("handleCharacterChange Cargado! - FALTA TERMINAR!");
+        Logger.debug("handleCharacterChange Cargado! - FALTA TERMINAR!");
     }
 
     private static void handleForceCharMove() {
@@ -2507,7 +2510,7 @@ public class Protocol {
         refreshAllChars();
 
         incomingData.copyBuffer(buffer);
-        System.out.println("handleCharacterCreate Cargado! - FALTA TERMINAR!");
+        Logger.debug("handleCharacterCreate Cargado! - FALTA TERMINAR!");
     }
 
     private static void handleUserCharIndexInServer() {
@@ -2535,7 +2538,7 @@ public class Protocol {
         incomingData.readByte();
 
         int userIndex = incomingData.readInteger();
-        System.out.println("No le encontre utilidad a este paquete....");
+        Logger.debug("No le encontre utilidad a este paquete....");
     }
 
     private static void handleShowMessageBox() {
@@ -2615,7 +2618,7 @@ public class Protocol {
         //    End If
 
         incomingData.copyBuffer(buffer);
-        System.out.println("handleGuildChat CARGADO - FALTA TERMINAR");
+        Logger.debug("handleGuildChat CARGADO - FALTA TERMINAR");
     }
 
     private static void handleConsoleMessage() {
@@ -2670,7 +2673,7 @@ public class Protocol {
         //    End If
 
         incomingData.copyBuffer(buffer);
-        System.out.println("handleConsoleMessage CARGADO - FALTA TERMINAR!");
+        Logger.debug("handleConsoleMessage CARGADO - FALTA TERMINAR!");
     }
 
     private static void handleChatOverHead() {
@@ -2697,7 +2700,7 @@ public class Protocol {
 
         incomingData.copyBuffer(buffer);
 
-        System.out.println("handleChatOverHead CARGADO - FALTA TERMINAR!");
+        Logger.debug("handleChatOverHead CARGADO - FALTA TERMINAR!");
     }
 
     private static void handlePosUpdate() {
@@ -2759,7 +2762,7 @@ public class Protocol {
         End If
          */
 
-        System.out.println("handleChangeMap Cargado! - FALTA TERMINAR!");
+        Logger.debug("handleChangeMap Cargado! - FALTA TERMINAR!");
 
     }
 
@@ -2786,7 +2789,7 @@ public class Protocol {
         incomingData.readByte();
         int bankGold = incomingData.readLong();
         //frmBancoObj.lblUserGld.Caption = incomingData.ReadLong
-        System.out.println("handleUpdateBankGold CARGADO - FALTA TERMINAR!");
+        Logger.debug("handleUpdateBankGold CARGADO - FALTA TERMINAR!");
     }
 
     private static void handleUpdateGold() {
@@ -2824,7 +2827,7 @@ public class Protocol {
         //        UserEstado = 0
         //    End If
 
-        System.out.println("handleUpdateHP CARGADO - FALTA DESACTIVAR MACROS DE TRABAJO!");
+        Logger.debug("handleUpdateHP CARGADO - FALTA DESACTIVAR MACROS DE TRABAJO!");
     }
 
     private static void handleUpdateMana() {
@@ -2863,7 +2866,7 @@ public class Protocol {
         //        frmCarp.Show , //FrmMain
         //    End If
 
-        System.out.println("handleShowCarpenterForm CARGADO - FALTA TERMINAR!");
+        Logger.debug("handleShowCarpenterForm CARGADO - FALTA TERMINAR!");
     }
 
     private static void handleShowBlacksmithForm() {
@@ -2876,7 +2879,7 @@ public class Protocol {
         //        frmHerrero.Show , //FrmMain
         //    End If
 
-        System.out.println("handleShowBlacksmithForm CARGADO - FALTA TERMINAR!");
+        Logger.debug("handleShowBlacksmithForm CARGADO - FALTA TERMINAR!");
     }
 
     private static void handleUserOfferConfirm() {
@@ -2890,7 +2893,7 @@ public class Protocol {
         //        .PrintCommerceMsg TradingUserName & " ha confirmado su oferta!", FontTypeNames.FONTTYPE_CONSE
         //    End With
 
-        System.out.println("handleUserOfferConfirm CARGADO - FALTA TERMINAR!");
+        Logger.debug("handleUserOfferConfirm CARGADO - FALTA TERMINAR!");
     }
 
     private static void handleUserCommerceEnd() {
@@ -2908,7 +2911,7 @@ public class Protocol {
         //    Unload frmComerciarUsu
         //    Comerciando = False
 
-        System.out.println("handleUserCommerceEnd CARGADO - FALTA TERMINAR!");
+        Logger.debug("handleUserCommerceEnd CARGADO - FALTA TERMINAR!");
     }
 
     private static void handleUserCommerceInit() {
@@ -2948,7 +2951,7 @@ public class Protocol {
         //    Comerciando = True
         //    Call frmComerciarUsu.Show(vbModeless, //FrmMain)
 
-        System.out.println("handleUserCommerceInit CARGADO - FALTA TERMINAR!");
+        Logger.debug("handleUserCommerceInit CARGADO - FALTA TERMINAR!");
     }
 
     private static void handleBankInit() {
@@ -2984,7 +2987,7 @@ public class Protocol {
         //
         //    frmBancoObj.Show , //FrmMain
 
-        System.out.println("handleBankInit CARGADO - FALTA TERMINAR!");
+        Logger.debug("handleBankInit CARGADO - FALTA TERMINAR!");
 
     }
 
@@ -3026,7 +3029,7 @@ public class Protocol {
             frmComerciar.Show , //FrmMain
          */
 
-        System.out.println("handleBankEnd CARGADO - FALTA TERMINAR!");
+        Logger.debug("handleBankEnd CARGADO - FALTA TERMINAR!");
     }
 
     private static void handleBankEnd() {
@@ -3041,7 +3044,7 @@ public class Protocol {
             Comerciando = False
          */
 
-        System.out.println("handleBankEnd CARGADO - FALTA TERMINAR!");
+        Logger.debug("handleBankEnd CARGADO - FALTA TERMINAR!");
     }
 
     private static void handleCommerceChat() {
@@ -3093,7 +3096,7 @@ public class Protocol {
 
         incomingData.copyBuffer(buffer);
 
-        System.out.println("handleCommerceChat CARGADO - FALTA TERMINAR!");
+        Logger.debug("handleCommerceChat CARGADO - FALTA TERMINAR!");
     }
 
     private static void handleCommerceEnd() {
@@ -3103,7 +3106,7 @@ public class Protocol {
         // Comerciando = false
         // Unload frmComerciar
 
-        System.out.println("handleCommerceEnd CARGADO - FALTA TERMINAR!");
+        Logger.debug("handleCommerceEnd CARGADO - FALTA TERMINAR!");
     }
 
     private static void handleDisconnect() {
@@ -3156,7 +3159,7 @@ public class Protocol {
     Call Audio.PlayMIDI("2.mid")
          */
 
-        System.out.println("handleDisconnect CARGADO - FALTA TERMINAR!");
+        Logger.debug("handleDisconnect CARGADO - FALTA TERMINAR!");
     }
 
     private static void handleNavigateToggle() {
@@ -3180,14 +3183,14 @@ public class Protocol {
         incomingData.readByte();
         short dialog = incomingData.readInteger();
         // Call Dialogos.RemoveDialog(incomingData.ReadInteger())
-        System.out.println("handleRemoveCharDialog CARGADO - FALTA TERMINAR!");
+        Logger.debug("handleRemoveCharDialog CARGADO - FALTA TERMINAR!");
     }
 
     private static void handleRemoveDialogs() {
         // Remove packet ID
         incomingData.readByte();
         // Call Dialogos.RemoveAllDialogs
-        System.out.println("handleRemoveDialogs CARGADO - FALTA TERMINAR!");
+        Logger.debug("handleRemoveDialogs CARGADO - FALTA TERMINAR!");
     }
 
     private static void handleLogged() {

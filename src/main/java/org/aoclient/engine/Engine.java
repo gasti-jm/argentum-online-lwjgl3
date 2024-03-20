@@ -8,6 +8,7 @@ import org.aoclient.engine.scenes.*;
 import org.aoclient.engine.utils.GameData;
 import org.aoclient.engine.utils.Time;
 import org.lwjgl.Version;
+import org.tinylog.Logger;
 
 import static org.aoclient.engine.scenes.SceneType.INTRO_SCENE;
 import static org.aoclient.engine.utils.GameData.options;
@@ -15,7 +16,7 @@ import static org.aoclient.engine.utils.Time.deltaTime;
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.*;
 
-public final class Engine{
+public final class Engine {
     private static boolean prgRun = true;
     private Window window;
     private ImGUISystem guiSystem;
@@ -67,9 +68,11 @@ public final class Engine{
      * @desc: Inicia nuestro motor grafico con su ventana, gestor de texturas (surface), inits (gamedata) y escenas.
      */
     public void init(){
-        System.out.println("Starting LWJGL " + Version.getVersion() + "!");
-        System.out.println("Running on " + System.getProperty("os.name") + " / v" + System.getProperty("os.version") + " [" + System.getProperty("os.arch") + "]");
-        System.out.println("Java " + System.getProperty("java.version"));
+        Logger.info("Starting LWJGL {} !", Version.getVersion());
+        Logger.info("Running on {} / v{} [{}]",
+                System.getProperty("os.name"), System.getProperty("os.version"), System.getProperty("os.arch"));
+
+        Logger.info("Java version: {}", System.getProperty("java.version"));
 
         window = Window.get();
         window.initialize();

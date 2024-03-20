@@ -19,12 +19,13 @@ public class SocketConnection {
     private Socket sock;
     private DataOutputStream writeData;
     private DataInputStream handleData;
+    private boolean tryConnect;
 
     /**
      * @desc: Constructor privado por singleton.
      */
     private SocketConnection() {
-
+        this.tryConnect = false;
     }
 
     /**
@@ -43,20 +44,41 @@ public class SocketConnection {
      * Intenta conectarse con el servidor segun la Ip y el puerto asignado.
      */
     public void connect(final String ip, final String port) {
-        try {
-            if(sock == null || sock.isClosed()) {
-                sock = new Socket(ip, Integer.parseInt(port));
-                writeData = new DataOutputStream(sock.getOutputStream()); // envio
-                handleData = new DataInputStream(sock.getInputStream()); // respuesta..
-            }
-
-            incomingData.readASCIIStringFixed(incomingData.length());
-            outgoingData.readASCIIStringFixed(outgoingData.length());
-
-        } catch(Exception e) {
-            ImGUISystem.get().checkAddOrChange("frmMessage",
-                    new FMessage(e.getMessage()));
+        if (tryConnect) {
+            ImGUISystem.get().checkAddOrChange("frmMessage", new FMessage(
+                    "Intentando conectarse con el servidor, porfavor espere..."
+            ));
+            return;
         }
+
+        new Thread(() -> {
+            try {
+                 if(sock == null || sock.isClosed()) {
+                    this.tryConnect = true;
+                    sock = new Socket(ip, Integer.parseInt(port));
+
+                    writeData   = new DataOutputStream(sock.getOutputStream()); // envio
+                    handleData  = new DataInputStream(sock.getInputStream()); // respuesta..
+               }
+//
+//                incomingData.readASCIIStringFixed(incomingData.length());
+//                outgoingData.readASCIIStringFixed(outgoingData.length());
+
+                if (sock.isConnected()) {
+                    this.tryConnect = false;
+                    //}
+
+                    incomingData.readASCIIStringFixed(incomingData.length());
+                    outgoingData.readASCIIStringFixed(outgoingData.length());
+                }
+
+
+            } catch(Exception e) {
+                ImGUISystem.get().checkAddOrChange("frmMessage", new FMessage(e.getMessage()));
+                this.tryConnect = false;
+            }
+        }).start();
+
     }
 
     /**

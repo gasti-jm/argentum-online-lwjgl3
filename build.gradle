@@ -10,6 +10,7 @@ import org.gradle.internal.os.OperatingSystem
 project.ext.lwjglVersion = "3.3.3"
 project.ext.jomlVersion = "1.10.5"
 project.ext.imguiVersion = "1.86.11"
+project.ext.loggerVersion = "2.7.0"
 
 switch (OperatingSystem.current()) {
     case OperatingSystem.LINUX:
@@ -39,6 +40,10 @@ repositories {
 }
 
 dependencies {
+    //Logger
+    implementation "org.tinylog:tinylog-api:$loggerVersion"
+    implementation "org.tinylog:tinylog-impl:$loggerVersion"
+
     // ImGUI dependencies
     implementation "io.github.spair:imgui-java-app:$imguiVersion"
     implementation "io.github.spair:imgui-java-binding:$imguiVersion"

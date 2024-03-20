@@ -52,7 +52,7 @@ public final class FMain extends Form {
                 ImGuiWindowFlags.NoBringToFrontOnFocus);
 
 
-        //ImGui.setWindowFocus();
+        //ImGui.setWindowFocus(formName);
         ImGui.getWindowDrawList().addImage(backgroundImage, 0, 0, Window.get().getWidth(), Window.get().getHeight());
 
         this.drawShapes();

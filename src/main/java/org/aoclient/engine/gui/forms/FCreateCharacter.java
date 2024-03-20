@@ -437,7 +437,6 @@ public final class FCreateCharacter extends Form{
     private void buttonThrowDices() {
         SocketConnection.get().connect(options.getIpServer(), options.getPortServer());
         writeThrowDices();
-        playSound(SND_DICE);
     }
 
     private void buttonGoBack() {
