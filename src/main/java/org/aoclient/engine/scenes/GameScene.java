@@ -12,7 +12,7 @@ import org.aoclient.engine.listeners.KeyListener;
 import org.aoclient.engine.listeners.MouseListener;
 import org.aoclient.engine.renderer.RGBColor;
 
-import static org.aoclient.engine.renderer.FontText.drawText;
+import static org.aoclient.engine.renderer.FontTypes.*;
 import static org.aoclient.network.Protocol.*;
 import static org.aoclient.engine.game.IntervalTimer.INT_SENTRPU;
 import static org.aoclient.engine.game.models.E_KeyType.*;
@@ -312,7 +312,7 @@ public final class GameScene extends Scene {
             camera.incrementScreenY();
         }
 
-        // LAYER 3, CHARACTERS & OBJECTS > 32x32
+        // LAYER 3, CHARACTERS, DIALOGS & OBJECTS > 32x32
         camera.setScreenY(camera.getMinYOffset() - TILE_BUFFER_SIZE);
         for (int y = camera.getMinY(); y <= camera.getMaxY(); y++) {
             camera.setScreenX(camera.getMinXOffset() - TILE_BUFFER_SIZE);
@@ -329,39 +329,13 @@ public final class GameScene extends Scene {
                     }
                 }
 
-                // dialogs
-                if (mapData[x][y].getCharIndex() != 0) {
-                    final Character chrActual = charList[mapData[x][y].getCharIndex()];
-
-                    if(!chrActual.getDialog().isEmpty()) {
-
-                        if(chrActual.getDialog_offset_counter_y() < 10) {
-                            chrActual.setDialog_offset_counter_y(chrActual.getDialog_offset_counter_y() + 50 * deltaTime);
-                        }
-
-                        final int dX = (camera.getScreenX() * TILE_PIXEL_SIZE) + ( ((int) chrActual.getMoveOffsetX()) + pixelOffsetX);
-                        final int dY = (camera.getScreenY() * TILE_PIXEL_SIZE) + ( ((int) chrActual.getMoveOffsetY()) + pixelOffsetY);
-
-                        // Render dialog
-                        drawText(chrActual.getDialog(),
-                                dX + 14 ,
-                                dY + chrActual.getBody().getHeadOffset().getY() - (int) chrActual.getDialog_offset_counter_y(),
-                                chrActual.getDialog_color(),
-                                0, true, false, true);
-                    }
-
-                    //
-                    //                        'Render dialog
-                    //                        Engine_Text_Render charlist(MapData(X, Y).CharIndex).dialog, screen_x + 14 - Engine_Text_Width(charlist(MapData(X, Y).CharIndex).dialog, True) / 2, screen_y + (charlist(MapData(X, Y).CharIndex).Body.HeadOffset.Y) - Engine_Text_Height(charlist(MapData(X, Y).CharIndex).dialog, True) - charlist(MapData(X, Y).CharIndex).dialog_offset_counter_y, temp_array, charlist(MapData(X, Y).CharIndex).dialog_font_index, True
-                }
+                Dialogs.renderDialogs(camera, x, y, pixelOffsetX, pixelOffsetY);
 
                 if (mapData[x][y].getCharIndex() != 0) {
                     drawCharacter(mapData[x][y].getCharIndex(),
                             POS_SCREEN_X + camera.getScreenX() * TILE_PIXEL_SIZE + pixelOffsetX,
                             POS_SCREEN_Y + camera.getScreenY() * TILE_PIXEL_SIZE + pixelOffsetY, ambientColor);
                 }
-
-
 
 
                 if (mapData[x][y].getLayer(3).getGrhIndex() != 0) {
@@ -378,7 +352,6 @@ public final class GameScene extends Scene {
 
         // LAYER 4
         this.checkEffectCeiling();
-
         if (alphaCeiling > 0.0f) {
             camera.setScreenY(camera.getMinYOffset() - TILE_BUFFER_SIZE);
             for (int y = camera.getMinY(); y <= camera.getMaxY(); y++) {

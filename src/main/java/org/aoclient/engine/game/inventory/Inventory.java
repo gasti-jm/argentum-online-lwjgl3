@@ -2,9 +2,11 @@ package org.aoclient.engine.game.inventory;
 
 import org.aoclient.engine.game.models.E_ObjType;
 import org.aoclient.engine.listeners.MouseListener;
+import org.aoclient.engine.renderer.RGBColor;
 
 import static org.aoclient.engine.renderer.Drawn.*;
-import static org.aoclient.engine.renderer.FontText.drawText;
+import static org.aoclient.engine.renderer.FontTypes.NORMAL_FONT;
+import static org.aoclient.engine.renderer.FontTypes.drawText;
 import static org.aoclient.engine.scenes.Camera.*;
 
 /**
@@ -15,6 +17,8 @@ public class Inventory {
     protected int sWidth, sHeigth;
     protected int cantRows, cantColumns;
     protected boolean visible;
+
+    protected RGBColor amountColor = new RGBColor(1,1,1);
 
     static class Slot {
         short objIndex;
@@ -103,7 +107,7 @@ public class Inventory {
 
             if (slots[i].grhIndex > 0) {
                 drawGrhIndex(slots[i].grhIndex, iX,  iY, null);
-                drawText(String.valueOf(slots[i].amount),  iX, iY + 20, null, 0, true, false, false);
+                drawText(String.valueOf(slots[i].amount),  iX, iY + 20, amountColor, NORMAL_FONT, false);
             }
 
             if(i == slotSelected) {

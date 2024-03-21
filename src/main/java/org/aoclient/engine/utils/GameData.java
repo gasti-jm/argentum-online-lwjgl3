@@ -14,7 +14,7 @@ import org.aoclient.engine.utils.structs.*;
 
 import static org.aoclient.engine.Sound.*;
 import static org.aoclient.engine.game.models.Character.eraseAllChars;
-import static org.aoclient.engine.renderer.FontText.loadCSV;
+import static org.aoclient.engine.renderer.FontTypes.loadFonts;
 import static org.aoclient.engine.utils.ByteMigration.*;
 
 /**
@@ -56,7 +56,7 @@ public final class GameData {
         loadShields();
         loadFxs();
         loadFK();
-        loadCSV();
+        loadFonts();
 
         playMusic("intro.ogg");
     }

@@ -27,7 +27,7 @@ public final class Sound {
     /**
      * @desc: Carga nuestro sonido en formato .ogg y activa si es en un loop infinito o no (ya sea para musica o sonido)
      */
-    public Sound(String filepath, boolean loops) {
+    public Sound(final String filepath, final boolean loops) {
         this.filepath = filepath;
 
         // Allocate space to store the return information from stb
@@ -47,8 +47,8 @@ public final class Sound {
         }
 
         // Retrieve the extra information that was stored in the buffers by stb
-        int channels = channelsBuffer.get();
-        int sampleRate = sampleRateBuffer.get();
+        final int channels = channelsBuffer.get();
+        final int sampleRate = sampleRateBuffer.get();
 
         // Free
         stackPop();

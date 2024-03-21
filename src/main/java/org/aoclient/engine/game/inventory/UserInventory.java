@@ -4,10 +4,11 @@ import org.aoclient.engine.game.IntervalTimer;
 import org.aoclient.engine.listeners.MouseListener;
 import org.aoclient.engine.renderer.RGBColor;
 
+import static org.aoclient.engine.renderer.FontTypes.NORMAL_FONT;
+import static org.aoclient.engine.renderer.FontTypes.drawText;
 import static org.aoclient.network.Protocol.writeEquipItem;
 import static org.aoclient.network.Protocol.writeUseItem;
 import static org.aoclient.engine.renderer.Drawn.*;
-import static org.aoclient.engine.renderer.FontText.drawText;
 import static org.aoclient.engine.scenes.Camera.*;
 
 /**
@@ -60,10 +61,10 @@ public final class UserInventory extends Inventory {
         for (int i = 0; i < slots.length; i++) {
             if (slots[i].grhIndex > 0) {
                 drawGrhIndex(slots[i].grhIndex, iX, iY, null);
-                drawText(String.valueOf(slots[i].amount), iX, iY + 20, null, 0, true, false, false);
+                drawText(String.valueOf(slots[i].amount), iX, iY + 20, amountColor, NORMAL_FONT, false);
 
                 if (slots[i].equipped) {
-                    drawText("E", iX + 23, iY, colorEquipped, 0, true, false, false);
+                    drawText("E", iX + 23, iY, colorEquipped, NORMAL_FONT, false);
                 }
             }
 

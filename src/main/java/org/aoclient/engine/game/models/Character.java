@@ -1,15 +1,11 @@
 package org.aoclient.engine.game.models;
 
-import org.aoclient.engine.game.User;
 import org.aoclient.engine.renderer.RGBColor;
 import org.aoclient.engine.utils.structs.*;
 
-import java.util.Arrays;
-
 import static org.aoclient.engine.game.models.E_Heading.SOUTH;
 import static org.aoclient.engine.renderer.Drawn.drawTexture;
-import static org.aoclient.engine.renderer.FontText.drawText;
-import static org.aoclient.engine.renderer.FontText.getSizeText;
+import static org.aoclient.engine.renderer.FontTypes.*;
 import static org.aoclient.engine.utils.GameData.*;
 import static org.aoclient.engine.utils.Time.timerTicksPerFrame;
 
@@ -640,11 +636,16 @@ public final class Character {
                             }
 
                             String line = charList[charIndex].name;
-                            drawText(line, PixelOffsetX - (getSizeText(line) / 2) + 15, PixelOffsetY + 30, color, 0, true, false, false);
+                            drawText(line,
+                                    PixelOffsetX + 16 - getTextWidth(line, false) / 2,
+                                    PixelOffsetY + 30, color, NORMAL_FONT, false);
+
 
                             line = charList[charIndex].clanName;
                             if (!line.isEmpty()) {
-                                drawText(line, PixelOffsetX - (getSizeText(line) / 2) + 15, PixelOffsetY + 43, color, 0, true, false, false);
+                                drawText(line,
+                                        PixelOffsetX + 16 - getTextWidth(line, false) / 2,
+                                        PixelOffsetY + 45, color, NORMAL_FONT, false);
                             }
                         }
                     }
