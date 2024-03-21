@@ -5,7 +5,11 @@
     <option name="linkedExternalProjectsSettings">
       <GradleProjectSettings>
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
+<<<<<<< HEAD
         <option name="gradleJvm" value="corretto-11" />
+=======
+        <option name="gradleJvm" value="corretto-1.8" />
+>>>>>>> cambios_lwk
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
