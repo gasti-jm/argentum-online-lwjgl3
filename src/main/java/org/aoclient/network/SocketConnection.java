@@ -63,8 +63,8 @@ public class SocketConnection {
 
                 if (sock.isConnected()) {
                     this.tryConnect = false;
-                    incomingData.readASCIIStringFixed(incomingData.length());
-                    outgoingData.readASCIIStringFixed(outgoingData.length());
+                    incomingData.readBytesSended(incomingData.length());
+                    outgoingData.readBytesSended(outgoingData.length());
                 }
 
             } catch(Exception e) {
@@ -82,7 +82,7 @@ public class SocketConnection {
         if (writeData == null || !sock.isConnected() || sock.isClosed()) return;
 
         if (outgoingData.length() != 0){
-            sendData(outgoingData.readASCIIStringFixed(outgoingData.length()));
+            sendData(outgoingData.readBytesSended(outgoingData.length()));
         }
     }
 
@@ -91,10 +91,10 @@ public class SocketConnection {
      * @param sdData Bytes en cadena para ser enviada
      * @desc Envia los bytes al servidor.
      */
-    public void sendData(String sdData) {
+    public void sendData(byte[] sdData) {
         if (sock.isConnected()){
             try {
-                writeData.write(sdData.getBytes());
+                writeData.write(sdData);
             } catch (IOException e) {
                 disconnect();
             }

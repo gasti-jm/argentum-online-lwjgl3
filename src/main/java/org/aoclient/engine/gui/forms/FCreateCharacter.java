@@ -67,9 +67,7 @@ public final class FCreateCharacter extends Form{
     static class RECT {
         private int top, left, right, bottom;
     }
-
     private RECT characterPos;
-
 
     public FCreateCharacter(){
         this.formName       = "frmCreateCharacter";

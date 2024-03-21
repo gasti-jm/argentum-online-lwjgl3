@@ -192,20 +192,11 @@ public class ByteQueue {
         return buf[0] == 1;
     }
 
-    public String readASCIIStringFixed(int length) {
-        if (length <= 0) {
-            return "";
-        }
-
+    public byte[] readBytesSended(int length) {
         if (queueLength >= length) {
             byte[] buf = new byte[length];
             removeData(readData(buf, length));
-
-            try {
-                return new String(buf, "Cp1252");
-            } catch (UnsupportedEncodingException e) {
-                throw new RuntimeException(e);
-            }
+            return buf;
         } else {
             throw new RuntimeException("Not enough data");
         }
