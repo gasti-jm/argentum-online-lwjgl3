@@ -64,17 +64,30 @@ public final class FCreateCharacter extends Form{
     private int userBody;
     private BodyData bodyGraphic;
 
+    static class RECT {
+        private int top, left, right, bottom;
+    }
+
+    private RECT characterPos;
+
+
     public FCreateCharacter(){
         this.formName       = "frmCreateCharacter";
         this.background     = Surface.get().createTexture("resources/gui/VentanaCrearPersonaje.jpg", true);
         this.userHead       = HUMANO_H_PRIMER_CABEZA;
         this.userBody       = HUMANO_H_CUERPO_DESNUDO;
         this.dir            = E_Heading.SOUTH.value;
-
         this.bodyGraphic    = new BodyData(bodyData[userBody]);
-
-
         this.color          = new RGBColor(1,1,1);
+        this.characterPos   = new RECT();
+
+        // pos
+        this.characterPos.left = 472;
+        this.characterPos.top = 425;
+        // size
+        this.characterPos.right = 41;
+        this.characterPos.bottom = 65;
+
 
         this.loadComboBoxes();
         this.giveBodyAndHead();
@@ -105,7 +118,6 @@ public final class FCreateCharacter extends Form{
 
     @Override
     public void render() {
-
         geometryBoxRenderGUI(background, 0, 0, 1.0f);
         this.updateHeadSelection();
 
@@ -302,9 +314,7 @@ public final class FCreateCharacter extends Form{
 
     private void drawHead(int head, int index) {
         final int headGraphic = headData[head].getHead(dir).getGrhIndex();
-
         this.bodyGraphic.getWalk(dir).setStarted(true);
-        drawTexture(bodyGraphic.getWalk(dir), 472, 450, true, true, false, 1.0f, color);
 
         switch (index) {
             case 0:
@@ -313,9 +323,27 @@ public final class FCreateCharacter extends Form{
             case 1:
                 drawGrhIndex(headGraphic, 456, 395, color);
                 break;
+
             case 2:
                 drawGrhIndex(headGraphic, 483, 395, color);
-                drawGrhIndex(headGraphic, 472, 430, color);
+
+                drawTexture(bodyGraphic.getWalk(dir),
+                        (characterPos.left + (characterPos.right / 2)) - (grhData[bodyGraphic.getWalk(dir).getGrhIndex()].getPixelWidth() / 2) - 4,
+                        450,
+                        true, true, false, 1.0f, color);
+
+                // gnomo o enano
+                if (currentItemRaza.get() == 3 || currentItemRaza.get() == 4) {
+                    drawGrhIndex(headGraphic,
+                            492 - (grhData[headGraphic].getPixelWidth() / 2),
+                            487 - (grhData[headGraphic].getPixelHeight()), color);
+                } else {
+                    drawGrhIndex(headGraphic,
+                            492 - (grhData[headGraphic].getPixelWidth() / 2),
+                            478 - (grhData[headGraphic].getPixelHeight()), color);
+                }
+
+
                 break;
             case 3:
                 drawGrhIndex(headGraphic, 510, 395, color);

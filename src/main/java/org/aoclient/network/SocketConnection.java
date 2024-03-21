@@ -53,25 +53,19 @@ public class SocketConnection {
 
         new Thread(() -> {
             try {
-                 if(sock == null || sock.isClosed()) {
+                if(sock == null || sock.isClosed()) {
                     this.tryConnect = true;
                     sock = new Socket(ip, Integer.parseInt(port));
 
                     writeData   = new DataOutputStream(sock.getOutputStream()); // envio
                     handleData  = new DataInputStream(sock.getInputStream()); // respuesta..
-               }
-//
-//                incomingData.readASCIIStringFixed(incomingData.length());
-//                outgoingData.readASCIIStringFixed(outgoingData.length());
+                }
 
                 if (sock.isConnected()) {
                     this.tryConnect = false;
-                    //}
-
                     incomingData.readASCIIStringFixed(incomingData.length());
                     outgoingData.readASCIIStringFixed(outgoingData.length());
                 }
-
 
             } catch(Exception e) {
                 ImGUISystem.get().checkAddOrChange("frmMessage", new FMessage(e.getMessage()));
