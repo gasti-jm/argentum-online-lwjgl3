@@ -1,7 +1,6 @@
 package org.aoclient.engine.utils;
 
 
-import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.util.HashMap;
@@ -33,8 +32,8 @@ public final class GameData {
     public static boolean[] bLluvia;
 
     public static Character[] charList = new Character[10000+1]; // se agrega aca porque hay mapas que tienen NPCs.
-    public static Sound music;
     public static Map<String, Sound> sounds = new HashMap<>();
+    public static Map<String, Sound> musics = new HashMap<>();
     public static Options options;
 
     /**

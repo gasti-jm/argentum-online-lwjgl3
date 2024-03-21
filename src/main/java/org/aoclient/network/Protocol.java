@@ -3119,6 +3119,7 @@ public class Protocol {
         eraseAllChars();
 
         ImGUISystem.get().closeAllFrms();
+
         Sound.clearSounds();
 
         /*
@@ -3161,6 +3162,7 @@ public class Protocol {
     Call Audio.PlayMIDI("2.mid")
          */
 
+        playMusic("2.ogg");
         Logger.debug("handleDisconnect CARGADO - FALTA TERMINAR!");
     }
 

@@ -31,6 +31,9 @@ public final class Engine {
      * del motor.
      */
     private void close() {
+        Sound.clearSounds();
+        Sound.clearMusics();
+
         guiSystem.destroy();
         window.close();
     }
@@ -94,8 +97,6 @@ public final class Engine {
      *         enumerador y segun el elegido realiza el cambio de escena.
      */
     private void changeScene(SceneType scene) {
-        //guiSystem.closeAllFrms();
-
         switch (scene) {
             case INTRO_SCENE:
                 currentScene = new IntroScene();

@@ -466,7 +466,6 @@ public final class FCreateCharacter extends Form{
 
     private void buttonGoBack() {
         ImGUISystem.get().checkAddOrChange("frmConnect", new FConnect());
-        music.stop();
         playMusic("6.ogg");
         this.close();
     }

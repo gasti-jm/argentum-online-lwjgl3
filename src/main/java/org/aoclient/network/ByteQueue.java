@@ -192,7 +192,7 @@ public class ByteQueue {
         return buf[0] == 1;
     }
 
-    public byte[] readBytesSended(int length) {
+    public byte[] readBytes(int length) {
         if (queueLength >= length) {
             byte[] buf = new byte[length];
             removeData(readData(buf, length));

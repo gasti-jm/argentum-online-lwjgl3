@@ -46,8 +46,8 @@ public class SocketConnection {
     public void connect(final String ip, final String port) {
         if (tryConnect) {
             ImGUISystem.get().checkAddOrChange("frmMessage", new FMessage(
-                    "Intentando conectarse con el servidor, porfavor espere..."
-            ));
+                    "Intentando conectarse con el servidor, porfavor espere..."));
+
             return;
         }
 
@@ -56,15 +56,14 @@ public class SocketConnection {
                 if(sock == null || sock.isClosed()) {
                     this.tryConnect = true;
                     sock = new Socket(ip, Integer.parseInt(port));
-
                     writeData   = new DataOutputStream(sock.getOutputStream()); // envio
                     handleData  = new DataInputStream(sock.getInputStream()); // respuesta..
                 }
 
                 if (sock.isConnected()) {
                     this.tryConnect = false;
-                    incomingData.readBytesSended(incomingData.length());
-                    outgoingData.readBytesSended(outgoingData.length());
+                    incomingData.readBytes(incomingData.length());
+                    outgoingData.readBytes(outgoingData.length());
                 }
 
             } catch(Exception e) {
@@ -82,7 +81,7 @@ public class SocketConnection {
         if (writeData == null || !sock.isConnected() || sock.isClosed()) return;
 
         if (outgoingData.length() != 0){
-            sendData(outgoingData.readBytesSended(outgoingData.length()));
+            sendData(outgoingData.readBytes(outgoingData.length()));
         }
     }
 

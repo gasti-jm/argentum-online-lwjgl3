@@ -168,6 +168,20 @@ public final class Sound {
     }
 
     /**
+     * @desc: Agregamos una musica a nuestro mapa.
+     */
+    public static Sound addMusic(String soundFile, boolean loops) {
+        final File file = new File(soundFile);
+        if (musics.containsKey(file.getAbsolutePath())) {
+            return musics.get(file.getAbsolutePath());
+        } else {
+            Sound sound = new Sound(file.getAbsolutePath(), loops);
+            musics.put(file.getAbsolutePath(), sound);
+            return sound;
+        }
+    }
+
+    /**
      * @desc: Reproduce un sonido, primero checkea si existe en nuestro mapa, en caso de que exista lo reproduce, caso
      *        contrario: crea uno, lo guarda en el mapa y lo reproduce.
      */
@@ -191,17 +205,19 @@ public final class Sound {
      * @desc: Agregamos musica a nuestro objeto de musica y lo reproduce.
      */
     public static void playMusic(String musicName) {
+        stopMusic();
+
         final File file = new File("resources/music/" + musicName);
 
-        if (music != null) {
-            music.stop();
-            music.delete();
-        }
-
-        music = new Sound(file.getAbsolutePath(), true);
-
-        if(options.isMusic()) {
-            music.play();
+        // existe?
+        if (musics.containsKey(file.getAbsolutePath())) {
+            if (options.isMusic()) {
+                musics.get(file.getAbsolutePath()).play();
+            }
+        } else {
+            if (options.isMusic()) {
+                addMusic("resources/music/" + musicName, true).play();
+            }
         }
     }
 
@@ -211,6 +227,15 @@ public final class Sound {
     public static void clearSounds() {
         sounds.forEach((s, sound) -> sound.delete());
         sounds.clear();
+    }
+
+    public static void clearMusics() {
+        musics.forEach((s, sound) -> sound.delete());
+        musics.clear();
+    }
+
+    private static void stopMusic() {
+        musics.forEach((m, musicReproducing) -> musicReproducing.stop());
     }
 
 }

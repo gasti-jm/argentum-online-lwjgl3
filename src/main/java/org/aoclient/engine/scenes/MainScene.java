@@ -8,8 +8,6 @@ import org.aoclient.engine.gui.forms.FConnect;
 import org.aoclient.engine.gui.ImGUISystem;
 import org.aoclient.engine.listeners.KeyListener;
 import org.aoclient.engine.renderer.RGBColor;
-import org.aoclient.engine.utils.GameData;
-
 
 import static org.aoclient.engine.Engine.closeClient;
 import static org.aoclient.engine.game.models.Character.drawCharacter;
@@ -17,7 +15,6 @@ import static org.aoclient.engine.renderer.Drawn.drawTexture;
 import static org.aoclient.engine.scenes.Camera.TILE_BUFFER_SIZE;
 import static org.aoclient.engine.scenes.Camera.TILE_PIXEL_SIZE;
 import static org.aoclient.engine.utils.GameData.mapData;
-import static org.aoclient.engine.utils.GameData.music;
 
 /**
  * Esta es la escena donde se va a mostrar un conectar renderizado y se va a tener en cuenta el crear personaje.
@@ -59,7 +56,6 @@ public final class MainScene extends Scene {
      */
     @Override
     public void close() {
-        music.stop();
         this.visible = false;
     }
 
