@@ -1,4 +1,4 @@
-package org.aoclient.connection;
+package org.aoclient.network;
 
 import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;

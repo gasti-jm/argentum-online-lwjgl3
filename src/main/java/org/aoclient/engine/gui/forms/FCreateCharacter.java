@@ -9,7 +9,7 @@ import imgui.flag.ImGuiInputTextFlags;
 import imgui.flag.ImGuiWindowFlags;
 import imgui.type.ImInt;
 import imgui.type.ImString;
-import org.aoclient.connection.SocketConnection;
+import org.aoclient.network.SocketConnection;
 import org.aoclient.engine.Window;
 import org.aoclient.engine.game.User;
 import org.aoclient.engine.game.models.E_Cities;
@@ -25,12 +25,9 @@ import org.aoclient.engine.utils.structs.BodyData;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static org.aoclient.connection.Protocol.writeLoginNewChar;
-import static org.aoclient.connection.Protocol.writeThrowDices;
-<<<<<<< HEAD
-=======
+import static org.aoclient.network.Protocol.writeLoginNewChar;
+import static org.aoclient.network.Protocol.writeThrowDices;
 import static org.aoclient.engine.Sound.*;
->>>>>>> cambios_lwk
 import static org.aoclient.engine.game.models.Character.*;
 import static org.aoclient.engine.renderer.Drawn.*;
 import static org.aoclient.engine.utils.GameData.*;

@@ -1,8 +1,8 @@
-package org.aoclient.connection;
+package org.aoclient.network;
 
-import org.aoclient.connection.packets.ClientPacketID;
-import org.aoclient.connection.packets.E_Messages;
-import org.aoclient.connection.packets.ServerPacketID;
+import org.aoclient.network.packets.ClientPacketID;
+import org.aoclient.network.packets.E_Messages;
+import org.aoclient.network.packets.ServerPacketID;
 import org.aoclient.engine.Sound;
 import org.aoclient.engine.Window;
 import org.aoclient.engine.game.Console;
@@ -21,7 +21,7 @@ import org.tinylog.Logger;
 import java.nio.charset.StandardCharsets;
 
 import static org.aoclient.engine.game.Dialogs.charDialogSet;
-import static org.aoclient.connection.Messages.*;
+import static org.aoclient.network.Messages.*;
 import static org.aoclient.engine.Sound.*;
 import static org.aoclient.engine.game.models.Character.*;
 import static org.aoclient.engine.game.models.E_Skills.FundirMetal;
@@ -2249,11 +2249,8 @@ public class Protocol {
             //Remove the bytes to prevent errors
             incomingData.readInteger();
         }
-<<<<<<< HEAD
 
         Logger.debug("handlePlayMIDI Cargado! - FALTA TERMINAR!");
-=======
->>>>>>> cambios_lwk
     }
 
     private static void handleBlockPosition() {

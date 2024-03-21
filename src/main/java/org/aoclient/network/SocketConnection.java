@@ -1,4 +1,4 @@
-package org.aoclient.connection;
+package org.aoclient.network;
 
 
 import org.aoclient.engine.game.Rain;
@@ -8,7 +8,7 @@ import org.aoclient.engine.gui.ImGUISystem;
 import java.net.*;
 import java.io.*;
 
-import static org.aoclient.connection.Protocol.*;
+import static org.aoclient.network.Protocol.*;
 
 /**
  * Clase que maneja el socket de conexion.

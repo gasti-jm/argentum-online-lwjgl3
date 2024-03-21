@@ -1,6 +1,6 @@
 package org.aoclient.engine;
 
-import org.aoclient.connection.SocketConnection;
+import org.aoclient.network.SocketConnection;
 import org.aoclient.engine.game.BindKeys;
 import org.aoclient.engine.gui.ImGUISystem;
 import org.aoclient.engine.renderer.Surface;

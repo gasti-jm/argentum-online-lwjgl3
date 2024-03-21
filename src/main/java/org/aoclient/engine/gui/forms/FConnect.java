@@ -7,7 +7,7 @@ import imgui.flag.ImGuiCond;
 import imgui.flag.ImGuiInputTextFlags;
 import imgui.flag.ImGuiWindowFlags;
 import imgui.type.ImString;
-import org.aoclient.connection.SocketConnection;
+import org.aoclient.network.SocketConnection;
 import org.aoclient.engine.Engine;
 import org.aoclient.engine.Window;
 import org.aoclient.engine.game.User;
@@ -17,7 +17,7 @@ import javax.imageio.ImageIO;
 import java.io.File;
 import java.io.IOException;
 
-import static org.aoclient.connection.Protocol.writeLoginExistingChar;
+import static org.aoclient.network.Protocol.writeLoginExistingChar;
 import static org.aoclient.engine.Sound.playMusic;
 import static org.aoclient.engine.utils.GameData.options;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_ENTER;
