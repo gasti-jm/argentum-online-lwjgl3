@@ -19,7 +19,6 @@ public final class BindKeys {
         try {
             loadBindKeys();
         } catch (IOException ex) {
-            System.err.println("No se pudo leer el archivo de configuracion de teclas");
             loadDefaultKeys();
             saveBindKeys();
         }

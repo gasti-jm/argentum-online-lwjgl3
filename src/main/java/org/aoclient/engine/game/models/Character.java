@@ -61,12 +61,10 @@ public final class Character {
     public static final int GNOMO_M_CUERPO_DESNUDO = 260;
 
     // ultimo personaje del array
-    private static short lastChar = 0;
-
+    public static short lastChar = 0;
     private boolean active;
     private E_Heading heading;
     private Position pos;
-
     private short iHead;
     private short iBody;
     private BodyData body;
@@ -75,7 +73,6 @@ public final class Character {
     private WeaponData weapon;
     private ShieldData shield;
     private boolean usingArm;
-
     private int walkingSpeed;
 
     // FX
@@ -102,6 +99,13 @@ public final class Character {
     private boolean paralizado;
     private byte priv;
 
+    // dialogs
+    private String dialog;
+    private RGBColor dialog_color;
+    private int dialog_life;
+    private int dialog_font_index;
+    private float dialog_offset_counter_y;
+    private boolean dialog_scroll;
 
     public Character() {
         body                = new BodyData();
@@ -129,6 +133,12 @@ public final class Character {
         this.usingArm       = false;
         this.clanName       = "";
         this.walkingSpeed   = 8;
+
+        this.dialog = "";
+        this.dialog_scroll = false;
+        this.dialog_font_index = 0;
+        this.dialog_color = new RGBColor(1f,1f,1f);
+        this.dialog_offset_counter_y = 0;
     }
 
     /**
@@ -454,6 +464,54 @@ public final class Character {
 
     public void setPriv(int priv) {
         this.priv = (byte) priv;
+    }
+
+    public String getDialog() {
+        return dialog;
+    }
+
+    public void setDialog(String dialog) {
+        this.dialog = dialog;
+    }
+
+    public RGBColor getDialog_color() {
+        return dialog_color;
+    }
+
+    public void setDialog_color(RGBColor dialog_color) {
+        this.dialog_color = dialog_color;
+    }
+
+    public int getDialog_life() {
+        return dialog_life;
+    }
+
+    public void setDialog_life(int dialog_life) {
+        this.dialog_life = dialog_life;
+    }
+
+    public int getDialog_font_index() {
+        return dialog_font_index;
+    }
+
+    public void setDialog_font_index(int dialog_font_index) {
+        this.dialog_font_index = dialog_font_index;
+    }
+
+    public float getDialog_offset_counter_y() {
+        return dialog_offset_counter_y;
+    }
+
+    public void setDialog_offset_counter_y(float dialog_offset_counter_y) {
+        this.dialog_offset_counter_y = dialog_offset_counter_y;
+    }
+
+    public boolean isDialog_scroll() {
+        return dialog_scroll;
+    }
+
+    public void setDialog_scroll(boolean dialog_scroll) {
+        this.dialog_scroll = dialog_scroll;
     }
 
     /**

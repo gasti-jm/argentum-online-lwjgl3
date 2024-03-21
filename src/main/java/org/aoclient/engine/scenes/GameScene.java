@@ -2,6 +2,7 @@ package org.aoclient.engine.scenes;
 
 import org.aoclient.engine.Window;
 import org.aoclient.engine.game.*;
+import org.aoclient.engine.game.models.Character;
 import org.aoclient.engine.game.models.E_KeyType;
 import org.aoclient.engine.game.models.E_Skills;
 import org.aoclient.engine.gui.forms.FCantidad;
@@ -11,6 +12,8 @@ import org.aoclient.engine.listeners.KeyListener;
 import org.aoclient.engine.listeners.MouseListener;
 import org.aoclient.engine.renderer.RGBColor;
 
+import static org.aoclient.engine.renderer.FontText.drawText;
+import static org.aoclient.engine.renderer.FontText.getSizeText;
 import static org.aoclient.network.Protocol.*;
 import static org.aoclient.engine.game.IntervalTimer.INT_SENTRPU;
 import static org.aoclient.engine.game.models.E_KeyType.*;
@@ -260,7 +263,7 @@ public final class GameScene extends Scene {
     /**
      * @desc: Dibuja cada capa y objeto del mapa, el personaje, la interfaz y demas.
      */
-    private void renderScreen(int tileX, int tileY, int PixelOffsetX, int PixelOffsetY) {
+    private void renderScreen(int tileX, int tileY, int pixelOffsetX, int pixelOffsetY) {
         camera.update(tileX, tileY);
 
         // LAYER 1
@@ -270,8 +273,8 @@ public final class GameScene extends Scene {
 
                 if (mapData[x][y].getLayer(1).getGrhIndex() != 0) {
                     drawTexture(mapData[x][y].getLayer(1),
-                            POS_SCREEN_X + (camera.getScreenX() - 1) * TILE_PIXEL_SIZE + PixelOffsetX,
-                            POS_SCREEN_Y + (camera.getScreenY() - 1) * TILE_PIXEL_SIZE + PixelOffsetY,
+                            POS_SCREEN_X + (camera.getScreenX() - 1) * TILE_PIXEL_SIZE + pixelOffsetX,
+                            POS_SCREEN_Y + (camera.getScreenY() - 1) * TILE_PIXEL_SIZE + pixelOffsetY,
                             true, true, false,1.0f, ambientColor);
                 }
 
@@ -289,8 +292,8 @@ public final class GameScene extends Scene {
 
                 if (mapData[x][y].getLayer(2).getGrhIndex() != 0) {
                     drawTexture(mapData[x][y].getLayer(2),
-                            POS_SCREEN_X + camera.getScreenX() * TILE_PIXEL_SIZE + PixelOffsetX,
-                            POS_SCREEN_Y + camera.getScreenY() * TILE_PIXEL_SIZE + PixelOffsetY,
+                            POS_SCREEN_X + camera.getScreenX() * TILE_PIXEL_SIZE + pixelOffsetX,
+                            POS_SCREEN_Y + camera.getScreenY() * TILE_PIXEL_SIZE + pixelOffsetY,
                             true, true, false,1.0f, ambientColor);
                 }
 
@@ -299,8 +302,8 @@ public final class GameScene extends Scene {
                         grhData[mapData[x][y].getObjGrh().getGrhIndex()].getPixelHeight() == TILE_PIXEL_SIZE) {
 
                         drawTexture(mapData[x][y].getObjGrh(),
-                                POS_SCREEN_X + camera.getScreenX() * TILE_PIXEL_SIZE + PixelOffsetX,
-                                POS_SCREEN_Y + camera.getScreenY() * TILE_PIXEL_SIZE + PixelOffsetY,
+                                POS_SCREEN_X + camera.getScreenX() * TILE_PIXEL_SIZE + pixelOffsetX,
+                                POS_SCREEN_Y + camera.getScreenY() * TILE_PIXEL_SIZE + pixelOffsetY,
                                 true, true, false,1.0f, ambientColor);
                     }
                 }
@@ -321,22 +324,51 @@ public final class GameScene extends Scene {
                             grhData[mapData[x][y].getObjGrh().getGrhIndex()].getPixelHeight() != TILE_PIXEL_SIZE) {
 
                         drawTexture(mapData[x][y].getObjGrh(),
-                                POS_SCREEN_X + camera.getScreenX() * TILE_PIXEL_SIZE + PixelOffsetX,
-                                POS_SCREEN_Y + camera.getScreenY() * TILE_PIXEL_SIZE + PixelOffsetY,
+                                POS_SCREEN_X + camera.getScreenX() * TILE_PIXEL_SIZE + pixelOffsetX,
+                                POS_SCREEN_Y + camera.getScreenY() * TILE_PIXEL_SIZE + pixelOffsetY,
                                 true, true, false,1.0f, ambientColor);
                     }
                 }
 
+                // dialogs
+                if (mapData[x][y].getCharIndex() != 0) {
+                    final Character chrActual = charList[mapData[x][y].getCharIndex()];
+
+                    if(!chrActual.getDialog().isEmpty()) {
+
+                        if(chrActual.getDialog_offset_counter_y() < 5) {
+                            chrActual.setDialog_offset_counter_y(chrActual.getDialog_offset_counter_y() + 125 * deltaTime);
+                        }
+
+                        final int dX = (camera.getScreenX() * TILE_PIXEL_SIZE) + ( ((int) chrActual.getMoveOffsetX()) + pixelOffsetX);
+                        final int dY = (camera.getScreenY() * TILE_PIXEL_SIZE) + ( ((int) chrActual.getMoveOffsetY()) + pixelOffsetY);
+
+                        // Render dialog
+                        drawText(chrActual.getDialog(),
+                                dX + 14 ,
+                                dY + chrActual.getBody().getHeadOffset().getY() - (int) chrActual.getDialog_offset_counter_y(),
+                                chrActual.getDialog_color(),
+                                0, true, false, true);
+                    }
+
+                    //
+                    //                        'Render dialog
+                    //                        Engine_Text_Render charlist(MapData(X, Y).CharIndex).dialog, screen_x + 14 - Engine_Text_Width(charlist(MapData(X, Y).CharIndex).dialog, True) / 2, screen_y + (charlist(MapData(X, Y).CharIndex).Body.HeadOffset.Y) - Engine_Text_Height(charlist(MapData(X, Y).CharIndex).dialog, True) - charlist(MapData(X, Y).CharIndex).dialog_offset_counter_y, temp_array, charlist(MapData(X, Y).CharIndex).dialog_font_index, True
+                }
+
                 if (mapData[x][y].getCharIndex() != 0) {
                     drawCharacter(mapData[x][y].getCharIndex(),
-                            POS_SCREEN_X + camera.getScreenX() * TILE_PIXEL_SIZE + PixelOffsetX,
-                            POS_SCREEN_Y + camera.getScreenY() * TILE_PIXEL_SIZE + PixelOffsetY, ambientColor);
+                            POS_SCREEN_X + camera.getScreenX() * TILE_PIXEL_SIZE + pixelOffsetX,
+                            POS_SCREEN_Y + camera.getScreenY() * TILE_PIXEL_SIZE + pixelOffsetY, ambientColor);
                 }
+
+
+
 
                 if (mapData[x][y].getLayer(3).getGrhIndex() != 0) {
                     drawTexture(mapData[x][y].getLayer(3),
-                            POS_SCREEN_X + camera.getScreenX() * TILE_PIXEL_SIZE + PixelOffsetX,
-                            POS_SCREEN_Y + camera.getScreenY() * TILE_PIXEL_SIZE + PixelOffsetY,
+                            POS_SCREEN_X + camera.getScreenX() * TILE_PIXEL_SIZE + pixelOffsetX,
+                            POS_SCREEN_Y + camera.getScreenY() * TILE_PIXEL_SIZE + pixelOffsetY,
                             true, true, false, 1.0f, ambientColor);
                 }
 
@@ -356,8 +388,8 @@ public final class GameScene extends Scene {
 
                     if (mapData[x][y].getLayer(4).getGrhIndex() > 0) {
                         drawTexture(mapData[x][y].getLayer(4),
-                                POS_SCREEN_X + camera.getScreenX() * TILE_PIXEL_SIZE + PixelOffsetX,
-                                POS_SCREEN_Y + camera.getScreenY() * TILE_PIXEL_SIZE + PixelOffsetY,
+                                POS_SCREEN_X + camera.getScreenX() * TILE_PIXEL_SIZE + pixelOffsetX,
+                                POS_SCREEN_Y + camera.getScreenY() * TILE_PIXEL_SIZE + pixelOffsetY,
                                 true, true, false, alphaCeiling, ambientColor);
                     }
 
@@ -367,6 +399,7 @@ public final class GameScene extends Scene {
             }
         }
 
+        Dialogs.updateDialogs();
         rain.render(ambientColor);
         user.getUserInventory().drawInventory();
     }

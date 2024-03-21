@@ -348,6 +348,10 @@ public final class User {
             End If
          */
 
+        if(!estaPCarea(charIndex)) {
+            Dialogs.removeDialog(charIndex);
+        }
+
         // If Not EstaPCarea(CharIndex) Then Call Dialogos.RemoveDialog(CharIndex)
 
         if ((nY < minLimiteY) || (nY > maxLimiteY) || (nX < minLimiteX) || (nX > maxLimiteX)) {

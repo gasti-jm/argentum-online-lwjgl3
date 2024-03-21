@@ -20,6 +20,7 @@ import org.tinylog.Logger;
 
 import java.nio.charset.StandardCharsets;
 
+import static org.aoclient.engine.game.Dialogs.charDialogSet;
 import static org.aoclient.network.Messages.*;
 import static org.aoclient.engine.Sound.*;
 import static org.aoclient.engine.game.models.Character.*;
@@ -2695,7 +2696,7 @@ public class Protocol {
         byte b = buffer.readByte();
 
         if (charList[charIndex].isActive()) {
-            //Call Dialogos.CreateDialog(Trim$(chat), CharIndex, RGB(r, g, b))
+            charDialogSet(charIndex, chat, new RGBColor(1, 1, 1), 10, 0);
         }
 
         incomingData.copyBuffer(buffer);
