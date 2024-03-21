@@ -4,8 +4,8 @@ import org.aoclient.engine.game.inventory.UserInventory;
 import org.aoclient.engine.game.models.E_Heading;
 import org.aoclient.engine.game.models.Position;
 
-import static org.aoclient.network.Protocol.writeChangeHeading;
-import static org.aoclient.network.Protocol.writeWalk;
+import static org.aoclient.connection.Protocol.writeChangeHeading;
+import static org.aoclient.connection.Protocol.writeWalk;
 import static org.aoclient.engine.Sound.*;
 import static org.aoclient.engine.game.models.Character.*;
 import static org.aoclient.engine.game.models.E_Heading.*;

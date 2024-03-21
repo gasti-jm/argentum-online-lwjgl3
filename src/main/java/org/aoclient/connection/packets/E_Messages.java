@@ -1,4 +1,4 @@
-package org.aoclient.network.packets;
+package org.aoclient.connection.packets;
 
 
 public enum E_Messages {

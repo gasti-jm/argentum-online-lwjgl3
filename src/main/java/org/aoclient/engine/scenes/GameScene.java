@@ -13,8 +13,7 @@ import org.aoclient.engine.listeners.MouseListener;
 import org.aoclient.engine.renderer.RGBColor;
 
 import static org.aoclient.engine.renderer.FontText.drawText;
-import static org.aoclient.engine.renderer.FontText.getSizeText;
-import static org.aoclient.network.Protocol.*;
+import static org.aoclient.connection.Protocol.*;
 import static org.aoclient.engine.game.IntervalTimer.INT_SENTRPU;
 import static org.aoclient.engine.game.models.E_KeyType.*;
 import static org.aoclient.engine.game.models.Character.*;
@@ -336,8 +335,8 @@ public final class GameScene extends Scene {
 
                     if(!chrActual.getDialog().isEmpty()) {
 
-                        if(chrActual.getDialog_offset_counter_y() < 5) {
-                            chrActual.setDialog_offset_counter_y(chrActual.getDialog_offset_counter_y() + 125 * deltaTime);
+                        if(chrActual.getDialog_offset_counter_y() < 10) {
+                            chrActual.setDialog_offset_counter_y(chrActual.getDialog_offset_counter_y() + 50 * deltaTime);
                         }
 
                         final int dX = (camera.getScreenX() * TILE_PIXEL_SIZE) + ( ((int) chrActual.getMoveOffsetX()) + pixelOffsetX);

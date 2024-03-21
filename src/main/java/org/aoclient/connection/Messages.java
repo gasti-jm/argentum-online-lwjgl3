@@ -1,4 +1,4 @@
-package org.aoclient.network;
+package org.aoclient.connection;
 
 /**
  * Aqui solo hay constantes de mensajes, estaria bueno guardarlas en un archivo.

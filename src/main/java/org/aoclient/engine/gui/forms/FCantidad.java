@@ -8,7 +8,7 @@ import imgui.flag.ImGuiWindowFlags;
 import imgui.type.ImString;
 import org.aoclient.engine.game.User;
 
-import static org.aoclient.network.Protocol.writeDrop;
+import static org.aoclient.connection.Protocol.writeDrop;
 import static org.aoclient.engine.game.inventory.UserInventory.FLAGORO;
 
 public final class FCantidad extends Form {

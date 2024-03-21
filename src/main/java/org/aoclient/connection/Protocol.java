@@ -1,8 +1,8 @@
-package org.aoclient.network;
+package org.aoclient.connection;
 
-import org.aoclient.network.packets.ClientPacketID;
-import org.aoclient.network.packets.E_Messages;
-import org.aoclient.network.packets.ServerPacketID;
+import org.aoclient.connection.packets.ClientPacketID;
+import org.aoclient.connection.packets.E_Messages;
+import org.aoclient.connection.packets.ServerPacketID;
 import org.aoclient.engine.Sound;
 import org.aoclient.engine.Window;
 import org.aoclient.engine.game.Console;
@@ -21,7 +21,7 @@ import org.tinylog.Logger;
 import java.nio.charset.StandardCharsets;
 
 import static org.aoclient.engine.game.Dialogs.charDialogSet;
-import static org.aoclient.network.Messages.*;
+import static org.aoclient.connection.Messages.*;
 import static org.aoclient.engine.Sound.*;
 import static org.aoclient.engine.game.models.Character.*;
 import static org.aoclient.engine.game.models.E_Skills.FundirMetal;

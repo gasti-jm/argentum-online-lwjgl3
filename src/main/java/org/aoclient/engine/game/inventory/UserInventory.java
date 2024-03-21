@@ -4,8 +4,8 @@ import org.aoclient.engine.game.IntervalTimer;
 import org.aoclient.engine.listeners.MouseListener;
 import org.aoclient.engine.renderer.RGBColor;
 
-import static org.aoclient.network.Protocol.writeEquipItem;
-import static org.aoclient.network.Protocol.writeUseItem;
+import static org.aoclient.connection.Protocol.writeEquipItem;
+import static org.aoclient.connection.Protocol.writeUseItem;
 import static org.aoclient.engine.renderer.Drawn.*;
 import static org.aoclient.engine.renderer.FontText.drawText;
 import static org.aoclient.engine.scenes.Camera.*;
