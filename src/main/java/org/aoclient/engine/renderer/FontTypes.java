@@ -118,21 +118,22 @@ public class FontTypes {
 
         font_types[1].ascii_code[97] = 23774;
         font_types[1].ascii_code[108] = 23775;
-        font_types[1].ascii_code[115] = 23776;
-        font_types[1].ascii_code[70] = 23777;
-        font_types[1].ascii_code[48] = 23778;
-        font_types[1].ascii_code[49] = 23779;
-        font_types[1].ascii_code[50] = 23780;
-        font_types[1].ascii_code[51] = 23781;
-        font_types[1].ascii_code[52] = 23782;
-        font_types[1].ascii_code[53] = 23783;
-        font_types[1].ascii_code[54] = 23784;
-        font_types[1].ascii_code[55] = 23785;
-        font_types[1].ascii_code[56] = 23786;
-        font_types[1].ascii_code[57] = 23787;
-        font_types[1].ascii_code[33] = 23788;
-        font_types[1].ascii_code[161] = 23789;
-        font_types[1].ascii_code[42] = 23797;
+        font_types[1].ascii_code[115] = 23797;
+        font_types[1].ascii_code[70] = 23776;
+
+        font_types[1].ascii_code[48] = 23777;
+        font_types[1].ascii_code[49] = 23778;
+        font_types[1].ascii_code[50] = 23779;
+        font_types[1].ascii_code[51] = 23780;
+        font_types[1].ascii_code[52] = 23781;
+        font_types[1].ascii_code[53] = 23782;
+        font_types[1].ascii_code[54] = 23783;
+        font_types[1].ascii_code[55] = 23784;
+        font_types[1].ascii_code[56] = 23785;
+        font_types[1].ascii_code[57] = 23786;
+        font_types[1].ascii_code[33] = 23787;
+        font_types[1].ascii_code[173] = 23788;
+        font_types[1].ascii_code[42] = 23789;
     }
 
 

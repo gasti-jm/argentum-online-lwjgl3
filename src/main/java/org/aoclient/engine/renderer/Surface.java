@@ -92,16 +92,6 @@ public class Surface {
 
     /**
      *
-     * @desc: Crea y retorna una textura para nuestra fuente de letras (Va a ser almacenada en su clase).
-     */
-    public TextureOGL createFontTexture(String fileName) {
-        TextureOGL texture = new TextureOGL();
-        texture.id = loadTexture(texture, "resources/fonts/" + fileName + ".bmp", false);
-        return texture;
-    }
-
-    /**
-     *
      * @desc: Crea y retorna una textura
      */
     public TextureOGL createTexture(String file, boolean isGUI) {

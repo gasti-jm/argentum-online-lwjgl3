@@ -15,6 +15,7 @@ import static org.aoclient.engine.utils.Time.deltaTime;
 
 public class Dialogs {
     private static float timerDialogs = 1.0f;
+    private static final RGBColor HIT_COLOR = new RGBColor(1, 0, 0);
 
     public static void removeDialog(final int charIndex) {
         if(charList[charIndex].getDialog_life() > 0) {
@@ -27,21 +28,75 @@ public class Dialogs {
     public static void removeAllDialogs() {
         for (int i = 1; i <= lastChar; i++) {
             if(!charList[i].getDialog().isEmpty()) {
-                charDialogSet(i, "", new RGBColor(1,1,1), 0, 0);
+                charDialogSet(i, "", new RGBColor(1,1,1));
+                charList[i].setDialog_life(0);
             }
         }
     }
 
-    public static void charDialogSet(final int charIndex, final String charDialog, final RGBColor color, final int charDialogLife, final int fontIndex) {
-        charList[charIndex].setDialog(charDialog);
-        charList[charIndex].setDialog_color(color);
-        charList[charIndex].setDialog_life(charDialogLife);
-        charList[charIndex].setDialog_font_index(fontIndex);
-        charList[charIndex].setDialog_offset_counter_y(0);
+    public static void charDialogSet(final int charIndex, final String charDialog, final RGBColor color) {
+        if (charList[charIndex].isActive()) {
+            charList[charIndex].setDialog(charDialog);
+            charList[charIndex].setDialog_color(color);
+            charList[charIndex].setDialog_life(10);
+            charList[charIndex].setDialog_font_index(NORMAL_FONT);
+            charList[charIndex].setDialog_offset_counter_y(0);
+        }
+    }
+
+    public static void charDialogHitSet(final int charIndex, int charDamage) {
+        String charDialog = "";
+
+        if (charList[charIndex].isActive()) {
+            charList[charIndex].setDialog_color(HIT_COLOR);
+            charList[charIndex].setDialog_life(5);
+            charList[charIndex].setDialog_font_index(HIT_FONT);
+            charList[charIndex].setDialog_offset_counter_y(0);
+
+            if (charDamage >= 150) {
+                charDialog = "¡" + charDamage + "!";
+            } else {
+                charDialog = String.valueOf(charDamage);
+            }
+
+            charList[charIndex].setDialog(charDialog);
+        }
+    }
+
+    public static void charDialogHitSet(final int charIndex, String charDialog) {
+        if (charList[charIndex].isActive()) {
+            charList[charIndex].setDialog_color(HIT_COLOR);
+            charList[charIndex].setDialog_life(5);
+            charList[charIndex].setDialog_font_index(HIT_FONT);
+            charList[charIndex].setDialog_offset_counter_y(0);
+            charList[charIndex].setDialog(charDialog);
+        }
+    }
+
+    //Public Sub RemoveDialogsNPCArea()
+    //Dim posX As Byte, posY As Byte
+    //For posX = charlist(UserCharIndex).Pos.X - HalfWindowTileWidth To charlist(UserCharIndex).Pos.X + HalfWindowTileWidth
+    //    For posY = charlist(UserCharIndex).Pos.Y - HalfWindowTileHeight To charlist(UserCharIndex).Pos.Y + HalfWindowTileHeight
+    //        If MapData(posX, posY).CharIndex > 0 Then _
+    //            If Len(charlist(MapData(posX, posY).CharIndex).Nombre) <= 1 Then _
+    //                Call Dialogos.RemoveDialog(MapData(posX, posY).CharIndex)
+    //    Next posY
+    //Next posX
+    //End Sub
+
+    public static void removeDialogsNPCArea() {
+        for (int x = charList[User.get().getUserCharIndex()].getPos().getX() - 8; x <= charList[User.get().getUserCharIndex()].getPos().getX() + 8; x++) {
+            for (int y = charList[User.get().getUserCharIndex()].getPos().getY() - 6; y <= charList[User.get().getUserCharIndex()].getPos().getY() + 6; y++) {
+                if(mapData[x][y].getCharIndex() > 0) {
+                    if (charList[mapData[x][y].getCharIndex()].getName().length() <= 1) {
+                        removeDialog(mapData[x][y].getCharIndex());
+                    }
+                }
+            }
+        }
     }
 
     public static void renderDialogs(final Camera camera, final int x, final int y, final int pixelOffsetX, final int pixelOffsetY) {
-        // dialogs
         if (mapData[x][y].getCharIndex() != 0) {
             final Character chrActual = charList[mapData[x][y].getCharIndex()];
 
@@ -55,10 +110,10 @@ public class Dialogs {
 
                 // Render dialog
                 drawText(chrActual.getDialog(),
-                        dX + 14 - getTextWidth(chrActual.getDialog(), true) / 2,
+                        dX + 15 - getTextWidth(chrActual.getDialog(), true) / 2,
                         dY - 24 + chrActual.getBody().getHeadOffset().getY() - getTextHeight(chrActual.getDialog(), true) - (int) chrActual.getDialog_offset_counter_y(),
                         chrActual.getDialog_color(),
-                        NORMAL_FONT, true);
+                        chrActual.getDialog_font_index(), true);
             }
         }
     }

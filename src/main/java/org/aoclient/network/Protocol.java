@@ -1,5 +1,6 @@
 package org.aoclient.network;
 
+import org.aoclient.engine.game.Dialogs;
 import org.aoclient.network.packets.ClientPacketID;
 import org.aoclient.network.packets.E_Messages;
 import org.aoclient.network.packets.ServerPacketID;
@@ -20,6 +21,7 @@ import org.tinylog.Logger;
 
 import java.nio.charset.StandardCharsets;
 
+import static org.aoclient.engine.game.Dialogs.charDialogHitSet;
 import static org.aoclient.engine.game.Dialogs.charDialogSet;
 import static org.aoclient.network.Messages.*;
 import static org.aoclient.engine.Sound.*;
@@ -231,6 +233,7 @@ public class Protocol {
 
             case UserSwing:
                 Console.get().addMsgToConsole(MENSAJE_FALLADO_GOLPE, false, false, new RGBColor());
+                charDialogHitSet(User.get().getUserCharIndex(), "*Fallas*");
                 break;
 
             case SafeModeOn:
@@ -292,90 +295,104 @@ public class Protocol {
                 break;
 
             case UserHitNPC:
-                Console.get().addMsgToConsole(MENSAJE_GOLPE_CRIATURA_1 + " " + incomingData.readLong(),
+                final int d = incomingData.readLong();
+                Console.get().addMsgToConsole(MENSAJE_GOLPE_CRIATURA_1 + " " + d,
                         false, false, new RGBColor());
+
+                charDialogHitSet(User.get().getUserCharIndex(), d);
+
                 break;
 
             case UserAttackedSwing:
-                Console.get().addMsgToConsole(MENSAJE_1 + " " + charList[incomingData.readInteger()].getName() +  MENSAJE_ATAQUE_FALLO,
+                final short charIndexAttaker = incomingData.readInteger();
+
+                Console.get().addMsgToConsole(MENSAJE_1 + " " + charList[charIndexAttaker].getName() +  MENSAJE_ATAQUE_FALLO,
                         false, false, new RGBColor());
+
+                charDialogHitSet(charIndexAttaker, "*Falla*");
                 break;
 
             case UserHittedByUser:
-                String attackerName = "<" + charList[incomingData.readInteger()].getName() + ">";
+                final int charIndexHitAttaker = incomingData.readInteger();
+                String attackerName = "<" + charList[charIndexHitAttaker].getName() + ">";
                 bodyPart = incomingData.readByte();
                 damage = incomingData.readInteger();
 
                 switch (bodyPart) {
                     case 1: // bCabeza
-                        Console.get().addMsgToConsole(MENSAJE_1 + attackerName  + MENSAJE_RECIVE_IMPACTO_CABEZA + damage + MENSAJE_2,
+                        Console.get().addMsgToConsole(MENSAJE_1 + attackerName + MENSAJE_RECIVE_IMPACTO_CABEZA + damage + MENSAJE_2,
                                 false, false, new RGBColor());
                         break;
 
                     case 2: // bBrazoIzquierdo
-                        Console.get().addMsgToConsole(MENSAJE_1 + attackerName  + MENSAJE_RECIVE_IMPACTO_BRAZO_IZQ + damage + MENSAJE_2,
+                        Console.get().addMsgToConsole(MENSAJE_1 + attackerName + MENSAJE_RECIVE_IMPACTO_BRAZO_IZQ + damage + MENSAJE_2,
                                 false, false, new RGBColor());
                         break;
 
                     case 3: // bBrazoDerecho
-                        Console.get().addMsgToConsole(MENSAJE_1 + attackerName  + MENSAJE_RECIVE_IMPACTO_BRAZO_DER + damage + MENSAJE_2,
+                        Console.get().addMsgToConsole(MENSAJE_1 + attackerName + MENSAJE_RECIVE_IMPACTO_BRAZO_DER + damage + MENSAJE_2,
                                 false, false, new RGBColor());
                         break;
 
                     case 4: // bPiernaIzquierda
-                        Console.get().addMsgToConsole(MENSAJE_1 + attackerName  + MENSAJE_RECIVE_IMPACTO_PIERNA_IZQ + damage + MENSAJE_2,
+                        Console.get().addMsgToConsole(MENSAJE_1 + attackerName + MENSAJE_RECIVE_IMPACTO_PIERNA_IZQ + damage + MENSAJE_2,
                                 false, false, new RGBColor());
                         break;
 
                     case 5: // bPiernaDerecha
-                        Console.get().addMsgToConsole(MENSAJE_1 + attackerName  + MENSAJE_RECIVE_IMPACTO_PIERNA_DER + damage + MENSAJE_2,
+                        Console.get().addMsgToConsole(MENSAJE_1 + attackerName + MENSAJE_RECIVE_IMPACTO_PIERNA_DER + damage + MENSAJE_2,
                                 false, false, new RGBColor());
                         break;
 
                     case 6: // bTorso
-                        Console.get().addMsgToConsole(MENSAJE_1 + attackerName  + MENSAJE_RECIVE_IMPACTO_TORSO + damage + MENSAJE_2,
+                        Console.get().addMsgToConsole(MENSAJE_1 + attackerName + MENSAJE_RECIVE_IMPACTO_TORSO + damage + MENSAJE_2,
                                 false, false, new RGBColor());
                         break;
                 }
+
+                charDialogHitSet(charIndexHitAttaker, damage);
 
                 break;
 
             case UserHittedUser:
-                String victimName = "<" + charList[incomingData.readInteger()].getName() + ">";
+                final int charIndexVictim = incomingData.readInteger();
+                final String victimName = "<" + charList[charIndexVictim].getName() + ">";
                 bodyPart = incomingData.readByte();
                 damage = incomingData.readInteger();
 
                 switch (bodyPart) {
                     case 1: // bCabeza
-                        Console.get().addMsgToConsole(MENSAJE_PRODUCE_IMPACTO_1 + victimName  + MENSAJE_PRODUCE_IMPACTO_CABEZA + damage + MENSAJE_2,
+                        Console.get().addMsgToConsole(MENSAJE_PRODUCE_IMPACTO_1 + victimName + MENSAJE_PRODUCE_IMPACTO_CABEZA + damage + MENSAJE_2,
                                 false, false, new RGBColor());
                         break;
 
                     case 2: // bBrazoIzquierdo
-                        Console.get().addMsgToConsole(MENSAJE_PRODUCE_IMPACTO_1 + victimName  + MENSAJE_PRODUCE_IMPACTO_BRAZO_IZQ + damage + MENSAJE_2,
+                        Console.get().addMsgToConsole(MENSAJE_PRODUCE_IMPACTO_1 + victimName + MENSAJE_PRODUCE_IMPACTO_BRAZO_IZQ + damage + MENSAJE_2,
                                 false, false, new RGBColor());
                         break;
 
                     case 3: // bBrazoDerecho
-                        Console.get().addMsgToConsole(MENSAJE_PRODUCE_IMPACTO_1 + victimName  + MENSAJE_RECIVE_IMPACTO_BRAZO_DER + damage + MENSAJE_2,
+                        Console.get().addMsgToConsole(MENSAJE_PRODUCE_IMPACTO_1 + victimName + MENSAJE_RECIVE_IMPACTO_BRAZO_DER + damage + MENSAJE_2,
                                 false, false, new RGBColor());
                         break;
 
                     case 4: // bPiernaIzquierda
-                        Console.get().addMsgToConsole(MENSAJE_PRODUCE_IMPACTO_1 + victimName  + MENSAJE_RECIVE_IMPACTO_PIERNA_IZQ + damage + MENSAJE_2,
+                        Console.get().addMsgToConsole(MENSAJE_PRODUCE_IMPACTO_1 + victimName + MENSAJE_RECIVE_IMPACTO_PIERNA_IZQ + damage + MENSAJE_2,
                                 false, false, new RGBColor());
                         break;
 
                     case 5: // bPiernaDerecha
-                        Console.get().addMsgToConsole(MENSAJE_PRODUCE_IMPACTO_1 + victimName  + MENSAJE_RECIVE_IMPACTO_PIERNA_DER + damage + MENSAJE_2,
+                        Console.get().addMsgToConsole(MENSAJE_PRODUCE_IMPACTO_1 + victimName + MENSAJE_RECIVE_IMPACTO_PIERNA_DER + damage + MENSAJE_2,
                                 false, false, new RGBColor());
                         break;
 
                     case 6: // bTorso
-                        Console.get().addMsgToConsole(MENSAJE_PRODUCE_IMPACTO_1 + victimName  + MENSAJE_RECIVE_IMPACTO_TORSO + damage + MENSAJE_2,
+                        Console.get().addMsgToConsole(MENSAJE_PRODUCE_IMPACTO_1 + victimName + MENSAJE_RECIVE_IMPACTO_TORSO + damage + MENSAJE_2,
                                 false, false, new RGBColor());
                         break;
                 }
+                charDialogHitSet(charIndexVictim, damage);
+
                 break;
 
             case WorkRequestTarget:
@@ -459,7 +476,6 @@ public class Protocol {
     private static void handleAddSlots() {
         // Remove packet ID
         incomingData.readByte();
-
         int maxInventorySlots = incomingData.readByte();
     }
 
@@ -2696,14 +2712,14 @@ public class Protocol {
         int g = buffer.readByte();
         int b = buffer.readByte();
 
-        if (charList[charIndex].isActive()) {
-            charDialogSet(charIndex, chat,
-                    new RGBColor((float) r / 255, (float) g /255, (float) b /255), 10, 0);
+        // es un NPC?
+        if(charList[charIndex].getName().length() <= 1) {
+            Dialogs.removeDialogsNPCArea();
         }
 
-        incomingData.copyBuffer(buffer);
+        charDialogSet(charIndex, chat, new RGBColor((float) r / 255, (float) g / 255, (float) b / 255));
 
-        Logger.debug("handleChatOverHead CARGADO - FALTA TERMINAR!");
+        incomingData.copyBuffer(buffer);
     }
 
     private static void handlePosUpdate() {
@@ -2755,17 +2771,11 @@ public class Protocol {
 
         GameData.loadMap(userMap);
 
-        /*
-        If bLluvia(UserMap) = 0 Then
-            If bRain Then
-                Call Audio.StopWave(RainBufferIndex)
-                RainBufferIndex = 0
-                //FrmMain.IsPlaying = PlayLoop.plNone
-            End If
-        End If
-         */
-
-        Logger.debug("handleChangeMap Cargado! - FALTA TERMINAR!");
+        if(!bLluvia[userMap]) {
+            if(Rain.get().isRaining()) {
+                Rain.get().stopRainingSoundLoop();
+            }
+        }
 
     }
 
@@ -3194,8 +3204,7 @@ public class Protocol {
     private static void handleRemoveDialogs() {
         // Remove packet ID
         incomingData.readByte();
-        // Call Dialogos.RemoveAllDialogs
-        Logger.debug("handleRemoveDialogs CARGADO - FALTA TERMINAR!");
+        Dialogs.removeAllDialogs();
     }
 
     private static void handleLogged() {

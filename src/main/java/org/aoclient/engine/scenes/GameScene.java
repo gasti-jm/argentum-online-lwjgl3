@@ -194,7 +194,11 @@ public final class GameScene extends Scene {
                     if(!ImGUISystem.get().isFormVisible("frmCantidad")) {
                         if(User.get().isTalking()) {
                             // send msg
-                            writeTalk(frmMain.getSendText());
+
+                            // No vamos a mandar paquetes con datos vacios.
+                            if(!frmMain.getSendText().isBlank()) {
+                                writeTalk(frmMain.getSendText());
+                            }
                             User.get().setTalking(false);
                         } else {
                             User.get().setTalking(true);
@@ -266,6 +270,32 @@ public final class GameScene extends Scene {
         camera.update(tileX, tileY);
 
         // LAYER 1
+        renderFirstLayer(pixelOffsetX, pixelOffsetY);
+        renderSecondLayer(pixelOffsetX, pixelOffsetY);
+        renderThirdLayer(pixelOffsetX, pixelOffsetY);
+
+        // Dialogs
+        camera.setScreenY(camera.getMinYOffset() - TILE_BUFFER_SIZE);
+        for (int y = camera.getMinY(); y <= camera.getMaxY(); y++) {
+            camera.setScreenX(camera.getMinXOffset() - TILE_BUFFER_SIZE);
+            for(int x = camera.getMinX(); x <= camera.getMaxX(); x++) {
+
+                Dialogs.renderDialogs(camera, x, y, pixelOffsetX, pixelOffsetY);
+
+                camera.incrementScreenX();
+            }
+            camera.incrementScreenY();
+        }
+
+        renderFourthLayer(pixelOffsetX, pixelOffsetY);
+
+        Dialogs.updateDialogs();
+        rain.render(ambientColor);
+        user.getUserInventory().drawInventory();
+    }
+
+
+    private void renderFirstLayer(final int pixelOffsetX, final int pixelOffsetY) {
         for (int y = camera.getScreenminY(); y <= camera.getScreenmaxY(); y++) {
             int x;
             for(x = camera.getScreenminX(); x <= camera.getScreenmaxX(); x++) {
@@ -282,8 +312,9 @@ public final class GameScene extends Scene {
             camera.setScreenX(camera.getScreenX() - x + camera.getScreenminX() );
             camera.incrementScreenY();
         }
+    }
 
-        // LAYER 2 & OBJECTS 32x32
+    private void renderSecondLayer(final int pixelOffsetX, final int pixelOffsetY) {
         camera.setScreenY(camera.getMinYOffset() - TILE_BUFFER_SIZE);
         for (int y = camera.getMinY(); y <= camera.getMaxY(); y++) {
             camera.setScreenX(camera.getMinXOffset() - TILE_BUFFER_SIZE);
@@ -298,7 +329,7 @@ public final class GameScene extends Scene {
 
                 if (mapData[x][y].getObjGrh().getGrhIndex() != 0) {
                     if(grhData[mapData[x][y].getObjGrh().getGrhIndex()].getPixelWidth() == TILE_PIXEL_SIZE &&
-                        grhData[mapData[x][y].getObjGrh().getGrhIndex()].getPixelHeight() == TILE_PIXEL_SIZE) {
+                            grhData[mapData[x][y].getObjGrh().getGrhIndex()].getPixelHeight() == TILE_PIXEL_SIZE) {
 
                         drawTexture(mapData[x][y].getObjGrh(),
                                 POS_SCREEN_X + camera.getScreenX() * TILE_PIXEL_SIZE + pixelOffsetX,
@@ -311,8 +342,10 @@ public final class GameScene extends Scene {
             }
             camera.incrementScreenY();
         }
+    }
 
-        // LAYER 3, CHARACTERS, DIALOGS & OBJECTS > 32x32
+    private void renderThirdLayer(final int pixelOffsetX, final int pixelOffsetY) {
+        // LAYER 3, CHARACTERS & OBJECTS > 32x32
         camera.setScreenY(camera.getMinYOffset() - TILE_BUFFER_SIZE);
         for (int y = camera.getMinY(); y <= camera.getMaxY(); y++) {
             camera.setScreenX(camera.getMinXOffset() - TILE_BUFFER_SIZE);
@@ -328,8 +361,6 @@ public final class GameScene extends Scene {
                                 true, true, false,1.0f, ambientColor);
                     }
                 }
-
-                Dialogs.renderDialogs(camera, x, y, pixelOffsetX, pixelOffsetY);
 
                 if (mapData[x][y].getCharIndex() != 0) {
                     drawCharacter(mapData[x][y].getCharIndex(),
@@ -349,8 +380,9 @@ public final class GameScene extends Scene {
             }
             camera.incrementScreenY();
         }
+    }
 
-        // LAYER 4
+    private void renderFourthLayer(final int pixelOffsetX, final int pixelOffsetY) {
         this.checkEffectCeiling();
         if (alphaCeiling > 0.0f) {
             camera.setScreenY(camera.getMinYOffset() - TILE_BUFFER_SIZE);
@@ -370,11 +402,9 @@ public final class GameScene extends Scene {
                 camera.incrementScreenY();
             }
         }
-
-        Dialogs.updateDialogs();
-        rain.render(ambientColor);
-        user.getUserInventory().drawInventory();
     }
+
+
 
     /**
      * @desc: Detecta si el usuario esta debajo del techo. Si es asi, se desvanecera
