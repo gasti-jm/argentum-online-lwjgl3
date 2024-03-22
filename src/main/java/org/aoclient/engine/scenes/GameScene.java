@@ -252,10 +252,10 @@ public final class GameScene extends Scene {
         if(keyPressed == null) return;
 
         switch(keyPressed) {
-            case mKeyUp:    user.moveTo(NORTH); break;
-            case mKeyDown:  user.moveTo(SOUTH); break;
-            case mKeyLeft:  user.moveTo(WEST);  break;
-            case mKeyRight: user.moveTo(EAST);  break;
+            case mKeyUp:        user.moveTo(NORTH);     break;
+            case mKeyDown:      user.moveTo(SOUTH);     break;
+            case mKeyLeft:      user.moveTo(WEST);      break;
+            case mKeyRight:     user.moveTo(EAST);      break;
         }
     }
 

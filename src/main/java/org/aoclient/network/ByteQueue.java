@@ -162,10 +162,10 @@ public class ByteQueue {
         return writeData(value, length);
     }
 
-    public byte readByte() {
+    public int readByte() {
         byte[] buf = new byte[1];
         removeData(readData(buf, 1));
-        return bigToLittle_Byte(ByteBuffer.wrap(buf).get());
+        return bigToLittle_Byte(ByteBuffer.wrap(buf).get()) & 0xFF;
     }
 
     public short readInteger() {

@@ -72,7 +72,7 @@ public class Inventory {
     /**
      * @desc: Agregamos un item al slot del inventario.
      */
-    public void setItem(int slot, short objIndex, int amount, boolean equipped, short grhIndex, short objType,
+    public void setItem(int slot, short objIndex, int amount, boolean equipped, short grhIndex, int objType,
                         short maxHit, short minHit, short maxDef, short minDef, float value, String name) {
 
 

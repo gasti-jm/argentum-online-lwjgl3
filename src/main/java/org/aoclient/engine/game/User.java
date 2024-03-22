@@ -46,23 +46,23 @@ public final class User {
     private int userPasarNivel;
     private int userExp;
     private int userGLD;
-    private byte userLvl;
-    private byte userDext;
-    private byte userStrg;
-    private short userMaxAGU;
-    private short userMinAGU;
-    private short userMaxHAM;
-    private short userMinHAM;
+    private int userLvl;
+    private int userDext;
+    private int userStrg;
+    private int userMaxAGU;
+    private int userMinAGU;
+    private int userMaxHAM;
+    private int userMinHAM;
 
     private String userWeaponEqpHit  = "0/0";
     private String userArmourEqpDef  = "0/0";
     private String userHelmEqpDef    = "0/0";
     private String userShieldEqpDef  = "0/0";
 
-    private byte userWeaponEqpSlot;
-    private byte userArmourEqpSlot;
-    private byte userHelmEqpSlot;
-    private byte userShieldEqpSlot;
+    private int userWeaponEqpSlot;
+    private int userArmourEqpSlot;
+    private int userHelmEqpSlot;
+    private int userShieldEqpSlot;
 
     private boolean talking;
 
@@ -557,59 +557,59 @@ public final class User {
         this.userGLD = userGLD;
     }
 
-    public byte getUserLvl() {
+    public int getUserLvl() {
         return userLvl;
     }
 
-    public void setUserLvl(byte userLvl) {
+    public void setUserLvl(int userLvl) {
         this.userLvl = userLvl;
     }
 
-    public byte getUserDext() {
+    public int getUserDext() {
         return userDext;
     }
 
-    public void setUserDext(byte userDext) {
+    public void setUserDext(int userDext) {
         this.userDext = userDext;
     }
 
-    public byte getUserStrg() {
+    public int getUserStrg() {
         return userStrg;
     }
 
-    public void setUserStrg(byte userStrg) {
+    public void setUserStrg(int userStrg) {
         this.userStrg = userStrg;
     }
 
-    public short getUserMaxAGU() {
+    public int getUserMaxAGU() {
         return userMaxAGU;
     }
 
-    public void setUserMaxAGU(short userMaxAGU) {
+    public void setUserMaxAGU(int userMaxAGU) {
         this.userMaxAGU = userMaxAGU;
     }
 
-    public short getUserMinAGU() {
+    public int getUserMinAGU() {
         return userMinAGU;
     }
 
-    public void setUserMinAGU(short userMinAGU) {
+    public void setUserMinAGU(int userMinAGU) {
         this.userMinAGU = userMinAGU;
     }
 
-    public short getUserMaxHAM() {
+    public int getUserMaxHAM() {
         return userMaxHAM;
     }
 
-    public void setUserMaxHAM(short userMaxHAM) {
+    public void setUserMaxHAM(int userMaxHAM) {
         this.userMaxHAM = userMaxHAM;
     }
 
-    public short getUserMinHAM() {
+    public int getUserMinHAM() {
         return userMinHAM;
     }
 
-    public void setUserMinHAM(short userMinHAM) {
+    public void setUserMinHAM(int userMinHAM) {
         this.userMinHAM = userMinHAM;
     }
 
@@ -645,35 +645,35 @@ public final class User {
         this.userShieldEqpDef = userShieldEqpDef;
     }
 
-    public byte getUserWeaponEqpSlot() {
+    public int getUserWeaponEqpSlot() {
         return userWeaponEqpSlot;
     }
 
-    public void setUserWeaponEqpSlot(byte userWeaponEqpSlot) {
+    public void setUserWeaponEqpSlot(int userWeaponEqpSlot) {
         this.userWeaponEqpSlot = userWeaponEqpSlot;
     }
 
-    public byte getUserArmourEqpSlot() {
+    public int getUserArmourEqpSlot() {
         return userArmourEqpSlot;
     }
 
-    public void setUserArmourEqpSlot(byte userArmourEqpSlot) {
+    public void setUserArmourEqpSlot(int userArmourEqpSlot) {
         this.userArmourEqpSlot = userArmourEqpSlot;
     }
 
-    public byte getUserHelmEqpSlot() {
+    public int getUserHelmEqpSlot() {
         return userHelmEqpSlot;
     }
 
-    public void setUserHelmEqpSlot(byte userHelmEqpSlot) {
+    public void setUserHelmEqpSlot(int userHelmEqpSlot) {
         this.userHelmEqpSlot = userHelmEqpSlot;
     }
 
-    public byte getUserShieldEqpSlot() {
+    public int getUserShieldEqpSlot() {
         return userShieldEqpSlot;
     }
 
-    public void setUserShieldEqpSlot(byte userShieldEqpSlot) {
+    public void setUserShieldEqpSlot(int userShieldEqpSlot) {
         this.userShieldEqpSlot = userShieldEqpSlot;
     }
 

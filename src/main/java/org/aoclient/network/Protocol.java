@@ -161,7 +161,7 @@ public class Protocol {
         // Remove packet ID
         incomingData.readByte();
 
-        byte slot = incomingData.readByte();
+        int slot = incomingData.readByte();
 
         //With InvOfferComUsu(0)
         //        Amount = .Amount(slot)
@@ -197,13 +197,13 @@ public class Protocol {
     }
 
     private static void handleMultiMessage() {
-        byte bodyPart;
+        int bodyPart;
         short damage;
 
         // Remove packet ID
         incomingData.readByte();
 
-        byte m = incomingData.readByte();
+        int m = incomingData.readByte();
 
         if (m > E_Messages.values().length) return;
         E_Messages msg = E_Messages.values()[m];
@@ -379,7 +379,7 @@ public class Protocol {
                 break;
 
             case WorkRequestTarget:
-                short usingSkill = incomingData.readByte();
+                int usingSkill = incomingData.readByte();
 
                 Window.get().setCursorCrosshair(true);
 
@@ -437,7 +437,7 @@ public class Protocol {
                 break;
 
             case GoHome:
-                byte distance = incomingData.readByte();
+                int distance = incomingData.readByte();
                 short time = incomingData.readInteger();
                 String hogar = incomingData.readASCIIString();
 
@@ -460,7 +460,7 @@ public class Protocol {
         // Remove packet ID
         incomingData.readByte();
 
-        byte maxInventorySlots = incomingData.readByte();
+        int maxInventorySlots = incomingData.readByte();
     }
 
     private static void handleUpdateDexterity() {
@@ -512,7 +512,7 @@ public class Protocol {
         // Remove packet ID
         buffer.readByte();
 
-        byte esPartyLeader = buffer.readByte();
+        int esPartyLeader = buffer.readByte();
         String members = buffer.readASCIIString();
 
         //Dim members() As String
@@ -716,7 +716,7 @@ public class Protocol {
         buffer.readByte();
 
         short charIndex = buffer.readInteger();
-        byte nickColor = buffer.readByte();
+        int nickColor = buffer.readByte();
         String userTag = buffer.readASCIIString();
 
         //Dim CharIndex As Integer
@@ -778,7 +778,7 @@ public class Protocol {
         // Remove packet ID
         buffer.readByte();
 
-        byte offerSlot = buffer.readByte();
+        int offerSlot = buffer.readByte();
 
         buffer.readInteger(); buffer.readLong();
         buffer.readInteger(); buffer.readByte(); buffer.readInteger();
@@ -1061,10 +1061,10 @@ public class Protocol {
         buffer.readByte();
 
         String nombre = buffer.readASCIIString();
-        byte raza = buffer.readByte();
-        byte clase = buffer.readByte();
-        byte genero = buffer.readByte();
-        byte nivel = buffer.readByte();
+        int raza = buffer.readByte();
+        int clase = buffer.readByte();
+        int genero = buffer.readByte();
+        int nivel = buffer.readByte();
         int oro = buffer.readLong();
         int banco = buffer.readLong();
         int reputacion = buffer.readLong();
@@ -1302,9 +1302,9 @@ public class Protocol {
         incomingData.readByte();
 
         // variables globales
-        short userClase = incomingData.readByte();
-        byte userSkills[] = new byte[20];
-        byte porcentajeSkills[] = new byte[20];
+        int userClase = incomingData.readByte();
+        int userSkills[] = new int[20];
+        int porcentajeSkills[] = new int[20];
 
 
         for(int i = 0; i < 20; i++) {
@@ -1350,11 +1350,11 @@ public class Protocol {
         // Remove packet ID
         incomingData.readByte();
 
-        byte fuerza = incomingData.readByte();
-        byte agilidad = incomingData.readByte();
-        byte inteligencia = incomingData.readByte();
-        byte carisma = incomingData.readByte();
-        byte constitucion = incomingData.readByte();
+        int fuerza = incomingData.readByte();
+        int agilidad = incomingData.readByte();
+        int inteligencia = incomingData.readByte();
+        int carisma = incomingData.readByte();
+        int constitucion = incomingData.readByte();
 
         //UserAtributos(eAtributos.Fuerza) = incomingData.ReadByte()
         //    UserAtributos(eAtributos.Agilidad) = incomingData.ReadByte()
@@ -1393,8 +1393,8 @@ public class Protocol {
         // Remove packet ID
         incomingData.readByte();
 
-        byte privilegios = incomingData.readByte();
-        byte canPostSticky = incomingData.readByte();
+        int privilegios = incomingData.readByte();
+        int canPostSticky = incomingData.readByte();
 
         //frmForo.Privilegios = incomingData.ReadByte
         //    frmForo.CanPostSticky = incomingData.ReadByte
@@ -1418,7 +1418,7 @@ public class Protocol {
         buffer.readByte();
 
 
-        byte forumType = buffer.readByte();
+        int forumType = buffer.readByte();
         String title = buffer.readASCIIString();
         String autor = buffer.readASCIIString();
         String message = buffer.readASCIIString();
@@ -1539,14 +1539,14 @@ public class Protocol {
         // Remove packet ID
         buffer.readByte();
 
-        byte slot = buffer.readByte();
+        int slot = buffer.readByte();
 
         String name = buffer.readASCIIString();
         short amount = buffer.readInteger();
         float value = buffer.readFloat();
         short grhIndex = buffer.readInteger();
         short objIndex = buffer.readInteger();
-        byte objType = buffer.readByte();
+        int objType = buffer.readByte();
         short maxHit = buffer.readInteger();
         short minHit = buffer.readInteger();
         short maxDef = buffer.readInteger();
@@ -1869,7 +1869,7 @@ public class Protocol {
         // Remove packet ID
         incomingData.readByte();
 
-        byte userAtributos[] = new byte[5];
+        int userAtributos[] = new int[5];
         for (int i = 0; i < 5; i++) {
             userAtributos[i] = incomingData.readByte();
         }
@@ -1910,7 +1910,7 @@ public class Protocol {
         // Remove packet ID
         buffer.readByte();
 
-        byte slot = buffer.readByte();
+        int slot = buffer.readByte();
         short hechizoNum = buffer.readInteger();
         String hechizoName = buffer.readASCIIString();
 
@@ -1930,13 +1930,13 @@ public class Protocol {
         // Remove packet ID
         buffer.readByte();
 
-        byte slot = buffer.readByte();
+        int slot = buffer.readByte();
 
         short objIndex = buffer.readInteger();
         String name = buffer.readASCIIString();
         short amount = buffer.readInteger();
         short grhIndex = buffer.readInteger();
-        byte objType = buffer.readByte();
+        int objType = buffer.readByte();
         short maxHit = buffer.readInteger();
         short minHit = buffer.readInteger();
         short maxDef = buffer.readInteger();
@@ -1979,13 +1979,13 @@ public class Protocol {
         // Remove packet ID
         buffer.readByte();
 
-        final byte slot = buffer.readByte();
+        final int slot = buffer.readByte();
         final short objIndex = buffer.readInteger();
         final String name = buffer.readASCIIString();
         final int amount = buffer.readInteger();
         final boolean equipped = buffer.readBoolean();
         final short grhIndex = buffer.readInteger();
-        final byte objType = buffer.readByte();
+        final int objType = buffer.readByte();
         final short maxHit = buffer.readInteger();
         final short minHit = buffer.readInteger();
         final short maxDef = buffer.readInteger();
@@ -2049,7 +2049,7 @@ public class Protocol {
         // Remove packet ID
         incomingData.readByte();
 
-        final byte usingSkills = incomingData.readByte();
+        final int usingSkills = incomingData.readByte();
 
         Window.get().setCursorCrosshair(true);
 
@@ -2172,8 +2172,8 @@ public class Protocol {
         // Remove packet ID
         incomingData.readByte();
 
-        byte x = incomingData.readByte();
-        byte y = incomingData.readByte();
+        int x = incomingData.readByte();
+        int y = incomingData.readByte();
 
         User.get().areaChange(x, y);
     }
@@ -2222,9 +2222,9 @@ public class Protocol {
         // Remove packet ID
         incomingData.readByte();
 
-        byte wave = incomingData.readByte();
-        byte srcX = incomingData.readByte();
-        byte srcY = incomingData.readByte();
+        int wave = incomingData.readByte();
+        int srcX = incomingData.readByte();
+        int srcY = incomingData.readByte();
 
         // Call Audio.PlayWave(CStr(wave) & ".wav", srcX, srcY)
         playSound(String.valueOf(wave) + ".ogg");
@@ -2239,7 +2239,7 @@ public class Protocol {
         // Remove packet ID
         incomingData.readByte();
 
-        byte currentMusic = incomingData.readByte();
+        int currentMusic = incomingData.readByte();
 
         if(currentMusic > 0) {
             incomingData.readInteger();
@@ -2262,8 +2262,8 @@ public class Protocol {
         // Remove packet ID
         incomingData.readByte();
 
-        byte x = incomingData.readByte();
-        byte y = incomingData.readByte();
+        int x = incomingData.readByte();
+        int y = incomingData.readByte();
 
         mapData[x][y].setBlocked(incomingData.readBoolean());
     }
@@ -2277,8 +2277,8 @@ public class Protocol {
         // Remove packet ID
         incomingData.readByte();
 
-        byte x = incomingData.readByte();
-        byte y = incomingData.readByte();
+        int x = incomingData.readByte();
+        int y = incomingData.readByte();
 
         mapData[x][y].getObjGrh().setGrhIndex((short) 0);
     }
@@ -2292,8 +2292,8 @@ public class Protocol {
         // Remove packet ID
         incomingData.readByte();
 
-        byte x = incomingData.readByte();
-        byte y = incomingData.readByte();
+        int x = incomingData.readByte();
+        int y = incomingData.readByte();
         short grhIndex = incomingData.readInteger();
 
         mapData[x][y].getObjGrh().setGrhIndex(grhIndex);
@@ -2382,8 +2382,8 @@ public class Protocol {
         incomingData.readByte();
 
         short charIndex = incomingData.readInteger();
-        byte x = incomingData.readByte();
-        byte y = incomingData.readByte();
+        int x = incomingData.readByte();
+        int y = incomingData.readByte();
 
         // Si esta meditando, removemos el FX.
         if (charList[charIndex].getFxIndex() >= 40 && charList[charIndex].getFxIndex() <= 49) {
@@ -2439,10 +2439,10 @@ public class Protocol {
         short charIndex = buffer.readInteger();
         short body = buffer.readInteger();
         short head = buffer.readInteger();
-        byte numHeading = buffer.readByte();
+        int numHeading = buffer.readByte();
         E_Heading heading = E_Heading.values()[numHeading - 1];
-        byte x = buffer.readByte();
-        byte y = buffer.readByte();
+        int x = buffer.readByte();
+        int y = buffer.readByte();
         short weapon = buffer.readInteger();
         short shield = buffer.readInteger();
         short helmet = buffer.readInteger();
@@ -2452,8 +2452,8 @@ public class Protocol {
 
         charList[charIndex].setName(buffer.readASCIIString());
 
-        byte nickColor = buffer.readByte();
-        short privs = buffer.readByte();
+        int nickColor = buffer.readByte();
+        int privs = buffer.readByte();
 
         // falta crear enums de nickcolor y playerType.
         if ((nickColor & 1) != 0) {
@@ -2636,7 +2636,7 @@ public class Protocol {
         buffer.readByte();
 
         String chat = buffer.readASCIIString();
-        short fontIndex = buffer.readByte();
+        int fontIndex = buffer.readByte();
 
         Console.get().addMsgToConsole(chat, false, false, new RGBColor(1.0f, 1.0f, 1.0f));
 
@@ -2692,12 +2692,13 @@ public class Protocol {
 
         String chat = buffer.readASCIIString();
         short charIndex = buffer.readInteger();
-        byte r = buffer.readByte();
-        byte g = buffer.readByte();
-        byte b = buffer.readByte();
+        int r = buffer.readByte();
+        int g = buffer.readByte();
+        int b = buffer.readByte();
 
         if (charList[charIndex].isActive()) {
-            charDialogSet(charIndex, chat, new RGBColor(1, 1, 1), 10, 0);
+            charDialogSet(charIndex, chat,
+                    new RGBColor((float) r / 255, (float) g /255, (float) b /255), 10, 0);
         }
 
         incomingData.copyBuffer(buffer);
@@ -3062,7 +3063,7 @@ public class Protocol {
         buffer.readByte();
 
         String chat = buffer.readASCIIString();
-        short fontSize = buffer.readByte();
+        int fontSize = buffer.readByte();
 
         /*
         If InStr(1, chat, "~") Then
