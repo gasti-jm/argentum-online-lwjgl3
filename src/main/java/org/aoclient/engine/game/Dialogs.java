@@ -73,17 +73,6 @@ public class Dialogs {
         }
     }
 
-    //Public Sub RemoveDialogsNPCArea()
-    //Dim posX As Byte, posY As Byte
-    //For posX = charlist(UserCharIndex).Pos.X - HalfWindowTileWidth To charlist(UserCharIndex).Pos.X + HalfWindowTileWidth
-    //    For posY = charlist(UserCharIndex).Pos.Y - HalfWindowTileHeight To charlist(UserCharIndex).Pos.Y + HalfWindowTileHeight
-    //        If MapData(posX, posY).CharIndex > 0 Then _
-    //            If Len(charlist(MapData(posX, posY).CharIndex).Nombre) <= 1 Then _
-    //                Call Dialogos.RemoveDialog(MapData(posX, posY).CharIndex)
-    //    Next posY
-    //Next posX
-    //End Sub
-
     public static void removeDialogsNPCArea() {
         for (int x = charList[User.get().getUserCharIndex()].getPos().getX() - 8; x <= charList[User.get().getUserCharIndex()].getPos().getX() + 8; x++) {
             for (int y = charList[User.get().getUserCharIndex()].getPos().getY() - 6; y <= charList[User.get().getUserCharIndex()].getPos().getY() + 6; y++) {
