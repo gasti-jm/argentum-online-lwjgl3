@@ -17,9 +17,9 @@ import javax.imageio.ImageIO;
 import java.io.File;
 import java.io.IOException;
 
-import static org.aoclient.network.Protocol.writeLoginExistingChar;
 import static org.aoclient.engine.Sound.playMusic;
 import static org.aoclient.engine.utils.GameData.options;
+import static org.aoclient.network.Protocol.writeLoginExistingChar;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_ENTER;
 
 public final class FConnect extends Form {
@@ -131,8 +131,11 @@ public final class FConnect extends Form {
         options.setPortServer(portStr.get());
 
         if (nickStr.get().isEmpty() || !passStr.get().isEmpty()) {
-            SocketConnection.get().connect(options.getIpServer(), options.getPortServer());
-            writeLoginExistingChar(nickStr.get(), passStr.get());
+            new Thread(() -> {
+                if (SocketConnection.get().connect()) {
+                    writeLoginExistingChar(nickStr.get(), passStr.get());
+                }
+            }).start();
 
             options.setNickName(nickStr.get());
             User.get().setUserName(nickStr.get());

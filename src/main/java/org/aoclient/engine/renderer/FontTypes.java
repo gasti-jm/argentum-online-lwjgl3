@@ -13,8 +13,7 @@ public class FontTypes {
         int fontSize;
         int[] ascii_code = new int[256];
     }
-
-    public static Font[] font_types;
+    private static Font[] font_types;
 
     public static void loadFontTypes()  {
         try {
@@ -41,10 +40,9 @@ public class FontTypes {
     }
 
     public static void drawText(String text, int x, int y, RGBColor color, int fontIndex, boolean multiLine) {
-        int a, b = 0, c, d, e, f;
+        int a, b, d = 0, e, f;
         if (text.isEmpty()) return;
 
-        d = 0;
         if (!multiLine) {
             for (a = 0; a < text.length(); a++) {
                 b = text.charAt(a);
@@ -53,10 +51,10 @@ public class FontTypes {
                 if (b != 32) {
                     if (font_types[fontIndex].ascii_code[b] != 0) {
                         drawGrhIndex(font_types[fontIndex].ascii_code[b], (x + d), y, color);
-                        d = d + grhData[font_types[fontIndex].ascii_code[b]].getPixelWidth();
+                        d += grhData[font_types[fontIndex].ascii_code[b]].getPixelWidth();
                     }
                 } else {
-                    d = d + 4;
+                    d += 4;
                 }
             }
         } else {
@@ -77,18 +75,18 @@ public class FontTypes {
                 } else {
                     if (font_types[fontIndex].ascii_code[b] > 12) {
                         drawGrhIndex(font_types[fontIndex].ascii_code[b], (x + d), y + f * 14, color);
-                        d = d + grhData[font_types[fontIndex].ascii_code[b]].getPixelWidth();
+                        d += grhData[font_types[fontIndex].ascii_code[b]].getPixelWidth();
                     }
                 }
 
-                e = e + 1;
+                e++;
             }
         }
     }
 
     public static int getTextWidth(String text, boolean multi) {
         int retVal = 0;
-        int b, e, f, d = 0;
+        int b, e, d = 0;
 
         if(!multi) {
             for (int a = 0; a < text.length(); a++) {
@@ -103,14 +101,12 @@ public class FontTypes {
 
         } else {
             e = 0;
-            f = 0;
 
             for (int a = 0; a < text.length(); a++) {
                 b = text.charAt(a);
 
                 if(b == 32 || b == 13){
                     if (e >= 20) { // reemplazar por lo que quieran
-                        f++;
                         e = 0;
                         d = 0;
                     } else {
@@ -134,7 +130,7 @@ public class FontTypes {
 
     public static int getTextHeight(String text, boolean multi) {
         int retVal = 0;
-        int b, e, f, d = 0;
+        int b, e, f;
 
         if (!multi) {
             return retVal;
@@ -148,11 +144,6 @@ public class FontTypes {
                     if (e >= 20) {
                         f++;
                         e = 0;
-                        d = 0;
-                    } else {
-                        if (b == 32) {
-                            d += 4;
-                        }
                     }
                 }
 

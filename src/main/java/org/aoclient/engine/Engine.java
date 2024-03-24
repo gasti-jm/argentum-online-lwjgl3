@@ -10,6 +10,7 @@ import org.aoclient.engine.utils.Time;
 import org.lwjgl.Version;
 import org.tinylog.Logger;
 
+import static org.aoclient.engine.Sound.playMusic;
 import static org.aoclient.engine.scenes.SceneType.INTRO_SCENE;
 import static org.aoclient.engine.utils.GameData.options;
 import static org.aoclient.engine.utils.Time.deltaTime;
@@ -77,6 +78,8 @@ public final class Engine {
 
         Logger.info("Java version: {}", System.getProperty("java.version"));
 
+        GameData.initialize();
+
         window = Window.get();
         window.initialize();
 
@@ -84,10 +87,10 @@ public final class Engine {
         guiSystem.init();
 
         Surface.get().initialize();
-        GameData.initialize();
         BindKeys bindKeys = BindKeys.get();
 
         changeScene(INTRO_SCENE);
+        playMusic("intro.ogg");
     }
 
     /**
@@ -144,7 +147,7 @@ public final class Engine {
      *        desactiva nuestro booleano del MainLoop para que se cierre el juego.
      */
     public static void closeClient() {
-        options.SaveOptions();
+        options.saveOptions();
         prgRun = false;
     }
 

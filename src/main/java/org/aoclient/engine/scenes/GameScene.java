@@ -54,9 +54,6 @@ public final class GameScene extends Scene {
         ambientColor    = new RGBColor(1.0f, 1.0f, 1.0f);
         frmMain         = new FMain();
 
-        camera.setHalfWindowTileWidth   (( (SCREEN_SIZE_X / TILE_PIXEL_SIZE) / 2 ));
-        camera.setHalfWindowTileHeight  (( (SCREEN_SIZE_Y / TILE_PIXEL_SIZE) / 2 ));
-
         ImGUISystem.get().addFrm(frmMain);
     }
 
@@ -269,7 +266,6 @@ public final class GameScene extends Scene {
     private void renderScreen(int tileX, int tileY, int pixelOffsetX, int pixelOffsetY) {
         camera.update(tileX, tileY);
 
-        // LAYER 1
         renderFirstLayer(pixelOffsetX, pixelOffsetY);
         renderSecondLayer(pixelOffsetX, pixelOffsetY);
         renderThirdLayer(pixelOffsetX, pixelOffsetY);
@@ -442,7 +438,7 @@ public final class GameScene extends Scene {
      * @desc: Se utiliza al hacer click izquierdo por el mapa, para interactuar con NPCs, etc.
      */
     private byte getTileMouseX(int mouseX) {
-        return (byte) (user.getUserPos().getX() + mouseX / TILE_PIXEL_SIZE - camera.getHalfWindowTileWidth());
+        return (byte) (user.getUserPos().getX() + mouseX / TILE_PIXEL_SIZE - HALF_WINDOW_TILE_WIDTH);
     }
 
     /**
@@ -452,7 +448,7 @@ public final class GameScene extends Scene {
      * @desc: Se utiliza al hacer click izquierdo por el mapa, para interactuar con NPCs, etc.
      */
     private byte getTileMouseY(int mouseY) {
-        return  (byte) (user.getUserPos().getY() +  mouseY / TILE_PIXEL_SIZE - camera.getHalfWindowTileHeight());
+        return  (byte) (user.getUserPos().getY() +  mouseY / TILE_PIXEL_SIZE - HALF_WINDOW_TILE_HEIGHT);
     }
 
 }

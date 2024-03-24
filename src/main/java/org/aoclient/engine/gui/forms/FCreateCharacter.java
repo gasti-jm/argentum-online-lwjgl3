@@ -25,12 +25,11 @@ import org.aoclient.engine.utils.structs.BodyData;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static org.aoclient.network.Protocol.writeLoginNewChar;
-import static org.aoclient.network.Protocol.writeThrowDices;
 import static org.aoclient.engine.Sound.*;
 import static org.aoclient.engine.game.models.Character.*;
 import static org.aoclient.engine.renderer.Drawn.*;
 import static org.aoclient.engine.utils.GameData.*;
+import static org.aoclient.network.Protocol.*;
 
 public final class FCreateCharacter extends Form{
     // Necesito hacer esto para dibujar despues el cuerpo y cabeza por encima de la interfaz
@@ -454,14 +453,21 @@ public final class FCreateCharacter extends Form{
 
         if(!checkData()) return;
 
-        SocketConnection.get().connect(options.getIpServer(), options.getPortServer());
-        writeLoginNewChar(txtNombre.get(), txtPassword.get(), userRaza, userSexo, userClase, userHead, txtMail.get(), userHogar);
+        new Thread(() -> {
+            if (SocketConnection.get().connect()) {
+                writeLoginNewChar(txtNombre.get(), txtPassword.get(), userRaza, userSexo, userClase, userHead, txtMail.get(), userHogar);
+            }
+        }).start();
+
         User.get().setUserName(txtNombre.get());
     }
 
     private void buttonThrowDices() {
-        SocketConnection.get().connect(options.getIpServer(), options.getPortServer());
-        writeThrowDices();
+        new Thread(() -> {
+            if (SocketConnection.get().connect()) {
+                writeThrowDices();
+            }
+        }).start();
     }
 
     private void buttonGoBack() {

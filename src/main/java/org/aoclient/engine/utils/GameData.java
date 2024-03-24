@@ -46,7 +46,7 @@ public final class GameData {
 
         // Creamos el objeto de las opciones.
         options = new Options();
-        options.LoadOptions();
+        options.loadOptions();
 
         loadGrhData();
         loadHeads();
@@ -57,8 +57,6 @@ public final class GameData {
         loadFxs();
         loadFK();
         loadFontTypes();
-
-        playMusic("intro.ogg");
     }
 
 

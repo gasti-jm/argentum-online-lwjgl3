@@ -5,9 +5,11 @@ import org.aoclient.engine.game.Rain;
 import org.aoclient.engine.game.User;
 import org.aoclient.engine.gui.forms.FMessage;
 import org.aoclient.engine.gui.ImGUISystem;
+
 import java.net.*;
 import java.io.*;
 
+import static org.aoclient.engine.utils.GameData.options;
 import static org.aoclient.network.Protocol.*;
 
 /**
@@ -20,6 +22,7 @@ public class SocketConnection {
     private DataOutputStream writeData;
     private DataInputStream handleData;
     private boolean tryConnect;
+
 
     /**
      * @desc: Constructor privado por singleton.
@@ -41,24 +44,23 @@ public class SocketConnection {
     }
 
     /**
-     * Intenta conectarse con el servidor segun la Ip y el puerto asignado.
+     * Intenta conectarse con el servidor segun la Ip y el puerto asignado y retorna true en caso de completarse la conexion
      */
-    public void connect(final String ip, final String port) {
+    public boolean connect() {
         if (tryConnect) {
             ImGUISystem.get().checkAddOrChange("frmMessage", new FMessage(
                     "Intentando conectarse con el servidor, porfavor espere..."));
 
-            return;
+            return false;
         }
 
-        new Thread(() -> {
+        if(sock == null || sock.isClosed()) {
+            this.tryConnect = true;
+
             try {
-                if(sock == null || sock.isClosed()) {
-                    this.tryConnect = true;
-                    sock = new Socket(ip, Integer.parseInt(port));
-                    writeData   = new DataOutputStream(sock.getOutputStream()); // envio
-                    handleData  = new DataInputStream(sock.getInputStream()); // respuesta..
-                }
+                sock = new Socket(options.getIpServer(), Integer.parseInt(options.getPortServer()));
+                writeData   = new DataOutputStream(sock.getOutputStream());     // envio
+                handleData  = new DataInputStream(sock.getInputStream());       // respuesta..
 
                 if (sock.isConnected()) {
                     this.tryConnect = false;
@@ -69,16 +71,21 @@ public class SocketConnection {
             } catch(Exception e) {
                 ImGUISystem.get().checkAddOrChange("frmMessage", new FMessage(e.getMessage()));
                 this.tryConnect = false;
+                return false;
             }
-        }).start();
+        }
 
+        return true;
     }
 
     /**
      * Prepara el envio de informacion checkeando nuestra cola de bytes y que el socket este conectado
      */
     public void flushBuffer() {
-        if (writeData == null || !sock.isConnected() || sock.isClosed()) return;
+        if (writeData == null ||
+                !sock.isConnected() ||
+                sock.isClosed())
+            return;
 
         if (outgoingData.length() != 0){
             sendData(outgoingData.readBytes(outgoingData.length()));
@@ -104,7 +111,10 @@ public class SocketConnection {
      * Lee los datos recibidos del servidor
      */
     public void readData() {
-        if (handleData == null || !sock.isConnected() || sock.isClosed()) return;
+        if (handleData == null ||
+                !sock.isConnected() ||
+                sock.isClosed())
+            return;
 
         try {
             final int availableBytes = handleData.available(); // cantidad de bytes que devolvio el servidor.
@@ -149,4 +159,5 @@ public class SocketConnection {
         Rain.get().setRainValue(false);
         Rain.get().stopRainingSoundLoop();
     }
+
 }

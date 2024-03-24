@@ -13,6 +13,7 @@ import org.lwjgl.system.MemoryStack;
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 
+import static org.aoclient.engine.utils.GameData.options;
 import static org.lwjgl.glfw.Callbacks.glfwFreeCallbacks;
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.openal.ALC10.*;
@@ -90,7 +91,8 @@ public final class Window {
 
         //glfwGetPrimaryMonitor()// permite pantalla completa. (PRIMER PARAMETRO NULL)
         // Create the window
-        window = glfwCreateWindow(this.width, this.height, this.title, NULL, NULL);
+        window = glfwCreateWindow(this.width, this.height, this.title,
+                options.isFullscreen() ? glfwGetPrimaryMonitor() : NULL, NULL);
 
         if (window == NULL) {
             throw new IllegalStateException("Failed to create the GLFW window.");
@@ -126,8 +128,11 @@ public final class Window {
         // Make the OpenGL context current
         glfwMakeContextCurrent(window);
 
-        // Disable v-sync
-        glfwSwapInterval(0);
+        if (options.isVsync()) {
+            glfwSwapInterval(1);
+        } else {
+            glfwSwapInterval(0);
+        }
 
         // Make the window visible
         glfwShowWindow(window);

@@ -24,21 +24,21 @@ public final class Camera {
     public static final int YMinMapSize = 1;
 
     // Tiles visibles segun la pantalla
-    private int halfWindowTileWidth;
-    private int halfWindowTileHeight;
+    public static final int HALF_WINDOW_TILE_WIDTH = (SCREEN_SIZE_X / TILE_PIXEL_SIZE) / 2;
+    public static final int HALF_WINDOW_TILE_HEIGHT = (SCREEN_SIZE_Y / TILE_PIXEL_SIZE) / 2;
 
     private int screenminY, screenmaxY;
     private int screenminX, screenmaxX;
     private int minY, maxY;
     private int minX, maxX;
-    private int ScreenX, ScreenY;
+    private int screenX, screenY;
     private int minXOffset, minYOffset;
 
     // limites del mapa
-    public static final int minXBorder = XMinMapSize + ( (SCREEN_SIZE_X / 32) / 2);
-    public static final int maxXBorder = XMaxMapSize - ( (SCREEN_SIZE_X / 32) / 2);
-    public static final int minYBorder = YMinMapSize + ( (SCREEN_SIZE_Y / 32) / 2);
-    public static final int maxYBorder = YMaxMapSize - ( (SCREEN_SIZE_Y / 32) / 2);
+    public static final int minXBorder = XMinMapSize + ( (SCREEN_SIZE_X / TILE_PIXEL_SIZE) / 2);
+    public static final int maxXBorder = XMaxMapSize - ( (SCREEN_SIZE_X / TILE_PIXEL_SIZE) / 2);
+    public static final int minYBorder = YMinMapSize + ( (SCREEN_SIZE_Y / TILE_PIXEL_SIZE) / 2);
+    public static final int maxYBorder = YMaxMapSize - ( (SCREEN_SIZE_Y / TILE_PIXEL_SIZE) / 2);
 
     public Camera() {
 
@@ -54,16 +54,16 @@ public final class Camera {
      *        del MapData, cada uno tiene distinto rango segun la capa que se va a dibujar.
      */
     public void update(int tileX, int tileY) {
-        ScreenX = 0;
-        ScreenY = 0;
+        screenX = 0;
+        screenY = 0;
         minXOffset = 0;
         minYOffset = 0;
 
         // esto es un rango de vision segun la pantalla y donde este parado el user
-        screenminY = tileY - halfWindowTileHeight;
-        screenmaxY = tileY + halfWindowTileHeight;
-        screenminX = tileX - halfWindowTileWidth;
-        screenmaxX = tileX + halfWindowTileWidth;
+        screenminY = tileY - HALF_WINDOW_TILE_HEIGHT;
+        screenmaxY = tileY + HALF_WINDOW_TILE_HEIGHT;
+        screenminX = tileX - HALF_WINDOW_TILE_WIDTH;
+        screenmaxX = tileX + HALF_WINDOW_TILE_WIDTH;
 
         // este es el rango minimo que se va a recorrer
         // este es el rango minimo que se va a recorrer
@@ -90,7 +90,7 @@ public final class Camera {
             screenminY--;
         } else {
             screenminY = 1;
-            ScreenY = 1;
+            screenY = 1;
         }
 
         if (screenmaxY < YMaxMapSize) screenmaxY++;
@@ -99,26 +99,10 @@ public final class Camera {
             screenminX--;
         } else {
             screenminX = 1;
-            ScreenX = 1;
+            screenX = 1;
         }
 
         if (screenmaxX < XMaxMapSize) screenmaxX++;
-    }
-
-    public int getHalfWindowTileWidth() {
-        return halfWindowTileWidth;
-    }
-
-    public void setHalfWindowTileWidth(int halfWindowTileWidth) {
-        this.halfWindowTileWidth = halfWindowTileWidth;
-    }
-
-    public int getHalfWindowTileHeight() {
-        return halfWindowTileHeight;
-    }
-
-    public void setHalfWindowTileHeight(int halfWindowTileHeight) {
-        this.halfWindowTileHeight = halfWindowTileHeight;
     }
 
     public int getScreenminY() {
@@ -186,27 +170,27 @@ public final class Camera {
     }
 
     public int getScreenX() {
-        return ScreenX;
+        return screenX;
     }
 
     public void incrementScreenX(){
-        this.ScreenX++;
+        this.screenX++;
     }
 
     public void incrementScreenY(){
-        this.ScreenY++;
+        this.screenY++;
     }
 
     public void setScreenX(int screenX) {
-        this.ScreenX = screenX;
+        this.screenX = screenX;
     }
 
     public int getScreenY() {
-        return ScreenY;
+        return screenY;
     }
 
     public void setScreenY(int screenY) {
-        this.ScreenY = screenY;
+        this.screenY = screenY;
     }
 
     public int getMinXOffset() {

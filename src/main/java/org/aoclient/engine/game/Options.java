@@ -15,6 +15,8 @@ public class Options {
     private boolean music;
     private boolean sound;
     private boolean showName;
+    private boolean fullscreen;
+    private boolean vsync;
     private String nickName;
     private String ipServer;
     private String portServer;
@@ -26,12 +28,96 @@ public class Options {
      * y el nombre del jugador se inicializa como una cadena vacía.
      */
     public Options() {
+        this.fullscreen     = true;
+        this.vsync          = true;
         this.music          = true;
         this.sound          = true;
         this.showName       = true;
         this.nickName       = "";
         this.ipServer       = "";
         this.portServer     = "";
+    }
+
+    /**
+     * Carga las opciones de configuración desde un archivo de inicialización.
+     */
+    public void loadOptions() {
+        try (BufferedReader reader = new BufferedReader(new FileReader("resources/inits/options.ini"))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split("=");
+                if (parts.length == 2) {
+                    String option = parts[0].trim();
+                    String value = parts[1].trim();
+                    updateOption(option, value);
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Guarda las opciones de configuración en un archivo de inicialización.
+     */
+    public void saveOptions() {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter("resources/inits/options.ini"))) {
+            writer.write("Music = " + music);
+            writer.newLine();
+            writer.write("Sound = " + sound);
+            writer.newLine();
+            writer.write("ShowName = " + showName);
+            writer.newLine();
+            writer.write("Name = " + nickName);
+            writer.newLine();
+            writer.write("IP = " + ipServer);
+            writer.newLine();
+            writer.write("PORT = " + portServer);
+            writer.newLine();
+            writer.write("Fullscreen = " + fullscreen);
+            writer.newLine();
+            writer.write("VSYNC = " + vsync);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Actualiza una opción de configuración con su nuevo valor.
+     *
+     * @param option El nombre de la opción a actualizar.
+     * @param value El nuevo valor de la opción.
+     */
+    private void updateOption(String option, String value) {
+        switch (option) {
+            case "Music":
+                music = Boolean.parseBoolean(value);
+                break;
+            case "Sound":
+                sound = Boolean.parseBoolean(value);
+                break;
+            case "ShowName":
+                showName = Boolean.parseBoolean(value);
+                break;
+            case "Name":
+                nickName = value;
+                break;
+            case "IP":
+                ipServer = value;
+                break;
+
+            case "PORT":
+                portServer = value;
+                break;
+
+            case "Fullscreen":
+                fullscreen = Boolean.parseBoolean(value);
+                break;
+
+            case "VSYNC":
+                vsync = Boolean.parseBoolean(value);
+                break;
+        }
     }
 
     /**
@@ -122,73 +208,19 @@ public class Options {
         this.portServer = portServer;
     }
 
-    /**
-     * Carga las opciones de configuración desde un archivo de inicialización.
-     */
-    public void LoadOptions() {
-        try (BufferedReader reader = new BufferedReader(new FileReader("resources/inits/options.ini"))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                String[] parts = line.split("=");
-                if (parts.length == 2) {
-                    String option = parts[0].trim();
-                    String value = parts[1].trim();
-                    updateOption(option, value);
-                }
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    public boolean isFullscreen() {
+        return fullscreen;
     }
 
-    /**
-     * Guarda las opciones de configuración en un archivo de inicialización.
-     */
-    public void SaveOptions() {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter("resources/inits/options.ini"))) {
-            writer.write("Music = " + music);
-            writer.newLine();
-            writer.write("Sound = " + sound);
-            writer.newLine();
-            writer.write("ShowName = " + showName);
-            writer.newLine();
-            writer.write("Name = " + nickName);
-            writer.newLine();
-            writer.write("IP = " + ipServer);
-            writer.newLine();
-            writer.write("PORT = " + portServer);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    public void setFullscreen(boolean fullscreen) {
+        this.fullscreen = fullscreen;
     }
 
-    /**
-     * Actualiza una opción de configuración con su nuevo valor.
-     *
-     * @param option El nombre de la opción a actualizar.
-     * @param value El nuevo valor de la opción.
-     */
-    private void updateOption(String option, String value) {
-        switch (option) {
-            case "Music":
-                music = Boolean.parseBoolean(value);
-                break;
-            case "Sound":
-                sound = Boolean.parseBoolean(value);
-                break;
-            case "ShowName":
-                showName = Boolean.parseBoolean(value);
-                break;
-            case "Name":
-                nickName = value;
-                break;
-            case "IP":
-                ipServer = value;
-                break;
+    public boolean isVsync() {
+        return vsync;
+    }
 
-            case "PORT":
-                portServer = value;
-                break;
-        }
+    public void setVsync(boolean vsync) {
+        this.vsync = vsync;
     }
 }
