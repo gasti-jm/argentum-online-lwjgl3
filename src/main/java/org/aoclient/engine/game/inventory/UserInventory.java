@@ -79,7 +79,7 @@ public final class UserInventory extends Inventory {
                 ImGui.text(String.valueOf(slots[i].amount));
 
                 if (slots[i].equipped) {
-                    ImGui.setCursorPos(iX + 23, iY);
+                    ImGui.setCursorPos(iX + 28, iY);
                     ImGui.textColored(ImGui.getColorU32(1f, 1f, 0f, 1f), "E");
                 }
             }

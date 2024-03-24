@@ -99,7 +99,7 @@ public class Dialogs {
 
                 // Render dialog
                 drawText(chrActual.getDialog(),
-                        dX + 15 - getTextWidth(chrActual.getDialog(), true) / 2,
+                        dX + 16 - getTextWidth(chrActual.getDialog(), true) / 2,
                         dY - 24 + chrActual.getBody().getHeadOffset().getY() - getTextHeight(chrActual.getDialog(), true) - (int) chrActual.getDialog_offset_counter_y(),
                         chrActual.getDialog_color(),
                         chrActual.getDialog_font_index(), true);
