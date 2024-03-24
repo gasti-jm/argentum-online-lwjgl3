@@ -3,11 +3,14 @@ package org.aoclient.engine.game.inventory;
 import org.aoclient.engine.game.models.E_ObjType;
 import org.aoclient.engine.listeners.MouseListener;
 import org.aoclient.engine.renderer.RGBColor;
+import org.aoclient.engine.renderer.Surface;
+import org.aoclient.engine.renderer.TextureOGL;
 
 import static org.aoclient.engine.renderer.Drawn.*;
 import static org.aoclient.engine.renderer.FontTypes.NORMAL_FONT;
 import static org.aoclient.engine.renderer.FontTypes.drawText;
 import static org.aoclient.engine.scenes.Camera.*;
+import static org.aoclient.engine.utils.GameData.grhData;
 
 /**
  * Clase padre de inventario, ya que puede existir distintos inventarios (usuario, npc, etc).
@@ -32,6 +35,9 @@ public class Inventory {
         short minDef;
         short maxHit;
         short minHit;
+
+        TextureOGL objTexture;
+
     }
 
     protected Slot[] slots;
@@ -81,6 +87,10 @@ public class Inventory {
         slots[slot].minDef      = minDef;
         slots[slot].equipped    = equipped;
         slots[slot].grhIndex    = grhIndex;
+
+        if (grhIndex > 0)
+            slots[slot].objTexture  = Surface.get().getTexture(grhData[grhIndex].getFileNum());
+
         slots[slot].maxHit      = maxHit;
         slots[slot].minHit      = minHit;
         slots[slot].name        = name;

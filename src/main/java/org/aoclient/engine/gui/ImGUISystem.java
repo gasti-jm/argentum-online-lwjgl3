@@ -231,7 +231,7 @@ public class ImGUISystem {
             frms.get(i).render();
         }
 
-        //ImGui.showDemoWindow();
+        ImGui.showDemoWindow();
     }
 
     public void checkAddOrChange(String formName, Form frm) {

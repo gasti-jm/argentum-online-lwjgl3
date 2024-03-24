@@ -12,4 +12,8 @@ public class TextureOGL {
     public TextureOGL() {
 
     }
+
+    public int getId() {
+        return this.id;
+    }
 }

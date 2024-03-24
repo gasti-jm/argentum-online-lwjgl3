@@ -159,16 +159,12 @@ public final class FMain extends Form {
             ImGui.pushItemWidth(546);
                 ImGui.pushStyleColor(ImGuiCol.FrameBg, 0f, 0f,0f, 1);
 
+                    ImGui.setKeyboardFocusHere();
                     ImGui.pushID("sendText");
-                        ImGui.setKeyboardFocusHere();
                         ImGui.inputText("", sendText, ImGuiInputTextFlags.CallbackResize);
                     ImGui.popID();
 
-                    if(ImGui.isWindowFocused()) {
-                        ImGui.setKeyboardFocusHere();
-                    } else {
-                        dataUser.setTalking(false);
-                    }
+
 
                 ImGui.popStyleColor();
             ImGui.popItemWidth();
@@ -180,8 +176,14 @@ public final class FMain extends Form {
             ImGui.endPopup();
         }
 
+        // Inventory
+        User.get().getUserInventory().drawInventory();
+
+
         /////// console
         Console.get().drawConsole();
+
+
 
         ImGui.end();
     }

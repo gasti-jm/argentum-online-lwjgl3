@@ -1,5 +1,6 @@
 package org.aoclient.engine.game.inventory;
 
+import imgui.ImGui;
 import org.aoclient.engine.game.IntervalTimer;
 import org.aoclient.engine.listeners.MouseListener;
 import org.aoclient.engine.renderer.RGBColor;
@@ -28,8 +29,6 @@ public final class UserInventory extends Inventory {
     // Intervalos del inventario.
     private static final float INT_USE_ITEM = 0.240f;
     private static final float INT_EQUIP_ITEM = 0.15f;
-
-    private final RGBColor colorEquipped = new RGBColor(1.0f, 1.0f, 0.0f);
     private final IntervalTimer intervalUseItem = new IntervalTimer(INT_USE_ITEM);
     private final IntervalTimer intervalEquipItem = new IntervalTimer(INT_EQUIP_ITEM);
 
@@ -55,21 +54,34 @@ public final class UserInventory extends Inventory {
         int iX = posX;
         int iY = posY;
 
-        // simulando un pictureBox
-        drawRectangle(posX, posY, sWidth, sHeigth, null);
-
         for (int i = 0; i < slots.length; i++) {
             if (slots[i].grhIndex > 0) {
-                drawGrhIndex(slots[i].grhIndex, iX, iY, null);
-                drawText(String.valueOf(slots[i].amount), iX, iY + 20, amountColor, NORMAL_FONT, false);
+                ImGui.setCursorPos(iX + 5, iY);
+
+
+                if (i == slotSelected) {
+                    ImGui.imageButton(slots[i].objTexture.getId(),
+                            32, 32, // size
+                            0, 0, 1, 1, // pos texture
+                            0, // padding border
+                            1f, 0f, 0f, 0.4f // background color
+                    );
+                } else {
+                    ImGui.imageButton(slots[i].objTexture.getId(),
+                            32, 32, // size
+                            0, 0, 1, 1,  // pos texture
+                            0,
+                            0f, 0f, 0f, 1f
+                    );
+                }
+
+                ImGui.setCursorPos(iX + 5, iY + 20);
+                ImGui.text(String.valueOf(slots[i].amount));
 
                 if (slots[i].equipped) {
-                    drawText("E", iX + 23, iY, colorEquipped, NORMAL_FONT, false);
+                    ImGui.setCursorPos(iX + 23, iY);
+                    ImGui.textColored(ImGui.getColorU32(1f, 1f, 0f, 1f), "E");
                 }
-            }
-
-            if (i == slotSelected) {
-                drawGrhIndex(2, iX, iY, null);
             }
 
             // actualizamos la posicion en forma de tabla.

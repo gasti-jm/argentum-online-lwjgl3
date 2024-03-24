@@ -287,7 +287,6 @@ public final class GameScene extends Scene {
 
         Dialogs.updateDialogs();
         rain.render(ambientColor);
-        user.getUserInventory().drawInventory();
     }
 
 

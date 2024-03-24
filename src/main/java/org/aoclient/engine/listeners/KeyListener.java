@@ -18,10 +18,7 @@ import static org.lwjgl.glfw.GLFW.*;
 public class KeyListener {
     private static KeyListener instance;
     private static final ImGuiIO io = ImGui.getIO();
-
-
     private final BindKeys bindKeys = BindKeys.get();
-
     private final boolean[] keyPressed = new boolean[350];
     private int lastKeyMovedPressed;
     private int lastKeyPressed;
