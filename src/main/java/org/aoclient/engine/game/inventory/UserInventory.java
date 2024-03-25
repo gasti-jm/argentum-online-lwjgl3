@@ -31,6 +31,7 @@ public final class UserInventory extends Inventory {
     private static final float INT_EQUIP_ITEM = 0.15f;
     private final IntervalTimer intervalUseItem = new IntervalTimer(INT_USE_ITEM);
     private final IntervalTimer intervalEquipItem = new IntervalTimer(INT_EQUIP_ITEM);
+    private static final int selectedColor = ImGui.getColorU32(0f, 1f, 0f, 1f);
 
 
     /**
@@ -58,21 +59,11 @@ public final class UserInventory extends Inventory {
             if (slots[i].grhIndex > 0) {
                 ImGui.setCursorPos(iX + 5, iY);
 
+                ImGui.image(slots[i].objTexture.getId(), 32, 32);
 
                 if (i == slotSelected) {
-                    ImGui.imageButton(slots[i].objTexture.getId(),
-                            32, 32, // size
-                            0, 0, 1, 1, // pos texture
-                            0, // padding border
-                            1f, 0f, 0f, 0.4f // background color
-                    );
-                } else {
-                    ImGui.imageButton(slots[i].objTexture.getId(),
-                            32, 32, // size
-                            0, 0, 1, 1,  // pos texture
-                            0,
-                            0f, 0f, 0f, 1f
-                    );
+                    ImGui.getWindowDrawList().addLine(iX + 32, iY, iX + 32, iY + 32, selectedColor);
+                    ImGui.getWindowDrawList().addLine(iX, iY + 32, iX + 32, iY + 32, selectedColor);
                 }
 
                 ImGui.setCursorPos(iX + 5, iY + 20);
