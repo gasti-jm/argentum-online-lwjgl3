@@ -1,6 +1,7 @@
 package org.aoclient.engine.game.inventory;
 
 import imgui.ImGui;
+import imgui.flag.ImGuiHoveredFlags;
 import org.aoclient.engine.game.IntervalTimer;
 import org.aoclient.engine.listeners.MouseListener;
 import org.aoclient.engine.renderer.RGBColor;
@@ -60,6 +61,9 @@ public final class UserInventory extends Inventory {
                 ImGui.setCursorPos(iX + 5, iY);
 
                 ImGui.image(slots[i].objTexture.getId(), 32, 32);
+                if (ImGui.isItemHovered()) {
+                    ImGui.setTooltip(slots[i].name);
+                }
 
                 if (i == slotSelected) {
                     ImGui.getWindowDrawList().addLine(iX + 32, iY, iX + 32, iY + 32, selectedColor);

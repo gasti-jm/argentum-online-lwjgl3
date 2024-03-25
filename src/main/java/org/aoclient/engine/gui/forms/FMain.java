@@ -198,19 +198,17 @@ public final class FMain extends Form {
         // lblCoords (color)
         ImGui.setCursorPos(590, 574);
         ImGui.pushStyleVar(ImGuiStyleVar.SelectableTextAlign, 0.5f, 0.5f);
-        //ImGui.pushStyleColor(ImGuiCol.HeaderHovered, ImGui.getColorU32(0f, 0f, 0f, 0f));
-        //ImGui.pushStyleColor(ImGuiCol.HeaderActive, ImGui.getColorU32(0f, 0f, 0f, 0f));
+        ImGui.pushStyleColor(ImGuiCol.HeaderHovered, ImGui.getColorU32(0f, 0f, 0f, 0f));
+        ImGui.pushStyleColor(ImGuiCol.HeaderActive, ImGui.getColorU32(0f, 0f, 0f, 0f));
         ImGui.pushStyleColor(ImGuiCol.Text, ImGui.getColorU32(1f, 1f, 0f, 1f));
 
         ImGui.selectable(dataUser.getUserMap() + " X:" + User.get().getUserPos().getX() + " Y:" + User.get().getUserPos().getY(),
                 false, ImGuiSelectableFlags.None, 90, 12);
 
         ImGui.popStyleColor();
-        //ImGui.popStyleColor();
-        //ImGui.popStyleColor();
+        ImGui.popStyleColor();
+        ImGui.popStyleColor();
         ImGui.popStyleVar();
-
-
 
 
 
