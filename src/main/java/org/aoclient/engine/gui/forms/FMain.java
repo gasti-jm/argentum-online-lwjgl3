@@ -3,10 +3,7 @@ package org.aoclient.engine.gui.forms;
 import imgui.ImDrawList;
 import imgui.ImGui;
 
-import imgui.flag.ImGuiCol;
-import imgui.flag.ImGuiCond;
-import imgui.flag.ImGuiInputTextFlags;
-import imgui.flag.ImGuiWindowFlags;
+import imgui.flag.*;
 import imgui.type.ImString;
 import org.aoclient.engine.Engine;
 import org.aoclient.engine.Window;
@@ -52,35 +49,70 @@ public final class FMain extends Form {
                 ImGuiWindowFlags.NoBringToFrontOnFocus);
 
 
-        //ImGui.setWindowFocus(formName);
         ImGui.getWindowDrawList().addImage(backgroundImage, 0, 0, Window.get().getWidth(), Window.get().getHeight());
 
         this.drawShapes();
 
         // LBL FPS
         final String txtFPS = String.valueOf(FPS);
-        ImGui.setCursorPos(centerTextValue(459, txtFPS.length()), 4);
-        ImGui.text(txtFPS);
+        ImGui.setCursorPos(448, 4);
+        ImGui.pushStyleVar(ImGuiStyleVar.SelectableTextAlign, 0.5f, 0.5f);
+        ImGui.pushStyleColor(ImGuiCol.HeaderHovered, ImGui.getColorU32(0f, 0f, 0f, 0f));
+        ImGui.pushStyleColor(ImGuiCol.HeaderActive, ImGui.getColorU32(0f, 0f, 0f, 0f));
+        ImGui.selectable(txtFPS, false, ImGuiSelectableFlags.None, 28, 10);
+        ImGui.popStyleColor();
+        ImGui.popStyleColor();
+        ImGui.popStyleVar();
 
         // lblEnergia
-        ImGui.setCursorPos(589, 453);
-        ImGui.text(dataUser.getUserMinSTA() + "/" + dataUser.getUserMaxSTA());
+        ImGui.setCursorPos(591, 453);
+        ImGui.pushStyleVar(ImGuiStyleVar.SelectableTextAlign, 0.5f, 0.5f);
+        ImGui.pushStyleColor(ImGuiCol.HeaderHovered, ImGui.getColorU32(0f, 0f, 0f, 0f));
+        ImGui.pushStyleColor(ImGuiCol.HeaderActive, ImGui.getColorU32(0f, 0f, 0f, 0f));
+        ImGui.selectable(dataUser.getUserMinSTA() + "/" + dataUser.getUserMaxSTA(), false, ImGuiSelectableFlags.None, 69, 10);
+        ImGui.popStyleColor();
+        ImGui.popStyleColor();
+        ImGui.popStyleVar();
 
         // lblMana
-        ImGui.setCursorPos(589, 477);
-        ImGui.text(dataUser.getUserMinMAN() + "/" + dataUser.getUserMaxMAN());
+        ImGui.setCursorPos(591, 477);
+        ImGui.pushStyleVar(ImGuiStyleVar.SelectableTextAlign, 0.5f, 0.5f);
+        ImGui.pushStyleColor(ImGuiCol.HeaderHovered, ImGui.getColorU32(0f, 0f, 0f, 0f));
+        ImGui.pushStyleColor(ImGuiCol.HeaderActive, ImGui.getColorU32(0f, 0f, 0f, 0f));
+        ImGui.selectable(dataUser.getUserMinMAN() + "/" + dataUser.getUserMaxMAN(), false, ImGuiSelectableFlags.None, 69, 10);
+        ImGui.popStyleColor();
+        ImGui.popStyleColor();
+        ImGui.popStyleVar();
 
         // lblHP
-        ImGui.setCursorPos(589, 498);
-        ImGui.text(dataUser.getUserMinHP() + "/" + dataUser.getUserMaxHP());
+        ImGui.setCursorPos(591, 498);
+        ImGui.pushStyleVar(ImGuiStyleVar.SelectableTextAlign, 0.5f, 0.5f);
+        ImGui.pushStyleColor(ImGuiCol.HeaderHovered, ImGui.getColorU32(0f, 0f, 0f, 0f));
+        ImGui.pushStyleColor(ImGuiCol.HeaderActive, ImGui.getColorU32(0f, 0f, 0f, 0f));
+        ImGui.selectable(dataUser.getUserMinHP() + "/" + dataUser.getUserMaxHP(), false, ImGuiSelectableFlags.None, 69, 10);
+        ImGui.popStyleColor();
+        ImGui.popStyleColor();
+        ImGui.popStyleVar();
 
         // lblHambre
-        ImGui.setCursorPos(589, 521);
-        ImGui.text(dataUser.getUserMinHAM() + "/" + dataUser.getUserMaxHAM());
+        ImGui.setCursorPos(591, 521);
+        ImGui.pushStyleVar(ImGuiStyleVar.SelectableTextAlign, 0.5f, 0.5f);
+        ImGui.pushStyleColor(ImGuiCol.HeaderHovered, ImGui.getColorU32(0f, 0f, 0f, 0f));
+        ImGui.pushStyleColor(ImGuiCol.HeaderActive, ImGui.getColorU32(0f, 0f, 0f, 0f));
+        ImGui.selectable(dataUser.getUserMinHAM() + "/" + dataUser.getUserMaxHAM(), false, ImGuiSelectableFlags.None, 69, 10);
+        ImGui.popStyleColor();
+        ImGui.popStyleColor();
+        ImGui.popStyleVar();
 
         // lblSed
-        ImGui.setCursorPos(589, 542);
-        ImGui.text(dataUser.getUserMinAGU() + "/" + dataUser.getUserMaxAGU());
+        ImGui.setCursorPos(591, 542);
+        ImGui.pushStyleVar(ImGuiStyleVar.SelectableTextAlign, 0.5f, 0.5f);
+        ImGui.pushStyleColor(ImGuiCol.HeaderHovered, ImGui.getColorU32(0f, 0f, 0f, 0f));
+        ImGui.pushStyleColor(ImGuiCol.HeaderActive, ImGui.getColorU32(0f, 0f, 0f, 0f));
+        ImGui.selectable(dataUser.getUserMinAGU() + "/" + dataUser.getUserMaxAGU(), false, ImGuiSelectableFlags.None, 69, 10);
+        ImGui.popStyleColor();
+        ImGui.popStyleColor();
+        ImGui.popStyleVar();
 
         // lblLvl
         ImGui.setCursorPos(625, 78);
@@ -111,26 +143,76 @@ public final class FMain extends Form {
         ImGui.setCursorPos(650, 413);
         ImGui.textColored(0.1f, 0.6f, 0.1f, 1, String.valueOf(dataUser.getUserStrg()));
 
+
         // lblArmor (color)
-        ImGui.setCursorPos(104, 579);
-        ImGui.textColored(1, 0.0f, 0.0f, 1, dataUser.getUserArmourEqpDef());
+        ImGui.setCursorPos(88, 579);
+        ImGui.pushStyleVar(ImGuiStyleVar.SelectableTextAlign, 0.5f, 0.5f);
+        ImGui.pushStyleColor(ImGuiCol.HeaderHovered, ImGui.getColorU32(0f, 0f, 0f, 0f));
+        ImGui.pushStyleColor(ImGuiCol.HeaderActive, ImGui.getColorU32(0f, 0f, 0f, 0f));
+        ImGui.pushStyleColor(ImGuiCol.Text, ImGui.getColorU32(1f, 0f, 0f, 1f));
+        ImGui.selectable(dataUser.getUserArmourEqpDef(), false, ImGuiSelectableFlags.None, 45, 10);
+        ImGui.popStyleColor();
+        ImGui.popStyleColor();
+        ImGui.popStyleColor();
+        ImGui.popStyleVar();
 
         // lblShielder (color)
-        ImGui.setCursorPos(370, 579);
-        ImGui.textColored(1, 0.0f, 0.0f, 1, dataUser.getUserShieldEqpDef());
+        ImGui.setCursorPos(354, 579);
+        ImGui.pushStyleVar(ImGuiStyleVar.SelectableTextAlign, 0.5f, 0.5f);
+        ImGui.pushStyleColor(ImGuiCol.HeaderHovered, ImGui.getColorU32(0f, 0f, 0f, 0f));
+        ImGui.pushStyleColor(ImGuiCol.HeaderActive, ImGui.getColorU32(0f, 0f, 0f, 0f));
+        ImGui.pushStyleColor(ImGuiCol.Text, ImGui.getColorU32(1f, 0f, 0f, 1f));
+        ImGui.selectable(dataUser.getUserShieldEqpDef(), false, ImGuiSelectableFlags.None, 45, 10);
+        ImGui.popStyleColor();
+        ImGui.popStyleColor();
+        ImGui.popStyleColor();
+        ImGui.popStyleVar();
+
 
         // lblHelm (color)
-        ImGui.setCursorPos(222, 579);
-        ImGui.textColored(1, 0.0f, 0.0f, 1, dataUser.getUserHelmEqpDef());
+        ImGui.setCursorPos(206, 579);
+        ImGui.pushStyleVar(ImGuiStyleVar.SelectableTextAlign, 0.5f, 0.5f);
+        ImGui.pushStyleColor(ImGuiCol.HeaderHovered, ImGui.getColorU32(0f, 0f, 0f, 0f));
+        ImGui.pushStyleColor(ImGuiCol.HeaderActive, ImGui.getColorU32(0f, 0f, 0f, 0f));
+        ImGui.pushStyleColor(ImGuiCol.Text, ImGui.getColorU32(1f, 0f, 0f, 1f));
+        ImGui.selectable(dataUser.getUserHelmEqpDef(), false, ImGuiSelectableFlags.None, 45, 10);
+        ImGui.popStyleColor();
+        ImGui.popStyleColor();
+        ImGui.popStyleColor();
+        ImGui.popStyleVar();
+
 
         // lblWeapon (color)
-        ImGui.setCursorPos(488, 579);
-        ImGui.textColored(1, 0.0f, 0.0f, 1, dataUser.getUserWeaponEqpHit());
+        ImGui.setCursorPos(472, 579);
+        ImGui.pushStyleVar(ImGuiStyleVar.SelectableTextAlign, 0.5f, 0.5f);
+        ImGui.pushStyleColor(ImGuiCol.HeaderHovered, ImGui.getColorU32(0f, 0f, 0f, 0f));
+        ImGui.pushStyleColor(ImGuiCol.HeaderActive, ImGui.getColorU32(0f, 0f, 0f, 0f));
+        ImGui.pushStyleColor(ImGuiCol.Text, ImGui.getColorU32(1f, 0f, 0f, 1f));
+        ImGui.selectable(dataUser.getUserWeaponEqpHit(), false, ImGuiSelectableFlags.None, 45, 10);
+        ImGui.popStyleColor();
+        ImGui.popStyleColor();
+        ImGui.popStyleColor();
+        ImGui.popStyleVar();
+
 
         // lblCoords (color)
-        ImGui.setCursorPos(630, 571);
-        ImGui.textColored(1, 1, 0.0f, 1,
-                dataUser.getUserMap() + " X: " + User.get().getUserPos().getX() + " Y: " + User.get().getUserPos().getY());
+        ImGui.setCursorPos(590, 574);
+        ImGui.pushStyleVar(ImGuiStyleVar.SelectableTextAlign, 0.5f, 0.5f);
+        //ImGui.pushStyleColor(ImGuiCol.HeaderHovered, ImGui.getColorU32(0f, 0f, 0f, 0f));
+        //ImGui.pushStyleColor(ImGuiCol.HeaderActive, ImGui.getColorU32(0f, 0f, 0f, 0f));
+        ImGui.pushStyleColor(ImGuiCol.Text, ImGui.getColorU32(1f, 1f, 0f, 1f));
+
+        ImGui.selectable(dataUser.getUserMap() + " X:" + User.get().getUserPos().getX() + " Y:" + User.get().getUserPos().getY(),
+                false, ImGuiSelectableFlags.None, 90, 12);
+
+        ImGui.popStyleColor();
+        //ImGui.popStyleColor();
+        //ImGui.popStyleColor();
+        ImGui.popStyleVar();
+
+
+
+
 
         // lblName
         ImGui.setCursorPos(584, 24);
@@ -176,14 +258,11 @@ public final class FMain extends Form {
             ImGui.endPopup();
         }
 
-        // Inventory
+        /////// Inventory
         User.get().getUserInventory().drawInventory();
 
-
-        /////// console
+        /////// Console
         Console.get().drawConsole();
-
-
 
         ImGui.end();
     }

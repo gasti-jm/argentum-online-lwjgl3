@@ -54,10 +54,4 @@ public abstract class Form {
         return textureID;
     }
 
-    public int centerTextValue(int pos, int strLen) {
-        //final int midLen = strLen / 2;
-        final int midTotalSizePerLetter = (strLen * ImGui.getFontSize()) / 2;
-
-        return pos - midTotalSizePerLetter;
-    }
 }
