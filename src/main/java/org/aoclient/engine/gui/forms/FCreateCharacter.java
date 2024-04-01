@@ -19,7 +19,7 @@ import org.aoclient.engine.game.models.E_Raza;
 import org.aoclient.engine.gui.ImGUISystem;
 import org.aoclient.engine.renderer.RGBColor;
 import org.aoclient.engine.renderer.Surface;
-import org.aoclient.engine.renderer.TextureOGL;
+import org.aoclient.engine.renderer.Texture;
 import org.aoclient.engine.utils.structs.BodyData;
 
 import java.util.regex.Matcher;
@@ -33,7 +33,7 @@ import static org.aoclient.network.Protocol.*;
 
 public final class FCreateCharacter extends Form{
     // Necesito hacer esto para dibujar despues el cuerpo y cabeza por encima de la interfaz
-    private final TextureOGL background;
+    private final Texture background;
 
     // Text Boxes
     private final ImString txtNombre = new ImString(20);

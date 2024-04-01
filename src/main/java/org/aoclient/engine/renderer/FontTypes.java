@@ -50,7 +50,7 @@ public class FontTypes {
 
                 if (b != 32) {
                     if (font_types[fontIndex].ascii_code[b] != 0) {
-                        drawGrhIndex(font_types[fontIndex].ascii_code[b], (x + d), y, color);
+                        drawGrhIndex(font_types[fontIndex].ascii_code[b], (x + d) + 1, y, color);
                         d += grhData[font_types[fontIndex].ascii_code[b]].getPixelWidth();
                     }
                 } else {
@@ -74,7 +74,7 @@ public class FontTypes {
                     }
                 } else {
                     if (font_types[fontIndex].ascii_code[b] > 12) {
-                        drawGrhIndex(font_types[fontIndex].ascii_code[b], (x + d), y + f * 14, color);
+                        drawGrhIndex(font_types[fontIndex].ascii_code[b], (x + d) + 1, y + f * 14, color);
                         d += grhData[font_types[fontIndex].ascii_code[b]].getPixelWidth();
                     }
                 }

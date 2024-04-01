@@ -8,6 +8,10 @@ import imgui.flag.ImGuiWindowFlags;
 import imgui.type.ImString;
 import org.aoclient.engine.game.User;
 
+import javax.imageio.ImageIO;
+import java.io.File;
+import java.io.IOException;
+
 import static org.aoclient.network.Protocol.writeDrop;
 import static org.aoclient.engine.game.inventory.UserInventory.FLAGORO;
 
@@ -18,26 +22,36 @@ public final class FCantidad extends Form {
     public FCantidad() {
         this.formName = "frmCantidad";
         this.dropOro = false;
+
+        try {
+            this.backgroundImage = loadTexture(ImageIO.read(new File("resources/gui/VentanaTirarOro.jpg")));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public FCantidad(boolean dropOro) {
         this.formName = "frmCantidad";
         this.dropOro = dropOro;
+
+        try {
+            this.backgroundImage = loadTexture(ImageIO.read(new File("resources/gui/VentanaTirarOro.jpg")));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
     public void render() {
-        ImGui.setNextWindowSize(216, 98, ImGuiCond.Always);
+        ImGui.setNextWindowSize(225, 100, ImGuiCond.Always);
+        ImGui.begin(formName, ImGuiWindowFlags.NoTitleBar | ImGuiWindowFlags.NoResize | ImGuiWindowFlags.NoDecoration |
+                ImGuiWindowFlags.NoBackground);
 
-        ImGui.begin(formName, ImGuiWindowFlags.NoTitleBar | ImGuiWindowFlags.NoResize);
+        ImGui.setCursorPos(5, 0);
+        ImGui.image(backgroundImage, 216, 100);
 
 
-
-        //input text
-        ImGui.setCursorPos(30, 15);
-        ImGui.text("Cantidad:");
-
-        ImGui.setCursorPos(30, 30);
+        ImGui.setCursorPos(35, 30);
         ImGui.pushItemWidth(150);
             ImGui.pushID("cantidad");
                 ImGui.inputText("", cant, ImGuiInputTextFlags.CharsDecimal | ImGuiInputTextFlags.CallbackResize);
@@ -45,10 +59,8 @@ public final class FCantidad extends Form {
         ImGui.popItemWidth();
 
 
-        ImGui.separator();
-
         // buttons
-        ImGui.setCursorPos(14, 65);
+        ImGui.setCursorPos(20, 65);
         if (ImGui.button("Tirar", 89, 25)) {
 
             if (!cant.get().isEmpty()) {
@@ -66,7 +78,7 @@ public final class FCantidad extends Form {
             this.close();
         }
 
-        ImGui.setCursorPos(112, 65);
+        ImGui.setCursorPos(118, 65);
         if (ImGui.button("Tirar todo", 89, 25)) {
 
             if (!cant.get().isEmpty()) {

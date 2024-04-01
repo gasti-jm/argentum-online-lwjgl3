@@ -20,9 +20,11 @@ import static org.aoclient.engine.utils.Time.FPS;
 public final class FMain extends Form {
     private final ImString sendText     = new ImString();
     private final User dataUser         = User.get();
+    private boolean viewInventorySpells;
 
     public FMain() {
         this.formName = "frmMain";
+        this.viewInventorySpells = false;
 
         Console.get().clearConsole();
 
@@ -143,7 +145,6 @@ public final class FMain extends Form {
         ImGui.setCursorPos(650, 413);
         ImGui.textColored(0.1f, 0.6f, 0.1f, 1, String.valueOf(dataUser.getUserStrg()));
 
-
         // lblArmor (color)
         ImGui.setCursorPos(88, 579);
         ImGui.pushStyleVar(ImGuiStyleVar.SelectableTextAlign, 0.5f, 0.5f);
@@ -168,7 +169,6 @@ public final class FMain extends Form {
         ImGui.popStyleColor();
         ImGui.popStyleVar();
 
-
         // lblHelm (color)
         ImGui.setCursorPos(206, 579);
         ImGui.pushStyleVar(ImGuiStyleVar.SelectableTextAlign, 0.5f, 0.5f);
@@ -181,7 +181,6 @@ public final class FMain extends Form {
         ImGui.popStyleColor();
         ImGui.popStyleVar();
 
-
         // lblWeapon (color)
         ImGui.setCursorPos(472, 579);
         ImGui.pushStyleVar(ImGuiStyleVar.SelectableTextAlign, 0.5f, 0.5f);
@@ -193,7 +192,6 @@ public final class FMain extends Form {
         ImGui.popStyleColor();
         ImGui.popStyleColor();
         ImGui.popStyleVar();
-
 
         // lblCoords (color)
         ImGui.setCursorPos(590, 574);
@@ -209,8 +207,6 @@ public final class FMain extends Form {
         ImGui.popStyleColor();
         ImGui.popStyleColor();
         ImGui.popStyleVar();
-
-
 
         // lblName
         ImGui.setCursorPos(584, 24);
@@ -244,8 +240,6 @@ public final class FMain extends Form {
                         ImGui.inputText("", sendText, ImGuiInputTextFlags.CallbackResize);
                     ImGui.popID();
 
-
-
                 ImGui.popStyleColor();
             ImGui.popItemWidth();
         }
@@ -257,7 +251,8 @@ public final class FMain extends Form {
         }
 
         /////// Inventory
-        User.get().getUserInventory().drawInventory();
+        if(!viewInventorySpells)
+            User.get().getUserInventory().drawInventory();
 
         /////// Console
         Console.get().drawConsole();

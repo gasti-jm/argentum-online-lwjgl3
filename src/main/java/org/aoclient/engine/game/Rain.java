@@ -3,7 +3,7 @@ package org.aoclient.engine.game;
 import org.aoclient.engine.Sound;
 import org.aoclient.engine.renderer.RGBColor;
 import org.aoclient.engine.renderer.Surface;
-import org.aoclient.engine.renderer.TextureOGL;
+import org.aoclient.engine.renderer.Texture;
 
 import static org.aoclient.engine.renderer.Drawn.geometryBoxRender;
 import static org.aoclient.engine.utils.GameData.bLluvia;
@@ -16,7 +16,7 @@ public class Rain {
         private int top, left, right, bottom;
     }
 
-    private final TextureOGL rainTexture;
+    private final Texture rainTexture;
 
     private boolean bRain;
     private final RECT[] RLluvia;

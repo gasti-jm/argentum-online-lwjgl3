@@ -30,12 +30,11 @@ public final class Drawn {
         if (blend)
             glBlendFunc(GL_SRC_ALPHA, GL_ONE);
 
-        TextureOGL texture = Surface.get().getTexture(grhData[grh_index].getFileNum());
-
+        final Texture texture = Surface.get().getTexture(grhData[grh_index].getFileNum());
         final float src_right = sX + src_width;
         final float src_bottom = sY + src_height;
 
-        glBindTexture(GL_TEXTURE_2D, texture.id);
+        texture.bind();
         glBegin(GL_QUADS);
 
         {
@@ -43,31 +42,32 @@ public final class Drawn {
             //  |    |
             //  1----0
             glColor4f(color.getRed(), color.getGreen(), color.getBlue(), alpha);
-            glTexCoord2f (sX / texture.tex_width, (src_bottom) / texture.tex_height);
+            glTexCoord2f (sX / texture.getTex_width(), (src_bottom) / texture.getTex_height());
             glVertex2d(x, y + src_height);
 
             //  1----0
             //  |    |
             //  0----0
             glColor4f(color.getRed(), color.getGreen(), color.getBlue(), alpha);
-            glTexCoord2f(sX / texture.tex_width, sY / texture.tex_height);
+            glTexCoord2f(sX / texture.getTex_width(), sY / texture.getTex_height());
             glVertex2d(x, y);
 
             //  0----1
             //  |    |
             //  0----0
             glColor4f(color.getRed(), color.getGreen(), color.getBlue(), alpha);
-            glTexCoord2f((src_right) / texture.tex_width, sY / texture.tex_height);
+            glTexCoord2f((src_right) / texture.getTex_width(), sY / texture.getTex_height());
             glVertex2d(x + src_width, y);
 
             //  0----0
             //  |    |
             //  0----1
             glColor4f(color.getRed(), color.getGreen(), color.getBlue(), alpha);
-            glTexCoord2f((src_right) / texture.tex_width, (src_bottom) / texture.tex_height);
+            glTexCoord2f((src_right) / texture.getTex_width(), (src_bottom) / texture.getTex_height());
             glVertex2d(x + src_width, y + src_height);
         }
 
+        texture.unbind();
         glEnd();
 
         if (blend)
@@ -78,8 +78,8 @@ public final class Drawn {
      *
      * @desc: Lo mismo pero para interfaces de usuario.
      */
-    public static void geometryBoxRenderGUI(TextureOGL texture, int x, int y, float alpha) {
-        glBindTexture(GL_TEXTURE_2D, texture.id);
+    public static void geometryBoxRenderGUI(Texture texture, int x, int y, float alpha) {
+        texture.bind();
         glBegin(GL_QUADS);
 
         {
@@ -88,7 +88,7 @@ public final class Drawn {
             //  1----0
             glColor4f(1.0f, 1.0f, 1.0f, alpha);
             glTexCoord2f (0, 1);
-            glVertex2d(x, y + texture.tex_height);
+            glVertex2d(x, y + texture.getTex_height());
 
             //  1----0
             //  |    |
@@ -102,30 +102,31 @@ public final class Drawn {
             //  0----0
             glColor4f(1.0f, 1.0f, 1.0f, alpha);
             glTexCoord2f(1, 0);
-            glVertex2d(x + texture.tex_width, y);
+            glVertex2d(x + texture.getTex_width(), y);
 
             //  0----0
             //  |    |
             //  0----1
             glColor4f(1.0f, 1.0f, 1.0f, alpha);
             glTexCoord2f(1, 1);
-            glVertex2d(x + texture.tex_width, y + texture.tex_height);
+            glVertex2d(x + texture.getTex_width(), y + texture.getTex_height());
         }
 
+        texture.unbind();
         glEnd();
     }
 
     /**
      * Lo mismo pero con una textura ya cargada.
      */
-    public static void geometryBoxRender(TextureOGL texture, int x, int y, int src_width, int src_height, float sX, float sY, boolean blend, float alpha, RGBColor color) {
+    public static void geometryBoxRender(Texture texture, int x, int y, int src_width, int src_height, float sX, float sY, boolean blend, float alpha, RGBColor color) {
         if (blend)
             glBlendFunc(GL_SRC_ALPHA, GL_ONE);
 
         final float src_right = sX + src_width;
         final float src_bottom = sY + src_height;
 
-        glBindTexture(GL_TEXTURE_2D, texture.id);
+        texture.bind();
         glBegin(GL_QUADS);
 
         {
@@ -133,31 +134,32 @@ public final class Drawn {
             //  |    |
             //  1----0
             glColor4f(color.getRed(), color.getGreen(), color.getBlue(), alpha);
-            glTexCoord2f (sX / texture.tex_width, (src_bottom) / texture.tex_height);
+            glTexCoord2f (sX / texture.getTex_width(), (src_bottom) / texture.getTex_height());
             glVertex2d(x, y + src_height);
 
             //  1----0
             //  |    |
             //  0----0
             glColor4f(color.getRed(), color.getGreen(), color.getBlue(), alpha);
-            glTexCoord2f(sX / texture.tex_width, sY / texture.tex_height);
+            glTexCoord2f(sX / texture.getTex_width(), sY / texture.getTex_height());
             glVertex2d(x, y);
 
             //  0----1
             //  |    |
             //  0----0
             glColor4f(color.getRed(), color.getGreen(), color.getBlue(), alpha);
-            glTexCoord2f((src_right) / texture.tex_width, sY / texture.tex_height);
+            glTexCoord2f((src_right) / texture.getTex_width(), sY / texture.getTex_height());
             glVertex2d(x + src_width, y);
 
             //  0----0
             //  |    |
             //  0----1
             glColor4f(color.getRed(), color.getGreen(), color.getBlue(), alpha);
-            glTexCoord2f((src_right) / texture.tex_width, (src_bottom) / texture.tex_height);
+            glTexCoord2f((src_right) / texture.getTex_width(), (src_bottom) / texture.getTex_height());
             glVertex2d(x + src_width, y + src_height);
         }
 
+        texture.unbind();
         glEnd();
 
         if (blend)
@@ -281,6 +283,7 @@ public final class Drawn {
 
         if (currentGrhIndex == 0 || grhData[currentGrhIndex].getFileNum() == 0)
             return;
+
 
         geometryBoxRender(currentGrhIndex, x, y,
                 grhData[currentGrhIndex].getPixelWidth(),

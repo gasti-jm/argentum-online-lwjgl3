@@ -2,10 +2,7 @@ package org.aoclient.engine.scenes;
 
 import org.aoclient.engine.listeners.KeyListener;
 import org.aoclient.engine.renderer.Surface;
-import org.aoclient.engine.renderer.TextureOGL;
-
-import java.util.ArrayList;
-import java.util.List;
+import org.aoclient.engine.renderer.Texture;
 
 import static org.aoclient.engine.renderer.Drawn.geometryBoxRenderGUI;
 import static org.aoclient.engine.utils.Time.*;
@@ -24,14 +21,14 @@ public final class IntroScene extends Scene {
     private int     nextInterface       = 1;
     private float   alphaInterface;
 
-    private TextureOGL[] imgs;
+    private Texture[] imgs;
 
     @Override
     public void init() {
         super.init();
         this.alphaInterface = 0.0f;
         this.canChangeTo = SceneType.MAIN_SCENE;
-        this.imgs = new TextureOGL[4];
+        this.imgs = new Texture[4];
 
         this.imgs[0] = Surface.get().createTexture("resources/gui/noland.jpg", true);
         this.imgs[1] = Surface.get().createTexture("resources/gui/Presentacion5.jpg", true);

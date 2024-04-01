@@ -81,18 +81,18 @@ public final class Window {
         // Sacamos esto por ahora, sino no va a ser compatible con linux. Habria que testiar en MacOS
         //glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
         //glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GLFW_TRUE);
-        //glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-        //glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+//        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+//        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
 
         glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
         glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
         glfwWindowHint(GLFW_MAXIMIZED, GLFW_FALSE);
         glfwWindowHint(GLFW_DECORATED, GLFW_FALSE);
 
-        //glfwGetPrimaryMonitor()// permite pantalla completa. (PRIMER PARAMETRO NULL)
         // Create the window
         window = glfwCreateWindow(this.width, this.height, this.title,
-                options.isFullscreen() ? glfwGetPrimaryMonitor() : NULL, NULL);
+                options.isFullscreen() ? glfwGetPrimaryMonitor() : NULL,
+                NULL);
 
         if (window == NULL) {
             throw new IllegalStateException("Failed to create the GLFW window.");

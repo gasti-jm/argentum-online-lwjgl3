@@ -4,7 +4,7 @@ import org.aoclient.engine.game.models.E_ObjType;
 import org.aoclient.engine.listeners.MouseListener;
 import org.aoclient.engine.renderer.RGBColor;
 import org.aoclient.engine.renderer.Surface;
-import org.aoclient.engine.renderer.TextureOGL;
+import org.aoclient.engine.renderer.Texture;
 
 import static org.aoclient.engine.renderer.Drawn.*;
 import static org.aoclient.engine.renderer.FontTypes.NORMAL_FONT;
@@ -36,7 +36,7 @@ public class Inventory {
         short maxHit;
         short minHit;
 
-        TextureOGL objTexture;
+        Texture objTexture;
 
     }
 
@@ -112,7 +112,6 @@ public class Inventory {
         int iX = posX;
         int iY = posY;
 
-        drawRectangle(posX, posY, sWidth, sHeigth, null);
         for (int i = 0; i < slots.length; i++) {
 
             if (slots[i].grhIndex > 0) {
