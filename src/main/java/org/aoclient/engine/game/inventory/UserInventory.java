@@ -34,12 +34,15 @@ public final class UserInventory extends Inventory {
     private final IntervalTimer intervalEquipItem = new IntervalTimer(INT_EQUIP_ITEM);
     private static final int selectedColor = ImGui.getColorU32(0f, 1f, 0f, 1f);
 
+    private boolean visible;
+
 
     /**
      * Inventory user constructor
      */
     public UserInventory(){
         super(MAIN_POS_X, MAIN_POS_Y, MAIN_SIZE_WIDTH, MAIN_SIZE_HEIGHT, MAX_INVENTORY_SLOTS);
+        this.visible = true;
     }
 
     /**
@@ -93,6 +96,9 @@ public final class UserInventory extends Inventory {
      * @desc Realiza una accion al hacer doble click dentro del inventario.
      */
     public void dobleClickInventory() {
+        if (!visible) return;
+
+
         final int x = (int) ((MouseListener.getX() - posX) / TILE_PIXEL_SIZE);
         final int y = (int) ((MouseListener.getY() - posY) / TILE_PIXEL_SIZE);
 
@@ -123,6 +129,10 @@ public final class UserInventory extends Inventory {
         if (slots[slotSelected].grhIndex > 0 && slots[slotSelected].objType.equippable && intervalEquipItem.check()) {
             writeEquipItem(this.slotSelected + 1);
         }
+    }
+
+    public void setVisible(boolean value) {
+        this.visible = value;
     }
 
 }

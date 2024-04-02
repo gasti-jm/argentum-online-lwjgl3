@@ -4,9 +4,13 @@ import imgui.ImGui;
 import imgui.flag.ImGuiCond;
 import imgui.flag.ImGuiWindowFlags;
 import imgui.type.ImInt;
+import org.aoclient.engine.game.models.E_Skills;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+
+import static org.aoclient.network.Protocol.*;
 
 public class InventorySpells {
     private static final int MAX_INVENTORY_SPELLS = 35;
@@ -25,9 +29,9 @@ public class InventorySpells {
     }
 
     public void draw() {
-
         ImGui.setNextWindowPos(595, 159);
-        ImGui.setNextWindowSize(250, 250, ImGuiCond.Once);
+        ImGui.setNextWindowSize(250, 171, ImGuiCond.Once);
+
         ImGui.begin("InventorySpells", ImGuiWindowFlags.NoTitleBar
                 | ImGuiWindowFlags.NoBackground
                 | ImGuiWindowFlags.NoResize
@@ -38,12 +42,20 @@ public class InventorySpells {
         ImGui.listBox("", currentItemSpell, spells);
         ImGui.popID();
 
-
         ImGui.end();
 
+        ImGui.setCursorPos(589, 353);
+        if(ImGui.button("Throw Spell", 77, 25)) {
+            this.buttonThrowSpell();
+        }
+
+        ImGui.setCursorPos(717, 353);
+        if(ImGui.button("Info Spell", 57, 27)) {
+            this.buttonInfoSpell();
+        }
     }
 
-    public void addSpell(String spell) {
+    public void addSpell(final String spell) {
         if (spellsAdded.size() == MAX_INVENTORY_SPELLS - 1) {
             spellsAdded.add(spell);
 
@@ -55,5 +67,16 @@ public class InventorySpells {
         } else {
             spellsAdded.add(spell);
         }
+    }
+
+    public void buttonThrowSpell(){
+        if(!spells[currentItemSpell.get()].equals("(None)")) {
+            writeCastSpell(currentItemSpell.get() + 1);
+            writeWork(E_Skills.Magia.value);
+        }
+    }
+
+    public void buttonInfoSpell() {
+        writeSpellInfo(currentItemSpell.get() + 1);
     }
 }

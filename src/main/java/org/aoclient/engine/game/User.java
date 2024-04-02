@@ -67,6 +67,8 @@ public final class User {
 
     private boolean talking;
 
+    private int usingSkill;
+
     /**
      * @desc: Constructor privado por singleton.
      */
@@ -701,5 +703,13 @@ public final class User {
 
     public void setUserNavegando(boolean userNavegando) {
         this.userNavegando = userNavegando;
+    }
+
+    public int getUsingSkill() {
+        return usingSkill;
+    }
+
+    public void setUsingSkill(int usingSkill) {
+        this.usingSkill = usingSkill;
     }
 }

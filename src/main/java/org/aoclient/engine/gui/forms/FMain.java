@@ -22,15 +22,18 @@ public final class FMain extends Form {
     private final ImString sendText     = new ImString();
     private final User dataUser         = User.get();
     private boolean viewInventory;
+    private int backgroundInventorySpells;
 
     public FMain() {
         this.formName = "frmMain";
         this.viewInventory = true;
+        User.get().getUserInventory().setVisible(true);
 
         Console.get().clearConsole();
 
         try {
             this.backgroundImage = loadTexture(ImageIO.read(new File("resources/gui/VentanaPrincipal.png")));
+            this.backgroundInventorySpells = loadTexture(ImageIO.read(new File("resources/gui/Centrohechizos.jpg")));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -259,11 +262,13 @@ public final class FMain extends Form {
 
         ImGui.setCursorPos(592, 128);
         if (ImGui.invisibleButton("ViewInvetory", 93, 30)) {
+            User.get().getUserInventory().setVisible(true);
             this.viewInventory = true;
         }
 
         ImGui.setCursorPos(688, 128);
         if (ImGui.invisibleButton("ViewInvetorySpells", 75, 30)) {
+            User.get().getUserInventory().setVisible(false);
             this.viewInventory = false;
         }
 
@@ -271,6 +276,8 @@ public final class FMain extends Form {
         if(viewInventory) {
             User.get().getUserInventory().drawInventory();
         } else {
+            ImGui.setCursorPos(586, 126);
+            ImGui.image(backgroundInventorySpells, 198, 282);
             User.get().getInventorySpells().draw();
         }
 

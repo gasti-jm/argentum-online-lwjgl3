@@ -396,38 +396,39 @@ public class Protocol {
                 break;
 
             case WorkRequestTarget:
-                int usingSkill = incomingData.readByte();
+                final int usingSkill = incomingData.readByte();
+                User.get().setUsingSkill(usingSkill);
 
                 Window.get().setCursorCrosshair(true);
 
-                switch (usingSkill) {
-                    case 0: // magia
+                switch(E_Skills.values()[usingSkill - 1]){
+                    case Magia:
                         Console.get().addMsgToConsole(MENSAJE_TRABAJO_MAGIA, false, false, new RGBColor());
                         break;
 
-                    case 1:
+                    case Pesca:
                         Console.get().addMsgToConsole(MENSAJE_TRABAJO_PESCA, false, false, new RGBColor());
                         break;
 
-                    case 2:
+                    case Robar:
                         Console.get().addMsgToConsole(MENSAJE_TRABAJO_ROBAR, false, false, new RGBColor());
                         break;
 
-                    case 3:
+                    case Talar:
                         Console.get().addMsgToConsole(MENSAJE_TRABAJO_TALAR, false, false, new RGBColor());
                         break;
 
-                    case 4:
+                    case Mineria:
                         Console.get().addMsgToConsole(MENSAJE_TRABAJO_MINERIA, false, false, new RGBColor());
                         break;
 
-                    case 5:
-                        Console.get().addMsgToConsole(MENSAJE_TRABAJO_FUNDIRMETAL, false, false, new RGBColor());
-                        break;
-
-                    case 6:
+                    case Proyectiles:
                         Console.get().addMsgToConsole(MENSAJE_TRABAJO_PROYECTILES, false, false, new RGBColor());
                         break;
+                }
+
+                if (usingSkill == FundirMetal) {
+                    Console.get().addMsgToConsole(MENSAJE_TRABAJO_FUNDIRMETAL, false, false, new RGBColor());
                 }
                 break;
 
@@ -2069,11 +2070,12 @@ public class Protocol {
         // Remove packet ID
         incomingData.readByte();
 
-        final int usingSkills = incomingData.readByte();
+        final int usingSkill = incomingData.readByte();
+        User.get().setUsingSkill(usingSkill);
 
         Window.get().setCursorCrosshair(true);
 
-        switch(E_Skills.values()[usingSkills - 1]){
+        switch(E_Skills.values()[usingSkill - 1]){
             case Magia:
                 Console.get().addMsgToConsole(MENSAJE_TRABAJO_MAGIA, false, false, new RGBColor());
                 break;
@@ -2099,7 +2101,7 @@ public class Protocol {
                 break;
         }
 
-        if (usingSkills == FundirMetal) {
+        if (usingSkill == FundirMetal) {
             Console.get().addMsgToConsole(MENSAJE_TRABAJO_FUNDIRMETAL, false, false, new RGBColor());
         }
 
@@ -3309,6 +3311,13 @@ public class Protocol {
         outgoingData.writeByte(y);
     }
 
+    public static void writeWorkLeftClick(int x, int y, int skill) {
+        outgoingData.writeByte(ClientPacketID.WorkLeftClick.ordinal());
+        outgoingData.writeByte(x);
+        outgoingData.writeByte(y);
+        outgoingData.writeByte(skill);
+    }
+
     public static void writeDoubleClick(int x, int y) {
         outgoingData.writeByte(ClientPacketID.DoubleClick.ordinal());
         outgoingData.writeByte(x);
@@ -3325,7 +3334,7 @@ public class Protocol {
         outgoingData.writeByte(slot);
     }
 
-    public static void writeWork(byte skill) {
+    public static void writeWork(int skill) {
         if(User.get().isDead()) {
             Console.get().addMsgToConsole(new String("¡¡Estás muerto!!".getBytes(), StandardCharsets.UTF_8),
                     false, true, new RGBColor());
@@ -3337,6 +3346,11 @@ public class Protocol {
         outgoingData.writeByte(skill);
     }
 
+    public static void writeCastSpell(int slot) {
+        outgoingData.writeByte(ClientPacketID.CastSpell.ordinal());
+        outgoingData.writeByte(slot);
+    }
+
     public static void writeQuit() {
         if(charList[User.get().getUserCharIndex()].isParalizado()) {
             Console.get().addMsgToConsole(new String("No puedes salir estando paralizado.".getBytes(), StandardCharsets.UTF_8),
@@ -3346,6 +3360,11 @@ public class Protocol {
         }
 
         outgoingData.writeByte(ClientPacketID.Quit.ordinal());
+    }
+
+    public static void writeSpellInfo(final int slot) {
+        outgoingData.writeByte(ClientPacketID.SpellInfo.ordinal());
+        outgoingData.writeByte(slot);
     }
 
 }

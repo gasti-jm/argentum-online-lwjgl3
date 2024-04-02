@@ -102,9 +102,17 @@ public final class GameScene extends Scene {
         // Estamos haciendo click en el render?
         if(inGameArea()) {
             if (MouseListener.mouseButtonClick(GLFW_MOUSE_BUTTON_LEFT)) {
-                Window.get().setCursorCrosshair(false);
 
-                writeLeftClick(getTileMouseX((int) MouseListener.getX() - POS_SCREEN_X), getTileMouseY((int) MouseListener.getY() - POS_SCREEN_Y));
+                if (user.getUsingSkill() == 0) {
+                    writeLeftClick(getTileMouseX((int) MouseListener.getX() - POS_SCREEN_X), getTileMouseY((int) MouseListener.getY() - POS_SCREEN_Y));
+                } else {
+                    writeWorkLeftClick(getTileMouseX((int) MouseListener.getX() - POS_SCREEN_X),
+                            getTileMouseY((int) MouseListener.getY() - POS_SCREEN_Y),
+                            user.getUsingSkill());
+
+                    user.setUsingSkill(0);
+                    Window.get().setCursorCrosshair(false);
+                }
             }
         }
 
