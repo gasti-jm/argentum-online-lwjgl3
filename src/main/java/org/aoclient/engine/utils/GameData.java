@@ -16,6 +16,7 @@ import static org.aoclient.engine.Sound.*;
 import static org.aoclient.engine.game.models.Character.eraseAllChars;
 import static org.aoclient.engine.renderer.FontTypes.loadFontTypes;
 import static org.aoclient.engine.utils.ByteMigration.*;
+import static org.aoclient.network.Messages.loadMessages;
 
 /**
  * Clase en donde se carga todos los archivos necesarios del juego.
@@ -57,6 +58,7 @@ public final class GameData {
         loadFxs();
         loadFK();
         loadFontTypes();
+        loadMessages("es");
     }
 
 

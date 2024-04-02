@@ -1,6 +1,8 @@
 package org.aoclient.network;
 
-import java.nio.charset.StandardCharsets;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 
@@ -8,76 +10,221 @@ import static java.nio.charset.StandardCharsets.UTF_8;
  * Aqui solo hay constantes de mensajes, estaria bueno guardarlas en un archivo.
  */
 public class Messages {
-    public static final String MENSAJE_CRIATURA_FALLA_GOLPE = new String("¡¡¡La criatura falló el golpe!!!".getBytes(), UTF_8);
-    public static final String MENSAJE_CRIATURA_MATADO = new String ("¡¡¡La criatura te ha matado!!!".getBytes(), UTF_8);
-    public static final String MENSAJE_RECHAZO_ATAQUE_ESCUDO = new String ("¡¡¡Has rechazado el ataque con el escudo!!!".getBytes(), UTF_8);
-    public static final String MENSAJE_USUARIO_RECHAZO_ATAQUE_ESCUDO = new String ("¡¡¡El usuario rechazó el ataque con su escudo!!!".getBytes(), UTF_8);
-    public static final String MENSAJE_FALLADO_GOLPE = new String("¡¡¡Has fallado el golpe!!!".getBytes(), UTF_8);
-    public static final String MENSAJE_SEGURO_ACTIVADO = new String(">>SEGURO ACTIVADO<<".getBytes(), UTF_8);
-    public static final String MENSAJE_SEGURO_DESACTIVADO = new String(">>SEGURO DESACTIVADO<<".getBytes(), UTF_8);
-    public static final String MENSAJE_PIERDE_NOBLEZA = new String("¡¡Has perdido puntaje de nobleza y ganado puntaje de criminalidd!! Si sigues ayudando a criminales te convertirás en uno de ellos y serás perseguido por las tropas de las ciudades.".getBytes(), UTF_8);
-    public static final String MENSAJE_USAR_MEDITANDO = new String("¡Estás meditando! Debes dejar de meditar para usar objetos.".getBytes(), UTF_8);
+    public static String MENSAJE_CRIATURA_FALLA_GOLPE;
+    public static String MENSAJE_CRIATURA_MATADO;
+    public static String MENSAJE_RECHAZO_ATAQUE_ESCUDO;
+    public static String MENSAJE_USUARIO_RECHAZO_ATAQUE_ESCUDO;
+    public static String MENSAJE_FALLADO_GOLPE;
+    public static String MENSAJE_SEGURO_ACTIVADO;
+    public static String MENSAJE_SEGURO_DESACTIVADO;
+    public static String MENSAJE_PIERDE_NOBLEZA;
+    public static String MENSAJE_USAR_MEDITANDO;
 
-    public static final String MENSAJE_SEGURO_RESU_ON = "SEGURO DE RESURRECCION ACTIVADO";
-    public static final String MENSAJE_SEGURO_RESU_OFF = "SEGURO DE RESURRECCION DESACTIVADO";
+    public static String MENSAJE_SEGURO_RESU_ON;
+    public static String MENSAJE_SEGURO_RESU_OFF;
 
-    public static final String MENSAJE_GOLPE_CABEZA = new String("¡¡La criatura te ha pegado en la cabeza por ".getBytes(), UTF_8);
-    public static final String MENSAJE_GOLPE_BRAZO_IZQ = new String("¡¡La criatura te ha pegado el brazo izquierdo por ".getBytes(), UTF_8);
-    public static final String MENSAJE_GOLPE_BRAZO_DER = new String("¡¡La criatura te ha pegado el brazo derecho por ".getBytes(), UTF_8);
-    public static final String MENSAJE_GOLPE_PIERNA_IZQ = new String("¡¡La criatura te ha pegado la pierna izquierda por ".getBytes(), UTF_8);
-    public static final String MENSAJE_GOLPE_PIERNA_DER = new String("¡¡La criatura te ha pegado la pierna derecha por ".getBytes(), UTF_8);
-    public static final String MENSAJE_GOLPE_TORSO  = new String("¡¡La criatura te ha pegado en el torso por ".getBytes(), UTF_8);
+    public static String MENSAJE_GOLPE_CABEZA;
+    public static String MENSAJE_GOLPE_BRAZO_IZQ;
+    public static String MENSAJE_GOLPE_BRAZO_DER;
+    public static String MENSAJE_GOLPE_PIERNA_IZQ;
+    public static String MENSAJE_GOLPE_PIERNA_DER;
+    public static String MENSAJE_GOLPE_TORSO;
 
     // MENSAJE_[12]: Aparecen antes y despues del valor de los mensajes anteriores (MENSAJE_GOLPE_*)
-    public static final String MENSAJE_1 = new String("¡¡".getBytes(), UTF_8);
-    public static final String MENSAJE_2 = new String("!!".getBytes(), UTF_8);
-    public static final String MENSAJE_11 = new String("¡".getBytes(), UTF_8);
-    public static final String MENSAJE_22 = new String("!".getBytes(), UTF_8);
+    public static String MENSAJE_1;
+    public static String MENSAJE_2;
+    public static String MENSAJE_11;
+    public static String MENSAJE_22;
 
-    public static final String MENSAJE_GOLPE_CRIATURA_1 = new String("¡¡Le has pegado a la criatura por ".getBytes(), UTF_8);
+    public static String MENSAJE_GOLPE_CRIATURA_1;
 
-    public static final String MENSAJE_ATAQUE_FALLO = new String(" te atacó y falló!!".getBytes(), UTF_8);
+    public static String MENSAJE_ATAQUE_FALLO;
 
-    public static final String MENSAJE_RECIVE_IMPACTO_CABEZA = " te ha pegado en la cabeza por ";
-    public static final String MENSAJE_RECIVE_IMPACTO_BRAZO_IZQ = " te ha pegado el brazo izquierdo por ";
-    public static final String MENSAJE_RECIVE_IMPACTO_BRAZO_DER = " te ha pegado el brazo derecho por ";
-    public static final String MENSAJE_RECIVE_IMPACTO_PIERNA_IZQ = " te ha pegado la pierna izquierda por ";
-    public static final String MENSAJE_RECIVE_IMPACTO_PIERNA_DER = " te ha pegado la pierna derecha por ";
-    public static final String MENSAJE_RECIVE_IMPACTO_TORSO = " te ha pegado en el torso por ";
+    public static String MENSAJE_RECIVE_IMPACTO_CABEZA;
+    public static String MENSAJE_RECIVE_IMPACTO_BRAZO_IZQ;
+    public static String MENSAJE_RECIVE_IMPACTO_BRAZO_DER;
+    public static String MENSAJE_RECIVE_IMPACTO_PIERNA_IZQ;
+    public static String MENSAJE_RECIVE_IMPACTO_PIERNA_DER;
+    public static String MENSAJE_RECIVE_IMPACTO_TORSO;
 
-    public static final String MENSAJE_PRODUCE_IMPACTO_1 = new String("¡¡Le has pegado a ".getBytes(), UTF_8);
-    public static final String MENSAJE_PRODUCE_IMPACTO_CABEZA = " en la cabeza por ";
-    public static final String MENSAJE_PRODUCE_IMPACTO_BRAZO_IZQ = " en el brazo izquierdo por ";
-    public static final String MENSAJE_PRODUCE_IMPACTO_BRAZO_DER = " en el brazo derecho por ";
-    public static final String MENSAJE_PRODUCE_IMPACTO_PIERNA_IZQ = " en la pierna izquierda por ";
-    public static final String MENSAJE_PRODUCE_IMPACTO_PIERNA_DER = " en la pierna derecha por ";
-    public static final String MENSAJE_PRODUCE_IMPACTO_TORSO = " en el torso por ";
+    public static String MENSAJE_PRODUCE_IMPACTO_1;
+    public static String MENSAJE_PRODUCE_IMPACTO_CABEZA;
+    public static String MENSAJE_PRODUCE_IMPACTO_BRAZO_IZQ ;
+    public static String MENSAJE_PRODUCE_IMPACTO_BRAZO_DER;
+    public static String MENSAJE_PRODUCE_IMPACTO_PIERNA_IZQ;
+    public static String MENSAJE_PRODUCE_IMPACTO_PIERNA_DER;
+    public static String MENSAJE_PRODUCE_IMPACTO_TORSO;
 
-    public static final String MENSAJE_TRABAJO_MAGIA = "Haz click sobre el objetivo...";
-    public static final String MENSAJE_TRABAJO_PESCA = "Haz click sobre el sitio donde quieres pescar...";
-    public static final String MENSAJE_TRABAJO_ROBAR = new String("Haz click sobre la víctima...".getBytes(), UTF_8);
-    public static final String MENSAJE_TRABAJO_TALAR = new String("Haz click sobre el árbol...".getBytes(), UTF_8);
-    public static final String MENSAJE_TRABAJO_MINERIA = "Haz click sobre el yacimiento...";
-    public static final String MENSAJE_TRABAJO_FUNDIRMETAL = "Haz click sobre la fragua...";
-    public static final String MENSAJE_TRABAJO_PROYECTILES = new String("Haz click sobre la víctima...".getBytes(), UTF_8);
+    public static String MENSAJE_TRABAJO_MAGIA;
+    public static String MENSAJE_TRABAJO_PESCA;
+    public static String MENSAJE_TRABAJO_ROBAR;
+    public static String MENSAJE_TRABAJO_TALAR;
+    public static String MENSAJE_TRABAJO_MINERIA;
+    public static String MENSAJE_TRABAJO_FUNDIRMETAL;
+    public static String MENSAJE_TRABAJO_PROYECTILES;
 
-    public static final String MENSAJE_ENTRAR_PARTY_1 = "Si deseas entrar en una party con ";
-    public static final String MENSAJE_ENTRAR_PARTY_2 = ", escribe /entrarparty";
+    public static String MENSAJE_ENTRAR_PARTY_1;
+    public static String MENSAJE_ENTRAR_PARTY_2;
 
-    public static final String MENSAJE_NENE = "Cantidad de NPCs: ";
+    public static String MENSAJE_NENE;
 
-    public static final String MENSAJE_FRAGSHOOTER_TE_HA_MATADO = new String("te ha matado!".getBytes(), UTF_8);
-    public static final String MENSAJE_FRAGSHOOTER_HAS_MATADO = "Has matado a";
-    public static final String MENSAJE_FRAGSHOOTER_HAS_GANADO = "Has ganado ";
-    public static final String MENSAJE_FRAGSHOOTER_PUNTOS_DE_EXPERIENCIA = "puntos de experiencia.";
+    public static String MENSAJE_FRAGSHOOTER_TE_HA_MATADO;
+    public static String MENSAJE_FRAGSHOOTER_HAS_MATADO;
+    public static String MENSAJE_FRAGSHOOTER_HAS_GANADO;
+    public static String MENSAJE_FRAGSHOOTER_PUNTOS_DE_EXPERIENCIA;
 
-    public static final String MENSAJE_NO_VES_NADA_INTERESANTE = "No ves nada interesante.";
-    public static final String MENSAJE_HAS_MATADO_A = "Has matado a ";
-    public static final String MENSAJE_HAS_GANADO_EXPE_1 = "Has ganado ";
-    public static final String MENSAJE_HAS_GANADO_EXPE_2 = " puntos de experiencia.";
-    public static final String MENSAJE_TE_HA_MATADO = new String(" te ha matado!".getBytes(), UTF_8);
+    public static String MENSAJE_NO_VES_NADA_INTERESANTE;
+    public static String MENSAJE_HAS_MATADO_A;
+    public static String MENSAJE_HAS_GANADO_EXPE_1;
+    public static String MENSAJE_HAS_GANADO_EXPE_2;
+    public static String MENSAJE_TE_HA_MATADO;
 
-    public static final String MENSAJE_HOGAR = "Has llegado a tu hogar. El viaje ha finalizado.";
-    public static final String MENSAJE_HOGAR_CANCEL = "Tu viaje ha sido cancelado.";
+    public static String MENSAJE_HOGAR;
+    public static String MENSAJE_HOGAR_CANCEL;
+
+
+
+    public static void loadMessages(String region) {
+        try (BufferedReader reader = new BufferedReader(new FileReader("resources/inits/strings_" + region +".ini"))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split("=");
+                if (parts.length == 2) {
+                    String option = parts[0].trim();
+                    String value = parts[1].trim();
+                    updateOption(option, value);
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * HAY QUE METER ESTO EN UN ARRAY O UN MAPA POR FAVOR.
+     *
+     * @param option El nombre del mensaje.
+     * @param value El nuevo valor del mensaje.
+     */
+    private static void updateOption(String option, String value) {
+        switch (option) {
+            case "MENSAJE_CRIATURA_FALLA_GOLPE":
+                  MENSAJE_CRIATURA_FALLA_GOLPE              = new String(value.getBytes(), UTF_8);      break;
+            case "MENSAJE_CRIATURA_MATADO":
+                  MENSAJE_CRIATURA_MATADO                   = new String(value.getBytes(), UTF_8);      break;
+            case "MENSAJE_RECHAZO_ATAQUE_ESCUDO":
+                MENSAJE_RECHAZO_ATAQUE_ESCUDO               = new String(value.getBytes(), UTF_8);      break;
+            case "MENSAJE_USUARIO_RECHAZO_ATAQUE_ESCUDO":
+                MENSAJE_USUARIO_RECHAZO_ATAQUE_ESCUDO       = new String(value.getBytes(), UTF_8);      break;
+            case "MENSAJE_FALLADO_GOLPE":
+                MENSAJE_FALLADO_GOLPE                       = new String(value.getBytes(), UTF_8);      break;
+            case "MENSAJE_SEGURO_ACTIVADO":
+                MENSAJE_SEGURO_ACTIVADO                     = new String(value.getBytes(), UTF_8);      break;
+            case "MENSAJE_SEGURO_DESACTIVADO":
+                MENSAJE_SEGURO_DESACTIVADO                  = new String(value.getBytes(), UTF_8);      break;
+            case "MENSAJE_PIERDE_NOBLEZA":
+                MENSAJE_PIERDE_NOBLEZA                      = new String(value.getBytes(), UTF_8);      break;
+            case "MENSAJE_USAR_MEDITANDO":
+                MENSAJE_USAR_MEDITANDO                      = new String(value.getBytes(), UTF_8);      break;
+            case "MENSAJE_SEGURO_RESU_ON":
+                MENSAJE_SEGURO_RESU_ON                      = new String(value.getBytes(), UTF_8);      break;
+            case "MENSAJE_SEGURO_RESU_OFF":
+                MENSAJE_SEGURO_RESU_OFF                     = new String(value.getBytes(), UTF_8);      break;
+            case "MENSAJE_GOLPE_CABEZA":
+                MENSAJE_GOLPE_CABEZA                        = new String(value.getBytes(), UTF_8);      break;
+            case "MENSAJE_GOLPE_BRAZO_IZQ":
+                MENSAJE_GOLPE_BRAZO_IZQ                     = new String(value.getBytes(), UTF_8);      break;
+            case "MENSAJE_GOLPE_BRAZO_DER":
+                MENSAJE_GOLPE_BRAZO_DER                     = new String(value.getBytes(), UTF_8);      break;
+            case "MENSAJE_GOLPE_PIERNA_IZQ":
+                MENSAJE_GOLPE_PIERNA_IZQ                    = new String(value.getBytes(), UTF_8);      break;
+            case "MENSAJE_GOLPE_PIERNA_DER":
+                MENSAJE_GOLPE_PIERNA_DER                    = new String(value.getBytes(), UTF_8);      break;
+            case "MENSAJE_GOLPE_TORSO":
+                MENSAJE_GOLPE_TORSO                         = new String(value.getBytes(), UTF_8);      break;
+            case "MENSAJE_1":
+                MENSAJE_1                                   = new String(value.getBytes(), UTF_8);      break;
+            case "MENSAJE_2":
+                MENSAJE_2                                   = new String(value.getBytes(), UTF_8);      break;
+            case "MENSAJE_11":
+                MENSAJE_11                                  = new String(value.getBytes(), UTF_8);      break;
+            case "MENSAJE_22":
+                MENSAJE_22                                  = new String(value.getBytes(), UTF_8);      break;
+            case "MENSAJE_GOLPE_CRIATURA_1":
+                MENSAJE_GOLPE_CRIATURA_1                    = new String(value.getBytes(), UTF_8);      break;
+            case "MENSAJE_ATAQUE_FALLO":
+                MENSAJE_ATAQUE_FALLO                        = new String(value.getBytes(), UTF_8);      break;
+            case "MENSAJE_RECIVE_IMPACTO_CABEZA":
+                MENSAJE_RECIVE_IMPACTO_CABEZA               = new String(value.getBytes(), UTF_8);      break;
+            case "MENSAJE_RECIVE_IMPACTO_BRAZO_IZQ":
+                MENSAJE_RECIVE_IMPACTO_BRAZO_IZQ            = new String(value.getBytes(), UTF_8);      break;
+            case "MENSAJE_RECIVE_IMPACTO_BRAZO_DER":
+                MENSAJE_RECIVE_IMPACTO_BRAZO_DER            = new String(value.getBytes(), UTF_8);      break;
+            case "MENSAJE_RECIVE_IMPACTO_PIERNA_IZQ":
+                MENSAJE_RECIVE_IMPACTO_PIERNA_IZQ           = new String(value.getBytes(), UTF_8);      break;
+            case "MENSAJE_RECIVE_IMPACTO_PIERNA_DER":
+                MENSAJE_RECIVE_IMPACTO_PIERNA_DER           = new String(value.getBytes(), UTF_8);      break;
+            case "MENSAJE_RECIVE_IMPACTO_TORSO":
+                MENSAJE_RECIVE_IMPACTO_TORSO                = new String(value.getBytes(), UTF_8);      break;
+            case "MENSAJE_PRODUCE_IMPACTO_1":
+                MENSAJE_PRODUCE_IMPACTO_1                   = new String(value.getBytes(), UTF_8);      break;
+            case "MENSAJE_PRODUCE_IMPACTO_CABEZA":
+                MENSAJE_PRODUCE_IMPACTO_CABEZA              = new String(value.getBytes(), UTF_8);      break;
+            case "MENSAJE_PRODUCE_IMPACTO_BRAZO_IZQ":
+                MENSAJE_PRODUCE_IMPACTO_BRAZO_IZQ           = new String(value.getBytes(), UTF_8);      break;
+            case "MENSAJE_PRODUCE_IMPACTO_BRAZO_DER":
+                MENSAJE_PRODUCE_IMPACTO_BRAZO_DER           = new String(value.getBytes(), UTF_8);      break;
+            case "MENSAJE_PRODUCE_IMPACTO_PIERNA_IZQ":
+                MENSAJE_PRODUCE_IMPACTO_PIERNA_IZQ          = new String(value.getBytes(), UTF_8);      break;
+            case "MENSAJE_PRODUCE_IMPACTO_PIERNA_DER":
+                MENSAJE_PRODUCE_IMPACTO_PIERNA_DER          = new String(value.getBytes(), UTF_8);      break;
+            case "MENSAJE_PRODUCE_IMPACTO_TORSO":
+                MENSAJE_PRODUCE_IMPACTO_TORSO               = new String(value.getBytes(), UTF_8);      break;
+            case "MENSAJE_TRABAJO_MAGIA":
+                MENSAJE_TRABAJO_MAGIA                       = new String(value.getBytes(), UTF_8);      break;
+            case "MENSAJE_TRABAJO_PESCA":
+                MENSAJE_TRABAJO_PESCA                       = new String(value.getBytes(), UTF_8);      break;
+            case "MENSAJE_TRABAJO_ROBAR":
+                MENSAJE_TRABAJO_ROBAR                       = new String(value.getBytes(), UTF_8);      break;
+            case "MENSAJE_TRABAJO_TALAR":
+                MENSAJE_TRABAJO_TALAR                       = new String(value.getBytes(), UTF_8);      break;
+            case "MENSAJE_TRABAJO_MINERIA":
+                MENSAJE_TRABAJO_MINERIA                     = new String(value.getBytes(), UTF_8);      break;
+            case "MENSAJE_TRABAJO_FUNDIRMETAL":
+                MENSAJE_TRABAJO_FUNDIRMETAL                 = new String(value.getBytes(), UTF_8);      break;
+            case "MENSAJE_TRABAJO_PROYECTILES":
+                MENSAJE_TRABAJO_PROYECTILES                 = new String(value.getBytes(), UTF_8);      break;
+            case "MENSAJE_ENTRAR_PARTY_1":
+                MENSAJE_ENTRAR_PARTY_1                      = new String(value.getBytes(), UTF_8);      break;
+            case "MENSAJE_ENTRAR_PARTY_2":
+                MENSAJE_ENTRAR_PARTY_2                      = new String(value.getBytes(), UTF_8);      break;
+            case "MENSAJE_NENE":
+                MENSAJE_NENE                                = new String(value.getBytes(), UTF_8);      break;
+            case "MENSAJE_FRAGSHOOTER_TE_HA_MATADO":
+                MENSAJE_FRAGSHOOTER_TE_HA_MATADO            = new String(value.getBytes(), UTF_8);      break;
+            case "MENSAJE_FRAGSHOOTER_HAS_MATADO":
+                MENSAJE_FRAGSHOOTER_HAS_MATADO              = new String(value.getBytes(), UTF_8);      break;
+            case "MENSAJE_FRAGSHOOTER_HAS_GANADO":
+                MENSAJE_FRAGSHOOTER_HAS_GANADO              = new String(value.getBytes(), UTF_8);      break;
+            case "MENSAJE_FRAGSHOOTER_PUNTOS_DE_EXPERIENCIA":
+                MENSAJE_FRAGSHOOTER_PUNTOS_DE_EXPERIENCIA   = new String(value.getBytes(), UTF_8);      break;
+            case "MENSAJE_NO_VES_NADA_INTERESANTE":
+                MENSAJE_NO_VES_NADA_INTERESANTE             = new String(value.getBytes(), UTF_8);      break;
+            case "MENSAJE_HAS_MATADO_A":
+                MENSAJE_HAS_MATADO_A                        = new String(value.getBytes(), UTF_8);      break;
+            case "MENSAJE_HAS_GANADO_EXPE_1":
+                MENSAJE_HAS_GANADO_EXPE_1                   = new String(value.getBytes(), UTF_8);      break;
+            case "MENSAJE_HAS_GANADO_EXPE_2":
+                MENSAJE_HAS_GANADO_EXPE_2                   = new String(value.getBytes(), UTF_8);      break;
+            case "MENSAJE_TE_HA_MATADO":
+                MENSAJE_TE_HA_MATADO                        = new String(value.getBytes(), UTF_8);      break;
+            case "MENSAJE_HOGAR":
+                MENSAJE_HOGAR                               = new String(value.getBytes(), UTF_8);      break;
+            case "MENSAJE_HOGAR_CANCEL":
+                MENSAJE_HOGAR_CANCEL                        = new String(value.getBytes(), UTF_8);      break;
+        }
+    }
+
+
 
 }
