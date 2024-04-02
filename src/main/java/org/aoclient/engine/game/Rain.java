@@ -7,6 +7,7 @@ import org.aoclient.engine.renderer.Texture;
 
 import static org.aoclient.engine.renderer.Drawn.geometryBoxRender;
 import static org.aoclient.engine.utils.GameData.bLluvia;
+import static org.aoclient.engine.utils.GameData.options;
 import static org.aoclient.engine.utils.Time.deltaTime;
 
 public class Rain {
@@ -111,6 +112,8 @@ public class Rain {
     }
 
     private void renderSound() {
+        if(!options.isSound()) return;
+
         if(bLluvia[User.get().getUserMap()] && bRain) {
             if(User.get().isUnderCeiling()) {
                 if(rainSounds[1].isPlaying()) rainSounds[1].stop();
@@ -123,6 +126,8 @@ public class Rain {
     }
 
     public void stopRainingSoundLoop() {
+        if(!options.isSound()) return;
+
         if(User.get().isUnderCeiling()) {
             rainSounds[0].stop();
         } else {
@@ -131,6 +136,8 @@ public class Rain {
     }
 
     public void playEndRainSound() {
+        if(!options.isSound()) return;
+
         if(bLluvia[User.get().getUserMap()]) {
             if(User.get().isUnderCeiling()) {
                 rainSounds[2].play();

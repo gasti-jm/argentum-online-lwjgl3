@@ -212,6 +212,12 @@ public final class FMain extends Form {
         ImGui.setCursorPos(584, 24);
         ImGui.textColored(1, 0.0f, 0.0f, 1, dataUser.getUserName());
 
+        // btnOptions
+        ImGui.setCursorPos(681, 485);
+        if(ImGui.invisibleButton("viewOptions", 95, 22)) {
+            ImGUISystem.get().checkAddOrChange("frmOpciones", new FOptions());
+        }
+
         // btnClose
         ImGui.setCursorPos(775, 3);
         if(ImGui.invisibleButton("close", 17, 17)) {

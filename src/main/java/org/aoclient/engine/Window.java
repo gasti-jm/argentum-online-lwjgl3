@@ -236,6 +236,41 @@ public final class Window {
         }
     }
 
+    public void toggleWindow(){
+        if (options.isFullscreen()) {
+            glfwSetWindowMonitor(window, glfwGetPrimaryMonitor(), 0, 0, width, height, GLFW_DONT_CARE);
+        } else {
+            glfwSetWindowMonitor(window, NULL,
+                    0,
+                    0,
+                    width, height, GLFW_DONT_CARE);
+
+            // Get the thread stack and push a new frame
+            try ( MemoryStack stack = stackPush() ) {
+                IntBuffer pWidth = stack.mallocInt(1); // int*
+                IntBuffer pHeight = stack.mallocInt(1); // int*
+
+                // Get the window size passed to glfwCreateWindow
+                glfwGetWindowSize(window, pWidth, pHeight);
+
+                GLFWVidMode vidmode = glfwGetVideoMode(glfwGetPrimaryMonitor());
+
+                // Center the window
+                glfwSetWindowPos(
+                        window,
+                        (vidmode.width() - pWidth.get(0)) / 2,
+                        (vidmode.height() - pHeight.get(0)) / 2
+                );
+            } // the stack frame is popped automatically
+        }
+
+        if (options.isVsync()) {
+            glfwSwapInterval(1);
+        } else {
+            glfwSwapInterval(0);
+        }
+    }
+
     /**
      * @desc Minimiza nuestra ventana
      */

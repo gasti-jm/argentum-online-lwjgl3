@@ -5,6 +5,8 @@ import imgui.flag.ImGuiCond;
 import imgui.flag.ImGuiWindowFlags;
 import org.aoclient.engine.renderer.RGBColor;
 
+import java.nio.charset.StandardCharsets;
+
 public class Console {
     private static Console instance;
 
@@ -16,7 +18,7 @@ public class Console {
      * Constructor privado por singleton.
      */
     private Console() {
-        this.consoleText        = "";
+        this.consoleText        = new String("".getBytes(), StandardCharsets.UTF_8);
         this.autoScroll         = true;
         this.scrollToBottom     = false;
     }

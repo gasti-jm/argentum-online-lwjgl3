@@ -1,10 +1,11 @@
 package org.aoclient.engine.gui.forms;
 
-import imgui.ImGui;
 import org.aoclient.engine.gui.ImGUISystem;
 import org.lwjgl.BufferUtils;
 
+import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.net.URI;
 import java.nio.ByteBuffer;
 
 import static org.lwjgl.opengl.GL11.*;
@@ -52,6 +53,23 @@ public abstract class Form {
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, image.getWidth(), image.getHeight(), 0, GL_RGBA, GL_UNSIGNED_BYTE, buffer);
 
         return textureID;
+    }
+
+    protected void abrirURL(String url) {
+        // Verifica si Desktop es compatible con la plataforma actual
+        if (Desktop.isDesktopSupported()) {
+            Desktop desktop = Desktop.getDesktop();
+            try {
+                // Crea una instancia de URI desde la URL
+                URI uri = new URI(url);
+                // Abrimos la URL en el navegador predeterminado
+                desktop.browse(uri);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else {
+            System.out.println("La apertura de URL no es compatible en esta plataforma.");
+        }
     }
 
 }

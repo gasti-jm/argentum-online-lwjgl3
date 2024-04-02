@@ -118,6 +118,31 @@ public final class FConnect extends Form {
             this.buttonCreateCharacter();
         }
 
+        ImGui.setCursorPos(149, 561);
+        if (ImGui.invisibleButton("Recovery", 89, 25)) {
+            // nothing to do yet..
+        }
+
+        ImGui.setCursorPos(253, 561);
+        if (ImGui.invisibleButton("Manual", 89, 25)) {
+            this.abrirURL("http://wiki.argentumonline.org/");
+        }
+
+        ImGui.setCursorPos(357, 561);
+        if (ImGui.invisibleButton("Rules", 89, 25)) {
+            this.abrirURL("http://wiki.argentumonline.org/reglamento.html");
+        }
+
+        ImGui.setCursorPos(461, 561);
+        if (ImGui.invisibleButton("Source code", 89, 25)) {
+            this.abrirURL("https://github.com/gasti-jm/argentum-online-lwjgl3");
+        }
+
+        ImGui.setCursorPos(565, 561);
+        if (ImGui.invisibleButton("Delete Character", 89, 25)) {
+            // nothing to do yet..
+        }
+
         ImGui.setCursorPos(669, 561);
         if (ImGui.invisibleButton("Exit", 89, 25)) {
             this.buttonExitGame();

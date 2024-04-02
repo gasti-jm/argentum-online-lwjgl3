@@ -50,14 +50,12 @@ public final class FCantidad extends Form {
         ImGui.setCursorPos(5, 0);
         ImGui.image(backgroundImage, 216, 100);
 
-
         ImGui.setCursorPos(35, 30);
         ImGui.pushItemWidth(150);
             ImGui.pushID("cantidad");
                 ImGui.inputText("", cant, ImGuiInputTextFlags.CharsDecimal | ImGuiInputTextFlags.CallbackResize);
             ImGui.popID();
         ImGui.popItemWidth();
-
 
         // buttons
         ImGui.setCursorPos(20, 65);
@@ -99,7 +97,6 @@ public final class FCantidad extends Form {
                     }
                 }
             }
-
 
             this.close();
         }
