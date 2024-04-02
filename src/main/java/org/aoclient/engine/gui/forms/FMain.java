@@ -33,7 +33,7 @@ public final class FMain extends Form {
 
         try {
             this.backgroundImage = loadTexture(ImageIO.read(new File("resources/gui/VentanaPrincipal.png")));
-            this.backgroundInventorySpells = loadTexture(ImageIO.read(new File("resources/gui/Centrohechizos.jpg")));
+            this.backgroundInventorySpells = loadTexture(ImageIO.read(new File("resources/gui/CentroHechizos.jpg")));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -280,6 +280,8 @@ public final class FMain extends Form {
             ImGui.image(backgroundInventorySpells, 198, 282);
             User.get().getInventorySpells().draw();
         }
+
+        User.get().getUserInventory().updateTimers();
 
         /////// Console
         Console.get().drawConsole();

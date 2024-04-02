@@ -45,13 +45,16 @@ public final class UserInventory extends Inventory {
         this.visible = true;
     }
 
+    public void updateTimers(){
+        intervalUseItem.update();
+        intervalEquipItem.update();
+    }
+
     /**
      * @desc: Actualiza y dibuja el inventario.
      */
     @Override
     public void drawInventory() {
-        intervalUseItem.update();
-        intervalEquipItem.update();
 
         if (slots.length == 0) return;
 
