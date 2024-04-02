@@ -1926,9 +1926,13 @@ public class Protocol {
         // Remove packet ID
         buffer.readByte();
 
-        int slot = buffer.readByte();
-        short hechizoNum = buffer.readInteger();
+        //int slot = buffer.readByte();
+        buffer.readByte();
+        //short hechizoNum = buffer.readInteger();
+        buffer.readInteger();
         String hechizoName = buffer.readASCIIString();
+
+        User.get().getInventorySpells().addSpell(hechizoName);
 
         incomingData.copyBuffer(buffer);
         Logger.debug("ChangeSpellSlot Cargado! - FALTA TERMINAR!");

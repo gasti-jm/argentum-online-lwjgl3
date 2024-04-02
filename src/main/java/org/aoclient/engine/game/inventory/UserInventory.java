@@ -66,8 +66,8 @@ public final class UserInventory extends Inventory {
                 }
 
                 if (i == slotSelected) {
-                    ImGui.getWindowDrawList().addLine(iX + 32, iY, iX + 32, iY + 32, selectedColor);
-                    ImGui.getWindowDrawList().addLine(iX, iY + 32, iX + 32, iY + 32, selectedColor);
+                    ImGui.getWindowDrawList().addLine(iX + 31, iY, iX + 31, iY + 31, selectedColor);
+                    ImGui.getWindowDrawList().addLine(iX, iY + 31, iX + 31, iY + 31, selectedColor);
                 }
 
                 ImGui.setCursorPos(iX + 5, iY + 20);

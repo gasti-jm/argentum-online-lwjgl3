@@ -1,5 +1,6 @@
 package org.aoclient.engine.game;
 
+import org.aoclient.engine.game.inventory.InventorySpells;
 import org.aoclient.engine.game.inventory.UserInventory;
 import org.aoclient.engine.game.models.E_Heading;
 import org.aoclient.engine.game.models.Position;
@@ -16,7 +17,7 @@ public final class User {
     private static User instance;
 
     private final UserInventory userInventory;
-    // private InventorySpells inventorySpells;
+    private final InventorySpells inventorySpells;
 
     private boolean underCeiling;
     private boolean userMoving;
@@ -70,9 +71,10 @@ public final class User {
      * @desc: Constructor privado por singleton.
      */
     private User() {
-        userPos = new Position();
-        addToUserPos = new Position();
-        userInventory = new UserInventory();
+        this.userPos = new Position();
+        this.addToUserPos = new Position();
+        this.userInventory = new UserInventory();
+        this.inventorySpells = new InventorySpells();
         this.talking = false;
         this.userNavegando = false;
     }
@@ -475,6 +477,10 @@ public final class User {
 
     public UserInventory getUserInventory() {
         return userInventory;
+    }
+
+    public InventorySpells getInventorySpells() {
+        return inventorySpells;
     }
 
     public String getUserName() {

@@ -4,6 +4,7 @@ import imgui.ImDrawList;
 import imgui.ImGui;
 
 import imgui.flag.*;
+import imgui.type.ImInt;
 import imgui.type.ImString;
 import org.aoclient.engine.Engine;
 import org.aoclient.engine.Window;
@@ -20,11 +21,11 @@ import static org.aoclient.engine.utils.Time.FPS;
 public final class FMain extends Form {
     private final ImString sendText     = new ImString();
     private final User dataUser         = User.get();
-    private boolean viewInventorySpells;
+    private boolean viewInventory;
 
     public FMain() {
         this.formName = "frmMain";
-        this.viewInventorySpells = false;
+        this.viewInventory = true;
 
         Console.get().clearConsole();
 
@@ -256,9 +257,22 @@ public final class FMain extends Form {
             ImGui.endPopup();
         }
 
+        ImGui.setCursorPos(592, 128);
+        if (ImGui.invisibleButton("ViewInvetory", 93, 30)) {
+            this.viewInventory = true;
+        }
+
+        ImGui.setCursorPos(688, 128);
+        if (ImGui.invisibleButton("ViewInvetorySpells", 75, 30)) {
+            this.viewInventory = false;
+        }
+
         /////// Inventory
-        if(!viewInventorySpells)
+        if(viewInventory) {
             User.get().getUserInventory().drawInventory();
+        } else {
+            User.get().getInventorySpells().draw();
+        }
 
         /////// Console
         Console.get().drawConsole();
