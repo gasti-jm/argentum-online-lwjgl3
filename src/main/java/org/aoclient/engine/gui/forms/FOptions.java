@@ -87,6 +87,7 @@ public class FOptions extends Form {
         ImGui.setCursorPos(6, 368);
         if(ImGui.button("Mapa", 170, 20)) {
             playSound(SND_CLICK);
+            ImGUISystem.get().checkAddOrChange("frmMapa", new FMapa());
         }
 
         ImGui.setCursorPos(6, 392);
