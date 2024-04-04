@@ -11,6 +11,7 @@ import org.aoclient.engine.gui.ImGUISystem;
 import javax.imageio.ImageIO;
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 
 import static org.aoclient.engine.Sound.SND_CLICK;
 import static org.aoclient.engine.Sound.playSound;
@@ -44,37 +45,38 @@ public class FNewPassword extends Form {
 
         //ImGui.getWindowDrawList().addImage(backgroundImage, 0, 0, Window.get().getWidth(), Window.get().getHeight());
 
-        ImGui.text("Cambiar Contraseña:");
+        ImGui.text(new String("Cambiar Contraseña:".getBytes(), StandardCharsets.UTF_8));
         ImGui.separator();
 
         // txtPassword
-        ImGui.setCursorPos(210, 20);
+        //ImGui.setCursorPos(100, 40);
+        ImGui.text(new String("Contraseña:".getBytes(), StandardCharsets.UTF_8));
         ImGui.pushItemWidth(150);
-            ImGui.pushStyleColor(ImGuiCol.FrameBg, 0, 0,0, 1);
+            //ImGui.pushStyleColor(ImGuiCol.FrameBg, 255, 0,0, 1);
                 ImGui.pushID("txtPassword");
                     ImGui.inputText("", txtPassword, ImGuiInputTextFlags.Password | ImGuiInputTextFlags.CallbackResize);
                 ImGui.popID();
-            ImGui.popStyleColor();
+            //ImGui.popStyleColor();
         ImGui.popItemWidth();
 
         // txtNewPasswd
-        ImGui.setCursorPos(210, 40);
+        ImGui.text(new String("Nueva Contraseña:".getBytes(), StandardCharsets.UTF_8));
         ImGui.pushItemWidth(150);
-            ImGui.pushStyleColor(ImGuiCol.FrameBg, 0, 0, 0, 1);
+            //ImGui.pushStyleColor(ImGuiCol.FrameBg, 0, 0, 0, 1);
                 ImGui.pushID("txtNewPassword");
                     ImGui.inputText("", txtNewPassword, ImGuiInputTextFlags.Password | ImGuiInputTextFlags.CallbackResize);
                 ImGui.popID();
-            ImGui.popStyleColor();
+            //ImGui.popStyleColor();
         ImGui.popItemWidth();
 
         // txtNewRePasswd
-        ImGui.setCursorPos(210, 60);
+        ImGui.text(new String("Repita la Contraseña:".getBytes(), StandardCharsets.UTF_8));
         ImGui.pushItemWidth(150);
-            ImGui.pushStyleColor(ImGuiCol.FrameBg, 0, 0, 0, 1);
+            //ImGui.pushStyleColor(ImGuiCol.FrameBg, 0, 0, 0, 1);
                 ImGui.pushID("txtNewrePassword");
                     ImGui.inputText("", txtNewrePassword, ImGuiInputTextFlags.Password | ImGuiInputTextFlags.CallbackResize);
                 ImGui.popID();
-            ImGui.popStyleColor();
+            //ImGui.popStyleColor();
         ImGui.popItemWidth();
 
         this.drawButtons();
