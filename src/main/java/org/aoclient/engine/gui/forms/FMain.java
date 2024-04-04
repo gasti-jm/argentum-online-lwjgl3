@@ -221,6 +221,12 @@ public final class FMain extends Form {
             ImGUISystem.get().checkAddOrChange("frmOpciones", new FOptions());
         }
 
+        // btnMapa
+        ImGui.setCursorPos(681, 445);
+        if(ImGui.invisibleButton("viewMap", 95, 22)) {
+            ImGUISystem.get().checkAddOrChange("frmMapa", new FMapa());
+        }
+
         // btnClose
         ImGui.setCursorPos(775, 3);
         if(ImGui.invisibleButton("close", 17, 17)) {
