@@ -3363,4 +3363,10 @@ public class Protocol {
         outgoingData.writeByte(ClientPacketID.CommerceEnd.ordinal());
     }
 
+    public static void writeChangePassword(String oldPass, String newPass) {
+        outgoingData.writeByte(ClientPacketID.ChangePassword.ordinal());
+        outgoingData.writeASCIIString(oldPass);
+        outgoingData.writeASCIIString(newPass);
+    }
+
 }
