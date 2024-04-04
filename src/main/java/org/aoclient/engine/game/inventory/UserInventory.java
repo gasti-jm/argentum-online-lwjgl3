@@ -24,7 +24,6 @@ public final class UserInventory extends Inventory {
     // Tamaño del inventario segun el frmMain original de AO
     private static final int MAIN_SIZE_WIDTH = 160;
     private static final int MAIN_SIZE_HEIGHT = 128;
-    private static final int MAX_INVENTORY_SLOTS = 30;
     public static final int FLAGORO = MAX_INVENTORY_SLOTS + 1;
 
     // Intervalos del inventario.
@@ -32,7 +31,6 @@ public final class UserInventory extends Inventory {
     private static final float INT_EQUIP_ITEM = 0.15f;
     private final IntervalTimer intervalUseItem = new IntervalTimer(INT_USE_ITEM);
     private final IntervalTimer intervalEquipItem = new IntervalTimer(INT_EQUIP_ITEM);
-    private static final int selectedColor = ImGui.getColorU32(0f, 1f, 0f, 1f);
 
     private boolean visible;
 
@@ -55,7 +53,6 @@ public final class UserInventory extends Inventory {
      */
     @Override
     public void drawInventory() {
-
         if (slots.length == 0) return;
 
         // posiciones por slot
@@ -100,7 +97,6 @@ public final class UserInventory extends Inventory {
      */
     public void dobleClickInventory() {
         if (!visible) return;
-
 
         final int x = (int) ((MouseListener.getX() - posX) / TILE_PIXEL_SIZE);
         final int y = (int) ((MouseListener.getY() - posY) / TILE_PIXEL_SIZE);
