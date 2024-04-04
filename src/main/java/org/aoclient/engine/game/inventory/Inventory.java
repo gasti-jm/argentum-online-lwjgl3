@@ -1,5 +1,6 @@
 package org.aoclient.engine.game.inventory;
 
+import imgui.ImGui;
 import org.aoclient.engine.game.models.E_ObjType;
 import org.aoclient.engine.listeners.MouseListener;
 import org.aoclient.engine.renderer.RGBColor;
@@ -15,7 +16,12 @@ import static org.aoclient.engine.utils.GameData.grhData;
 /**
  * Clase padre de inventario, ya que puede existir distintos inventarios (usuario, npc, etc).
  */
-public class Inventory {
+public abstract class Inventory {
+    public static final int MAX_INVENTORY_SLOTS = 30;
+    public static final int MAX_NPC_INVENTORY_SLOTS = 50;
+
+    protected static final int selectedColor = ImGui.getColorU32(0f, 1f, 0f, 1f);
+
     protected int posX, posY;
     protected int sWidth, sHeigth;
     protected int cantRows, cantColumns;
@@ -105,32 +111,7 @@ public class Inventory {
     /**
      * @desc: Dibujamos el inventario.
      */
-    public void drawInventory() {
-        if(slots.length == 0) return;
-
-        // posiciones por slot
-        int iX = posX;
-        int iY = posY;
-
-        for (int i = 0; i < slots.length; i++) {
-
-            if (slots[i].grhIndex > 0) {
-                drawGrhIndex(slots[i].grhIndex, iX,  iY, null);
-                drawText(String.valueOf(slots[i].amount),  iX, iY + 20, amountColor, NORMAL_FONT, false);
-            }
-
-            if(i == slotSelected) {
-                drawGrhIndex(2, iX,  iY, null);
-            }
-
-            // actualizamos la posicion en forma de tabla.
-            iX += TILE_PIXEL_SIZE;
-            if((iX - posX) / TILE_PIXEL_SIZE == this.cantColumns) {
-                iY += TILE_PIXEL_SIZE;
-                iX = posX;
-            }
-        }
-    }
+    public abstract void drawInventory();
 
     /**
      * @desc Selecciona un slot al hacer un solo click dentro del inventario.

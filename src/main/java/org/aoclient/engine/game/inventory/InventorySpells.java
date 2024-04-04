@@ -8,7 +8,6 @@ import org.aoclient.engine.game.models.E_Skills;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 import static org.aoclient.network.Protocol.*;
 

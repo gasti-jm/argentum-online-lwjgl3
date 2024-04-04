@@ -1,6 +1,8 @@
 package org.aoclient.network;
 
 import org.aoclient.engine.game.Dialogs;
+import org.aoclient.engine.game.inventory.NPCInventory;
+import org.aoclient.engine.gui.forms.FComerce;
 import org.aoclient.network.packets.ClientPacketID;
 import org.aoclient.network.packets.E_Messages;
 import org.aoclient.network.packets.ServerPacketID;
@@ -23,6 +25,7 @@ import java.nio.charset.StandardCharsets;
 
 import static org.aoclient.engine.game.Dialogs.charDialogHitSet;
 import static org.aoclient.engine.game.Dialogs.charDialogSet;
+import static org.aoclient.engine.game.inventory.Inventory.MAX_NPC_INVENTORY_SLOTS;
 import static org.aoclient.network.Messages.*;
 import static org.aoclient.engine.Sound.*;
 import static org.aoclient.engine.game.models.Character.*;
@@ -1569,21 +1572,8 @@ public class Protocol {
         short maxDef = buffer.readInteger();
         short minDef = buffer.readInteger();
 
-        //With NPCInventory(slot)
-        //        .Name = Buffer.ReadASCIIString()
-        //        .Amount = Buffer.ReadInteger()
-        //        .Valor = Buffer.ReadSingle()
-        //        .GrhIndex = Buffer.ReadInteger()
-        //        .OBJIndex = Buffer.ReadInteger()
-        //        .OBJType = Buffer.ReadByte()
-        //        .MaxHit = Buffer.ReadInteger()
-        //        .MinHit = Buffer.ReadInteger()
-        //        .MaxDef = Buffer.ReadInteger()
-        //        .MinDef = Buffer.ReadInteger
-        //    End With
-
+        FComerce.invNPC.setItem(slot - 1, objIndex, amount, false, grhIndex, objType, maxHit, minHit, maxDef, minDef, value, name);
         incomingData.copyBuffer(buffer);
-        Logger.debug("handleChangeNPCInventorySlot Cargado! - FALTA TERMINAR!");
     }
 
     private static void handleShowSignal() {
@@ -3014,6 +3004,8 @@ public class Protocol {
         // Remove packet ID
         incomingData.readByte();
 
+        ImGUISystem.get().checkAddOrChange("frmComerciar", new FComerce());
+
         /*
             ' Initialize commerce inventories
             Call InvComUsu.Initialize(DirectDraw, frmComerciar.picInvUser, Inventario.MaxObjs)
@@ -3048,7 +3040,7 @@ public class Protocol {
             frmComerciar.Show , //FrmMain
          */
 
-        Logger.debug("handleBankEnd CARGADO - FALTA TERMINAR!");
+        Logger.debug("handleCommerceInit CARGADO - FALTA TERMINAR!");
     }
 
     private static void handleBankEnd() {
@@ -3365,6 +3357,10 @@ public class Protocol {
     public static void writeSpellInfo(final int slot) {
         outgoingData.writeByte(ClientPacketID.SpellInfo.ordinal());
         outgoingData.writeByte(slot);
+    }
+
+    public static void writeCommerceEnd() {
+        outgoingData.writeByte(ClientPacketID.CommerceEnd.ordinal());
     }
 
     public static void writeChangePassword(String oldPass, String newPass) {
