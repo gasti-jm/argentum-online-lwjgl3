@@ -4,6 +4,7 @@ import imgui.ImGui;
 import imgui.flag.ImGuiCond;
 import imgui.flag.ImGuiWindowFlags;
 import org.aoclient.engine.Window;
+import org.aoclient.engine.gui.ImGUISystem;
 
 import javax.imageio.ImageIO;
 import java.io.File;
@@ -107,9 +108,9 @@ public class FOptions extends Form {
         }
 
         ImGui.setCursorPos(180, 368);
-        if(ImGui.button(new String("Cambiar Contraseña".getBytes(), StandardCharsets.UTF_8),
-                170, 20)) {
+        if(ImGui.button(new String("Cambiar Contraseña".getBytes(), StandardCharsets.UTF_8), 170, 20)) {
             playSound(SND_CLICK);
+            ImGUISystem.get().checkAddOrChange("frmNewPassword", new FNewPassword());
         }
 
         ImGui.setCursorPos(180, 392);

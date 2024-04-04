@@ -4,7 +4,6 @@ import imgui.ImDrawList;
 import imgui.ImGui;
 
 import imgui.flag.*;
-import imgui.type.ImInt;
 import imgui.type.ImString;
 import org.aoclient.engine.Engine;
 import org.aoclient.engine.Window;
