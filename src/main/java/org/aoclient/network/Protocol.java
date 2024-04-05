@@ -3377,4 +3377,23 @@ public class Protocol {
         outgoingData.writeByte(ClientPacketID.Online.ordinal());
     }
 
+    public static void writeMeditate() {
+        if(charList[User.get().getUserCharIndex()].isDead()) {
+            Console.get().addMsgToConsole(new String("¡Estas muerto!".getBytes(), StandardCharsets.UTF_8),
+                    false, true, new RGBColor());
+
+            return;
+        }
+
+        outgoingData.writeByte(ClientPacketID.Meditate.ordinal());
+    }
+
+    public static void writeCommerceStart() {
+        outgoingData.writeByte(ClientPacketID.CommerceStart.ordinal());
+    }
+
+    public static void writeBankStart() {
+        outgoingData.writeByte(ClientPacketID.BankStart.ordinal());
+    }
+
 }

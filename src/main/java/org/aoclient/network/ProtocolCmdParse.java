@@ -78,6 +78,7 @@ public class ProtocolCmdParse {
                     break;
 
                 case "/MEDITAR":
+                    writeMeditate();
                     break;
 
                 case "/CONSULTA":
@@ -96,9 +97,11 @@ public class ProtocolCmdParse {
                     break;
 
                 case "/COMERCIAR":
+                    writeCommerceStart();
                     break;
 
                 case "/BOVEDA":
+                    writeBankStart();
                     break;
 
                 case "/ENLISTAR":
