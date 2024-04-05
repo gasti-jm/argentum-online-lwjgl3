@@ -22,6 +22,7 @@ import static org.aoclient.engine.renderer.Drawn.*;
 import static org.aoclient.engine.scenes.Camera.*;
 import static org.aoclient.engine.utils.GameData.*;
 import static org.aoclient.engine.utils.Time.*;
+import static org.aoclient.network.ProtocolCmdParse.parseUserCommand;
 import static org.lwjgl.glfw.GLFW.*;
 
 
@@ -202,7 +203,12 @@ public final class GameScene extends Scene {
 
                             // No vamos a mandar paquetes con datos vacios.
                             if(!frmMain.getSendText().isBlank()) {
-                                writeTalk(frmMain.getSendText());
+                                //¿Es un comando?
+                                if (frmMain.getSendText().startsWith("/")) {
+                                    parseUserCommand(frmMain.getSendText());
+                                } else {
+                                    writeTalk(frmMain.getSendText());
+                                }
                             }
                             User.get().setTalking(false);
                         } else {

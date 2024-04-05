@@ -3367,4 +3367,188 @@ public class Protocol {
         outgoingData.writeASCIIString(newPass);
     }
 
+    public static void writeOnline(){
+        outgoingData.writeByte(ClientPacketID.Online.ordinal());
+    }
+
+    public static void writeMeditate() {
+
+        if (User.get().getUserMaxMAN() == User.get().getUserMinMAN()) { return; }
+
+        if(charList[User.get().getUserCharIndex()].isDead()) {
+            Console.get().addMsgToConsole(new String("¡Estas muerto!".getBytes(), StandardCharsets.UTF_8),
+                    false, true, new RGBColor());
+
+            return;
+        }
+
+        outgoingData.writeByte(ClientPacketID.Meditate.ordinal());
+    }
+
+    public static void writeCommerceStart() {
+        outgoingData.writeByte(ClientPacketID.CommerceStart.ordinal());
+    }
+
+    public static void writeBankStart() {
+        outgoingData.writeByte(ClientPacketID.BankStart.ordinal());
+    }
+
+    public static void writeGuildLeave() {
+        outgoingData.writeByte(ClientPacketID.GuildLeave.ordinal());
+    }
+
+    public static void writeRequestAccountState() {
+        if(charList[User.get().getUserCharIndex()].isDead()) {
+            Console.get().addMsgToConsole(new String("¡Estas muerto!".getBytes(), StandardCharsets.UTF_8),
+                    false, true, new RGBColor());
+
+            return;
+        }
+
+        outgoingData.writeByte(ClientPacketID.RequestAccountState.ordinal());
+    }
+
+    public static void writePetStand() {
+        if(charList[User.get().getUserCharIndex()].isDead()) {
+            Console.get().addMsgToConsole(new String("¡Estas muerto!".getBytes(), StandardCharsets.UTF_8),
+                    false, true, new RGBColor());
+
+            return;
+        }
+
+        outgoingData.writeByte(ClientPacketID.PetStand.ordinal());
+    }
+
+    public static void writePetFollow() {
+        if(charList[User.get().getUserCharIndex()].isDead()) {
+            Console.get().addMsgToConsole(new String("¡Estas muerto!".getBytes(), StandardCharsets.UTF_8),
+                    false, true, new RGBColor());
+
+            return;
+        }
+
+        outgoingData.writeByte(ClientPacketID.PetFollow.ordinal());
+    }
+
+    public static void writeReleasePet() {
+        if(charList[User.get().getUserCharIndex()].isDead()) {
+            Console.get().addMsgToConsole(new String("¡Estas muerto!".getBytes(), StandardCharsets.UTF_8),
+                    false, true, new RGBColor());
+
+            return;
+        }
+
+        outgoingData.writeByte(ClientPacketID.ReleasePet.ordinal());
+    }
+
+    public static void writeTrainList() {
+        if(charList[User.get().getUserCharIndex()].isDead()) {
+            Console.get().addMsgToConsole(new String("¡Estas muerto!".getBytes(), StandardCharsets.UTF_8),
+                    false, true, new RGBColor());
+
+            return;
+        }
+
+        outgoingData.writeByte(ClientPacketID.TrainList.ordinal());
+    }
+
+    public static void writeRest() {
+        if(charList[User.get().getUserCharIndex()].isDead()) {
+            Console.get().addMsgToConsole(new String("¡Estas muerto!".getBytes(), StandardCharsets.UTF_8),
+                    false, true, new RGBColor());
+
+            return;
+        }
+
+        outgoingData.writeByte(ClientPacketID.Rest.ordinal());
+    }
+
+    public static void writeConsultation() {
+        outgoingData.writeByte(ClientPacketID.Consulta.ordinal());
+    }
+
+    public static void writeResucitate() {
+        outgoingData.writeByte(ClientPacketID.Resucitate.ordinal());
+    }
+
+    public static void writeHeal() {
+        outgoingData.writeByte(ClientPacketID.Heal.ordinal());
+    }
+
+    public static void writeRequestStats() {
+        outgoingData.writeByte(ClientPacketID.RequestStats.ordinal());
+    }
+
+    public static void writeHelp() {
+        outgoingData.writeByte(ClientPacketID.Help.ordinal());
+    }
+
+    public static void writeEnlist() {
+        outgoingData.writeByte(ClientPacketID.Enlist.ordinal());
+    }
+
+    public static void writeInformation() {
+        outgoingData.writeByte(ClientPacketID.Information.ordinal());
+    }
+
+    public static void writeReward() {
+        outgoingData.writeByte(ClientPacketID.Reward.ordinal());
+    }
+
+    public static void writeRequestMOTD() {
+        outgoingData.writeByte(ClientPacketID.RequestMOTD.ordinal());
+    }
+
+    public static void writeUpTime() {
+        outgoingData.writeByte(ClientPacketID.Uptime.ordinal());
+    }
+
+    public static void writePartyLeave() {
+        outgoingData.writeByte(ClientPacketID.PartyLeave.ordinal());
+    }
+
+    public static void writePartyCreate() {
+        if(charList[User.get().getUserCharIndex()].isDead()) {
+            Console.get().addMsgToConsole(new String("¡Estas muerto!".getBytes(), StandardCharsets.UTF_8),
+                    false, true, new RGBColor());
+
+            return;
+        }
+
+        outgoingData.writeByte(ClientPacketID.PartyCreate.ordinal());
+    }
+
+    public static void writePartyJoin() {
+        if(charList[User.get().getUserCharIndex()].isDead()) {
+            Console.get().addMsgToConsole(new String("¡Estas muerto!".getBytes(), StandardCharsets.UTF_8),
+                    false, true, new RGBColor());
+
+            return;
+        }
+
+        outgoingData.writeByte(ClientPacketID.PartyJoin.ordinal());
+    }
+
+    public static void writeShareNpc() {
+        if(charList[User.get().getUserCharIndex()].isDead()) {
+            Console.get().addMsgToConsole(new String("¡Estas muerto!".getBytes(), StandardCharsets.UTF_8),
+                    false, true, new RGBColor());
+
+            return;
+        }
+
+        outgoingData.writeByte(ClientPacketID.ShareNpc.ordinal());
+    }
+
+    public static void writeStopSharingNpc() {
+        if(charList[User.get().getUserCharIndex()].isDead()) {
+            Console.get().addMsgToConsole(new String("¡Estas muerto!".getBytes(), StandardCharsets.UTF_8),
+                    false, true, new RGBColor());
+
+            return;
+        }
+
+        outgoingData.writeByte(ClientPacketID.StopSharingNpc.ordinal());
+    }
+
 }
