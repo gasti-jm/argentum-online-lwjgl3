@@ -3378,6 +3378,9 @@ public class Protocol {
     }
 
     public static void writeMeditate() {
+
+        if (User.get().getUserMaxMAN() == User.get().getUserMinMAN()) { return; }
+
         if(charList[User.get().getUserCharIndex()].isDead()) {
             Console.get().addMsgToConsole(new String("¡Estas muerto!".getBytes(), StandardCharsets.UTF_8),
                     false, true, new RGBColor());
