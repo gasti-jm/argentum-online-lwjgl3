@@ -3373,4 +3373,8 @@ public class Protocol {
         outgoingData.writeASCIIString(newPass);
     }
 
+    public static void writeOnline(){
+        outgoingData.writeByte(ClientPacketID.Online.ordinal());
+    }
+
 }
