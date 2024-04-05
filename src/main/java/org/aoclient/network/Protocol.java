@@ -3194,9 +3194,7 @@ public class Protocol {
 
         // Remove packet ID
         incomingData.readByte();
-        short dialog = incomingData.readInteger();
-        // Call Dialogos.RemoveDialog(incomingData.ReadInteger())
-        Logger.debug("handleRemoveCharDialog CARGADO - FALTA TERMINAR!");
+        Dialogs.removeDialog(incomingData.readInteger());
     }
 
     private static void handleRemoveDialogs() {
