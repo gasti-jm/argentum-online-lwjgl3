@@ -89,18 +89,23 @@ public class ProtocolCmdParse {
                     break;
 
                 case "/CONSULTA":
+                    writeConsultation();
                     break;
 
                 case "/RESUCITAR":
+                    writeResucitate();
                     break;
 
                 case "/CURAR":
+                    writeHeal();
                     break;
 
                 case "/EST":
+                    writeRequestStats();
                     break;
 
                 case "/AYUDA":
+                    writeHelp();
                     break;
 
                 case "/COMERCIAR":

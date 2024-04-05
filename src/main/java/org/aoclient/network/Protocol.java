@@ -3466,4 +3466,24 @@ public class Protocol {
         outgoingData.writeByte(ClientPacketID.Rest.ordinal());
     }
 
+    public static void writeConsultation() {
+        outgoingData.writeByte(ClientPacketID.Consulta.ordinal());
+    }
+
+    public static void writeResucitate() {
+        outgoingData.writeByte(ClientPacketID.Resucitate.ordinal());
+    }
+
+    public static void writeHeal() {
+        outgoingData.writeByte(ClientPacketID.Heal.ordinal());
+    }
+
+    public static void writeRequestStats() {
+        outgoingData.writeByte(ClientPacketID.RequestStats.ordinal());
+    }
+
+    public static void writeHelp() {
+        outgoingData.writeByte(ClientPacketID.Help.ordinal());
+    }
+
 }
