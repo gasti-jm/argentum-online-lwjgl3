@@ -3489,4 +3489,72 @@ public class Protocol {
         outgoingData.writeByte(ClientPacketID.Help.ordinal());
     }
 
+    public static void writeEnlist() {
+        outgoingData.writeByte(ClientPacketID.Enlist.ordinal());
+    }
+
+    public static void writeInformation() {
+        outgoingData.writeByte(ClientPacketID.Information.ordinal());
+    }
+
+    public static void writeReward() {
+        outgoingData.writeByte(ClientPacketID.Reward.ordinal());
+    }
+
+    public static void writeRequestMOTD() {
+        outgoingData.writeByte(ClientPacketID.RequestMOTD.ordinal());
+    }
+
+    public static void writeUpTime() {
+        outgoingData.writeByte(ClientPacketID.Uptime.ordinal());
+    }
+
+    public static void writePartyLeave() {
+        outgoingData.writeByte(ClientPacketID.PartyLeave.ordinal());
+    }
+
+    public static void writePartyCreate() {
+        if(charList[User.get().getUserCharIndex()].isDead()) {
+            Console.get().addMsgToConsole(new String("¡Estas muerto!".getBytes(), StandardCharsets.UTF_8),
+                    false, true, new RGBColor());
+
+            return;
+        }
+
+        outgoingData.writeByte(ClientPacketID.PartyCreate.ordinal());
+    }
+
+    public static void writePartyJoin() {
+        if(charList[User.get().getUserCharIndex()].isDead()) {
+            Console.get().addMsgToConsole(new String("¡Estas muerto!".getBytes(), StandardCharsets.UTF_8),
+                    false, true, new RGBColor());
+
+            return;
+        }
+
+        outgoingData.writeByte(ClientPacketID.PartyJoin.ordinal());
+    }
+
+    public static void writeShareNpc() {
+        if(charList[User.get().getUserCharIndex()].isDead()) {
+            Console.get().addMsgToConsole(new String("¡Estas muerto!".getBytes(), StandardCharsets.UTF_8),
+                    false, true, new RGBColor());
+
+            return;
+        }
+
+        outgoingData.writeByte(ClientPacketID.ShareNpc.ordinal());
+    }
+
+    public static void writeStopSharingNpc() {
+        if(charList[User.get().getUserCharIndex()].isDead()) {
+            Console.get().addMsgToConsole(new String("¡Estas muerto!".getBytes(), StandardCharsets.UTF_8),
+                    false, true, new RGBColor());
+
+            return;
+        }
+
+        outgoingData.writeByte(ClientPacketID.StopSharingNpc.ordinal());
+    }
+
 }

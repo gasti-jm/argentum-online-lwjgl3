@@ -117,33 +117,43 @@ public class ProtocolCmdParse {
                     break;
 
                 case "/ENLISTAR":
+                    writeEnlist();
                     break;
 
                 case "/INFORMACION":
+                    writeInformation();
                     break;
 
                 case "/RECOMPENSA":
+                    writeReward();
                     break;
 
                 case "/MOTD":
+                    writeRequestMOTD();
                     break;
 
                 case "/UPTIME":
+                    writeUpTime();
                     break;
 
                 case "/SALIRPARTY":
+                    writePartyLeave();
                     break;
 
                 case "/CREARPARTY":
+                    writePartyCreate();
                     break;
 
                 case "/PARTY":
+                    writePartyJoin();
                     break;
 
                 case "/COMPARTIRNPC":
+                    writeShareNpc();
                     break;
 
                 case "/NOCOMPARTIRNPC":
+                    writeStopSharingNpc();
                     break;
 
                 case "/ENCUESTA":
