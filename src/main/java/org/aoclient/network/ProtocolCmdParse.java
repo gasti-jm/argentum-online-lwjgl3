@@ -57,24 +57,31 @@ public class ProtocolCmdParse {
                     break;
 
                 case "/SALIRCLAN":
+                    writeGuildLeave();
                     break;
 
                 case "/BALANCE":
+                    writeRequestAccountState();
                     break;
 
                 case "/QUIETO":
+                    writePetStand();
                     break;
 
                 case "/ACOMPAÑAR":
+                    writePetFollow();
                     break;
 
                 case "/LIBERAR":
+                    writeReleasePet();
                     break;
 
                 case "/ENTRENAR":
+                    writeTrainList();
                     break;
 
                 case "/DESCANSAR":
+                    writeRest();
                     break;
 
                 case "/MEDITAR":

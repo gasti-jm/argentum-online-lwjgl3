@@ -3396,4 +3396,74 @@ public class Protocol {
         outgoingData.writeByte(ClientPacketID.BankStart.ordinal());
     }
 
+    public static void writeGuildLeave() {
+        outgoingData.writeByte(ClientPacketID.GuildLeave.ordinal());
+    }
+
+    public static void writeRequestAccountState() {
+        if(charList[User.get().getUserCharIndex()].isDead()) {
+            Console.get().addMsgToConsole(new String("¡Estas muerto!".getBytes(), StandardCharsets.UTF_8),
+                    false, true, new RGBColor());
+
+            return;
+        }
+
+        outgoingData.writeByte(ClientPacketID.RequestAccountState.ordinal());
+    }
+
+    public static void writePetStand() {
+        if(charList[User.get().getUserCharIndex()].isDead()) {
+            Console.get().addMsgToConsole(new String("¡Estas muerto!".getBytes(), StandardCharsets.UTF_8),
+                    false, true, new RGBColor());
+
+            return;
+        }
+
+        outgoingData.writeByte(ClientPacketID.PetStand.ordinal());
+    }
+
+    public static void writePetFollow() {
+        if(charList[User.get().getUserCharIndex()].isDead()) {
+            Console.get().addMsgToConsole(new String("¡Estas muerto!".getBytes(), StandardCharsets.UTF_8),
+                    false, true, new RGBColor());
+
+            return;
+        }
+
+        outgoingData.writeByte(ClientPacketID.PetFollow.ordinal());
+    }
+
+    public static void writeReleasePet() {
+        if(charList[User.get().getUserCharIndex()].isDead()) {
+            Console.get().addMsgToConsole(new String("¡Estas muerto!".getBytes(), StandardCharsets.UTF_8),
+                    false, true, new RGBColor());
+
+            return;
+        }
+
+        outgoingData.writeByte(ClientPacketID.ReleasePet.ordinal());
+    }
+
+    public static void writeTrainList() {
+        if(charList[User.get().getUserCharIndex()].isDead()) {
+            Console.get().addMsgToConsole(new String("¡Estas muerto!".getBytes(), StandardCharsets.UTF_8),
+                    false, true, new RGBColor());
+
+            return;
+        }
+
+        outgoingData.writeByte(ClientPacketID.TrainList.ordinal());
+    }
+
+    public static void writeRest() {
+        if(charList[User.get().getUserCharIndex()].isDead()) {
+            Console.get().addMsgToConsole(new String("¡Estas muerto!".getBytes(), StandardCharsets.UTF_8),
+                    false, true, new RGBColor());
+
+            return;
+        }
+
+        outgoingData.writeByte(ClientPacketID.Rest.ordinal());
+    }
+
 }
