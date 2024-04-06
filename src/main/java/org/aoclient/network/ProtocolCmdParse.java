@@ -598,7 +598,7 @@ public class ProtocolCmdParse {
             }
 
         } else if (comando.startsWith("-")) { //Gritar
-            writeYell(rawCommand);
+            writeYell(rawCommand.substring(1));
 
         } else { //Hablar
             writeTalk(rawCommand);

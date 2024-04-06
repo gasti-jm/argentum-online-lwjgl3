@@ -203,12 +203,7 @@ public final class GameScene extends Scene {
 
                             // No vamos a mandar paquetes con datos vacios.
                             if(!frmMain.getSendText().isBlank()) {
-                                //¿Es un comando?
-                                if (frmMain.getSendText().startsWith("/")) {
-                                    parseUserCommand(frmMain.getSendText());
-                                } else {
-                                    writeTalk(frmMain.getSendText());
-                                }
+                                parseUserCommand(frmMain.getSendText());
                             }
                             User.get().setTalking(false);
                         } else {
