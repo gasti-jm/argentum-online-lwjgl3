@@ -3582,9 +3582,19 @@ public class Protocol {
         outgoingData.writeInteger((short)itemIndex);
     }
 
-    public static void writeWarpMeToTarget(){
+    public static void writeWarpMeToTarget() {
         outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
         outgoingData.writeByte(eGMCommands.WarpMeToTarget.ordinal());
+    }
+
+    public static void writeWarpChar(String userName, short map, int x, int y) {
+        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
+        outgoingData.writeByte(eGMCommands.WarpChar.ordinal());
+
+        outgoingData.writeASCIIString(userName);
+        outgoingData.writeInteger(map);
+        outgoingData.writeByte(x);
+        outgoingData.writeByte(y);
     }
 
 }

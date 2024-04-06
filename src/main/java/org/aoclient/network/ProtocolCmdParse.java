@@ -1,6 +1,7 @@
 package org.aoclient.network;
 
 import org.aoclient.engine.game.Console;
+import org.aoclient.engine.game.User;
 import org.aoclient.engine.renderer.RGBColor;
 import org.aoclient.network.packets.eNumber_Types;
 
