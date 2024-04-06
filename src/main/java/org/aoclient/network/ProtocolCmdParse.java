@@ -291,6 +291,45 @@ public class ProtocolCmdParse {
                     break;
 
                 case "/TELEP":
+                    if (notNullArguments && cantidadArgumentos >= 4) {
+                        if (validNumber(argumentosAll[1], eNumber_Types.ent_Integer) &&
+                                validNumber(argumentosAll[2], eNumber_Types.ent_Byte) &&
+                                validNumber(argumentosAll[3], eNumber_Types.ent_Byte)) {
+                            writeWarpChar(argumentosAll[0], Short.parseShort(argumentosAll[1]), Integer.parseInt(argumentosAll[2]), Integer.parseInt(argumentosAll[3]));
+                        } else {
+                            Console.get().addMsgToConsole(new String("Valor incorrecto. Utilice /telep NICKNAME MAPA X Y.".getBytes(), StandardCharsets.UTF_8),
+                                    false, true, new RGBColor());
+                        }
+                    } else if (cantidadArgumentos == 3) {
+                        if (validNumber(argumentosAll[0], eNumber_Types.ent_Integer) &&
+                                validNumber(argumentosAll[1], eNumber_Types.ent_Byte) &&
+                                validNumber(argumentosAll[2], eNumber_Types.ent_Byte)) {
+                            // Por defecto, si no se indica el nombre, se teletransporta el mismo usuario
+                            writeWarpChar("YO", Short.parseShort(argumentosAll[0]), Integer.parseInt(argumentosAll[1]), Integer.parseInt(argumentosAll[2]));
+                        } else if (validNumber(argumentosAll[1], eNumber_Types.ent_Byte) &&
+                                validNumber(argumentosAll[2], eNumber_Types.ent_Byte)) {
+                            // Por defecto, si no se indica el mapa, se teletransporta al mismo donde esta el usuario
+                            writeWarpChar(argumentosAll[0], User.get().getUserMap(), Integer.parseInt(argumentosAll[1]), Integer.parseInt(argumentosAll[2]));
+                        } else {
+                            // No uso ningun formato por defecto
+                            Console.get().addMsgToConsole(new String("Valor incorrecto. Utilice /telep NICKNAME MAPA X Y.".getBytes(), StandardCharsets.UTF_8),
+                                    false, true, new RGBColor());
+                        }
+                    } else if (cantidadArgumentos == 2) {
+                        if (validNumber(argumentosAll[0], eNumber_Types.ent_Byte) &&
+                                validNumber(argumentosAll[1], eNumber_Types.ent_Byte)) {
+                            // Por defecto, se considera que se quiere unicamente cambiar las coordenadas del usuario, en el mismo mapa
+                            writeWarpChar("YO", User.get().getUserMap(), Integer.parseInt(argumentosAll[0]), Integer.parseInt(argumentosAll[1]));
+                        } else {
+                            // No uso ningun formato por defecto
+                            Console.get().addMsgToConsole(new String("Valor incorrecto. Utilice /telep NICKNAME MAPA X Y.".getBytes(), StandardCharsets.UTF_8),
+                                    false, true, new RGBColor());
+                        }
+                    } else {
+                        // Avisar que falta el parametro
+                        Console.get().addMsgToConsole(new String("Faltan parámetros. Utilice /telep NICKNAME MAPA X Y.".getBytes(), StandardCharsets.UTF_8),
+                                false, true, new RGBColor());
+                    }
                     break;
 
                 case "/SILENCIAR":
