@@ -4,6 +4,7 @@ import org.aoclient.engine.game.Dialogs;
 import org.aoclient.engine.game.inventory.NPCInventory;
 import org.aoclient.engine.gui.forms.FComerce;
 import org.aoclient.network.packets.ClientPacketID;
+import org.aoclient.network.packets.eGMCommands;
 import org.aoclient.network.packets.E_Messages;
 import org.aoclient.network.packets.ServerPacketID;
 import org.aoclient.engine.Sound;
@@ -3549,6 +3550,41 @@ public class Protocol {
         }
 
         outgoingData.writeByte(ClientPacketID.StopSharingNpc.ordinal());
+    }
+
+    public static void writeInquiry(){
+        outgoingData.writeByte(ClientPacketID.Inquiry.ordinal());
+    }
+
+    public static void writeInquiryVote(int opt) {
+        outgoingData.writeByte(ClientPacketID.InquiryVote.ordinal());
+        outgoingData.writeByte(opt);
+    }
+
+    public static void writeGuildMessage(String message) {
+        outgoingData.writeByte(ClientPacketID.GuildMessage.ordinal());
+        outgoingData.writeASCIIString(message);
+    }
+
+    public static void writePartyMessage(String message) {
+        outgoingData.writeByte(ClientPacketID.PartyMessage.ordinal());
+        outgoingData.writeASCIIString(message);
+    }
+
+    public static void writeCentinelReport(int number) {
+        outgoingData.writeByte(ClientPacketID.CentinelReport.ordinal());
+        outgoingData.writeByte(number);
+    }
+
+    public static void writeCreateItem(int itemIndex) {
+        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
+        outgoingData.writeByte(eGMCommands.CreateItem.ordinal());
+        outgoingData.writeInteger((short)itemIndex);
+    }
+
+    public static void writeWarpMeToTarget(){
+        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
+        outgoingData.writeByte(eGMCommands.WarpMeToTarget.ordinal());
     }
 
 }

@@ -1,11 +1,11 @@
 package org.aoclient.network;
 
 import org.aoclient.engine.game.Console;
-import org.aoclient.engine.game.User;
 import org.aoclient.engine.renderer.RGBColor;
+import org.aoclient.network.packets.eNumber_Types;
 
-import static org.aoclient.engine.utils.GameData.charList;
-import static org.aoclient.network.Messages.*;
+import java.nio.charset.StandardCharsets;
+
 import static org.aoclient.network.Protocol.*;
 
 public class ProtocolCmdParse {
@@ -14,13 +14,13 @@ public class ProtocolCmdParse {
         // Declaración de variables
         String[] tmpArgs;
         String comando;
-        String[] argumentosAll;
-        String argumentosRaw;
+        String[] argumentosAll = new String[0];
+        String argumentosRaw = "";
         String[] argumentos2;
         String[] argumentos3;
         String[] argumentos4;
         int cantidadArgumentos;
-        boolean notNullArguments;
+        boolean notNullArguments = false;
         String[] tmpArr;
         int tmpInt;
 
@@ -157,15 +157,50 @@ public class ProtocolCmdParse {
                     break;
 
                 case "/ENCUESTA":
+                    if (cantidadArgumentos == 0) {
+                        writeInquiry();
+                    } else {
+                        if (validNumber(argumentosRaw, eNumber_Types.ent_Byte)) {
+                            writeInquiryVote(Integer.parseInt(argumentosRaw));
+                        } else {
+                            Console.get().addMsgToConsole(new String("Para votar una opción, escribe /encuesta NUMERODEOPCION, por ejemplo para votar la opción 1, escribe /encuesta 1.".getBytes(), StandardCharsets.UTF_8),
+                                    false, true, new RGBColor());
+                        }
+                    }
                     break;
 
                 case "/CMSG":
+                    if (cantidadArgumentos == 0) {
+                        writeGuildMessage(argumentosRaw);
+                    } else {
+                        Console.get().addMsgToConsole(new String("Escribe un mensaje.".getBytes(), StandardCharsets.UTF_8),
+                                false, true, new RGBColor());
+                    }
                     break;
 
                 case "/PMSG":
+                    if (cantidadArgumentos == 0) {
+                        writePartyMessage(argumentosRaw);
+                    } else {
+                        Console.get().addMsgToConsole(new String("Escribe un mensaje.".getBytes(), StandardCharsets.UTF_8),
+                                false, true, new RGBColor());
+                    }
                     break;
 
                 case "/CENTINELA":
+                    if (cantidadArgumentos != 1) {
+                        Console.get().addMsgToConsole(new String("El comando /CENTINELA requiere un argumento. Por favor, ingrese el código de verificación..".getBytes(), StandardCharsets.UTF_8),
+                                false, true, new RGBColor());
+
+                    } else {
+                        if (validNumber(argumentosRaw, eNumber_Types.ent_Integer)) {
+                            writeCentinelReport(Integer.parseInt(argumentosRaw));
+
+                        } else {
+                            Console.get().addMsgToConsole(new String("El código de verificación debe ser numérico. Utilice /centinela X, donde X es el código de verificación.".getBytes(), StandardCharsets.UTF_8),
+                                    false, true, new RGBColor());
+                        }
+                    }
                     break;
 
                 case "/ONLINECLAN":
@@ -251,6 +286,7 @@ public class ProtocolCmdParse {
                     break;
 
                 case "/TELEPLOC":
+                    writeWarpMeToTarget();
                     break;
 
                 case "/TELEP":
@@ -437,6 +473,15 @@ public class ProtocolCmdParse {
                     break;
 
                 case "/CI":
+                    if (notNullArguments) {
+                        if (validNumber(argumentosAll[0], eNumber_Types.ent_Long)) {
+                            writeCreateItem(Integer.parseInt(argumentosAll[0]));
+                        } else {
+                            Console.get().addMsgToConsole("Objeto incorrecto. Utilice /ci OBJETO.", false, true, new RGBColor());
+                        }
+                    } else {
+                        Console.get().addMsgToConsole("Faltan parámetros. Utilice /ci OBJETO.", false, true, new RGBColor());
+                    }
                     break;
 
                 case "/DEST":
@@ -603,6 +648,39 @@ public class ProtocolCmdParse {
         } else { //Hablar
             writeTalk(rawCommand);
         }
+    }
+
+    public static boolean validNumber(String numero, eNumber_Types tipo) {
+        long minimo;
+        long maximo;
+
+        if (!numero.matches("-?\\d+(\\.\\d+)?")) {
+            return false;
+        }
+
+        switch (tipo) {
+            case ent_Byte:
+                minimo = 0;
+                maximo = 255;
+                break;
+            case ent_Integer:
+                minimo = -32768;
+                maximo = 32767;
+                break;
+            case ent_Long:
+                minimo = -2147483648L;
+                maximo = 2147483647L;
+                break;
+            case ent_Trigger:
+                minimo = 0;
+                maximo = 6;
+                break;
+            default:
+                throw new IllegalArgumentException("Tipo de número no válido.");
+        }
+
+        long valor = Long.parseLong(numero);
+        return valor >= minimo && valor <= maximo;
     }
 
 }
