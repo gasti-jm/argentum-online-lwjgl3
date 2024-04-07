@@ -3597,4 +3597,12 @@ public class Protocol {
         outgoingData.writeByte(y);
     }
 
+    public static void writeGuildOnline() {
+        outgoingData.writeByte(ClientPacketID.GuildOnline.ordinal());
+    }
+
+    public static void writePartyOnline() {
+        outgoingData.writeByte(ClientPacketID.GuildOnline.ordinal());
+    }
+
 }

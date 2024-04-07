@@ -205,6 +205,11 @@ public class ProtocolCmdParse {
                     break;
 
                 case "/ONLINECLAN":
+                    writeGuildOnline();
+                    break;
+
+                case "/ONLINEPARTY":
+                    writePartyOnline();
                     break;
 
                 case "/BMSG":
