@@ -3605,4 +3605,46 @@ public class Protocol {
         outgoingData.writeByte(ClientPacketID.GuildOnline.ordinal());
     }
 
+    public static void writeCouncilMessage(String message) {
+        outgoingData.writeByte(ClientPacketID.CouncilMessage.ordinal());
+        outgoingData.writeASCIIString(message);
+    }
+
+    public static void writeRoleMasterRequest(String message) {
+        outgoingData.writeByte(ClientPacketID.RoleMasterRequest.ordinal());
+        outgoingData.writeASCIIString(message);
+    }
+
+    public static void writeGMRequest() {
+        outgoingData.writeByte(ClientPacketID.GMRequest.ordinal());
+    }
+
+    public static void writeBugReport(String message) {
+        outgoingData.writeByte(ClientPacketID.bugReport.ordinal());
+        outgoingData.writeASCIIString(message);
+    }
+
+    public static void writeChangeDescription(String message) {
+        outgoingData.writeByte(ClientPacketID.ChangeDescription.ordinal());
+        outgoingData.writeASCIIString(message);
+    }
+
+    public static void writeGuildVote(String message) {
+        outgoingData.writeByte(ClientPacketID.GuildVote.ordinal());
+        outgoingData.writeASCIIString(message);
+    }
+
+    public static void writePunishments(String message) {
+        outgoingData.writeByte(ClientPacketID.Punishments.ordinal());
+        outgoingData.writeASCIIString(message);
+    }
+
+    public static void writeGamble(short amount) {
+        outgoingData.writeByte(ClientPacketID.Gamble.ordinal());
+        outgoingData.writeInteger(amount);
+    }
+
+    public static void writeLeaveFaction() {
+        outgoingData.writeByte(ClientPacketID.LeaveFaction.ordinal());
+    }
 }

@@ -2,6 +2,8 @@ package org.aoclient.network;
 
 import org.aoclient.engine.game.Console;
 import org.aoclient.engine.game.User;
+import org.aoclient.engine.gui.ImGUISystem;
+import org.aoclient.engine.gui.forms.FNewPassword;
 import org.aoclient.engine.renderer.RGBColor;
 import org.aoclient.network.packets.eNumber_Types;
 
@@ -213,33 +215,93 @@ public class ProtocolCmdParse {
                     break;
 
                 case "/BMSG":
+                    if (notNullArguments) {
+                        writeCouncilMessage(argumentosRaw);
+                    } else {
+                        Console.get().addMsgToConsole(new String("Escriba un mensaje.".getBytes(), StandardCharsets.UTF_8),
+                                false, true, new RGBColor());
+                    }
                     break;
 
                 case "/ROL":
+                    if (notNullArguments) {
+                        writeRoleMasterRequest(argumentosRaw);
+                    } else {
+                        Console.get().addMsgToConsole(new String("Escriba un mensaje.".getBytes(), StandardCharsets.UTF_8),
+                                false, true, new RGBColor());
+                    }
                     break;
 
                 case "/GM":
+                    writeGMRequest();
                     break;
 
                 case "/_BUG":
+                    if (notNullArguments) {
+                        writeBugReport(argumentosRaw);
+                    } else {
+                        Console.get().addMsgToConsole(new String("Escriba una descripción del bug.".getBytes(), StandardCharsets.UTF_8),
+                                false, true, new RGBColor());
+                    }
                     break;
 
                 case "/DESC":
+                    if (User.get().isDead()) {
+                        Console.get().addMsgToConsole(new String("¡Estás muerto!".getBytes(), StandardCharsets.UTF_8),
+                                false, true, new RGBColor());
+                    } else {
+                        writeChangeDescription(argumentosRaw);
+                    }
                     break;
 
                 case "/VOTO":
+                    if (notNullArguments) {
+                        writeGuildVote(argumentosRaw);
+                    } else {
+                        Console.get().addMsgToConsole(new String("Faltan parámetros. Utilice /voto NICKNAME.".getBytes(), StandardCharsets.UTF_8),
+                                false, true, new RGBColor());
+                    }
                     break;
 
                 case "/PENAS":
+                    if (notNullArguments) {
+                        writePunishments(argumentosRaw);
+                    } else {
+                        Console.get().addMsgToConsole(new String("Faltan parámetros. Utilice /penas NICKNAME.".getBytes(), StandardCharsets.UTF_8),
+                                false, true, new RGBColor());
+                    }
                     break;
 
                 case "/CONTRASEÑA":
+                    ImGUISystem.get().checkAddOrChange("frmNewPassword", new FNewPassword());
                     break;
 
                 case "/APOSTAR":
+                    if (User.get().isDead()) {
+                        Console.get().addMsgToConsole(new String("¡Estás muerto!".getBytes(), StandardCharsets.UTF_8),
+                                false, true, new RGBColor());
+                    } else {
+                        if (notNullArguments) {
+                            if (validNumber(argumentosRaw, eNumber_Types.ent_Integer)) {
+                                writeGamble(Short.parseShort(argumentosRaw));
+                            } else {
+                                Console.get().addMsgToConsole(new String("Faltan parámetros. Utilice /apostar CANTIDAD.".getBytes(), StandardCharsets.UTF_8),
+                                        false, true, new RGBColor());
+                            }
+                        } else {
+                            Console.get().addMsgToConsole(new String("Faltan parámetros. Utilice /apostar CANTIDAD.".getBytes(), StandardCharsets.UTF_8),
+                                    false, true, new RGBColor());
+                        }
+                    }
                     break;
 
                 case "/RETIRARFACCION":
+                    if (User.get().isDead()) {
+                        Console.get().addMsgToConsole(new String("¡Estás muerto!".getBytes(), StandardCharsets.UTF_8),
+                                false, true, new RGBColor());
+                    } else {
+                        writeLeaveFaction();
+                    }
                     break;
 
                 case "/RETIRAR":
