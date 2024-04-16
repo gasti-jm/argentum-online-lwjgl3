@@ -4,6 +4,7 @@ import org.aoclient.engine.game.Dialogs;
 import org.aoclient.engine.game.inventory.NPCInventory;
 import org.aoclient.engine.gui.forms.FComerce;
 import org.aoclient.network.packets.ClientPacketID;
+import org.aoclient.network.packets.eGMCommands;
 import org.aoclient.network.packets.E_Messages;
 import org.aoclient.network.packets.ServerPacketID;
 import org.aoclient.engine.Sound;
@@ -3551,4 +3552,99 @@ public class Protocol {
         outgoingData.writeByte(ClientPacketID.StopSharingNpc.ordinal());
     }
 
+    public static void writeInquiry(){
+        outgoingData.writeByte(ClientPacketID.Inquiry.ordinal());
+    }
+
+    public static void writeInquiryVote(int opt) {
+        outgoingData.writeByte(ClientPacketID.InquiryVote.ordinal());
+        outgoingData.writeByte(opt);
+    }
+
+    public static void writeGuildMessage(String message) {
+        outgoingData.writeByte(ClientPacketID.GuildMessage.ordinal());
+        outgoingData.writeASCIIString(message);
+    }
+
+    public static void writePartyMessage(String message) {
+        outgoingData.writeByte(ClientPacketID.PartyMessage.ordinal());
+        outgoingData.writeASCIIString(message);
+    }
+
+    public static void writeCentinelReport(int number) {
+        outgoingData.writeByte(ClientPacketID.CentinelReport.ordinal());
+        outgoingData.writeByte(number);
+    }
+
+    public static void writeCreateItem(int itemIndex) {
+        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
+        outgoingData.writeByte(eGMCommands.CreateItem.ordinal());
+        outgoingData.writeInteger((short)itemIndex);
+    }
+
+    public static void writeWarpMeToTarget() {
+        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
+        outgoingData.writeByte(eGMCommands.WarpMeToTarget.ordinal());
+    }
+
+    public static void writeWarpChar(String userName, short map, int x, int y) {
+        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
+        outgoingData.writeByte(eGMCommands.WarpChar.ordinal());
+
+        outgoingData.writeASCIIString(userName);
+        outgoingData.writeInteger(map);
+        outgoingData.writeByte(x);
+        outgoingData.writeByte(y);
+    }
+
+    public static void writeGuildOnline() {
+        outgoingData.writeByte(ClientPacketID.GuildOnline.ordinal());
+    }
+
+    public static void writePartyOnline() {
+        outgoingData.writeByte(ClientPacketID.GuildOnline.ordinal());
+    }
+
+    public static void writeCouncilMessage(String message) {
+        outgoingData.writeByte(ClientPacketID.CouncilMessage.ordinal());
+        outgoingData.writeASCIIString(message);
+    }
+
+    public static void writeRoleMasterRequest(String message) {
+        outgoingData.writeByte(ClientPacketID.RoleMasterRequest.ordinal());
+        outgoingData.writeASCIIString(message);
+    }
+
+    public static void writeGMRequest() {
+        outgoingData.writeByte(ClientPacketID.GMRequest.ordinal());
+    }
+
+    public static void writeBugReport(String message) {
+        outgoingData.writeByte(ClientPacketID.bugReport.ordinal());
+        outgoingData.writeASCIIString(message);
+    }
+
+    public static void writeChangeDescription(String message) {
+        outgoingData.writeByte(ClientPacketID.ChangeDescription.ordinal());
+        outgoingData.writeASCIIString(message);
+    }
+
+    public static void writeGuildVote(String message) {
+        outgoingData.writeByte(ClientPacketID.GuildVote.ordinal());
+        outgoingData.writeASCIIString(message);
+    }
+
+    public static void writePunishments(String message) {
+        outgoingData.writeByte(ClientPacketID.Punishments.ordinal());
+        outgoingData.writeASCIIString(message);
+    }
+
+    public static void writeGamble(short amount) {
+        outgoingData.writeByte(ClientPacketID.Gamble.ordinal());
+        outgoingData.writeInteger(amount);
+    }
+
+    public static void writeLeaveFaction() {
+        outgoingData.writeByte(ClientPacketID.LeaveFaction.ordinal());
+    }
 }
