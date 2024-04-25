@@ -5,6 +5,7 @@ import org.aoclient.engine.game.User;
 import org.aoclient.engine.gui.ImGUISystem;
 import org.aoclient.engine.gui.forms.FNewPassword;
 import org.aoclient.engine.renderer.RGBColor;
+import org.aoclient.network.packets.eEditOptions;
 import org.aoclient.network.packets.eNumber_Types;
 
 import java.nio.charset.StandardCharsets;
@@ -305,52 +306,159 @@ public class ProtocolCmdParse {
                     break;
 
                 case "/RETIRAR":
+                    if (User.get().isDead()) {
+                        Console.get().addMsgToConsole(new String("¡Estás muerto!".getBytes(), StandardCharsets.UTF_8),
+                                false, true, new RGBColor());
+                    } else {
+
+                        if (notNullArguments) {
+                            if (validNumber(argumentosRaw,eNumber_Types.ent_Long)) {
+                                writeBankExtractGold(Integer.parseInt(argumentosRaw));
+                            } else {
+                                Console.get().addMsgToConsole(new String("Cantidad incorrecta. Utilice /retirar CANTIDAD.".getBytes(), StandardCharsets.UTF_8),
+                                        false, true, new RGBColor());
+                            }
+                        }
+
+                    }
                     break;
 
                 case "/DEPOSITAR":
+                    if (User.get().isDead()) {
+                        Console.get().addMsgToConsole(new String("¡Estás muerto!".getBytes(), StandardCharsets.UTF_8),
+                                false, true, new RGBColor());
+                    } else {
+
+                        if (notNullArguments) {
+                            if (validNumber(argumentosRaw,eNumber_Types.ent_Long)) {
+                                writeBankDepositGold(Integer.parseInt(argumentosRaw));
+                            } else {
+                                Console.get().addMsgToConsole(new String("Cantidad incorrecta. Utilice /depositar CANTIDAD.".getBytes(), StandardCharsets.UTF_8),
+                                        false, true, new RGBColor());
+                            }
+                        }
+
+                    }
                     break;
 
                 case "/DENUNCIAR":
+                    if (notNullArguments) {
+                        writeDenounce(argumentosRaw);
+                    } else {
+                        Console.get().addMsgToConsole(new String("Formule su denuncia.".getBytes(), StandardCharsets.UTF_8),
+                                false, true, new RGBColor());
+                    }
                     break;
 
                 case "/FUNDARCLAN":
+                    if (User.get().getUserLvl() >= 25) {
+                        writeGuildFundate();
+                    } else {
+                        Console.get().addMsgToConsole(new String("Para fundar un clan tenés que ser nivel 25 y tener 90 skills en liderazgo.".getBytes(), StandardCharsets.UTF_8),
+                                false, true, new RGBColor());
+                    }
                     break;
 
                 case "/FUNDARCLANGM":
+                    writeGuildFundation(3); //NOTA: En el codigo original clanType pertenece a un Enum que solo se utiliza en este caso, evaluar si crear el Enum o dejarlo así. El 3 pertenece al clan de GM.
                     break;
 
                 case "/ECHARPARTY":
+                    if(notNullArguments) {
+                        writePartyKick(argumentosRaw);
+                    } else {
+                        Console.get().addMsgToConsole(new String("Faltan parámetros. Utilice /echarparty NICKNAME.".getBytes(), StandardCharsets.UTF_8),
+                                false, true, new RGBColor());
+                    }
+                    break;
+
+                case "/PARTYLIDER":
+                    if(notNullArguments) {
+                        writePartySetLeader(argumentosRaw);
+                    } else {
+                        Console.get().addMsgToConsole(new String("Faltan parámetros. Utilice /partylider NICKNAME.".getBytes(), StandardCharsets.UTF_8),
+                                false, true, new RGBColor());
+                    }
                     break;
 
                 case "/ACCEPTPARTY":
+                    if(notNullArguments) {
+                        writePartyAcceptMember(argumentosRaw);
+                    } else {
+                        Console.get().addMsgToConsole(new String("Faltan parámetros. Utilice /acceptparty NICKNAME.".getBytes(), StandardCharsets.UTF_8),
+                                false, true, new RGBColor());
+                    }
                     break;
 
-                // COMANDOS DE GM
+                /* ##############################################
+                   #        COMIENZAN LOS COMANDOS DE GM        #
+                   ##############################################*/
+
                 case "/GMSG":
+                    if(notNullArguments) {
+                        writeGMMessage(argumentosRaw);
+                    } else {
+                        Console.get().addMsgToConsole(new String("Escriba un mensaje.".getBytes(), StandardCharsets.UTF_8),
+                                false, true, new RGBColor());
+                    }
                     break;
 
                 case "/SHOWNAME":
+                    writeShowName();
                     break;
 
                 case "/ONLINEREAL":
+                    writeOnlineRoyalArmy();
                     break;
 
                 case "/ONLINECAOS":
+                    writeOnlineChaosLegion();
                     break;
 
                 case "/IRCERCA":
+                    if(notNullArguments) {
+                        writeGoNearby(argumentosRaw);
+                    } else {
+                        Console.get().addMsgToConsole(new String("Faltan parámetros. Utilice /ircerca NICKNAME.".getBytes(), StandardCharsets.UTF_8),
+                                false, true, new RGBColor());
+                    }
                     break;
 
                 case "/REM":
+                    if(notNullArguments) {
+                        writeComment(argumentosRaw);
+                    } else {
+                        Console.get().addMsgToConsole(new String("Escriba un comentario.".getBytes(), StandardCharsets.UTF_8),
+                                false, true, new RGBColor());
+                    }
                     break;
 
                 case "/HORA":
+                    writeServerTime();
                     break;
 
                 case "/DONDE":
+                    if(notNullArguments) {
+                        writeWhere(argumentosRaw);
+                    } else {
+                        Console.get().addMsgToConsole(new String("Faltan parámetros. Utilice /donde NICKNAME.".getBytes(), StandardCharsets.UTF_8),
+                                false, true, new RGBColor());
+                    }
                     break;
 
                 case "/NENE":
+                    if(notNullArguments) {
+                        if (validNumber(argumentosRaw, eNumber_Types.ent_Integer)) {
+                            writeCreaturesInMap(Short.parseShort(argumentosRaw));
+                        } else {
+                            // No es numérico.
+                            Console.get().addMsgToConsole(new String("Mapa incorrecto. Utilice /nene MAPA..".getBytes(), StandardCharsets.UTF_8),
+                                    false, true, new RGBColor());
+                        }
+                    } else {
+                        // Por defecto toma el mapa en el que está.
+                        writeCreaturesInMap(User.get().getUserMap());
+                    }
                     break;
 
                 case "/TELEPLOC":
@@ -400,63 +508,234 @@ public class ProtocolCmdParse {
                     break;
 
                 case "/SILENCIAR":
+                    if(notNullArguments) {
+                        writeSilence(argumentosRaw);
+                    } else {
+                        Console.get().addMsgToConsole(new String("Faltan parámetros. Utilice /silenciar NICKNAME.".getBytes(), StandardCharsets.UTF_8),
+                                false, true, new RGBColor());
+                    }
                     break;
 
                 case "/SHOW":
-                    break;
-
-                case "/DENUNCIAS":
+                    if (notNullArguments) {
+                        switch (argumentosAll[0].toUpperCase()) {
+                            case "SOS":
+                                writeSOSShowList();
+                                break;
+                            case "INT":
+                                writeShowServerForm();
+                                break;
+                        }
+                    }
                     break;
 
                 case "/IRA":
+                    if(notNullArguments) {
+                        writeGoToChar(argumentosRaw);
+                    } else {
+                        Console.get().addMsgToConsole(new String("Faltan parámetros. Utilice /ira NICKNAME.".getBytes(), StandardCharsets.UTF_8),
+                                false, true, new RGBColor());
+                    }
                     break;
 
                 case "/INVISIBLE":
+                    writeInvisible();
                     break;
 
                 case "/PANELGM":
+                    writeGMPanel();
                     break;
 
                 case "/TRABAJANDO":
+                    writeWorking();
                     break;
 
                 case "/OCULTANDO":
+                    writeHiding();
                     break;
 
                 case "/CARCEL":
+                    if (notNullArguments) {
+                        tmpArr = argumentosRaw.split("@");
+                        if (tmpArr.length == 3) {
+                            if (validNumber(tmpArr[2], eNumber_Types.ent_Byte)) {
+                                writeJail(tmpArr[0], tmpArr[1], Integer.parseInt(tmpArr[2]));
+                            } else {
+                                // No es numérico
+                                Console.get().addMsgToConsole(new String("Tiempo incorrecto. Utilice /carcel NICKNAME@MOTIVO@TIEMPO.".getBytes(), StandardCharsets.UTF_8),
+                                        false, true, new RGBColor());
+                            }
+                        } else {
+                            // Faltan los parámetros con el formato propio
+                            Console.get().addMsgToConsole(new String("Formato incorrecto. Utilice /carcel NICKNAME@MOTIVO@TIEMPO.".getBytes(), StandardCharsets.UTF_8),
+                                    false, true, new RGBColor());
+                        }
+                    } else {
+                        // Avisar que falta el parámetro
+                        Console.get().addMsgToConsole(new String("Faltan parámetros. Utilice /carcel NICKNAME@MOTIVO@TIEMPO.".getBytes(), StandardCharsets.UTF_8),
+                                false, true, new RGBColor());
+                    }
                     break;
 
                 case "/RMATA":
+                    writeKillNPC();
                     break;
 
                 case "/ADVERTENCIA":
+                    if (notNullArguments){
+                        tmpArr = argumentosRaw.split("@", 2);
+                        if (tmpArr.length == 2) {
+                            writeWarnUser(tmpArr[0], tmpArr[1]);
+                        } else {
+                            //Faltan los parametros con el formato propio
+                            Console.get().addMsgToConsole(new String("Formato incorrecto. Utilice /advertencia NICKNAME@MOTIVO".getBytes(), StandardCharsets.UTF_8),
+                                    false, true, new RGBColor());
+                        }
+                    } else {
+                        // Avisar que falta el parámetro
+                        Console.get().addMsgToConsole(new String("Faltan parámetros. Utilice /advertencia NICKNAME@MOTIVO@TIEMPO.".getBytes(), StandardCharsets.UTF_8),
+                                false, true, new RGBColor());
+                    }
                     break;
 
                 case "/MOD":
+                    if (notNullArguments && cantidadArgumentos >= 3) {
+                        String argumento = argumentosAll[1].toUpperCase();
+                        tmpInt = -1;
+                        switch (argumento) {
+                            case "BODY":
+                                tmpInt = eEditOptions.eo_Body.getValue();
+                                break;
+                            case "HEAD":
+                                tmpInt = eEditOptions.eo_Head.getValue();
+                                break;
+                            case "ORO":
+                                tmpInt = eEditOptions.eo_Gold.getValue();
+                                break;
+                            case "LEVEL":
+                                tmpInt = eEditOptions.eo_Level.getValue();
+                                break;
+                            case "SKILLS":
+                                tmpInt = eEditOptions.eo_Skills.getValue();
+                                break;
+                            case "SKILLSLIBRES":
+                                tmpInt = eEditOptions.eo_SkillPointsLeft.getValue();
+                                break;
+                            case "CLASE":
+                                tmpInt = eEditOptions.eo_Class.getValue();
+                                break;
+                            case "EXP":
+                                tmpInt = eEditOptions.eo_Experience.getValue();
+                                break;
+                            case "CRI":
+                                tmpInt = eEditOptions.eo_CriminalsKilled.getValue();
+                                break;
+                            case "CIU":
+                                tmpInt = eEditOptions.eo_CiticensKilled.getValue();
+                                break;
+                            case "NOB":
+                                tmpInt = eEditOptions.eo_Nobleza.getValue();
+                                break;
+                            case "ASE":
+                                tmpInt = eEditOptions.eo_Asesino.getValue();
+                                break;
+                            case "SEX":
+                                tmpInt = eEditOptions.eo_Sex.getValue();
+                                break;
+                            case "RAZA":
+                                tmpInt = eEditOptions.eo_Raza.getValue();
+                                break;
+                            case "AGREGAR":
+                                tmpInt = eEditOptions.eo_addGold.getValue();
+                                break;
+
+                            default:
+                                tmpInt = -1;
+                        }
+
+                        if (tmpInt > 0) {
+                            if (cantidadArgumentos == 3) {
+                                writeEditChar(argumentosAll[0], tmpInt, argumentosAll[2], "");
+                            } else {
+                                writeEditChar(argumentosAll[0], tmpInt, argumentosAll[2], argumentosAll[3]);
+                            }
+                        } else {
+                            // Avisar que no existe el comando
+                            Console.get().addMsgToConsole(new String("Comando incorrecto.".getBytes(), StandardCharsets.UTF_8),
+                                    false, true, new RGBColor());
+                        }
+                    } else {
+                        // Avisar que falta el parámetro
+                        Console.get().addMsgToConsole(new String("Faltan parámetros.".getBytes(), StandardCharsets.UTF_8),
+                                false, true, new RGBColor());
+                    }
                     break;
 
                 case "/INFO":
+                    if(notNullArguments) {
+                        writeRequestCharInfo(argumentosRaw);
+                    } else {
+                        Console.get().addMsgToConsole(new String("Faltan parámetros. Utilice /info NICKNAME.".getBytes(), StandardCharsets.UTF_8),
+                                false, true, new RGBColor());
+                    }
                     break;
 
                 case "/STAT":
+                    if(notNullArguments) {
+                        writeRequestCharStats(argumentosRaw);
+                    } else {
+                        Console.get().addMsgToConsole(new String("Faltan parámetros. Utilice /stat NICKNAME.".getBytes(), StandardCharsets.UTF_8),
+                                false, true, new RGBColor());
+                    }
                     break;
 
                 case "/BAL":
+                    if(notNullArguments) {
+                        writeRequestCharGold(argumentosRaw);
+                    } else {
+                        Console.get().addMsgToConsole(new String("Faltan parámetros. Utilice /bal NICKNAME.".getBytes(), StandardCharsets.UTF_8),
+                                false, true, new RGBColor());
+                    }
                     break;
 
                 case "/INV":
+                    if(notNullArguments) {
+                        writeRequestCharInventory(argumentosRaw);
+                    } else {
+                        Console.get().addMsgToConsole(new String("Faltan parámetros. Utilice /inv NICKNAME.".getBytes(), StandardCharsets.UTF_8),
+                                false, true, new RGBColor());
+                    }
                     break;
 
                 case "/BOV":
+                    if(notNullArguments) {
+                        writeRequestCharBank(argumentosRaw);
+                    } else {
+                        Console.get().addMsgToConsole(new String("Faltan parámetros. Utilice /bov NICKNAME.".getBytes(), StandardCharsets.UTF_8),
+                                false, true, new RGBColor());
+                    }
                     break;
 
                 case "/SKILLS":
+                    if(notNullArguments) {
+                        writeRequestCharSkills(argumentosRaw);
+                    } else {
+                        Console.get().addMsgToConsole(new String("Faltan parámetros. Utilice /skills NICKNAME.".getBytes(), StandardCharsets.UTF_8),
+                                false, true, new RGBColor());
+                    }
                     break;
 
                 case "/REVIVIR":
+                    if(notNullArguments) {
+                        writeReviveChar(argumentosRaw);
+                    } else {
+                        Console.get().addMsgToConsole(new String("Faltan parámetros. Utilice /revivir NICKNAME.".getBytes(), StandardCharsets.UTF_8),
+                                false, true, new RGBColor());
+                    }
                     break;
 
                 case "/ONLINEGM":
+                    writeOnlineGM();
                     break;
 
                 case "/ONLINEMAP":

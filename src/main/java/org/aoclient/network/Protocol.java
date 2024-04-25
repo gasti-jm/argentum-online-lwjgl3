@@ -3576,27 +3576,6 @@ public class Protocol {
         outgoingData.writeByte(number);
     }
 
-    public static void writeCreateItem(int itemIndex) {
-        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
-        outgoingData.writeByte(eGMCommands.CreateItem.ordinal());
-        outgoingData.writeInteger((short)itemIndex);
-    }
-
-    public static void writeWarpMeToTarget() {
-        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
-        outgoingData.writeByte(eGMCommands.WarpMeToTarget.ordinal());
-    }
-
-    public static void writeWarpChar(String userName, short map, int x, int y) {
-        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
-        outgoingData.writeByte(eGMCommands.WarpChar.ordinal());
-
-        outgoingData.writeASCIIString(userName);
-        outgoingData.writeInteger(map);
-        outgoingData.writeByte(x);
-        outgoingData.writeByte(y);
-    }
-
     public static void writeGuildOnline() {
         outgoingData.writeByte(ClientPacketID.GuildOnline.ordinal());
     }
@@ -3646,5 +3625,242 @@ public class Protocol {
 
     public static void writeLeaveFaction() {
         outgoingData.writeByte(ClientPacketID.LeaveFaction.ordinal());
+    }
+
+    public static void writeBankExtractGold(int amount) {
+        outgoingData.writeByte(ClientPacketID.BankExtractGold.ordinal());
+        outgoingData.writeLong(amount);
+    }
+
+    public static void writeBankDepositGold(int amount) {
+        outgoingData.writeByte(ClientPacketID.BankDepositGold.ordinal());
+        outgoingData.writeLong(amount);
+    }
+
+    public static void writeDenounce(String message) {
+        outgoingData.writeByte(ClientPacketID.Denounce.ordinal());
+        outgoingData.writeASCIIString(message);
+    }
+
+    public static void writeGuildFundate() {
+        outgoingData.writeByte(ClientPacketID.GuildFundate.ordinal());
+    }
+
+    public static void writeGuildFundation(int clanType) {
+        outgoingData.writeByte(ClientPacketID.GuildFundation.ordinal());
+        outgoingData.writeByte(clanType);
+    }
+
+    public static void writePartyKick(String userName){
+        outgoingData.writeByte(ClientPacketID.PartyKick.ordinal());
+        outgoingData.writeASCIIString(userName);
+    }
+
+    public static void writePartySetLeader(String userName){
+        outgoingData.writeByte(ClientPacketID.PartySetLeader.ordinal());
+        outgoingData.writeASCIIString(userName);
+    }
+
+    public static void writePartyAcceptMember(String userName){
+        outgoingData.writeByte(ClientPacketID.PartyAcceptMember.ordinal());
+        outgoingData.writeASCIIString(userName);
+    }
+
+     /* ##############################################
+        #              COMANDOS DE GM                #
+        ##############################################*/
+
+    public static void writeGMMessage(String message) {
+        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
+        outgoingData.writeByte(eGMCommands.GMMessage.ordinal());
+        outgoingData.writeASCIIString(message);
+    }
+
+    public static void writeShowName() {
+        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
+        outgoingData.writeByte(eGMCommands.showName.ordinal());
+    }
+
+    public static void writeOnlineRoyalArmy() {
+        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
+        outgoingData.writeByte(eGMCommands.OnlineRoyalArmy.ordinal());
+    }
+
+    public static void writeOnlineChaosLegion() {
+        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
+        outgoingData.writeByte(eGMCommands.OnlineChaosLegion.ordinal());
+    }
+
+    public static void writeGoNearby(String userName) {
+        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
+        outgoingData.writeByte(eGMCommands.GoNearby.ordinal());
+        outgoingData.writeASCIIString(userName);
+    }
+
+    public static void writeComment(String message) {
+        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
+        outgoingData.writeByte(eGMCommands.Comment.ordinal());
+        outgoingData.writeASCIIString(message);
+    }
+
+    public static void writeServerTime() {
+        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
+        outgoingData.writeByte(eGMCommands.serverTime.ordinal());
+    }
+
+    public static void writeWhere(String userName) {
+        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
+        outgoingData.writeByte(eGMCommands.Where.ordinal());
+        outgoingData.writeASCIIString(userName);
+    }
+
+    public static void writeCreaturesInMap(short Map) {
+        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
+        outgoingData.writeByte(eGMCommands.CreaturesInMap.ordinal());
+        outgoingData.writeInteger(Map);
+    }
+
+    public static void writeCreateItem(int itemIndex) {
+        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
+        outgoingData.writeByte(eGMCommands.CreateItem.ordinal());
+        outgoingData.writeInteger((short)itemIndex);
+    }
+
+    public static void writeWarpMeToTarget() {
+        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
+        outgoingData.writeByte(eGMCommands.WarpMeToTarget.ordinal());
+    }
+
+    public static void writeWarpChar(String userName, short map, int x, int y) {
+        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
+        outgoingData.writeByte(eGMCommands.WarpChar.ordinal());
+
+        outgoingData.writeASCIIString(userName);
+        outgoingData.writeInteger(map);
+        outgoingData.writeByte(x);
+        outgoingData.writeByte(y);
+    }
+
+    public static void writeSilence(String userName) {
+        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
+        outgoingData.writeByte(eGMCommands.Silence.ordinal());
+        outgoingData.writeASCIIString(userName);
+    }
+
+    public static void writeSOSShowList() {
+        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
+        outgoingData.writeByte(eGMCommands.SOSShowList.ordinal());
+    }
+
+    public static void writeShowServerForm() {
+        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
+        outgoingData.writeByte(eGMCommands.ShowServerForm.ordinal());
+    }
+
+    public static void writeGoToChar(String userName) {
+        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
+        outgoingData.writeByte(eGMCommands.GoToChar.ordinal());
+        outgoingData.writeASCIIString(userName);
+    }
+
+    public static void writeInvisible() {
+        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
+        outgoingData.writeByte(eGMCommands.Invisible.ordinal());
+    }
+
+    public static void writeGMPanel() {
+        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
+        outgoingData.writeByte(eGMCommands.GMPanel.ordinal());
+    }
+
+    public static void writeWorking() {
+        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
+        outgoingData.writeByte(eGMCommands.Working.ordinal());
+    }
+
+    public static void writeHiding() {
+        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
+        outgoingData.writeByte(eGMCommands.Hiding.ordinal());
+    }
+
+    public static void writeJail(String userName, String reason, int time) {
+        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
+        outgoingData.writeByte(eGMCommands.Jail.ordinal());
+        outgoingData.writeASCIIString(userName);
+        outgoingData.writeASCIIString(reason);
+        outgoingData.writeByte(time);
+    }
+
+    public static void writeKillNPC() {
+        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
+        outgoingData.writeByte(eGMCommands.KillNPC.ordinal());
+    }
+
+    public static void writeWarnUser(String userName, String reason) {
+        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
+        outgoingData.writeByte(eGMCommands.WarnUser.ordinal());
+        outgoingData.writeASCIIString(userName);
+        outgoingData.writeASCIIString(reason);
+    }
+
+    public static void writeEditChar(String userName, int editOption, String arg1, String arg2) {
+        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
+        outgoingData.writeByte(eGMCommands.EditChar.ordinal());
+
+        outgoingData.writeASCIIString(userName);
+
+        outgoingData.writeByte(editOption);
+
+        outgoingData.writeASCIIString(arg1);
+        outgoingData.writeASCIIString(arg2);
+
+
+    }
+
+    public static void writeRequestCharInfo(String userName) {
+        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
+        outgoingData.writeByte(eGMCommands.RequestCharInfo.ordinal());
+        outgoingData.writeASCIIString(userName);
+    }
+
+    public static void writeRequestCharStats(String userName) {
+        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
+        outgoingData.writeByte(eGMCommands.RequestCharStats.ordinal());
+        outgoingData.writeASCIIString(userName);
+    }
+
+    public static void writeRequestCharGold(String userName) {
+        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
+        outgoingData.writeByte(eGMCommands.RequestCharGold.ordinal());
+        outgoingData.writeASCIIString(userName);
+    }
+
+    public static void writeRequestCharInventory(String userName) {
+        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
+        outgoingData.writeByte(eGMCommands.RequestCharInventory.ordinal());
+        outgoingData.writeASCIIString(userName);
+    }
+
+    public static void writeRequestCharBank(String userName) {
+        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
+        outgoingData.writeByte(eGMCommands.RequestCharBank.ordinal());
+        outgoingData.writeASCIIString(userName);
+    }
+
+    public static void writeRequestCharSkills(String userName) {
+        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
+        outgoingData.writeByte(eGMCommands.RequestCharSkills.ordinal());
+        outgoingData.writeASCIIString(userName);
+    }
+
+    public static void writeReviveChar(String userName) {
+        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
+        outgoingData.writeByte(eGMCommands.ReviveChar.ordinal());
+        outgoingData.writeASCIIString(userName);
+    }
+
+    public static void writeOnlineGM() {
+        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
+        outgoingData.writeByte(eGMCommands.OnlineGM.ordinal());
     }
 }
