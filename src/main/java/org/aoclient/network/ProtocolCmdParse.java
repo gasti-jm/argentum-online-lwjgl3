@@ -739,99 +739,358 @@ public class ProtocolCmdParse {
                     break;
 
                 case "/ONLINEMAP":
+                    if(notNullArguments) {
+                        if (validNumber(argumentosAll[0], eNumber_Types.ent_Integer)){
+                            writeOnlineMap(Short.parseShort(argumentosAll[0]));
+                        } else {
+                            Console.get().addMsgToConsole(new String("Mapa incorrecto.".getBytes(), StandardCharsets.UTF_8),
+                                    false, true, new RGBColor());
+                        }
+                    } else {
+                        writeOnlineMap(User.get().getUserMap());
+                    }
                     break;
 
                 case "/PERDON":
+                    if(notNullArguments) {
+                        writeForgive(argumentosRaw);
+                    } else {
+                        Console.get().addMsgToConsole(new String("Faltan parámetros. Utilice /perdon NICKNAME.".getBytes(), StandardCharsets.UTF_8),
+                                false, true, new RGBColor());
+                    }
                     break;
 
                 case "/ECHAR":
+                    if(notNullArguments) {
+                        writeKick(argumentosRaw);
+                    } else {
+                        Console.get().addMsgToConsole(new String("Faltan parámetros. Utilice /echar NICKNAME.".getBytes(), StandardCharsets.UTF_8),
+                                false, true, new RGBColor());
+                    }
                     break;
 
                 case "/EJECUTAR":
+                    if(notNullArguments) {
+                        writeExecute(argumentosRaw);
+                    } else {
+                        Console.get().addMsgToConsole(new String("Faltan parámetros. Utilice /ejecutar NICKNAME.".getBytes(), StandardCharsets.UTF_8),
+                                false, true, new RGBColor());
+                    }
                     break;
 
                 case "/BAN":
+                    if (notNullArguments) {
+                        tmpArr = argumentosRaw.split("@", 2);
+                        if (tmpArr.length == 2) {
+                            writeBanChar(tmpArr[0], tmpArr[1]);
+                        } else {
+                            // Faltan los parámetros con el formato propio
+                            Console.get().addMsgToConsole(new String("Formato incorrecto. Utilice /ban NICKNAME@MOTIVO.".getBytes(), StandardCharsets.UTF_8),
+                                    false, true, new RGBColor());
+                        }
+                    } else {
+                        // Avisar que falta el parámetro
+                        Console.get().addMsgToConsole(new String("Faltan parámetros. Utilice /ban NICKNAME@MOTIVO.".getBytes(), StandardCharsets.UTF_8),
+                                false, true, new RGBColor());
+                    }
                     break;
 
                 case "/UNBAN":
+                    if(notNullArguments) {
+                        writeUnbanChar(argumentosRaw);
+                    } else {
+                        Console.get().addMsgToConsole(new String("Faltan parámetros. Utilice /unban NICKNAME.".getBytes(), StandardCharsets.UTF_8),
+                                false, true, new RGBColor());
+                    }
                     break;
 
                 case "/SEGUIR":
+                    writeNPCFollow();
                     break;
 
                 case "/SUM":
+                    if(notNullArguments) {
+                        writeSummonChar();
+                    } else {
+                        Console.get().addMsgToConsole(new String("Faltan parámetros. Utilice /sum NICKNAME.".getBytes(), StandardCharsets.UTF_8),
+                                false, true, new RGBColor());
+                    }
                     break;
 
                 case "/CC":
+                    writeSpawnListRequest();
                     break;
 
                 case "/RESETINV":
+                    writeResetNPCInventory();
                     break;
 
                 case "/LIMPIAR":
+                    writeCleanWorld();
                     break;
 
                 case "/RMSG":
-                    break;
-
-                case "/MAPMSG":
+                    if(notNullArguments) {
+                        writeServerMessage();
+                    } else {
+                        // Avisar de que falta parametro
+                        Console.get().addMsgToConsole(new String("Escriba un mensaje.".getBytes(), StandardCharsets.UTF_8),
+                                false, true, new RGBColor());
+                    }
                     break;
 
                 case "/NICK2IP":
+                    if(notNullArguments) {
+                        writeNickToIP(argumentosRaw);
+                    } else {
+                        // Avisar de que falta parametro
+                        Console.get().addMsgToConsole(new String("Faltan parámetros. Utilice /nick2ip ip.".getBytes(), StandardCharsets.UTF_8),
+                                false, true, new RGBColor());
+                    }
                     break;
 
                 case "/IP2NICK":
+                    if (notNullArguments) {
+                        if (validIPv4Str(argumentosRaw)) {
+                            int[] ip = str2ipv4l(argumentosRaw);
+                            if (ip != null) {
+                                writeIPToNick(ip);
+                            } else {
+                                // La conversión de la IP falló
+                                Console.get().addMsgToConsole(new String("Error al convertir la IP.".getBytes(), StandardCharsets.UTF_8),
+                                        false, true, new RGBColor());
+                            }
+                        } else {
+                            // No es una IP válida
+                            Console.get().addMsgToConsole(new String("IP incorrecta. Utilice /ip2nick IP.".getBytes(), StandardCharsets.UTF_8),
+                                    false, true, new RGBColor());
+                        }
+                    } else {
+                        // Avisar que falta el parámetro
+                        Console.get().addMsgToConsole(new String("Faltan parámetros. Utilice /ip2nick IP.".getBytes(), StandardCharsets.UTF_8),
+                                false, true, new RGBColor());
+                    }
                     break;
 
                 case "/ONCLAN":
+                    if(notNullArguments) {
+                        writeGuildOnlineMembers(argumentosRaw);
+                    } else {
+                        // Avisar de que falta parametro
+                        Console.get().addMsgToConsole(new String("Utilice /onclan nombre del clan".getBytes(), StandardCharsets.UTF_8),
+                                false, true, new RGBColor());
+                    }
+                    break;
+
+                case "/CT":
+                    if (notNullArguments && cantidadArgumentos >= 3) {
+                        if (validNumber(argumentosAll[0], eNumber_Types.ent_Integer) &&
+                                validNumber(argumentosAll[1], eNumber_Types.ent_Byte) &&
+                                validNumber(argumentosAll[2], eNumber_Types.ent_Byte)) {
+
+                            if (cantidadArgumentos == 3) {
+                                writeTeleportCreate(Short.parseShort(argumentosAll[0]), Integer.parseInt(argumentosAll[1]), Integer.parseInt(argumentosAll[2]),0);
+                            } else {
+                                if (validNumber(argumentosAll[3], eNumber_Types.ent_Byte)) {
+                                    writeTeleportCreate(Short.parseShort(argumentosAll[0]), Integer.parseInt(argumentosAll[1]), Integer.parseInt(argumentosAll[2]), Integer.parseInt(argumentosAll[3]));
+                                } else {
+                                    // No es numérico
+                                    Console.get().addMsgToConsole(new String("Valor incorrecto. Utilice /ct MAPA X Y RADIO(Opcional).".getBytes(), StandardCharsets.UTF_8),
+                                            false, true, new RGBColor());
+                                }
+                            }
+                        } else {
+                            // No es numérico
+                            Console.get().addMsgToConsole(new String("Valor incorrecto. Utilice /ct MAPA X Y RADIO(Opcional).".getBytes(), StandardCharsets.UTF_8),
+                                    false, true, new RGBColor());
+                        }
+                    } else {
+                        // Avisar que falta el parámetro
+                        Console.get().addMsgToConsole(new String("Faltan parámetros. Utilice /ct MAPA X Y RADIO(Opcional).".getBytes(), StandardCharsets.UTF_8),
+                                false, true, new RGBColor());
+                    }
                     break;
 
                 case "/DT":
+                    writeTeleportDestroy();
                     break;
 
                 case "/LLUVIA":
+                    writeRainToggle();
                     break;
 
                 case "/SETDESC":
+                    writeSetCharDescription(argumentosRaw);
                     break;
 
                 case "/FORCEMIDIMAP":
+                    if (notNullArguments) {
+                        // Elegir el mapa es opcional
+                        if (cantidadArgumentos == 1) {
+                            if (validNumber(argumentosAll[0], eNumber_Types.ent_Byte)) {
+                                // Enviamos un mapa nulo para que tome el del usuario.
+                                writeForceMIDIToMap(Integer.parseInt(argumentosAll[0]), (short) 0);
+                            } else {
+                                // No es numérico
+                                Console.get().addMsgToConsole(new String("Midi incorrecto. Utilice /forcemidimap MIDI MAPA, siendo el mapa opcional.".getBytes(), StandardCharsets.UTF_8),
+                                        false, true, new RGBColor());
+                            }
+                        } else if (cantidadArgumentos == 2) {
+                            if (validNumber(argumentosAll[0], eNumber_Types.ent_Byte) &&
+                                    validNumber(argumentosAll[1], eNumber_Types.ent_Integer)) {
+                                writeForceMIDIToMap(Integer.parseInt(argumentosAll[0]), Short.parseShort(argumentosAll[1]));
+                            } else {
+                                // No es numérico
+                                Console.get().addMsgToConsole(new String("Valor incorrecto. Utilice /forcemidimap MIDI MAPA, siendo el mapa opcional.".getBytes(), StandardCharsets.UTF_8),
+                                        false, true, new RGBColor());
+                            }
+                        } else {
+                            // Avisar que falta el parámetro
+                            Console.get().addMsgToConsole(new String("Utilice /forcemidimap MIDI MAPA, siendo el mapa opcional.".getBytes(), StandardCharsets.UTF_8),
+                                    false, true, new RGBColor());
+                        }
+                    } else {
+                        // Avisar que falta el parámetro
+                        Console.get().addMsgToConsole(new String("Utilice /forcemidimap MIDI MAPA, siendo el mapa opcional.".getBytes(), StandardCharsets.UTF_8),
+                                false, true, new RGBColor());
+                    }
                     break;
 
                 case "/FORCEWAVMAP":
+                    if (notNullArguments) {
+                        // Elegir la posición es opcional
+                        if (cantidadArgumentos == 1) {
+                            if (validNumber(argumentosAll[0], eNumber_Types.ent_Byte)) {
+                                // Enviamos una posición nula para que tome la del usuario.
+                                writeForceWAVEToMap(Integer.parseInt(argumentosAll[0]), (short) 0, 0, 0);
+                            } else {
+                                // No es numérico
+                                Console.get().addMsgToConsole(new String("Utilice /forcewavmap WAV MAP X Y, siendo los últimos 3 opcionales.".getBytes(), StandardCharsets.UTF_8),
+                                        false, true, new RGBColor());
+                            }
+                        } else if (cantidadArgumentos == 4) {
+                            if (validNumber(argumentosAll[0], eNumber_Types.ent_Byte) &&
+                                    validNumber(argumentosAll[1], eNumber_Types.ent_Integer) &&
+                                    validNumber(argumentosAll[2], eNumber_Types.ent_Byte) &&
+                                    validNumber(argumentosAll[3], eNumber_Types.ent_Byte)) {
+                                writeForceWAVEToMap(Integer.parseInt(argumentosAll[0]), Short.parseShort(argumentosAll[1]), Integer.parseInt(argumentosAll[2]), Integer.parseInt(argumentosAll[3]));
+                            } else {
+                                // No es numérico
+                                Console.get().addMsgToConsole(new String("Utilice /forcewavmap WAV MAP X Y, siendo los últimos 3 opcionales.".getBytes(), StandardCharsets.UTF_8),
+                                        false, true, new RGBColor());
+                            }
+                        } else {
+                            // Avisar que falta el parámetro
+                            Console.get().addMsgToConsole(new String("Utilice /forcewavmap WAV MAP X Y, siendo los últimos 3 opcionales.".getBytes(), StandardCharsets.UTF_8),
+                                    false, true, new RGBColor());
+                        }
+                    } else {
+                        // Avisar que falta el parámetro
+                        Console.get().addMsgToConsole(new String("Utilice /forcewavmap WAV MAP X Y, siendo los últimos 3 opcionales.".getBytes(), StandardCharsets.UTF_8),
+                                false, true, new RGBColor());
+                    }
                     break;
 
                 case "/REALMSG":
+                    if(notNullArguments) {
+                        writeRoyaleArmyMessage(argumentosRaw);
+                    } else {
+                        // Avisar de que falta parametro
+                        Console.get().addMsgToConsole(new String("Escriba un mensaje".getBytes(), StandardCharsets.UTF_8),
+                                false, true, new RGBColor());
+                    }
                     break;
 
                 case "/CAOSMSG":
+                    if(notNullArguments) {
+                        writeChaosLegionMessage(argumentosRaw);
+                    } else {
+                        // Avisar de que falta parametro
+                        Console.get().addMsgToConsole(new String("Escriba un mensaje".getBytes(), StandardCharsets.UTF_8),
+                                false, true, new RGBColor());
+                    }
                     break;
 
                 case "/CIUMSG":
+                    if(notNullArguments) {
+                        writeCitizenMessage(argumentosRaw);
+                    } else {
+                        // Avisar de que falta parametro
+                        Console.get().addMsgToConsole(new String("Escriba un mensaje".getBytes(), StandardCharsets.UTF_8),
+                                false, true, new RGBColor());
+                    }
                     break;
 
                 case "/CRIMSG":
+                    if(notNullArguments) {
+                        writeCriminalMessage(argumentosRaw);
+                    } else {
+                        // Avisar de que falta parametro
+                        Console.get().addMsgToConsole(new String("Escriba un mensaje".getBytes(), StandardCharsets.UTF_8),
+                                false, true, new RGBColor());
+                    }
                     break;
 
                 case "/TALKAS":
+                    if(notNullArguments) {
+                        writeTalkAsNPC(argumentosRaw);
+                    } else {
+                        // Avisar de que falta parametro
+                        Console.get().addMsgToConsole(new String("Escriba un mensaje".getBytes(), StandardCharsets.UTF_8),
+                                false, true, new RGBColor());
+                    }
                     break;
 
                 case "/MASDEST":
+                    writeDestroyAllItemsInArea();
                     break;
 
                 case "/ACEPTCONSE":
+                    if(notNullArguments) {
+                        writeAcceptRoyalCouncilMember(argumentosRaw);
+                    } else {
+                        // Avisar de que falta parametro
+                        Console.get().addMsgToConsole(new String("Faltan parámetros. Utilice /aceptconse NICKNAME.".getBytes(), StandardCharsets.UTF_8),
+                                false, true, new RGBColor());
+                    }
                     break;
 
                 case "/ACEPTCONSECAOS":
+                    if(notNullArguments) {
+                        writeAcceptChaosCouncilMember(argumentosRaw);
+                    } else {
+                        // Avisar de que falta parametro
+                        Console.get().addMsgToConsole(new String("Faltan parámetros. Utilice /aceptconsecaos NICKNAME.".getBytes(), StandardCharsets.UTF_8),
+                                false, true, new RGBColor());
+                    }
                     break;
 
                 case "/PISO":
+                    writeItemsInTheFloor();
+                    break;
+
+                case "/ESTUPIDO":
+                    if(notNullArguments) {
+                        writeMakeDumb(argumentosRaw);
+                    } else {
+                        // Avisar de que falta parametro
+                        Console.get().addMsgToConsole(new String("Faltan parámetros. Utilice /estupido NICKNAME.".getBytes(), StandardCharsets.UTF_8),
+                                false, true, new RGBColor());
+                    }
                     break;
 
                 case "/NOESTUPIDO":
+                    if(notNullArguments) {
+                        writeMakeDumbNoMore(argumentosRaw);
+                    } else {
+                        // Avisar de que falta parametro
+                        Console.get().addMsgToConsole(new String("Faltan parámetros. Utilice /noestupido NICKNAME.".getBytes(), StandardCharsets.UTF_8),
+                                false, true, new RGBColor());
+                    }
                     break;
 
                 case "/DUMPSECURITY":
+                    writeDumpIPTables();
                     break;
 
                 case "/KICKCONSE":
@@ -1067,6 +1326,41 @@ public class ProtocolCmdParse {
 
         long valor = Long.parseLong(numero);
         return valor >= minimo && valor <= maximo;
+    }
+
+    private static boolean validIPv4Str(String ip) {
+        String[] tmpArr = ip.split("\\.");
+
+        if (tmpArr.length != 4) {
+            return false;
+        }
+
+        for (String octet : tmpArr) {
+            if (!validNumber(octet, eNumber_Types.ent_Byte)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    private static int[] str2ipv4l(String ip) {
+        String[] tmpArr = ip.split("\\.");
+        int[] bArr = new int[4];
+
+        if (tmpArr.length != 4) {
+            return null;
+        }
+
+        try {
+            for (int i = 0; i < 4; i++) {
+                bArr[i] = Byte.parseByte(tmpArr[i]);
+            }
+        } catch (NumberFormatException e) {
+            return null;
+        }
+
+        return bArr;
     }
 
 }
