@@ -22,6 +22,7 @@ import org.aoclient.engine.utils.GameData;
 import org.aoclient.engine.utils.structs.*;
 import org.tinylog.Logger;
 
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
 import static org.aoclient.engine.game.Dialogs.charDialogHitSet;
@@ -37,7 +38,9 @@ public class Protocol {
     static ByteQueue incomingData = new ByteQueue();
     static ByteQueue outgoingData = new ByteQueue();
 
-    public static void handleIncomingData(){
+    static Long pingTime;
+
+    public static void handleIncomingData() {
         byte p = incomingData.peekByte();
 
         if (p > ServerPacketID.values().length) return;
@@ -45,120 +48,329 @@ public class Protocol {
         //Logger.debug(packet + " #" + p);
 
         switch (packet) {
-            case logged:                    handleLogged();                             break;
-            case RemoveDialogs:             handleRemoveDialogs();                      break;
-            case RemoveCharDialog:          handleRemoveCharDialog();                   break;
-            case NavigateToggle:            handleNavigateToggle();                     break;
-            case Disconnect:                handleDisconnect();                         break;
-            case CommerceEnd:               handleCommerceEnd();                        break;
-            case CommerceChat:              handleCommerceChat();                       break;
-            case BankEnd:                   handleBankEnd();                            break;
-            case CommerceInit:              handleCommerceInit();                       break;
-            case BankInit:                  handleBankInit();                           break;
-            case UserCommerceInit:          handleUserCommerceInit();                   break;
-            case UserCommerceEnd:           handleUserCommerceEnd();                    break;
-            case UserOfferConfirm:          handleUserOfferConfirm();                   break;
-            case ShowBlacksmithForm:        handleShowBlacksmithForm();                 break;
-            case ShowCarpenterForm:         handleShowCarpenterForm();                  break;
-            case UpdateSta:                 handleUpdateSta();                          break;
-            case UpdateMana:                handleUpdateMana();                         break;
-            case UpdateHP:                  handleUpdateHP();                           break;
-            case UpdateGold:                handleUpdateGold();                         break;
-            case UpdateBankGold:            handleUpdateBankGold();                     break;
-            case UpdateExp:                 handleUpdateExp();                          break;
-            case ChangeMap:                 handleChangeMap();                          break;
-            case PosUpdate:                 handlePosUpdate();                          break;
-            case ChatOverHead:              handleChatOverHead();                       break;
-            case ConsoleMsg:                handleConsoleMessage();                     break;
-            case GuildChat:                 handleGuildChat();                          break;
-            case ShowMessageBox:            handleShowMessageBox();                     break;
-            case UserIndexInServer:         handleUserIndexInServer();                  break;
-            case UserCharIndexInServer:     handleUserCharIndexInServer();              break;
-            case CharacterCreate:           handleCharacterCreate();                    break;
-            case CharacterRemove:           handleCharacterRemove();                    break;
-            case CharacterChangeNick:       handleCharacterChangeNick();                break;
-            case CharacterMove:             handleCharacterMove();                      break;
-            case ForceCharMove:             handleForceCharMove();                      break;
-            case CharacterChange:           handleCharacterChange();                    break;
-            case ObjectCreate:              handleObjectCreate();                       break;
-            case ObjectDelete:              handleObjectDelete();                       break;
-            case BlockPosition:             handleBlockPosition();                      break;
-            case PlayMIDI:                  handlePlayMIDI();                           break;
-            case PlayWave:                  handlePlayWave();                           break;
-            case guildList:                 handleGuildList();                          break;
-            case AreaChanged:               handleAreaChanged();                        break;
-            case PauseToggle:               handlePauseToggle();                        break;
-            case RainToggle:                handleRainToggle();                         break;
-            case CreateFX:                  handleCreateFX();                           break;
-            case UpdateUserStats:           handleUpdateUserStats();                    break;
-            case WorkRequestTarget:         handleWorkRequestTarget();                  break;
-            case ChangeInventorySlot:       handleChangeInventorySlot();                break;
-            case ChangeBankSlot:            handleChangeBankSlot();                     break;
-            case ChangeSpellSlot:           handleChangeSpellSlot();                    break;
-            case Atributes:                 handleAtributes();                          break;
-            case BlacksmithWeapons:         handleBlacksmithWeapons();                  break;
-            case BlacksmithArmors:          handleBlacksmithArmors();                   break;
-            case CarpenterObjects:          handleCarpenterObjects();                   break;
-            case RestOK:                    handleRestOK();                             break;
-            case ErrorMsg:                  handleErrorMessage();                       break;
-            case Blind:                     handleBlind();                              break;
-            case Dumb:                      handleDumb();                               break;
-            case ShowSignal:                handleShowSignal();                         break;
-            case ChangeNPCInventorySlot:    handleChangeNPCInventorySlot();             break;
-            case UpdateHungerAndThirst:     handleUpdateHungerAndThirst();              break;
-            case Fame:                      handleFame();                               break;
-            case MiniStats:                 handleMiniStats();                          break;
-            case LevelUp:                   handleLevelUp();                            break;
-            case AddForumMsg:               handleAddForumMessage();                    break;
-            case ShowForumForm:             handleShowForumForm();                      break;
-            case SetInvisible:              handleSetInvisible();                       break;
-            case DiceRoll:                  handleDiceRoll();                           break;
-            case MeditateToggle:            handleMeditateToggle();                     break;
-            case BlindNoMore:               handleBlindNoMore();                        break;
-            case DumbNoMore:                handleDumbNoMore();                         break;
-            case SendSkills:                handleSendSkills();                         break;
-            case TrainerCreatureList:       handleTrainerCreatureList();                break;
-            case guildNews:                 handleGuildNews();                          break;
-            case OfferDetails:              handleOfferDetails();                       break;
-            case AlianceProposalsList:      handleAlianceProposalsList();               break;
-            case PeaceProposalsList:        handlePeaceProposalsList();                 break;
-            case CharacterInfo:             handleCharacterInfo();                      break;
-            case GuildLeaderInfo:           handleGuildLeaderInfo();                    break;
-            case GuildDetails:              handleGuildDetails();                       break;
-            case ShowGuildFundationForm:    handleShowGuildFundationForm();             break;
-            case ParalizeOK:                handleParalizeOK();                         break;
-            case ShowUserRequest:           handleShowUserRequest();                    break;
-            case TradeOK:                   handleTradeOK();                            break;
-            case BankOK:                    handleBankOK();                             break;
-            case ChangeUserTradeSlot:       handleChangeUserTradeSlot();                break;
-            case SendNight:                 handleSendNight();                          break;
-            case Pong:                      handlePong();                               break;
-            case UpdateTagAndStatus:        handleUpdateTagAndStatus();                 break;
-            case GuildMemberInfo:           handleGuildMemberInfo();                    break;
+            case logged:
+                handleLogged();
+                break;
+            case RemoveDialogs:
+                handleRemoveDialogs();
+                break;
+            case RemoveCharDialog:
+                handleRemoveCharDialog();
+                break;
+            case NavigateToggle:
+                handleNavigateToggle();
+                break;
+            case Disconnect:
+                handleDisconnect();
+                break;
+            case CommerceEnd:
+                handleCommerceEnd();
+                break;
+            case CommerceChat:
+                handleCommerceChat();
+                break;
+            case BankEnd:
+                handleBankEnd();
+                break;
+            case CommerceInit:
+                handleCommerceInit();
+                break;
+            case BankInit:
+                handleBankInit();
+                break;
+            case UserCommerceInit:
+                handleUserCommerceInit();
+                break;
+            case UserCommerceEnd:
+                handleUserCommerceEnd();
+                break;
+            case UserOfferConfirm:
+                handleUserOfferConfirm();
+                break;
+            case ShowBlacksmithForm:
+                handleShowBlacksmithForm();
+                break;
+            case ShowCarpenterForm:
+                handleShowCarpenterForm();
+                break;
+            case UpdateSta:
+                handleUpdateSta();
+                break;
+            case UpdateMana:
+                handleUpdateMana();
+                break;
+            case UpdateHP:
+                handleUpdateHP();
+                break;
+            case UpdateGold:
+                handleUpdateGold();
+                break;
+            case UpdateBankGold:
+                handleUpdateBankGold();
+                break;
+            case UpdateExp:
+                handleUpdateExp();
+                break;
+            case ChangeMap:
+                handleChangeMap();
+                break;
+            case PosUpdate:
+                handlePosUpdate();
+                break;
+            case ChatOverHead:
+                handleChatOverHead();
+                break;
+            case ConsoleMsg:
+                handleConsoleMessage();
+                break;
+            case GuildChat:
+                handleGuildChat();
+                break;
+            case ShowMessageBox:
+                handleShowMessageBox();
+                break;
+            case UserIndexInServer:
+                handleUserIndexInServer();
+                break;
+            case UserCharIndexInServer:
+                handleUserCharIndexInServer();
+                break;
+            case CharacterCreate:
+                handleCharacterCreate();
+                break;
+            case CharacterRemove:
+                handleCharacterRemove();
+                break;
+            case CharacterChangeNick:
+                handleCharacterChangeNick();
+                break;
+            case CharacterMove:
+                handleCharacterMove();
+                break;
+            case ForceCharMove:
+                handleForceCharMove();
+                break;
+            case CharacterChange:
+                handleCharacterChange();
+                break;
+            case ObjectCreate:
+                handleObjectCreate();
+                break;
+            case ObjectDelete:
+                handleObjectDelete();
+                break;
+            case BlockPosition:
+                handleBlockPosition();
+                break;
+            case PlayMIDI:
+                handlePlayMIDI();
+                break;
+            case PlayWave:
+                handlePlayWave();
+                break;
+            case guildList:
+                handleGuildList();
+                break;
+            case AreaChanged:
+                handleAreaChanged();
+                break;
+            case PauseToggle:
+                handlePauseToggle();
+                break;
+            case RainToggle:
+                handleRainToggle();
+                break;
+            case CreateFX:
+                handleCreateFX();
+                break;
+            case UpdateUserStats:
+                handleUpdateUserStats();
+                break;
+            case WorkRequestTarget:
+                handleWorkRequestTarget();
+                break;
+            case ChangeInventorySlot:
+                handleChangeInventorySlot();
+                break;
+            case ChangeBankSlot:
+                handleChangeBankSlot();
+                break;
+            case ChangeSpellSlot:
+                handleChangeSpellSlot();
+                break;
+            case Atributes:
+                handleAtributes();
+                break;
+            case BlacksmithWeapons:
+                handleBlacksmithWeapons();
+                break;
+            case BlacksmithArmors:
+                handleBlacksmithArmors();
+                break;
+            case CarpenterObjects:
+                handleCarpenterObjects();
+                break;
+            case RestOK:
+                handleRestOK();
+                break;
+            case ErrorMsg:
+                handleErrorMessage();
+                break;
+            case Blind:
+                handleBlind();
+                break;
+            case Dumb:
+                handleDumb();
+                break;
+            case ShowSignal:
+                handleShowSignal();
+                break;
+            case ChangeNPCInventorySlot:
+                handleChangeNPCInventorySlot();
+                break;
+            case UpdateHungerAndThirst:
+                handleUpdateHungerAndThirst();
+                break;
+            case Fame:
+                handleFame();
+                break;
+            case MiniStats:
+                handleMiniStats();
+                break;
+            case LevelUp:
+                handleLevelUp();
+                break;
+            case AddForumMsg:
+                handleAddForumMessage();
+                break;
+            case ShowForumForm:
+                handleShowForumForm();
+                break;
+            case SetInvisible:
+                handleSetInvisible();
+                break;
+            case DiceRoll:
+                handleDiceRoll();
+                break;
+            case MeditateToggle:
+                handleMeditateToggle();
+                break;
+            case BlindNoMore:
+                handleBlindNoMore();
+                break;
+            case DumbNoMore:
+                handleDumbNoMore();
+                break;
+            case SendSkills:
+                handleSendSkills();
+                break;
+            case TrainerCreatureList:
+                handleTrainerCreatureList();
+                break;
+            case guildNews:
+                handleGuildNews();
+                break;
+            case OfferDetails:
+                handleOfferDetails();
+                break;
+            case AlianceProposalsList:
+                handleAlianceProposalsList();
+                break;
+            case PeaceProposalsList:
+                handlePeaceProposalsList();
+                break;
+            case CharacterInfo:
+                handleCharacterInfo();
+                break;
+            case GuildLeaderInfo:
+                handleGuildLeaderInfo();
+                break;
+            case GuildDetails:
+                handleGuildDetails();
+                break;
+            case ShowGuildFundationForm:
+                handleShowGuildFundationForm();
+                break;
+            case ParalizeOK:
+                handleParalizeOK();
+                break;
+            case ShowUserRequest:
+                handleShowUserRequest();
+                break;
+            case TradeOK:
+                handleTradeOK();
+                break;
+            case BankOK:
+                handleBankOK();
+                break;
+            case ChangeUserTradeSlot:
+                handleChangeUserTradeSlot();
+                break;
+            case SendNight:
+                handleSendNight();
+                break;
+            case Pong:
+                handlePong();
+                break;
+            case UpdateTagAndStatus:
+                handleUpdateTagAndStatus();
+                break;
+            case GuildMemberInfo:
+                handleGuildMemberInfo();
+                break;
 
             //*******************
             // GM messages
             //*******************
-            case SpawnList:                     handleSpawnList();                      break;
-            case ShowSOSForm:                   handleShowSOSForm();                    break;
-            case ShowMOTDEditionForm:           handleShowMOTDEditionForm();            break;
-            case ShowGMPanelForm:               handleShowGMPanelForm();                break;
-            case UserNameList:                  handleUserNameList();                   break;
-            case ShowGuildAlign:                handleShowGuildAlign();                 break;
-            case ShowPartyForm:                 handleShowPartyForm();                  break;
-            case UpdateStrenghtAndDexterity:    handleUpdateStrenghtAndDexterity();     break;
-            case UpdateStrenght:                handleUpdateStrenght();                 break;
-            case UpdateDexterity:               handleUpdateDexterity();                break;
-            case AddSlots:                      handleAddSlots();                       break;
-            case MultiMessage:                  handleMultiMessage();                   break;
-            case StopWorking:                   handleStopWorking();                    break;
-            case CancelOfferItem:               handleCancelOfferItem();                break;
+            case SpawnList:
+                handleSpawnList();
+                break;
+            case ShowSOSForm:
+                handleShowSOSForm();
+                break;
+            case ShowMOTDEditionForm:
+                handleShowMOTDEditionForm();
+                break;
+            case ShowGMPanelForm:
+                handleShowGMPanelForm();
+                break;
+            case UserNameList:
+                handleUserNameList();
+                break;
+            case ShowGuildAlign:
+                handleShowGuildAlign();
+                break;
+            case ShowPartyForm:
+                handleShowPartyForm();
+                break;
+            case UpdateStrenghtAndDexterity:
+                handleUpdateStrenghtAndDexterity();
+                break;
+            case UpdateStrenght:
+                handleUpdateStrenght();
+                break;
+            case UpdateDexterity:
+                handleUpdateDexterity();
+                break;
+            case AddSlots:
+                handleAddSlots();
+                break;
+            case MultiMessage:
+                handleMultiMessage();
+                break;
+            case StopWorking:
+                handleStopWorking();
+                break;
+            case CancelOfferItem:
+                handleCancelOfferItem();
+                break;
 
-            default: return;
+            default:
+                return;
         }
 
         // Done with this packet, move on to next one
-        if(incomingData.length() > 0) {
+        if (incomingData.length() > 0) {
             handleIncomingData();
         }
     }
@@ -310,7 +522,7 @@ public class Protocol {
             case UserAttackedSwing:
                 final short charIndexAttaker = incomingData.readInteger();
 
-                Console.get().addMsgToConsole(MENSAJE_1 + " " + charList[charIndexAttaker].getName() +  MENSAJE_ATAQUE_FALLO,
+                Console.get().addMsgToConsole(MENSAJE_1 + " " + charList[charIndexAttaker].getName() + MENSAJE_ATAQUE_FALLO,
                         false, false, new RGBColor());
 
                 charDialogHitSet(charIndexAttaker, "*Falla*");
@@ -405,7 +617,7 @@ public class Protocol {
 
                 Window.get().setCursorCrosshair(true);
 
-                switch(E_Skills.values()[usingSkill - 1]){
+                switch (E_Skills.values()[usingSkill - 1]) {
                     case Magia:
                         Console.get().addMsgToConsole(MENSAJE_TRABAJO_MAGIA, false, false, new RGBColor());
                         break;
@@ -801,13 +1013,27 @@ public class Protocol {
 
         int offerSlot = buffer.readByte();
 
-        buffer.readInteger(); buffer.readLong();
-        buffer.readInteger(); buffer.readByte(); buffer.readInteger();
-        buffer.readInteger(); buffer.readInteger(); buffer.readInteger(); buffer.readLong(); buffer.readASCIIString();
+        buffer.readInteger();
+        buffer.readLong();
+        buffer.readInteger();
+        buffer.readByte();
+        buffer.readInteger();
+        buffer.readInteger();
+        buffer.readInteger();
+        buffer.readInteger();
+        buffer.readLong();
+        buffer.readASCIIString();
 
-        buffer.readInteger(); buffer.readLong();
-        buffer.readInteger(); buffer.readByte(); buffer.readInteger();
-        buffer.readInteger(); buffer.readInteger(); buffer.readInteger(); buffer.readLong(); buffer.readASCIIString();
+        buffer.readInteger();
+        buffer.readLong();
+        buffer.readInteger();
+        buffer.readByte();
+        buffer.readInteger();
+        buffer.readInteger();
+        buffer.readInteger();
+        buffer.readInteger();
+        buffer.readLong();
+        buffer.readASCIIString();
 
         //OfferSlot = Buffer.ReadByte
         //
@@ -1328,7 +1554,7 @@ public class Protocol {
         int porcentajeSkills[] = new int[20];
 
 
-        for(int i = 0; i < 20; i++) {
+        for (int i = 0; i < 20; i++) {
             userSkills[i] = incomingData.readByte();
             porcentajeSkills[i] = incomingData.readByte();
         }
@@ -1655,7 +1881,7 @@ public class Protocol {
 
         short count = buffer.readInteger();
 
-        for(int i = 0; i < count; i++) {
+        for (int i = 0; i < count; i++) {
             buffer.readASCIIString();
             buffer.readInteger();
             buffer.readInteger();
@@ -1731,7 +1957,7 @@ public class Protocol {
 
         short count = buffer.readInteger();
 
-        for(int i = 0; i < count; i++) {
+        for (int i = 0; i < count; i++) {
             buffer.readASCIIString();
             buffer.readInteger();
             buffer.readInteger();
@@ -1802,7 +2028,7 @@ public class Protocol {
         short count = buffer.readInteger();
 
 
-        for(int i = 0; i < count; i++) {
+        for (int i = 0; i < count; i++) {
             buffer.readASCIIString();
             buffer.readInteger();
             buffer.readInteger();
@@ -2004,7 +2230,7 @@ public class Protocol {
         final short minDef = buffer.readInteger();
         final float value = buffer.readFloat();
 
-        if(equipped) {
+        if (equipped) {
             switch (E_ObjType.values()[objType - 1]) {
                 case otWeapon:
                     User.get().setUserWeaponEqpHit(minHit + "/" + maxHit);
@@ -2027,26 +2253,26 @@ public class Protocol {
                     break;
             }
         } else {
-            if(slot == User.get().getUserWeaponEqpSlot()) {
+            if (slot == User.get().getUserWeaponEqpSlot()) {
                 User.get().setUserWeaponEqpHit("0/0");
-                User.get().setUserWeaponEqpSlot( (byte) 0);
+                User.get().setUserWeaponEqpSlot((byte) 0);
 
-            } else if(slot == User.get().getUserArmourEqpSlot()) {
+            } else if (slot == User.get().getUserArmourEqpSlot()) {
                 User.get().setUserArmourEqpDef("0/0");
-                User.get().setUserArmourEqpSlot( (byte) 0);
+                User.get().setUserArmourEqpSlot((byte) 0);
 
-            } else if(slot == User.get().getUserShieldEqpSlot()) {
+            } else if (slot == User.get().getUserShieldEqpSlot()) {
                 User.get().setUserShieldEqpDef("0/0");
-                User.get().setUserShieldEqpSlot( (byte) 0);
+                User.get().setUserShieldEqpSlot((byte) 0);
 
-            } else if(slot == User.get().getUserHelmEqpSlot()) {
+            } else if (slot == User.get().getUserHelmEqpSlot()) {
                 User.get().setUserHelmEqpDef("0/0");
-                User.get().setUserHelmEqpSlot( (byte) 0);
+                User.get().setUserHelmEqpSlot((byte) 0);
 
             }
         }
 
-        User.get().getUserInventory().setItem( slot - 1, objIndex, amount, equipped, grhIndex, objType,
+        User.get().getUserInventory().setItem(slot - 1, objIndex, amount, equipped, grhIndex, objType,
                 maxHit, minHit, maxDef, minDef, value, name);
 
         incomingData.copyBuffer(buffer);
@@ -2066,7 +2292,7 @@ public class Protocol {
 
         Window.get().setCursorCrosshair(true);
 
-        switch(E_Skills.values()[usingSkill - 1]){
+        switch (E_Skills.values()[usingSkill - 1]) {
             case Magia:
                 Console.get().addMsgToConsole(MENSAJE_TRABAJO_MAGIA, false, false, new RGBColor());
                 break;
@@ -2159,7 +2385,7 @@ public class Protocol {
 
         User.get().setUnderCeiling(User.get().checkUnderCeiling());
 
-        if(Rain.get().isRaining()) {
+        if (Rain.get().isRaining()) {
             Rain.get().setRainValue(false);
             Rain.get().stopRainingSoundLoop();
             Rain.get().playEndRainSound();
@@ -2254,7 +2480,7 @@ public class Protocol {
 
         int currentMusic = incomingData.readByte();
 
-        if(currentMusic > 0) {
+        if (currentMusic > 0) {
             incomingData.readInteger();
             // play music
             playMusic(currentMusic + ".ogg");
@@ -2414,7 +2640,7 @@ public class Protocol {
     }
 
     private static void handleCharacterChangeNick() {
-        if(incomingData.length() < 5) {
+        if (incomingData.length() < 5) {
             System.err.println("ERROR " + incomingData.getNotEnoughDataErrCode() + ": en handleCharacterRemove");
             return;
         }
@@ -2425,7 +2651,7 @@ public class Protocol {
     }
 
     private static void handleCharacterRemove() {
-        if(incomingData.length() < 3) {
+        if (incomingData.length() < 3) {
             System.err.println("ERROR " + incomingData.getNotEnoughDataErrCode() + ": en handleCharacterRemove");
             return;
         }
@@ -2478,11 +2704,11 @@ public class Protocol {
         charList[charIndex].setAttackable((nickColor & 4) != 0);
 
         if (privs != 9) {
-            if ( (privs & 64) != 0 && (privs & 1) == 0) {
+            if ((privs & 64) != 0 && (privs & 1) == 0) {
                 privs = (short) (privs ^ 64);
             }
 
-            if ( (privs & 128) != 0 && (privs & 1) == 0) {
+            if ((privs & 128) != 0 && (privs & 1) == 0) {
                 privs = (short) (privs ^ 128);
             }
 
@@ -2637,7 +2863,7 @@ public class Protocol {
     }
 
     private static void handleConsoleMessage() {
-        if(incomingData.length() < 4) {
+        if (incomingData.length() < 4) {
             System.err.println("ERROR " + incomingData.getNotEnoughDataErrCode() + ": en handleConsoleMessage");
             return;
         }
@@ -2692,7 +2918,7 @@ public class Protocol {
     }
 
     private static void handleChatOverHead() {
-        if(incomingData.length() < 8) {
+        if (incomingData.length() < 8) {
             System.err.println("ERROR " + incomingData.getNotEnoughDataErrCode() + ": en handleChatOverHead");
             return;
         }
@@ -2710,7 +2936,7 @@ public class Protocol {
         int b = buffer.readByte();
 
         // es un NPC?
-        if(charList[charIndex].getName().length() <= 1) {
+        if (charList[charIndex].getName().length() <= 1) {
             Dialogs.removeDialogsNPCArea();
         }
 
@@ -2720,7 +2946,7 @@ public class Protocol {
     }
 
     private static void handlePosUpdate() {
-        if(incomingData.length() < 3) {
+        if (incomingData.length() < 3) {
             System.err.println("ERROR " + incomingData.getNotEnoughDataErrCode() + ": en handlePosUpdate");
             return;
         }
@@ -2733,7 +2959,7 @@ public class Protocol {
         int userCharIndex = User.get().getUserCharIndex();
 
         // Remove char form old position
-        if(mapData[x][y].getCharIndex() == userCharIndex) {
+        if (mapData[x][y].getCharIndex() == userCharIndex) {
             mapData[x][y].setCharIndex(0);
         }
 
@@ -2768,8 +2994,8 @@ public class Protocol {
 
         GameData.loadMap(userMap);
 
-        if(!bLluvia[userMap]) {
-            if(Rain.get().isRaining()) {
+        if (!bLluvia[userMap]) {
+            if (Rain.get().isRaining()) {
                 Rain.get().stopRainingSoundLoop();
             }
         }
@@ -2777,7 +3003,7 @@ public class Protocol {
     }
 
     private static void handleUpdateExp() {
-        if(incomingData.length() < 5) {
+        if (incomingData.length() < 5) {
             System.err.println("ERROR " + incomingData.getNotEnoughDataErrCode() + ": en handleUpdateExp");
             return;
         }
@@ -2790,7 +3016,7 @@ public class Protocol {
     }
 
     private static void handleUpdateBankGold() {
-        if(incomingData.length() < 5) {
+        if (incomingData.length() < 5) {
             System.err.println("ERROR " + incomingData.getNotEnoughDataErrCode() + ": en handleUpdateBankGold");
             return;
         }
@@ -2803,7 +3029,7 @@ public class Protocol {
     }
 
     private static void handleUpdateGold() {
-        if(incomingData.length() < 5) {
+        if (incomingData.length() < 5) {
             System.err.println("ERROR " + incomingData.getNotEnoughDataErrCode() + ": en handleUpdateGold");
             return;
         }
@@ -2815,7 +3041,7 @@ public class Protocol {
     }
 
     private static void handleUpdateHP() {
-        if(incomingData.length() < 3) {
+        if (incomingData.length() < 3) {
             System.err.println("ERROR " + incomingData.getNotEnoughDataErrCode() + ": en handleUpdateHP");
             return;
         }
@@ -2841,7 +3067,7 @@ public class Protocol {
     }
 
     private static void handleUpdateMana() {
-        if(incomingData.length() < 3) {
+        if (incomingData.length() < 3) {
             System.err.println("ERROR " + incomingData.getNotEnoughDataErrCode() + ": en handleUpdateMana");
             return;
         }
@@ -2854,7 +3080,7 @@ public class Protocol {
     }
 
     private static void handleUpdateSta() {
-        if(incomingData.length() < 3) {
+        if (incomingData.length() < 3) {
             System.err.println("ERROR " + incomingData.getNotEnoughDataErrCode() + ": en handleUpdateSta");
             return;
         }
@@ -3060,7 +3286,7 @@ public class Protocol {
     }
 
     private static void handleCommerceChat() {
-        if(incomingData.length() < 4) {
+        if (incomingData.length() < 4) {
             System.err.println("ERROR " + incomingData.getNotEnoughDataErrCode() + ": en handleCommerceChat");
             return;
         }
@@ -3180,7 +3406,7 @@ public class Protocol {
         // Remove packet ID
         incomingData.readByte();
 
-        if(User.get().isUserNavegando()) {
+        if (User.get().isUserNavegando()) {
             User.get().setUserNavegando(false);
         } else {
             User.get().setUserNavegando(true);
@@ -3188,7 +3414,7 @@ public class Protocol {
     }
 
     private static void handleRemoveCharDialog() {
-        if(incomingData.length() < 3) {
+        if (incomingData.length() < 3) {
             System.err.println("ERROR " + incomingData.getNotEnoughDataErrCode() + ": en handleRemoveCharDialog");
             return;
         }
@@ -3222,7 +3448,7 @@ public class Protocol {
         outgoingData.writeByte(ClientPacketID.ThrowDices.ordinal());
     }
 
-    public static void writeLoginNewChar(String userName, String userPassword, int userRaza, int userSexo, int userClase, int userHead, String userEmail, int userHogar){
+    public static void writeLoginNewChar(String userName, String userPassword, int userRaza, int userSexo, int userClase, int userHead, String userEmail, int userHogar) {
         outgoingData.writeByte(ClientPacketID.LoginNewChar.ordinal());
         outgoingData.writeASCIIString(userName);
         outgoingData.writeASCIIString(userPassword);
@@ -3326,7 +3552,7 @@ public class Protocol {
     }
 
     public static void writeWork(int skill) {
-        if(User.get().isDead()) {
+        if (User.get().isDead()) {
             Console.get().addMsgToConsole(new String("¡¡Estás muerto!!".getBytes(), StandardCharsets.UTF_8),
                     false, true, new RGBColor());
 
@@ -3343,7 +3569,7 @@ public class Protocol {
     }
 
     public static void writeQuit() {
-        if(charList[User.get().getUserCharIndex()].isParalizado()) {
+        if (charList[User.get().getUserCharIndex()].isParalizado()) {
             Console.get().addMsgToConsole(new String("No puedes salir estando paralizado.".getBytes(), StandardCharsets.UTF_8),
                     false, true, new RGBColor());
 
@@ -3368,15 +3594,17 @@ public class Protocol {
         outgoingData.writeASCIIString(newPass);
     }
 
-    public static void writeOnline(){
+    public static void writeOnline() {
         outgoingData.writeByte(ClientPacketID.Online.ordinal());
     }
 
     public static void writeMeditate() {
 
-        if (User.get().getUserMaxMAN() == User.get().getUserMinMAN()) { return; }
+        if (User.get().getUserMaxMAN() == User.get().getUserMinMAN()) {
+            return;
+        }
 
-        if(charList[User.get().getUserCharIndex()].isDead()) {
+        if (charList[User.get().getUserCharIndex()].isDead()) {
             Console.get().addMsgToConsole(new String("¡Estas muerto!".getBytes(), StandardCharsets.UTF_8),
                     false, true, new RGBColor());
 
@@ -3399,7 +3627,7 @@ public class Protocol {
     }
 
     public static void writeRequestAccountState() {
-        if(charList[User.get().getUserCharIndex()].isDead()) {
+        if (charList[User.get().getUserCharIndex()].isDead()) {
             Console.get().addMsgToConsole(new String("¡Estas muerto!".getBytes(), StandardCharsets.UTF_8),
                     false, true, new RGBColor());
 
@@ -3410,7 +3638,7 @@ public class Protocol {
     }
 
     public static void writePetStand() {
-        if(charList[User.get().getUserCharIndex()].isDead()) {
+        if (charList[User.get().getUserCharIndex()].isDead()) {
             Console.get().addMsgToConsole(new String("¡Estas muerto!".getBytes(), StandardCharsets.UTF_8),
                     false, true, new RGBColor());
 
@@ -3421,7 +3649,7 @@ public class Protocol {
     }
 
     public static void writePetFollow() {
-        if(charList[User.get().getUserCharIndex()].isDead()) {
+        if (charList[User.get().getUserCharIndex()].isDead()) {
             Console.get().addMsgToConsole(new String("¡Estas muerto!".getBytes(), StandardCharsets.UTF_8),
                     false, true, new RGBColor());
 
@@ -3432,7 +3660,7 @@ public class Protocol {
     }
 
     public static void writeReleasePet() {
-        if(charList[User.get().getUserCharIndex()].isDead()) {
+        if (charList[User.get().getUserCharIndex()].isDead()) {
             Console.get().addMsgToConsole(new String("¡Estas muerto!".getBytes(), StandardCharsets.UTF_8),
                     false, true, new RGBColor());
 
@@ -3443,7 +3671,7 @@ public class Protocol {
     }
 
     public static void writeTrainList() {
-        if(charList[User.get().getUserCharIndex()].isDead()) {
+        if (charList[User.get().getUserCharIndex()].isDead()) {
             Console.get().addMsgToConsole(new String("¡Estas muerto!".getBytes(), StandardCharsets.UTF_8),
                     false, true, new RGBColor());
 
@@ -3454,7 +3682,7 @@ public class Protocol {
     }
 
     public static void writeRest() {
-        if(charList[User.get().getUserCharIndex()].isDead()) {
+        if (charList[User.get().getUserCharIndex()].isDead()) {
             Console.get().addMsgToConsole(new String("¡Estas muerto!".getBytes(), StandardCharsets.UTF_8),
                     false, true, new RGBColor());
 
@@ -3509,7 +3737,7 @@ public class Protocol {
     }
 
     public static void writePartyCreate() {
-        if(charList[User.get().getUserCharIndex()].isDead()) {
+        if (charList[User.get().getUserCharIndex()].isDead()) {
             Console.get().addMsgToConsole(new String("¡Estas muerto!".getBytes(), StandardCharsets.UTF_8),
                     false, true, new RGBColor());
 
@@ -3520,7 +3748,7 @@ public class Protocol {
     }
 
     public static void writePartyJoin() {
-        if(charList[User.get().getUserCharIndex()].isDead()) {
+        if (charList[User.get().getUserCharIndex()].isDead()) {
             Console.get().addMsgToConsole(new String("¡Estas muerto!".getBytes(), StandardCharsets.UTF_8),
                     false, true, new RGBColor());
 
@@ -3531,7 +3759,7 @@ public class Protocol {
     }
 
     public static void writeShareNpc() {
-        if(charList[User.get().getUserCharIndex()].isDead()) {
+        if (charList[User.get().getUserCharIndex()].isDead()) {
             Console.get().addMsgToConsole(new String("¡Estas muerto!".getBytes(), StandardCharsets.UTF_8),
                     false, true, new RGBColor());
 
@@ -3542,7 +3770,7 @@ public class Protocol {
     }
 
     public static void writeStopSharingNpc() {
-        if(charList[User.get().getUserCharIndex()].isDead()) {
+        if (charList[User.get().getUserCharIndex()].isDead()) {
             Console.get().addMsgToConsole(new String("¡Estas muerto!".getBytes(), StandardCharsets.UTF_8),
                     false, true, new RGBColor());
 
@@ -3552,7 +3780,7 @@ public class Protocol {
         outgoingData.writeByte(ClientPacketID.StopSharingNpc.ordinal());
     }
 
-    public static void writeInquiry(){
+    public static void writeInquiry() {
         outgoingData.writeByte(ClientPacketID.Inquiry.ordinal());
     }
 
@@ -3651,17 +3879,17 @@ public class Protocol {
         outgoingData.writeByte(clanType);
     }
 
-    public static void writePartyKick(String userName){
+    public static void writePartyKick(String userName) {
         outgoingData.writeByte(ClientPacketID.PartyKick.ordinal());
         outgoingData.writeASCIIString(userName);
     }
 
-    public static void writePartySetLeader(String userName){
+    public static void writePartySetLeader(String userName) {
         outgoingData.writeByte(ClientPacketID.PartySetLeader.ordinal());
         outgoingData.writeASCIIString(userName);
     }
 
-    public static void writePartyAcceptMember(String userName){
+    public static void writePartyAcceptMember(String userName) {
         outgoingData.writeByte(ClientPacketID.PartyAcceptMember.ordinal());
         outgoingData.writeASCIIString(userName);
     }
@@ -3673,6 +3901,7 @@ public class Protocol {
     public static void writeGMMessage(String message) {
         outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
         outgoingData.writeByte(eGMCommands.GMMessage.ordinal());
+
         outgoingData.writeASCIIString(message);
     }
 
@@ -3694,12 +3923,14 @@ public class Protocol {
     public static void writeGoNearby(String userName) {
         outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
         outgoingData.writeByte(eGMCommands.GoNearby.ordinal());
+
         outgoingData.writeASCIIString(userName);
     }
 
     public static void writeComment(String message) {
         outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
         outgoingData.writeByte(eGMCommands.Comment.ordinal());
+
         outgoingData.writeASCIIString(message);
     }
 
@@ -3711,19 +3942,21 @@ public class Protocol {
     public static void writeWhere(String userName) {
         outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
         outgoingData.writeByte(eGMCommands.Where.ordinal());
+
         outgoingData.writeASCIIString(userName);
     }
 
     public static void writeCreaturesInMap(short Map) {
         outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
         outgoingData.writeByte(eGMCommands.CreaturesInMap.ordinal());
+
         outgoingData.writeInteger(Map);
     }
 
     public static void writeCreateItem(int itemIndex) {
         outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
         outgoingData.writeByte(eGMCommands.CreateItem.ordinal());
-        outgoingData.writeInteger((short)itemIndex);
+        outgoingData.writeInteger((short) itemIndex);
     }
 
     public static void writeWarpMeToTarget() {
@@ -3744,6 +3977,7 @@ public class Protocol {
     public static void writeSilence(String userName) {
         outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
         outgoingData.writeByte(eGMCommands.Silence.ordinal());
+
         outgoingData.writeASCIIString(userName);
     }
 
@@ -3760,6 +3994,7 @@ public class Protocol {
     public static void writeGoToChar(String userName) {
         outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
         outgoingData.writeByte(eGMCommands.GoToChar.ordinal());
+
         outgoingData.writeASCIIString(userName);
     }
 
@@ -3786,6 +4021,7 @@ public class Protocol {
     public static void writeJail(String userName, String reason, int time) {
         outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
         outgoingData.writeByte(eGMCommands.Jail.ordinal());
+
         outgoingData.writeASCIIString(userName);
         outgoingData.writeASCIIString(reason);
         outgoingData.writeByte(time);
@@ -3799,6 +4035,7 @@ public class Protocol {
     public static void writeWarnUser(String userName, String reason) {
         outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
         outgoingData.writeByte(eGMCommands.WarnUser.ordinal());
+
         outgoingData.writeASCIIString(userName);
         outgoingData.writeASCIIString(reason);
     }
@@ -3820,42 +4057,49 @@ public class Protocol {
     public static void writeRequestCharInfo(String userName) {
         outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
         outgoingData.writeByte(eGMCommands.RequestCharInfo.ordinal());
+
         outgoingData.writeASCIIString(userName);
     }
 
     public static void writeRequestCharStats(String userName) {
         outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
         outgoingData.writeByte(eGMCommands.RequestCharStats.ordinal());
+
         outgoingData.writeASCIIString(userName);
     }
 
     public static void writeRequestCharGold(String userName) {
         outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
         outgoingData.writeByte(eGMCommands.RequestCharGold.ordinal());
+
         outgoingData.writeASCIIString(userName);
     }
 
     public static void writeRequestCharInventory(String userName) {
         outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
         outgoingData.writeByte(eGMCommands.RequestCharInventory.ordinal());
+
         outgoingData.writeASCIIString(userName);
     }
 
     public static void writeRequestCharBank(String userName) {
         outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
         outgoingData.writeByte(eGMCommands.RequestCharBank.ordinal());
+
         outgoingData.writeASCIIString(userName);
     }
 
     public static void writeRequestCharSkills(String userName) {
         outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
         outgoingData.writeByte(eGMCommands.RequestCharSkills.ordinal());
+
         outgoingData.writeASCIIString(userName);
     }
 
     public static void writeReviveChar(String userName) {
         outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
         outgoingData.writeByte(eGMCommands.ReviveChar.ordinal());
+
         outgoingData.writeASCIIString(userName);
     }
 
@@ -3867,30 +4111,35 @@ public class Protocol {
     public static void writeOnlineMap(short map) {
         outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
         outgoingData.writeByte(eGMCommands.OnlineMap.ordinal());
+
         outgoingData.writeInteger(map);
     }
 
     public static void writeForgive(String userName) {
         outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
         outgoingData.writeByte(eGMCommands.Forgive.ordinal());
+
         outgoingData.writeASCIIString(userName);
     }
 
     public static void writeKick(String userName) {
         outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
         outgoingData.writeByte(eGMCommands.Kick.ordinal());
+
         outgoingData.writeASCIIString(userName);
     }
 
     public static void writeExecute(String userName) {
         outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
         outgoingData.writeByte(eGMCommands.Execute.ordinal());
+
         outgoingData.writeASCIIString(userName);
     }
 
     public static void writeBanChar(String userName, String reason) {
         outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
         outgoingData.writeByte(eGMCommands.banChar.ordinal());
+
         outgoingData.writeASCIIString(userName);
         outgoingData.writeASCIIString(reason);
     }
@@ -3898,6 +4147,7 @@ public class Protocol {
     public static void writeUnbanChar(String userName) {
         outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
         outgoingData.writeByte(eGMCommands.UnbanChar.ordinal());
+
         outgoingData.writeASCIIString(userName);
     }
 
@@ -3934,6 +4184,7 @@ public class Protocol {
     public static void writeNickToIP(String userName) {
         outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
         outgoingData.writeByte(eGMCommands.nickToIP.ordinal());
+
         outgoingData.writeASCIIString(userName);
     }
 
@@ -3954,12 +4205,14 @@ public class Protocol {
     public static void writeGuildOnlineMembers(String guild) {
         outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
         outgoingData.writeByte(eGMCommands.GuildOnlineMembers.ordinal());
+
         outgoingData.writeASCIIString(guild);
     }
 
     public static void writeTeleportCreate(short map, int x, int y, int radio) {
         outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
         outgoingData.writeByte(eGMCommands.TeleportCreate.ordinal());
+
         outgoingData.writeInteger(map);
         outgoingData.writeByte(x);
         outgoingData.writeByte(y);
@@ -3979,10 +4232,11 @@ public class Protocol {
     public static void writeSetCharDescription(String desc) {
         outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
         outgoingData.writeByte(eGMCommands.SetCharDescription.ordinal());
+
         outgoingData.writeASCIIString(desc);
     }
 
-    public static void writeForceMIDIToMap(int midiID, short map){
+    public static void writeForceMIDIToMap(int midiID, short map) {
         outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
         outgoingData.writeByte(eGMCommands.ForceMIDIToMap.ordinal());
 
@@ -3990,7 +4244,7 @@ public class Protocol {
         outgoingData.writeInteger(map);
     }
 
-    public static void writeForceWAVEToMap(int waveID, short map, int x, int y){
+    public static void writeForceWAVEToMap(int waveID, short map, int x, int y) {
         outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
         outgoingData.writeByte(eGMCommands.ForceWAVEToMap.ordinal());
 
@@ -4005,30 +4259,35 @@ public class Protocol {
     public static void writeRoyaleArmyMessage(String message) {
         outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
         outgoingData.writeByte(eGMCommands.RoyalArmyMessage.ordinal());
+
         outgoingData.writeASCIIString(message);
     }
 
     public static void writeChaosLegionMessage(String message) {
         outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
         outgoingData.writeByte(eGMCommands.ChaosLegionMessage.ordinal());
+
         outgoingData.writeASCIIString(message);
     }
 
     public static void writeCitizenMessage(String message) {
         outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
         outgoingData.writeByte(eGMCommands.CitizenMessage.ordinal());
+
         outgoingData.writeASCIIString(message);
     }
 
     public static void writeCriminalMessage(String message) {
         outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
         outgoingData.writeByte(eGMCommands.CriminalMessage.ordinal());
+
         outgoingData.writeASCIIString(message);
     }
 
     public static void writeTalkAsNPC(String message) {
         outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
         outgoingData.writeByte(eGMCommands.TalkAsNPC.ordinal());
+
         outgoingData.writeASCIIString(message);
     }
 
@@ -4037,38 +4296,465 @@ public class Protocol {
         outgoingData.writeByte(eGMCommands.DestroyAllItemsInArea.ordinal());
     }
 
-    public static void writeAcceptRoyalCouncilMember(String userName){
+    public static void writeAcceptRoyalCouncilMember(String userName) {
         outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
         outgoingData.writeByte(eGMCommands.AcceptRoyalCouncilMember.ordinal());
+
         outgoingData.writeASCIIString(userName);
     }
 
-    public static void writeAcceptChaosCouncilMember(String userName){
+    public static void writeAcceptChaosCouncilMember(String userName) {
         outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
         outgoingData.writeByte(eGMCommands.AcceptChaosCouncilMember.ordinal());
+
         outgoingData.writeASCIIString(userName);
     }
 
-    public static void writeItemsInTheFloor(){
+    public static void writeItemsInTheFloor() {
         outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
         outgoingData.writeByte(eGMCommands.ItemsInTheFloor.ordinal());
     }
 
-    public static void writeMakeDumb(String userName){
+    public static void writeMakeDumb(String userName) {
         outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
         outgoingData.writeByte(eGMCommands.MakeDumb.ordinal());
+
         outgoingData.writeASCIIString(userName);
     }
 
-    public static void writeMakeDumbNoMore(String userName){
+    public static void writeMakeDumbNoMore(String userName) {
         outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
         outgoingData.writeByte(eGMCommands.MakeDumbNoMore.ordinal());
+
         outgoingData.writeASCIIString(userName);
     }
 
-    public static void writeDumpIPTables(){
+    public static void writeDumpIPTables() {
         outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
         outgoingData.writeByte(eGMCommands.dumpIPTables.ordinal());
     }
 
+    public static void writeCouncilKick(String userName) {
+        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
+        outgoingData.writeByte(eGMCommands.CouncilKick.ordinal());
+
+        outgoingData.writeASCIIString(userName);
+    }
+
+    public static void writeSetTrigger(int trigger) {
+        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
+        outgoingData.writeByte(eGMCommands.SetTrigger.ordinal());
+
+        outgoingData.writeByte(trigger);
+    }
+
+    public static void writeAskTrigger() {
+        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
+        outgoingData.writeByte(eGMCommands.AskTrigger.ordinal());
+    }
+
+    public static void writeBannedIPList() {
+        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
+        outgoingData.writeByte(eGMCommands.BannedIPList.ordinal());
+    }
+
+    public static void writeBannedIPReload() {
+        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
+        outgoingData.writeByte(eGMCommands.BannedIPReload.ordinal());
+    }
+
+    public static void writeGuildMemberList(String guild) {
+        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
+        outgoingData.writeByte(eGMCommands.GuildMemberList.ordinal());
+
+        outgoingData.writeASCIIString(guild);
+    }
+
+    public static void writeGuildBan(String guild) {
+        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
+        outgoingData.writeByte(eGMCommands.GuildBan.ordinal());
+
+        outgoingData.writeASCIIString(guild);
+    }
+
+    public static void writeBanIP(boolean byIp, int[] ip, String nick, String reason) {
+        if (byIp && ip.length != 4) return; // IP inválida
+
+        // Escribir el mensaje "BanIP" en el buffer de datos salientes
+        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
+        outgoingData.writeByte(eGMCommands.BanIP.ordinal());
+
+        // Escribir si es por IP o por nick
+        outgoingData.writeBoolean(byIp);
+
+        // Si es por IP, escribir los componentes de la IP
+        if (byIp) {
+            for (int b : ip) {
+                outgoingData.writeByte(b);
+            }
+        } else {
+            // Si es por nick, escribir el nick
+            outgoingData.writeASCIIString(nick);
+        }
+
+        // Escribir el motivo del baneo
+        outgoingData.writeASCIIString(reason);
+    }
+
+    public static void writeUnbanIP(int[] ip) {
+        if (ip.length != 4) return; // IP inválida
+
+        // Escribir el mensaje "UnbanIP" en el buffer de datos salientes
+        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
+        outgoingData.writeByte(eGMCommands.UnbanIP.ordinal());
+
+        // Escribir los componentes de la IP
+        for (int b : ip) {
+            outgoingData.writeByte(b);
+        }
+    }
+
+    public static void writeDestroyItems() {
+        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
+        outgoingData.writeByte(eGMCommands.DestroyItems.ordinal());
+    }
+
+    public static void writeChaosLegionKick(String userName) {
+        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
+        outgoingData.writeByte(eGMCommands.ChaosLegionKick.ordinal());
+
+        outgoingData.writeASCIIString(userName);
+    }
+
+    public static void writeRoyalArmyKick(String userName) {
+        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
+        outgoingData.writeByte(eGMCommands.RoyalArmyKick.ordinal());
+
+        outgoingData.writeASCIIString(userName);
+    }
+
+    public static void writeForceMIDIAll(int midiID) {
+        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
+        outgoingData.writeByte(eGMCommands.ForceMIDIAll.ordinal());
+
+        outgoingData.writeByte(midiID);
+    }
+
+    public static void writeForceWAVEAll(int waveID) {
+        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
+        outgoingData.writeByte(eGMCommands.ForceWAVEAll.ordinal());
+
+        outgoingData.writeByte(waveID);
+    }
+
+    public static void writeRemovePunishment(String userName, int punishment, String newText) {
+        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
+        outgoingData.writeByte(eGMCommands.RemovePunishment.ordinal());
+
+        outgoingData.writeASCIIString(userName);
+        outgoingData.writeByte(punishment);
+        outgoingData.writeASCIIString(newText);
+    }
+
+    public static void writeTileBlockedToggle() {
+        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
+        outgoingData.writeByte(eGMCommands.TileBlockedToggle.ordinal());
+    }
+
+    public static void writeKillNPCNoRespawn() {
+        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
+        outgoingData.writeByte(eGMCommands.KillNPCNoRespawn.ordinal());
+    }
+
+    public static void writeKillAllNearbyNPCs() {
+        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
+        outgoingData.writeByte(eGMCommands.KillAllNearbyNPCs.ordinal());
+    }
+
+    public static void writeLastIP(String userName) {
+        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
+        outgoingData.writeByte(eGMCommands.LastIP.ordinal());
+
+        outgoingData.writeASCIIString(userName);
+    }
+
+    public static void writeChangeMOTD() {
+        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
+        outgoingData.writeByte(eGMCommands.ChangeMOTD.ordinal());
+    }
+
+    public static void writeSystemMessage(String message) {
+        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
+        outgoingData.writeByte(eGMCommands.SystemMessage.ordinal());
+
+        outgoingData.writeASCIIString(message);
+    }
+
+    public static void writeCreateNPC(Short NPCIndex) {
+        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
+        outgoingData.writeByte(eGMCommands.CreateNPC.ordinal());
+
+        outgoingData.writeInteger(NPCIndex);
+    }
+
+    public static void writeCreateNPCWithRespawn(Short NPCIndex) {
+        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
+        outgoingData.writeByte(eGMCommands.CreateNPCWithRespawn.ordinal());
+
+        outgoingData.writeInteger(NPCIndex);
+    }
+
+    public static void writeImperialArmour(int armourIndex, short objectIndex) {
+        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
+        outgoingData.writeByte(eGMCommands.ImperialArmour.ordinal());
+
+        outgoingData.writeByte(armourIndex);
+        outgoingData.writeInteger(objectIndex);
+    }
+
+    public static void writeChaosArmour(int armourIndex, short objectIndex) {
+        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
+        outgoingData.writeByte(eGMCommands.ChaosArmour.ordinal());
+
+        outgoingData.writeByte(armourIndex);
+        outgoingData.writeInteger(objectIndex);
+    }
+
+    public static void writeNavigateToggle() {
+        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
+        outgoingData.writeByte(eGMCommands.NavigateToggle.ordinal());
+    }
+
+    public static void writeServerOpenToUsersToggle() {
+        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
+        outgoingData.writeByte(eGMCommands.ServerOpenToUsersToggle.ordinal());
+    }
+
+    public static void writeTurnOffServer() {
+        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
+        outgoingData.writeByte(eGMCommands.TurnOffServer.ordinal());
+    }
+
+    public static void writeTurnCriminal(String userName) {
+        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
+        outgoingData.writeByte(eGMCommands.TurnCriminal.ordinal());
+
+        outgoingData.writeASCIIString(userName);
+    }
+
+    public static void writeResetFactions(String userName) {
+        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
+        outgoingData.writeByte(eGMCommands.ResetFactions.ordinal());
+
+        outgoingData.writeASCIIString(userName);
+    }
+
+    public static void writeRemoveCharFromGuild(String userName) {
+        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
+        outgoingData.writeByte(eGMCommands.RemoveCharFromGuild.ordinal());
+
+        outgoingData.writeASCIIString(userName);
+    }
+
+    public static void writeRequestCharMail(String userName) {
+        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
+        outgoingData.writeByte(eGMCommands.RequestCharMail.ordinal());
+
+        outgoingData.writeASCIIString(userName);
+    }
+
+    public static void writeAlterPassword(String userName, String copyFrom) {
+        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
+        outgoingData.writeByte(eGMCommands.AlterPassword.ordinal());
+
+        outgoingData.writeASCIIString(userName);
+        outgoingData.writeASCIIString(copyFrom);
+    }
+
+    public static void writeAlterMail(String userName, String newMail) {
+        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
+        outgoingData.writeByte(eGMCommands.AlterMail.ordinal());
+
+        outgoingData.writeASCIIString(userName);
+        outgoingData.writeASCIIString(newMail);
+    }
+
+    public static void writeAlterName(String userName, String newName) {
+        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
+        outgoingData.writeByte(eGMCommands.AlterName.ordinal());
+
+        outgoingData.writeASCIIString(userName);
+        outgoingData.writeASCIIString(newName);
+    }
+
+    public static void writeCheckSlot(String userName, int slot) {
+        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
+        outgoingData.writeByte(eGMCommands.AlterName.ordinal());
+
+        outgoingData.writeASCIIString(userName);
+        outgoingData.writeByte(slot);
+    }
+
+    public static void writeToggleCentinelActivated() {
+        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
+        outgoingData.writeByte(eGMCommands.ToggleCentinelActivated.ordinal());
+    }
+
+    public static void writeDoBackup() {
+        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
+        outgoingData.writeByte(eGMCommands.DoBackUp.ordinal());
+    }
+
+    public static void writeShowGuildMessages(String guild) {
+        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
+        outgoingData.writeByte(eGMCommands.ShowGuildMessages.ordinal());
+
+        outgoingData.writeASCIIString(guild);
+    }
+
+    public static void writeSaveMap() {
+        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
+        outgoingData.writeByte(eGMCommands.SaveMap.ordinal());
+    }
+
+    public static void writeChangeMapInfoPK(boolean isPK) {
+        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
+        outgoingData.writeByte(eGMCommands.ChangeMapInfoPK.ordinal());
+
+        outgoingData.writeBoolean(isPK);
+    }
+
+    public static void writeChangeMapInfoBackup(boolean backup) {
+        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
+        outgoingData.writeByte(eGMCommands.ChangeMapInfoBackup.ordinal());
+
+        outgoingData.writeBoolean(backup);
+    }
+
+    public static void writeChangeMapInfoRestricted(String restrict) {
+        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
+        outgoingData.writeByte(eGMCommands.ChangeMapInfoBackup.ordinal());
+
+        outgoingData.writeASCIIString(restrict);
+    }
+
+    public static void writeChangeMapInfoNoMagic(boolean noMagic) {
+        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
+        outgoingData.writeByte(eGMCommands.ChangeMapInfoNoMagic.ordinal());
+
+        outgoingData.writeBoolean(noMagic);
+    }
+
+    public static void writeChangeMapInfoNoInvi(boolean noInvi) {
+        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
+        outgoingData.writeByte(eGMCommands.ChangeMapInfoNoInvi.ordinal());
+
+        outgoingData.writeBoolean(noInvi);
+    }
+
+    public static void writeChangeMapInfoNoResu(boolean noResu) {
+        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
+        outgoingData.writeByte(eGMCommands.ChangeMapInfoNoResu.ordinal());
+
+        outgoingData.writeBoolean(noResu);
+    }
+
+    public static void writeChangeMapInfoLand(String land) {
+        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
+        outgoingData.writeByte(eGMCommands.ChangeMapInfoLand.ordinal());
+
+        outgoingData.writeASCIIString(land);
+    }
+
+    public static void writeChangeMapInfoZone(String zone) {
+        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
+        outgoingData.writeByte(eGMCommands.ChangeMapInfoZone.ordinal());
+
+        outgoingData.writeASCIIString(zone);
+    }
+
+    public static void writeSaveChars() {
+        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
+        outgoingData.writeByte(eGMCommands.SaveChars.ordinal());
+    }
+
+    public static void writeCleanSOS() {
+        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
+        outgoingData.writeByte(eGMCommands.CleanSOS.ordinal());
+    }
+
+    public static void writeNight() {
+        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
+        outgoingData.writeByte(eGMCommands.night.ordinal());
+    }
+
+    public static void writeKickAllChars() {
+        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
+        outgoingData.writeByte(eGMCommands.KickAllChars.ordinal());
+    }
+
+    public static void writeReloadNPCs() {
+        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
+        outgoingData.writeByte(eGMCommands.ReloadNPCs.ordinal());
+    }
+
+    public static void writeReloadServerIni() {
+        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
+        outgoingData.writeByte(eGMCommands.ReloadServerIni.ordinal());
+    }
+
+    public static void writeReloadSpells() {
+        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
+        outgoingData.writeByte(eGMCommands.ReloadSpells.ordinal());
+    }
+
+    public static void writeReloadObjects() {
+        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
+        outgoingData.writeByte(eGMCommands.ReloadObjects.ordinal());
+    }
+
+    public static void writeRestart() {
+        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
+        outgoingData.writeByte(eGMCommands.Restart.ordinal());
+    }
+
+    public static void writeResetAutoUpdate() {
+        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
+        outgoingData.writeByte(eGMCommands.ResetAutoUpdate.ordinal());
+    }
+
+    public static void writeChatColor(int r, int g, int b) {
+        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
+        outgoingData.writeByte(eGMCommands.ChatColor.ordinal());
+
+        outgoingData.writeByte(r);
+        outgoingData.writeByte(g);
+        outgoingData.writeByte(b);
+    }
+
+    public static void writeIgnored() {
+        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
+        outgoingData.writeByte(eGMCommands.Ignored.ordinal());
+    }
+
+    public static void writePing() {
+        if (pingTime != 0) return;
+
+        outgoingData.writeByte(ClientPacketID.Ping.ordinal());
+
+        pingTime = System.currentTimeMillis();
+    }
+
+    public static void writeSetIniVar(String sLlave, String sClave, String sValor) {
+        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
+        outgoingData.writeByte(eGMCommands.SetIniVar.ordinal());
+
+        outgoingData.writeASCIIString(sLlave);
+        outgoingData.writeASCIIString(sClave);
+        outgoingData.writeASCIIString(sValor);
+    }
+
+    public static void writeHome() {
+        outgoingData.writeByte(ClientPacketID.Home.ordinal());
+    }
 }
