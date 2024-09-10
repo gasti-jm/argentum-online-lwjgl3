@@ -11,6 +11,7 @@ import org.aoclient.engine.gui.ImGUISystem;
 import org.aoclient.engine.listeners.KeyListener;
 import org.aoclient.engine.listeners.MouseListener;
 import org.aoclient.engine.renderer.RGBColor;
+import org.aoclient.network.ProtocolCmdParse;
 
 import static org.aoclient.engine.renderer.FontTypes.*;
 import static org.aoclient.network.Protocol.*;
@@ -22,7 +23,6 @@ import static org.aoclient.engine.renderer.Drawn.*;
 import static org.aoclient.engine.scenes.Camera.*;
 import static org.aoclient.engine.utils.GameData.*;
 import static org.aoclient.engine.utils.Time.*;
-import static org.aoclient.network.ProtocolCmdParse.parseUserCommand;
 import static org.lwjgl.glfw.GLFW.*;
 
 
@@ -44,9 +44,13 @@ public final class GameScene extends Scene {
     private FMain frmMain;
     private final IntervalTimer intervalToUpdatePos = new IntervalTimer(INT_SENTRPU);
 
+    private ProtocolCmdParse protocolCmdParse;
+
     @Override
     public void init() {
         super.init();
+
+        protocolCmdParse = ProtocolCmdParse.getInstance();
 
         canChangeTo     = SceneType.MAIN_SCENE;
         bindKeys        = BindKeys.get();
@@ -203,7 +207,7 @@ public final class GameScene extends Scene {
 
                             // No vamos a mandar paquetes con datos vacios.
                             if(!frmMain.getSendText().isBlank()) {
-                                parseUserCommand(frmMain.getSendText());
+                                protocolCmdParse.parseUserCommand(frmMain.getSendText());
                             }
                             User.get().setTalking(false);
                         } else {
