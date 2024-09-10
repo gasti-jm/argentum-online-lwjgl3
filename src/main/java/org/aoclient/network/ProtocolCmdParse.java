@@ -14,7 +14,22 @@ import static org.aoclient.network.Protocol.*;
 
 public class ProtocolCmdParse {
 
-    public static void parseUserCommand(String rawCommand) {
+    private static ProtocolCmdParse instance;
+
+    // Constructor privado para evitar instanciación directa
+    private ProtocolCmdParse() {
+        // Constructor privado para evitar instanciación directa
+    }
+
+    // Método estático para obtener la única instancia de ByteMigration
+    public static ProtocolCmdParse getInstance() {
+        if (instance == null) {
+            instance = new ProtocolCmdParse();
+        }
+        return instance;
+    }
+
+    public void parseUserCommand(String rawCommand) {
         // Declaración de variables
         String[] tmpArgs;
         String comando;
@@ -1649,7 +1664,7 @@ public class ProtocolCmdParse {
         }
     }
 
-    public static boolean validNumber(String numero, eNumber_Types tipo) {
+    public boolean validNumber(String numero, eNumber_Types tipo) {
         long minimo;
         long maximo;
 
@@ -1682,7 +1697,7 @@ public class ProtocolCmdParse {
         return valor >= minimo && valor <= maximo;
     }
 
-    private static boolean validIPv4Str(String ip) {
+    private boolean validIPv4Str(String ip) {
         String[] tmpArr = ip.split("\\.");
 
         if (tmpArr.length != 4) {
@@ -1698,7 +1713,7 @@ public class ProtocolCmdParse {
         return true;
     }
 
-    private static int[] str2ipv4l(String ip) {
+    private int[] str2ipv4l(String ip) {
         String[] tmpArr = ip.split("\\.");
         int[] bArr = new int[4];
 
@@ -1717,7 +1732,7 @@ public class ProtocolCmdParse {
         return bArr;
     }
 
-    private static String[] AEMAILSplit(String text) {
+    private String[] AEMAILSplit(String text) {
         String[] tmpArr = new String[2];
         byte Pos;
 
