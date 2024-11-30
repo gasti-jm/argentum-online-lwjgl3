@@ -16,9 +16,6 @@ import static org.aoclient.network.Protocol.lastPacket;
  * Aca es donde se gestiona toda la cola de bytes que entran y salen de nuestro cliente.
  */
 public class ByteQueue {
-    // codigos de error (Hay que quitarlo esto, es al pepe)....
-    private static final int NOT_ENOUGH_DATA = 10000;
-    private static final int NOT_ENOUGH_SPACE = 10001;
     private static final int DATA_BUFFER = 10240;
 
     private byte[] data;
@@ -445,6 +442,7 @@ public class ByteQueue {
         SocketConnection.get().disconnect();
 
 
+        // reseteamos nuestra cola de bytes para que termine la recursividad de lectura de paquetes.
         data = new byte[DATA_BUFFER];
         queueCapacity = DATA_BUFFER;
         queueLength = 0;

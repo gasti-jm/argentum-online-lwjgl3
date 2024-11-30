@@ -9,7 +9,9 @@ public class RGBColor{
     private float blue;
 
     public RGBColor() {
-
+        this.red = 1f;
+        this.green = 1f;
+        this.blue = 1f;
     }
     public RGBColor(float red, float green, float blue) {
         this.red = red;
