@@ -1,10 +1,16 @@
 package org.aoclient.network;
 
+import org.aoclient.engine.game.User;
+import org.aoclient.engine.gui.ImGUISystem;
+import org.aoclient.engine.gui.forms.FMessage;
+
 import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 import java.nio.charset.StandardCharsets;
 
-import static org.aoclient.engine.utils.ByteMigration.*;
+import static org.aoclient.network.Protocol.incomingData;
+import static org.aoclient.network.Protocol.lastPacket;
 
 /**
  * Aca es donde se gestiona toda la cola de bytes que entran y salen de nuestro cliente.
@@ -95,25 +101,25 @@ public class ByteQueue {
 
     public int writeInteger(short value) {
         byte[] buf = new byte[2];
-        ByteBuffer.wrap(buf).putShort(bigToLittle_Short(value));
+        ByteBuffer.wrap(buf).order(ByteOrder.LITTLE_ENDIAN).putShort(value);
         return writeData(buf, 2);
     }
 
     public int writeLong(int value) {
         byte[] buf = new byte[4];
-        ByteBuffer.wrap(buf).putInt(bigToLittle_Int(value));
+        ByteBuffer.wrap(buf).order(ByteOrder.LITTLE_ENDIAN).putInt(value);
         return writeData(buf, 4);
     }
 
     public int writeSingle(float value) {
         byte[] buf = new byte[4];
-        ByteBuffer.wrap(buf).putFloat(bigToLittle_Float(value));
+        ByteBuffer.wrap(buf).order(ByteOrder.LITTLE_ENDIAN).putFloat(value);
         return writeData(buf, 4);
     }
 
     public long writeDouble(double value) {
         byte[] buf = new byte[8];
-        ByteBuffer.wrap(buf).putDouble(bigToLittle_Double(value));
+        ByteBuffer.wrap(buf).order(ByteOrder.LITTLE_ENDIAN).putDouble(value);
         return writeData(buf, 8);
     }
 
@@ -165,25 +171,25 @@ public class ByteQueue {
     public int readByte() {
         byte[] buf = new byte[1];
         removeData(readData(buf, 1));
-        return bigToLittle_Byte(ByteBuffer.wrap(buf).get()) & 0xFF;
+        return ByteBuffer.wrap(buf).order(ByteOrder.LITTLE_ENDIAN).get() & 0xFF;
     }
 
     public short readInteger() {
         byte[] buf = new byte[2];
         removeData(readData(buf, 2));
-        return bigToLittle_Short(ByteBuffer.wrap(buf).getShort());
+        return ByteBuffer.wrap(buf).order(ByteOrder.LITTLE_ENDIAN).getShort();
     }
 
     public int readLong() {
         byte[] buf = new byte[4];
         removeData(readData(buf, 4));
-        return bigToLittle_Int(ByteBuffer.wrap(buf).getInt());
+        return ByteBuffer.wrap(buf).order(ByteOrder.LITTLE_ENDIAN).getInt();
     }
 
     public float readFloat() {
         byte[] buf = new byte[4];
         removeData(readData(buf, 4));
-        return bigToLittle_Float(ByteBuffer.wrap(buf).getFloat());
+        return ByteBuffer.wrap(buf).order(ByteOrder.LITTLE_ENDIAN).getFloat();
     }
 
     public boolean readBoolean() {
@@ -223,7 +229,7 @@ public class ByteQueue {
 
         if (queueLength > 1) {
             readData(buf, 2);
-            length = bigToLittle_Short(ByteBuffer.wrap(buf).getShort());
+            length = ByteBuffer.wrap(buf).order(ByteOrder.LITTLE_ENDIAN).getShort();
 
             if (queueLength >= length + 2) {
                 removeData(2);
@@ -418,12 +424,31 @@ public class ByteQueue {
         data = newData;
     }
 
-    public int getNotEnoughDataErrCode() {
-        return NOT_ENOUGH_DATA;
+    /**
+     *
+     * Revisa la cantidad de bytes que tiene que leer de un paquete
+     * en caso de que no coincida la cantidad se presentara un error.
+     */
+    public boolean checkPacketData(int bytes) {
+        if (this.queueLength < bytes) {
+            disconnectByMistake("NOT_ENOUGH_DATA");
+            return true;
+        }
+
+        return false;
     }
 
-    public int getNotEnoughSpaceErrCode() {
-        return NOT_ENOUGH_SPACE;
+    private void disconnectByMistake(final String typeError) {
+        final String msgErr = "Error al leer datos del servidor, intente actualizar su cliente o solicitar soporte al sitio oficial. Codigo de error: "+ typeError +" packet #" + lastPacket;
+        ImGUISystem.get().checkAddOrChange("frmMessage", new FMessage(msgErr));
+        //System.out.println(msgErr);
+        SocketConnection.get().disconnect();
+
+
+        data = new byte[DATA_BUFFER];
+        queueCapacity = DATA_BUFFER;
+        queueLength = 0;
+
     }
 }
 

@@ -1,4 +1,4 @@
-package org.aoclient.engine.utils.structs;
+package org.aoclient.engine.utils.inits;
 
 /**
  * Simula el "Type" o la estructura de FxData.

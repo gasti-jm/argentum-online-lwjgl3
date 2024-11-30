@@ -20,7 +20,7 @@ import org.aoclient.engine.gui.ImGUISystem;
 import org.aoclient.engine.renderer.RGBColor;
 import org.aoclient.engine.renderer.Surface;
 import org.aoclient.engine.renderer.Texture;
-import org.aoclient.engine.utils.structs.BodyData;
+import org.aoclient.engine.utils.inits.BodyData;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
