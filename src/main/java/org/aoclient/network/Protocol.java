@@ -1,6 +1,7 @@
 package org.aoclient.network;
 
 import org.aoclient.engine.game.Dialogs;
+import org.aoclient.engine.game.models.E_FontType;
 import org.aoclient.engine.gui.forms.FComerce;
 import org.aoclient.network.packets.ClientPacketID;
 import org.aoclient.network.packets.eGMCommands;
@@ -220,80 +221,80 @@ public class Protocol {
                 break;
 
             case NPCSwing:
-                console.addMsgToConsole(MENSAJE_CRIATURA_FALLA_GOLPE, false, false, new RGBColor());
+                console.addMsgToConsole(MENSAJE_CRIATURA_FALLA_GOLPE, false, false, new RGBColor(1f, 0f, 0f));
                 break;
 
             case NPCKillUser:
-                console.addMsgToConsole(MENSAJE_CRIATURA_MATADO, false, false, new RGBColor());
+                console.addMsgToConsole(MENSAJE_CRIATURA_MATADO, false, false, new RGBColor(1f, 0f, 0f));
                 break;
 
             case BlockedWithShieldUser:
-                console.addMsgToConsole(MENSAJE_RECHAZO_ATAQUE_ESCUDO, false, false, new RGBColor());
+                console.addMsgToConsole(MENSAJE_RECHAZO_ATAQUE_ESCUDO, false, false, new RGBColor(1f, 0f, 0f));
                 break;
 
             case BlockedWithShieldOther:
-                console.addMsgToConsole(MENSAJE_USUARIO_RECHAZO_ATAQUE_ESCUDO, false, false, new RGBColor());
+                console.addMsgToConsole(MENSAJE_USUARIO_RECHAZO_ATAQUE_ESCUDO, false, false, new RGBColor(1f, 0f, 0f));
                 break;
 
             case UserSwing:
-                console.addMsgToConsole(MENSAJE_FALLADO_GOLPE, false, false, new RGBColor());
+                console.addMsgToConsole(MENSAJE_FALLADO_GOLPE, false, false, new RGBColor(1f, 0f, 0f));
                 charDialogHitSet(User.get().getUserCharIndex(), "*Fallas*");
                 break;
 
             case SafeModeOn:
-                console.addMsgToConsole("MODO SEGURO ACTIVADO", false, false, new RGBColor());
+                console.addMsgToConsole("MODO SEGURO ACTIVADO", false, false, new RGBColor(0f, 1f, 0f));
                 break;
 
             case SafeModeOff:
-                console.addMsgToConsole("MODO SEGURO DESACTIVADO", false, false, new RGBColor());
+                console.addMsgToConsole("MODO SEGURO DESACTIVADO", false, false, new RGBColor(1f, 0f, 0f));
                 break;
 
             case ResuscitationSafeOff:
-                console.addMsgToConsole("MODO RESURECCION ACTIVADO", false, false, new RGBColor());
+                console.addMsgToConsole("MODO RESURECCION ACTIVADO", false, false, new RGBColor(0f, 1f, 0f));
                 break;
 
             case ResuscitationSafeOn:
-                console.addMsgToConsole("MODO RESURECCION DESACTIVADO", false, false, new RGBColor());
+                console.addMsgToConsole("MODO RESURECCION DESACTIVADO", false, false, new RGBColor(1f, 0f, 0f));
                 break;
 
             case NobilityLost:
-                console.addMsgToConsole(MENSAJE_PIERDE_NOBLEZA, false, false, new RGBColor());
+                console.addMsgToConsole(MENSAJE_PIERDE_NOBLEZA, false, false, new RGBColor(1f, 0f, 0f));
                 break;
 
             case CantUseWhileMeditating:
-                console.addMsgToConsole(MENSAJE_USAR_MEDITANDO, false, false, new RGBColor());
+                console.addMsgToConsole(MENSAJE_USAR_MEDITANDO, false, false, new RGBColor(1f, 0f, 0f));
                 break;
 
             case NPCHitUser:
                 switch (incomingData.readByte()) {
                     case 1: // bCabeza
                         console.addMsgToConsole(MENSAJE_GOLPE_CABEZA + " " + incomingData.readInteger(),
-                                false, false, new RGBColor());
+                                false, false, new RGBColor(1f, 0f, 0f));
                         break;
 
                     case 2: // bBrazoIzquierdo
                         console.addMsgToConsole(MENSAJE_GOLPE_BRAZO_IZQ + " " + incomingData.readInteger(),
-                                false, false, new RGBColor());
+                                false, false, new RGBColor(1f, 0f, 0f));
                         break;
 
                     case 3: // bBrazoDerecho
                         console.addMsgToConsole(MENSAJE_GOLPE_BRAZO_DER + " " + incomingData.readInteger(),
-                                false, false, new RGBColor());
+                                false, false, new RGBColor(1f, 0f, 0f));
                         break;
 
                     case 4: // bPiernaIzquierda
                         console.addMsgToConsole(MENSAJE_GOLPE_PIERNA_IZQ + " " + incomingData.readInteger(),
-                                false, false, new RGBColor());
+                                false, false, new RGBColor(1f, 0f, 0f));
                         break;
 
                     case 5: // bPiernaDerecha
                         console.addMsgToConsole(MENSAJE_GOLPE_PIERNA_DER + " " + incomingData.readInteger(),
-                                false, false, new RGBColor());
+                                false, false, new RGBColor(1f, 0f, 0f));
                         break;
 
                     case 6: // bTorso
                         console.addMsgToConsole(MENSAJE_GOLPE_TORSO + " " + incomingData.readInteger(),
-                                false, false, new RGBColor());
+                                false, false, new RGBColor(1f, 0f, 0f));
                         break;
                 }
                 break;
@@ -301,7 +302,7 @@ public class Protocol {
             case UserHitNPC:
                 final int d = incomingData.readLong();
                 console.addMsgToConsole(MENSAJE_GOLPE_CRIATURA_1 + " " + d,
-                        false, false, new RGBColor());
+                        false, false, new RGBColor(1f, 0f, 0f));
 
                 charDialogHitSet(User.get().getUserCharIndex(), d);
 
@@ -311,7 +312,7 @@ public class Protocol {
                 final short charIndexAttaker = incomingData.readInteger();
 
                 console.addMsgToConsole(MENSAJE_1 + " " + charList[charIndexAttaker].getName() + MENSAJE_ATAQUE_FALLO,
-                        false, false, new RGBColor());
+                        false, false, new RGBColor(1f, 0f, 0f));
 
                 charDialogHitSet(charIndexAttaker, "*Falla*");
                 break;
@@ -325,32 +326,32 @@ public class Protocol {
                 switch (bodyPart) {
                     case 1: // bCabeza
                         console.addMsgToConsole(MENSAJE_1 + attackerName + MENSAJE_RECIVE_IMPACTO_CABEZA + damage + MENSAJE_2,
-                                false, false, new RGBColor());
+                                false, false, new RGBColor(1f, 0f, 0f));
                         break;
 
                     case 2: // bBrazoIzquierdo
                         console.addMsgToConsole(MENSAJE_1 + attackerName + MENSAJE_RECIVE_IMPACTO_BRAZO_IZQ + damage + MENSAJE_2,
-                                false, false, new RGBColor());
+                                false, false, new RGBColor(1f, 0f, 0f));
                         break;
 
                     case 3: // bBrazoDerecho
                         console.addMsgToConsole(MENSAJE_1 + attackerName + MENSAJE_RECIVE_IMPACTO_BRAZO_DER + damage + MENSAJE_2,
-                                false, false, new RGBColor());
+                                false, false, new RGBColor(1f, 0f, 0f));
                         break;
 
                     case 4: // bPiernaIzquierda
                         console.addMsgToConsole(MENSAJE_1 + attackerName + MENSAJE_RECIVE_IMPACTO_PIERNA_IZQ + damage + MENSAJE_2,
-                                false, false, new RGBColor());
+                                false, false, new RGBColor(1f, 0f, 0f));
                         break;
 
                     case 5: // bPiernaDerecha
                         console.addMsgToConsole(MENSAJE_1 + attackerName + MENSAJE_RECIVE_IMPACTO_PIERNA_DER + damage + MENSAJE_2,
-                                false, false, new RGBColor());
+                                false, false, new RGBColor(1f, 0f, 0f));
                         break;
 
                     case 6: // bTorso
                         console.addMsgToConsole(MENSAJE_1 + attackerName + MENSAJE_RECIVE_IMPACTO_TORSO + damage + MENSAJE_2,
-                                false, false, new RGBColor());
+                                false, false, new RGBColor(1f, 0f, 0f));
                         break;
                 }
 
@@ -367,32 +368,32 @@ public class Protocol {
                 switch (bodyPart) {
                     case 1: // bCabeza
                         console.addMsgToConsole(MENSAJE_PRODUCE_IMPACTO_1 + victimName + MENSAJE_PRODUCE_IMPACTO_CABEZA + damage + MENSAJE_2,
-                                false, false, new RGBColor());
+                                false, false, new RGBColor(1f, 0f, 0f));
                         break;
 
                     case 2: // bBrazoIzquierdo
                         console.addMsgToConsole(MENSAJE_PRODUCE_IMPACTO_1 + victimName + MENSAJE_PRODUCE_IMPACTO_BRAZO_IZQ + damage + MENSAJE_2,
-                                false, false, new RGBColor());
+                                false, false, new RGBColor(1f, 0f, 0f));
                         break;
 
                     case 3: // bBrazoDerecho
                         console.addMsgToConsole(MENSAJE_PRODUCE_IMPACTO_1 + victimName + MENSAJE_RECIVE_IMPACTO_BRAZO_DER + damage + MENSAJE_2,
-                                false, false, new RGBColor());
+                                false, false, new RGBColor(1f, 0f, 0f));
                         break;
 
                     case 4: // bPiernaIzquierda
                         console.addMsgToConsole(MENSAJE_PRODUCE_IMPACTO_1 + victimName + MENSAJE_RECIVE_IMPACTO_PIERNA_IZQ + damage + MENSAJE_2,
-                                false, false, new RGBColor());
+                                false, false, new RGBColor(1f, 0f, 0f));
                         break;
 
                     case 5: // bPiernaDerecha
                         console.addMsgToConsole(MENSAJE_PRODUCE_IMPACTO_1 + victimName + MENSAJE_RECIVE_IMPACTO_PIERNA_DER + damage + MENSAJE_2,
-                                false, false, new RGBColor());
+                                false, false, new RGBColor(1f, 0f, 0f));
                         break;
 
                     case 6: // bTorso
                         console.addMsgToConsole(MENSAJE_PRODUCE_IMPACTO_1 + victimName + MENSAJE_RECIVE_IMPACTO_TORSO + damage + MENSAJE_2,
-                                false, false, new RGBColor());
+                                false, false, new RGBColor(1f, 0f, 0f));
                         break;
                 }
                 charDialogHitSet(charIndexVictim, damage);
@@ -407,55 +408,55 @@ public class Protocol {
 
                 switch (E_Skills.values()[usingSkill - 1]) {
                     case Magia:
-                        console.addMsgToConsole(MENSAJE_TRABAJO_MAGIA, false, false, new RGBColor());
+                        console.addMsgToConsole(MENSAJE_TRABAJO_MAGIA, false, false, new RGBColor(0.39f, 0.39f, 0.47f));
                         break;
 
                     case Pesca:
-                        console.addMsgToConsole(MENSAJE_TRABAJO_PESCA, false, false, new RGBColor());
+                        console.addMsgToConsole(MENSAJE_TRABAJO_PESCA, false, false, new RGBColor(0.39f, 0.39f, 0.47f));
                         break;
 
                     case Robar:
-                        console.addMsgToConsole(MENSAJE_TRABAJO_ROBAR, false, false, new RGBColor());
+                        console.addMsgToConsole(MENSAJE_TRABAJO_ROBAR, false, false, new RGBColor(0.39f, 0.39f, 0.47f));
                         break;
 
                     case Talar:
-                        console.addMsgToConsole(MENSAJE_TRABAJO_TALAR, false, false, new RGBColor());
+                        console.addMsgToConsole(MENSAJE_TRABAJO_TALAR, false, false, new RGBColor(0.39f, 0.39f, 0.47f));
                         break;
 
                     case Mineria:
-                        console.addMsgToConsole(MENSAJE_TRABAJO_MINERIA, false, false, new RGBColor());
+                        console.addMsgToConsole(MENSAJE_TRABAJO_MINERIA, false, false, new RGBColor(0.39f, 0.39f, 0.47f));
                         break;
 
                     case Proyectiles:
-                        console.addMsgToConsole(MENSAJE_TRABAJO_PROYECTILES, false, false, new RGBColor());
+                        console.addMsgToConsole(MENSAJE_TRABAJO_PROYECTILES, false, false, new RGBColor(0.39f, 0.39f, 0.47f));
                         break;
                 }
 
                 if (usingSkill == FundirMetal) {
-                    console.addMsgToConsole(MENSAJE_TRABAJO_FUNDIRMETAL, false, false, new RGBColor());
+                    console.addMsgToConsole(MENSAJE_TRABAJO_FUNDIRMETAL, false, false, new RGBColor(0.39f, 0.39f, 0.47f));
                 }
                 break;
 
             case HaveKilledUser:
                 console.addMsgToConsole(MENSAJE_HAS_MATADO_A + charList[incomingData.readInteger()].getName() + MENSAJE_22,
-                        false, false, new RGBColor());
+                        false, false, new RGBColor(1f, 0f, 0f));
 
                 final int level = incomingData.readLong();
 
                 console.addMsgToConsole(MENSAJE_HAS_GANADO_EXPE_1 + level + MENSAJE_HAS_GANADO_EXPE_2,
-                        false, false, new RGBColor());
+                        false, false, new RGBColor(1f, 0f, 0f));
 
                 // sistema de captura al matar.
                 break;
 
             case UserKill:
                 console.addMsgToConsole(charList[incomingData.readInteger()].getName() + MENSAJE_TE_HA_MATADO,
-                        false, false, new RGBColor());
+                        false, false, new RGBColor(1f, 0f, 0f));
                 break;
 
             case EarnExp:
                 console.addMsgToConsole(MENSAJE_HAS_GANADO_EXPE_1 + incomingData.readLong() + MENSAJE_HAS_GANADO_EXPE_2,
-                        false, false, new RGBColor());
+                        false, false, new RGBColor(1f, 0f, 0f));
                 break;
 
             case GoHome:
@@ -464,7 +465,7 @@ public class Protocol {
                 String hogar = incomingData.readASCIIString();
 
                 console.addMsgToConsole("Estas a " + distance + " mapas de distancia de " + hogar + ", este viaje durara " + time + " segundos.",
-                        false, false, new RGBColor());
+                        false, false, new RGBColor(1f, 0f, 0f));
                 break;
 
             case FinishHome:
@@ -472,7 +473,7 @@ public class Protocol {
                 break;
 
             case CancelGoHome:
-                console.addMsgToConsole(MENSAJE_HOGAR_CANCEL, false, false, new RGBColor());
+                console.addMsgToConsole(MENSAJE_HOGAR_CANCEL, false, false, new RGBColor(1f, 0f, 0f));
                 break;
         }
 
@@ -2482,34 +2483,11 @@ public class Protocol {
         buffer.readByte();
 
         String chat = buffer.readASCIIString();
-        int fontIndex = buffer.readByte();
+        E_FontType fontType = E_FontType.values()[buffer.readByte()];
 
-        console.addMsgToConsole(chat, false, false, new RGBColor(1.0f, 1.0f, 1.0f));
+        console.addMsgToConsole(chat, false, false, new RGBColor(fontType.r, fontType.g, fontType.b));
 
-        //If InStr(1, chat, "~") Then
-        //        str = ReadField(2, chat, 126)
-        //            If Val(str) > 255 Then
-        //                r = 255
-        //            Else
-        //                r = Val(str)
-        //            End If
-        //
-        //            str = ReadField(3, chat, 126)
-        //            If Val(str) > 255 Then
-        //                g = 255
-        //            Else
-        //                g = Val(str)
-        //            End If
-        //
-        //            str = ReadField(4, chat, 126)
-        //            If Val(str) > 255 Then
-        //                b = 255
-        //            Else
-        //                b = Val(str)
-        //            End If
-        //
-        //        Call AddtoRichTextBox(//FrmMain.RecTxt, Left$(chat, InStr(1, chat, "~") - 1), r, g, b, Val(ReadField(5, chat, 126)) <> 0, Val(ReadField(6, chat, 126)) <> 0)
-        //    Else
+
         //        With FontTypes(FontIndex)
         //            Call AddtoRichTextBox(//FrmMain.RecTxt, chat, .red, .green, .blue, .bold, .italic)
         //        End With
