@@ -43,3 +43,6 @@ bin/
 
 ### Extra ###
 Server/
+git
+### ImGui ###
+resources/inits/gui.ini

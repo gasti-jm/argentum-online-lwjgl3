@@ -1,7 +1,7 @@
 package org.aoclient.engine.game.models;
 
 import org.aoclient.engine.renderer.RGBColor;
-import org.aoclient.engine.utils.structs.*;
+import org.aoclient.engine.utils.inits.*;
 
 import static org.aoclient.engine.game.models.E_Heading.SOUTH;
 import static org.aoclient.engine.renderer.Drawn.drawTexture;

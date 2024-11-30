@@ -1,7 +1,6 @@
 package org.aoclient.network;
 
 import org.aoclient.engine.game.Dialogs;
-import org.aoclient.engine.game.inventory.NPCInventory;
 import org.aoclient.engine.gui.forms.FComerce;
 import org.aoclient.network.packets.ClientPacketID;
 import org.aoclient.network.packets.eGMCommands;
@@ -19,15 +18,13 @@ import org.aoclient.engine.gui.forms.FMessage;
 import org.aoclient.engine.gui.ImGUISystem;
 import org.aoclient.engine.renderer.RGBColor;
 import org.aoclient.engine.utils.GameData;
-import org.aoclient.engine.utils.structs.*;
+import org.aoclient.engine.utils.inits.*;
 import org.tinylog.Logger;
 
-import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
 import static org.aoclient.engine.game.Dialogs.charDialogHitSet;
 import static org.aoclient.engine.game.Dialogs.charDialogSet;
-import static org.aoclient.engine.game.inventory.Inventory.MAX_NPC_INVENTORY_SLOTS;
 import static org.aoclient.network.Messages.*;
 import static org.aoclient.engine.Sound.*;
 import static org.aoclient.engine.game.models.Character.*;
@@ -37,336 +34,127 @@ import static org.aoclient.engine.utils.GameData.*;
 public class Protocol {
     static ByteQueue incomingData = new ByteQueue();
     static ByteQueue outgoingData = new ByteQueue();
-
     static Long pingTime;
+    static int lastPacket;
+    private static Console console = Console.get();
 
     public static void handleIncomingData() {
-        byte p = incomingData.peekByte();
+        lastPacket = incomingData.peekByte();
 
-        if (p > ServerPacketID.values().length) return;
-        ServerPacketID packet = ServerPacketID.values()[p];
+        if (lastPacket > ServerPacketID.values().length) return;
+        ServerPacketID packet = ServerPacketID.values()[lastPacket];
         //Logger.debug(packet + " #" + p);
 
         switch (packet) {
-            case logged:
-                handleLogged();
-                break;
-            case RemoveDialogs:
-                handleRemoveDialogs();
-                break;
-            case RemoveCharDialog:
-                handleRemoveCharDialog();
-                break;
-            case NavigateToggle:
-                handleNavigateToggle();
-                break;
-            case Disconnect:
-                handleDisconnect();
-                break;
-            case CommerceEnd:
-                handleCommerceEnd();
-                break;
-            case CommerceChat:
-                handleCommerceChat();
-                break;
-            case BankEnd:
-                handleBankEnd();
-                break;
-            case CommerceInit:
-                handleCommerceInit();
-                break;
-            case BankInit:
-                handleBankInit();
-                break;
-            case UserCommerceInit:
-                handleUserCommerceInit();
-                break;
-            case UserCommerceEnd:
-                handleUserCommerceEnd();
-                break;
-            case UserOfferConfirm:
-                handleUserOfferConfirm();
-                break;
-            case ShowBlacksmithForm:
-                handleShowBlacksmithForm();
-                break;
-            case ShowCarpenterForm:
-                handleShowCarpenterForm();
-                break;
-            case UpdateSta:
-                handleUpdateSta();
-                break;
-            case UpdateMana:
-                handleUpdateMana();
-                break;
-            case UpdateHP:
-                handleUpdateHP();
-                break;
-            case UpdateGold:
-                handleUpdateGold();
-                break;
-            case UpdateBankGold:
-                handleUpdateBankGold();
-                break;
-            case UpdateExp:
-                handleUpdateExp();
-                break;
-            case ChangeMap:
-                handleChangeMap();
-                break;
-            case PosUpdate:
-                handlePosUpdate();
-                break;
-            case ChatOverHead:
-                handleChatOverHead();
-                break;
-            case ConsoleMsg:
-                handleConsoleMessage();
-                break;
-            case GuildChat:
-                handleGuildChat();
-                break;
-            case ShowMessageBox:
-                handleShowMessageBox();
-                break;
-            case UserIndexInServer:
-                handleUserIndexInServer();
-                break;
-            case UserCharIndexInServer:
-                handleUserCharIndexInServer();
-                break;
-            case CharacterCreate:
-                handleCharacterCreate();
-                break;
-            case CharacterRemove:
-                handleCharacterRemove();
-                break;
-            case CharacterChangeNick:
-                handleCharacterChangeNick();
-                break;
-            case CharacterMove:
-                handleCharacterMove();
-                break;
-            case ForceCharMove:
-                handleForceCharMove();
-                break;
-            case CharacterChange:
-                handleCharacterChange();
-                break;
-            case ObjectCreate:
-                handleObjectCreate();
-                break;
-            case ObjectDelete:
-                handleObjectDelete();
-                break;
-            case BlockPosition:
-                handleBlockPosition();
-                break;
-            case PlayMIDI:
-                handlePlayMIDI();
-                break;
-            case PlayWave:
-                handlePlayWave();
-                break;
-            case guildList:
-                handleGuildList();
-                break;
-            case AreaChanged:
-                handleAreaChanged();
-                break;
-            case PauseToggle:
-                handlePauseToggle();
-                break;
-            case RainToggle:
-                handleRainToggle();
-                break;
-            case CreateFX:
-                handleCreateFX();
-                break;
-            case UpdateUserStats:
-                handleUpdateUserStats();
-                break;
-            case WorkRequestTarget:
-                handleWorkRequestTarget();
-                break;
-            case ChangeInventorySlot:
-                handleChangeInventorySlot();
-                break;
-            case ChangeBankSlot:
-                handleChangeBankSlot();
-                break;
-            case ChangeSpellSlot:
-                handleChangeSpellSlot();
-                break;
-            case Atributes:
-                handleAtributes();
-                break;
-            case BlacksmithWeapons:
-                handleBlacksmithWeapons();
-                break;
-            case BlacksmithArmors:
-                handleBlacksmithArmors();
-                break;
-            case CarpenterObjects:
-                handleCarpenterObjects();
-                break;
-            case RestOK:
-                handleRestOK();
-                break;
-            case ErrorMsg:
-                handleErrorMessage();
-                break;
-            case Blind:
-                handleBlind();
-                break;
-            case Dumb:
-                handleDumb();
-                break;
-            case ShowSignal:
-                handleShowSignal();
-                break;
-            case ChangeNPCInventorySlot:
-                handleChangeNPCInventorySlot();
-                break;
-            case UpdateHungerAndThirst:
-                handleUpdateHungerAndThirst();
-                break;
-            case Fame:
-                handleFame();
-                break;
-            case MiniStats:
-                handleMiniStats();
-                break;
-            case LevelUp:
-                handleLevelUp();
-                break;
-            case AddForumMsg:
-                handleAddForumMessage();
-                break;
-            case ShowForumForm:
-                handleShowForumForm();
-                break;
-            case SetInvisible:
-                handleSetInvisible();
-                break;
-            case DiceRoll:
-                handleDiceRoll();
-                break;
-            case MeditateToggle:
-                handleMeditateToggle();
-                break;
-            case BlindNoMore:
-                handleBlindNoMore();
-                break;
-            case DumbNoMore:
-                handleDumbNoMore();
-                break;
-            case SendSkills:
-                handleSendSkills();
-                break;
-            case TrainerCreatureList:
-                handleTrainerCreatureList();
-                break;
-            case guildNews:
-                handleGuildNews();
-                break;
-            case OfferDetails:
-                handleOfferDetails();
-                break;
-            case AlianceProposalsList:
-                handleAlianceProposalsList();
-                break;
-            case PeaceProposalsList:
-                handlePeaceProposalsList();
-                break;
-            case CharacterInfo:
-                handleCharacterInfo();
-                break;
-            case GuildLeaderInfo:
-                handleGuildLeaderInfo();
-                break;
-            case GuildDetails:
-                handleGuildDetails();
-                break;
-            case ShowGuildFundationForm:
-                handleShowGuildFundationForm();
-                break;
-            case ParalizeOK:
-                handleParalizeOK();
-                break;
-            case ShowUserRequest:
-                handleShowUserRequest();
-                break;
-            case TradeOK:
-                handleTradeOK();
-                break;
-            case BankOK:
-                handleBankOK();
-                break;
-            case ChangeUserTradeSlot:
-                handleChangeUserTradeSlot();
-                break;
-            case SendNight:
-                handleSendNight();
-                break;
-            case Pong:
-                handlePong();
-                break;
-            case UpdateTagAndStatus:
-                handleUpdateTagAndStatus();
-                break;
-            case GuildMemberInfo:
-                handleGuildMemberInfo();
-                break;
+            case logged: handleLogged(); break;
+            case RemoveDialogs: handleRemoveDialogs(); break;
+            case RemoveCharDialog: handleRemoveCharDialog(); break;
+            case NavigateToggle: handleNavigateToggle(); break;
+            case Disconnect: handleDisconnect(); break;
+            case CommerceEnd: handleCommerceEnd(); break;
+            case CommerceChat: handleCommerceChat();break;
+            case BankEnd: handleBankEnd();break;
+            case CommerceInit: handleCommerceInit();break;
+            case BankInit: handleBankInit();break;
+            case UserCommerceInit: handleUserCommerceInit();break;
+            case UserCommerceEnd: handleUserCommerceEnd();break;
+            case UserOfferConfirm: handleUserOfferConfirm();break;
+            case ShowBlacksmithForm: handleShowBlacksmithForm();break;
+            case ShowCarpenterForm: handleShowCarpenterForm();break;
+            case UpdateSta: handleUpdateSta();break;
+            case UpdateMana: handleUpdateMana();break;
+            case UpdateHP: handleUpdateHP();break;
+            case UpdateGold: handleUpdateGold();break;
+            case UpdateBankGold: handleUpdateBankGold();break;
+            case UpdateExp: handleUpdateExp();break;
+            case ChangeMap: handleChangeMap();break;
+            case PosUpdate: handlePosUpdate();break;
+            case ChatOverHead: handleChatOverHead();break;
+            case ConsoleMsg: handleConsoleMessage();break;
+            case GuildChat: handleGuildChat();break;
+            case ShowMessageBox: handleShowMessageBox();break;
+            case UserIndexInServer: handleUserIndexInServer();break;
+            case UserCharIndexInServer: handleUserCharIndexInServer();break;
+            case CharacterCreate: handleCharacterCreate();break;
+            case CharacterRemove: handleCharacterRemove();break;
+            case CharacterChangeNick: handleCharacterChangeNick();break;
+            case CharacterMove: handleCharacterMove();break;
+            case ForceCharMove: handleForceCharMove();break;
+            case CharacterChange: handleCharacterChange();break;
+            case ObjectCreate: handleObjectCreate();break;
+            case ObjectDelete: handleObjectDelete();break;
+            case BlockPosition: handleBlockPosition();break;
+            case PlayMIDI: handlePlayMIDI();break;
+            case PlayWave: handlePlayWave();break;
+            case guildList: handleGuildList();break;
+            case AreaChanged: handleAreaChanged();break;
+            case PauseToggle: handlePauseToggle();break;
+            case RainToggle: handleRainToggle();break;
+            case CreateFX: handleCreateFX();break;
+            case UpdateUserStats: handleUpdateUserStats();break;
+            case WorkRequestTarget: handleWorkRequestTarget();break;
+            case ChangeInventorySlot: handleChangeInventorySlot();break;
+            case ChangeBankSlot: handleChangeBankSlot();break;
+            case ChangeSpellSlot: handleChangeSpellSlot();break;
+            case Atributes: handleAtributes();break;
+            case BlacksmithWeapons: handleBlacksmithWeapons();break;
+            case BlacksmithArmors: handleBlacksmithArmors();break;
+            case CarpenterObjects: handleCarpenterObjects();break;
+            case RestOK: handleRestOK();break;
+            case ErrorMsg: handleErrorMessage();break;
+            case Blind: handleBlind();break;
+            case Dumb: handleDumb();break;
+            case ShowSignal: handleShowSignal();break;
+            case ChangeNPCInventorySlot: handleChangeNPCInventorySlot();break;
+            case UpdateHungerAndThirst: handleUpdateHungerAndThirst();break;
+            case Fame: handleFame();break;
+            case MiniStats: handleMiniStats();break;
+            case LevelUp: handleLevelUp();break;
+            case AddForumMsg: handleAddForumMessage();break;
+            case ShowForumForm: handleShowForumForm();break;
+            case SetInvisible: handleSetInvisible();break;
+            case DiceRoll: handleDiceRoll();break;
+            case MeditateToggle: handleMeditateToggle();break;
+            case BlindNoMore: handleBlindNoMore();break;
+            case DumbNoMore: handleDumbNoMore();break;
+            case SendSkills: handleSendSkills();break;
+            case TrainerCreatureList: handleTrainerCreatureList();break;
+            case guildNews: handleGuildNews();break;
+            case OfferDetails: handleOfferDetails();break;
+            case AlianceProposalsList: handleAlianceProposalsList();break;
+            case PeaceProposalsList: handlePeaceProposalsList();break;
+            case CharacterInfo: handleCharacterInfo();break;
+            case GuildLeaderInfo: handleGuildLeaderInfo();break;
+            case GuildDetails: handleGuildDetails();break;
+            case ShowGuildFundationForm: handleShowGuildFundationForm();break;
+            case ParalizeOK: handleParalizeOK();break;
+            case ShowUserRequest: handleShowUserRequest();break;
+            case TradeOK: handleTradeOK();break;
+            case BankOK: handleBankOK();break;
+            case ChangeUserTradeSlot: handleChangeUserTradeSlot();break;
+            case SendNight: handleSendNight();break;
+            case Pong: handlePong();break;
+            case UpdateTagAndStatus: handleUpdateTagAndStatus();break;
+            case GuildMemberInfo: handleGuildMemberInfo();break;
 
             //*******************
             // GM messages
             //*******************
-            case SpawnList:
-                handleSpawnList();
-                break;
-            case ShowSOSForm:
-                handleShowSOSForm();
-                break;
-            case ShowMOTDEditionForm:
-                handleShowMOTDEditionForm();
-                break;
-            case ShowGMPanelForm:
-                handleShowGMPanelForm();
-                break;
-            case UserNameList:
-                handleUserNameList();
-                break;
-            case ShowGuildAlign:
-                handleShowGuildAlign();
-                break;
-            case ShowPartyForm:
-                handleShowPartyForm();
-                break;
-            case UpdateStrenghtAndDexterity:
-                handleUpdateStrenghtAndDexterity();
-                break;
-            case UpdateStrenght:
-                handleUpdateStrenght();
-                break;
-            case UpdateDexterity:
-                handleUpdateDexterity();
-                break;
-            case AddSlots:
-                handleAddSlots();
-                break;
-            case MultiMessage:
-                handleMultiMessage();
-                break;
-            case StopWorking:
-                handleStopWorking();
-                break;
-            case CancelOfferItem:
-                handleCancelOfferItem();
-                break;
-
-            default:
-                return;
+            case SpawnList: handleSpawnList();break;
+            case ShowSOSForm: handleShowSOSForm();break;
+            case ShowMOTDEditionForm: handleShowMOTDEditionForm();break;
+            case ShowGMPanelForm: handleShowGMPanelForm();break;
+            case UserNameList: handleUserNameList();break;
+            case ShowGuildAlign: handleShowGuildAlign();break;
+            case ShowPartyForm: handleShowPartyForm();break;
+            case UpdateStrenghtAndDexterity: handleUpdateStrenghtAndDexterity();break;
+            case UpdateStrenght: handleUpdateStrenght();break;
+            case UpdateDexterity: handleUpdateDexterity();break;
+            case AddSlots: handleAddSlots();break;
+            case MultiMessage: handleMultiMessage();break;
+            case StopWorking: handleStopWorking();break;
+            case CancelOfferItem: handleCancelOfferItem();break;
+            default: return;
         }
 
         // Done with this packet, move on to next one
@@ -428,83 +216,83 @@ public class Protocol {
 
         switch (msg) {
             case DontSeeAnything:
-                Console.get().addMsgToConsole(MENSAJE_NO_VES_NADA_INTERESANTE, false, false, new RGBColor(0.25f, 0.75f, 0.60f));
+                console.addMsgToConsole(MENSAJE_NO_VES_NADA_INTERESANTE, false, false, new RGBColor(0.25f, 0.75f, 0.60f));
                 break;
 
             case NPCSwing:
-                Console.get().addMsgToConsole(MENSAJE_CRIATURA_FALLA_GOLPE, false, false, new RGBColor());
+                console.addMsgToConsole(MENSAJE_CRIATURA_FALLA_GOLPE, false, false, new RGBColor());
                 break;
 
             case NPCKillUser:
-                Console.get().addMsgToConsole(MENSAJE_CRIATURA_MATADO, false, false, new RGBColor());
+                console.addMsgToConsole(MENSAJE_CRIATURA_MATADO, false, false, new RGBColor());
                 break;
 
             case BlockedWithShieldUser:
-                Console.get().addMsgToConsole(MENSAJE_RECHAZO_ATAQUE_ESCUDO, false, false, new RGBColor());
+                console.addMsgToConsole(MENSAJE_RECHAZO_ATAQUE_ESCUDO, false, false, new RGBColor());
                 break;
 
             case BlockedWithShieldOther:
-                Console.get().addMsgToConsole(MENSAJE_USUARIO_RECHAZO_ATAQUE_ESCUDO, false, false, new RGBColor());
+                console.addMsgToConsole(MENSAJE_USUARIO_RECHAZO_ATAQUE_ESCUDO, false, false, new RGBColor());
                 break;
 
             case UserSwing:
-                Console.get().addMsgToConsole(MENSAJE_FALLADO_GOLPE, false, false, new RGBColor());
+                console.addMsgToConsole(MENSAJE_FALLADO_GOLPE, false, false, new RGBColor());
                 charDialogHitSet(User.get().getUserCharIndex(), "*Fallas*");
                 break;
 
             case SafeModeOn:
-                Console.get().addMsgToConsole("MODO SEGURO ACTIVADO", false, false, new RGBColor());
+                console.addMsgToConsole("MODO SEGURO ACTIVADO", false, false, new RGBColor());
                 break;
 
             case SafeModeOff:
-                Console.get().addMsgToConsole("MODO SEGURO DESACTIVADO", false, false, new RGBColor());
+                console.addMsgToConsole("MODO SEGURO DESACTIVADO", false, false, new RGBColor());
                 break;
 
             case ResuscitationSafeOff:
-                Console.get().addMsgToConsole("MODO RESURECCION ACTIVADO", false, false, new RGBColor());
+                console.addMsgToConsole("MODO RESURECCION ACTIVADO", false, false, new RGBColor());
                 break;
 
             case ResuscitationSafeOn:
-                Console.get().addMsgToConsole("MODO RESURECCION DESACTIVADO", false, false, new RGBColor());
+                console.addMsgToConsole("MODO RESURECCION DESACTIVADO", false, false, new RGBColor());
                 break;
 
             case NobilityLost:
-                Console.get().addMsgToConsole(MENSAJE_PIERDE_NOBLEZA, false, false, new RGBColor());
+                console.addMsgToConsole(MENSAJE_PIERDE_NOBLEZA, false, false, new RGBColor());
                 break;
 
             case CantUseWhileMeditating:
-                Console.get().addMsgToConsole(MENSAJE_USAR_MEDITANDO, false, false, new RGBColor());
+                console.addMsgToConsole(MENSAJE_USAR_MEDITANDO, false, false, new RGBColor());
                 break;
 
             case NPCHitUser:
                 switch (incomingData.readByte()) {
                     case 1: // bCabeza
-                        Console.get().addMsgToConsole(MENSAJE_GOLPE_CABEZA + " " + incomingData.readInteger(),
+                        console.addMsgToConsole(MENSAJE_GOLPE_CABEZA + " " + incomingData.readInteger(),
                                 false, false, new RGBColor());
                         break;
 
                     case 2: // bBrazoIzquierdo
-                        Console.get().addMsgToConsole(MENSAJE_GOLPE_BRAZO_IZQ + " " + incomingData.readInteger(),
+                        console.addMsgToConsole(MENSAJE_GOLPE_BRAZO_IZQ + " " + incomingData.readInteger(),
                                 false, false, new RGBColor());
                         break;
 
                     case 3: // bBrazoDerecho
-                        Console.get().addMsgToConsole(MENSAJE_GOLPE_BRAZO_DER + " " + incomingData.readInteger(),
+                        console.addMsgToConsole(MENSAJE_GOLPE_BRAZO_DER + " " + incomingData.readInteger(),
                                 false, false, new RGBColor());
                         break;
 
                     case 4: // bPiernaIzquierda
-                        Console.get().addMsgToConsole(MENSAJE_GOLPE_PIERNA_IZQ + " " + incomingData.readInteger(),
+                        console.addMsgToConsole(MENSAJE_GOLPE_PIERNA_IZQ + " " + incomingData.readInteger(),
                                 false, false, new RGBColor());
                         break;
 
                     case 5: // bPiernaDerecha
-                        Console.get().addMsgToConsole(MENSAJE_GOLPE_PIERNA_DER + " " + incomingData.readInteger(),
+                        console.addMsgToConsole(MENSAJE_GOLPE_PIERNA_DER + " " + incomingData.readInteger(),
                                 false, false, new RGBColor());
                         break;
 
                     case 6: // bTorso
-                        Console.get().addMsgToConsole(MENSAJE_GOLPE_TORSO + " " + incomingData.readInteger(),
+                        console.addMsgToConsole(MENSAJE_GOLPE_TORSO + " " + incomingData.readInteger(),
                                 false, false, new RGBColor());
                         break;
                 }
@@ -512,7 +300,7 @@ public class Protocol {
 
             case UserHitNPC:
                 final int d = incomingData.readLong();
-                Console.get().addMsgToConsole(MENSAJE_GOLPE_CRIATURA_1 + " " + d,
+                console.addMsgToConsole(MENSAJE_GOLPE_CRIATURA_1 + " " + d,
                         false, false, new RGBColor());
 
                 charDialogHitSet(User.get().getUserCharIndex(), d);
@@ -522,7 +310,7 @@ public class Protocol {
             case UserAttackedSwing:
                 final short charIndexAttaker = incomingData.readInteger();
 
-                Console.get().addMsgToConsole(MENSAJE_1 + " " + charList[charIndexAttaker].getName() + MENSAJE_ATAQUE_FALLO,
+                console.addMsgToConsole(MENSAJE_1 + " " + charList[charIndexAttaker].getName() + MENSAJE_ATAQUE_FALLO,
                         false, false, new RGBColor());
 
                 charDialogHitSet(charIndexAttaker, "*Falla*");
@@ -536,32 +324,32 @@ public class Protocol {
 
                 switch (bodyPart) {
                     case 1: // bCabeza
-                        Console.get().addMsgToConsole(MENSAJE_1 + attackerName + MENSAJE_RECIVE_IMPACTO_CABEZA + damage + MENSAJE_2,
+                        console.addMsgToConsole(MENSAJE_1 + attackerName + MENSAJE_RECIVE_IMPACTO_CABEZA + damage + MENSAJE_2,
                                 false, false, new RGBColor());
                         break;
 
                     case 2: // bBrazoIzquierdo
-                        Console.get().addMsgToConsole(MENSAJE_1 + attackerName + MENSAJE_RECIVE_IMPACTO_BRAZO_IZQ + damage + MENSAJE_2,
+                        console.addMsgToConsole(MENSAJE_1 + attackerName + MENSAJE_RECIVE_IMPACTO_BRAZO_IZQ + damage + MENSAJE_2,
                                 false, false, new RGBColor());
                         break;
 
                     case 3: // bBrazoDerecho
-                        Console.get().addMsgToConsole(MENSAJE_1 + attackerName + MENSAJE_RECIVE_IMPACTO_BRAZO_DER + damage + MENSAJE_2,
+                        console.addMsgToConsole(MENSAJE_1 + attackerName + MENSAJE_RECIVE_IMPACTO_BRAZO_DER + damage + MENSAJE_2,
                                 false, false, new RGBColor());
                         break;
 
                     case 4: // bPiernaIzquierda
-                        Console.get().addMsgToConsole(MENSAJE_1 + attackerName + MENSAJE_RECIVE_IMPACTO_PIERNA_IZQ + damage + MENSAJE_2,
+                        console.addMsgToConsole(MENSAJE_1 + attackerName + MENSAJE_RECIVE_IMPACTO_PIERNA_IZQ + damage + MENSAJE_2,
                                 false, false, new RGBColor());
                         break;
 
                     case 5: // bPiernaDerecha
-                        Console.get().addMsgToConsole(MENSAJE_1 + attackerName + MENSAJE_RECIVE_IMPACTO_PIERNA_DER + damage + MENSAJE_2,
+                        console.addMsgToConsole(MENSAJE_1 + attackerName + MENSAJE_RECIVE_IMPACTO_PIERNA_DER + damage + MENSAJE_2,
                                 false, false, new RGBColor());
                         break;
 
                     case 6: // bTorso
-                        Console.get().addMsgToConsole(MENSAJE_1 + attackerName + MENSAJE_RECIVE_IMPACTO_TORSO + damage + MENSAJE_2,
+                        console.addMsgToConsole(MENSAJE_1 + attackerName + MENSAJE_RECIVE_IMPACTO_TORSO + damage + MENSAJE_2,
                                 false, false, new RGBColor());
                         break;
                 }
@@ -578,32 +366,32 @@ public class Protocol {
 
                 switch (bodyPart) {
                     case 1: // bCabeza
-                        Console.get().addMsgToConsole(MENSAJE_PRODUCE_IMPACTO_1 + victimName + MENSAJE_PRODUCE_IMPACTO_CABEZA + damage + MENSAJE_2,
+                        console.addMsgToConsole(MENSAJE_PRODUCE_IMPACTO_1 + victimName + MENSAJE_PRODUCE_IMPACTO_CABEZA + damage + MENSAJE_2,
                                 false, false, new RGBColor());
                         break;
 
                     case 2: // bBrazoIzquierdo
-                        Console.get().addMsgToConsole(MENSAJE_PRODUCE_IMPACTO_1 + victimName + MENSAJE_PRODUCE_IMPACTO_BRAZO_IZQ + damage + MENSAJE_2,
+                        console.addMsgToConsole(MENSAJE_PRODUCE_IMPACTO_1 + victimName + MENSAJE_PRODUCE_IMPACTO_BRAZO_IZQ + damage + MENSAJE_2,
                                 false, false, new RGBColor());
                         break;
 
                     case 3: // bBrazoDerecho
-                        Console.get().addMsgToConsole(MENSAJE_PRODUCE_IMPACTO_1 + victimName + MENSAJE_RECIVE_IMPACTO_BRAZO_DER + damage + MENSAJE_2,
+                        console.addMsgToConsole(MENSAJE_PRODUCE_IMPACTO_1 + victimName + MENSAJE_RECIVE_IMPACTO_BRAZO_DER + damage + MENSAJE_2,
                                 false, false, new RGBColor());
                         break;
 
                     case 4: // bPiernaIzquierda
-                        Console.get().addMsgToConsole(MENSAJE_PRODUCE_IMPACTO_1 + victimName + MENSAJE_RECIVE_IMPACTO_PIERNA_IZQ + damage + MENSAJE_2,
+                        console.addMsgToConsole(MENSAJE_PRODUCE_IMPACTO_1 + victimName + MENSAJE_RECIVE_IMPACTO_PIERNA_IZQ + damage + MENSAJE_2,
                                 false, false, new RGBColor());
                         break;
 
                     case 5: // bPiernaDerecha
-                        Console.get().addMsgToConsole(MENSAJE_PRODUCE_IMPACTO_1 + victimName + MENSAJE_RECIVE_IMPACTO_PIERNA_DER + damage + MENSAJE_2,
+                        console.addMsgToConsole(MENSAJE_PRODUCE_IMPACTO_1 + victimName + MENSAJE_RECIVE_IMPACTO_PIERNA_DER + damage + MENSAJE_2,
                                 false, false, new RGBColor());
                         break;
 
                     case 6: // bTorso
-                        Console.get().addMsgToConsole(MENSAJE_PRODUCE_IMPACTO_1 + victimName + MENSAJE_RECIVE_IMPACTO_TORSO + damage + MENSAJE_2,
+                        console.addMsgToConsole(MENSAJE_PRODUCE_IMPACTO_1 + victimName + MENSAJE_RECIVE_IMPACTO_TORSO + damage + MENSAJE_2,
                                 false, false, new RGBColor());
                         break;
                 }
@@ -619,54 +407,54 @@ public class Protocol {
 
                 switch (E_Skills.values()[usingSkill - 1]) {
                     case Magia:
-                        Console.get().addMsgToConsole(MENSAJE_TRABAJO_MAGIA, false, false, new RGBColor());
+                        console.addMsgToConsole(MENSAJE_TRABAJO_MAGIA, false, false, new RGBColor());
                         break;
 
                     case Pesca:
-                        Console.get().addMsgToConsole(MENSAJE_TRABAJO_PESCA, false, false, new RGBColor());
+                        console.addMsgToConsole(MENSAJE_TRABAJO_PESCA, false, false, new RGBColor());
                         break;
 
                     case Robar:
-                        Console.get().addMsgToConsole(MENSAJE_TRABAJO_ROBAR, false, false, new RGBColor());
+                        console.addMsgToConsole(MENSAJE_TRABAJO_ROBAR, false, false, new RGBColor());
                         break;
 
                     case Talar:
-                        Console.get().addMsgToConsole(MENSAJE_TRABAJO_TALAR, false, false, new RGBColor());
+                        console.addMsgToConsole(MENSAJE_TRABAJO_TALAR, false, false, new RGBColor());
                         break;
 
                     case Mineria:
-                        Console.get().addMsgToConsole(MENSAJE_TRABAJO_MINERIA, false, false, new RGBColor());
+                        console.addMsgToConsole(MENSAJE_TRABAJO_MINERIA, false, false, new RGBColor());
                         break;
 
                     case Proyectiles:
-                        Console.get().addMsgToConsole(MENSAJE_TRABAJO_PROYECTILES, false, false, new RGBColor());
+                        console.addMsgToConsole(MENSAJE_TRABAJO_PROYECTILES, false, false, new RGBColor());
                         break;
                 }
 
                 if (usingSkill == FundirMetal) {
-                    Console.get().addMsgToConsole(MENSAJE_TRABAJO_FUNDIRMETAL, false, false, new RGBColor());
+                    console.addMsgToConsole(MENSAJE_TRABAJO_FUNDIRMETAL, false, false, new RGBColor());
                 }
                 break;
 
             case HaveKilledUser:
-                Console.get().addMsgToConsole(MENSAJE_HAS_MATADO_A + charList[incomingData.readInteger()].getName() + MENSAJE_22,
+                console.addMsgToConsole(MENSAJE_HAS_MATADO_A + charList[incomingData.readInteger()].getName() + MENSAJE_22,
                         false, false, new RGBColor());
 
                 final int level = incomingData.readLong();
 
-                Console.get().addMsgToConsole(MENSAJE_HAS_GANADO_EXPE_1 + level + MENSAJE_HAS_GANADO_EXPE_2,
+                console.addMsgToConsole(MENSAJE_HAS_GANADO_EXPE_1 + level + MENSAJE_HAS_GANADO_EXPE_2,
                         false, false, new RGBColor());
 
                 // sistema de captura al matar.
                 break;
 
             case UserKill:
-                Console.get().addMsgToConsole(charList[incomingData.readInteger()].getName() + MENSAJE_TE_HA_MATADO,
+                console.addMsgToConsole(charList[incomingData.readInteger()].getName() + MENSAJE_TE_HA_MATADO,
                         false, false, new RGBColor());
                 break;
 
             case EarnExp:
-                Console.get().addMsgToConsole(MENSAJE_HAS_GANADO_EXPE_1 + incomingData.readLong() + MENSAJE_HAS_GANADO_EXPE_2,
+                console.addMsgToConsole(MENSAJE_HAS_GANADO_EXPE_1 + incomingData.readLong() + MENSAJE_HAS_GANADO_EXPE_2,
                         false, false, new RGBColor());
                 break;
 
@@ -675,16 +463,16 @@ public class Protocol {
                 short time = incomingData.readInteger();
                 String hogar = incomingData.readASCIIString();
 
-                Console.get().addMsgToConsole("Estas a " + distance + " mapas de distancia de " + hogar + ", este viaje durara " + time + " segundos.",
+                console.addMsgToConsole("Estas a " + distance + " mapas de distancia de " + hogar + ", este viaje durara " + time + " segundos.",
                         false, false, new RGBColor());
                 break;
 
             case FinishHome:
-                Console.get().addMsgToConsole(MENSAJE_HOGAR, false, false, new RGBColor());
+                console.addMsgToConsole(MENSAJE_HOGAR, false, false, new RGBColor());
                 break;
 
             case CancelGoHome:
-                Console.get().addMsgToConsole(MENSAJE_HOGAR_CANCEL, false, false, new RGBColor());
+                console.addMsgToConsole(MENSAJE_HOGAR_CANCEL, false, false, new RGBColor());
                 break;
         }
 
@@ -697,10 +485,7 @@ public class Protocol {
     }
 
     private static void handleUpdateDexterity() {
-        if (incomingData.length() < 2) {
-            System.err.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handleUpdateDexterity");
-            return;
-        }
+        if (incomingData.checkPacketData(2)) return;
 
         // Remove packet ID
         incomingData.readByte();
@@ -709,10 +494,7 @@ public class Protocol {
     }
 
     private static void handleUpdateStrenght() {
-        if (incomingData.length() < 2) {
-            System.err.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handleUpdateStrenght");
-            return;
-        }
+        if (incomingData.checkPacketData(2)) return;
 
         // Remove packet ID
         incomingData.readByte();
@@ -721,10 +503,7 @@ public class Protocol {
     }
 
     private static void handleUpdateStrenghtAndDexterity() {
-        if (incomingData.length() < 3) {
-            System.err.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handleUpdateStrenghtAndDexterity");
-            return;
-        }
+        if (incomingData.checkPacketData(3)) return;
 
         // Remove packet ID
         incomingData.readByte();
@@ -734,10 +513,7 @@ public class Protocol {
     }
 
     private static void handleShowPartyForm() {
-        if (incomingData.length() < 4) {
-            System.err.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handleShowPartyForm");
-            return;
-        }
+        if (incomingData.checkPacketData(4)) return;
 
         ByteQueue buffer = new ByteQueue();
         buffer.copyBuffer(incomingData);
@@ -772,10 +548,7 @@ public class Protocol {
     }
 
     private static void handleUserNameList() {
-        if (incomingData.length() < 3) {
-            System.err.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handleUserNameList");
-            return;
-        }
+        if (incomingData.checkPacketData(3)) return;
 
         ByteQueue buffer = new ByteQueue();
         buffer.copyBuffer(incomingData);
@@ -810,10 +583,7 @@ public class Protocol {
     }
 
     private static void handleShowMOTDEditionForm() {
-        if (incomingData.length() < 3) {
-            System.err.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handleShowMOTDEditionForm");
-            return;
-        }
+        if (incomingData.checkPacketData(3)) return;
 
         ByteQueue buffer = new ByteQueue();
         buffer.copyBuffer(incomingData);
@@ -832,10 +602,7 @@ public class Protocol {
     }
 
     private static void handleShowSOSForm() {
-        if (incomingData.length() < 3) {
-            System.err.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handleShowSOSForm");
-            return;
-        }
+        if (incomingData.checkPacketData(3)) return;
 
         ByteQueue buffer = new ByteQueue();
         buffer.copyBuffer(incomingData);
@@ -860,10 +627,7 @@ public class Protocol {
     }
 
     private static void handleSpawnList() {
-        if (incomingData.length() < 3) {
-            System.err.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handleSpawnList");
-            return;
-        }
+        if (incomingData.checkPacketData(3)) return;
 
         ByteQueue buffer = new ByteQueue();
         buffer.copyBuffer(incomingData);
@@ -889,10 +653,7 @@ public class Protocol {
     }
 
     private static void handleGuildMemberInfo() {
-        if (incomingData.length() < 5) {
-            System.err.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handleGuildMemberInfo");
-            return;
-        }
+        if (incomingData.checkPacketData(5)) return;
 
         ByteQueue buffer = new ByteQueue();
         buffer.copyBuffer(incomingData);
@@ -937,10 +698,7 @@ public class Protocol {
     }
 
     private static void handleUpdateTagAndStatus() {
-        if (incomingData.length() < 6) {
-            System.err.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handleUpdateTagAndStatus");
-            return;
-        }
+        if (incomingData.checkPacketData(6)) return;
 
         ByteQueue buffer = new ByteQueue();
         buffer.copyBuffer(incomingData);
@@ -987,10 +745,7 @@ public class Protocol {
     }
 
     private static void handleSendNight() {
-        if (incomingData.length() < 2) {
-            System.err.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handleSendNight");
-            return;
-        }
+        if (incomingData.checkPacketData(2)) return;
 
         // Remove packet ID
         incomingData.readByte();
@@ -1000,10 +755,7 @@ public class Protocol {
     }
 
     private static void handleChangeUserTradeSlot() {
-        if (incomingData.length() < 22) {
-            System.err.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handleChangeUserTradeSlot");
-            return;
-        }
+        if (incomingData.checkPacketData(22)) return;
 
         ByteQueue buffer = new ByteQueue();
         buffer.copyBuffer(incomingData);
@@ -1127,10 +879,7 @@ public class Protocol {
     }
 
     private static void handleShowUserRequest() {
-        if (incomingData.length() < 3) {
-            System.err.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handleShowUserRequest");
-            return;
-        }
+        if (incomingData.checkPacketData(3)) return;
 
         ByteQueue buffer = new ByteQueue();
         buffer.copyBuffer(incomingData);
@@ -1169,10 +918,7 @@ public class Protocol {
     }
 
     private static void handleGuildDetails() {
-        if (incomingData.length() < 26) {
-            System.err.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handleGuildDetails");
-            return;
-        }
+        if (incomingData.checkPacketData(26)) return;
 
         ByteQueue buffer = new ByteQueue();
         buffer.copyBuffer(incomingData);
@@ -1238,10 +984,7 @@ public class Protocol {
     }
 
     private static void handleGuildLeaderInfo() {
-        if (incomingData.length() < 9) {
-            System.err.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handleGuildLeaderInfo");
-            return;
-        }
+        if (incomingData.checkPacketData(9)) return;
 
         ByteQueue buffer = new ByteQueue();
         buffer.copyBuffer(incomingData);
@@ -1296,10 +1039,7 @@ public class Protocol {
     }
 
     private static void handleCharacterInfo() {
-        if (incomingData.length() < 35) {
-            System.err.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handleCharacterInfo");
-            return;
-        }
+        if (incomingData.checkPacketData(35)) return;
 
         ByteQueue buffer = new ByteQueue();
         buffer.copyBuffer(incomingData);
@@ -1394,10 +1134,7 @@ public class Protocol {
     }
 
     private static void handlePeaceProposalsList() {
-        if (incomingData.length() < 3) {
-            System.err.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handlePeaceProposalsList");
-            return;
-        }
+        if (incomingData.checkPacketData(3)) return;
 
         ByteQueue buffer = new ByteQueue();
         buffer.copyBuffer(incomingData);
@@ -1425,10 +1162,7 @@ public class Protocol {
     }
 
     private static void handleAlianceProposalsList() {
-        if (incomingData.length() < 3) {
-            System.err.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handleAlianceProposalsList");
-            return;
-        }
+        if (incomingData.checkPacketData(3)) return;
 
         ByteQueue buffer = new ByteQueue();
         buffer.copyBuffer(incomingData);
@@ -1456,10 +1190,7 @@ public class Protocol {
     }
 
     private static void handleOfferDetails() {
-        if (incomingData.length() < 3) {
-            System.err.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handleOfferDetails");
-            return;
-        }
+        if (incomingData.checkPacketData(3)) return;
 
         ByteQueue buffer = new ByteQueue();
         buffer.copyBuffer(incomingData);
@@ -1474,10 +1205,7 @@ public class Protocol {
     }
 
     private static void handleGuildNews() {
-        if (incomingData.length() < 7) {
-            System.err.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handleGuildNews");
-            return;
-        }
+        if (incomingData.checkPacketData(7)) return;
 
         ByteQueue buffer = new ByteQueue();
         buffer.copyBuffer(incomingData);
@@ -1515,10 +1243,7 @@ public class Protocol {
     }
 
     private static void handleTrainerCreatureList() {
-        if (incomingData.length() < 3) {
-            System.err.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handleTrainerCreatureList");
-            return;
-        }
+        if (incomingData.checkPacketData(3)) return;
 
         ByteQueue buffer = new ByteQueue();
         buffer.copyBuffer(incomingData);
@@ -1540,10 +1265,7 @@ public class Protocol {
     }
 
     private static void handleSendSkills() {
-        if (incomingData.length() < 2 + 20 * 2) {
-            System.err.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handleSendSkills");
-            return;
-        }
+        if (incomingData.checkPacketData(2 + 20 * 2)) return;
 
         // Remove packet ID
         incomingData.readByte();
@@ -1589,10 +1311,7 @@ public class Protocol {
     }
 
     private static void handleDiceRoll() {
-        if (incomingData.length() < 6) {
-            System.err.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handleDiceRoll");
-            return;
-        }
+        if (incomingData.checkPacketData(6)) return;
 
         // Remove packet ID
         incomingData.readByte();
@@ -1625,10 +1344,7 @@ public class Protocol {
     }
 
     private static void handleSetInvisible() {
-        if (incomingData.length() < 4) {
-            System.err.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handleSetInvisible");
-            return;
-        }
+        if (incomingData.checkPacketData(4)) return;
 
         // Remove packet ID
         incomingData.readByte();
@@ -1653,10 +1369,7 @@ public class Protocol {
     }
 
     private static void handleAddForumMessage() {
-        if (incomingData.length() < 8) {
-            System.err.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handleAddForumMessage");
-            return;
-        }
+        if (incomingData.checkPacketData(8)) return;
 
         ByteQueue buffer = new ByteQueue();
         buffer.copyBuffer(incomingData);
@@ -1683,10 +1396,7 @@ public class Protocol {
     }
 
     private static void handleLevelUp() {
-        if (incomingData.length() < 3) {
-            System.err.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handleLevelUp");
-            return;
-        }
+        if (incomingData.checkPacketData(3)) return;
 
         // Remove packet ID
         incomingData.readByte();
@@ -1700,10 +1410,7 @@ public class Protocol {
     }
 
     private static void handleMiniStats() {
-        if (incomingData.length() < 20) {
-            System.err.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handleMiniStats");
-            return;
-        }
+        if (incomingData.checkPacketData(20)) return;
 
         // Remove packet ID
         incomingData.readByte();
@@ -1728,10 +1435,7 @@ public class Protocol {
     }
 
     private static void handleFame() {
-        if (incomingData.length() < 29) {
-            System.err.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handleFame");
-            return;
-        }
+        if (incomingData.checkPacketData(29)) return;
 
         // Remove packet ID
         incomingData.readByte();
@@ -1760,10 +1464,7 @@ public class Protocol {
     }
 
     private static void handleUpdateHungerAndThirst() {
-        if (incomingData.length() < 5) {
-            System.err.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handleUpdateHungerAndThirst");
-            return;
-        }
+        if (incomingData.checkPacketData(5)) return;
 
         // Remove packet ID
         incomingData.readByte();
@@ -1775,10 +1476,7 @@ public class Protocol {
     }
 
     private static void handleChangeNPCInventorySlot() {
-        if (incomingData.length() < 21) {
-            System.err.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handleChangeNPCInventorySlot");
-            return;
-        }
+        if (incomingData.checkPacketData(21)) return;
 
         ByteQueue buffer = new ByteQueue();
         buffer.copyBuffer(incomingData);
@@ -1804,10 +1502,7 @@ public class Protocol {
     }
 
     private static void handleShowSignal() {
-        if (incomingData.length() < 5) {
-            System.err.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handleShowSignal");
-            return;
-        }
+        if (incomingData.checkPacketData(5)) return;
 
         ByteQueue buffer = new ByteQueue();
         buffer.copyBuffer(incomingData);
@@ -1838,10 +1533,7 @@ public class Protocol {
     }
 
     private static void handleErrorMessage() {
-        if (incomingData.length() < 3) {
-            System.err.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handleErrorMessage");
-            return;
-        }
+        if (incomingData.checkPacketData(3)) return;
 
         ByteQueue buffer = new ByteQueue();
         buffer.copyBuffer(incomingData);
@@ -1868,10 +1560,7 @@ public class Protocol {
     }
 
     private static void handleCarpenterObjects() {
-        if (incomingData.length() < 3) {
-            System.err.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handleCarpenterObjects");
-            return;
-        }
+        if (incomingData.checkPacketData(3)) return;
 
         ByteQueue buffer = new ByteQueue();
         buffer.copyBuffer(incomingData);
@@ -1944,10 +1633,7 @@ public class Protocol {
     }
 
     private static void handleBlacksmithArmors() {
-        if (incomingData.length() < 3) {
-            System.err.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handleBlacksmithArmors");
-            return;
-        }
+        if (incomingData.checkPacketData(3)) return;
 
         ByteQueue buffer = new ByteQueue();
         buffer.copyBuffer(incomingData);
@@ -2014,10 +1700,7 @@ public class Protocol {
     }
 
     private static void handleBlacksmithWeapons() {
-        if (incomingData.length() < 3) {
-            System.err.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handleBlacksmithWeapons");
-            return;
-        }
+        if (incomingData.checkPacketData(3)) return;
 
         ByteQueue buffer = new ByteQueue();
         buffer.copyBuffer(incomingData);
@@ -2094,11 +1777,7 @@ public class Protocol {
     }
 
     private static void handleAtributes() {
-        // NUMATRIBUTES
-        if (incomingData.length() < 1 + 5) {
-            System.err.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handleAtributes");
-            return;
-        }
+        if (incomingData.checkPacketData(6)) return;
 
         // Remove packet ID
         incomingData.readByte();
@@ -2133,10 +1812,7 @@ public class Protocol {
     }
 
     private static void handleChangeSpellSlot() {
-        if (incomingData.length() < 6) {
-            System.err.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handleChangeSpellSlot");
-            return;
-        }
+        if (incomingData.checkPacketData(6)) return;
 
         ByteQueue buffer = new ByteQueue();
         buffer.copyBuffer(incomingData);
@@ -2157,10 +1833,7 @@ public class Protocol {
     }
 
     private static void handleChangeBankSlot() {
-        if (incomingData.length() < 5) {
-            System.err.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handleChangeBankSlot");
-            return;
-        }
+        if (incomingData.checkPacketData(5)) return;
 
         ByteQueue buffer = new ByteQueue();
         buffer.copyBuffer(incomingData);
@@ -2206,15 +1879,12 @@ public class Protocol {
     }
 
     private static void handleChangeInventorySlot() {
-        if (incomingData.length() < 22) {
-            System.err.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handleChangeInventorySlot");
-            return;
-        }
+        if (incomingData.checkPacketData(22)) return;
 
         ByteQueue buffer = new ByteQueue();
         buffer.copyBuffer(incomingData);
 
-        // Remove packet ID
+        // Remove packet
         buffer.readByte();
 
         final int slot = buffer.readByte();
@@ -2279,10 +1949,7 @@ public class Protocol {
     }
 
     private static void handleWorkRequestTarget() {
-        if (incomingData.length() < 2) {
-            System.err.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handleWorkRequestTarget");
-            return;
-        }
+        if (incomingData.checkPacketData(2)) return;
 
         // Remove packet ID
         incomingData.readByte();
@@ -2294,42 +1961,39 @@ public class Protocol {
 
         switch (E_Skills.values()[usingSkill - 1]) {
             case Magia:
-                Console.get().addMsgToConsole(MENSAJE_TRABAJO_MAGIA, false, false, new RGBColor());
+                console.addMsgToConsole(MENSAJE_TRABAJO_MAGIA, false, false, new RGBColor());
                 break;
 
             case Pesca:
-                Console.get().addMsgToConsole(MENSAJE_TRABAJO_PESCA, false, false, new RGBColor());
+                console.addMsgToConsole(MENSAJE_TRABAJO_PESCA, false, false, new RGBColor());
                 break;
 
             case Robar:
-                Console.get().addMsgToConsole(MENSAJE_TRABAJO_ROBAR, false, false, new RGBColor());
+                console.addMsgToConsole(MENSAJE_TRABAJO_ROBAR, false, false, new RGBColor());
                 break;
 
             case Talar:
-                Console.get().addMsgToConsole(MENSAJE_TRABAJO_TALAR, false, false, new RGBColor());
+                console.addMsgToConsole(MENSAJE_TRABAJO_TALAR, false, false, new RGBColor());
                 break;
 
             case Mineria:
-                Console.get().addMsgToConsole(MENSAJE_TRABAJO_MINERIA, false, false, new RGBColor());
+                console.addMsgToConsole(MENSAJE_TRABAJO_MINERIA, false, false, new RGBColor());
                 break;
 
             case Proyectiles:
-                Console.get().addMsgToConsole(MENSAJE_TRABAJO_PROYECTILES, false, false, new RGBColor());
+                console.addMsgToConsole(MENSAJE_TRABAJO_PROYECTILES, false, false, new RGBColor());
                 break;
         }
 
         if (usingSkill == FundirMetal) {
-            Console.get().addMsgToConsole(MENSAJE_TRABAJO_FUNDIRMETAL, false, false, new RGBColor());
+            console.addMsgToConsole(MENSAJE_TRABAJO_FUNDIRMETAL, false, false, new RGBColor());
         }
 
         Logger.debug("handleWorkRequestTarget Cargado! - FALTA TESTIAR!");
     }
 
     private static void handleUpdateUserStats() {
-        if (incomingData.length() < 26) {
-            System.err.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handleUpdateUserStats");
-            return;
-        }
+        if (incomingData.checkPacketData(26)) return;
 
         // Remove packet ID
         incomingData.readByte();
@@ -2360,10 +2024,7 @@ public class Protocol {
     }
 
     private static void handleCreateFX() {
-        if (incomingData.length() < 7) {
-            System.err.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handleCreateFX");
-            return;
-        }
+        if (incomingData.checkPacketData(7)) return;
 
         // Remove packet ID
         incomingData.readByte();
@@ -2403,10 +2064,7 @@ public class Protocol {
     }
 
     private static void handleAreaChanged() {
-        if (incomingData.length() < 3) {
-            System.err.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handleAreaChanged");
-            return;
-        }
+        if (incomingData.checkPacketData(3)) return;
 
         // Remove packet ID
         incomingData.readByte();
@@ -2418,10 +2076,7 @@ public class Protocol {
     }
 
     private static void handleGuildList() {
-        if (incomingData.length() < 3) {
-            System.err.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handleGuildList");
-            return;
-        }
+        if (incomingData.checkPacketData(3)) return;
 
         ByteQueue buffer = new ByteQueue();
         buffer.copyBuffer(incomingData);
@@ -2453,10 +2108,7 @@ public class Protocol {
     }
 
     private static void handlePlayWave() {
-        if (incomingData.length() < 3) {
-            System.err.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handlePlayWave");
-            return;
-        }
+        if (incomingData.checkPacketData(3)) return;
 
         // Remove packet ID
         incomingData.readByte();
@@ -2470,10 +2122,7 @@ public class Protocol {
     }
 
     private static void handlePlayMIDI() {
-        if (incomingData.length() < 4) {
-            System.err.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handlePlayMIDI");
-            return;
-        }
+        if (incomingData.checkPacketData(4)) return;
 
         // Remove packet ID
         incomingData.readByte();
@@ -2493,10 +2142,7 @@ public class Protocol {
     }
 
     private static void handleBlockPosition() {
-        if (incomingData.length() < 4) {
-            System.err.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handleBlockPosition");
-            return;
-        }
+        if (incomingData.checkPacketData(4)) return;
 
         // Remove packet ID
         incomingData.readByte();
@@ -2508,10 +2154,7 @@ public class Protocol {
     }
 
     private static void handleObjectDelete() {
-        if (incomingData.length() < 3) {
-            System.err.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handleObjectDelete");
-            return;
-        }
+        if (incomingData.checkPacketData(3)) return;
 
         // Remove packet ID
         incomingData.readByte();
@@ -2523,10 +2166,7 @@ public class Protocol {
     }
 
     private static void handleObjectCreate() {
-        if (incomingData.length() < 5) {
-            System.err.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handleObjectCreate");
-            return;
-        }
+        if (incomingData.checkPacketData(5)) return;
 
         // Remove packet ID
         incomingData.readByte();
@@ -2540,10 +2180,7 @@ public class Protocol {
     }
 
     private static void handleCharacterChange() {
-        if (incomingData.length() < 18) {
-            System.err.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handleCharacterMove");
-            return;
-        }
+        if (incomingData.checkPacketData(18)) return;
 
         // Remove packet ID
         incomingData.readByte();
@@ -2595,10 +2232,7 @@ public class Protocol {
     }
 
     private static void handleForceCharMove() {
-        if (incomingData.length() < 2) {
-            System.err.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handleCharacterMove");
-            return;
-        }
+        if (incomingData.checkPacketData(2)) return;
 
         // Remove packet ID
         incomingData.readByte();
@@ -2612,10 +2246,7 @@ public class Protocol {
     }
 
     private static void handleCharacterMove() {
-        if (incomingData.length() < 5) {
-            System.err.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handleCharacterMove");
-            return;
-        }
+        if (incomingData.checkPacketData(5)) return;
 
         // Remove packet ID
         incomingData.readByte();
@@ -2640,10 +2271,7 @@ public class Protocol {
     }
 
     private static void handleCharacterChangeNick() {
-        if (incomingData.length() < 5) {
-            System.err.println("ERROR " + incomingData.getNotEnoughDataErrCode() + ": en handleCharacterRemove");
-            return;
-        }
+        if (incomingData.checkPacketData(5)) return;
 
         // Remove packet ID
         incomingData.readByte();
@@ -2651,10 +2279,7 @@ public class Protocol {
     }
 
     private static void handleCharacterRemove() {
-        if (incomingData.length() < 3) {
-            System.err.println("ERROR " + incomingData.getNotEnoughDataErrCode() + ": en handleCharacterRemove");
-            return;
-        }
+        if (incomingData.checkPacketData(3)) return;
 
         // Remove packet ID
         incomingData.readByte();
@@ -2664,10 +2289,7 @@ public class Protocol {
     }
 
     private static void handleCharacterCreate() {
-        if (incomingData.length() < 24) {
-            System.err.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handleCharacterCreate");
-            return;
-        }
+        if (incomingData.checkPacketData(24)) return;
 
         ByteQueue buffer = new ByteQueue();
         buffer.copyBuffer(incomingData);
@@ -2755,10 +2377,7 @@ public class Protocol {
     }
 
     private static void handleUserCharIndexInServer() {
-        if (incomingData.length() < 3) {
-            System.err.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handleUserCharIndexInServer");
-            return;
-        }
+        if (incomingData.checkPacketData(3)) return;
 
         // Remove packet ID
         incomingData.readByte();
@@ -2770,10 +2389,7 @@ public class Protocol {
     }
 
     private static void handleUserIndexInServer() {
-        if (incomingData.length() < 3) {
-            System.err.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handleUserIndexInServer");
-            return;
-        }
+        if (incomingData.checkPacketData(3)) return;
 
         // Remove packet ID
         incomingData.readByte();
@@ -2783,10 +2399,7 @@ public class Protocol {
     }
 
     private static void handleShowMessageBox() {
-        if (incomingData.length() < 3) {
-            System.err.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handleShowMessageBox");
-            return;
-        }
+        if (incomingData.checkPacketData(3)) return;
 
         ByteQueue buffer = new ByteQueue();
         buffer.copyBuffer(incomingData);
@@ -2802,10 +2415,7 @@ public class Protocol {
     }
 
     private static void handleGuildChat() {
-        if (incomingData.length() < 3) {
-            System.err.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handleGuildChat");
-            return;
-        }
+        if (incomingData.checkPacketData(3)) return;
 
         ByteQueue buffer = new ByteQueue();
         buffer.copyBuffer(incomingData);
@@ -2863,10 +2473,7 @@ public class Protocol {
     }
 
     private static void handleConsoleMessage() {
-        if (incomingData.length() < 4) {
-            System.err.println("ERROR " + incomingData.getNotEnoughDataErrCode() + ": en handleConsoleMessage");
-            return;
-        }
+        if (incomingData.checkPacketData(4)) return;
 
         ByteQueue buffer = new ByteQueue();
         buffer.copyBuffer(incomingData);
@@ -2877,7 +2484,7 @@ public class Protocol {
         String chat = buffer.readASCIIString();
         int fontIndex = buffer.readByte();
 
-        Console.get().addMsgToConsole(chat, false, false, new RGBColor(1.0f, 1.0f, 1.0f));
+        console.addMsgToConsole(chat, false, false, new RGBColor(1.0f, 1.0f, 1.0f));
 
         //If InStr(1, chat, "~") Then
         //        str = ReadField(2, chat, 126)
@@ -2918,10 +2525,7 @@ public class Protocol {
     }
 
     private static void handleChatOverHead() {
-        if (incomingData.length() < 8) {
-            System.err.println("ERROR " + incomingData.getNotEnoughDataErrCode() + ": en handleChatOverHead");
-            return;
-        }
+        if (incomingData.checkPacketData(8)) return;
 
         ByteQueue buffer = new ByteQueue();
         buffer.copyBuffer(incomingData);
@@ -2946,10 +2550,7 @@ public class Protocol {
     }
 
     private static void handlePosUpdate() {
-        if (incomingData.length() < 3) {
-            System.err.println("ERROR " + incomingData.getNotEnoughDataErrCode() + ": en handlePosUpdate");
-            return;
-        }
+        if (incomingData.checkPacketData(3)) return;
 
         // Remove packet ID
         incomingData.readByte();
@@ -2977,10 +2578,7 @@ public class Protocol {
     }
 
     private static void handleChangeMap() {
-        if (incomingData.length() < 5) {
-            System.err.println("ERROR " + incomingData.getNotEnoughDataErrCode() + " en handleChangeMap");
-            return;
-        }
+        if (incomingData.checkPacketData(5)) return;
 
         // Remove packet ID
         incomingData.readByte();
@@ -3003,10 +2601,7 @@ public class Protocol {
     }
 
     private static void handleUpdateExp() {
-        if (incomingData.length() < 5) {
-            System.err.println("ERROR " + incomingData.getNotEnoughDataErrCode() + ": en handleUpdateExp");
-            return;
-        }
+        if (incomingData.checkPacketData(5)) return;
 
         // Remove packet ID
         incomingData.readByte();
@@ -3016,10 +2611,7 @@ public class Protocol {
     }
 
     private static void handleUpdateBankGold() {
-        if (incomingData.length() < 5) {
-            System.err.println("ERROR " + incomingData.getNotEnoughDataErrCode() + ": en handleUpdateBankGold");
-            return;
-        }
+        if (incomingData.checkPacketData(5)) return;
 
         // Remove packet ID
         incomingData.readByte();
@@ -3029,10 +2621,7 @@ public class Protocol {
     }
 
     private static void handleUpdateGold() {
-        if (incomingData.length() < 5) {
-            System.err.println("ERROR " + incomingData.getNotEnoughDataErrCode() + ": en handleUpdateGold");
-            return;
-        }
+        if (incomingData.checkPacketData(5)) return;
 
         // Remove packet ID
         incomingData.readByte();
@@ -3041,10 +2630,7 @@ public class Protocol {
     }
 
     private static void handleUpdateHP() {
-        if (incomingData.length() < 3) {
-            System.err.println("ERROR " + incomingData.getNotEnoughDataErrCode() + ": en handleUpdateHP");
-            return;
-        }
+        if (incomingData.checkPacketData(3)) return;
 
         // Remove packet ID
         incomingData.readByte();
@@ -3067,10 +2653,7 @@ public class Protocol {
     }
 
     private static void handleUpdateMana() {
-        if (incomingData.length() < 3) {
-            System.err.println("ERROR " + incomingData.getNotEnoughDataErrCode() + ": en handleUpdateMana");
-            return;
-        }
+        if (incomingData.checkPacketData(3)) return;
 
         // Remove packet ID
         incomingData.readByte();
@@ -3080,10 +2663,7 @@ public class Protocol {
     }
 
     private static void handleUpdateSta() {
-        if (incomingData.length() < 3) {
-            System.err.println("ERROR " + incomingData.getNotEnoughDataErrCode() + ": en handleUpdateSta");
-            return;
-        }
+        if (incomingData.checkPacketData(3)) return;
 
         // Remove packet ID
         incomingData.readByte();
@@ -3286,10 +2866,7 @@ public class Protocol {
     }
 
     private static void handleCommerceChat() {
-        if (incomingData.length() < 4) {
-            System.err.println("ERROR " + incomingData.getNotEnoughDataErrCode() + ": en handleCommerceChat");
-            return;
-        }
+        if (incomingData.checkPacketData(4)) return;
 
         ByteQueue buffer = new ByteQueue();
         buffer.copyBuffer(incomingData);
@@ -3414,10 +2991,7 @@ public class Protocol {
     }
 
     private static void handleRemoveCharDialog() {
-        if (incomingData.length() < 3) {
-            System.err.println("ERROR " + incomingData.getNotEnoughDataErrCode() + ": en handleRemoveCharDialog");
-            return;
-        }
+        if (incomingData.checkPacketData(3)) return;
 
         // Remove packet ID
         incomingData.readByte();
@@ -3553,7 +3127,7 @@ public class Protocol {
 
     public static void writeWork(int skill) {
         if (User.get().isDead()) {
-            Console.get().addMsgToConsole(new String("¡¡Estás muerto!!".getBytes(), StandardCharsets.UTF_8),
+            console.addMsgToConsole(new String("¡¡Estás muerto!!".getBytes(), StandardCharsets.UTF_8),
                     false, true, new RGBColor());
 
             return;
@@ -3570,7 +3144,7 @@ public class Protocol {
 
     public static void writeQuit() {
         if (charList[User.get().getUserCharIndex()].isParalizado()) {
-            Console.get().addMsgToConsole(new String("No puedes salir estando paralizado.".getBytes(), StandardCharsets.UTF_8),
+            console.addMsgToConsole(new String("No puedes salir estando paralizado.".getBytes(), StandardCharsets.UTF_8),
                     false, true, new RGBColor());
 
             return;
@@ -3605,7 +3179,7 @@ public class Protocol {
         }
 
         if (charList[User.get().getUserCharIndex()].isDead()) {
-            Console.get().addMsgToConsole(new String("¡Estas muerto!".getBytes(), StandardCharsets.UTF_8),
+            console.addMsgToConsole(new String("¡Estas muerto!".getBytes(), StandardCharsets.UTF_8),
                     false, true, new RGBColor());
 
             return;
@@ -3628,7 +3202,7 @@ public class Protocol {
 
     public static void writeRequestAccountState() {
         if (charList[User.get().getUserCharIndex()].isDead()) {
-            Console.get().addMsgToConsole(new String("¡Estas muerto!".getBytes(), StandardCharsets.UTF_8),
+            console.addMsgToConsole(new String("¡Estas muerto!".getBytes(), StandardCharsets.UTF_8),
                     false, true, new RGBColor());
 
             return;
@@ -3639,7 +3213,7 @@ public class Protocol {
 
     public static void writePetStand() {
         if (charList[User.get().getUserCharIndex()].isDead()) {
-            Console.get().addMsgToConsole(new String("¡Estas muerto!".getBytes(), StandardCharsets.UTF_8),
+            console.addMsgToConsole(new String("¡Estas muerto!".getBytes(), StandardCharsets.UTF_8),
                     false, true, new RGBColor());
 
             return;
@@ -3650,7 +3224,7 @@ public class Protocol {
 
     public static void writePetFollow() {
         if (charList[User.get().getUserCharIndex()].isDead()) {
-            Console.get().addMsgToConsole(new String("¡Estas muerto!".getBytes(), StandardCharsets.UTF_8),
+            console.addMsgToConsole(new String("¡Estas muerto!".getBytes(), StandardCharsets.UTF_8),
                     false, true, new RGBColor());
 
             return;
@@ -3661,7 +3235,7 @@ public class Protocol {
 
     public static void writeReleasePet() {
         if (charList[User.get().getUserCharIndex()].isDead()) {
-            Console.get().addMsgToConsole(new String("¡Estas muerto!".getBytes(), StandardCharsets.UTF_8),
+            console.addMsgToConsole(new String("¡Estas muerto!".getBytes(), StandardCharsets.UTF_8),
                     false, true, new RGBColor());
 
             return;
@@ -3672,7 +3246,7 @@ public class Protocol {
 
     public static void writeTrainList() {
         if (charList[User.get().getUserCharIndex()].isDead()) {
-            Console.get().addMsgToConsole(new String("¡Estas muerto!".getBytes(), StandardCharsets.UTF_8),
+            console.addMsgToConsole(new String("¡Estas muerto!".getBytes(), StandardCharsets.UTF_8),
                     false, true, new RGBColor());
 
             return;
@@ -3683,7 +3257,7 @@ public class Protocol {
 
     public static void writeRest() {
         if (charList[User.get().getUserCharIndex()].isDead()) {
-            Console.get().addMsgToConsole(new String("¡Estas muerto!".getBytes(), StandardCharsets.UTF_8),
+            console.addMsgToConsole(new String("¡Estas muerto!".getBytes(), StandardCharsets.UTF_8),
                     false, true, new RGBColor());
 
             return;
@@ -3738,7 +3312,7 @@ public class Protocol {
 
     public static void writePartyCreate() {
         if (charList[User.get().getUserCharIndex()].isDead()) {
-            Console.get().addMsgToConsole(new String("¡Estas muerto!".getBytes(), StandardCharsets.UTF_8),
+            console.addMsgToConsole(new String("¡Estas muerto!".getBytes(), StandardCharsets.UTF_8),
                     false, true, new RGBColor());
 
             return;
@@ -3749,7 +3323,7 @@ public class Protocol {
 
     public static void writePartyJoin() {
         if (charList[User.get().getUserCharIndex()].isDead()) {
-            Console.get().addMsgToConsole(new String("¡Estas muerto!".getBytes(), StandardCharsets.UTF_8),
+            console.addMsgToConsole(new String("¡Estas muerto!".getBytes(), StandardCharsets.UTF_8),
                     false, true, new RGBColor());
 
             return;
@@ -3760,7 +3334,7 @@ public class Protocol {
 
     public static void writeShareNpc() {
         if (charList[User.get().getUserCharIndex()].isDead()) {
-            Console.get().addMsgToConsole(new String("¡Estas muerto!".getBytes(), StandardCharsets.UTF_8),
+            console.addMsgToConsole(new String("¡Estas muerto!".getBytes(), StandardCharsets.UTF_8),
                     false, true, new RGBColor());
 
             return;
@@ -3771,7 +3345,7 @@ public class Protocol {
 
     public static void writeStopSharingNpc() {
         if (charList[User.get().getUserCharIndex()].isDead()) {
-            Console.get().addMsgToConsole(new String("¡Estas muerto!".getBytes(), StandardCharsets.UTF_8),
+            console.addMsgToConsole(new String("¡Estas muerto!".getBytes(), StandardCharsets.UTF_8),
                     false, true, new RGBColor());
 
             return;
