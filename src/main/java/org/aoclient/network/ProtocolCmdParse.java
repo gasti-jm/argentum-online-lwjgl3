@@ -13,7 +13,7 @@ import java.nio.charset.StandardCharsets;
 import static org.aoclient.network.Protocol.*;
 
 public class ProtocolCmdParse {
-
+    private Console console = Console.get();
     private static ProtocolCmdParse instance;
 
     // Constructor privado para evitar instanciación directa
@@ -182,7 +182,7 @@ public class ProtocolCmdParse {
                         if (validNumber(argumentosRaw, eNumber_Types.ent_Byte)) {
                             writeInquiryVote(Integer.parseInt(argumentosRaw));
                         } else {
-                            Console.get().addMsgToConsole(new String("Para votar una opción, escribe /encuesta NUMERODEOPCION, por ejemplo para votar la opción 1, escribe /encuesta 1.".getBytes(), StandardCharsets.UTF_8),
+                            console.addMsgToConsole(new String("Para votar una opción, escribe /encuesta NUMERODEOPCION, por ejemplo para votar la opción 1, escribe /encuesta 1.".getBytes(), StandardCharsets.UTF_8),
                                     false, true, new RGBColor());
                         }
                     }
@@ -192,7 +192,7 @@ public class ProtocolCmdParse {
                     if (cantidadArgumentos == 0) {
                         writeGuildMessage(argumentosRaw);
                     } else {
-                        Console.get().addMsgToConsole(new String("Escribe un mensaje.".getBytes(), StandardCharsets.UTF_8),
+                        console.addMsgToConsole(new String("Escribe un mensaje.".getBytes(), StandardCharsets.UTF_8),
                                 false, true, new RGBColor());
                     }
                     break;
@@ -201,14 +201,14 @@ public class ProtocolCmdParse {
                     if (cantidadArgumentos == 0) {
                         writePartyMessage(argumentosRaw);
                     } else {
-                        Console.get().addMsgToConsole(new String("Escribe un mensaje.".getBytes(), StandardCharsets.UTF_8),
+                        console.addMsgToConsole(new String("Escribe un mensaje.".getBytes(), StandardCharsets.UTF_8),
                                 false, true, new RGBColor());
                     }
                     break;
 
                 case "/CENTINELA":
                     if (cantidadArgumentos != 1) {
-                        Console.get().addMsgToConsole(new String("El comando /CENTINELA requiere un argumento. Por favor, ingrese el código de verificación..".getBytes(), StandardCharsets.UTF_8),
+                        console.addMsgToConsole(new String("El comando /CENTINELA requiere un argumento. Por favor, ingrese el código de verificación..".getBytes(), StandardCharsets.UTF_8),
                                 false, true, new RGBColor());
 
                     } else {
@@ -216,7 +216,7 @@ public class ProtocolCmdParse {
                             writeCentinelReport(Integer.parseInt(argumentosRaw));
 
                         } else {
-                            Console.get().addMsgToConsole(new String("El código de verificación debe ser numérico. Utilice /centinela X, donde X es el código de verificación.".getBytes(), StandardCharsets.UTF_8),
+                            console.addMsgToConsole(new String("El código de verificación debe ser numérico. Utilice /centinela X, donde X es el código de verificación.".getBytes(), StandardCharsets.UTF_8),
                                     false, true, new RGBColor());
                         }
                     }
@@ -234,7 +234,7 @@ public class ProtocolCmdParse {
                     if (notNullArguments) {
                         writeCouncilMessage(argumentosRaw);
                     } else {
-                        Console.get().addMsgToConsole(new String("Escriba un mensaje.".getBytes(), StandardCharsets.UTF_8),
+                        console.addMsgToConsole(new String("Escriba un mensaje.".getBytes(), StandardCharsets.UTF_8),
                                 false, true, new RGBColor());
                     }
                     break;
@@ -243,7 +243,7 @@ public class ProtocolCmdParse {
                     if (notNullArguments) {
                         writeRoleMasterRequest(argumentosRaw);
                     } else {
-                        Console.get().addMsgToConsole(new String("Escriba un mensaje.".getBytes(), StandardCharsets.UTF_8),
+                        console.addMsgToConsole(new String("Escriba un mensaje.".getBytes(), StandardCharsets.UTF_8),
                                 false, true, new RGBColor());
                     }
                     break;
@@ -256,14 +256,14 @@ public class ProtocolCmdParse {
                     if (notNullArguments) {
                         writeBugReport(argumentosRaw);
                     } else {
-                        Console.get().addMsgToConsole(new String("Escriba una descripción del bug.".getBytes(), StandardCharsets.UTF_8),
+                        console.addMsgToConsole(new String("Escriba una descripción del bug.".getBytes(), StandardCharsets.UTF_8),
                                 false, true, new RGBColor());
                     }
                     break;
 
                 case "/DESC":
                     if (User.get().isDead()) {
-                        Console.get().addMsgToConsole(new String("¡Estás muerto!".getBytes(), StandardCharsets.UTF_8),
+                        console.addMsgToConsole(new String("¡Estás muerto!".getBytes(), StandardCharsets.UTF_8),
                                 false, true, new RGBColor());
                     } else {
                         writeChangeDescription(argumentosRaw);
@@ -274,7 +274,7 @@ public class ProtocolCmdParse {
                     if (notNullArguments) {
                         writeGuildVote(argumentosRaw);
                     } else {
-                        Console.get().addMsgToConsole(new String("Faltan parámetros. Utilice /voto NICKNAME.".getBytes(), StandardCharsets.UTF_8),
+                        console.addMsgToConsole(new String("Faltan parámetros. Utilice /voto NICKNAME.".getBytes(), StandardCharsets.UTF_8),
                                 false, true, new RGBColor());
                     }
                     break;
@@ -283,7 +283,7 @@ public class ProtocolCmdParse {
                     if (notNullArguments) {
                         writePunishments(argumentosRaw);
                     } else {
-                        Console.get().addMsgToConsole(new String("Faltan parámetros. Utilice /penas NICKNAME.".getBytes(), StandardCharsets.UTF_8),
+                        console.addMsgToConsole(new String("Faltan parámetros. Utilice /penas NICKNAME.".getBytes(), StandardCharsets.UTF_8),
                                 false, true, new RGBColor());
                     }
                     break;
@@ -294,18 +294,18 @@ public class ProtocolCmdParse {
 
                 case "/APOSTAR":
                     if (User.get().isDead()) {
-                        Console.get().addMsgToConsole(new String("¡Estás muerto!".getBytes(), StandardCharsets.UTF_8),
+                        console.addMsgToConsole(new String("¡Estás muerto!".getBytes(), StandardCharsets.UTF_8),
                                 false, true, new RGBColor());
                     } else {
                         if (notNullArguments) {
                             if (validNumber(argumentosRaw, eNumber_Types.ent_Integer)) {
                                 writeGamble(Short.parseShort(argumentosRaw));
                             } else {
-                                Console.get().addMsgToConsole(new String("Faltan parámetros. Utilice /apostar CANTIDAD.".getBytes(), StandardCharsets.UTF_8),
+                                console.addMsgToConsole(new String("Faltan parámetros. Utilice /apostar CANTIDAD.".getBytes(), StandardCharsets.UTF_8),
                                         false, true, new RGBColor());
                             }
                         } else {
-                            Console.get().addMsgToConsole(new String("Faltan parámetros. Utilice /apostar CANTIDAD.".getBytes(), StandardCharsets.UTF_8),
+                            console.addMsgToConsole(new String("Faltan parámetros. Utilice /apostar CANTIDAD.".getBytes(), StandardCharsets.UTF_8),
                                     false, true, new RGBColor());
                         }
                     }
@@ -313,7 +313,7 @@ public class ProtocolCmdParse {
 
                 case "/RETIRARFACCION":
                     if (User.get().isDead()) {
-                        Console.get().addMsgToConsole(new String("¡Estás muerto!".getBytes(), StandardCharsets.UTF_8),
+                        console.addMsgToConsole(new String("¡Estás muerto!".getBytes(), StandardCharsets.UTF_8),
                                 false, true, new RGBColor());
                     } else {
                         writeLeaveFaction();
@@ -322,7 +322,7 @@ public class ProtocolCmdParse {
 
                 case "/RETIRAR":
                     if (User.get().isDead()) {
-                        Console.get().addMsgToConsole(new String("¡Estás muerto!".getBytes(), StandardCharsets.UTF_8),
+                        console.addMsgToConsole(new String("¡Estás muerto!".getBytes(), StandardCharsets.UTF_8),
                                 false, true, new RGBColor());
                     } else {
 
@@ -330,7 +330,7 @@ public class ProtocolCmdParse {
                             if (validNumber(argumentosRaw,eNumber_Types.ent_Long)) {
                                 writeBankExtractGold(Integer.parseInt(argumentosRaw));
                             } else {
-                                Console.get().addMsgToConsole(new String("Cantidad incorrecta. Utilice /retirar CANTIDAD.".getBytes(), StandardCharsets.UTF_8),
+                                console.addMsgToConsole(new String("Cantidad incorrecta. Utilice /retirar CANTIDAD.".getBytes(), StandardCharsets.UTF_8),
                                         false, true, new RGBColor());
                             }
                         }
@@ -340,7 +340,7 @@ public class ProtocolCmdParse {
 
                 case "/DEPOSITAR":
                     if (User.get().isDead()) {
-                        Console.get().addMsgToConsole(new String("¡Estás muerto!".getBytes(), StandardCharsets.UTF_8),
+                        console.addMsgToConsole(new String("¡Estás muerto!".getBytes(), StandardCharsets.UTF_8),
                                 false, true, new RGBColor());
                     } else {
 
@@ -348,7 +348,7 @@ public class ProtocolCmdParse {
                             if (validNumber(argumentosRaw,eNumber_Types.ent_Long)) {
                                 writeBankDepositGold(Integer.parseInt(argumentosRaw));
                             } else {
-                                Console.get().addMsgToConsole(new String("Cantidad incorrecta. Utilice /depositar CANTIDAD.".getBytes(), StandardCharsets.UTF_8),
+                                console.addMsgToConsole(new String("Cantidad incorrecta. Utilice /depositar CANTIDAD.".getBytes(), StandardCharsets.UTF_8),
                                         false, true, new RGBColor());
                             }
                         }
@@ -360,7 +360,7 @@ public class ProtocolCmdParse {
                     if (notNullArguments) {
                         writeDenounce(argumentosRaw);
                     } else {
-                        Console.get().addMsgToConsole(new String("Formule su denuncia.".getBytes(), StandardCharsets.UTF_8),
+                        console.addMsgToConsole(new String("Formule su denuncia.".getBytes(), StandardCharsets.UTF_8),
                                 false, true, new RGBColor());
                     }
                     break;
@@ -369,7 +369,7 @@ public class ProtocolCmdParse {
                     if (User.get().getUserLvl() >= 25) {
                         writeGuildFundate();
                     } else {
-                        Console.get().addMsgToConsole(new String("Para fundar un clan tenés que ser nivel 25 y tener 90 skills en liderazgo.".getBytes(), StandardCharsets.UTF_8),
+                        console.addMsgToConsole(new String("Para fundar un clan tenés que ser nivel 25 y tener 90 skills en liderazgo.".getBytes(), StandardCharsets.UTF_8),
                                 false, true, new RGBColor());
                     }
                     break;
@@ -382,7 +382,7 @@ public class ProtocolCmdParse {
                     if(notNullArguments) {
                         writePartyKick(argumentosRaw);
                     } else {
-                        Console.get().addMsgToConsole(new String("Faltan parámetros. Utilice /echarparty NICKNAME.".getBytes(), StandardCharsets.UTF_8),
+                        console.addMsgToConsole(new String("Faltan parámetros. Utilice /echarparty NICKNAME.".getBytes(), StandardCharsets.UTF_8),
                                 false, true, new RGBColor());
                     }
                     break;
@@ -391,7 +391,7 @@ public class ProtocolCmdParse {
                     if(notNullArguments) {
                         writePartySetLeader(argumentosRaw);
                     } else {
-                        Console.get().addMsgToConsole(new String("Faltan parámetros. Utilice /partylider NICKNAME.".getBytes(), StandardCharsets.UTF_8),
+                        console.addMsgToConsole(new String("Faltan parámetros. Utilice /partylider NICKNAME.".getBytes(), StandardCharsets.UTF_8),
                                 false, true, new RGBColor());
                     }
                     break;
@@ -400,7 +400,7 @@ public class ProtocolCmdParse {
                     if(notNullArguments) {
                         writePartyAcceptMember(argumentosRaw);
                     } else {
-                        Console.get().addMsgToConsole(new String("Faltan parámetros. Utilice /acceptparty NICKNAME.".getBytes(), StandardCharsets.UTF_8),
+                        console.addMsgToConsole(new String("Faltan parámetros. Utilice /acceptparty NICKNAME.".getBytes(), StandardCharsets.UTF_8),
                                 false, true, new RGBColor());
                     }
                     break;
@@ -413,7 +413,7 @@ public class ProtocolCmdParse {
                     if(notNullArguments) {
                         writeGMMessage(argumentosRaw);
                     } else {
-                        Console.get().addMsgToConsole(new String("Escriba un mensaje.".getBytes(), StandardCharsets.UTF_8),
+                        console.addMsgToConsole(new String("Escriba un mensaje.".getBytes(), StandardCharsets.UTF_8),
                                 false, true, new RGBColor());
                     }
                     break;
@@ -434,7 +434,7 @@ public class ProtocolCmdParse {
                     if(notNullArguments) {
                         writeGoNearby(argumentosRaw);
                     } else {
-                        Console.get().addMsgToConsole(new String("Faltan parámetros. Utilice /ircerca NICKNAME.".getBytes(), StandardCharsets.UTF_8),
+                        console.addMsgToConsole(new String("Faltan parámetros. Utilice /ircerca NICKNAME.".getBytes(), StandardCharsets.UTF_8),
                                 false, true, new RGBColor());
                     }
                     break;
@@ -443,7 +443,7 @@ public class ProtocolCmdParse {
                     if(notNullArguments) {
                         writeComment(argumentosRaw);
                     } else {
-                        Console.get().addMsgToConsole(new String("Escriba un comentario.".getBytes(), StandardCharsets.UTF_8),
+                        console.addMsgToConsole(new String("Escriba un comentario.".getBytes(), StandardCharsets.UTF_8),
                                 false, true, new RGBColor());
                     }
                     break;
@@ -456,7 +456,7 @@ public class ProtocolCmdParse {
                     if(notNullArguments) {
                         writeWhere(argumentosRaw);
                     } else {
-                        Console.get().addMsgToConsole(new String("Faltan parámetros. Utilice /donde NICKNAME.".getBytes(), StandardCharsets.UTF_8),
+                        console.addMsgToConsole(new String("Faltan parámetros. Utilice /donde NICKNAME.".getBytes(), StandardCharsets.UTF_8),
                                 false, true, new RGBColor());
                     }
                     break;
@@ -467,7 +467,7 @@ public class ProtocolCmdParse {
                             writeCreaturesInMap(Short.parseShort(argumentosRaw));
                         } else {
                             // No es numérico.
-                            Console.get().addMsgToConsole(new String("Mapa incorrecto. Utilice /nene MAPA..".getBytes(), StandardCharsets.UTF_8),
+                            console.addMsgToConsole(new String("Mapa incorrecto. Utilice /nene MAPA..".getBytes(), StandardCharsets.UTF_8),
                                     false, true, new RGBColor());
                         }
                     } else {
@@ -487,7 +487,7 @@ public class ProtocolCmdParse {
                                 validNumber(argumentosAll[3], eNumber_Types.ent_Byte)) {
                             writeWarpChar(argumentosAll[0], Short.parseShort(argumentosAll[1]), Integer.parseInt(argumentosAll[2]), Integer.parseInt(argumentosAll[3]));
                         } else {
-                            Console.get().addMsgToConsole(new String("Valor incorrecto. Utilice /telep NICKNAME MAPA X Y.".getBytes(), StandardCharsets.UTF_8),
+                            console.addMsgToConsole(new String("Valor incorrecto. Utilice /telep NICKNAME MAPA X Y.".getBytes(), StandardCharsets.UTF_8),
                                     false, true, new RGBColor());
                         }
                     } else if (cantidadArgumentos == 3) {
@@ -502,7 +502,7 @@ public class ProtocolCmdParse {
                             writeWarpChar(argumentosAll[0], User.get().getUserMap(), Integer.parseInt(argumentosAll[1]), Integer.parseInt(argumentosAll[2]));
                         } else {
                             // No uso ningun formato por defecto
-                            Console.get().addMsgToConsole(new String("Valor incorrecto. Utilice /telep NICKNAME MAPA X Y.".getBytes(), StandardCharsets.UTF_8),
+                            console.addMsgToConsole(new String("Valor incorrecto. Utilice /telep NICKNAME MAPA X Y.".getBytes(), StandardCharsets.UTF_8),
                                     false, true, new RGBColor());
                         }
                     } else if (cantidadArgumentos == 2) {
@@ -512,12 +512,12 @@ public class ProtocolCmdParse {
                             writeWarpChar("YO", User.get().getUserMap(), Integer.parseInt(argumentosAll[0]), Integer.parseInt(argumentosAll[1]));
                         } else {
                             // No uso ningun formato por defecto
-                            Console.get().addMsgToConsole(new String("Valor incorrecto. Utilice /telep NICKNAME MAPA X Y.".getBytes(), StandardCharsets.UTF_8),
+                            console.addMsgToConsole(new String("Valor incorrecto. Utilice /telep NICKNAME MAPA X Y.".getBytes(), StandardCharsets.UTF_8),
                                     false, true, new RGBColor());
                         }
                     } else {
                         // Avisar que falta el parametro
-                        Console.get().addMsgToConsole(new String("Faltan parámetros. Utilice /telep NICKNAME MAPA X Y.".getBytes(), StandardCharsets.UTF_8),
+                        console.addMsgToConsole(new String("Faltan parámetros. Utilice /telep NICKNAME MAPA X Y.".getBytes(), StandardCharsets.UTF_8),
                                 false, true, new RGBColor());
                     }
                     break;
@@ -526,7 +526,7 @@ public class ProtocolCmdParse {
                     if(notNullArguments) {
                         writeSilence(argumentosRaw);
                     } else {
-                        Console.get().addMsgToConsole(new String("Faltan parámetros. Utilice /silenciar NICKNAME.".getBytes(), StandardCharsets.UTF_8),
+                        console.addMsgToConsole(new String("Faltan parámetros. Utilice /silenciar NICKNAME.".getBytes(), StandardCharsets.UTF_8),
                                 false, true, new RGBColor());
                     }
                     break;
@@ -548,7 +548,7 @@ public class ProtocolCmdParse {
                     if(notNullArguments) {
                         writeGoToChar(argumentosRaw);
                     } else {
-                        Console.get().addMsgToConsole(new String("Faltan parámetros. Utilice /ira NICKNAME.".getBytes(), StandardCharsets.UTF_8),
+                        console.addMsgToConsole(new String("Faltan parámetros. Utilice /ira NICKNAME.".getBytes(), StandardCharsets.UTF_8),
                                 false, true, new RGBColor());
                     }
                     break;
@@ -577,17 +577,17 @@ public class ProtocolCmdParse {
                                 writeJail(tmpArr[0], tmpArr[1], Integer.parseInt(tmpArr[2]));
                             } else {
                                 // No es numérico
-                                Console.get().addMsgToConsole(new String("Tiempo incorrecto. Utilice /carcel NICKNAME@MOTIVO@TIEMPO.".getBytes(), StandardCharsets.UTF_8),
+                                console.addMsgToConsole(new String("Tiempo incorrecto. Utilice /carcel NICKNAME@MOTIVO@TIEMPO.".getBytes(), StandardCharsets.UTF_8),
                                         false, true, new RGBColor());
                             }
                         } else {
                             // Faltan los parámetros con el formato propio
-                            Console.get().addMsgToConsole(new String("Formato incorrecto. Utilice /carcel NICKNAME@MOTIVO@TIEMPO.".getBytes(), StandardCharsets.UTF_8),
+                            console.addMsgToConsole(new String("Formato incorrecto. Utilice /carcel NICKNAME@MOTIVO@TIEMPO.".getBytes(), StandardCharsets.UTF_8),
                                     false, true, new RGBColor());
                         }
                     } else {
                         // Avisar que falta el parámetro
-                        Console.get().addMsgToConsole(new String("Faltan parámetros. Utilice /carcel NICKNAME@MOTIVO@TIEMPO.".getBytes(), StandardCharsets.UTF_8),
+                        console.addMsgToConsole(new String("Faltan parámetros. Utilice /carcel NICKNAME@MOTIVO@TIEMPO.".getBytes(), StandardCharsets.UTF_8),
                                 false, true, new RGBColor());
                     }
                     break;
@@ -603,12 +603,12 @@ public class ProtocolCmdParse {
                             writeWarnUser(tmpArr[0], tmpArr[1]);
                         } else {
                             //Faltan los parametros con el formato propio
-                            Console.get().addMsgToConsole(new String("Formato incorrecto. Utilice /advertencia NICKNAME@MOTIVO".getBytes(), StandardCharsets.UTF_8),
+                            console.addMsgToConsole(new String("Formato incorrecto. Utilice /advertencia NICKNAME@MOTIVO".getBytes(), StandardCharsets.UTF_8),
                                     false, true, new RGBColor());
                         }
                     } else {
                         // Avisar que falta el parámetro
-                        Console.get().addMsgToConsole(new String("Faltan parámetros. Utilice /advertencia NICKNAME@MOTIVO@TIEMPO.".getBytes(), StandardCharsets.UTF_8),
+                        console.addMsgToConsole(new String("Faltan parámetros. Utilice /advertencia NICKNAME@MOTIVO@TIEMPO.".getBytes(), StandardCharsets.UTF_8),
                                 false, true, new RGBColor());
                     }
                     break;
@@ -676,12 +676,12 @@ public class ProtocolCmdParse {
                             }
                         } else {
                             // Avisar que no existe el comando
-                            Console.get().addMsgToConsole(new String("Comando incorrecto.".getBytes(), StandardCharsets.UTF_8),
+                            console.addMsgToConsole(new String("Comando incorrecto.".getBytes(), StandardCharsets.UTF_8),
                                     false, true, new RGBColor());
                         }
                     } else {
                         // Avisar que falta el parámetro
-                        Console.get().addMsgToConsole(new String("Faltan parámetros.".getBytes(), StandardCharsets.UTF_8),
+                        console.addMsgToConsole(new String("Faltan parámetros.".getBytes(), StandardCharsets.UTF_8),
                                 false, true, new RGBColor());
                     }
                     break;
@@ -690,7 +690,7 @@ public class ProtocolCmdParse {
                     if(notNullArguments) {
                         writeRequestCharInfo(argumentosRaw);
                     } else {
-                        Console.get().addMsgToConsole(new String("Faltan parámetros. Utilice /info NICKNAME.".getBytes(), StandardCharsets.UTF_8),
+                        console.addMsgToConsole(new String("Faltan parámetros. Utilice /info NICKNAME.".getBytes(), StandardCharsets.UTF_8),
                                 false, true, new RGBColor());
                     }
                     break;
@@ -699,7 +699,7 @@ public class ProtocolCmdParse {
                     if(notNullArguments) {
                         writeRequestCharStats(argumentosRaw);
                     } else {
-                        Console.get().addMsgToConsole(new String("Faltan parámetros. Utilice /stat NICKNAME.".getBytes(), StandardCharsets.UTF_8),
+                        console.addMsgToConsole(new String("Faltan parámetros. Utilice /stat NICKNAME.".getBytes(), StandardCharsets.UTF_8),
                                 false, true, new RGBColor());
                     }
                     break;
@@ -708,7 +708,7 @@ public class ProtocolCmdParse {
                     if(notNullArguments) {
                         writeRequestCharGold(argumentosRaw);
                     } else {
-                        Console.get().addMsgToConsole(new String("Faltan parámetros. Utilice /bal NICKNAME.".getBytes(), StandardCharsets.UTF_8),
+                        console.addMsgToConsole(new String("Faltan parámetros. Utilice /bal NICKNAME.".getBytes(), StandardCharsets.UTF_8),
                                 false, true, new RGBColor());
                     }
                     break;
@@ -717,7 +717,7 @@ public class ProtocolCmdParse {
                     if(notNullArguments) {
                         writeRequestCharInventory(argumentosRaw);
                     } else {
-                        Console.get().addMsgToConsole(new String("Faltan parámetros. Utilice /inv NICKNAME.".getBytes(), StandardCharsets.UTF_8),
+                        console.addMsgToConsole(new String("Faltan parámetros. Utilice /inv NICKNAME.".getBytes(), StandardCharsets.UTF_8),
                                 false, true, new RGBColor());
                     }
                     break;
@@ -726,7 +726,7 @@ public class ProtocolCmdParse {
                     if(notNullArguments) {
                         writeRequestCharBank(argumentosRaw);
                     } else {
-                        Console.get().addMsgToConsole(new String("Faltan parámetros. Utilice /bov NICKNAME.".getBytes(), StandardCharsets.UTF_8),
+                        console.addMsgToConsole(new String("Faltan parámetros. Utilice /bov NICKNAME.".getBytes(), StandardCharsets.UTF_8),
                                 false, true, new RGBColor());
                     }
                     break;
@@ -735,7 +735,7 @@ public class ProtocolCmdParse {
                     if(notNullArguments) {
                         writeRequestCharSkills(argumentosRaw);
                     } else {
-                        Console.get().addMsgToConsole(new String("Faltan parámetros. Utilice /skills NICKNAME.".getBytes(), StandardCharsets.UTF_8),
+                        console.addMsgToConsole(new String("Faltan parámetros. Utilice /skills NICKNAME.".getBytes(), StandardCharsets.UTF_8),
                                 false, true, new RGBColor());
                     }
                     break;
@@ -744,7 +744,7 @@ public class ProtocolCmdParse {
                     if(notNullArguments) {
                         writeReviveChar(argumentosRaw);
                     } else {
-                        Console.get().addMsgToConsole(new String("Faltan parámetros. Utilice /revivir NICKNAME.".getBytes(), StandardCharsets.UTF_8),
+                        console.addMsgToConsole(new String("Faltan parámetros. Utilice /revivir NICKNAME.".getBytes(), StandardCharsets.UTF_8),
                                 false, true, new RGBColor());
                     }
                     break;
@@ -758,7 +758,7 @@ public class ProtocolCmdParse {
                         if (validNumber(argumentosAll[0], eNumber_Types.ent_Integer)){
                             writeOnlineMap(Short.parseShort(argumentosAll[0]));
                         } else {
-                            Console.get().addMsgToConsole(new String("Mapa incorrecto.".getBytes(), StandardCharsets.UTF_8),
+                            console.addMsgToConsole(new String("Mapa incorrecto.".getBytes(), StandardCharsets.UTF_8),
                                     false, true, new RGBColor());
                         }
                     } else {
@@ -770,7 +770,7 @@ public class ProtocolCmdParse {
                     if(notNullArguments) {
                         writeForgive(argumentosRaw);
                     } else {
-                        Console.get().addMsgToConsole(new String("Faltan parámetros. Utilice /perdon NICKNAME.".getBytes(), StandardCharsets.UTF_8),
+                        console.addMsgToConsole(new String("Faltan parámetros. Utilice /perdon NICKNAME.".getBytes(), StandardCharsets.UTF_8),
                                 false, true, new RGBColor());
                     }
                     break;
@@ -779,7 +779,7 @@ public class ProtocolCmdParse {
                     if(notNullArguments) {
                         writeKick(argumentosRaw);
                     } else {
-                        Console.get().addMsgToConsole(new String("Faltan parámetros. Utilice /echar NICKNAME.".getBytes(), StandardCharsets.UTF_8),
+                        console.addMsgToConsole(new String("Faltan parámetros. Utilice /echar NICKNAME.".getBytes(), StandardCharsets.UTF_8),
                                 false, true, new RGBColor());
                     }
                     break;
@@ -788,7 +788,7 @@ public class ProtocolCmdParse {
                     if(notNullArguments) {
                         writeExecute(argumentosRaw);
                     } else {
-                        Console.get().addMsgToConsole(new String("Faltan parámetros. Utilice /ejecutar NICKNAME.".getBytes(), StandardCharsets.UTF_8),
+                        console.addMsgToConsole(new String("Faltan parámetros. Utilice /ejecutar NICKNAME.".getBytes(), StandardCharsets.UTF_8),
                                 false, true, new RGBColor());
                     }
                     break;
@@ -800,12 +800,12 @@ public class ProtocolCmdParse {
                             writeBanChar(tmpArr[0], tmpArr[1]);
                         } else {
                             // Faltan los parámetros con el formato propio
-                            Console.get().addMsgToConsole(new String("Formato incorrecto. Utilice /ban NICKNAME@MOTIVO.".getBytes(), StandardCharsets.UTF_8),
+                            console.addMsgToConsole(new String("Formato incorrecto. Utilice /ban NICKNAME@MOTIVO.".getBytes(), StandardCharsets.UTF_8),
                                     false, true, new RGBColor());
                         }
                     } else {
                         // Avisar que falta el parámetro
-                        Console.get().addMsgToConsole(new String("Faltan parámetros. Utilice /ban NICKNAME@MOTIVO.".getBytes(), StandardCharsets.UTF_8),
+                        console.addMsgToConsole(new String("Faltan parámetros. Utilice /ban NICKNAME@MOTIVO.".getBytes(), StandardCharsets.UTF_8),
                                 false, true, new RGBColor());
                     }
                     break;
@@ -814,7 +814,7 @@ public class ProtocolCmdParse {
                     if(notNullArguments) {
                         writeUnbanChar(argumentosRaw);
                     } else {
-                        Console.get().addMsgToConsole(new String("Faltan parámetros. Utilice /unban NICKNAME.".getBytes(), StandardCharsets.UTF_8),
+                        console.addMsgToConsole(new String("Faltan parámetros. Utilice /unban NICKNAME.".getBytes(), StandardCharsets.UTF_8),
                                 false, true, new RGBColor());
                     }
                     break;
@@ -827,7 +827,7 @@ public class ProtocolCmdParse {
                     if(notNullArguments) {
                         writeSummonChar();
                     } else {
-                        Console.get().addMsgToConsole(new String("Faltan parámetros. Utilice /sum NICKNAME.".getBytes(), StandardCharsets.UTF_8),
+                        console.addMsgToConsole(new String("Faltan parámetros. Utilice /sum NICKNAME.".getBytes(), StandardCharsets.UTF_8),
                                 false, true, new RGBColor());
                     }
                     break;
@@ -849,7 +849,7 @@ public class ProtocolCmdParse {
                         writeServerMessage();
                     } else {
                         // Avisar de que falta parametro
-                        Console.get().addMsgToConsole(new String("Escriba un mensaje.".getBytes(), StandardCharsets.UTF_8),
+                        console.addMsgToConsole(new String("Escriba un mensaje.".getBytes(), StandardCharsets.UTF_8),
                                 false, true, new RGBColor());
                     }
                     break;
@@ -859,7 +859,7 @@ public class ProtocolCmdParse {
                         writeNickToIP(argumentosRaw);
                     } else {
                         // Avisar de que falta parametro
-                        Console.get().addMsgToConsole(new String("Faltan parámetros. Utilice /nick2ip ip.".getBytes(), StandardCharsets.UTF_8),
+                        console.addMsgToConsole(new String("Faltan parámetros. Utilice /nick2ip ip.".getBytes(), StandardCharsets.UTF_8),
                                 false, true, new RGBColor());
                     }
                     break;
@@ -872,17 +872,17 @@ public class ProtocolCmdParse {
                                 writeIPToNick(ip);
                             } else {
                                 // La conversión de la IP falló
-                                Console.get().addMsgToConsole(new String("Error al convertir la IP.".getBytes(), StandardCharsets.UTF_8),
+                                console.addMsgToConsole(new String("Error al convertir la IP.".getBytes(), StandardCharsets.UTF_8),
                                         false, true, new RGBColor());
                             }
                         } else {
                             // No es una IP válida
-                            Console.get().addMsgToConsole(new String("IP incorrecta. Utilice /ip2nick IP.".getBytes(), StandardCharsets.UTF_8),
+                            console.addMsgToConsole(new String("IP incorrecta. Utilice /ip2nick IP.".getBytes(), StandardCharsets.UTF_8),
                                     false, true, new RGBColor());
                         }
                     } else {
                         // Avisar que falta el parámetro
-                        Console.get().addMsgToConsole(new String("Faltan parámetros. Utilice /ip2nick IP.".getBytes(), StandardCharsets.UTF_8),
+                        console.addMsgToConsole(new String("Faltan parámetros. Utilice /ip2nick IP.".getBytes(), StandardCharsets.UTF_8),
                                 false, true, new RGBColor());
                     }
                     break;
@@ -892,7 +892,7 @@ public class ProtocolCmdParse {
                         writeGuildOnlineMembers(argumentosRaw);
                     } else {
                         // Avisar de que falta parametro
-                        Console.get().addMsgToConsole(new String("Utilice /onclan nombre del clan".getBytes(), StandardCharsets.UTF_8),
+                        console.addMsgToConsole(new String("Utilice /onclan nombre del clan".getBytes(), StandardCharsets.UTF_8),
                                 false, true, new RGBColor());
                     }
                     break;
@@ -910,18 +910,18 @@ public class ProtocolCmdParse {
                                     writeTeleportCreate(Short.parseShort(argumentosAll[0]), Integer.parseInt(argumentosAll[1]), Integer.parseInt(argumentosAll[2]), Integer.parseInt(argumentosAll[3]));
                                 } else {
                                     // No es numérico
-                                    Console.get().addMsgToConsole(new String("Valor incorrecto. Utilice /ct MAPA X Y RADIO(Opcional).".getBytes(), StandardCharsets.UTF_8),
+                                    console.addMsgToConsole(new String("Valor incorrecto. Utilice /ct MAPA X Y RADIO(Opcional).".getBytes(), StandardCharsets.UTF_8),
                                             false, true, new RGBColor());
                                 }
                             }
                         } else {
                             // No es numérico
-                            Console.get().addMsgToConsole(new String("Valor incorrecto. Utilice /ct MAPA X Y RADIO(Opcional).".getBytes(), StandardCharsets.UTF_8),
+                            console.addMsgToConsole(new String("Valor incorrecto. Utilice /ct MAPA X Y RADIO(Opcional).".getBytes(), StandardCharsets.UTF_8),
                                     false, true, new RGBColor());
                         }
                     } else {
                         // Avisar que falta el parámetro
-                        Console.get().addMsgToConsole(new String("Faltan parámetros. Utilice /ct MAPA X Y RADIO(Opcional).".getBytes(), StandardCharsets.UTF_8),
+                        console.addMsgToConsole(new String("Faltan parámetros. Utilice /ct MAPA X Y RADIO(Opcional).".getBytes(), StandardCharsets.UTF_8),
                                 false, true, new RGBColor());
                     }
                     break;
@@ -947,7 +947,7 @@ public class ProtocolCmdParse {
                                 writeForceMIDIToMap(Integer.parseInt(argumentosAll[0]), (short) 0);
                             } else {
                                 // No es numérico
-                                Console.get().addMsgToConsole(new String("Midi incorrecto. Utilice /forcemidimap MIDI MAPA, siendo el mapa opcional.".getBytes(), StandardCharsets.UTF_8),
+                                console.addMsgToConsole(new String("Midi incorrecto. Utilice /forcemidimap MIDI MAPA, siendo el mapa opcional.".getBytes(), StandardCharsets.UTF_8),
                                         false, true, new RGBColor());
                             }
                         } else if (cantidadArgumentos == 2) {
@@ -956,17 +956,17 @@ public class ProtocolCmdParse {
                                 writeForceMIDIToMap(Integer.parseInt(argumentosAll[0]), Short.parseShort(argumentosAll[1]));
                             } else {
                                 // No es numérico
-                                Console.get().addMsgToConsole(new String("Valor incorrecto. Utilice /forcemidimap MIDI MAPA, siendo el mapa opcional.".getBytes(), StandardCharsets.UTF_8),
+                                console.addMsgToConsole(new String("Valor incorrecto. Utilice /forcemidimap MIDI MAPA, siendo el mapa opcional.".getBytes(), StandardCharsets.UTF_8),
                                         false, true, new RGBColor());
                             }
                         } else {
                             // Avisar que falta el parámetro
-                            Console.get().addMsgToConsole(new String("Utilice /forcemidimap MIDI MAPA, siendo el mapa opcional.".getBytes(), StandardCharsets.UTF_8),
+                            console.addMsgToConsole(new String("Utilice /forcemidimap MIDI MAPA, siendo el mapa opcional.".getBytes(), StandardCharsets.UTF_8),
                                     false, true, new RGBColor());
                         }
                     } else {
                         // Avisar que falta el parámetro
-                        Console.get().addMsgToConsole(new String("Utilice /forcemidimap MIDI MAPA, siendo el mapa opcional.".getBytes(), StandardCharsets.UTF_8),
+                        console.addMsgToConsole(new String("Utilice /forcemidimap MIDI MAPA, siendo el mapa opcional.".getBytes(), StandardCharsets.UTF_8),
                                 false, true, new RGBColor());
                     }
                     break;
@@ -980,7 +980,7 @@ public class ProtocolCmdParse {
                                 writeForceWAVEToMap(Integer.parseInt(argumentosAll[0]), (short) 0, 0, 0);
                             } else {
                                 // No es numérico
-                                Console.get().addMsgToConsole(new String("Utilice /forcewavmap WAV MAP X Y, siendo los últimos 3 opcionales.".getBytes(), StandardCharsets.UTF_8),
+                                console.addMsgToConsole(new String("Utilice /forcewavmap WAV MAP X Y, siendo los últimos 3 opcionales.".getBytes(), StandardCharsets.UTF_8),
                                         false, true, new RGBColor());
                             }
                         } else if (cantidadArgumentos == 4) {
@@ -991,17 +991,17 @@ public class ProtocolCmdParse {
                                 writeForceWAVEToMap(Integer.parseInt(argumentosAll[0]), Short.parseShort(argumentosAll[1]), Integer.parseInt(argumentosAll[2]), Integer.parseInt(argumentosAll[3]));
                             } else {
                                 // No es numérico
-                                Console.get().addMsgToConsole(new String("Utilice /forcewavmap WAV MAP X Y, siendo los últimos 3 opcionales.".getBytes(), StandardCharsets.UTF_8),
+                                console.addMsgToConsole(new String("Utilice /forcewavmap WAV MAP X Y, siendo los últimos 3 opcionales.".getBytes(), StandardCharsets.UTF_8),
                                         false, true, new RGBColor());
                             }
                         } else {
                             // Avisar que falta el parámetro
-                            Console.get().addMsgToConsole(new String("Utilice /forcewavmap WAV MAP X Y, siendo los últimos 3 opcionales.".getBytes(), StandardCharsets.UTF_8),
+                            console.addMsgToConsole(new String("Utilice /forcewavmap WAV MAP X Y, siendo los últimos 3 opcionales.".getBytes(), StandardCharsets.UTF_8),
                                     false, true, new RGBColor());
                         }
                     } else {
                         // Avisar que falta el parámetro
-                        Console.get().addMsgToConsole(new String("Utilice /forcewavmap WAV MAP X Y, siendo los últimos 3 opcionales.".getBytes(), StandardCharsets.UTF_8),
+                        console.addMsgToConsole(new String("Utilice /forcewavmap WAV MAP X Y, siendo los últimos 3 opcionales.".getBytes(), StandardCharsets.UTF_8),
                                 false, true, new RGBColor());
                     }
                     break;
@@ -1011,7 +1011,7 @@ public class ProtocolCmdParse {
                         writeRoyaleArmyMessage(argumentosRaw);
                     } else {
                         // Avisar de que falta parametro
-                        Console.get().addMsgToConsole(new String("Escriba un mensaje".getBytes(), StandardCharsets.UTF_8),
+                        console.addMsgToConsole(new String("Escriba un mensaje".getBytes(), StandardCharsets.UTF_8),
                                 false, true, new RGBColor());
                     }
                     break;
@@ -1021,7 +1021,7 @@ public class ProtocolCmdParse {
                         writeChaosLegionMessage(argumentosRaw);
                     } else {
                         // Avisar de que falta parametro
-                        Console.get().addMsgToConsole(new String("Escriba un mensaje".getBytes(), StandardCharsets.UTF_8),
+                        console.addMsgToConsole(new String("Escriba un mensaje".getBytes(), StandardCharsets.UTF_8),
                                 false, true, new RGBColor());
                     }
                     break;
@@ -1031,7 +1031,7 @@ public class ProtocolCmdParse {
                         writeCitizenMessage(argumentosRaw);
                     } else {
                         // Avisar de que falta parametro
-                        Console.get().addMsgToConsole(new String("Escriba un mensaje".getBytes(), StandardCharsets.UTF_8),
+                        console.addMsgToConsole(new String("Escriba un mensaje".getBytes(), StandardCharsets.UTF_8),
                                 false, true, new RGBColor());
                     }
                     break;
@@ -1041,7 +1041,7 @@ public class ProtocolCmdParse {
                         writeCriminalMessage(argumentosRaw);
                     } else {
                         // Avisar de que falta parametro
-                        Console.get().addMsgToConsole(new String("Escriba un mensaje".getBytes(), StandardCharsets.UTF_8),
+                        console.addMsgToConsole(new String("Escriba un mensaje".getBytes(), StandardCharsets.UTF_8),
                                 false, true, new RGBColor());
                     }
                     break;
@@ -1051,7 +1051,7 @@ public class ProtocolCmdParse {
                         writeTalkAsNPC(argumentosRaw);
                     } else {
                         // Avisar de que falta parametro
-                        Console.get().addMsgToConsole(new String("Escriba un mensaje".getBytes(), StandardCharsets.UTF_8),
+                        console.addMsgToConsole(new String("Escriba un mensaje".getBytes(), StandardCharsets.UTF_8),
                                 false, true, new RGBColor());
                     }
                     break;
@@ -1065,7 +1065,7 @@ public class ProtocolCmdParse {
                         writeAcceptRoyalCouncilMember(argumentosRaw);
                     } else {
                         // Avisar de que falta parametro
-                        Console.get().addMsgToConsole(new String("Faltan parámetros. Utilice /aceptconse NICKNAME.".getBytes(), StandardCharsets.UTF_8),
+                        console.addMsgToConsole(new String("Faltan parámetros. Utilice /aceptconse NICKNAME.".getBytes(), StandardCharsets.UTF_8),
                                 false, true, new RGBColor());
                     }
                     break;
@@ -1075,7 +1075,7 @@ public class ProtocolCmdParse {
                         writeAcceptChaosCouncilMember(argumentosRaw);
                     } else {
                         // Avisar de que falta parametro
-                        Console.get().addMsgToConsole(new String("Faltan parámetros. Utilice /aceptconsecaos NICKNAME.".getBytes(), StandardCharsets.UTF_8),
+                        console.addMsgToConsole(new String("Faltan parámetros. Utilice /aceptconsecaos NICKNAME.".getBytes(), StandardCharsets.UTF_8),
                                 false, true, new RGBColor());
                     }
                     break;
@@ -1089,7 +1089,7 @@ public class ProtocolCmdParse {
                         writeMakeDumb(argumentosRaw);
                     } else {
                         // Avisar de que falta parametro
-                        Console.get().addMsgToConsole(new String("Faltan parámetros. Utilice /estupido NICKNAME.".getBytes(), StandardCharsets.UTF_8),
+                        console.addMsgToConsole(new String("Faltan parámetros. Utilice /estupido NICKNAME.".getBytes(), StandardCharsets.UTF_8),
                                 false, true, new RGBColor());
                     }
                     break;
@@ -1099,7 +1099,7 @@ public class ProtocolCmdParse {
                         writeMakeDumbNoMore(argumentosRaw);
                     } else {
                         // Avisar de que falta parametro
-                        Console.get().addMsgToConsole(new String("Faltan parámetros. Utilice /noestupido NICKNAME.".getBytes(), StandardCharsets.UTF_8),
+                        console.addMsgToConsole(new String("Faltan parámetros. Utilice /noestupido NICKNAME.".getBytes(), StandardCharsets.UTF_8),
                                 false, true, new RGBColor());
                     }
                     break;
@@ -1113,7 +1113,7 @@ public class ProtocolCmdParse {
                         writeCouncilKick(argumentosRaw);
                     } else {
                         // Avisar de que falta parametro
-                        Console.get().addMsgToConsole(new String("Faltan parámetros. Utilice /kickconse NICKNAME.".getBytes(), StandardCharsets.UTF_8),
+                        console.addMsgToConsole(new String("Faltan parámetros. Utilice /kickconse NICKNAME.".getBytes(), StandardCharsets.UTF_8),
                                 false, true, new RGBColor());
                     }
                     break;
@@ -1124,7 +1124,7 @@ public class ProtocolCmdParse {
                             writeSetTrigger(Integer.parseInt(argumentosRaw));
                         } else {
                             // No es numerico
-                            Console.get().addMsgToConsole(new String("Número incorrecto. Utilice /trigger NUMERO.".getBytes(), StandardCharsets.UTF_8),
+                            console.addMsgToConsole(new String("Número incorrecto. Utilice /trigger NUMERO.".getBytes(), StandardCharsets.UTF_8),
                                     false, true, new RGBColor());
                         }
                     } else {
@@ -1146,7 +1146,7 @@ public class ProtocolCmdParse {
                         writeGuildMemberList(argumentosRaw);
                     } else {
                         // Avisar de que falta parametro
-                        Console.get().addMsgToConsole(new String("Faltan parámetros. Utilice /miembrosclan GUILDNAME.".getBytes(), StandardCharsets.UTF_8),
+                        console.addMsgToConsole(new String("Faltan parámetros. Utilice /miembrosclan GUILDNAME.".getBytes(), StandardCharsets.UTF_8),
                                 false, true, new RGBColor());
                     }
                     break;
@@ -1156,7 +1156,7 @@ public class ProtocolCmdParse {
                         writeGuildBan(argumentosRaw);
                     } else {
                         // Avisar de que falta parametro
-                        Console.get().addMsgToConsole(new String("Faltan parámetros. Utilice /banclan GUILDNAME.".getBytes(), StandardCharsets.UTF_8),
+                        console.addMsgToConsole(new String("Faltan parámetros. Utilice /banclan GUILDNAME.".getBytes(), StandardCharsets.UTF_8),
                                 false, true, new RGBColor());
                     }
                     break;
@@ -1171,7 +1171,7 @@ public class ProtocolCmdParse {
                         }
                     } else {
                         // Avisar que falta el parámetro
-                        Console.get().addMsgToConsole(new String("Faltan parámetros. Utilice /banip IP motivo o /banip nick motivo.".getBytes(), StandardCharsets.UTF_8),
+                        console.addMsgToConsole(new String("Faltan parámetros. Utilice /banip IP motivo o /banip nick motivo.".getBytes(), StandardCharsets.UTF_8),
                                 false, true, new RGBColor());
                     }
                     break;
@@ -1182,12 +1182,12 @@ public class ProtocolCmdParse {
                             writeUnbanIP(str2ipv4l(argumentosRaw));
                         } else {
                             // No es una IP
-                            Console.get().addMsgToConsole(new String("IP incorrecta. Utilice /unbanip IP.".getBytes(), StandardCharsets.UTF_8),
+                            console.addMsgToConsole(new String("IP incorrecta. Utilice /unbanip IP.".getBytes(), StandardCharsets.UTF_8),
                                     false, true, new RGBColor());
                         }
                     } else {
                         // Avisar que falta el parámetro
-                        Console.get().addMsgToConsole(new String("Faltan parámetros. Utilice /unbanip IP.".getBytes(), StandardCharsets.UTF_8),
+                        console.addMsgToConsole(new String("Faltan parámetros. Utilice /unbanip IP.".getBytes(), StandardCharsets.UTF_8),
                                 false, true, new RGBColor());
                     }
                     break;
@@ -1197,10 +1197,10 @@ public class ProtocolCmdParse {
                         if (validNumber(argumentosAll[0], eNumber_Types.ent_Long)) {
                             writeCreateItem(Integer.parseInt(argumentosAll[0]));
                         } else {
-                            Console.get().addMsgToConsole("Objeto incorrecto. Utilice /ci OBJETO.", false, true, new RGBColor());
+                            console.addMsgToConsole("Objeto incorrecto. Utilice /ci OBJETO.", false, true, new RGBColor());
                         }
                     } else {
-                        Console.get().addMsgToConsole("Faltan parámetros. Utilice /ci OBJETO.", false, true, new RGBColor());
+                        console.addMsgToConsole("Faltan parámetros. Utilice /ci OBJETO.", false, true, new RGBColor());
                     }
                     break;
 
@@ -1213,7 +1213,7 @@ public class ProtocolCmdParse {
                         writeChaosLegionKick(argumentosRaw);
                     } else {
                         // Avisar de que falta parametro
-                        Console.get().addMsgToConsole(new String("Faltan parámetros. Utilice /nocaos NICKNAME.".getBytes(), StandardCharsets.UTF_8),
+                        console.addMsgToConsole(new String("Faltan parámetros. Utilice /nocaos NICKNAME.".getBytes(), StandardCharsets.UTF_8),
                                 false, true, new RGBColor());
                     }
                     break;
@@ -1223,7 +1223,7 @@ public class ProtocolCmdParse {
                         writeRoyalArmyKick(argumentosRaw);
                     } else {
                         // Avisar de que falta parametro
-                        Console.get().addMsgToConsole(new String("Faltan parámetros. Utilice /noreal NICKNAME.".getBytes(), StandardCharsets.UTF_8),
+                        console.addMsgToConsole(new String("Faltan parámetros. Utilice /noreal NICKNAME.".getBytes(), StandardCharsets.UTF_8),
                                 false, true, new RGBColor());
                     }
                     break;
@@ -1234,12 +1234,12 @@ public class ProtocolCmdParse {
                             writeForceMIDIAll(Integer.parseInt(argumentosAll[0]));
                         } else {
                             // No es numérico
-                            Console.get().addMsgToConsole(new String("Midi incorrecto. Utilice /forcemidi MIDI.".getBytes(), StandardCharsets.UTF_8),
+                            console.addMsgToConsole(new String("Midi incorrecto. Utilice /forcemidi MIDI.".getBytes(), StandardCharsets.UTF_8),
                                     false, true, new RGBColor());
                         }
                     } else {
                         // Avisar que falta el parámetro
-                        Console.get().addMsgToConsole(new String("Faltan parámetros. Utilice /forcemidi MIDI.".getBytes(), StandardCharsets.UTF_8),
+                        console.addMsgToConsole(new String("Faltan parámetros. Utilice /forcemidi MIDI.".getBytes(), StandardCharsets.UTF_8),
                                 false, true, new RGBColor());
                     }
                     break;
@@ -1250,12 +1250,12 @@ public class ProtocolCmdParse {
                             writeForceWAVEAll(Integer.parseInt(argumentosAll[0]));
                         } else {
                             // No es numérico
-                            Console.get().addMsgToConsole(new String("Wav incorrecto. Utilice /forcewav WAV.".getBytes(), StandardCharsets.UTF_8),
+                            console.addMsgToConsole(new String("Wav incorrecto. Utilice /forcewav WAV.".getBytes(), StandardCharsets.UTF_8),
                                     false, true, new RGBColor());
                         }
                     } else {
                         // Avisar que falta el parámetro
-                        Console.get().addMsgToConsole(new String("Faltan parámetros. Utilice /forcewav WAV.".getBytes(), StandardCharsets.UTF_8),
+                        console.addMsgToConsole(new String("Faltan parámetros. Utilice /forcewav WAV.".getBytes(), StandardCharsets.UTF_8),
                                 false, true, new RGBColor());
                     }
                     break;
@@ -1267,12 +1267,12 @@ public class ProtocolCmdParse {
                             writeRemovePunishment(tmpArr[0],Integer.parseInt(tmpArr[1]), tmpArr[2]);
                         } else {
                             // Faltan los parámetros con el formato propio
-                            Console.get().addMsgToConsole(new String("Formato incorrecto. Utilice /borrarpena NICK@PENA@NuevaPena.".getBytes(), StandardCharsets.UTF_8),
+                            console.addMsgToConsole(new String("Formato incorrecto. Utilice /borrarpena NICK@PENA@NuevaPena.".getBytes(), StandardCharsets.UTF_8),
                                     false, true, new RGBColor());
                         }
                     } else {
                         // Avisar que falta el parámetro
-                        Console.get().addMsgToConsole(new String("Faltan parámetros. Utilice /borrarpena NICK@PENA@NuevaPena.".getBytes(), StandardCharsets.UTF_8),
+                        console.addMsgToConsole(new String("Faltan parámetros. Utilice /borrarpena NICK@PENA@NuevaPena.".getBytes(), StandardCharsets.UTF_8),
                                 false, true, new RGBColor());
                     }
                     break;
@@ -1294,7 +1294,7 @@ public class ProtocolCmdParse {
                         writeLastIP(argumentosRaw);
                     } else {
                         // Avisar que falta el parámetro
-                        Console.get().addMsgToConsole(new String("Faltan parámetros. Utilice /lastip NICKNAME.".getBytes(), StandardCharsets.UTF_8),
+                        console.addMsgToConsole(new String("Faltan parámetros. Utilice /lastip NICKNAME.".getBytes(), StandardCharsets.UTF_8),
                                 false, true, new RGBColor());
                     }
                     break;
@@ -1308,7 +1308,7 @@ public class ProtocolCmdParse {
                         writeSystemMessage(argumentosRaw);
                     } else {
                         // Avisar que falta el parámetro
-                        Console.get().addMsgToConsole(new String("Escriba un mensaje.".getBytes(), StandardCharsets.UTF_8),
+                        console.addMsgToConsole(new String("Escriba un mensaje.".getBytes(), StandardCharsets.UTF_8),
                                 false, true, new RGBColor());
                     }
                     break;
@@ -1319,12 +1319,12 @@ public class ProtocolCmdParse {
                             writeCreateNPC(Short.parseShort(argumentosAll[0]));
                         } else {
                             // No es numérico
-                            Console.get().addMsgToConsole(new String("Npc incorrecto. Utilice /acc NPC.".getBytes(), StandardCharsets.UTF_8),
+                            console.addMsgToConsole(new String("Npc incorrecto. Utilice /acc NPC.".getBytes(), StandardCharsets.UTF_8),
                                     false, true, new RGBColor());
                         }
                     } else {
                         // Avisar que falta el parámetro
-                        Console.get().addMsgToConsole(new String("Faltan parámetros. Utilice /acc NPC.".getBytes(), StandardCharsets.UTF_8),
+                        console.addMsgToConsole(new String("Faltan parámetros. Utilice /acc NPC.".getBytes(), StandardCharsets.UTF_8),
                                 false, true, new RGBColor());
                     }
                     break;
@@ -1335,12 +1335,12 @@ public class ProtocolCmdParse {
                             writeCreateNPCWithRespawn(Short.parseShort(argumentosAll[0]));
                         } else {
                             // No es numérico
-                            Console.get().addMsgToConsole(new String("Npc incorrecto. Utilice /racc NPC.".getBytes(), StandardCharsets.UTF_8),
+                            console.addMsgToConsole(new String("Npc incorrecto. Utilice /racc NPC.".getBytes(), StandardCharsets.UTF_8),
                                     false, true, new RGBColor());
                         }
                     } else {
                         // Avisar que falta el parámetro
-                        Console.get().addMsgToConsole(new String("Faltan parámetros. Utilice /racc NPC.".getBytes(), StandardCharsets.UTF_8),
+                        console.addMsgToConsole(new String("Faltan parámetros. Utilice /racc NPC.".getBytes(), StandardCharsets.UTF_8),
                                 false, true, new RGBColor());
                     }
                     break;
@@ -1351,12 +1351,12 @@ public class ProtocolCmdParse {
                             writeImperialArmour(Integer.parseInt(argumentosAll[0]), Short.parseShort(argumentosAll[1]));
                         } else {
                             // No es numérico
-                            Console.get().addMsgToConsole(new String("Valor incorrecto. Utilice /ai ARMADURA OBJETO.".getBytes(), StandardCharsets.UTF_8),
+                            console.addMsgToConsole(new String("Valor incorrecto. Utilice /ai ARMADURA OBJETO.".getBytes(), StandardCharsets.UTF_8),
                                     false, true, new RGBColor());
                         }
                     } else {
                         // Avisar que falta el parámetro
-                        Console.get().addMsgToConsole(new String("Faltan parámetros. Utilice /ai ARMADURA OBJETO.".getBytes(), StandardCharsets.UTF_8),
+                        console.addMsgToConsole(new String("Faltan parámetros. Utilice /ai ARMADURA OBJETO.".getBytes(), StandardCharsets.UTF_8),
                                 false, true, new RGBColor());
                     }
                     break;
@@ -1367,12 +1367,12 @@ public class ProtocolCmdParse {
                             writeChaosArmour(Integer.parseInt(argumentosAll[0]), Short.parseShort(argumentosAll[1]));
                         } else {
                             // No es numérico
-                            Console.get().addMsgToConsole(new String("Valor incorrecto. Utilice /ac ARMADURA OBJETO.".getBytes(), StandardCharsets.UTF_8),
+                            console.addMsgToConsole(new String("Valor incorrecto. Utilice /ac ARMADURA OBJETO.".getBytes(), StandardCharsets.UTF_8),
                                     false, true, new RGBColor());
                         }
                     } else {
                         // Avisar que falta el parámetro
-                        Console.get().addMsgToConsole(new String("Faltan parámetros. Utilice /ac ARMADURA OBJETO.".getBytes(), StandardCharsets.UTF_8),
+                        console.addMsgToConsole(new String("Faltan parámetros. Utilice /ac ARMADURA OBJETO.".getBytes(), StandardCharsets.UTF_8),
                                 false, true, new RGBColor());
                     }
                     break;
@@ -1394,7 +1394,7 @@ public class ProtocolCmdParse {
                         writeTurnCriminal(argumentosRaw);
                     } else {
                         // Avisar que falta el parámetro
-                        Console.get().addMsgToConsole(new String("Faltan parámetros. Utilice /conden NICKNAME.".getBytes(), StandardCharsets.UTF_8),
+                        console.addMsgToConsole(new String("Faltan parámetros. Utilice /conden NICKNAME.".getBytes(), StandardCharsets.UTF_8),
                                 false, true, new RGBColor());
                     }
                     break;
@@ -1404,7 +1404,7 @@ public class ProtocolCmdParse {
                         writeResetFactions(argumentosRaw);
                     } else {
                         // Avisar que falta el parámetro
-                        Console.get().addMsgToConsole(new String("Faltan parámetros. Utilice /rajar NICKNAME.".getBytes(), StandardCharsets.UTF_8),
+                        console.addMsgToConsole(new String("Faltan parámetros. Utilice /rajar NICKNAME.".getBytes(), StandardCharsets.UTF_8),
                                 false, true, new RGBColor());
                     }
                     break;
@@ -1414,7 +1414,7 @@ public class ProtocolCmdParse {
                         writeRemoveCharFromGuild(argumentosRaw);
                     } else {
                         // Avisar que falta el parámetro
-                        Console.get().addMsgToConsole(new String("Faltan parámetros. Utilice /rajarclan NICKNAME.".getBytes(), StandardCharsets.UTF_8),
+                        console.addMsgToConsole(new String("Faltan parámetros. Utilice /rajarclan NICKNAME.".getBytes(), StandardCharsets.UTF_8),
                                 false, true, new RGBColor());
                     }
                     break;
@@ -1424,7 +1424,7 @@ public class ProtocolCmdParse {
                         writeRequestCharMail(argumentosRaw);
                     } else {
                         // Avisar que falta el parámetro
-                        Console.get().addMsgToConsole(new String("Faltan parámetros. Utilice /lastemail NICKNAME.".getBytes(), StandardCharsets.UTF_8),
+                        console.addMsgToConsole(new String("Faltan parámetros. Utilice /lastemail NICKNAME.".getBytes(), StandardCharsets.UTF_8),
                                 false, true, new RGBColor());
                     }
                     break;
@@ -1436,12 +1436,12 @@ public class ProtocolCmdParse {
                             writeAlterPassword(tmpArr[0], tmpArr[1]);
                         } else {
                             // Faltan los parámetros con el formato propio
-                            Console.get().addMsgToConsole(new String("Formato incorrecto. Utilice /apass PJSINPASS@PJCONPASS.".getBytes(), StandardCharsets.UTF_8),
+                            console.addMsgToConsole(new String("Formato incorrecto. Utilice /apass PJSINPASS@PJCONPASS.".getBytes(), StandardCharsets.UTF_8),
                                     false, true, new RGBColor());
                         }
                     } else {
                         // Avisar que falta el parámetro
-                        Console.get().addMsgToConsole(new String("Faltan parámetros. Utilice /apass PJSINPASS@PJCONPASS.".getBytes(), StandardCharsets.UTF_8),
+                        console.addMsgToConsole(new String("Faltan parámetros. Utilice /apass PJSINPASS@PJCONPASS.".getBytes(), StandardCharsets.UTF_8),
                                 false, true, new RGBColor());
                     }
                     break;
@@ -1451,14 +1451,14 @@ public class ProtocolCmdParse {
                         tmpArr = AEMAILSplit(argumentosRaw);
                         if (tmpArr[0].length() == 0) {
                             // Faltan los parámetros con el formato propio
-                            Console.get().addMsgToConsole(new String("Formato incorrecto. Utilice /aemail NICKNAME-NUEVOMAIL.".getBytes(), StandardCharsets.UTF_8),
+                            console.addMsgToConsole(new String("Formato incorrecto. Utilice /aemail NICKNAME-NUEVOMAIL.".getBytes(), StandardCharsets.UTF_8),
                                     false, true, new RGBColor());
                         } else {
                             writeAlterMail(tmpArr[0], tmpArr[1]);
                         }
                     } else {
                         // Avisar que falta el parámetro
-                        Console.get().addMsgToConsole(new String("Faltan parámetros. Utilice /aemail NICKNAME-NUEVOMAIL.".getBytes(), StandardCharsets.UTF_8),
+                        console.addMsgToConsole(new String("Faltan parámetros. Utilice /aemail NICKNAME-NUEVOMAIL.".getBytes(), StandardCharsets.UTF_8),
                                 false, true, new RGBColor());
                     }
                     break;
@@ -1470,12 +1470,12 @@ public class ProtocolCmdParse {
                             writeAlterName(tmpArr[0], tmpArr[1]);
                         } else {
                             // Faltan los parámetros con el formato propio
-                            Console.get().addMsgToConsole(new String("Formato incorrecto. Utilice /aname ORIGEN@DESTINO.".getBytes(), StandardCharsets.UTF_8),
+                            console.addMsgToConsole(new String("Formato incorrecto. Utilice /aname ORIGEN@DESTINO.".getBytes(), StandardCharsets.UTF_8),
                                     false, true, new RGBColor());
                         }
                     } else {
                         // Avisar que falta el parámetro
-                        Console.get().addMsgToConsole(new String("Faltan parámetros. Utilice /aname ORIGEN@DESTINO.".getBytes(), StandardCharsets.UTF_8),
+                        console.addMsgToConsole(new String("Faltan parámetros. Utilice /aname ORIGEN@DESTINO.".getBytes(), StandardCharsets.UTF_8),
                                 false, true, new RGBColor());
                     }
                     break;
@@ -1488,17 +1488,17 @@ public class ProtocolCmdParse {
                                 writeCheckSlot(tmpArr[0], Integer.parseInt(tmpArr[1]));
                             } else {
                                 // Faltan o sobran los parámetros con el formato propio
-                                Console.get().addMsgToConsole(new String("Formato incorrecto. Utilice /slot NICK@SLOT.".getBytes(), StandardCharsets.UTF_8),
+                                console.addMsgToConsole(new String("Formato incorrecto. Utilice /slot NICK@SLOT.".getBytes(), StandardCharsets.UTF_8),
                                         false, true, new RGBColor());
                             }
                         } else {
                             // Faltan o sobran los parámetros con el formato propio
-                            Console.get().addMsgToConsole(new String("Formato incorrecto. Utilice /slot NICK@SLOT.".getBytes(), StandardCharsets.UTF_8),
+                            console.addMsgToConsole(new String("Formato incorrecto. Utilice /slot NICK@SLOT.".getBytes(), StandardCharsets.UTF_8),
                                     false, true, new RGBColor());
                         }
                     } else {
                         // Avisar que falta el parámetro
-                        Console.get().addMsgToConsole(new String("Faltan parámetros. Utilice /slot NICK@SLOT.".getBytes(), StandardCharsets.UTF_8),
+                        console.addMsgToConsole(new String("Faltan parámetros. Utilice /slot NICK@SLOT.".getBytes(), StandardCharsets.UTF_8),
                                 false, true, new RGBColor());
                     }
                     break;
@@ -1516,7 +1516,7 @@ public class ProtocolCmdParse {
                         writeShowGuildMessages(argumentosRaw);
                     } else {
                         // Avisar que falta el parámetro
-                        Console.get().addMsgToConsole(new String("Faltan parámetros. Utilice /showcmsg GUILDNAME.".getBytes(), StandardCharsets.UTF_8),
+                        console.addMsgToConsole(new String("Faltan parámetros. Utilice /showcmsg GUILDNAME.".getBytes(), StandardCharsets.UTF_8),
                                 false, true, new RGBColor());
                     }
                     break;
@@ -1563,7 +1563,7 @@ public class ProtocolCmdParse {
                         }
                     } else {
                         // Avisar que falta el parámetro
-                        Console.get().addMsgToConsole(new String("Faltan parametros. Opciones: PK, BACKUP, RESTRINGIR, MAGIASINEFECTO, INVISINEFECTO, RESUSINEFECTO, TERRENO, ZONA".getBytes(), StandardCharsets.UTF_8),
+                        console.addMsgToConsole(new String("Faltan parametros. Opciones: PK, BACKUP, RESTRINGIR, MAGIASINEFECTO, INVISINEFECTO, RESUSINEFECTO, TERRENO, ZONA".getBytes(), StandardCharsets.UTF_8),
                                 false, true, new RGBColor());
                     }
                     break;
@@ -1623,7 +1623,7 @@ public class ProtocolCmdParse {
                             writeChatColor(Integer.parseInt(argumentosAll[0]),Integer.parseInt(argumentosAll[1]), Integer.parseInt(argumentosAll[2]));
                         } else {
                             // No es numérico
-                            Console.get().addMsgToConsole(new String("Valor incorrecto. Utilice /chatcolor R G B.".getBytes(), StandardCharsets.UTF_8),
+                            console.addMsgToConsole(new String("Valor incorrecto. Utilice /chatcolor R G B.".getBytes(), StandardCharsets.UTF_8),
                                     false, true, new RGBColor());
                         }
                     } else if (!notNullArguments) {
@@ -1631,7 +1631,7 @@ public class ProtocolCmdParse {
                         writeChatColor(0, 255, 0);
                     } else {
                         // Faltan parámetros
-                        Console.get().addMsgToConsole(new String("Faltan parámetros. Utilice /chatcolor R G B.".getBytes(), StandardCharsets.UTF_8),
+                        console.addMsgToConsole(new String("Faltan parámetros. Utilice /chatcolor R G B.".getBytes(), StandardCharsets.UTF_8),
                                 false, true, new RGBColor());
                     }
                     break;
@@ -1646,7 +1646,7 @@ public class ProtocolCmdParse {
                         argumentosAll[2] = argumentosAll[2].replace("+", " ");
                         writeSetIniVar(argumentosAll[0], argumentosAll[1], argumentosAll[2]);
                     } else {
-                        Console.get().addMsgToConsole(new String("Prámetros incorrectos. Utilice /SETINIVAR LLAVE CLAVE VALOR".getBytes(), StandardCharsets.UTF_8),
+                        console.addMsgToConsole(new String("Prámetros incorrectos. Utilice /SETINIVAR LLAVE CLAVE VALOR".getBytes(), StandardCharsets.UTF_8),
                                 false, true, new RGBColor());
                     }
                     break;

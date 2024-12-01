@@ -68,7 +68,7 @@ public final class FCreateCharacter extends Form{
     private RECT characterPos;
 
     public FCreateCharacter(){
-        this.background     = Surface.get().createTexture("resources/gui/VentanaCrearPersonaje.jpg", true);
+        this.background     = Surface.get().createTexture("gui.ao","VentanaCrearPersonaje", true);
         this.userHead       = HUMANO_H_PRIMER_CABEZA;
         this.userBody       = HUMANO_H_CUERPO_DESNUDO;
         this.dir            = E_Heading.SOUTH.value;

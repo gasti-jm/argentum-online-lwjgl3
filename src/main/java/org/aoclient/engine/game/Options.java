@@ -42,7 +42,7 @@ public class Options {
      * Carga las opciones de configuración desde un archivo de inicialización.
      */
     public void loadOptions() {
-        try (BufferedReader reader = new BufferedReader(new FileReader("resources/inits/options.ini"))) {
+        try (BufferedReader reader = new BufferedReader(new FileReader("resources/options.ini"))) {
             String line;
             while ((line = reader.readLine()) != null) {
                 String[] parts = line.split("=");
@@ -61,7 +61,7 @@ public class Options {
      * Guarda las opciones de configuración en un archivo de inicialización.
      */
     public void saveOptions() {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter("resources/inits/options.ini"))) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter("resources/options.ini"))) {
             writer.write("Music = " + music);
             writer.newLine();
             writer.write("Sound = " + sound);

@@ -32,8 +32,8 @@ public final class FMain extends Form {
         Console.get().clearConsole();
 
         try {
-            this.backgroundImage = loadTexture(ImageIO.read(new File("resources/gui/VentanaPrincipal.png")));
-            this.backgroundInventorySpells = loadTexture(ImageIO.read(new File("resources/gui/CentroHechizos.jpg")));
+            this.backgroundImage = loadTexture("VentanaPrincipal");
+            this.backgroundInventorySpells = loadTexture("CentroHechizos");
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

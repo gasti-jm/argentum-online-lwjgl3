@@ -87,7 +87,7 @@ public final class BindKeys {
      * @desc: Carga todas las teclas guardadas por el usuario.
      */
     public void loadBindKeys() throws IOException {
-        RandomAccessFile f = new RandomAccessFile("resources/inits/keys.bin", "rw");
+        RandomAccessFile f = new RandomAccessFile("resources/keys.bin", "rw");
         f.seek(0);
 
         for (int i = 0; i < E_KeyType.values().length; i++) {
@@ -104,7 +104,7 @@ public final class BindKeys {
         RandomAccessFile f;
 
         try {
-            f = new RandomAccessFile("resources/inits/keys.bin", "rw");
+            f = new RandomAccessFile("resources/keys.bin", "rw");
             f.seek(0);
 
             for (int i = 0; i < E_KeyType.values().length; i++) {

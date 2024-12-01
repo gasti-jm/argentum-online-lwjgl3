@@ -52,7 +52,7 @@ public class Rain {
         this.loadData();
 
         // dios mio.
-        this.rainTexture = Surface.get().createTexture("resources/graphics/15168.bmp", false);
+        this.rainTexture = Surface.get().createTexture("graphics.ao","15168", false);
     }
 
     public static Rain get() {

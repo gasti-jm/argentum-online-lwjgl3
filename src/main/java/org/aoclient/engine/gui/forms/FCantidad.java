@@ -23,7 +23,7 @@ public final class FCantidad extends Form {
         this.dropOro = false;
 
         try {
-            this.backgroundImage = loadTexture(ImageIO.read(new File("resources/gui/VentanaTirarOro.jpg")));
+            this.backgroundImage = loadTexture("VentanaTirarOro");
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -33,7 +33,7 @@ public final class FCantidad extends Form {
         this.dropOro = dropOro;
 
         try {
-            this.backgroundImage = loadTexture(ImageIO.read(new File("resources/gui/VentanaTirarOro.jpg")));
+            this.backgroundImage = loadTexture("VentanaTirarOro");
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

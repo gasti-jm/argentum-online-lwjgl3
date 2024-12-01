@@ -58,25 +58,17 @@ public class Surface {
             return textures.get(fileNum);
         }
 
-        return createTexture(fileNum);
+        return createTexture("graphics.ao", fileNum);
     }
 
     /**
      *
      * @desc: Crea una textura y lo guarda en nuestro mapa de texturas con su id (en este caso el numero del archivo).
      */
-    private Texture createTexture(int fileNum) {
+    private Texture createTexture(String fileCompressed, int fileNum) {
         Texture texture = new Texture();
-        File file = new File("resources/graphics/" + fileNum + ".bmp");
-
-        if (file.exists()) {
-            texture.loadTexture(texture, "resources/graphics/" + fileNum + ".bmp", false);
-        } else {
-            texture.loadTexture(texture, "resources/graphics/" + fileNum + ".png", false);
-        }
-
+        texture.loadTexture(texture, fileCompressed, String.valueOf(fileNum),false);
         textures.put(fileNum, texture);
-
         return texture;
     }
 
@@ -84,11 +76,11 @@ public class Surface {
      *
      * @desc: Crea y retorna una textura
      */
-    public Texture createTexture(String file, boolean isGUI) {
+    public Texture createTexture(String fileCompressed, String file, boolean isGUI) {
         if (file.isEmpty()) return null;
 
         Texture texture = new Texture();
-        texture.loadTexture(texture, file, isGUI);
+        texture.loadTexture(texture, fileCompressed, file, isGUI);
         return texture;
     }
 }

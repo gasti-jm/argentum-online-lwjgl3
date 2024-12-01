@@ -85,7 +85,7 @@ public class Messages {
 
 
     public static void loadMessages(String region) {
-        try (BufferedReader reader = new BufferedReader(new FileReader("resources/inits/strings_" + region +".ini"))) {
+        try (BufferedReader reader = new BufferedReader(new FileReader("resources/strings_" + region +".ini"))) {
             String line;
             while ((line = reader.readLine()) != null) {
                 String[] parts = line.split("=");

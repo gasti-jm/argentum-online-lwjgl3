@@ -30,7 +30,7 @@ public final class FConnect extends Form {
 
     public FConnect(){
         try {
-            this.backgroundImage = loadTexture(ImageIO.read(new File("resources/gui/VentanaConectar.jpg")));
+            this.backgroundImage = loadTexture("VentanaConectar");
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

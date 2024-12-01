@@ -1,13 +1,19 @@
 package org.aoclient.engine.renderer;
 
+import org.aoclient.engine.utils.BinaryDataReader;
+
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.nio.ByteOrder;
+
 import static org.aoclient.engine.renderer.Drawn.drawGrhIndex;
 import static org.aoclient.engine.utils.GameData.grhData;
+import static org.aoclient.scripts.Compressor.readResource;
 
 public class FontTypes {
     public static final int NORMAL_FONT = 0;
     public static final int HIT_FONT = 1;
+    private static BinaryDataReader reader = new BinaryDataReader();
 
     static class Font {
         int fontSize;
@@ -17,25 +23,23 @@ public class FontTypes {
 
     public static void loadFontTypes()  {
         try {
-            RandomAccessFile f = new RandomAccessFile("resources/inits/fonts.bin", "rw");
-            f.seek(0);
+            byte[] data = readResource("resources/inits.ao", "fonts");
+            reader.init(data, ByteOrder.BIG_ENDIAN);
 
-            int cantFontTypes = f.readInt();
+            int cantFontTypes = (int) reader.readInt();
             font_types = new Font[cantFontTypes];
-
 
             for (int i = 0; i < cantFontTypes; i++) {
                 font_types[i] = new Font();
-                font_types[i].fontSize = f.readInt();
+                font_types[i].fontSize =  reader.readInt();
 
                 for (int k = 0; k < 256; k++) {
-                    font_types[i].ascii_code[k] = f.readInt();
+                    font_types[i].ascii_code[k] = reader.readInt();
                 }
             }
 
-            f.close();
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
         }
     }
 

@@ -3,11 +3,16 @@ package org.aoclient.engine.gui.forms;
 import org.aoclient.engine.gui.ImGUISystem;
 import org.lwjgl.BufferUtils;
 
+import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.URI;
 import java.nio.ByteBuffer;
 
+import static org.aoclient.scripts.Compressor.readResource;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL11.GL_UNSIGNED_BYTE;
 import static org.lwjgl.opengl.GL12.GL_CLAMP_TO_EDGE;
@@ -20,7 +25,13 @@ public abstract class Form {
         ImGUISystem.get().deleteFrmArray(this);
     }
 
-    protected int loadTexture(final BufferedImage image) {
+    protected int loadTexture(final String file) throws IOException {
+        // Lee los datos del recurso desde el archivo comprimido
+        byte[] resourceData = readResource("resources/gui.ao", file);
+        InputStream is = new ByteArrayInputStream(resourceData);
+        BufferedImage image = ImageIO.read(is);
+
+
         final int[] pixels = new int[image.getWidth() * image.getHeight()];
         image.getRGB(0, 0, image.getWidth(), image.getHeight(), pixels, 0, image.getWidth());
 

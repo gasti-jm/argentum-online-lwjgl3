@@ -15,6 +15,12 @@ public class BinaryDataReader {
         this.buffer.order(ByteOrder.LITTLE_ENDIAN); // Especifica el orden de los bytes (BIG_ENDIAN o LITTLE_ENDIAN)
     }
 
+    public void init(byte[] data, ByteOrder order) {
+        this.buffer = ByteBuffer.wrap(data);
+        this.buffer.order(order); // Especifica el orden de los bytes (BIG_ENDIAN o LITTLE_ENDIAN)
+    }
+
+
     // Lee un entero (4 bytes)
     public int readInt() {
         return buffer.getInt();

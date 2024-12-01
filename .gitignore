@@ -45,4 +45,4 @@ bin/
 Server/
 git
 ### ImGui ###
-resources/inits/gui.ini
+resources/gui.ini
