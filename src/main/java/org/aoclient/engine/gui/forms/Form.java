@@ -14,12 +14,7 @@ import static org.lwjgl.opengl.GL12.GL_CLAMP_TO_EDGE;
 
 public abstract class Form {
     protected int backgroundImage;
-    protected String formName = "";
     public abstract void render();
-
-    public String getFormName() {
-        return formName;
-    }
 
     public void close() {
         ImGUISystem.get().deleteFrmArray(this);

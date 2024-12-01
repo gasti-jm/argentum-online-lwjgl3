@@ -15,7 +15,6 @@ public class FComerce extends Form {
     public static NPCInventory invNPC = new NPCInventory();
 
     public FComerce() {
-        this.formName = "frmComerciar";
 
         try {
             this.backgroundImage = loadTexture(ImageIO.read(new File("resources/gui/VentanaComercio.jpg")));
@@ -27,7 +26,7 @@ public class FComerce extends Form {
     @Override
     public void render() {
         ImGui.setNextWindowSize(462, 486, ImGuiCond.Always);
-        ImGui.begin(formName, ImGuiWindowFlags.NoTitleBar | ImGuiWindowFlags.NoResize | ImGuiWindowFlags.NoDecoration |
+        ImGui.begin(this.getClass().getSimpleName(), ImGuiWindowFlags.NoTitleBar | ImGuiWindowFlags.NoResize | ImGuiWindowFlags.NoDecoration |
                 ImGuiWindowFlags.NoBackground | ImGuiWindowFlags.NoMove);
 
         ImGui.setCursorPos(5, 0);

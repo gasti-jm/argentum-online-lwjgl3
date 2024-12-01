@@ -1,6 +1,5 @@
 package org.aoclient.network;
 
-import org.aoclient.engine.game.User;
 import org.aoclient.engine.gui.ImGUISystem;
 import org.aoclient.engine.gui.forms.FMessage;
 
@@ -9,7 +8,6 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.charset.StandardCharsets;
 
-import static org.aoclient.network.Protocol.incomingData;
 import static org.aoclient.network.Protocol.lastPacket;
 
 /**
@@ -437,7 +435,7 @@ public class ByteQueue {
 
     private void disconnectByMistake(final String typeError) {
         final String msgErr = "Error al leer datos del servidor, intente actualizar su cliente o solicitar soporte al sitio oficial. Codigo de error: "+ typeError +" packet #" + lastPacket;
-        ImGUISystem.get().checkAddOrChange("frmMessage", new FMessage(msgErr));
+        ImGUISystem.get().show(new FMessage(msgErr));
         //System.out.println(msgErr);
         SocketConnection.get().disconnect();
 

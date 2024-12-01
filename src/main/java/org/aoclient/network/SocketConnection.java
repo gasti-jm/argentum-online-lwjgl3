@@ -48,7 +48,7 @@ public class SocketConnection {
      */
     public boolean connect() {
         if (tryConnect) {
-            ImGUISystem.get().checkAddOrChange("frmMessage", new FMessage(
+            ImGUISystem.get().show(new FMessage(
                     "Intentando conectarse con el servidor, porfavor espere..."));
 
             return false;
@@ -69,7 +69,7 @@ public class SocketConnection {
                 }
 
             } catch(Exception e) {
-                ImGUISystem.get().checkAddOrChange("frmMessage", new FMessage(e.getMessage()));
+                ImGUISystem.get().show(new FMessage(e.getMessage()));
                 this.tryConnect = false;
                 return false;
             }

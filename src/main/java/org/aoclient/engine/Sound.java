@@ -19,6 +19,9 @@ public final class Sound {
     public static final String SND_OVER = "click2.ogg";
     public static final String SND_DICE = "cupdice.ogg";
 
+    public static final int MAX_SOUNDS = 30; // cantidad maxima de sondios almacenadas en memoria.
+    public static final int MAX_MUSIC = 10; // cantidad maxima de musica almacenada en memoria.
+
     private int bufferId;
     private int sourceId;
     private final String filepath;
@@ -161,6 +164,9 @@ public final class Sound {
         if (sounds.containsKey(file.getAbsolutePath())) {
             return sounds.get(file.getAbsolutePath());
         } else {
+            if(sounds.size() == MAX_SOUNDS) clearSounds();
+
+
             Sound sound = new Sound(file.getAbsolutePath(), loops);
             sounds.put(file.getAbsolutePath(), sound);
             return sound;
@@ -175,6 +181,8 @@ public final class Sound {
         if (musics.containsKey(file.getAbsolutePath())) {
             return musics.get(file.getAbsolutePath());
         } else {
+            if(musics.size() == MAX_MUSIC) clearMusics();
+
             Sound sound = new Sound(file.getAbsolutePath(), loops);
             musics.put(file.getAbsolutePath(), sound);
             return sound;
@@ -189,12 +197,10 @@ public final class Sound {
         final File file = new File("resources/sounds/" + soundName);
 
         // existe?
-        if (sounds.containsKey(file.getAbsolutePath())) {
-            if (options.isSound()) {
+        if (options.isSound()) {
+            if (sounds.containsKey(file.getAbsolutePath())) {
                 sounds.get(file.getAbsolutePath()).play();
-            }
-        } else {
-            if (options.isSound()) {
+            } else {
                 addSound("resources/sounds/" + soundName, false).play();
             }
         }

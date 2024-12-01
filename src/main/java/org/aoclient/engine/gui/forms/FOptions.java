@@ -18,7 +18,6 @@ import static org.aoclient.engine.utils.GameData.options;
 public class FOptions extends Form {
 
     public FOptions() {
-        this.formName = "frmOpciones";
 
         try {
             this.backgroundImage = loadTexture(ImageIO.read(new File("resources/gui/VentanaOpciones.jpg")));
@@ -30,7 +29,7 @@ public class FOptions extends Form {
     @Override
     public void render() {
         ImGui.setNextWindowSize(355, 480, ImGuiCond.Always);
-        ImGui.begin(formName, ImGuiWindowFlags.NoTitleBar | ImGuiWindowFlags.NoResize);
+        ImGui.begin(this.getClass().getSimpleName(), ImGuiWindowFlags.NoTitleBar | ImGuiWindowFlags.NoResize);
 
         ImGui.text("Opciones:");
         ImGui.separator();
@@ -87,7 +86,7 @@ public class FOptions extends Form {
         ImGui.setCursorPos(6, 368);
         if(ImGui.button("Mapa", 170, 20)) {
             playSound(SND_CLICK);
-            ImGUISystem.get().checkAddOrChange("frmMapa", new FMapa());
+            ImGUISystem.get().show(new FMapa());
         }
 
         ImGui.setCursorPos(6, 392);
@@ -111,7 +110,7 @@ public class FOptions extends Form {
         ImGui.setCursorPos(180, 368);
         if(ImGui.button(new String("Cambiar Contraseña".getBytes(), StandardCharsets.UTF_8), 170, 20)) {
             playSound(SND_CLICK);
-            ImGUISystem.get().checkAddOrChange("frmNewPassword", new FNewPassword());
+            ImGUISystem.get().show(new FNewPassword());
         }
 
         ImGui.setCursorPos(180, 392);

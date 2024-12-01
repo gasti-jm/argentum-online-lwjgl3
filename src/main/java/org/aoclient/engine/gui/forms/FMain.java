@@ -26,7 +26,6 @@ public final class FMain extends Form {
     private int backgroundInventorySpells;
 
     public FMain() {
-        this.formName = "frmMain";
         this.viewInventory = true;
         User.get().getUserInventory().setVisible(true);
 
@@ -46,7 +45,7 @@ public final class FMain extends Form {
         ImGui.setNextWindowPos(-5, -1, ImGuiCond.Once);
 
         // Start Custom window
-        ImGui.begin(formName, ImGuiWindowFlags.NoTitleBar |
+        ImGui.begin(this.getClass().getSimpleName(), ImGuiWindowFlags.NoTitleBar |
                 ImGuiWindowFlags.NoMove |
                 ImGuiWindowFlags.NoFocusOnAppearing |
                 ImGuiWindowFlags.NoDecoration |
@@ -221,14 +220,14 @@ public final class FMain extends Form {
         ImGui.setCursorPos(681, 485);
         if(ImGui.invisibleButton("viewOptions", 95, 22)) {
             playSound(SND_CLICK);
-            ImGUISystem.get().checkAddOrChange("frmOpciones", new FOptions());
+            ImGUISystem.get().show(new FOptions());
         }
 
         // btnMapa
         ImGui.setCursorPos(681, 445);
         if(ImGui.invisibleButton("viewMap", 95, 22)) {
             playSound(SND_CLICK);
-            ImGUISystem.get().checkAddOrChange("frmMapa", new FMapa());
+            ImGUISystem.get().show(new FMapa());
         }
 
         // btnClose
@@ -268,7 +267,7 @@ public final class FMain extends Form {
         // para hacer click derecho y abrir el frm
         if (ImGui.beginPopupContextItem("Tirar Oro")) {
             playSound(SND_CLICK);
-            ImGUISystem.get().checkAddOrChange("frmCantidad", new FCantidad(true));
+            ImGUISystem.get().show(new FCantidad(true));
             ImGui.endPopup();
         }
 

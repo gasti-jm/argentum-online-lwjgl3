@@ -31,11 +31,12 @@ import static org.aoclient.engine.Sound.*;
 import static org.aoclient.engine.game.models.Character.*;
 import static org.aoclient.engine.game.models.E_Skills.FundirMetal;
 import static org.aoclient.engine.utils.GameData.*;
+import static org.lwjgl.glfw.GLFW.glfwGetTime;
 
 public class Protocol {
     static ByteQueue incomingData = new ByteQueue();
     static ByteQueue outgoingData = new ByteQueue();
-    static Long pingTime;
+    static int pingTime = 0;
     static int lastPacket;
     private static Console console = Console.get();
 
@@ -740,9 +741,9 @@ public class Protocol {
         // Remove packet ID
         incomingData.readByte();
 
-        //Call AddtoRichTextBox(//FrmMain.RecTxt, "El ping es " & (GetTickCount - pingTime) & " ms.", 255, 0, 0, True, False, True)
-        //
-        //    pingTime = 0
+        console.addMsgToConsole("El ping es " + (int) (glfwGetTime() - pingTime) + " ms.", false, false, new RGBColor(1f, 0f, 0f));
+        pingTime = 0;
+
     }
 
     private static void handleSendNight() {
@@ -1543,8 +1544,7 @@ public class Protocol {
         buffer.readByte();
 
         String errMsg = buffer.readASCIIString();
-        ImGUISystem.get().checkAddOrChange("frmMessage",
-                new FMessage(errMsg));
+        ImGUISystem.get().show(new FMessage(errMsg));
 
         SocketConnection.get().disconnect();
         User.get().setUserConected(false);
@@ -2409,8 +2409,7 @@ public class Protocol {
         buffer.readByte();
 
         String msg = buffer.readASCIIString();
-        ImGUISystem.get().checkAddOrChange("frmMessage",
-                new FMessage(msg));
+        ImGUISystem.get().show(new FMessage(msg));
 
         incomingData.copyBuffer(buffer);
     }
@@ -2789,7 +2788,7 @@ public class Protocol {
         // Remove packet ID
         incomingData.readByte();
 
-        ImGUISystem.get().checkAddOrChange("frmComerciar", new FComerce());
+        ImGUISystem.get().show(new FComerce());
 
         /*
             ' Initialize commerce inventories
@@ -4291,10 +4290,8 @@ public class Protocol {
 
     public static void writePing() {
         if (pingTime != 0) return;
-
         outgoingData.writeByte(ClientPacketID.Ping.ordinal());
-
-        pingTime = System.currentTimeMillis();
+        pingTime = (int) glfwGetTime();
     }
 
     public static void writeSetIniVar(String sLlave, String sClave, String sValor) {

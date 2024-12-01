@@ -12,12 +12,10 @@ public final class FMessage extends Form {
     private final String txtMessage;
 
     public FMessage() {
-        this.formName = "frmMessage";
         this.txtMessage = "";
     }
 
     public FMessage(String text) {
-        this.formName = "frmMessage";
         this.txtMessage = new String(text.getBytes(), StandardCharsets.UTF_8);
     }
 
@@ -26,7 +24,7 @@ public final class FMessage extends Form {
         ImGui.setNextWindowSize(250, 230, ImGuiCond.Always);
 
         // Start Custom window
-        ImGui.begin(formName, ImGuiWindowFlags.NoTitleBar | ImGuiWindowFlags.AlwaysAutoResize);
+        ImGui.begin(this.getClass().getSimpleName(), ImGuiWindowFlags.NoTitleBar | ImGuiWindowFlags.AlwaysAutoResize);
 
         ImGui.textWrapped(this.txtMessage);
 
