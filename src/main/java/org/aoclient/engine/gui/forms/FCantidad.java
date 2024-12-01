@@ -20,7 +20,6 @@ public final class FCantidad extends Form {
     private final boolean dropOro;
 
     public FCantidad() {
-        this.formName = "frmCantidad";
         this.dropOro = false;
 
         try {
@@ -31,7 +30,6 @@ public final class FCantidad extends Form {
     }
 
     public FCantidad(boolean dropOro) {
-        this.formName = "frmCantidad";
         this.dropOro = dropOro;
 
         try {
@@ -44,7 +42,7 @@ public final class FCantidad extends Form {
     @Override
     public void render() {
         ImGui.setNextWindowSize(225, 100, ImGuiCond.Always);
-        ImGui.begin(formName, ImGuiWindowFlags.NoTitleBar | ImGuiWindowFlags.NoResize | ImGuiWindowFlags.NoDecoration |
+        ImGui.begin(this.getClass().getSimpleName(), ImGuiWindowFlags.NoTitleBar | ImGuiWindowFlags.NoResize | ImGuiWindowFlags.NoDecoration |
                 ImGuiWindowFlags.NoBackground);
 
         ImGui.setCursorPos(5, 0);

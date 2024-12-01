@@ -289,7 +289,7 @@ public class ProtocolCmdParse {
                     break;
 
                 case "/CONTRASEÑA":
-                    ImGUISystem.get().checkAddOrChange("frmNewPassword", new FNewPassword());
+                    ImGUISystem.get().show(new FNewPassword());
                     break;
 
                 case "/APOSTAR":

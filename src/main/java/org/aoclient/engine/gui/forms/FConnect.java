@@ -29,8 +29,6 @@ public final class FConnect extends Form {
     private final ImString passStr      = new ImString();
 
     public FConnect(){
-        this.formName = "frmConnect";
-
         try {
             this.backgroundImage = loadTexture(ImageIO.read(new File("resources/gui/VentanaConectar.jpg")));
         } catch (IOException e) {
@@ -44,7 +42,7 @@ public final class FConnect extends Form {
         ImGui.setNextWindowPos(-5, -1, ImGuiCond.Once);
 
         // Start Custom window
-        ImGui.begin(formName, ImGuiWindowFlags.NoTitleBar |
+        ImGui.begin(this.getClass().getSimpleName(), ImGuiWindowFlags.NoTitleBar |
                 ImGuiWindowFlags.NoMove |
                 ImGuiWindowFlags.NoFocusOnAppearing |
                 ImGuiWindowFlags.NoDecoration |
@@ -165,13 +163,12 @@ public final class FConnect extends Form {
             options.setNickName(nickStr.get());
             User.get().setUserName(nickStr.get());
         } else {
-            ImGUISystem.get().checkAddOrChange("frmMessage",
-                    new FMessage("Por favor, ingrese un nombre de usuario y/o contraseña valida."));
+            ImGUISystem.get().show(new FMessage("Por favor, ingrese un nombre de usuario y/o contraseña valida."));
         }
     }
 
     private void buttonCreateCharacter() {
-        ImGUISystem.get().checkAddOrChange("frmCreateCharacter", new FCreateCharacter());
+        ImGUISystem.get().show(new FCreateCharacter());
         playMusic("7.ogg");
         this.close();
     }

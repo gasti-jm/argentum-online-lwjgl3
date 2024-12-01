@@ -162,6 +162,7 @@ public class ImGUISystem {
         fontConfig.setPixelSnapH(true);
         fontConfig.setGlyphRanges(fontAtlas.getGlyphRangesCyrillic());
 
+
         // We merge font loaded from resources with the default one. Thus we will get an absent cyrillic glyphs
         //fontAtlas.addFontFromMemoryTTF(loadFromResources("basis33.ttf"), 16, fontConfig);
 
@@ -218,7 +219,7 @@ public class ImGUISystem {
         // IMPORTANT!!
         // Any Dear ImGui code SHOULD go between NewFrame()/Render() methods
         ImGui.newFrame();
-        this.showFrms();
+        this.renderFrms();
         ImGui.render();
 
         // After ImGui#render call we provide draw data into LWJGL3 renderer.
@@ -226,7 +227,7 @@ public class ImGUISystem {
         imGuiGl3.renderDrawData(ImGui.getDrawData());
     }
 
-    private void showFrms() {
+    private void renderFrms() {
         for(int i = 0; i < frms.size(); i++) {
             frms.get(i).render();
         }
@@ -234,12 +235,13 @@ public class ImGUISystem {
         ImGui.showDemoWindow();
     }
 
-    public void checkAddOrChange(String formName, Form frm) {
+    public void show(Form frm) {
         boolean exits = false;
 
+        // esta abierto?
         for(int i = 0; i < frms.size(); i++) {
-            if (frms.get(i).getFormName().equals(formName)) {
-                frms.set(i, frm);
+            if (frms.get(i).getClass().getSimpleName().equals(frm.getClass().getSimpleName())) {
+                frms.set(i, frm); // bueno remplazamos su contenido (esto si es que tenemos un frmMessage).
                 exits = true;
                 break;
             }
@@ -251,11 +253,11 @@ public class ImGUISystem {
 
     }
 
-    public boolean isFormVisible(String formName) {
+    public boolean isFormVisible(String fromClass) {
         boolean visible = false;
 
-        for(int i = 0; i < frms.size(); i++) {
-            if (frms.get(i).getFormName().equals(formName)) {
+        for (Form frm : frms) {
+            if (frm.getClass().getSimpleName().equals(fromClass)) {
                 visible = true;
                 break;
             }

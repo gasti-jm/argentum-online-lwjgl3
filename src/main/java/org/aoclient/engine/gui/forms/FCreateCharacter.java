@@ -68,7 +68,6 @@ public final class FCreateCharacter extends Form{
     private RECT characterPos;
 
     public FCreateCharacter(){
-        this.formName       = "frmCreateCharacter";
         this.background     = Surface.get().createTexture("resources/gui/VentanaCrearPersonaje.jpg", true);
         this.userHead       = HUMANO_H_PRIMER_CABEZA;
         this.userBody       = HUMANO_H_CUERPO_DESNUDO;
@@ -121,7 +120,7 @@ public final class FCreateCharacter extends Form{
         ImGui.setNextWindowPos(-5, -1, ImGuiCond.Once);
 
         // Start Custom window
-        ImGui.begin(formName, ImGuiWindowFlags.NoTitleBar |
+        ImGui.begin(this.getClass().getSimpleName(), ImGuiWindowFlags.NoTitleBar |
                 ImGuiWindowFlags.NoMove |
                 ImGuiWindowFlags.NoFocusOnAppearing |
                 ImGuiWindowFlags.NoDecoration |
@@ -471,7 +470,7 @@ public final class FCreateCharacter extends Form{
     }
 
     private void buttonGoBack() {
-        ImGUISystem.get().checkAddOrChange("frmConnect", new FConnect());
+        ImGUISystem.get().show(new FConnect());
         playMusic("6.ogg");
         this.close();
     }
@@ -560,28 +559,28 @@ public final class FCreateCharacter extends Form{
 
     private boolean checkData() {
         if(txtNombre.get().isEmpty() || txtPassword.get().isEmpty() || txtMail.get().isEmpty()) {
-            ImGUISystem.get().checkAddOrChange("frmMessage", new FMessage("Por favor, rellene todos los campos."));
+            ImGUISystem.get().show(new FMessage("Por favor, rellene todos los campos."));
             return false;
         }
 
         if(txtNombre.get().endsWith(" ")) {
-            ImGUISystem.get().checkAddOrChange("frmMessage", new FMessage("Nombre invalido, se ha removido un espacio en blanco al final del nombre."));
+            ImGUISystem.get().show(new FMessage("Nombre invalido, se ha removido un espacio en blanco al final del nombre."));
             txtNombre.set(txtNombre.get().substring(0, txtNombre.get().length() - 1));
             return false;
         }
 
         if(!txtPassword.get().equals(txtConfirmPassword.get())) {
-            ImGUISystem.get().checkAddOrChange("frmMessage", new FMessage("Las contraseñas no son iguales. Recuerde que no se permite caracteres especiales."));
+            ImGUISystem.get().show(new FMessage("Las contraseñas no son iguales. Recuerde que no se permite caracteres especiales."));
             return false;
         }
 
         if(!checkEmail(txtMail.get())) {
-            ImGUISystem.get().checkAddOrChange("frmMessage", new FMessage("Direccion de correo electronico invalido."));
+            ImGUISystem.get().show(new FMessage("Direccion de correo electronico invalido."));
             return false;
         }
 
         if (checkSpecialChar(txtPassword.get()) || txtPassword.get().contains(" ")) {
-            ImGUISystem.get().checkAddOrChange("frmMessage", new FMessage("Password invalido, no puede contener caracteres especiales ni espacios en blanco."));
+            ImGUISystem.get().show(new FMessage("Password invalido, no puede contener caracteres especiales ni espacios en blanco."));
             return false;
         }
 

@@ -1,7 +1,6 @@
 package org.aoclient.engine.gui.forms;
 
 import imgui.ImGui;
-import imgui.flag.ImGuiCol;
 import imgui.flag.ImGuiCond;
 import imgui.flag.ImGuiInputTextFlags;
 import imgui.flag.ImGuiWindowFlags;
@@ -26,8 +25,6 @@ public class FNewPassword extends Form {
     private final ImString txtNewrePassword = new ImString();
 
     public FNewPassword() {
-        this.formName = "frmNewPassword";
-
         try {
             this.backgroundImage = loadTexture(ImageIO.read(new File("resources/gui/VentanaCambiarcontrasenia.jpg")));
 
@@ -41,7 +38,7 @@ public class FNewPassword extends Form {
     public void render() {
 
         ImGui.setNextWindowSize(317, 237, ImGuiCond.Always);
-        ImGui.begin(formName, ImGuiWindowFlags.NoTitleBar | ImGuiWindowFlags.NoResize);
+        ImGui.begin(this.getClass().getSimpleName(), ImGuiWindowFlags.NoTitleBar | ImGuiWindowFlags.NoResize);
 
         //ImGui.getWindowDrawList().addImage(backgroundImage, 0, 0, Window.get().getWidth(), Window.get().getHeight());
 
@@ -100,12 +97,10 @@ public class FNewPassword extends Form {
             playSound(SND_CLICK);
 
             if (this.txtPassword.get().isEmpty() || this.txtNewPassword.get().isEmpty() || this.txtNewrePassword.get().isEmpty()) {
-                ImGUISystem.get().checkAddOrChange("frmMessage",
-                        new FMessage("Por favor, completa todos los campos."));
+                ImGUISystem.get().show(new FMessage("Por favor, completa todos los campos."));
 
             } else if (!this.txtNewPassword.get().equals(this.txtNewrePassword.get())) {
-                ImGUISystem.get().checkAddOrChange("frmMessage",
-                        new FMessage("Las contraseñas no coinciden."));
+                ImGUISystem.get().show(new FMessage("Las contraseñas no coinciden."));
 
             } else { // Si está correcto enviamos paquete para cambiar la contraseña.
                 writeChangePassword(this.txtPassword.get(),this.txtNewPassword.get());

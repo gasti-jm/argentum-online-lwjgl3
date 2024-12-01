@@ -2,7 +2,6 @@ package org.aoclient.engine.scenes;
 
 import org.aoclient.engine.Window;
 import org.aoclient.engine.game.*;
-import org.aoclient.engine.game.models.Character;
 import org.aoclient.engine.game.models.E_KeyType;
 import org.aoclient.engine.game.models.E_Skills;
 import org.aoclient.engine.gui.forms.FCantidad;
@@ -13,7 +12,6 @@ import org.aoclient.engine.listeners.MouseListener;
 import org.aoclient.engine.renderer.RGBColor;
 import org.aoclient.network.ProtocolCmdParse;
 
-import static org.aoclient.engine.renderer.FontTypes.*;
 import static org.aoclient.network.Protocol.*;
 import static org.aoclient.engine.game.IntervalTimer.INT_SENTRPU;
 import static org.aoclient.engine.game.models.E_KeyType.*;
@@ -197,11 +195,11 @@ public final class GameScene extends Scene {
                     break;
 
                 case mKeyDropObject:
-                    ImGUISystem.get().checkAddOrChange("frmCantidad", new FCantidad());
+                    ImGUISystem.get().show(new FCantidad());
                     break;
 
                 case mKeyTalk:
-                    if(!ImGUISystem.get().isFormVisible("frmCantidad")) {
+                    if(!ImGUISystem.get().isFormVisible(FCantidad.class.getSimpleName())) {
                         if(User.get().isTalking()) {
                             // send msg
 

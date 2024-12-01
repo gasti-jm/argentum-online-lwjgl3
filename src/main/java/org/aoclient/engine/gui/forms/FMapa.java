@@ -16,8 +16,6 @@ public class FMapa extends Form {
     private boolean overWorld;
 
     public FMapa() {
-        this.formName = "frmMapa";
-
         try {
             this.backgroundImage = loadTexture(ImageIO.read(new File("resources/gui/Mapa1.jpg")));
             this.overWorld = true;
@@ -29,8 +27,9 @@ public class FMapa extends Form {
     @Override
     public void render() {
         ImGui.setNextWindowSize(573, 528, ImGuiCond.Always);
-        ImGui.begin(formName, ImGuiWindowFlags.NoTitleBar | ImGuiWindowFlags.NoResize | ImGuiWindowFlags.NoDecoration |
-                ImGuiWindowFlags.NoBackground);
+        ImGui.begin(this.getClass().getSimpleName(),
+                ImGuiWindowFlags.NoTitleBar | ImGuiWindowFlags.NoResize
+                        | ImGuiWindowFlags.NoDecoration | ImGuiWindowFlags.NoBackground);
 
         ImGui.setCursorPos(5, 0);
         ImGui.image(backgroundImage, 573, 528);
