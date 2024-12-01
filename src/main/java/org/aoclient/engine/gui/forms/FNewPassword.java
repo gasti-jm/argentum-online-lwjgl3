@@ -26,11 +26,9 @@ public class FNewPassword extends Form {
 
     public FNewPassword() {
         try {
-            this.backgroundImage = loadTexture(ImageIO.read(new File("resources/gui/VentanaCambiarcontrasenia.jpg")));
-
+            this.backgroundImage = loadTexture("VentanaCambiarcontrasenia");
         } catch (IOException e) {
             throw new RuntimeException(e);
-
         }
     }
 

@@ -2133,7 +2133,7 @@ public class Protocol {
         if (currentMusic > 0) {
             incomingData.readInteger();
             // play music
-            playMusic(currentMusic + ".ogg");
+            playMusic(String.valueOf(currentMusic) + ".ogg");
         } else {
             //Remove the bytes to prevent errors
             incomingData.readInteger();

@@ -17,7 +17,7 @@ public class FComerce extends Form {
     public FComerce() {
 
         try {
-            this.backgroundImage = loadTexture(ImageIO.read(new File("resources/gui/VentanaComercio.jpg")));
+            this.backgroundImage = loadTexture("VentanaComercio");
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

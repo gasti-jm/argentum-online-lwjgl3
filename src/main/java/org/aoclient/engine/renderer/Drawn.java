@@ -301,6 +301,7 @@ public final class Drawn {
             color = new RGBColor(1.0f, 1.0f, 1.0f);
         }
 
+
         geometryBoxRender(grhIndex, x, y,
                 grhData[grhIndex].getPixelWidth(),
                 grhData[grhIndex].getPixelHeight(),

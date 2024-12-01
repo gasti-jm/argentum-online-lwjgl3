@@ -17,7 +17,7 @@ public class FMapa extends Form {
 
     public FMapa() {
         try {
-            this.backgroundImage = loadTexture(ImageIO.read(new File("resources/gui/Mapa1.jpg")));
+            this.backgroundImage = loadTexture("Mapa1");
             this.overWorld = true;
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -48,7 +48,7 @@ public class FMapa extends Form {
                 playSound(SND_CLICK);
 
                 try {
-                    this.backgroundImage = loadTexture(ImageIO.read(new File("resources/gui/Mapa2.jpg")));
+                    this.backgroundImage = loadTexture("Mapa2");
                     this.overWorld = false;
                 } catch (IOException e) {
                     throw new RuntimeException(e);
@@ -70,7 +70,7 @@ public class FMapa extends Form {
                 playSound(SND_CLICK);
 
                 try {
-                    this.backgroundImage = loadTexture(ImageIO.read(new File("resources/gui/Mapa1.jpg")));
+                    this.backgroundImage = loadTexture("Mapa1");
                     this.overWorld = true;
                 } catch (IOException e) {
                     throw new RuntimeException(e);

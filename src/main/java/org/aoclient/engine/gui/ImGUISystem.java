@@ -67,7 +67,7 @@ public class ImGUISystem {
         // Iniciamos la configuracion de ImGuiIO
         final ImGuiIO io = ImGui.getIO();
 
-        io.setIniFilename("resources/inits/gui.ini"); // Guardamos en un archivo .ini
+        io.setIniFilename("resources/gui.ini"); // Guardamos en un archivo .ini
         io.setConfigFlags(ImGuiConfigFlags.NavEnableKeyboard); // Navegacion con el teclado
         io.setBackendFlags(ImGuiBackendFlags.HasMouseCursors); // Cursores del mouse para mostrar al cambiar el tamaño de las ventanas, etc.
         io.setBackendPlatformName("imgui_java_impl_glfw");

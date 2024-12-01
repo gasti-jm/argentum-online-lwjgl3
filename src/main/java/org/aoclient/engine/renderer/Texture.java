@@ -5,11 +5,14 @@ import org.lwjgl.BufferUtils;
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 
+import static org.aoclient.scripts.Compressor.readResource;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.stb.STBImage.*;
 
@@ -26,7 +29,7 @@ public class Texture {
 
     }
 
-    public void loadTexture(Texture refTexture, String file, boolean isGUI) {
+    public void loadTexture(Texture refTexture, String compressedFile,  String file, boolean isGUI) {
         ByteBuffer pixels;
         BufferedImage bi;
 
@@ -35,8 +38,13 @@ public class Texture {
             this.id = glGenTextures();
             glBindTexture(GL_TEXTURE_2D, id);
 
-            File fil = new File(file);
-            BufferedImage image = ImageIO.read(fil);
+            // Lee los datos del recurso desde el archivo comprimido
+            byte[] resourceData = readResource("resources/" + compressedFile, file);
+            InputStream is = new ByteArrayInputStream(resourceData);
+
+
+            //File fil = new File(file);
+            BufferedImage image = ImageIO.read(is);
 
             refTexture.tex_width = image.getWidth();
             refTexture.tex_height = image.getHeight();

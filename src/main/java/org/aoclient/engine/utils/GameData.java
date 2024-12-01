@@ -18,6 +18,7 @@ import static org.aoclient.engine.Sound.*;
 import static org.aoclient.engine.game.models.Character.eraseAllChars;
 import static org.aoclient.engine.renderer.FontTypes.loadFontTypes;
 import static org.aoclient.network.Messages.loadMessages;
+import static org.aoclient.scripts.Compressor.readResource;
 
 /**
  * Clase en donde se carga todos los archivos necesarios del juego.
@@ -72,7 +73,7 @@ public final class GameData {
      */
     private static void loadGrhData() {
         try {
-            byte[] data = Files.readAllBytes(Paths.get("resources/inits/graphics.ind"));
+            byte[] data = readResource("resources/inits.ao", "graphics");
             reader.init(data);
             
             final int fileVersion = reader.readInt();
@@ -175,7 +176,7 @@ public final class GameData {
      */
     private static void loadHeads() {
         try {
-            byte[] data = Files.readAllBytes(Paths.get("resources/inits/heads.ind"));
+            byte[] data = readResource("resources/inits.ao", "heads");
             reader.init(data);
             reader.skipBytes(263);
 
@@ -212,7 +213,7 @@ public final class GameData {
      */
     private static void loadHelmets() {
         try {
-            byte[] data = Files.readAllBytes(Paths.get("resources/inits/helmets.ind"));
+            byte[] data = readResource("resources/inits.ao", "helmets");
             reader.init(data);
             reader.skipBytes(263);
 
@@ -248,7 +249,7 @@ public final class GameData {
      */
     private static void loadBodys() {
         try {
-            byte[] data = Files.readAllBytes(Paths.get("resources/inits/bodys.ind"));
+            byte[] data = readResource("resources/inits.ao", "bodys");
             reader.init(data);
             reader.skipBytes(263);
 
@@ -290,7 +291,7 @@ public final class GameData {
      */
     private static void loadWeapons() {
         try {
-            byte[] data = Files.readAllBytes(Paths.get("resources/inits/weapons.ind"));
+            byte[] data = readResource("resources/inits.ao", "weapons");
             reader.init(data);
 
             final int numArms = reader.readShort();
@@ -315,7 +316,7 @@ public final class GameData {
      */
     private static void loadShields() {
         try {
-            byte[] data = Files.readAllBytes(Paths.get("resources/inits/shields.ind"));
+            byte[] data = readResource("resources/inits.ao", "shields");
             reader.init(data);
 
             final int numShields = reader.readShort();
@@ -340,7 +341,7 @@ public final class GameData {
      */
     public static void loadMap(int numMap) {
         try {
-            byte[] data = Files.readAllBytes(Paths.get("resources/maps/mapa" + numMap + ".map"));
+            byte[] data = readResource("resources/maps.ao", "mapa" + numMap);
             reader.init(data);
 
             mapData = new MapData[101][101];
@@ -421,7 +422,7 @@ public final class GameData {
      */
     private static void loadFxs() {
         try {
-            byte[] data = Files.readAllBytes(Paths.get("resources/inits/fxs.ind"));
+            byte[] data = readResource("resources/inits.ao", "fxs");
             reader.init(data);
             reader.skipBytes(263);
 
@@ -444,7 +445,7 @@ public final class GameData {
      */
     private static void loadFK() {
         try {
-            byte[] data = Files.readAllBytes(Paths.get("resources/inits/fk.ind"));
+            byte[] data = readResource("resources/inits.ao", "fk");
             reader.init(data);
             reader.skipBytes(263);
 
