@@ -209,7 +209,6 @@ public final class Window {
     /**
      * Carga un cursor grafico, por ahora no lo vamos a usar.
      */
-    @Deprecated
     private void loadCursor() {
         try(MemoryStack stack = MemoryStack.stackPush()) {
             final IntBuffer ch = stack.mallocInt(1), w = stack.mallocInt(1), h = stack.mallocInt(1);

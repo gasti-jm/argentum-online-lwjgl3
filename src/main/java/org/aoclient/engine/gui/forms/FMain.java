@@ -15,6 +15,8 @@ import javax.imageio.ImageIO;
 import java.io.File;
 import java.io.IOException;
 
+import static org.aoclient.engine.Sound.SND_CLICK;
+import static org.aoclient.engine.Sound.playSound;
 import static org.aoclient.engine.utils.Time.FPS;
 
 public final class FMain extends Form {
@@ -218,24 +220,28 @@ public final class FMain extends Form {
         // btnOptions
         ImGui.setCursorPos(681, 485);
         if(ImGui.invisibleButton("viewOptions", 95, 22)) {
+            playSound(SND_CLICK);
             ImGUISystem.get().checkAddOrChange("frmOpciones", new FOptions());
         }
 
         // btnMapa
         ImGui.setCursorPos(681, 445);
         if(ImGui.invisibleButton("viewMap", 95, 22)) {
+            playSound(SND_CLICK);
             ImGUISystem.get().checkAddOrChange("frmMapa", new FMapa());
         }
 
         // btnClose
         ImGui.setCursorPos(775, 3);
         if(ImGui.invisibleButton("close", 17, 17)) {
+            playSound(SND_CLICK);
             Engine.closeClient();
         }
 
         // btnMinimizar
         ImGui.setCursorPos(755, 3);
         if(ImGui.invisibleButton("minimizar", 17, 17)) {
+            playSound(SND_CLICK);
             Window.get().minimizar();
         }
 
@@ -261,18 +267,21 @@ public final class FMain extends Form {
 
         // para hacer click derecho y abrir el frm
         if (ImGui.beginPopupContextItem("Tirar Oro")) {
+            playSound(SND_CLICK);
             ImGUISystem.get().checkAddOrChange("frmCantidad", new FCantidad(true));
             ImGui.endPopup();
         }
 
         ImGui.setCursorPos(592, 128);
         if (ImGui.invisibleButton("ViewInvetory", 93, 30)) {
+            playSound(SND_CLICK);
             User.get().getUserInventory().setVisible(true);
             this.viewInventory = true;
         }
 
         ImGui.setCursorPos(688, 128);
         if (ImGui.invisibleButton("ViewInvetorySpells", 75, 30)) {
+            playSound(SND_CLICK);
             User.get().getUserInventory().setVisible(false);
             this.viewInventory = false;
         }
