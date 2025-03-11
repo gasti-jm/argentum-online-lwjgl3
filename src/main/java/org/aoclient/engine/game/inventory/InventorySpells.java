@@ -12,19 +12,15 @@ import java.util.List;
 import static org.aoclient.network.Protocol.*;
 
 public class InventorySpells {
+
     private static final int MAX_INVENTORY_SPELLS = 35;
-
-
+    private final ImInt currentItemSpell = new ImInt(0);
     private List<String> spellsAdded = new ArrayList<>();
     private String[] spells;
-    private final ImInt currentItemSpell = new ImInt(0);
 
     public InventorySpells() {
         this.spells = new String[MAX_INVENTORY_SPELLS];
-
-        for (int i = 0; i < MAX_INVENTORY_SPELLS; i++) {
-            spells[i] = "";
-        }
+        for (int i = 0; i < MAX_INVENTORY_SPELLS; i++) spells[i] = "";
     }
 
     public void draw() {
@@ -44,32 +40,24 @@ public class InventorySpells {
         ImGui.end();
 
         ImGui.setCursorPos(589, 353);
-        if(ImGui.button("Throw Spell", 77, 25)) {
-            this.buttonThrowSpell();
-        }
+        if (ImGui.button("Throw Spell", 77, 25)) this.buttonThrowSpell();
 
         ImGui.setCursorPos(717, 353);
-        if(ImGui.button("Info Spell", 57, 27)) {
-            this.buttonInfoSpell();
-        }
+        if (ImGui.button("Info Spell", 57, 27)) this.buttonInfoSpell();
+
     }
 
     public void addSpell(final String spell) {
         if (spellsAdded.size() == MAX_INVENTORY_SPELLS - 1) {
             spellsAdded.add(spell);
-
-            for (int i = 0; i < MAX_INVENTORY_SPELLS; i++) {
+            for (int i = 0; i < MAX_INVENTORY_SPELLS; i++)
                 spells[i] = spellsAdded.get(i);
-            }
-
             spellsAdded.clear();
-        } else {
-            spellsAdded.add(spell);
-        }
+        } else spellsAdded.add(spell);
     }
 
-    public void buttonThrowSpell(){
-        if(!spells[currentItemSpell.get()].equals("(None)")) {
+    public void buttonThrowSpell() {
+        if (!spells[currentItemSpell.get()].equals("(None)")) {
             writeCastSpell(currentItemSpell.get() + 1);
             writeWork(E_Skills.Magia.value);
         }
@@ -78,4 +66,5 @@ public class InventorySpells {
     public void buttonInfoSpell() {
         writeSpellInfo(currentItemSpell.get() + 1);
     }
+
 }

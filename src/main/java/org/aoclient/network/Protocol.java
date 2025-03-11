@@ -34,6 +34,7 @@ import static org.aoclient.engine.utils.GameData.*;
 import static org.lwjgl.glfw.GLFW.glfwGetTime;
 
 public class Protocol {
+
     static ByteQueue incomingData = new ByteQueue();
     static ByteQueue outgoingData = new ByteQueue();
     static int pingTime = 0;
@@ -160,9 +161,8 @@ public class Protocol {
         }
 
         // Done with this packet, move on to next one
-        if (incomingData.length() > 0) {
-            handleIncomingData();
-        }
+        if (incomingData.length() > 0) handleIncomingData();
+
     }
 
     private static void handleCancelOfferItem() {
@@ -4306,4 +4306,5 @@ public class Protocol {
     public static void writeHome() {
         outgoingData.writeByte(ClientPacketID.Home.ordinal());
     }
+
 }

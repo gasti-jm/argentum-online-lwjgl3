@@ -3,7 +3,9 @@ package org.aoclient.engine.game.models;
 /**
  * Simula el Type o structure de "position"
  */
+
 public final class Position {
+
     private int x;
     private int y;
 
@@ -22,4 +24,5 @@ public final class Position {
     public void setY(int y) {
         this.y = y;
     }
+
 }

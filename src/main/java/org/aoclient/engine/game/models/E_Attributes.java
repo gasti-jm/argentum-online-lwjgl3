@@ -1,6 +1,7 @@
 package org.aoclient.engine.game.models;
 
 public enum E_Attributes {
+
     Fuerza(1),
     Agilidad(2),
     Inteligencia(3),
@@ -12,4 +13,5 @@ public enum E_Attributes {
     E_Attributes(int value) {
         this.value = value;
     }
+
 }

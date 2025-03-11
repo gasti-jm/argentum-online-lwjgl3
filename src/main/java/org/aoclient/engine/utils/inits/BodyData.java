@@ -5,7 +5,9 @@ import org.aoclient.engine.game.models.Position;
 /**
  * Simula el "Type" o la estructura de BodyData.
  */
+
 public final class BodyData {
+
     private GrhInfo[] walk = new GrhInfo[5];
     private Position headOffset;
 
@@ -19,7 +21,6 @@ public final class BodyData {
     }
 
     /**
-     *
      * @desc: Sirve para asignar a un personaje su body ya inicializado.
      */
     public BodyData(BodyData other) {

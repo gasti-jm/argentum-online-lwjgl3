@@ -1,11 +1,19 @@
 package org.aoclient.scripts;
 
-import java.io.*;
-import java.nio.file.*;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.stream.Collectors;
-import java.util.zip.*;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
+import java.util.zip.ZipOutputStream;
 
 public class Compressor {
+
     // Comprime una carpeta en un archivo .AO
     public static void compressFolder(String folderPath, String outputFilePath) throws IOException {
         try (FileOutputStream fos = new FileOutputStream(outputFilePath);
@@ -42,9 +50,7 @@ public class Compressor {
                 }
             }
 
-            if (matchedEntry == null) {
-                throw new FileNotFoundException("No se encontró un archivo que coincida con: " + resourceBaseName);
-            }
+            if (matchedEntry == null) throw new FileNotFoundException("No se encontró un archivo que coincida con: " + resourceBaseName);
 
             // Lee los datos del recurso encontrado
             try (InputStream is = zipFile.getInputStream(matchedEntry)) {
@@ -74,4 +80,5 @@ public class Compressor {
             System.err.println("Error: " + e.getMessage());
         }
     }
+
 }

@@ -4,6 +4,7 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
 public class BinaryDataReader {
+
     private ByteBuffer buffer;
 
     public BinaryDataReader() {
@@ -19,7 +20,6 @@ public class BinaryDataReader {
         this.buffer = ByteBuffer.wrap(data);
         this.buffer.order(order); // Especifica el orden de los bytes (BIG_ENDIAN o LITTLE_ENDIAN)
     }
-
 
     // Lee un entero (4 bytes)
     public int readInt() {
@@ -72,4 +72,5 @@ public class BinaryDataReader {
     public boolean hasRemaining() {
         return buffer.hasRemaining();
     }
+
 }

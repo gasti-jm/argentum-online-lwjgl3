@@ -1,6 +1,7 @@
 package org.aoclient.network.packets;
 
 public enum eGMCommands {
+
     StrawBundle,
     GMMessage,                  // '/GMSG
     showName,                   // '/SHOWNAME

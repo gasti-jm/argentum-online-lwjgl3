@@ -1,17 +1,14 @@
 package org.aoclient.engine.game;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 
 /**
- * La clase Options representa las opciones de configuración del juego.
- * Puede utilizarse para controlar la configuración relacionada con la música,
- * el sonido, la visualización del nombre, el nombre del jugador en el juego, etc.
+ * La clase Options representa las opciones de configuración del juego. Puede utilizarse para controlar la configuración
+ * relacionada con la música, el sonido, la visualización del nombre, el nombre del jugador en el juego, etc.
  */
+
 public class Options {
+
     private boolean music;
     private boolean sound;
     private boolean showName;
@@ -21,21 +18,19 @@ public class Options {
     private String ipServer;
     private String portServer;
 
-
     /**
-     * Crea una instancia de Options con valores predeterminados.
-     * La música, el sonido y la visualización del nombre están habilitados por defecto,
-     * y el nombre del jugador se inicializa como una cadena vacía.
+     * Crea una instancia de Options con valores predeterminados. La música, el sonido y la visualización del nombre están
+     * habilitados por defecto, y el nombre del jugador se inicializa como una cadena vacía.
      */
     public Options() {
-        this.fullscreen     = true;
-        this.vsync          = true;
-        this.music          = true;
-        this.sound          = true;
-        this.showName       = true;
-        this.nickName       = "";
-        this.ipServer       = "";
-        this.portServer     = "";
+        this.fullscreen = true;
+        this.vsync = true;
+        this.music = true;
+        this.sound = true;
+        this.showName = true;
+        this.nickName = "";
+        this.ipServer = "";
+        this.portServer = "";
     }
 
     /**
@@ -86,7 +81,7 @@ public class Options {
      * Actualiza una opción de configuración con su nuevo valor.
      *
      * @param option El nombre de la opción a actualizar.
-     * @param value El nuevo valor de la opción.
+     * @param value  El nuevo valor de la opción.
      */
     private void updateOption(String option, String value) {
         switch (option) {
@@ -105,15 +100,12 @@ public class Options {
             case "IP":
                 ipServer = value;
                 break;
-
             case "PORT":
                 portServer = value;
                 break;
-
             case "Fullscreen":
                 fullscreen = Boolean.parseBoolean(value);
                 break;
-
             case "VSYNC":
                 vsync = Boolean.parseBoolean(value);
                 break;
@@ -223,4 +215,5 @@ public class Options {
     public void setVsync(boolean vsync) {
         this.vsync = vsync;
     }
+
 }

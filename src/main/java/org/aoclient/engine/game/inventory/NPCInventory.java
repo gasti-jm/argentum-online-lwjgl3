@@ -5,6 +5,7 @@ import imgui.ImGui;
 import static org.aoclient.engine.scenes.Camera.TILE_PIXEL_SIZE;
 
 public class NPCInventory extends Inventory {
+
     // Posicion original del picInv del frmComerciar original de AO
     private static final int FORM_POS_X = 40;
     private static final int FORM_POS_Y = 131;
@@ -45,6 +46,5 @@ public class NPCInventory extends Inventory {
         }
 
     }
-
 
 }

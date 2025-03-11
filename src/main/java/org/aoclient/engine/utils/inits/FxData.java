@@ -3,17 +3,19 @@ package org.aoclient.engine.utils.inits;
 /**
  * Simula el "Type" o la estructura de FxData.
  */
+
 public final class FxData {
+
     private short Animacion;
     private short OffsetX;
     private short OffsetY;
 
-    public void setAnimacion(short animacion) {
-        Animacion = animacion;
-    }
-
     public short getAnimacion() {
         return Animacion;
+    }
+
+    public void setAnimacion(short animacion) {
+        Animacion = animacion;
     }
 
     public short getOffsetX() {
@@ -31,4 +33,5 @@ public final class FxData {
     public void setOffsetY(short offsetY) {
         OffsetY = offsetY;
     }
+
 }

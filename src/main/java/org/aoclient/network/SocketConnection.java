@@ -1,13 +1,14 @@
 package org.aoclient.network;
 
-
 import org.aoclient.engine.game.Rain;
 import org.aoclient.engine.game.User;
-import org.aoclient.engine.gui.forms.FMessage;
 import org.aoclient.engine.gui.ImGUISystem;
+import org.aoclient.engine.gui.forms.FMessage;
 
-import java.net.*;
-import java.io.*;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.net.Socket;
 
 import static org.aoclient.engine.utils.GameData.options;
 import static org.aoclient.network.Protocol.*;
@@ -15,14 +16,15 @@ import static org.aoclient.network.Protocol.*;
 /**
  * Clase que maneja el socket de conexion.
  */
+
 public class SocketConnection {
+
     private static SocketConnection instance;
 
     private Socket sock;
     private DataOutputStream writeData;
     private DataInputStream handleData;
     private boolean tryConnect;
-
 
     /**
      * @desc: Constructor privado por singleton.
@@ -32,14 +34,10 @@ public class SocketConnection {
     }
 
     /**
-     *
      * @return Mismo objeto (Patron de diseño Singleton)
      */
     public static SocketConnection get() {
-        if(instance == null) {
-            instance = new SocketConnection();
-        }
-
+        if (instance == null) instance = new SocketConnection();
         return instance;
     }
 
@@ -48,19 +46,17 @@ public class SocketConnection {
      */
     public boolean connect() {
         if (tryConnect) {
-            ImGUISystem.get().show(new FMessage(
-                    "Intentando conectarse con el servidor, porfavor espere..."));
-
+            ImGUISystem.get().show(new FMessage("Intentando conectarse con el servidor, porfavor espere..."));
             return false;
         }
 
-        if(sock == null || sock.isClosed()) {
+        if (sock == null || sock.isClosed()) {
             this.tryConnect = true;
 
             try {
                 sock = new Socket(options.getIpServer(), Integer.parseInt(options.getPortServer()));
-                writeData   = new DataOutputStream(sock.getOutputStream());     // envio
-                handleData  = new DataInputStream(sock.getInputStream());       // respuesta..
+                writeData = new DataOutputStream(sock.getOutputStream());     // envio
+                handleData = new DataInputStream(sock.getInputStream());       // respuesta..
 
                 if (sock.isConnected()) {
                     this.tryConnect = false;
@@ -68,7 +64,7 @@ public class SocketConnection {
                     outgoingData.readBytes(outgoingData.length());
                 }
 
-            } catch(Exception e) {
+            } catch (Exception e) {
                 ImGUISystem.get().show(new FMessage(e.getMessage()));
                 this.tryConnect = false;
                 return false;
@@ -82,23 +78,16 @@ public class SocketConnection {
      * Prepara el envio de informacion checkeando nuestra cola de bytes y que el socket este conectado
      */
     public void flushBuffer() {
-        if (writeData == null ||
-                !sock.isConnected() ||
-                sock.isClosed())
-            return;
-
-        if (outgoingData.length() != 0){
-            sendData(outgoingData.readBytes(outgoingData.length()));
-        }
+        if (writeData == null || !sock.isConnected() || sock.isClosed()) return;
+        if (outgoingData.length() != 0) sendData(outgoingData.readBytes(outgoingData.length()));
     }
 
     /**
-     *
      * @param sdData Bytes en cadena para ser enviada
      * @desc Envia los bytes al servidor.
      */
     public void sendData(byte[] sdData) {
-        if (sock.isConnected()){
+        if (sock.isConnected()) {
             try {
                 writeData.write(sdData);
             } catch (IOException e) {
@@ -111,11 +100,7 @@ public class SocketConnection {
      * Lee los datos recibidos del servidor
      */
     public void readData() {
-        if (handleData == null ||
-                !sock.isConnected() ||
-                sock.isClosed())
-            return;
-
+        if (handleData == null || !sock.isConnected() || sock.isClosed()) return;
         try {
             final int availableBytes = handleData.available(); // cantidad de bytes que devolvio el servidor.
 

@@ -1,15 +1,16 @@
 package org.aoclient.engine.game.models;
 
 public enum E_Skills {
+
     Magia(1),
-    Robar( 2),
-    Tacticas( 3),
-    Arma( 4),
-    Medita( 5),
-    Stab( 6),
-    Ocultarse( 7),
-    Supervivencia( 8),
-    Talar( 9),
+    Robar(2),
+    Tacticas(3),
+    Arma(4),
+    Medita(5),
+    Stab(6),
+    Ocultarse(7),
+    Supervivencia(8),
+    Talar(9),
     Comerciar(10),
     Defensa(11),
     Pesca(12),
@@ -28,4 +29,5 @@ public enum E_Skills {
     E_Skills(int value) {
         this.value = (byte) value;
     }
+
 }

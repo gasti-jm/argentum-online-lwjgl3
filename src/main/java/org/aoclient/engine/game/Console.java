@@ -1,7 +1,6 @@
 package org.aoclient.engine.game;
 
 import imgui.ImGui;
-import imgui.ImGuiStyle;
 import imgui.flag.ImGuiCol;
 import imgui.flag.ImGuiCond;
 import imgui.flag.ImGuiWindowFlags;
@@ -12,44 +11,27 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Console {
-    private static Console instance;
-
-    static class ConsoleData {
-        String consoleText = new String("".getBytes(), StandardCharsets.UTF_8);
-        RGBColor color = new RGBColor(1f, 1f,1f);
-
-        ConsoleData addData(String text, RGBColor color) {
-            this.consoleText += text;
-            this.color = color;
-
-            return this;
-        }
-    }
 
     private static final int MAX_SIZE_DATA = 500;
+    private static Console instance;
     private boolean autoScroll;
     private boolean scrollToBottom;
     private List<ConsoleData> data;
-
 
     /**
      * Constructor privado por singleton.
      */
     private Console() {
-        this.autoScroll         = true;
-        this.scrollToBottom     = false;
-        this.data               = new ArrayList<>();
+        this.autoScroll = true;
+        this.scrollToBottom = false;
+        this.data = new ArrayList<>();
     }
 
     /**
-     *
      * @return Mismo objeto (Patron de diseño Singleton)
      */
     public static Console get() {
-        if (instance == null) {
-            instance = new Console();
-        }
-
+        if (instance == null) instance = new Console();
         return instance;
     }
 
@@ -82,7 +64,7 @@ public class Console {
                 | ImGuiWindowFlags.NoSavedSettings);
 
         ImGui.setCursorPos(5, 0);
-        ImGui.beginChild("ScrollingRegion", 0, 0, false,  ImGuiWindowFlags.HorizontalScrollbar);
+        ImGui.beginChild("ScrollingRegion", 0, 0, false, ImGuiWindowFlags.HorizontalScrollbar);
 
         // recorremos cada item y le asignamos un color y lo dibujamos.
         for (ConsoleData item : data) {
@@ -92,13 +74,25 @@ public class Console {
         }
 
 
-        if (scrollToBottom || (autoScroll && ImGui.getScrollY() >= ImGui.getScrollMaxY()))
-                ImGui.setScrollHereY(1.0f);
+        if (scrollToBottom || (autoScroll && ImGui.getScrollY() >= ImGui.getScrollMaxY())) ImGui.setScrollHereY(1.0f);
 
         scrollToBottom = false;
 
         ImGui.endChild();
         ImGui.end();
+    }
+
+    static class ConsoleData {
+
+        String consoleText = new String("".getBytes(), StandardCharsets.UTF_8);
+        RGBColor color = new RGBColor(1f, 1f, 1f);
+
+        ConsoleData addData(String text, RGBColor color) {
+            this.consoleText += text;
+            this.color = color;
+            return this;
+        }
+
     }
 
 }

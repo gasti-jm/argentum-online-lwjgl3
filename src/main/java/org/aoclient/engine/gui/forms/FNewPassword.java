@@ -7,8 +7,6 @@ import imgui.flag.ImGuiWindowFlags;
 import imgui.type.ImString;
 import org.aoclient.engine.gui.ImGUISystem;
 
-import javax.imageio.ImageIO;
-import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
@@ -47,31 +45,31 @@ public class FNewPassword extends Form {
         //ImGui.setCursorPos(100, 40);
         ImGui.text(new String("Contraseña:".getBytes(), StandardCharsets.UTF_8));
         ImGui.pushItemWidth(150);
-            //ImGui.pushStyleColor(ImGuiCol.FrameBg, 255, 0,0, 1);
-                ImGui.pushID("txtPassword");
-                    ImGui.inputText("", txtPassword, ImGuiInputTextFlags.Password | ImGuiInputTextFlags.CallbackResize);
-                ImGui.popID();
-            //ImGui.popStyleColor();
+        //ImGui.pushStyleColor(ImGuiCol.FrameBg, 255, 0,0, 1);
+        ImGui.pushID("txtPassword");
+        ImGui.inputText("", txtPassword, ImGuiInputTextFlags.Password | ImGuiInputTextFlags.CallbackResize);
+        ImGui.popID();
+        //ImGui.popStyleColor();
         ImGui.popItemWidth();
 
         // txtNewPasswd
         ImGui.text(new String("Nueva Contraseña:".getBytes(), StandardCharsets.UTF_8));
         ImGui.pushItemWidth(150);
-            //ImGui.pushStyleColor(ImGuiCol.FrameBg, 0, 0, 0, 1);
-                ImGui.pushID("txtNewPassword");
-                    ImGui.inputText("", txtNewPassword, ImGuiInputTextFlags.Password | ImGuiInputTextFlags.CallbackResize);
-                ImGui.popID();
-            //ImGui.popStyleColor();
+        //ImGui.pushStyleColor(ImGuiCol.FrameBg, 0, 0, 0, 1);
+        ImGui.pushID("txtNewPassword");
+        ImGui.inputText("", txtNewPassword, ImGuiInputTextFlags.Password | ImGuiInputTextFlags.CallbackResize);
+        ImGui.popID();
+        //ImGui.popStyleColor();
         ImGui.popItemWidth();
 
         // txtNewRePasswd
         ImGui.text(new String("Repita la Contraseña:".getBytes(), StandardCharsets.UTF_8));
         ImGui.pushItemWidth(150);
-            //ImGui.pushStyleColor(ImGuiCol.FrameBg, 0, 0, 0, 1);
-                ImGui.pushID("txtNewrePassword");
-                    ImGui.inputText("", txtNewrePassword, ImGuiInputTextFlags.Password | ImGuiInputTextFlags.CallbackResize);
-                ImGui.popID();
-            //ImGui.popStyleColor();
+        //ImGui.pushStyleColor(ImGuiCol.FrameBg, 0, 0, 0, 1);
+        ImGui.pushID("txtNewrePassword");
+        ImGui.inputText("", txtNewrePassword, ImGuiInputTextFlags.Password | ImGuiInputTextFlags.CallbackResize);
+        ImGui.popID();
+        //ImGui.popStyleColor();
         ImGui.popItemWidth();
 
         this.drawButtons();
@@ -84,27 +82,22 @@ public class FNewPassword extends Form {
 
         //Botón Salir
         ImGui.setCursorPos(25, 200);
-        if(ImGui.button("Salir", 110, 20)) {
+        if (ImGui.button("Salir", 110, 20)) {
             playSound(SND_CLICK);
             close();
         }
 
         //Botón Cambiar Contraseña
         ImGui.setCursorPos(180, 200);
-        if(ImGui.button("Cambiar", 110, 20)) {
+        if (ImGui.button("Cambiar", 110, 20)) {
             playSound(SND_CLICK);
-
             if (this.txtPassword.get().isEmpty() || this.txtNewPassword.get().isEmpty() || this.txtNewrePassword.get().isEmpty()) {
                 ImGUISystem.get().show(new FMessage("Por favor, completa todos los campos."));
-
             } else if (!this.txtNewPassword.get().equals(this.txtNewrePassword.get())) {
                 ImGUISystem.get().show(new FMessage("Las contraseñas no coinciden."));
-
-            } else { // Si está correcto enviamos paquete para cambiar la contraseña.
-                writeChangePassword(this.txtPassword.get(),this.txtNewPassword.get());
-
-            }
-
+            } else
+                // Si está correcto enviamos paquete para cambiar la contraseña.
+                writeChangePassword(this.txtPassword.get(), this.txtNewPassword.get());
         }
 
     }

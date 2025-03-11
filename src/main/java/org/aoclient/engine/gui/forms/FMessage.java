@@ -21,6 +21,7 @@ public final class FMessage extends Form {
 
     @Override
     public void render() {
+
         ImGui.setNextWindowSize(250, 230, ImGuiCond.Always);
 
         // Start Custom window
@@ -32,10 +33,10 @@ public final class FMessage extends Form {
         ImGui.separator();
 
         ImGui.setCursorPos(8, ImGui.getWindowHeight() - 30);
-        if(ImGui.button("Aceptar", ImGui.getWindowWidth() - 16, 20) || ImGui.isKeyPressed(GLFW_KEY_ENTER)) {
-            close();
-        }
+        if(ImGui.button("Aceptar", ImGui.getWindowWidth() - 16, 20) || ImGui.isKeyPressed(GLFW_KEY_ENTER)) close();
 
         ImGui.end();
+
     }
+
 }

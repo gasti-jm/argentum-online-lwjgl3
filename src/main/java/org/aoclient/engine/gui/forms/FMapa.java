@@ -4,8 +4,6 @@ import imgui.ImGui;
 import imgui.flag.ImGuiCond;
 import imgui.flag.ImGuiWindowFlags;
 
-import javax.imageio.ImageIO;
-import java.io.File;
 import java.io.IOException;
 
 import static org.aoclient.engine.Sound.SND_CLICK;
@@ -44,7 +42,7 @@ public class FMapa extends Form {
         // Dependiendo de que mapa estemos viendo ahora, renderizamos el boton de arriba o el de abajo.
         if (this.overWorld) {
             ImGui.setCursorPos(266, 504);
-            if(ImGui.invisibleButton("overWorldView", 55, 17)) {
+            if (ImGui.invisibleButton("overWorldView", 55, 17)) {
                 playSound(SND_CLICK);
 
                 try {
@@ -58,17 +56,15 @@ public class FMapa extends Form {
 
             // Botón cerrar (solo se muestra con el Mapa1)
             ImGui.setCursorPos(542, 14);
-            if(ImGui.invisibleButton("closeMap", 17, 17)) {
+            if (ImGui.invisibleButton("closeMap", 17, 17)) {
                 playSound(SND_CLICK);
                 close();
             }
 
         } else {
-
             ImGui.setCursorPos(266, 8);
-            if(ImGui.invisibleButton("dungeonView", 55, 17)) {
+            if (ImGui.invisibleButton("dungeonView", 55, 17)) {
                 playSound(SND_CLICK);
-
                 try {
                     this.backgroundImage = loadTexture("Mapa1");
                     this.overWorld = true;
@@ -80,4 +76,5 @@ public class FMapa extends Form {
         }
 
     }
+
 }

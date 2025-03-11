@@ -14,11 +14,12 @@ import java.nio.ByteBuffer;
 
 import static org.aoclient.scripts.Compressor.readResource;
 import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.opengl.GL11.GL_UNSIGNED_BYTE;
 import static org.lwjgl.opengl.GL12.GL_CLAMP_TO_EDGE;
 
 public abstract class Form {
+
     protected int backgroundImage;
+
     public abstract void render();
 
     public void close() {
@@ -30,7 +31,6 @@ public abstract class Form {
         byte[] resourceData = readResource("resources/gui.ao", file);
         InputStream is = new ByteArrayInputStream(resourceData);
         BufferedImage image = ImageIO.read(is);
-
 
         final int[] pixels = new int[image.getWidth() * image.getHeight()];
         image.getRGB(0, 0, image.getWidth(), image.getHeight(), pixels, 0, image.getWidth());
@@ -73,9 +73,7 @@ public abstract class Form {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-        } else {
-            System.out.println("La apertura de URL no es compatible en esta plataforma.");
-        }
+        } else System.out.println("La apertura de URL no es compatible en esta plataforma.");
     }
 
 }

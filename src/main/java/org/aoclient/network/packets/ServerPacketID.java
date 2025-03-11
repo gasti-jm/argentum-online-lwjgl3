@@ -1,6 +1,7 @@
 package org.aoclient.network.packets;
 
 public enum ServerPacketID {
+
     logged,                  // LOGGED
     RemoveDialogs,           // QTDL
     RemoveCharDialog,        // QDL
@@ -109,4 +110,5 @@ public enum ServerPacketID {
     MultiMessage,
     StopWorking,
     CancelOfferItem
+
 }

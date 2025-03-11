@@ -5,13 +5,12 @@ import imgui.flag.ImGuiCond;
 import imgui.flag.ImGuiWindowFlags;
 import org.aoclient.engine.game.inventory.NPCInventory;
 
-import javax.imageio.ImageIO;
-import java.io.File;
 import java.io.IOException;
 
 import static org.aoclient.network.Protocol.writeCommerceEnd;
 
 public class FComerce extends Form {
+
     public static NPCInventory invNPC = new NPCInventory();
 
     public FComerce() {
@@ -42,4 +41,5 @@ public class FComerce extends Form {
 
         ImGui.end();
     }
+
 }

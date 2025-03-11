@@ -3,7 +3,9 @@ package org.aoclient.engine.utils.inits;
 /**
  * Simula el "Type" o la estructura de GrhData.
  */
+
 public final class GrhData {
+
     private short sX;
     private short sY;
 
@@ -107,4 +109,5 @@ public final class GrhData {
     public void setSpeed(float speed) {
         this.speed = speed;
     }
+
 }

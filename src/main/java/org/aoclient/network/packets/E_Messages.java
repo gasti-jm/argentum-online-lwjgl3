@@ -2,6 +2,7 @@ package org.aoclient.network.packets;
 
 
 public enum E_Messages {
+
     DontSeeAnything,
     NPCSwing,
     NPCKillUser,
@@ -26,4 +27,5 @@ public enum E_Messages {
     GoHome,
     CancelGoHome,
     FinishHome
+
 }

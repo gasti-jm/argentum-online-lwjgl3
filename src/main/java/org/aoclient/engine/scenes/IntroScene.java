@@ -5,21 +5,23 @@ import org.aoclient.engine.renderer.Surface;
 import org.aoclient.engine.renderer.Texture;
 
 import static org.aoclient.engine.renderer.Drawn.geometryBoxRenderGUI;
-import static org.aoclient.engine.utils.Time.*;
-import static org.lwjgl.glfw.GLFW.*;
+import static org.aoclient.engine.utils.Time.deltaTime;
+import static org.lwjgl.glfw.GLFW.GLFW_KEY_ENTER;
 
 
 /**
  * Escena de presentacion
- *
+ * <p>
  * Se recomienda leer el JavaDoc de la clase padre "Scene.java".
  */
+
 public final class IntroScene extends Scene {
-    private float   timeScene           = 15.0f; // 15 segundos de intro.
-    private float   timeLogo            = 5.0f; // 5seg
-    private float   timePresentation    = 3.33f;
-    private int     nextInterface       = 1;
-    private float   alphaInterface;
+
+    private float timeScene = 15.0f; // 15 segundos de intro.
+    private float timeLogo = 5.0f; // 5seg
+    private float timePresentation = 3.33f;
+    private int nextInterface = 1;
+    private float alphaInterface;
 
     private Texture[] imgs;
 
@@ -30,10 +32,10 @@ public final class IntroScene extends Scene {
         this.canChangeTo = SceneType.MAIN_SCENE;
         this.imgs = new Texture[4];
 
-        this.imgs[0] = Surface.get().createTexture("gui.ao","noland", true);
-        this.imgs[1] = Surface.get().createTexture("gui.ao","Presentacion5", true);
-        this.imgs[2] = Surface.get().createTexture("gui.ao","Presentacion6", true);
-        this.imgs[3] = Surface.get().createTexture("gui.ao","Presentacion7", true);
+        this.imgs[0] = Surface.get().createTexture("gui.ao", "noland", true);
+        this.imgs[1] = Surface.get().createTexture("gui.ao", "Presentacion5", true);
+        this.imgs[2] = Surface.get().createTexture("gui.ao", "Presentacion6", true);
+        this.imgs[3] = Surface.get().createTexture("gui.ao", "Presentacion7", true);
     }
 
     @Override
@@ -46,9 +48,7 @@ public final class IntroScene extends Scene {
      */
     @Override
     public void keyEvents() {
-        if (KeyListener.isKeyReadyForAction(GLFW_KEY_ENTER)) {
-            close();
-        }
+        if (KeyListener.isKeyReadyForAction(GLFW_KEY_ENTER)) close();
     }
 
     /**
@@ -56,15 +56,10 @@ public final class IntroScene extends Scene {
      */
     @Override
     public void render() {
-        if(!visible) return; // Si no dejamos esto, es posible que al cerrarse la escena genere un NullPointerException.
-
+        if (!visible) return; // Si no dejamos esto, es posible que al cerrarse la escena genere un NullPointerException.
         // mientras no termine su tiempo se va a renderizar el efecto del logo.
-        if(timeLogo >= 0) {
-            effectNoLandStudios();
-        } else {
-            showPresentation();
-        }
-
+        if (timeLogo >= 0) effectNoLandStudios();
+        else showPresentation();
         checkEndScene();
     }
 
@@ -76,9 +71,7 @@ public final class IntroScene extends Scene {
             timePresentation = 3.75f;
             nextInterface++;
         }
-
         geometryBoxRenderGUI(imgs[nextInterface], 0, 0, alphaInterface);
-
         timePresentation -= deltaTime;
     }
 
@@ -87,10 +80,7 @@ public final class IntroScene extends Scene {
      */
     private void checkEndScene() {
         timeScene -= deltaTime;
-
-        if(timeScene <= 0) {
-            close();
-        }
+        if (timeScene <= 0) close();
     }
 
     /**

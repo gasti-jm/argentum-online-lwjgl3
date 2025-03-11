@@ -1,6 +1,7 @@
 package org.aoclient.network.packets;
 
 public enum eEditOptions {
+
     eo_Gold(1),
     eo_Experience(2),
     eo_Body(3),

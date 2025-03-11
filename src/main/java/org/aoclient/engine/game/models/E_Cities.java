@@ -1,6 +1,7 @@
 package org.aoclient.engine.game.models;
 
 public enum E_Cities {
+
     Ullathorpe(1),
     Nix(2),
     Banderbill(3),
@@ -16,4 +17,5 @@ public enum E_Cities {
     public int getValue() {
         return value;
     }
+
 }

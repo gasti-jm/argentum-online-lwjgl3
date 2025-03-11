@@ -1,6 +1,7 @@
 package org.aoclient.engine.game.models;
 
 public enum E_Raza {
+
     Humano(1),
     Elfo(2),
     Elfo_Drow(3),
@@ -16,4 +17,5 @@ public enum E_Raza {
     public int getValue() {
         return value;
     }
+
 }

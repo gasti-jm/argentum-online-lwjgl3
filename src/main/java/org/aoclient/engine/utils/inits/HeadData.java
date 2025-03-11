@@ -3,7 +3,9 @@ package org.aoclient.engine.utils.inits;
 /**
  * Simula el "Type" o la estructura de HeadData.
  */
+
 public final class HeadData {
+
     private GrhInfo[] head = new GrhInfo[5];
 
     public HeadData() {
@@ -27,4 +29,5 @@ public final class HeadData {
     public void setHead(int index, GrhInfo head) {
         this.head[index] = head;
     }
+
 }

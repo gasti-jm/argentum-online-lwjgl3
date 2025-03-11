@@ -2,7 +2,6 @@ package org.aoclient.engine.gui.forms;
 
 import imgui.ImDrawList;
 import imgui.ImGui;
-
 import imgui.flag.*;
 import imgui.type.ImString;
 import org.aoclient.engine.Engine;
@@ -11,8 +10,6 @@ import org.aoclient.engine.game.Console;
 import org.aoclient.engine.game.User;
 import org.aoclient.engine.gui.ImGUISystem;
 
-import javax.imageio.ImageIO;
-import java.io.File;
 import java.io.IOException;
 
 import static org.aoclient.engine.Sound.SND_CLICK;
@@ -20,8 +17,9 @@ import static org.aoclient.engine.Sound.playSound;
 import static org.aoclient.engine.utils.Time.FPS;
 
 public final class FMain extends Form {
-    private final ImString sendText     = new ImString();
-    private final User dataUser         = User.get();
+
+    private final ImString sendText = new ImString();
+    private final User dataUser = User.get();
     private boolean viewInventory;
     private int backgroundInventorySpells;
 
@@ -129,9 +127,8 @@ public final class FMain extends Form {
         if (dataUser.getUserPasarNivel() > 0) {
             ImGui.textColored(0.5f, 1, 1, 1,
                     "[" + Math.round((float) (dataUser.getUserExp() * 100) / dataUser.getUserPasarNivel()) + "%]");
-        } else {
-            ImGui.textColored(0.5f, 1, 1, 1,"[N/A]");
-        }
+        } else ImGui.textColored(0.5f, 1, 1, 1, "[N/A]");
+
 
         //lblExp
         ImGui.setCursorPos(625, 102);
@@ -218,28 +215,28 @@ public final class FMain extends Form {
 
         // btnOptions
         ImGui.setCursorPos(681, 485);
-        if(ImGui.invisibleButton("viewOptions", 95, 22)) {
+        if (ImGui.invisibleButton("viewOptions", 95, 22)) {
             playSound(SND_CLICK);
             ImGUISystem.get().show(new FOptions());
         }
 
         // btnMapa
         ImGui.setCursorPos(681, 445);
-        if(ImGui.invisibleButton("viewMap", 95, 22)) {
+        if (ImGui.invisibleButton("viewMap", 95, 22)) {
             playSound(SND_CLICK);
             ImGUISystem.get().show(new FMapa());
         }
 
         // btnClose
         ImGui.setCursorPos(775, 3);
-        if(ImGui.invisibleButton("close", 17, 17)) {
+        if (ImGui.invisibleButton("close", 17, 17)) {
             playSound(SND_CLICK);
             Engine.closeClient();
         }
 
         // btnMinimizar
         ImGui.setCursorPos(755, 3);
-        if(ImGui.invisibleButton("minimizar", 17, 17)) {
+        if (ImGui.invisibleButton("minimizar", 17, 17)) {
             playSound(SND_CLICK);
             Window.get().minimizar();
         }
@@ -249,18 +246,18 @@ public final class FMain extends Form {
         ImGui.invisibleButton("Tirar Oro", 17, 17);
 
         // txtSend
-        if(dataUser.isTalking()) {
+        if (dataUser.isTalking()) {
             ImGui.setCursorPos(15, 123);
 
             ImGui.pushItemWidth(546);
-                ImGui.pushStyleColor(ImGuiCol.FrameBg, 0f, 0f,0f, 1);
+            ImGui.pushStyleColor(ImGuiCol.FrameBg, 0f, 0f, 0f, 1);
 
-                    ImGui.setKeyboardFocusHere();
-                    ImGui.pushID("sendText");
-                        ImGui.inputText("", sendText, ImGuiInputTextFlags.CallbackResize);
-                    ImGui.popID();
+            ImGui.setKeyboardFocusHere();
+            ImGui.pushID("sendText");
+            ImGui.inputText("", sendText, ImGuiInputTextFlags.CallbackResize);
+            ImGui.popID();
 
-                ImGui.popStyleColor();
+            ImGui.popStyleColor();
             ImGui.popItemWidth();
         }
 
@@ -286,9 +283,8 @@ public final class FMain extends Form {
         }
 
         /////// Inventory
-        if(viewInventory) {
-            User.get().getUserInventory().drawInventory();
-        } else {
+        if (viewInventory) User.get().getUserInventory().drawInventory();
+        else {
             ImGui.setCursorPos(586, 126);
             ImGui.image(backgroundInventorySpells, 198, 282);
             User.get().getInventorySpells().draw();
@@ -303,8 +299,8 @@ public final class FMain extends Form {
     }
 
     private void drawShapes() {
-        final ImDrawList drawList   = ImGui.getWindowDrawList();
-        final int shpColor          = ImGui.getColorU32(0, 0, 0, 1);
+        final ImDrawList drawList = ImGui.getWindowDrawList();
+        final int shpColor = ImGui.getColorU32(0, 0, 0, 1);
 
         // shpEnergia
         float bWidth = (((float) (dataUser.getUserMinSTA()) / ((float) dataUser.getUserMaxSTA())) * 75);
@@ -355,4 +351,5 @@ public final class FMain extends Form {
     public String getSendText() {
         return this.sendText.get();
     }
+
 }

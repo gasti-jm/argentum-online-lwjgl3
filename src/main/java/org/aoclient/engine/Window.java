@@ -5,7 +5,10 @@ import org.aoclient.engine.listeners.MouseListener;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.glfw.GLFWImage;
 import org.lwjgl.glfw.GLFWVidMode;
-import org.lwjgl.openal.*;
+import org.lwjgl.openal.AL;
+import org.lwjgl.openal.ALC;
+import org.lwjgl.openal.ALCCapabilities;
+import org.lwjgl.openal.ALCapabilities;
 import org.lwjgl.opengl.GL;
 import org.lwjgl.stb.STBImage;
 import org.lwjgl.system.MemoryStack;
@@ -18,27 +21,25 @@ import static org.lwjgl.glfw.Callbacks.glfwFreeCallbacks;
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.openal.ALC10.*;
 import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.opengl.GL11.GL_DEPTH_TEST;
 import static org.lwjgl.system.MemoryStack.stackPush;
 import static org.lwjgl.system.MemoryUtil.NULL;
 
 /**
- * Esta es la clase de nuestra Ventana GLFW, donde inicializa una nueva ventana y inicializa y crea nuestro contexto de
- * OpenGL y OpenAL.
+ * Esta es la clase de nuestra Ventana GLFW, donde inicializa una nueva ventana y inicializa y crea nuestro contexto de OpenGL y
+ * OpenAL.
  */
+
 public final class Window {
+
     private static final int SCREEN_WIDTH = 800;
     private static final int SCREEN_HEIGHT = 600;
 
     private static Window instance;
-
-    private long window;
-
-    private long audioContext;
-    private long audioDevice;
-
     private final String title;
     private final int width, height;
+    private long window;
+    private long audioContext;
+    private long audioDevice;
     private boolean cursorCrosshair;
 
     /**
@@ -52,14 +53,10 @@ public final class Window {
     }
 
     /**
-     *
      * @return Mismo objeto (Patron de diseño Singleton)
      */
     public static Window get() {
-        if (instance == null) {
-            instance = new Window();
-        }
-
+        if (instance == null) instance = new Window();
         return instance;
     }
 
@@ -71,9 +68,7 @@ public final class Window {
         GLFWErrorCallback.createPrint(System.err).set();
 
         // Initialize GLFW
-        if (!glfwInit()) {
-            throw new IllegalStateException("Unable to initialize GLFW.");
-        }
+        if (!glfwInit()) throw new IllegalStateException("Unable to initialize GLFW.");
 
         // Configure GLFW
         glfwDefaultWindowHints();
@@ -94,9 +89,7 @@ public final class Window {
                 options.isFullscreen() ? glfwGetPrimaryMonitor() : NULL,
                 NULL);
 
-        if (window == NULL) {
-            throw new IllegalStateException("Failed to create the GLFW window.");
-        }
+        if (window == NULL) throw new IllegalStateException("Failed to create the GLFW window.");
 
         glfwSetCursorPosCallback(window, MouseListener::mousePosCallback);
         glfwSetMouseButtonCallback(window, MouseListener::mouseButtonCallback);
@@ -104,7 +97,7 @@ public final class Window {
         glfwSetKeyCallback(window, KeyListener::keyCallback);
 
         // Get the thread stack and push a new frame
-        try ( MemoryStack stack = stackPush() ) {
+        try (MemoryStack stack = stackPush()) {
             IntBuffer pWidth = stack.mallocInt(1); // int*
             IntBuffer pHeight = stack.mallocInt(1); // int*
 
@@ -128,11 +121,8 @@ public final class Window {
         // Make the OpenGL context current
         glfwMakeContextCurrent(window);
 
-        if (options.isVsync()) {
-            glfwSwapInterval(1);
-        } else {
-            glfwSwapInterval(0);
-        }
+        if (options.isVsync()) glfwSwapInterval(1);
+        else glfwSwapInterval(0);
 
         // Make the window visible
         glfwShowWindow(window);
@@ -150,9 +140,7 @@ public final class Window {
         ALCCapabilities alcCapabilities = ALC.createCapabilities(audioDevice);
         ALCapabilities alCapabilities = AL.createCapabilities(alcCapabilities);
 
-        if (!alCapabilities.OpenAL10) {
-            throw new IllegalStateException("Audio library not supported.");
-        }
+        if (!alCapabilities.OpenAL10) throw new IllegalStateException("Audio library not supported.");
 
         GL.createCapabilities();
 
@@ -191,14 +179,14 @@ public final class Window {
      * Carga una imagen y la agrega como icono a nuestra ventana GLFW.
      */
     private void loadIcon() {
-        try(MemoryStack stack = MemoryStack.stackPush()){
-            final IntBuffer ch       = stack.mallocInt(1), w = stack.mallocInt(1), h = stack.mallocInt(1);
+        try (MemoryStack stack = MemoryStack.stackPush()) {
+            final IntBuffer ch = stack.mallocInt(1), w = stack.mallocInt(1), h = stack.mallocInt(1);
             final ByteBuffer imgBuff = STBImage.stbi_load("./resources/icon.png", w, h, ch, 4);
 
-            if(imgBuff == null) return;
+            if (imgBuff == null) return;
 
-            GLFWImage image             = GLFWImage.malloc();
-            GLFWImage.Buffer imageBf    = GLFWImage.malloc(1);
+            GLFWImage image = GLFWImage.malloc();
+            GLFWImage.Buffer imageBf = GLFWImage.malloc(1);
 
             image.set(w.get(), h.get(), imgBuff);
             imageBf.put(0, image);
@@ -210,7 +198,7 @@ public final class Window {
      * Carga un cursor grafico, por ahora no lo vamos a usar.
      */
     private void loadCursor() {
-        try(MemoryStack stack = MemoryStack.stackPush()) {
+        try (MemoryStack stack = MemoryStack.stackPush()) {
             final IntBuffer ch = stack.mallocInt(1), w = stack.mallocInt(1), h = stack.mallocInt(1);
             final ByteBuffer imgBuff = STBImage.stbi_load("./resources/MAIN.png", w, h, ch, 4);
 
@@ -235,17 +223,16 @@ public final class Window {
         }
     }
 
-    public void toggleWindow(){
-        if (options.isFullscreen()) {
-            glfwSetWindowMonitor(window, glfwGetPrimaryMonitor(), 0, 0, width, height, GLFW_DONT_CARE);
-        } else {
+    public void toggleWindow() {
+        if (options.isFullscreen()) glfwSetWindowMonitor(window, glfwGetPrimaryMonitor(), 0, 0, width, height, GLFW_DONT_CARE);
+        else {
             glfwSetWindowMonitor(window, NULL,
                     0,
                     0,
                     width, height, GLFW_DONT_CARE);
 
             // Get the thread stack and push a new frame
-            try ( MemoryStack stack = stackPush() ) {
+            try (MemoryStack stack = stackPush()) {
                 IntBuffer pWidth = stack.mallocInt(1); // int*
                 IntBuffer pHeight = stack.mallocInt(1); // int*
 
@@ -263,22 +250,19 @@ public final class Window {
             } // the stack frame is popped automatically
         }
 
-        if (options.isVsync()) {
-            glfwSwapInterval(1);
-        } else {
-            glfwSwapInterval(0);
-        }
+        if (options.isVsync()) glfwSwapInterval(1);
+        else glfwSwapInterval(0);
+
     }
 
     /**
      * @desc Minimiza nuestra ventana
      */
-    public void minimizar(){
+    public void minimizar() {
         glfwIconifyWindow(window);
     }
 
     /**
-     *
      * @return True si la ventana esta minimizada, caso contrario falso.
      */
     public boolean isMinimized() {
@@ -304,4 +288,5 @@ public final class Window {
     public void setCursorCrosshair(boolean cursorCrosshair) {
         this.cursorCrosshair = cursorCrosshair;
     }
+
 }

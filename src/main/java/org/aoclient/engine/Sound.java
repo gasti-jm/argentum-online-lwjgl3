@@ -12,6 +12,7 @@ import static org.lwjgl.system.MemoryStack.*;
 import static org.lwjgl.system.libc.LibCStdlib.free;
 
 public final class Sound {
+
     public static final String SND_CLICK = "click.ogg";
     public static final String SND_PASOS1 = "23.ogg";
     public static final String SND_PASOS2 = "24.ogg";
@@ -21,10 +22,9 @@ public final class Sound {
 
     public static final int MAX_SOUNDS = 30; // cantidad maxima de sondios almacenadas en memoria.
     public static final int MAX_MUSIC = 10; // cantidad maxima de musica almacenada en memoria.
-
+    private final String filepath;
     private int bufferId;
     private int sourceId;
-    private final String filepath;
     private boolean isPlaying = false;
 
     /**
@@ -59,11 +59,8 @@ public final class Sound {
 
         // Find the correct openAL format
         int format = -1;
-        if (channels == 1) {
-            format = AL_FORMAT_MONO16;
-        } else if (channels == 2) {
-            format = AL_FORMAT_STEREO16;
-        }
+        if (channels == 1) format = AL_FORMAT_MONO16;
+        else if (channels == 2) format = AL_FORMAT_STEREO16;
 
         bufferId = alGenBuffers();
         alBufferData(bufferId, format, rawAudioBuffer, sampleRate);
@@ -81,61 +78,6 @@ public final class Sound {
     }
 
     /**
-     * @desc: Destruye el sonido creado en OpenAL.
-     */
-    public void delete() {
-        alDeleteSources(sourceId);
-        alDeleteBuffers(bufferId);
-    }
-
-    /**
-     * @desc: Reproduce un sonido.
-     *        Primero checkea si se esta reproduciendo el mismo sonido, si es asi crea el mismo sonido y lo reproduce,
-     *        ya que en el AO cuando se reproduce el mismo sonido, se reproduce varias veces por encima del otro.
-     *        En caso contrario, se comienza a reproducir el sonido 1 sola vez.
-     */
-    public void play() {
-        if (alGetSourcei(sourceId, AL_SOURCE_STATE) == AL_PLAYING) {
-            new Sound(this.filepath, false).play();
-        } else {
-            if (!isPlaying)
-                isPlaying = true;
-
-            alSourcePlay(sourceId);
-        }
-    }
-
-    /**
-     * @desc: Detiene el sonido que se esta reproduciendo.
-     */
-    public void stop() {
-        if (isPlaying){
-            alSourceStop(sourceId);
-            isPlaying = false;
-        }
-    }
-
-    /**
-     *
-     * @return Getter del atributo filepath.
-     */
-    public String getFilepath() {
-        return this.filepath;
-    }
-
-    /**
-     *
-     * @return True si esta reproduciendose el sonido, falso en caso contrario.
-     */
-    public boolean isPlaying() {
-        if (alGetSourcei(sourceId, AL_SOURCE_STATE) == AL_STOPPED) {
-            isPlaying = false;
-        }
-
-        return isPlaying;
-    }
-
-    /**
      * @desc: Devuelve todos los sonidos
      */
     public static Collection<Sound> getAllSounds() {
@@ -147,12 +89,8 @@ public final class Sound {
      */
     public static Sound getSound(String soundFile) {
         File file = new File(soundFile);
-        if (sounds.containsKey(file.getAbsolutePath())) {
-            return sounds.get(file.getAbsolutePath());
-        } else {
-            System.out.println("Sound file not added '" + soundFile + "'");
-        }
-
+        if (sounds.containsKey(file.getAbsolutePath())) return sounds.get(file.getAbsolutePath());
+        else System.out.println("Sound file not added '" + soundFile + "'");
         return null;
     }
 
@@ -161,12 +99,9 @@ public final class Sound {
      */
     public static Sound addSound(String soundFile, boolean loops) {
         final File file = new File(soundFile);
-        if (sounds.containsKey(file.getAbsolutePath())) {
-            return sounds.get(file.getAbsolutePath());
-        } else {
-            if(sounds.size() == MAX_SOUNDS) clearSounds();
-
-
+        if (sounds.containsKey(file.getAbsolutePath())) return sounds.get(file.getAbsolutePath());
+        else {
+            if (sounds.size() == MAX_SOUNDS) clearSounds();
             Sound sound = new Sound(file.getAbsolutePath(), loops);
             sounds.put(file.getAbsolutePath(), sound);
             return sound;
@@ -178,11 +113,9 @@ public final class Sound {
      */
     public static Sound addMusic(String soundFile, boolean loops) {
         final File file = new File(soundFile);
-        if (musics.containsKey(file.getAbsolutePath())) {
-            return musics.get(file.getAbsolutePath());
-        } else {
-            if(musics.size() == MAX_MUSIC) clearMusics();
-
+        if (musics.containsKey(file.getAbsolutePath())) return musics.get(file.getAbsolutePath());
+        else {
+            if (musics.size() == MAX_MUSIC) clearMusics();
             Sound sound = new Sound(file.getAbsolutePath(), loops);
             musics.put(file.getAbsolutePath(), sound);
             return sound;
@@ -190,24 +123,19 @@ public final class Sound {
     }
 
     /**
-     * @desc: Reproduce un sonido, primero checkea si existe en nuestro mapa, en caso de que exista lo reproduce, caso
-     *        contrario: crea uno, lo guarda en el mapa y lo reproduce.
+     * @desc: Reproduce un sonido, primero checkea si existe en nuestro mapa, en caso de que exista lo reproduce, caso contrario:
+     * crea uno, lo guarda en el mapa y lo reproduce.
      */
     public static void playSound(String soundName) {
         final File file = new File("resources/sounds/" + soundName);
-
         // existe?
         if (options.isSound()) {
-            if (sounds.containsKey(file.getAbsolutePath())) {
-                sounds.get(file.getAbsolutePath()).play();
-            } else {
-                addSound("resources/sounds/" + soundName, false).play();
-            }
+            if (sounds.containsKey(file.getAbsolutePath())) sounds.get(file.getAbsolutePath()).play();
+            else addSound("resources/sounds/" + soundName, false).play();
         }
     }
 
     /**
-     *
      * @desc: Agregamos musica a nuestro objeto de musica y lo reproduce.
      */
     public static void playMusic(String musicName) {
@@ -217,14 +145,11 @@ public final class Sound {
 
         // existe?
         if (musics.containsKey(file.getAbsolutePath())) {
-            if (options.isMusic()) {
-                musics.get(file.getAbsolutePath()).play();
-            }
+            if (options.isMusic()) musics.get(file.getAbsolutePath()).play();
         } else {
-            if (options.isMusic()) {
-                addMusic("resources/music/" + musicName, true).play();
-            }
+            if (options.isMusic()) addMusic("resources/music/" + musicName, true).play();
         }
+
     }
 
     /**
@@ -242,6 +167,52 @@ public final class Sound {
 
     private static void stopMusic() {
         musics.forEach((m, musicReproducing) -> musicReproducing.stop());
+    }
+
+    /**
+     * @desc: Destruye el sonido creado en OpenAL.
+     */
+    public void delete() {
+        alDeleteSources(sourceId);
+        alDeleteBuffers(bufferId);
+    }
+
+    /**
+     * @desc: Reproduce un sonido. Primero checkea si se esta reproduciendo el mismo sonido, si es asi crea el mismo sonido y lo
+     * reproduce, ya que en el AO cuando se reproduce el mismo sonido, se reproduce varias veces por encima del otro. En caso
+     * contrario, se comienza a reproducir el sonido 1 sola vez.
+     */
+    public void play() {
+        if (alGetSourcei(sourceId, AL_SOURCE_STATE) == AL_PLAYING) new Sound(this.filepath, false).play();
+        else {
+            if (!isPlaying) isPlaying = true;
+            alSourcePlay(sourceId);
+        }
+    }
+
+    /**
+     * @desc: Detiene el sonido que se esta reproduciendo.
+     */
+    public void stop() {
+        if (isPlaying) {
+            alSourceStop(sourceId);
+            isPlaying = false;
+        }
+    }
+
+    /**
+     * @return Getter del atributo filepath.
+     */
+    public String getFilepath() {
+        return this.filepath;
+    }
+
+    /**
+     * @return True si esta reproduciendose el sonido, falso en caso contrario.
+     */
+    public boolean isPlaying() {
+        if (alGetSourcei(sourceId, AL_SOURCE_STATE) == AL_STOPPED) isPlaying = false;
+        return isPlaying;
     }
 
 }
