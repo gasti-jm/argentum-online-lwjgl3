@@ -6,7 +6,7 @@ package org.aoclient.engine.utils.inits;
 
 public final class MapData {
 
-    private GrhInfo[] layer = new GrhInfo[5];
+    private final GrhInfo[] layer = new GrhInfo[5];
     private short charIndex;
     private GrhInfo objGrh;
     private short npcIndex;

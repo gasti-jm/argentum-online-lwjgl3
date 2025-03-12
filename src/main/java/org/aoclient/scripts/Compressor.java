@@ -63,7 +63,6 @@ public class Compressor {
         String folderToCompress = "resources/sounds-descompressed";
         String compressedFile = "resources/sounds.ao";
         String resourceToRead = "9";
-
         try {
             // Comprime la carpeta
             compressFolder(folderToCompress, compressedFile);

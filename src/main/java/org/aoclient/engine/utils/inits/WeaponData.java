@@ -6,7 +6,7 @@ package org.aoclient.engine.utils.inits;
 
 public final class WeaponData {
 
-    private GrhInfo[] WeaponWalk = new GrhInfo[5];
+    private final GrhInfo[] WeaponWalk = new GrhInfo[5];
 
     public WeaponData() {
         WeaponWalk[1] = new GrhInfo();

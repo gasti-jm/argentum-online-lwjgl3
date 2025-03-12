@@ -18,7 +18,7 @@ public final class GrhData {
     private float tileHeight;
 
     private short numFrames;
-    private int frames[];
+    private int[] frames;
 
     private float speed;
 

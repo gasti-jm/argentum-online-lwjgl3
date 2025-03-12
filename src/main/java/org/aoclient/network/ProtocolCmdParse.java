@@ -15,7 +15,7 @@ import static org.aoclient.network.Protocol.*;
 public class ProtocolCmdParse {
 
     private static ProtocolCmdParse instance;
-    private Console console = Console.get();
+    private final Console console = Console.get();
 
     // Constructor privado para evitar instanciación directa
     private ProtocolCmdParse() {
@@ -48,7 +48,7 @@ public class ProtocolCmdParse {
 
         if (tmpArgs.length > 1) {
             argumentosRaw = tmpArgs[1];
-            notNullArguments = argumentosRaw.trim().length() > 0;
+            notNullArguments = !argumentosRaw.trim().isEmpty();
             argumentosAll = tmpArgs[1].split(" ");
             cantidadArgumentos = argumentosAll.length;
 
@@ -507,56 +507,24 @@ public class ProtocolCmdParse {
                 case "/MOD":
                     if (notNullArguments && cantidadArgumentos >= 3) {
                         String argumento = argumentosAll[1].toUpperCase();
-                        tmpInt = -1;
-                        switch (argumento) {
-                            case "BODY":
-                                tmpInt = eEditOptions.eo_Body.getValue();
-                                break;
-                            case "HEAD":
-                                tmpInt = eEditOptions.eo_Head.getValue();
-                                break;
-                            case "ORO":
-                                tmpInt = eEditOptions.eo_Gold.getValue();
-                                break;
-                            case "LEVEL":
-                                tmpInt = eEditOptions.eo_Level.getValue();
-                                break;
-                            case "SKILLS":
-                                tmpInt = eEditOptions.eo_Skills.getValue();
-                                break;
-                            case "SKILLSLIBRES":
-                                tmpInt = eEditOptions.eo_SkillPointsLeft.getValue();
-                                break;
-                            case "CLASE":
-                                tmpInt = eEditOptions.eo_Class.getValue();
-                                break;
-                            case "EXP":
-                                tmpInt = eEditOptions.eo_Experience.getValue();
-                                break;
-                            case "CRI":
-                                tmpInt = eEditOptions.eo_CriminalsKilled.getValue();
-                                break;
-                            case "CIU":
-                                tmpInt = eEditOptions.eo_CiticensKilled.getValue();
-                                break;
-                            case "NOB":
-                                tmpInt = eEditOptions.eo_Nobleza.getValue();
-                                break;
-                            case "ASE":
-                                tmpInt = eEditOptions.eo_Asesino.getValue();
-                                break;
-                            case "SEX":
-                                tmpInt = eEditOptions.eo_Sex.getValue();
-                                break;
-                            case "RAZA":
-                                tmpInt = eEditOptions.eo_Raza.getValue();
-                                break;
-                            case "AGREGAR":
-                                tmpInt = eEditOptions.eo_addGold.getValue();
-                                break;
-                            default:
-                                tmpInt = -1;
-                        }
+                        tmpInt = switch (argumento) {
+                            case "BODY" -> eEditOptions.eo_Body.getValue();
+                            case "HEAD" -> eEditOptions.eo_Head.getValue();
+                            case "ORO" -> eEditOptions.eo_Gold.getValue();
+                            case "LEVEL" -> eEditOptions.eo_Level.getValue();
+                            case "SKILLS" -> eEditOptions.eo_Skills.getValue();
+                            case "SKILLSLIBRES" -> eEditOptions.eo_SkillPointsLeft.getValue();
+                            case "CLASE" -> eEditOptions.eo_Class.getValue();
+                            case "EXP" -> eEditOptions.eo_Experience.getValue();
+                            case "CRI" -> eEditOptions.eo_CriminalsKilled.getValue();
+                            case "CIU" -> eEditOptions.eo_CiticensKilled.getValue();
+                            case "NOB" -> eEditOptions.eo_Nobleza.getValue();
+                            case "ASE" -> eEditOptions.eo_Asesino.getValue();
+                            case "SEX" -> eEditOptions.eo_Sex.getValue();
+                            case "RAZA" -> eEditOptions.eo_Raza.getValue();
+                            case "AGREGAR" -> eEditOptions.eo_addGold.getValue();
+                            default -> -1;
+                        };
                         if (tmpInt > 0) {
                             if (cantidadArgumentos == 3) {
                                 writeEditChar(argumentosAll[0], tmpInt, argumentosAll[2], "");
@@ -1238,7 +1206,7 @@ public class ProtocolCmdParse {
                 case "/AEMAIL":
                     if (notNullArguments) {
                         tmpArr = AEMAILSplit(argumentosRaw);
-                        if (tmpArr[0].length() == 0) {
+                        if (tmpArr[0].isEmpty()) {
                             // Faltan los parámetros con el formato propio
                             console.addMsgToConsole(new String("Formato incorrecto. Utilice /aemail NICKNAME-NUEVOMAIL.".getBytes(), StandardCharsets.UTF_8),
                                     false, true, new RGBColor());
@@ -1414,26 +1382,25 @@ public class ProtocolCmdParse {
     public boolean validNumber(String numero, eNumber_Types tipo) {
         long minimo, maximo;
         if (!numero.matches("-?\\d+(\\.\\d+)?")) return false;
-        switch (tipo) {
-            case ent_Byte:
+        maximo = switch (tipo) {
+            case ent_Byte -> {
                 minimo = 0;
-                maximo = 255;
-                break;
-            case ent_Integer:
+                yield 255;
+            }
+            case ent_Integer -> {
                 minimo = -32768;
-                maximo = 32767;
-                break;
-            case ent_Long:
+                yield 32767;
+            }
+            case ent_Long -> {
                 minimo = -2147483648L;
-                maximo = 2147483647L;
-                break;
-            case ent_Trigger:
+                yield 2147483647L;
+            }
+            case ent_Trigger -> {
                 minimo = 0;
-                maximo = 6;
-                break;
-            default:
-                throw new IllegalArgumentException("Tipo de número no válido.");
-        }
+                yield 6;
+            }
+            default -> throw new IllegalArgumentException("Tipo de número no válido.");
+        };
         long valor = Long.parseLong(numero);
         return valor >= minimo && valor <= maximo;
     }

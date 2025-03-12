@@ -70,10 +70,8 @@ public final class FCantidad extends Form {
             if (!cant.get().isEmpty()) {
                 final int cantToDrop = Integer.parseInt(cant.get());
                 if (cantToDrop > 0 && cantToDrop <= 10000) {
-                    if (dropOro) {
-                        if (User.get().getUserGLD() > 10000) writeDrop(FLAGORO, 10000);
-                        else writeDrop(FLAGORO, User.get().getUserGLD());
-                    } else
+                    if (dropOro) writeDrop(FLAGORO, Math.min(User.get().getUserGLD(), 10000));
+                    else
                         writeDrop(User.get().getUserInventory().getSlotSelected() + 1, User.get().getUserInventory().getAmountSlotSelected());
                 }
             }

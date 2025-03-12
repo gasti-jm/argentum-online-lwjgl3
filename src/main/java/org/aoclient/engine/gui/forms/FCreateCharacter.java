@@ -55,12 +55,12 @@ public final class FCreateCharacter extends Form {
     private final ImInt currentItemGenero = new ImInt(0);
     private final String[] strGenero = {"Hombre", "Mujer"};
     private final RGBColor color;
+    private final RECT characterPos;
     // para el dibujado
     private int dir;
     private int userHead;
     private int userBody;
     private BodyData bodyGraphic;
-    private RECT characterPos;
 
     public FCreateCharacter() {
         this.background = Surface.get().createTexture("gui.ao", "VentanaCrearPersonaje", true);
@@ -78,7 +78,6 @@ public final class FCreateCharacter extends Form {
         this.characterPos.right = 41;
         this.characterPos.bottom = 65;
 
-
         this.loadComboBoxes();
         this.giveBodyAndHead();
     }
@@ -88,19 +87,15 @@ public final class FCreateCharacter extends Form {
      */
     private void loadComboBoxes() {
         // Esto hay que internacionalizarlo en algun momento, es puro hardcodeo.
-
         // Hogar
         for (int i = 0; i < E_Cities.values().length; i++)
             strCities[i] = E_Cities.values()[i].name();
-
         // Raza
         for (int i = 0; i < E_Raza.values().length; i++)
             strRazas[i] = E_Raza.values()[i].name().replace("_", " "); // para quitar el "_" del enum
-
         // Clases
         for (int i = 0; i < E_Class.values().length; i++)
             strClass[i] = E_Class.values()[i].name();
-
     }
 
     @Override
@@ -251,10 +246,8 @@ public final class FCreateCharacter extends Form {
     private int checkDir(int direction) {
         if (direction > E_Heading.WEST.value) direction = E_Heading.NORTH.value;
         if (direction < E_Heading.NORTH.value) direction = E_Heading.WEST.value;
-
         this.bodyGraphic.getWalk(dir).setFrameCounter(1);
         this.bodyGraphic.getWalk(dir).setStarted(false);
-
         return direction;
     }
 

@@ -45,7 +45,6 @@ public final class Time {
             FPS = contFPS;
             contFPS = 0;
         }
-
         contFPS++;
         timerFPS -= deltaTime;
     }

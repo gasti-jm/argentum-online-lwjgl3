@@ -44,7 +44,6 @@ public class ImGUISystem {
     // arreglo de ventanas gui
     private final List<Form> frms = new ArrayList<>();
 
-
     private ImGUISystem() {
 
     }
@@ -159,7 +158,6 @@ public class ImGUISystem {
         fontConfig.setPixelSnapH(true);
         fontConfig.setGlyphRanges(fontAtlas.getGlyphRangesCyrillic());
 
-
         // We merge font loaded from resources with the default one. Thus we will get an absent cyrillic glyphs
         //fontAtlas.addFontFromMemoryTTF(loadFromResources("basis33.ttf"), 16, fontConfig);
 
@@ -205,13 +203,12 @@ public class ImGUISystem {
         io.setDeltaTime(deltaTime);
 
         // ACA HAY QUE LABURAR CON LOS CURSORES.
-        if (Window.get().isCursorCrosshair()) {
+        if (Window.get().isCursorCrosshair())
             glfwSetCursor(Window.get().getWindow(), glfwCreateStandardCursor(GLFW_CROSSHAIR_CURSOR));
-        } else {
+        else {
             glfwSetCursor(Window.get().getWindow(), mouseCursors[ImGui.getMouseCursor()]);
             glfwSetInputMode(Window.get().getWindow(), GLFW_CURSOR, GLFW_CURSOR_NORMAL);
         }
-
 
         // IMPORTANT!!
         // Any Dear ImGui code SHOULD go between NewFrame()/Render() methods
@@ -225,14 +222,12 @@ public class ImGUISystem {
     }
 
     private void renderFrms() {
-        for (int i = 0; i < frms.size(); i++)
-            frms.get(i).render();
+        for (Form frm : frms) frm.render();
         ImGui.showDemoWindow();
     }
 
     public void show(Form frm) {
         boolean exits = false;
-
         // esta abierto?
         for (int i = 0; i < frms.size(); i++) {
             if (frms.get(i).getClass().getSimpleName().equals(frm.getClass().getSimpleName())) {
@@ -242,7 +237,6 @@ public class ImGUISystem {
             }
         }
         if (!exits) addFrm(frm);
-
     }
 
     public boolean isFormVisible(String fromClass) {
@@ -253,7 +247,6 @@ public class ImGUISystem {
                 break;
             }
         }
-
         return visible;
     }
 

@@ -32,28 +32,21 @@ public class FOptions extends Form {
         ImGui.separator();
 
         if (ImGui.checkbox("Pantalla Completa", options.isFullscreen())) {
-            if (options.isFullscreen()) options.setFullscreen(false);
-            else options.setFullscreen(true);
+            options.setFullscreen(!options.isFullscreen());
             Window.get().toggleWindow();
         }
 
         if (ImGui.checkbox("Sincronizacion Vertical", options.isVsync())) {
-            if (options.isVsync()) options.setVsync(false);
-            else options.setVsync(true);
+            options.setVsync(!options.isVsync());
             Window.get().toggleWindow();
         }
 
         ImGui.separator();
 
-        if (ImGui.checkbox("Musica", options.isMusic())) {
-            if (options.isMusic()) options.setMusic(false);
-            else options.setMusic(true);
-        }
+        if (ImGui.checkbox("Musica", options.isMusic())) options.setMusic(!options.isMusic());
 
-        if (ImGui.checkbox("Audio", options.isSound())) {
-            if (options.isSound()) options.setSound(false);
-            else options.setSound(true);
-        }
+        if (ImGui.checkbox("Audio", options.isSound())) options.setSound(!options.isSound());
+
 
         this.drawButtons();
 

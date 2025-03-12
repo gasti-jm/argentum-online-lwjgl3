@@ -69,7 +69,6 @@ public class Surface {
      */
     public Texture createTexture(String fileCompressed, String file, boolean isGUI) {
         if (file.isEmpty()) return null;
-
         Texture texture = new Texture();
         texture.loadTexture(texture, fileCompressed, file, isGUI);
         return texture;

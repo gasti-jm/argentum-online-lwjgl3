@@ -39,7 +39,7 @@ public class Protocol {
     static ByteQueue outgoingData = new ByteQueue();
     static int pingTime = 0;
     static int lastPacket;
-    private static Console console = Console.get();
+    private static final Console console = Console.get();
 
     public static void handleIncomingData() {
         lastPacket = incomingData.peekByte();
@@ -1783,10 +1783,9 @@ public class Protocol {
         // Remove packet ID
         incomingData.readByte();
 
-        int userAtributos[] = new int[5];
-        for (int i = 0; i < 5; i++) {
+        int[] userAtributos = new int[5];
+        for (int i = 0; i < 5; i++)
             userAtributos[i] = incomingData.readByte();
-        }
 
         //Dim i As Long
         //

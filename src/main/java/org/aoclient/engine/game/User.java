@@ -213,8 +213,7 @@ public final class User {
      * @return True si se encuentra dentro del limite del mapa, false en caso contrario.
      */
     public boolean inMapBounds(int x, int y) {
-        return (x < TILE_BUFFER_SIZE || x > XMaxMapSize - TILE_BUFFER_SIZE ||
-                y < TILE_BUFFER_SIZE || y > YMaxMapSize - TILE_BUFFER_SIZE);
+        return x < TILE_BUFFER_SIZE || x > XMaxMapSize - TILE_BUFFER_SIZE || y < TILE_BUFFER_SIZE || y > YMaxMapSize - TILE_BUFFER_SIZE;
     }
 
     public boolean estaPCarea(int charIndex) {
@@ -232,7 +231,6 @@ public final class User {
     private boolean moveToLegalPos(int x, int y) {
         // Limite del mapa
         if (x < minXBorder || x > maxXBorder || y < minYBorder || y > maxYBorder) return false;
-
         // Tile Bloqueado?
         if (mapData[x][y].getBlocked()) return false;
 
@@ -241,11 +239,9 @@ public final class User {
         // ¿Hay un personaje?
         if (charIndex > 0) {
             if (mapData[userPos.getX()][userPos.getY()].getBlocked()) return false;
-
             if (charList[charIndex].getiHead() != CASPER_HEAD && charList[charIndex].getiBody() != FRAGATA_FANTASMAL) {
                 return false;
             } else {
-
                 // No puedo intercambiar con un casper que este en la orilla (Lado tierra)
                 if (hayAgua(userPos.getX(), userPos.getY())) {
                     if (!hayAgua(x, y)) return false;
@@ -340,22 +336,12 @@ public final class User {
      * @desc Mueve nuestro personaje a una cierta direccion si es posible.
      */
     public void moveTo(E_Heading direction) {
-        boolean legalOk = false;
-        switch (direction) {
-            case NORTH:
-                legalOk = moveToLegalPos(userPos.getX(), userPos.getY() - 1);
-                break;
-            case EAST:
-                legalOk = moveToLegalPos(userPos.getX() + 1, userPos.getY());
-                break;
-            case SOUTH:
-                legalOk = moveToLegalPos(userPos.getX(), userPos.getY() + 1);
-                break;
-            case WEST:
-                legalOk = moveToLegalPos(userPos.getX() - 1, userPos.getY());
-                break;
-        }
-
+        boolean legalOk = switch (direction) {
+            case NORTH -> moveToLegalPos(userPos.getX(), userPos.getY() - 1);
+            case EAST -> moveToLegalPos(userPos.getX() + 1, userPos.getY());
+            case SOUTH -> moveToLegalPos(userPos.getX(), userPos.getY() + 1);
+            case WEST -> moveToLegalPos(userPos.getX() - 1, userPos.getY());
+        };
         if (legalOk && !charList[userCharIndex].isParalizado()) {
             writeWalk(direction);
             moveScreen(direction);

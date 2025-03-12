@@ -38,7 +38,6 @@ public class FMapa extends Form {
     }
 
     private void drawButtons() {
-
         // Dependiendo de que mapa estemos viendo ahora, renderizamos el boton de arriba o el de abajo.
         if (this.overWorld) {
             ImGui.setCursorPos(266, 504);
@@ -71,10 +70,8 @@ public class FMapa extends Form {
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
-
             }
         }
-
     }
 
 }

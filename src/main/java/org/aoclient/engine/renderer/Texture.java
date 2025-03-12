@@ -41,7 +41,6 @@ public class Texture {
             byte[] resourceData = readResource("resources/" + compressedFile, file);
             InputStream is = new ByteArrayInputStream(resourceData);
 
-
             //File fil = new File(file);
             BufferedImage image = ImageIO.read(is);
 
@@ -64,12 +63,9 @@ public class Texture {
                         data[j * 4 + 1] = -1;
                         data[j * 4 + 2] = -1;
                         data[j * 4 + 3] = 0;
-                    } else {
-                        data[j * 4 + 3] = -1;
-                    }
+                    } else data[j * 4 + 3] = -1;
                 }
             }
-
 
             pixels = BufferUtils.createByteBuffer(data.length);
             pixels.put(data);

@@ -15,8 +15,8 @@ public class InventorySpells {
 
     private static final int MAX_INVENTORY_SPELLS = 35;
     private final ImInt currentItemSpell = new ImInt(0);
-    private List<String> spellsAdded = new ArrayList<>();
-    private String[] spells;
+    private final List<String> spellsAdded = new ArrayList<>();
+    private final String[] spells;
 
     public InventorySpells() {
         this.spells = new String[MAX_INVENTORY_SPELLS];

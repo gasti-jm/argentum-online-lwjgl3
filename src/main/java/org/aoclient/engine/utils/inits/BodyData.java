@@ -8,8 +8,8 @@ import org.aoclient.engine.game.models.Position;
 
 public final class BodyData {
 
-    private GrhInfo[] walk = new GrhInfo[5];
-    private Position headOffset;
+    private final GrhInfo[] walk = new GrhInfo[5];
+    private final Position headOffset;
 
     public BodyData() {
         walk[1] = new GrhInfo();

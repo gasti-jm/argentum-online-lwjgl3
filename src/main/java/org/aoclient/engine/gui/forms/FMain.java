@@ -21,7 +21,7 @@ public final class FMain extends Form {
     private final ImString sendText = new ImString();
     private final User dataUser = User.get();
     private boolean viewInventory;
-    private int backgroundInventorySpells;
+    private final int backgroundInventorySpells;
 
     public FMain() {
         this.viewInventory = true;

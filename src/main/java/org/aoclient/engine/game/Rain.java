@@ -4,6 +4,7 @@ import org.aoclient.engine.Sound;
 import org.aoclient.engine.renderer.RGBColor;
 import org.aoclient.engine.renderer.Surface;
 import org.aoclient.engine.renderer.Texture;
+import org.lwjgl.system.windows.RECT;
 
 import static org.aoclient.engine.renderer.Drawn.geometryBoxRender;
 import static org.aoclient.engine.utils.GameData.bLluvia;
@@ -54,9 +55,8 @@ public class Rain {
 
     private void loadData() {
         // Set up te rain rects
-        for (int i = 0; i < 8; i++) {
+        for (int i = 0; i < 8; i++)
             RLluvia[i] = new RECT();
-        }
 
         RLluvia[0].top = 0;
         RLluvia[1].top = 0;
@@ -126,7 +126,6 @@ public class Rain {
 
     private void renderSound() {
         if (!options.isSound()) return;
-
         if (bLluvia[User.get().getUserMap()] && bRain) {
             if (User.get().isUnderCeiling()) {
                 if (rainSounds[1].isPlaying()) rainSounds[1].stop();

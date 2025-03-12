@@ -6,7 +6,7 @@ package org.aoclient.engine.utils.inits;
 
 public final class ShieldData {
 
-    private GrhInfo[] shieldWalk = new GrhInfo[5];
+    private final GrhInfo[] shieldWalk = new GrhInfo[5];
 
     public ShieldData() {
         shieldWalk[1] = new GrhInfo();

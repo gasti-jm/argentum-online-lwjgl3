@@ -216,7 +216,6 @@ public final class Character {
             mapData[charList[i].getPos().getX()][charList[i].getPos().getY()].setCharIndex(0);
             resetCharInfo(i);
         }
-
         lastChar = 0;
     }
 
@@ -376,7 +375,6 @@ public final class Character {
                             }
                         }
                     }
-
                 }
             }
 

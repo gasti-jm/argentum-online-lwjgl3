@@ -18,8 +18,8 @@ public class MouseListener {
     private static MouseListener instance;
     private double scrollX, scrollY;
     private double xPos, yPos, lastY, lastX;
-    private boolean mouseButtonPressed[] = new boolean[3];
-    private boolean mouseButtonDobleClickPressed[] = new boolean[3];
+    private final boolean[] mouseButtonPressed = new boolean[3];
+    private final boolean[] mouseButtonDobleClickPressed = new boolean[3];
     private boolean isDragging;
     private double lastTimeClick;
 
@@ -79,8 +79,7 @@ public class MouseListener {
                 // Doble click!
                 double currentTime = glfwGetTime();
 
-                if (currentTime - get().lastTimeClick <= DOUBLE_CLICK_TIME) get().mouseButtonDobleClickPressed[button] = true;
-                else get().mouseButtonDobleClickPressed[button] = false;
+                get().mouseButtonDobleClickPressed[button] = currentTime - get().lastTimeClick <= DOUBLE_CLICK_TIME;
 
                 get().lastTimeClick = currentTime;
             }
@@ -98,7 +97,6 @@ public class MouseListener {
     public static void mouseScrollCallback(long window, double xOffset, double yOffset) {
         io.setMouseWheelH(io.getMouseWheelH() + (float) xOffset);
         io.setMouseWheel(io.getMouseWheel() + (float) yOffset);
-
         get().scrollX = xOffset;
         get().scrollY = yOffset;
     }

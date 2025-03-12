@@ -25,7 +25,6 @@ import static org.aoclient.network.Protocol.*;
 import static org.lwjgl.glfw.GLFW.GLFW_MOUSE_BUTTON_LEFT;
 import static org.lwjgl.glfw.GLFW.GLFW_MOUSE_BUTTON_RIGHT;
 
-
 /**
  * Esta es la escena donde el usuario jugara. Se recomienda leer el JavaDoc de la clase padre "Scene.java".
  */
@@ -399,10 +398,8 @@ public final class GameScene extends Scene {
      * @desc: Detecta si tenemos el mouse adentro del "render MainViewPic".
      */
     private boolean inGameArea() {
-        if (MouseListener.getX() < POS_SCREEN_X || MouseListener.getX() > POS_SCREEN_X + SCREEN_SIZE_X)
-            return false;
-        if (MouseListener.getY() < POS_SCREEN_Y || MouseListener.getY() > POS_SCREEN_Y + SCREEN_SIZE_Y)
-            return false;
+        if (MouseListener.getX() < POS_SCREEN_X || MouseListener.getX() > POS_SCREEN_X + SCREEN_SIZE_X) return false;
+        if (MouseListener.getY() < POS_SCREEN_Y || MouseListener.getY() > POS_SCREEN_Y + SCREEN_SIZE_Y) return false;
         return true;
     }
 

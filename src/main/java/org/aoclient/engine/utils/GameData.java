@@ -318,7 +318,7 @@ public final class GameData {
             final short mapversion = reader.readShort();
             reader.skipBytes(263); // cabecera.
 
-            byte byflags = 0;
+            byte byflags;
 
             // Falta implementar el mapInfo xd....
             reader.readShort();
