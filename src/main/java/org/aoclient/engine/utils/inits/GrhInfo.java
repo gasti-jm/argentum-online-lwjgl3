@@ -3,7 +3,9 @@ package org.aoclient.engine.utils.inits;
 /**
  * Simula el "Type" o la estructura de Grh.
  */
+
 public final class GrhInfo {
+
     private short grhIndex;
     private float frameCounter;
     private float speed;
@@ -12,21 +14,21 @@ public final class GrhInfo {
     private float angle;
 
     public GrhInfo() {
-        this.started         = false;
-        this.grhIndex        = 0;
-        this.frameCounter    = 1.0f;
-        this.loops           = 0;
-        this.speed           = 0.0f;
-        this.angle           = 0.0f;
+        this.started = false;
+        this.grhIndex = 0;
+        this.frameCounter = 1.0f;
+        this.loops = 0;
+        this.speed = 0.0f;
+        this.angle = 0.0f;
     }
 
     public GrhInfo(GrhInfo other) {
-        this.grhIndex        = other.grhIndex;
-        this.frameCounter    = other.frameCounter;
-        this.speed           = other.speed;
-        this.started         = other.started;
-        this.loops           = other.loops;
-        this.angle           = other.angle;
+        this.grhIndex = other.grhIndex;
+        this.frameCounter = other.frameCounter;
+        this.speed = other.speed;
+        this.started = other.started;
+        this.loops = other.loops;
+        this.angle = other.angle;
     }
 
     public short getGrhIndex() {
@@ -76,4 +78,5 @@ public final class GrhInfo {
     public void setAngle(float angle) {
         this.angle = angle;
     }
+
 }

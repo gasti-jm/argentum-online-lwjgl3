@@ -12,7 +12,9 @@ import static org.aoclient.engine.utils.Time.timerTicksPerFrame;
 /**
  * Clase para un objeto personaje.
  */
+
 public final class Character {
+
     public static final int CASPER_HEAD = 500;
     public static final int FRAGATA_FANTASMAL = 87;
 
@@ -104,47 +106,45 @@ public final class Character {
     private boolean dialog_scroll;
 
     public Character() {
-        body                = new BodyData();
-        head                = new HeadData();
-        helmet              = new HeadData();
-        weapon              = new WeaponData();
-        shield              = new ShieldData();
-        this.pos            = new Position();
-        this.fX             = new GrhInfo();
+        body = new BodyData();
+        head = new HeadData();
+        helmet = new HeadData();
+        weapon = new WeaponData();
+        shield = new ShieldData();
+        this.pos = new Position();
+        this.fX = new GrhInfo();
 
-        this.heading        = SOUTH;
-        this.active         = false;
-        this.criminal       = false;
-        this.attackable     = false;
-        this.fxIndex        = 0;
-        this.invisible      = false;
-        this.paralizado     = false;
-        this.moving         = false;
-        this.dead           = false;
-        this.name           = "";
-        this.pie            = false;
+        this.heading = SOUTH;
+        this.active = false;
+        this.criminal = false;
+        this.attackable = false;
+        this.fxIndex = 0;
+        this.invisible = false;
+        this.paralizado = false;
+        this.moving = false;
+        this.dead = false;
+        this.name = "";
+        this.pie = false;
         this.pos.setX(0);
         this.pos.setY(0);
 
-        this.usingArm       = false;
-        this.clanName       = "";
-        this.walkingSpeed   = 8;
+        this.usingArm = false;
+        this.clanName = "";
+        this.walkingSpeed = 8;
 
         this.dialog = "";
         this.dialog_scroll = false;
         this.dialog_font_index = 0;
-        this.dialog_color = new RGBColor(1f,1f,1f);
+        this.dialog_color = new RGBColor(1f, 1f, 1f);
         this.dialog_offset_counter_y = 0;
     }
 
     /**
      * @desc Crea un nuevo personaje segun los parametros establecidos.
      */
-    public static void makeChar(short charIndex, int body, int head,  E_Heading heading, int x, int y, int weapon, int shield, int helmet) {
+    public static void makeChar(short charIndex, int body, int head, E_Heading heading, int x, int y, int weapon, int shield, int helmet) {
         // apuntamos al ultimo char
-        if (charIndex > lastChar) {
-            lastChar = charIndex;
-        }
+        if (charIndex > lastChar) lastChar = charIndex;
 
         if (weapon == 0) weapon = 2;
         if (shield == 0) shield = 2;
@@ -152,9 +152,7 @@ public final class Character {
 
         char f = '<', u = '>';
 
-        if(charList[charIndex].priv != 0) {
-            charList[charIndex].setClanName(f + "Game Master" + u);
-        }
+        if (charList[charIndex].priv != 0) charList[charIndex].setClanName(f + "Game Master" + u);
 
         charList[charIndex].setDead(head == CASPER_HEAD);
         charList[charIndex].setiHead(head);
@@ -187,7 +185,6 @@ public final class Character {
     }
 
     /**
-     *
      * @param charIndex Numero de identificador de personaje
      * @desc Elimina un personaje del array de personajes.
      */
@@ -197,14 +194,11 @@ public final class Character {
         if (charIndex == lastChar) {
             while (!charList[lastChar].isActive()) {
                 lastChar--;
-                if (lastChar == 0) {
-                    break;
-                }
+                if (lastChar == 0) break;
             }
         }
 
         mapData[charList[charIndex].getPos().getX()][charList[charIndex].getPos().getY()].setCharIndex(0);
-
 
         /*
             'Remove char's dialog
@@ -222,12 +216,10 @@ public final class Character {
             mapData[charList[i].getPos().getX()][charList[i].getPos().getY()].setCharIndex(0);
             resetCharInfo(i);
         }
-
         lastChar = 0;
     }
 
     /**
-     *
      * @param charIndex Numero de identificador del personaje
      * @desc Resetea los atributos del personaje.
      */
@@ -239,11 +231,177 @@ public final class Character {
      * @desc Actualiza todos los personajes visibles.
      */
     public static void refreshAllChars() {
-        for (int loopC = 1; loopC <= lastChar; loopC++) {
-            if (charList[loopC].isActive()) {
+        for (int loopC = 1; loopC <= lastChar; loopC++)
+            if (charList[loopC].isActive())
                 mapData[charList[loopC].getPos().getX()][charList[loopC].getPos().getY()].setCharIndex(loopC);
+    }
+
+    /**
+     * @desc Dibuja nuestro personaje!
+     */
+    public static void drawCharacter(int charIndex, int PixelOffsetX, int PixelOffsetY, RGBColor ambientcolor) {
+        boolean moved = false;
+        RGBColor color = new RGBColor();
+
+        if (charList[charIndex].getMoving()) {
+            if (charList[charIndex].getScrollDirectionX() != 0) {
+
+                charList[charIndex].setMoveOffsetX(charList[charIndex].getMoveOffsetX() +
+                        charList[charIndex].getWalkingSpeed() * sgn(charList[charIndex].getScrollDirectionX()) * timerTicksPerFrame);
+
+                if (charList[charIndex].getBody().getWalk(charList[charIndex].getHeading().value).getSpeed() > 0.0f) {
+                    charList[charIndex].getBody().getWalk(charList[charIndex].getHeading().value).setStarted(true);
+                }
+
+                charList[charIndex].getWeapon().getWeaponWalk(charList[charIndex].getHeading().value).setStarted(true);
+                charList[charIndex].getShield().getShieldWalk(charList[charIndex].getHeading().value).setStarted(true);
+
+                moved = true;
+
+                if ((sgn(charList[charIndex].getScrollDirectionX()) == 1 && charList[charIndex].getMoveOffsetX() >= 0) ||
+                        (sgn(charList[charIndex].getScrollDirectionX()) == -1 && charList[charIndex].getMoveOffsetX() <= 0)) {
+
+                    charList[charIndex].setMoveOffsetX(0);
+                    charList[charIndex].setScrollDirectionX(0);
+                }
+            }
+
+            if (charList[charIndex].getScrollDirectionY() != 0) {
+                charList[charIndex].setMoveOffsetY(charList[charIndex].getMoveOffsetY()
+                        + charList[charIndex].getWalkingSpeed() * sgn(charList[charIndex].getScrollDirectionY()) * timerTicksPerFrame);
+
+
+                if (charList[charIndex].getBody().getWalk(charList[charIndex].getHeading().value).getSpeed() > 0.0f) {
+                    charList[charIndex].getBody().getWalk(charList[charIndex].getHeading().value).setStarted(true);
+                }
+
+                charList[charIndex].getWeapon().getWeaponWalk(charList[charIndex].getHeading().value).setStarted(true);
+                charList[charIndex].getShield().getShieldWalk(charList[charIndex].getHeading().value).setStarted(true);
+
+                moved = true;
+
+                if ((sgn(charList[charIndex].getScrollDirectionY()) == 1 && charList[charIndex].getMoveOffsetY() >= 0)
+                        || (sgn(charList[charIndex].getScrollDirectionY()) == -1 && charList[charIndex].getMoveOffsetY() <= 0)) {
+                    charList[charIndex].setMoveOffsetY(0);
+                    charList[charIndex].setScrollDirectionY(0);
+                }
             }
         }
+
+        if (!moved) {
+            charList[charIndex].getBody().getWalk(charList[charIndex].getHeading().value).setStarted(false);
+            charList[charIndex].getBody().getWalk(charList[charIndex].getHeading().value).setFrameCounter(1);
+
+            charList[charIndex].getWeapon().getWeaponWalk(charList[charIndex].getHeading().value).setStarted(false);
+            charList[charIndex].getWeapon().getWeaponWalk(charList[charIndex].getHeading().value).setFrameCounter(1);
+
+            charList[charIndex].getShield().getShieldWalk(charList[charIndex].getHeading().value).setStarted(false);
+            charList[charIndex].getShield().getShieldWalk(charList[charIndex].getHeading().value).setFrameCounter(1);
+
+            charList[charIndex].setMoving(false);
+        }
+
+        PixelOffsetX += (int) charList[charIndex].getMoveOffsetX();
+        PixelOffsetY += (int) charList[charIndex].getMoveOffsetY();
+
+        if (charList[charIndex].getHead().getHead(charList[charIndex].getHeading().value).getGrhIndex() != 0) {
+            if (!charList[charIndex].isInvisible()) {
+
+                if (charList[charIndex].getBody().getWalk(charList[charIndex].getHeading().value).getGrhIndex() != 0) {
+                    drawTexture(charList[charIndex].getBody().getWalk(charList[charIndex].getHeading().value),
+                            PixelOffsetX, PixelOffsetY, true, true, false, 1.0f, ambientcolor);
+                }
+
+                if (charList[charIndex].getHead().getHead(charList[charIndex].getHeading().value).getGrhIndex() != 0) {
+                    drawTexture(charList[charIndex].getHead().getHead(charList[charIndex].getHeading().value),
+                            PixelOffsetX + charList[charIndex].getBody().getHeadOffset().getX(),
+                            PixelOffsetY + charList[charIndex].getBody().getHeadOffset().getY(),
+                            true, false, false, 1.0f, ambientcolor);
+
+
+                    if (charList[charIndex].getHelmet().getHead(charList[charIndex].getHeading().value).getGrhIndex() != 0) {
+                        drawTexture(charList[charIndex].getHelmet().getHead(charList[charIndex].getHeading().value),
+                                PixelOffsetX + charList[charIndex].getBody().getHeadOffset().getX(),
+                                PixelOffsetY + charList[charIndex].getBody().getHeadOffset().getY() - 34,
+                                true, false, false, 1.0f, ambientcolor);
+                    }
+
+                    if (charList[charIndex].getWeapon().getWeaponWalk(charList[charIndex].getHeading().value).getGrhIndex() != 0) {
+                        drawTexture(charList[charIndex].getWeapon().getWeaponWalk(charList[charIndex].getHeading().value),
+                                PixelOffsetX, PixelOffsetY, true, true, false, 1.0f, ambientcolor);
+                    }
+
+                    if (charList[charIndex].getShield().getShieldWalk(charList[charIndex].getHeading().value).getGrhIndex() != 0) {
+                        drawTexture(charList[charIndex].getShield().getShieldWalk(charList[charIndex].getHeading().value),
+                                PixelOffsetX, PixelOffsetY, true, true, false, 1.0f, ambientcolor);
+                    }
+
+                    if (options.isShowName()) {
+                        if (charList[charIndex].name.length() > 0) {
+
+                            if (charList[charIndex].priv == 0) {
+                                if (charList[charIndex].attackable) {
+                                    color.setRed(0.54f);
+                                    color.setGreen(0.0f);
+                                    color.setBlue(1.0f);
+                                } else {
+                                    if (charList[charIndex].criminal) {
+                                        color.setRed(1.0f);
+                                        color.setGreen(0.0f);
+                                        color.setBlue(0.0f);
+                                    } else {
+                                        color.setRed(0.0f);
+                                        color.setGreen(0.5f);
+                                        color.setBlue(1.0f);
+                                    }
+                                }
+                            } else {
+                                color.setRed(0.13f);
+                                color.setGreen(0.7f);
+                                color.setBlue(0.3f);
+                            }
+
+                            String line = charList[charIndex].name;
+                            drawText(line,
+                                    PixelOffsetX + 16 - getTextWidth(line, false) / 2,
+                                    PixelOffsetY + 30, color, NORMAL_FONT, false);
+
+
+                            line = charList[charIndex].clanName;
+                            if (!line.isEmpty()) {
+                                drawText(line,
+                                        PixelOffsetX + 16 - getTextWidth(line, false) / 2,
+                                        PixelOffsetY + 45, color, NORMAL_FONT, false);
+                            }
+                        }
+                    }
+                }
+            }
+
+
+        } else {
+            if (charList[charIndex].getBody().getWalk(charList[charIndex].getHeading().value).getGrhIndex() > 0) {
+                drawTexture(charList[charIndex].getBody().getWalk(charList[charIndex].getHeading().value),
+                        PixelOffsetX, PixelOffsetY, true, true, false, 1.0f, ambientcolor);
+            }
+        }
+
+        // Draw FX
+        if (charList[charIndex].fxIndex != 0) {
+            drawTexture(charList[charIndex].fX,
+                    PixelOffsetX + fxData[charList[charIndex].fxIndex].getOffsetX(),
+                    PixelOffsetY + fxData[charList[charIndex].fxIndex].getOffsetY(),
+                    true, true, true, 1.0f, ambientcolor);
+
+            // Check if animation is over
+            if (!charList[charIndex].fX.isStarted())
+                charList[charIndex].setFxIndex(0);
+        }
+    }
+
+    public static int sgn(short number) {
+        if (number == 0) return 0;
+        return (number / Math.abs(number));
     }
 
     public int getWalkingSpeed() {
@@ -386,7 +544,7 @@ public final class Character {
         return scrollDirectionX;
     }
 
-    public void setScrollDirectionX(int  scrollDirectionX) {
+    public void setScrollDirectionX(int scrollDirectionX) {
         this.scrollDirectionX = (short) scrollDirectionX;
     }
 
@@ -510,172 +668,4 @@ public final class Character {
         this.dialog_scroll = dialog_scroll;
     }
 
-    /**
-     * @desc Dibuja nuestro personaje!
-     */
-    public static void drawCharacter(int charIndex, int PixelOffsetX, int PixelOffsetY, RGBColor ambientcolor) {
-        boolean moved = false;
-        RGBColor color = new RGBColor();
-
-        if (charList[charIndex].getMoving()) {
-            if (charList[charIndex].getScrollDirectionX() != 0) {
-
-                charList[charIndex].setMoveOffsetX(charList[charIndex].getMoveOffsetX() +
-                        charList[charIndex].getWalkingSpeed() * sgn(charList[charIndex].getScrollDirectionX()) * timerTicksPerFrame);
-
-                if (charList[charIndex].getBody().getWalk(charList[charIndex].getHeading().value).getSpeed() > 0.0f) {
-                    charList[charIndex].getBody().getWalk(charList[charIndex].getHeading().value).setStarted(true);
-                }
-
-                charList[charIndex].getWeapon().getWeaponWalk(charList[charIndex].getHeading().value).setStarted(true);
-                charList[charIndex].getShield().getShieldWalk(charList[charIndex].getHeading().value).setStarted(true);
-
-                moved = true;
-
-                if ((sgn(charList[charIndex].getScrollDirectionX()) == 1 && charList[charIndex].getMoveOffsetX() >= 0) ||
-                        (sgn(charList[charIndex].getScrollDirectionX()) == -1 && charList[charIndex].getMoveOffsetX() <= 0)) {
-
-                    charList[charIndex].setMoveOffsetX(0);
-                    charList[charIndex].setScrollDirectionX(0);
-                }
-            }
-
-            if (charList[charIndex].getScrollDirectionY() != 0) {
-                charList[charIndex].setMoveOffsetY(charList[charIndex].getMoveOffsetY()
-                        + charList[charIndex].getWalkingSpeed() * sgn(charList[charIndex].getScrollDirectionY()) * timerTicksPerFrame);
-
-
-                if (charList[charIndex].getBody().getWalk(charList[charIndex].getHeading().value).getSpeed() > 0.0f) {
-                    charList[charIndex].getBody().getWalk(charList[charIndex].getHeading().value).setStarted(true);
-                }
-
-                charList[charIndex].getWeapon().getWeaponWalk(charList[charIndex].getHeading().value).setStarted(true);
-                charList[charIndex].getShield().getShieldWalk(charList[charIndex].getHeading().value).setStarted(true);
-
-                moved = true;
-
-                if ((sgn(charList[charIndex].getScrollDirectionY()) == 1 && charList[charIndex].getMoveOffsetY() >= 0)
-                        || (sgn(charList[charIndex].getScrollDirectionY()) == -1 && charList[charIndex].getMoveOffsetY() <= 0)) {
-                    charList[charIndex].setMoveOffsetY(0);
-                    charList[charIndex].setScrollDirectionY(0);
-                }
-            }
-        }
-
-        if (!moved) {
-            charList[charIndex].getBody().getWalk(charList[charIndex].getHeading().value).setStarted(false);
-            charList[charIndex].getBody().getWalk(charList[charIndex].getHeading().value).setFrameCounter(1);
-
-            charList[charIndex].getWeapon().getWeaponWalk(charList[charIndex].getHeading().value).setStarted(false);
-            charList[charIndex].getWeapon().getWeaponWalk(charList[charIndex].getHeading().value).setFrameCounter(1);
-
-            charList[charIndex].getShield().getShieldWalk(charList[charIndex].getHeading().value).setStarted(false);
-            charList[charIndex].getShield().getShieldWalk(charList[charIndex].getHeading().value).setFrameCounter(1);
-
-            charList[charIndex].setMoving(false);
-        }
-
-        PixelOffsetX += (int) charList[charIndex].getMoveOffsetX();
-        PixelOffsetY += (int) charList[charIndex].getMoveOffsetY();
-
-        if (charList[charIndex].getHead().getHead(charList[charIndex].getHeading().value).getGrhIndex() != 0) {
-            if (!charList[charIndex].isInvisible()) {
-
-                if (charList[charIndex].getBody().getWalk(charList[charIndex].getHeading().value).getGrhIndex() != 0) {
-                    drawTexture(charList[charIndex].getBody().getWalk(charList[charIndex].getHeading().value),
-                            PixelOffsetX, PixelOffsetY, true, true, false, 1.0f, ambientcolor);
-                }
-
-                if (charList[charIndex].getHead().getHead(charList[charIndex].getHeading().value).getGrhIndex() != 0) {
-                    drawTexture(charList[charIndex].getHead().getHead(charList[charIndex].getHeading().value),
-                            PixelOffsetX + charList[charIndex].getBody().getHeadOffset().getX(),
-                            PixelOffsetY + charList[charIndex].getBody().getHeadOffset().getY(),
-                            true, false, false, 1.0f, ambientcolor);
-
-
-                    if (charList[charIndex].getHelmet().getHead(charList[charIndex].getHeading().value).getGrhIndex() != 0) {
-                        drawTexture(charList[charIndex].getHelmet().getHead(charList[charIndex].getHeading().value),
-                                PixelOffsetX + charList[charIndex].getBody().getHeadOffset().getX(),
-                                PixelOffsetY + charList[charIndex].getBody().getHeadOffset().getY() - 34,
-                                true, false, false, 1.0f, ambientcolor);
-                    }
-
-                    if (charList[charIndex].getWeapon().getWeaponWalk(charList[charIndex].getHeading().value).getGrhIndex() != 0) {
-                        drawTexture(charList[charIndex].getWeapon().getWeaponWalk(charList[charIndex].getHeading().value),
-                                PixelOffsetX, PixelOffsetY, true, true, false, 1.0f, ambientcolor);
-                    }
-
-                    if (charList[charIndex].getShield().getShieldWalk(charList[charIndex].getHeading().value).getGrhIndex() != 0) {
-                        drawTexture(charList[charIndex].getShield().getShieldWalk(charList[charIndex].getHeading().value),
-                                PixelOffsetX, PixelOffsetY, true, true, false, 1.0f, ambientcolor);
-                    }
-
-                    if (options.isShowName()) {
-                        if (charList[charIndex].name.length() > 0) {
-
-                            if (charList[charIndex].priv == 0) {
-                                if(charList[charIndex].attackable) {
-                                    color.setRed(0.54f);
-                                    color.setGreen(0.0f);
-                                    color.setBlue(1.0f);
-                                } else {
-                                    if(charList[charIndex].criminal) {
-                                        color.setRed(1.0f);
-                                        color.setGreen(0.0f);
-                                        color.setBlue(0.0f);
-                                    } else {
-                                        color.setRed(0.0f);
-                                        color.setGreen(0.5f);
-                                        color.setBlue(1.0f);
-                                    }
-                                }
-                            } else {
-                                color.setRed(0.13f);
-                                color.setGreen(0.7f);
-                                color.setBlue(0.3f);
-                            }
-
-                            String line = charList[charIndex].name;
-                            drawText(line,
-                                    PixelOffsetX + 16 - getTextWidth(line, false) / 2,
-                                    PixelOffsetY + 30, color, NORMAL_FONT, false);
-
-
-                            line = charList[charIndex].clanName;
-                            if (!line.isEmpty()) {
-                                drawText(line,
-                                        PixelOffsetX + 16 - getTextWidth(line, false) / 2,
-                                        PixelOffsetY + 45, color, NORMAL_FONT, false);
-                            }
-                        }
-                    }
-
-                }
-            }
-
-
-        } else {
-            if (charList[charIndex].getBody().getWalk(charList[charIndex].getHeading().value).getGrhIndex() > 0) {
-                drawTexture(charList[charIndex].getBody().getWalk(charList[charIndex].getHeading().value),
-                        PixelOffsetX, PixelOffsetY, true, true, false, 1.0f, ambientcolor);
-            }
-        }
-
-        // Draw FX
-        if (charList[charIndex].fxIndex != 0) {
-            drawTexture(charList[charIndex].fX,
-                    PixelOffsetX + fxData[charList[charIndex].fxIndex].getOffsetX(),
-                    PixelOffsetY + fxData[charList[charIndex].fxIndex].getOffsetY(),
-                    true, true, true,1.0f, ambientcolor);
-
-            // Check if animation is over
-            if (!charList[charIndex].fX.isStarted())
-                charList[charIndex].setFxIndex(0);
-        }
-    }
-
-    public static int sgn(short number) {
-        if (number == 0) return 0;
-        return (number / Math.abs(number));
-    }
 }

@@ -3,8 +3,10 @@ package org.aoclient.engine.utils.inits;
 /**
  * Simula el "Type" o la estructura de MapData.
  */
+
 public final class MapData {
-    private GrhInfo[] layer = new GrhInfo[5];
+
+    private final GrhInfo[] layer = new GrhInfo[5];
     private short charIndex;
     private GrhInfo objGrh;
     private short npcIndex;
@@ -13,11 +15,11 @@ public final class MapData {
     private short trigger;
 
     public MapData() {
-        layer[1]    = new GrhInfo();
-        layer[2]    = new GrhInfo();
-        layer[3]    = new GrhInfo();
-        layer[4]    = new GrhInfo();
-        objGrh      = new GrhInfo();
+        layer[1] = new GrhInfo();
+        layer[2] = new GrhInfo();
+        layer[3] = new GrhInfo();
+        layer[4] = new GrhInfo();
+        objGrh = new GrhInfo();
     }
 
     public GrhInfo getLayer(int index) {
@@ -75,4 +77,5 @@ public final class MapData {
     public void setTrigger(int trigger) {
         this.trigger = (short) trigger;
     }
+
 }

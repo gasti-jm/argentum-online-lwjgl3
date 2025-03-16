@@ -4,44 +4,43 @@ import org.aoclient.engine.Window;
 import org.aoclient.engine.game.*;
 import org.aoclient.engine.game.models.E_KeyType;
 import org.aoclient.engine.game.models.E_Skills;
+import org.aoclient.engine.gui.ImGUISystem;
 import org.aoclient.engine.gui.forms.FCantidad;
 import org.aoclient.engine.gui.forms.FMain;
-import org.aoclient.engine.gui.ImGUISystem;
 import org.aoclient.engine.listeners.KeyListener;
 import org.aoclient.engine.listeners.MouseListener;
 import org.aoclient.engine.renderer.RGBColor;
 import org.aoclient.network.ProtocolCmdParse;
 
-import static org.aoclient.network.Protocol.*;
 import static org.aoclient.engine.game.IntervalTimer.INT_SENTRPU;
-import static org.aoclient.engine.game.models.E_KeyType.*;
-import static org.aoclient.engine.game.models.Character.*;
+import static org.aoclient.engine.game.models.Character.drawCharacter;
 import static org.aoclient.engine.game.models.E_Heading.*;
-import static org.aoclient.engine.renderer.Drawn.*;
+import static org.aoclient.engine.game.models.E_KeyType.*;
+import static org.aoclient.engine.renderer.Drawn.drawTexture;
 import static org.aoclient.engine.scenes.Camera.*;
 import static org.aoclient.engine.utils.GameData.*;
-import static org.aoclient.engine.utils.Time.*;
-import static org.lwjgl.glfw.GLFW.*;
-
+import static org.aoclient.engine.utils.Time.deltaTime;
+import static org.aoclient.engine.utils.Time.timerTicksPerFrame;
+import static org.aoclient.network.Protocol.*;
+import static org.lwjgl.glfw.GLFW.GLFW_MOUSE_BUTTON_LEFT;
+import static org.lwjgl.glfw.GLFW.GLFW_MOUSE_BUTTON_RIGHT;
 
 /**
- * Esta es la escena donde el usuario jugara.
- * Se recomienda leer el JavaDoc de la clase padre "Scene.java".
+ * Esta es la escena donde el usuario jugara. Se recomienda leer el JavaDoc de la clase padre "Scene.java".
  */
+
 public final class GameScene extends Scene {
+
+    private final IntervalTimer intervalToUpdatePos = new IntervalTimer(INT_SENTRPU);
+    RGBColor ambientColor; // color de ambiente.
     private BindKeys bindKeys;
     private User user;
     private Rain rain;
-
-    private float offSetCounterX    = 0;
-    private float offSetCounterY    = 0;
-    private float alphaCeiling      = 1.0f;
-    private boolean autoMove        = false;
-
-    RGBColor ambientColor; // color de ambiente.
+    private float offSetCounterX = 0;
+    private float offSetCounterY = 0;
+    private float alphaCeiling = 1.0f;
+    private boolean autoMove = false;
     private FMain frmMain;
-    private final IntervalTimer intervalToUpdatePos = new IntervalTimer(INT_SENTRPU);
-
     private ProtocolCmdParse protocolCmdParse;
 
     @Override
@@ -50,12 +49,12 @@ public final class GameScene extends Scene {
 
         protocolCmdParse = ProtocolCmdParse.getInstance();
 
-        canChangeTo     = SceneType.MAIN_SCENE;
-        bindKeys        = BindKeys.get();
-        user            = User.get();
-        rain            = Rain.get();
-        ambientColor    = new RGBColor(1.0f, 1.0f, 1.0f);
-        frmMain         = new FMain();
+        canChangeTo = SceneType.MAIN_SCENE;
+        bindKeys = BindKeys.get();
+        user = User.get();
+        rain = Rain.get();
+        ambientColor = new RGBColor(1.0f, 1.0f, 1.0f);
+        frmMain = new FMain();
 
         ImGUISystem.get().addFrm(frmMain);
     }
@@ -63,12 +62,12 @@ public final class GameScene extends Scene {
     @Override
     public void render() {
         // si el usuario se desconecta debe regresar al menu principal.
-        if(!user.isUserConected()) {
+        if (!user.isUserConected()) {
             frmMain.close();
             this.close();
         }
 
-        if(!visible) return;
+        if (!visible) return;
 
         intervalToUpdatePos.update();
 
@@ -94,7 +93,7 @@ public final class GameScene extends Scene {
 
         renderScreen(user.getUserPos().getX() - user.getAddToUserPos().getX(),
                 user.getUserPos().getY() - user.getAddToUserPos().getY(),
-                (int)(offSetCounterX), (int)(offSetCounterY));
+                (int) (offSetCounterX), (int) (offSetCounterY));
     }
 
     /**
@@ -103,9 +102,8 @@ public final class GameScene extends Scene {
     @Override
     public void mouseEvents() {
         // Estamos haciendo click en el render?
-        if(inGameArea()) {
+        if (inGameArea()) {
             if (MouseListener.mouseButtonClick(GLFW_MOUSE_BUTTON_LEFT)) {
-
                 if (user.getUsingSkill() == 0) {
                     writeLeftClick(getTileMouseX((int) MouseListener.getX() - POS_SCREEN_X), getTileMouseY((int) MouseListener.getY() - POS_SCREEN_Y));
                 } else {
@@ -128,9 +126,9 @@ public final class GameScene extends Scene {
         }
 
         // estamos haciendo doble click?
-        if(MouseListener.mouseButtonDoubleClick(GLFW_MOUSE_BUTTON_LEFT)) {
+        if (MouseListener.mouseButtonDoubleClick(GLFW_MOUSE_BUTTON_LEFT)) {
             user.getUserInventory().dobleClickInventory();
-        } else if(MouseListener.mouseButtonDoubleClick(GLFW_MOUSE_BUTTON_RIGHT)) {
+        } else if (MouseListener.mouseButtonDoubleClick(GLFW_MOUSE_BUTTON_RIGHT)) {
             writeDoubleClick(getTileMouseX((int) MouseListener.getX() - POS_SCREEN_X), getTileMouseY((int) MouseListener.getY() - POS_SCREEN_Y));
         }
 
@@ -141,10 +139,7 @@ public final class GameScene extends Scene {
      */
     @Override
     public void keyEvents() {
-        if (KeyListener.isKeyPressed(bindKeys.getBindedKey(E_KeyType.mKeyExitGame))) {
-            writeQuit();
-        }
-
+        if (KeyListener.isKeyPressed(bindKeys.getBindedKey(E_KeyType.mKeyExitGame))) writeQuit();
         this.checkBindedKeys();
     }
 
@@ -164,72 +159,53 @@ public final class GameScene extends Scene {
 
         this.checkWalkKeys();
 
-        if(keyPressed == null)
-            return; // ni me gasto si la tecla presionada no existe en nuestro bind.
+        if (keyPressed == null) return; // ni me gasto si la tecla presionada no existe en nuestro bind.
 
         if (KeyListener.isKeyReadyForAction(bindKeys.getBindedKey(keyPressed))) {
 
             // Para que al hablar no ejecute teclas bindeadas y solo permita cerrar nuevamente el sendText
-            if(User.get().isTalking() && keyPressed != mKeyTalk) return;
+            if (User.get().isTalking() && keyPressed != mKeyTalk) return;
 
             switch (keyPressed) {
                 case mKeyUseObject:
                     user.getUserInventory().useItem();
                     break;
-
                 case mKeyGetObject:
                     writePickUp();
                     break;
-
                 case mKeyAttack:
                     writeAttack();
                     break;
-
                 case mKeyEquipObject:
                     user.getUserInventory().equipItem();
                     break;
-
                 case mKeyAutoMove:
                     KeyListener.setLastKeyMovedPressed(0);
                     autoMove = !autoMove;
                     break;
-
                 case mKeyDropObject:
                     ImGUISystem.get().show(new FCantidad());
                     break;
-
                 case mKeyTalk:
-                    if(!ImGUISystem.get().isFormVisible(FCantidad.class.getSimpleName())) {
-                        if(User.get().isTalking()) {
+                    if (!ImGUISystem.get().isFormVisible(FCantidad.class.getSimpleName())) {
+                        if (User.get().isTalking()) {
                             // send msg
-
                             // No vamos a mandar paquetes con datos vacios.
-                            if(!frmMain.getSendText().isBlank()) {
-                                protocolCmdParse.parseUserCommand(frmMain.getSendText());
-                            }
+                            if (!frmMain.getSendText().isBlank()) protocolCmdParse.parseUserCommand(frmMain.getSendText());
                             User.get().setTalking(false);
-                        } else {
-                            User.get().setTalking(true);
-                        }
-
+                        } else User.get().setTalking(true);
                         frmMain.clearSendTxt();
                     }
                     break;
-
                 case mKeyHide:
                     writeWork(E_Skills.Ocultarse.value);
                     break;
-
                 case mKeySteal:
                     writeWork(E_Skills.Robar.value);
                     break;
-
                 case mKeyRequestRefresh:
-                    if(intervalToUpdatePos.check()) {
-                        writeRequestPositionUpdate();
-                    }
+                    if (intervalToUpdatePos.check()) writeRequestPositionUpdate();
                     break;
-
             }
         }
 
@@ -237,22 +213,19 @@ public final class GameScene extends Scene {
 
     private void checkWalkKeys() {
         // Caminata!
-        if(!user.isUserMoving()) {
-            if(!autoMove){
+        if (!user.isUserMoving()) {
+            if (!autoMove) {
                 if (!KeyListener.lastKeysMovedPressed.isEmpty()) {
-                    if (KeyListener.lastKeysMovedPressed.get(KeyListener.lastKeysMovedPressed.size() - 1) == bindKeys.getBindedKey(mKeyUp)) {
+                    if (KeyListener.lastKeysMovedPressed.get(KeyListener.lastKeysMovedPressed.size() - 1) == bindKeys.getBindedKey(mKeyUp))
                         user.moveTo(NORTH);
-                    } else if (KeyListener.lastKeysMovedPressed.get(KeyListener.lastKeysMovedPressed.size() - 1) == bindKeys.getBindedKey(mKeyDown)) {
+                    else if (KeyListener.lastKeysMovedPressed.get(KeyListener.lastKeysMovedPressed.size() - 1) == bindKeys.getBindedKey(mKeyDown))
                         user.moveTo(SOUTH);
-                    } else if (KeyListener.lastKeysMovedPressed.get(KeyListener.lastKeysMovedPressed.size() - 1) == bindKeys.getBindedKey(mKeyLeft)) {
+                    else if (KeyListener.lastKeysMovedPressed.get(KeyListener.lastKeysMovedPressed.size() - 1) == bindKeys.getBindedKey(mKeyLeft))
                         user.moveTo(WEST);
-                    } else if (KeyListener.lastKeysMovedPressed.get(KeyListener.lastKeysMovedPressed.size() - 1) == bindKeys.getBindedKey(mKeyRight)) {
+                    else if (KeyListener.lastKeysMovedPressed.get(KeyListener.lastKeysMovedPressed.size() - 1) == bindKeys.getBindedKey(mKeyRight))
                         user.moveTo(EAST);
-                    }
                 }
-            } else {
-                autoWalk();
-            }
+            } else autoWalk();
         }
     }
 
@@ -261,13 +234,20 @@ public final class GameScene extends Scene {
      */
     private void autoWalk() {
         E_KeyType keyPressed = bindKeys.getKeyPressed(KeyListener.getLastKeyMovedPressed());
-        if(keyPressed == null) return;
-
-        switch(keyPressed) {
-            case mKeyUp:        user.moveTo(NORTH);     break;
-            case mKeyDown:      user.moveTo(SOUTH);     break;
-            case mKeyLeft:      user.moveTo(WEST);      break;
-            case mKeyRight:     user.moveTo(EAST);      break;
+        if (keyPressed == null) return;
+        switch (keyPressed) {
+            case mKeyUp:
+                user.moveTo(NORTH);
+                break;
+            case mKeyDown:
+                user.moveTo(SOUTH);
+                break;
+            case mKeyLeft:
+                user.moveTo(WEST);
+                break;
+            case mKeyRight:
+                user.moveTo(EAST);
+                break;
         }
     }
 
@@ -285,10 +265,8 @@ public final class GameScene extends Scene {
         camera.setScreenY(camera.getMinYOffset() - TILE_BUFFER_SIZE);
         for (int y = camera.getMinY(); y <= camera.getMaxY(); y++) {
             camera.setScreenX(camera.getMinXOffset() - TILE_BUFFER_SIZE);
-            for(int x = camera.getMinX(); x <= camera.getMaxX(); x++) {
-
+            for (int x = camera.getMinX(); x <= camera.getMaxX(); x++) {
                 Dialogs.renderDialogs(camera, x, y, pixelOffsetX, pixelOffsetY);
-
                 camera.incrementScreenX();
             }
             camera.incrementScreenY();
@@ -304,18 +282,16 @@ public final class GameScene extends Scene {
     private void renderFirstLayer(final int pixelOffsetX, final int pixelOffsetY) {
         for (int y = camera.getScreenminY(); y <= camera.getScreenmaxY(); y++) {
             int x;
-            for(x = camera.getScreenminX(); x <= camera.getScreenmaxX(); x++) {
-
+            for (x = camera.getScreenminX(); x <= camera.getScreenmaxX(); x++) {
                 if (mapData[x][y].getLayer(1).getGrhIndex() != 0) {
                     drawTexture(mapData[x][y].getLayer(1),
                             POS_SCREEN_X + (camera.getScreenX() - 1) * TILE_PIXEL_SIZE + pixelOffsetX,
                             POS_SCREEN_Y + (camera.getScreenY() - 1) * TILE_PIXEL_SIZE + pixelOffsetY,
-                            true, true, false,1.0f, ambientColor);
+                            true, true, false, 1.0f, ambientColor);
                 }
-
                 camera.incrementScreenX();
             }
-            camera.setScreenX(camera.getScreenX() - x + camera.getScreenminX() );
+            camera.setScreenX(camera.getScreenX() - x + camera.getScreenminX());
             camera.incrementScreenY();
         }
     }
@@ -324,26 +300,22 @@ public final class GameScene extends Scene {
         camera.setScreenY(camera.getMinYOffset() - TILE_BUFFER_SIZE);
         for (int y = camera.getMinY(); y <= camera.getMaxY(); y++) {
             camera.setScreenX(camera.getMinXOffset() - TILE_BUFFER_SIZE);
-            for(int x = camera.getMinX(); x <= camera.getMaxX(); x++) {
-
+            for (int x = camera.getMinX(); x <= camera.getMaxX(); x++) {
                 if (mapData[x][y].getLayer(2).getGrhIndex() != 0) {
                     drawTexture(mapData[x][y].getLayer(2),
                             POS_SCREEN_X + camera.getScreenX() * TILE_PIXEL_SIZE + pixelOffsetX,
                             POS_SCREEN_Y + camera.getScreenY() * TILE_PIXEL_SIZE + pixelOffsetY,
-                            true, true, false,1.0f, ambientColor);
+                            true, true, false, 1.0f, ambientColor);
                 }
-
                 if (mapData[x][y].getObjGrh().getGrhIndex() != 0) {
-                    if(grhData[mapData[x][y].getObjGrh().getGrhIndex()].getPixelWidth() == TILE_PIXEL_SIZE &&
+                    if (grhData[mapData[x][y].getObjGrh().getGrhIndex()].getPixelWidth() == TILE_PIXEL_SIZE &&
                             grhData[mapData[x][y].getObjGrh().getGrhIndex()].getPixelHeight() == TILE_PIXEL_SIZE) {
-
                         drawTexture(mapData[x][y].getObjGrh(),
                                 POS_SCREEN_X + camera.getScreenX() * TILE_PIXEL_SIZE + pixelOffsetX,
                                 POS_SCREEN_Y + camera.getScreenY() * TILE_PIXEL_SIZE + pixelOffsetY,
-                                true, true, false,1.0f, ambientColor);
+                                true, true, false, 1.0f, ambientColor);
                     }
                 }
-
                 camera.incrementScreenX();
             }
             camera.incrementScreenY();
@@ -355,16 +327,16 @@ public final class GameScene extends Scene {
         camera.setScreenY(camera.getMinYOffset() - TILE_BUFFER_SIZE);
         for (int y = camera.getMinY(); y <= camera.getMaxY(); y++) {
             camera.setScreenX(camera.getMinXOffset() - TILE_BUFFER_SIZE);
-            for(int x = camera.getMinX(); x <= camera.getMaxX(); x++) {
+            for (int x = camera.getMinX(); x <= camera.getMaxX(); x++) {
 
                 if (mapData[x][y].getObjGrh().getGrhIndex() != 0) {
-                    if(grhData[mapData[x][y].getObjGrh().getGrhIndex()].getPixelWidth() != TILE_PIXEL_SIZE &&
+                    if (grhData[mapData[x][y].getObjGrh().getGrhIndex()].getPixelWidth() != TILE_PIXEL_SIZE &&
                             grhData[mapData[x][y].getObjGrh().getGrhIndex()].getPixelHeight() != TILE_PIXEL_SIZE) {
 
                         drawTexture(mapData[x][y].getObjGrh(),
                                 POS_SCREEN_X + camera.getScreenX() * TILE_PIXEL_SIZE + pixelOffsetX,
                                 POS_SCREEN_Y + camera.getScreenY() * TILE_PIXEL_SIZE + pixelOffsetY,
-                                true, true, false,1.0f, ambientColor);
+                                true, true, false, 1.0f, ambientColor);
                     }
                 }
 
@@ -411,20 +383,14 @@ public final class GameScene extends Scene {
     }
 
 
-
     /**
-     * @desc: Detecta si el usuario esta debajo del techo. Si es asi, se desvanecera
-     *        y en caso contrario re aparece.
+     * @desc: Detecta si el usuario esta debajo del techo. Si es asi, se desvanecera y en caso contrario re aparece.
      */
-    private void checkEffectCeiling(){
-        if(user.isUnderCeiling()) {
-            if (alphaCeiling > 0.0f){
-                alphaCeiling -= 0.5f * deltaTime;
-            }
+    private void checkEffectCeiling() {
+        if (user.isUnderCeiling()) {
+            if (alphaCeiling > 0.0f) alphaCeiling -= 0.5f * deltaTime;
         } else {
-            if (alphaCeiling < 1.0f){
-                alphaCeiling += 0.5f * deltaTime;
-            }
+            if (alphaCeiling < 1.0f) alphaCeiling += 0.5f * deltaTime;
         }
     }
 
@@ -432,17 +398,12 @@ public final class GameScene extends Scene {
      * @desc: Detecta si tenemos el mouse adentro del "render MainViewPic".
      */
     private boolean inGameArea() {
-        if (MouseListener.getX() < POS_SCREEN_X || MouseListener.getX() > POS_SCREEN_X + SCREEN_SIZE_X)
-            return false;
-
-        if (MouseListener.getY() < POS_SCREEN_Y || MouseListener.getY() > POS_SCREEN_Y + SCREEN_SIZE_Y)
-            return false;
-
+        if (MouseListener.getX() < POS_SCREEN_X || MouseListener.getX() > POS_SCREEN_X + SCREEN_SIZE_X) return false;
+        if (MouseListener.getY() < POS_SCREEN_Y || MouseListener.getY() > POS_SCREEN_Y + SCREEN_SIZE_Y) return false;
         return true;
     }
 
     /**
-     *
      * @param mouseX: Posicion X del mouse en la pantalla
      * @return: Devuelve la posicion en tile del eje X del mouse.
      * @desc: Se utiliza al hacer click izquierdo por el mapa, para interactuar con NPCs, etc.
@@ -452,13 +413,12 @@ public final class GameScene extends Scene {
     }
 
     /**
-     *
      * @param mouseY: Posicion X del mouse en la pantalla
      * @return: Devuelve la posicion en tile del eje Y del mouse.
      * @desc: Se utiliza al hacer click izquierdo por el mapa, para interactuar con NPCs, etc.
      */
     private byte getTileMouseY(int mouseY) {
-        return  (byte) (user.getUserPos().getY() +  mouseY / TILE_PIXEL_SIZE - HALF_WINDOW_TILE_HEIGHT);
+        return (byte) (user.getUserPos().getY() + mouseY / TILE_PIXEL_SIZE - HALF_WINDOW_TILE_HEIGHT);
     }
 
 }

@@ -6,21 +6,20 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
-import java.nio.IntBuffer;
 
 import static org.aoclient.scripts.Compressor.readResource;
 import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.stb.STBImage.*;
 
 /**
- * OpenGL guarda las texturas creadas con un id, ese id lo almacenamos para despues dibujar la textura.
- * El resto de atributos son para almacenar el tamaño de la textura.
+ * OpenGL guarda las texturas creadas con un id, ese id lo almacenamos para despues dibujar la textura. El resto de atributos son
+ * para almacenar el tamaño de la textura.
  */
+
 public class Texture {
+
     private int id;
     private int tex_width;
     private int tex_height;
@@ -29,7 +28,7 @@ public class Texture {
 
     }
 
-    public void loadTexture(Texture refTexture, String compressedFile,  String file, boolean isGUI) {
+    public void loadTexture(Texture refTexture, String compressedFile, String file, boolean isGUI) {
         ByteBuffer pixels;
         BufferedImage bi;
 
@@ -41,7 +40,6 @@ public class Texture {
             // Lee los datos del recurso desde el archivo comprimido
             byte[] resourceData = readResource("resources/" + compressedFile, file);
             InputStream is = new ByteArrayInputStream(resourceData);
-
 
             //File fil = new File(file);
             BufferedImage image = ImageIO.read(is);
@@ -58,19 +56,16 @@ public class Texture {
             byte[] data = new byte[4 * refTexture.tex_width * refTexture.tex_height];
             bi.getRaster().getDataElements(0, 0, refTexture.tex_width, refTexture.tex_height, data);
 
-            if(!isGUI) {
+            if (!isGUI) {
                 for (int j = 0; j < refTexture.tex_width * refTexture.tex_height; j++) {
                     if (data[j * 4] == 0 && data[j * 4 + 1] == 0 && data[j * 4 + 2] == 0) {
                         data[j * 4] = -1;
                         data[j * 4 + 1] = -1;
                         data[j * 4 + 2] = -1;
                         data[j * 4 + 3] = 0;
-                    } else {
-                        data[j * 4 + 3] = -1;
-                    }
+                    } else data[j * 4 + 3] = -1;
                 }
             }
-
 
             pixels = BufferUtils.createByteBuffer(data.length);
             pixels.put(data);
@@ -113,4 +108,5 @@ public class Texture {
     public int getTex_height() {
         return tex_height;
     }
+
 }

@@ -5,28 +5,27 @@ import org.aoclient.engine.game.inventory.UserInventory;
 import org.aoclient.engine.game.models.E_Heading;
 import org.aoclient.engine.game.models.Position;
 
-import static org.aoclient.network.Protocol.writeChangeHeading;
-import static org.aoclient.network.Protocol.writeWalk;
 import static org.aoclient.engine.Sound.*;
 import static org.aoclient.engine.game.models.Character.*;
 import static org.aoclient.engine.game.models.E_Heading.*;
 import static org.aoclient.engine.scenes.Camera.*;
 import static org.aoclient.engine.utils.GameData.*;
+import static org.aoclient.network.Protocol.writeChangeHeading;
+import static org.aoclient.network.Protocol.writeWalk;
 
 public final class User {
+
     private static User instance;
 
     private final UserInventory userInventory;
     private final InventorySpells inventorySpells;
-
+    private final Position userPos;
+    private final Position addToUserPos;
     private boolean underCeiling;
     private boolean userMoving;
     private boolean userNavegando;
-
     // mapa
     private short userMap;
-    private final Position userPos;
-    private final Position addToUserPos;
     private short userCharIndex;
 
     // conexion
@@ -55,10 +54,10 @@ public final class User {
     private int userMaxHAM;
     private int userMinHAM;
 
-    private String userWeaponEqpHit  = "0/0";
-    private String userArmourEqpDef  = "0/0";
-    private String userHelmEqpDef    = "0/0";
-    private String userShieldEqpDef  = "0/0";
+    private String userWeaponEqpHit = "0/0";
+    private String userArmourEqpDef = "0/0";
+    private String userHelmEqpDef = "0/0";
+    private String userShieldEqpDef = "0/0";
 
     private int userWeaponEqpSlot;
     private int userArmourEqpSlot;
@@ -82,30 +81,32 @@ public final class User {
     }
 
     /**
-     *
      * @return Mismo objeto (Patron de diseño Singleton)
      */
-    public static User get(){
-        if(instance == null) {
-            instance = new User();
-        }
-
+    public static User get() {
+        if (instance == null) instance = new User();
         return instance;
     }
 
     /**
-     *
      * @param nHeading direccion pasada por parametro
      * @desc Mueve la camara hacia una direccion.
      */
     public void moveScreen(E_Heading nHeading) {
         int x = 0, y = 0;
-
         switch (nHeading) {
-            case NORTH  : y = -1; break;
-            case EAST   : x = 1;  break;
-            case SOUTH  : y = 1;  break;
-            case WEST   : x = -1; break;
+            case NORTH:
+                y = -1;
+                break;
+            case EAST:
+                x = 1;
+                break;
+            case SOUTH:
+                y = 1;
+                break;
+            case WEST:
+                x = -1;
+                break;
         }
 
         final int tX = userPos.getX() + x;
@@ -114,18 +115,15 @@ public final class User {
         if (!(tX < minXBorder || tX > maxXBorder || tY < minYBorder || tY > maxYBorder)) {
             addToUserPos.setX(x);
             userPos.setX(tX);
-
             addToUserPos.setY(y);
             userPos.setY(tY);
-
             userMoving = true;
-
             underCeiling = checkUnderCeiling();
         }
+
     }
 
     /**
-     *
      * @desc: Checkea si estamos bajo techo segun el trigger en donde esta parado el usuario.
      */
     public boolean checkUnderCeiling() {
@@ -135,20 +133,25 @@ public final class User {
     }
 
     /**
-     *
      * @param charIndex Numero de identificador de personaje
-     * @param nHeading Direccion del personaje
-     *
+     * @param nHeading  Direccion del personaje
      * @desc Mueve el personaje segun la direccion establecida en "nHeading".
      */
     public void moveCharbyHead(short charIndex, E_Heading nHeading) {
         int addX = 0, addY = 0;
-
         switch (nHeading) {
-            case NORTH  : addY = -1;    break;
-            case EAST   : addX = 1;     break;
-            case SOUTH  : addY = 1;     break;
-            case WEST   : addX = -1;    break;
+            case NORTH:
+                addY = -1;
+                break;
+            case EAST:
+                addX = 1;
+                break;
+            case SOUTH:
+                addY = 1;
+                break;
+            case WEST:
+                addX = -1;
+                break;
         }
 
         final int x = charList[charIndex].getPos().getX();
@@ -174,15 +177,12 @@ public final class User {
         doPasosFx(charIndex);
 
         // areas viejos
-        if ((nY < minLimiteY) || (nY > maxLimiteY) || (nX < minLimiteX) || (nX > maxLimiteX)) {
-            if(charIndex != userCharIndex) {
-                eraseChar(charIndex);
-            }
-        }
+        if ((nY < minLimiteY) || (nY > maxLimiteY) || (nX < minLimiteX) || (nX > maxLimiteX))
+            if (charIndex != userCharIndex) eraseChar(charIndex);
+
     }
 
     /**
-     *
      * @desc: Actualiza las areas de vision de objetos y personajes.
      */
     public void areaChange(int x, int y) {
@@ -193,19 +193,14 @@ public final class User {
 
         for (int loopX = 1; loopX <= 100; loopX++) {
             for (int loopY = 1; loopY <= 100; loopY++) {
-
                 if ((loopY < minLimiteY) || (loopY > maxLimiteY) || (loopX < minLimiteX) || (loopX > maxLimiteX)) {
                     // Erase NPCs
-                    if(mapData[loopX][loopY].getCharIndex() > 0) {
-                        if(mapData[loopX][loopY].getCharIndex() != userCharIndex) {
+                    if (mapData[loopX][loopY].getCharIndex() > 0)
+                        if (mapData[loopX][loopY].getCharIndex() != userCharIndex)
                             eraseChar(mapData[loopX][loopY].getCharIndex());
-                        }
-                    }
-
                     // Erase Objs
                     mapData[loopX][loopY].getObjGrh().setGrhIndex(0);
                 }
-
             }
         }
 
@@ -213,14 +208,12 @@ public final class User {
     }
 
     /**
-     *
      * @param x Posicion X del usuario.
      * @param y Posicion Y del usuario.
      * @return True si se encuentra dentro del limite del mapa, false en caso contrario.
      */
     public boolean inMapBounds(int x, int y) {
-        return (x < TILE_BUFFER_SIZE || x > XMaxMapSize - TILE_BUFFER_SIZE ||
-                y < TILE_BUFFER_SIZE || y > YMaxMapSize - TILE_BUFFER_SIZE);
+        return x < TILE_BUFFER_SIZE || x > XMaxMapSize - TILE_BUFFER_SIZE || y < TILE_BUFFER_SIZE || y > YMaxMapSize - TILE_BUFFER_SIZE;
     }
 
     public boolean estaPCarea(int charIndex) {
@@ -231,53 +224,41 @@ public final class User {
     }
 
     /**
-     *
      * @param x Posicion X del usuario.
      * @param y Posicion Y del usuario.
      * @return True si el usuario puede caminar hacia cierta posicion, false caso contrario.
      */
     private boolean moveToLegalPos(int x, int y) {
         // Limite del mapa
-        if (x < minXBorder || x > maxXBorder || y < minYBorder || y > maxYBorder)
-            return false;
-
+        if (x < minXBorder || x > maxXBorder || y < minYBorder || y > maxYBorder) return false;
         // Tile Bloqueado?
-        if (mapData[x][y].getBlocked())
-            return false;
+        if (mapData[x][y].getBlocked()) return false;
 
         final int charIndex = mapData[x][y].getCharIndex();
 
         // ¿Hay un personaje?
         if (charIndex > 0) {
-            if (mapData[userPos.getX()][userPos.getY()].getBlocked()) {
-                return false;
-            }
-
-            if(charList[charIndex].getiHead() != CASPER_HEAD &&
-                    charList[charIndex].getiBody() != FRAGATA_FANTASMAL) {
+            if (mapData[userPos.getX()][userPos.getY()].getBlocked()) return false;
+            if (charList[charIndex].getiHead() != CASPER_HEAD && charList[charIndex].getiBody() != FRAGATA_FANTASMAL) {
                 return false;
             } else {
-
                 // No puedo intercambiar con un casper que este en la orilla (Lado tierra)
-                if(hayAgua(userPos.getX(), userPos.getY())) {
-                    if(!hayAgua(x, y)) return false;
+                if (hayAgua(userPos.getX(), userPos.getY())) {
+                    if (!hayAgua(x, y)) return false;
                 } else {
                     // No puedo intercambiar con un casper que este en la orilla (Lado agua)
-                    if(hayAgua(x, y)) return false;
+                    if (hayAgua(x, y)) return false;
                 }
-
                 // Los admins no pueden intercambiar pos con caspers cuando estan invisibles
-                if(charList[userCharIndex].getPriv() > 0 && charList[userCharIndex].getPriv() < 6) {
-                    if(charList[userCharIndex].isInvisible()) return false;
+                if (charList[userCharIndex].getPriv() > 0 && charList[userCharIndex].getPriv() < 6) {
+                    if (charList[userCharIndex].isInvisible()) return false;
                 }
 
             }
 
         }
 
-        if(User.get().isUserNavegando() != hayAgua(x, y))
-            return false;
-
+        if (User.get().isUserNavegando() != hayAgua(x, y)) return false;
 
         return true;
     }
@@ -290,29 +271,23 @@ public final class User {
     }
 
     /**
-     *
      * @param charIndex Numero de identificador de personaje.
-     * @param fx Numero de efecto FX.
-     * @param loops Tiempo del efecto FX.
-     *
+     * @param fx        Numero de efecto FX.
+     * @param loops     Tiempo del efecto FX.
      * @desc Establece un efecto FX en un personaje.
      */
     public void setCharacterFx(int charIndex, int fx, int loops) {
         charList[charIndex].setFxIndex(fx);
-
-        if (charList[charIndex].getFxIndex() > 0){
+        if (charList[charIndex].getFxIndex() > 0) {
             initGrh(charList[charIndex].getfX(), fxData[fx].getAnimacion(), true);
             charList[charIndex].getfX().setLoops(loops);
         }
     }
 
     /**
-     *
      * @param charIndex Numero de identificador de personaje
-     * @param nX Posicion X a actualizar
-     * @param nY Posicion Y a actualizar
-     *
-     *
+     * @param nX        Posicion X a actualizar
+     * @param nY        Posicion Y a actualizar
      * @desc Mueve el personaje segun la direccion establecida en "nX" y "nY".
      */
     public void moveCharbyPos(short charIndex, int nX, int nY) {
@@ -322,15 +297,10 @@ public final class User {
         final int addX = nX - x;
         final int addY = nY - y;
 
-        if(sgn( (short) addX) == 1) {
-            charList[charIndex].setHeading(EAST);
-        } else if(sgn( (short) addX) == -1) {
-            charList[charIndex].setHeading(WEST);
-        } else if (sgn( (short) addY) == -1) {
-            charList[charIndex].setHeading(NORTH);
-        } else if (sgn( (short) addY) == 1) {
-            charList[charIndex].setHeading(SOUTH);
-        }
+        if (sgn((short) addX) == 1) charList[charIndex].setHeading(EAST);
+        else if (sgn((short) addX) == -1) charList[charIndex].setHeading(WEST);
+        else if (sgn((short) addY) == -1) charList[charIndex].setHeading(NORTH);
+        else if (sgn((short) addY) == 1) charList[charIndex].setHeading(SOUTH);
 
         mapData[nX][nY].setCharIndex(charIndex);
         charList[charIndex].getPos().setX(nX);
@@ -342,8 +312,8 @@ public final class User {
 
         charList[charIndex].setMoving(true);
 
-        charList[charIndex].setScrollDirectionX( sgn( (short) addX));
-        charList[charIndex].setScrollDirectionY( sgn( (short) addY));
+        charList[charIndex].setScrollDirectionX(sgn((short) addX));
+        charList[charIndex].setScrollDirectionY(sgn((short) addY));
 
         /*
             'parche para que no medite cuando camina
@@ -352,71 +322,45 @@ public final class User {
             End If
          */
 
-        if(!estaPCarea(charIndex)) {
-            Dialogs.removeDialog(charIndex);
-        }
+        if (!estaPCarea(charIndex)) Dialogs.removeDialog(charIndex);
 
         // If Not EstaPCarea(CharIndex) Then Call Dialogos.RemoveDialog(CharIndex)
 
-        if ((nY < minLimiteY) || (nY > maxLimiteY) || (nX < minLimiteX) || (nX > maxLimiteX)) {
-            if(charIndex != userCharIndex) {
-                eraseChar(charIndex);
-            }
-        }
+        if ((nY < minLimiteY) || (nY > maxLimiteY) || (nX < minLimiteX) || (nX > maxLimiteX))
+            if (charIndex != userCharIndex) eraseChar(charIndex);
+
     }
 
     /**
-     *
      * @param direction
      * @desc Mueve nuestro personaje a una cierta direccion si es posible.
      */
     public void moveTo(E_Heading direction) {
-        boolean legalOk = false;
-
-        switch (direction){
-            case NORTH:
-                legalOk = moveToLegalPos(userPos.getX(), userPos.getY() - 1);
-                break;
-
-            case EAST:
-                legalOk = moveToLegalPos(userPos.getX() + 1, userPos.getY());
-                break;
-
-            case SOUTH:
-                legalOk = moveToLegalPos(userPos.getX(), userPos.getY() + 1);
-                break;
-
-            case WEST:
-                legalOk = moveToLegalPos(userPos.getX() - 1, userPos.getY());
-                break;
-        }
-
-        if (legalOk && !charList[userCharIndex].isParalizado()){
+        boolean legalOk = switch (direction) {
+            case NORTH -> moveToLegalPos(userPos.getX(), userPos.getY() - 1);
+            case EAST -> moveToLegalPos(userPos.getX() + 1, userPos.getY());
+            case SOUTH -> moveToLegalPos(userPos.getX(), userPos.getY() + 1);
+            case WEST -> moveToLegalPos(userPos.getX() - 1, userPos.getY());
+        };
+        if (legalOk && !charList[userCharIndex].isParalizado()) {
             writeWalk(direction);
             moveScreen(direction);
             moveCharbyHead(userCharIndex, direction);
+        } else if (charList[userCharIndex].getHeading() != direction) writeChangeHeading(direction);
 
-        } else {
-            if(charList[userCharIndex].getHeading() != direction) {
-                writeChangeHeading(direction);
-            }
-        }
     }
 
     /**
-     *
      * @param charIndex Numero de identificador de personaje
      * @desc Realiza sonidos de caminata segun el estado del personaje
-     *
+     * <p>
      * EN PROGRESO....
      */
     public void doPasosFx(int charIndex) {
-        if(!User.get().isUserNavegando()) {
-
+        if (!User.get().isUserNavegando()) {
             if (!charList[charIndex].isDead()
                     && estaPCarea(charIndex)
                     && (charList[charIndex].getPriv() == 0 || charList[charIndex].getPriv() > 5)) {
-
                 if (charList[charIndex].isPie()) {
                     playSound(SND_PASOS1);
                     charList[charIndex].setPie(false);
@@ -453,10 +397,6 @@ public final class User {
         this.underCeiling = underCeiling;
     }
 
-    public void setUserMap(short userMap) {
-        this.userMap = userMap;
-    }
-
     public boolean isUserConected() {
         return userConected;
     }
@@ -469,12 +409,12 @@ public final class User {
         return userCharIndex;
     }
 
-    public boolean isDead() {
-        return charList[userCharIndex].isDead();
-    }
-
     public void setUserCharIndex(short userCharIndex) {
         this.userCharIndex = userCharIndex;
+    }
+
+    public boolean isDead() {
+        return charList[userCharIndex].isDead();
     }
 
     public UserInventory getUserInventory() {
@@ -697,6 +637,10 @@ public final class User {
         return userMap;
     }
 
+    public void setUserMap(short userMap) {
+        this.userMap = userMap;
+    }
+
     public boolean isUserNavegando() {
         return userNavegando;
     }
@@ -712,4 +656,5 @@ public final class User {
     public void setUsingSkill(int usingSkill) {
         this.usingSkill = usingSkill;
     }
+
 }

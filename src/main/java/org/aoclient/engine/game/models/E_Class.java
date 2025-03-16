@@ -1,6 +1,7 @@
 package org.aoclient.engine.game.models;
 
 public enum E_Class {
+
     Mago(1),
     Clerigo(2),
     Guerrero(3),
@@ -23,4 +24,5 @@ public enum E_Class {
     public int getValue() {
         return value;
     }
+
 }

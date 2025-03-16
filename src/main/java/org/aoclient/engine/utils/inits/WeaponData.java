@@ -3,8 +3,10 @@ package org.aoclient.engine.utils.inits;
 /**
  * Simula el "Type" o la estructura de WeaponData.
  */
+
 public final class WeaponData {
-    private GrhInfo[] WeaponWalk = new GrhInfo[5];
+
+    private final GrhInfo[] WeaponWalk = new GrhInfo[5];
 
     public WeaponData() {
         WeaponWalk[1] = new GrhInfo();
@@ -27,4 +29,5 @@ public final class WeaponData {
     public void setWeaponWalk(int index, GrhInfo weaponWalk) {
         WeaponWalk[index] = weaponWalk;
     }
+
 }

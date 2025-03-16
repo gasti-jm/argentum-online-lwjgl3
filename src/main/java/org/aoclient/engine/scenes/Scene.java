@@ -3,21 +3,23 @@ package org.aoclient.engine.scenes;
 import org.aoclient.engine.renderer.RGBColor;
 
 /**
- * Scene: Clase abstracta ya que no se sabe como se va a formar cada escena. En este caso hay varias:
- *        Intro (frmCargando - frmPres), Main (frmConectar - frmCrearPersonaje), Game (frmMain).
- *
- *        Cada uno de estos va a estar formado por varias cosas y cada uno tendra su propia funcion en la
- *        escucha del mouse y teclado, dibujado, etc.
+ * Scene: Clase abstracta ya que no se sabe como se va a formar cada escena. En este caso hay varias: Intro (frmCargando -
+ * frmPres), Main (frmConectar - frmCrearPersonaje), Game (frmMain).
+ * <p>
+ * Cada uno de estos va a estar formado por varias cosas y cada uno tendra su propia funcion en la escucha del mouse y teclado,
+ * dibujado, etc.
  */
+
 public abstract class Scene {
+
     protected RGBColor background;
     protected Camera camera;
     protected boolean visible = false;
     protected SceneType canChangeTo; // posible cambio de escena.
 
     /**
-     * @desc: Inicializa la escena. No se crea un constructor ya que cada escena distinta puede estar compuesta por
-     *        distintos atributos...
+     * @desc: Inicializa la escena. No se crea un constructor ya que cada escena distinta puede estar compuesta por distintos
+     * atributos...
      */
     public void init() {
         this.visible = true;
@@ -56,4 +58,5 @@ public abstract class Scene {
     public SceneType getChangeScene() {
         return canChangeTo;
     }
+
 }

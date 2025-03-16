@@ -1,7 +1,9 @@
 package org.aoclient.engine.gui;
 
-import imgui.*;
-
+import imgui.ImFontAtlas;
+import imgui.ImFontConfig;
+import imgui.ImGui;
+import imgui.ImGuiIO;
 import imgui.callback.ImStrConsumer;
 import imgui.callback.ImStrSupplier;
 import imgui.flag.ImGuiBackendFlags;
@@ -18,8 +20,8 @@ import java.util.List;
 import static org.aoclient.engine.utils.Time.deltaTime;
 import static org.lwjgl.glfw.GLFW.*;
 
-
 public class ImGUISystem {
+
     // Unico objeto del sistema de GUI.
     private static ImGUISystem instance;
 
@@ -42,16 +44,12 @@ public class ImGUISystem {
     // arreglo de ventanas gui
     private final List<Form> frms = new ArrayList<>();
 
-
     private ImGUISystem() {
 
     }
 
     public static ImGUISystem get() {
-        if (instance == null) {
-            instance = new ImGUISystem();
-        }
-
+        if (instance == null) instance = new ImGUISystem();
         return instance;
     }
 
@@ -86,51 +84,49 @@ public class ImGUISystem {
     }
 
     private void setKeyboardMapping(ImGuiIO io) {
-        final int[] keyMap              = new int[ImGuiKey.COUNT];
+        final int[] keyMap = new int[ImGuiKey.COUNT];
 
-        keyMap[ImGuiKey.Tab]            = GLFW_KEY_TAB;
-        keyMap[ImGuiKey.LeftArrow]      = GLFW_KEY_LEFT;
-        keyMap[ImGuiKey.RightArrow]     = GLFW_KEY_RIGHT;
-        keyMap[ImGuiKey.UpArrow]        = GLFW_KEY_UP;
-        keyMap[ImGuiKey.DownArrow]      = GLFW_KEY_DOWN;
-        keyMap[ImGuiKey.PageUp]         = GLFW_KEY_PAGE_UP;
-        keyMap[ImGuiKey.PageDown]       = GLFW_KEY_PAGE_DOWN;
-        keyMap[ImGuiKey.Home]           = GLFW_KEY_HOME;
-        keyMap[ImGuiKey.End]            = GLFW_KEY_END;
-        keyMap[ImGuiKey.Insert]         = GLFW_KEY_INSERT;
-        keyMap[ImGuiKey.Delete]         = GLFW_KEY_DELETE;
-        keyMap[ImGuiKey.Backspace]      = GLFW_KEY_BACKSPACE;
-        keyMap[ImGuiKey.Space]          = GLFW_KEY_SPACE;
+        keyMap[ImGuiKey.Tab] = GLFW_KEY_TAB;
+        keyMap[ImGuiKey.LeftArrow] = GLFW_KEY_LEFT;
+        keyMap[ImGuiKey.RightArrow] = GLFW_KEY_RIGHT;
+        keyMap[ImGuiKey.UpArrow] = GLFW_KEY_UP;
+        keyMap[ImGuiKey.DownArrow] = GLFW_KEY_DOWN;
+        keyMap[ImGuiKey.PageUp] = GLFW_KEY_PAGE_UP;
+        keyMap[ImGuiKey.PageDown] = GLFW_KEY_PAGE_DOWN;
+        keyMap[ImGuiKey.Home] = GLFW_KEY_HOME;
+        keyMap[ImGuiKey.End] = GLFW_KEY_END;
+        keyMap[ImGuiKey.Insert] = GLFW_KEY_INSERT;
+        keyMap[ImGuiKey.Delete] = GLFW_KEY_DELETE;
+        keyMap[ImGuiKey.Backspace] = GLFW_KEY_BACKSPACE;
+        keyMap[ImGuiKey.Space] = GLFW_KEY_SPACE;
         //keyMap[ImGuiKey.Enter]          = GLFW_KEY_ENTER;
-        keyMap[ImGuiKey.Escape]         = GLFW_KEY_ESCAPE;
-        keyMap[ImGuiKey.KeyPadEnter]    = GLFW_KEY_KP_ENTER;
-        keyMap[ImGuiKey.A]              = GLFW_KEY_A;
-        keyMap[ImGuiKey.C]              = GLFW_KEY_C;
-        keyMap[ImGuiKey.V]              = GLFW_KEY_V;
-        keyMap[ImGuiKey.X]              = GLFW_KEY_X;
-        keyMap[ImGuiKey.Y]              = GLFW_KEY_Y;
-        keyMap[ImGuiKey.Z]              = GLFW_KEY_Z;
+        keyMap[ImGuiKey.Escape] = GLFW_KEY_ESCAPE;
+        keyMap[ImGuiKey.KeyPadEnter] = GLFW_KEY_KP_ENTER;
+        keyMap[ImGuiKey.A] = GLFW_KEY_A;
+        keyMap[ImGuiKey.C] = GLFW_KEY_C;
+        keyMap[ImGuiKey.V] = GLFW_KEY_V;
+        keyMap[ImGuiKey.X] = GLFW_KEY_X;
+        keyMap[ImGuiKey.Y] = GLFW_KEY_Y;
+        keyMap[ImGuiKey.Z] = GLFW_KEY_Z;
 
         io.setKeyMap(keyMap);
     }
 
     private void setMouseMapping() {
-        mouseCursors[ImGuiMouseCursor.Arrow]        = glfwCreateStandardCursor(GLFW_ARROW_CURSOR);
-        mouseCursors[ImGuiMouseCursor.TextInput]    = glfwCreateStandardCursor(GLFW_IBEAM_CURSOR);
-        mouseCursors[ImGuiMouseCursor.ResizeAll]    = glfwCreateStandardCursor(GLFW_ARROW_CURSOR);
-        mouseCursors[ImGuiMouseCursor.ResizeNS]     = glfwCreateStandardCursor(GLFW_VRESIZE_CURSOR);
-        mouseCursors[ImGuiMouseCursor.ResizeEW]     = glfwCreateStandardCursor(GLFW_HRESIZE_CURSOR);
-        mouseCursors[ImGuiMouseCursor.ResizeNESW]   = glfwCreateStandardCursor(GLFW_ARROW_CURSOR);
-        mouseCursors[ImGuiMouseCursor.ResizeNWSE]   = glfwCreateStandardCursor(GLFW_ARROW_CURSOR);
-        mouseCursors[ImGuiMouseCursor.Hand]         = glfwCreateStandardCursor(GLFW_HAND_CURSOR);
-        mouseCursors[ImGuiMouseCursor.NotAllowed]   = glfwCreateStandardCursor(GLFW_ARROW_CURSOR);
+        mouseCursors[ImGuiMouseCursor.Arrow] = glfwCreateStandardCursor(GLFW_ARROW_CURSOR);
+        mouseCursors[ImGuiMouseCursor.TextInput] = glfwCreateStandardCursor(GLFW_IBEAM_CURSOR);
+        mouseCursors[ImGuiMouseCursor.ResizeAll] = glfwCreateStandardCursor(GLFW_ARROW_CURSOR);
+        mouseCursors[ImGuiMouseCursor.ResizeNS] = glfwCreateStandardCursor(GLFW_VRESIZE_CURSOR);
+        mouseCursors[ImGuiMouseCursor.ResizeEW] = glfwCreateStandardCursor(GLFW_HRESIZE_CURSOR);
+        mouseCursors[ImGuiMouseCursor.ResizeNESW] = glfwCreateStandardCursor(GLFW_ARROW_CURSOR);
+        mouseCursors[ImGuiMouseCursor.ResizeNWSE] = glfwCreateStandardCursor(GLFW_ARROW_CURSOR);
+        mouseCursors[ImGuiMouseCursor.Hand] = glfwCreateStandardCursor(GLFW_HAND_CURSOR);
+        mouseCursors[ImGuiMouseCursor.NotAllowed] = glfwCreateStandardCursor(GLFW_ARROW_CURSOR);
     }
 
     private void setCallbacks(ImGuiIO io) {
         glfwSetCharCallback(Window.get().getWindow(), (w, c) -> {
-            if (c != GLFW_KEY_DELETE) {
-                io.addInputCharacter(c);
-            }
+            if (c != GLFW_KEY_DELETE) io.addInputCharacter(c);
         });
 
         io.setSetClipboardTextFn(new ImStrConsumer() {
@@ -161,7 +157,6 @@ public class ImGUISystem {
         fontConfig.setMergeMode(true);
         fontConfig.setPixelSnapH(true);
         fontConfig.setGlyphRanges(fontAtlas.getGlyphRangesCyrillic());
-
 
         // We merge font loaded from resources with the default one. Thus we will get an absent cyrillic glyphs
         //fontAtlas.addFontFromMemoryTTF(loadFromResources("basis33.ttf"), 16, fontConfig);
@@ -208,13 +203,12 @@ public class ImGUISystem {
         io.setDeltaTime(deltaTime);
 
         // ACA HAY QUE LABURAR CON LOS CURSORES.
-        if (Window.get().isCursorCrosshair()){
+        if (Window.get().isCursorCrosshair())
             glfwSetCursor(Window.get().getWindow(), glfwCreateStandardCursor(GLFW_CROSSHAIR_CURSOR));
-        } else {
+        else {
             glfwSetCursor(Window.get().getWindow(), mouseCursors[ImGui.getMouseCursor()]);
             glfwSetInputMode(Window.get().getWindow(), GLFW_CURSOR, GLFW_CURSOR_NORMAL);
         }
-
 
         // IMPORTANT!!
         // Any Dear ImGui code SHOULD go between NewFrame()/Render() methods
@@ -228,41 +222,31 @@ public class ImGUISystem {
     }
 
     private void renderFrms() {
-        for(int i = 0; i < frms.size(); i++) {
-            frms.get(i).render();
-        }
-
+        for (Form frm : frms) frm.render();
         ImGui.showDemoWindow();
     }
 
     public void show(Form frm) {
         boolean exits = false;
-
         // esta abierto?
-        for(int i = 0; i < frms.size(); i++) {
+        for (int i = 0; i < frms.size(); i++) {
             if (frms.get(i).getClass().getSimpleName().equals(frm.getClass().getSimpleName())) {
                 frms.set(i, frm); // bueno remplazamos su contenido (esto si es que tenemos un frmMessage).
                 exits = true;
                 break;
             }
         }
-
-        if (!exits) {
-            addFrm(frm);
-        }
-
+        if (!exits) addFrm(frm);
     }
 
     public boolean isFormVisible(String fromClass) {
         boolean visible = false;
-
         for (Form frm : frms) {
             if (frm.getClass().getSimpleName().equals(fromClass)) {
                 visible = true;
                 break;
             }
         }
-
         return visible;
     }
 

@@ -5,6 +5,7 @@ import imgui.ImGui;
 import static org.aoclient.engine.scenes.Camera.TILE_PIXEL_SIZE;
 
 public class NPCInventory extends Inventory {
+
     // Posicion original del picInv del frmComerciar original de AO
     private static final int FORM_POS_X = 40;
     private static final int FORM_POS_Y = 131;
@@ -25,15 +26,15 @@ public class NPCInventory extends Inventory {
         int iX = posX;
         int iY = posY;
 
-        for (int i = 0; i < slots.length; i++) {
-            if (slots[i].grhIndex > 0) {
+        for (Slot slot : slots) {
+            if (slot.grhIndex > 0) {
                 ImGui.setCursorPos(iX + 5, iY);
 
-                ImGui.image(slots[i].objTexture.getId(), 32, 32);
+                ImGui.image(slot.objTexture.getId(), 32, 32);
 
 
                 ImGui.setCursorPos(iX + 5, iY + 20);
-                ImGui.text(String.valueOf(slots[i].amount));
+                ImGui.text(String.valueOf(slot.amount));
             }
 
             // actualizamos la posicion en forma de tabla.
@@ -45,6 +46,5 @@ public class NPCInventory extends Inventory {
         }
 
     }
-
 
 }

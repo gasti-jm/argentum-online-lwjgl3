@@ -1,35 +1,30 @@
 package org.aoclient.engine.scenes;
 
-import org.aoclient.engine.Window;
 import org.aoclient.engine.game.BindKeys;
 import org.aoclient.engine.game.User;
 import org.aoclient.engine.game.models.E_KeyType;
-import org.aoclient.engine.gui.forms.FConnect;
 import org.aoclient.engine.gui.ImGUISystem;
+import org.aoclient.engine.gui.forms.FConnect;
 import org.aoclient.engine.listeners.KeyListener;
-import org.aoclient.engine.renderer.RGBColor;
 
 import static org.aoclient.engine.Engine.closeClient;
-import static org.aoclient.engine.game.models.Character.drawCharacter;
-import static org.aoclient.engine.renderer.Drawn.drawTexture;
-import static org.aoclient.engine.scenes.Camera.TILE_BUFFER_SIZE;
-import static org.aoclient.engine.scenes.Camera.TILE_PIXEL_SIZE;
-import static org.aoclient.engine.utils.GameData.mapData;
 
 /**
  * Esta es la escena donde se va a mostrar un conectar renderizado y se va a tener en cuenta el crear personaje.
- *
+ * <p>
  * Se recomienda leer el JavaDoc de la clase padre "Scene.java".
  */
+
 public final class MainScene extends Scene {
+
     private final FConnect frmConnect = new FConnect();
     private BindKeys bindKeys;
 
     @Override
     public void init() {
         super.init();
-        canChangeTo     = SceneType.GAME_SCENE;
-        bindKeys        = BindKeys.get();
+        canChangeTo = SceneType.GAME_SCENE;
+        bindKeys = BindKeys.get();
 
         ImGUISystem.get().addFrm(frmConnect);
     }
@@ -41,9 +36,7 @@ public final class MainScene extends Scene {
 
     @Override
     public void keyEvents() {
-        if (KeyListener.isKeyPressed(bindKeys.getBindedKey(E_KeyType.mKeyExitGame))) {
-            closeClient();
-        }
+        if (KeyListener.isKeyPressed(bindKeys.getBindedKey(E_KeyType.mKeyExitGame))) closeClient();
     }
 
     /**
@@ -56,7 +49,7 @@ public final class MainScene extends Scene {
 
     @Override
     public void render() {
-        if(User.get().isUserConected()) {
+        if (User.get().isUserConected()) {
             this.close();
             ImGUISystem.get().closeAllFrms();
         }

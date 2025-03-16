@@ -6,8 +6,6 @@ import imgui.flag.ImGuiWindowFlags;
 import org.aoclient.engine.Window;
 import org.aoclient.engine.gui.ImGUISystem;
 
-import javax.imageio.ImageIO;
-import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
@@ -18,7 +16,6 @@ import static org.aoclient.engine.utils.GameData.options;
 public class FOptions extends Form {
 
     public FOptions() {
-
         try {
             this.backgroundImage = loadTexture("VentanaOpciones");
         } catch (IOException e) {
@@ -35,42 +32,21 @@ public class FOptions extends Form {
         ImGui.separator();
 
         if (ImGui.checkbox("Pantalla Completa", options.isFullscreen())) {
-            if(options.isFullscreen()) {
-                options.setFullscreen(false);
-            } else {
-                options.setFullscreen(true);
-            }
-
+            options.setFullscreen(!options.isFullscreen());
             Window.get().toggleWindow();
         }
 
         if (ImGui.checkbox("Sincronizacion Vertical", options.isVsync())) {
-            if(options.isVsync()) {
-                options.setVsync(false);
-            } else {
-                options.setVsync(true);
-            }
-
+            options.setVsync(!options.isVsync());
             Window.get().toggleWindow();
         }
 
         ImGui.separator();
 
-        if (ImGui.checkbox("Musica", options.isMusic())) {
-            if(options.isMusic()) {
-                options.setMusic(false);
-            } else {
-                options.setMusic(true);
-            }
-        }
+        if (ImGui.checkbox("Musica", options.isMusic())) options.setMusic(!options.isMusic());
 
-        if (ImGui.checkbox("Audio", options.isSound())) {
-            if(options.isSound()) {
-                options.setSound(false);
-            } else {
-                options.setSound(true);
-            }
-        }
+        if (ImGui.checkbox("Audio", options.isSound())) options.setSound(!options.isSound());
+
 
         this.drawButtons();
 
@@ -79,55 +55,40 @@ public class FOptions extends Form {
 
     private void drawButtons() {
         ImGui.setCursorPos(6, 344);
-        if(ImGui.button("Configurar Teclas", 170, 20)) {
-            playSound(SND_CLICK);
-        }
+        if (ImGui.button("Configurar Teclas", 170, 20)) playSound(SND_CLICK);
 
         ImGui.setCursorPos(6, 368);
-        if(ImGui.button("Mapa", 170, 20)) {
+        if (ImGui.button("Mapa", 170, 20)) {
             playSound(SND_CLICK);
             ImGUISystem.get().show(new FMapa());
         }
 
         ImGui.setCursorPos(6, 392);
-        if(ImGui.button("Manual", 170, 20)) {
-            playSound(SND_CLICK);
-        }
+        if (ImGui.button("Manual", 170, 20)) playSound(SND_CLICK);
 
         ImGui.setCursorPos(6, 416);
-        if(ImGui.button("Soporte", 170, 20)) {
-            playSound(SND_CLICK);
-        }
-
-
-
+        if (ImGui.button("Soporte", 170, 20)) playSound(SND_CLICK);
 
         ImGui.setCursorPos(180, 344);
-        if(ImGui.button("Mensajes Personalizados", 170, 20)) {
-            playSound(SND_CLICK);
-        }
+        if (ImGui.button("Mensajes Personalizados", 170, 20)) playSound(SND_CLICK);
 
         ImGui.setCursorPos(180, 368);
-        if(ImGui.button(new String("Cambiar Contraseña".getBytes(), StandardCharsets.UTF_8), 170, 20)) {
+        if (ImGui.button(new String("Cambiar Contraseña".getBytes(), StandardCharsets.UTF_8), 170, 20)) {
             playSound(SND_CLICK);
             ImGUISystem.get().show(new FNewPassword());
         }
 
         ImGui.setCursorPos(180, 392);
-        if(ImGui.button("Radio", 170, 20)) {
-            playSound(SND_CLICK);
-        }
+        if (ImGui.button("Radio", 170, 20)) playSound(SND_CLICK);
 
         ImGui.setCursorPos(180, 416);
-        if(ImGui.button("Tutorial", 170, 20)) {
-            playSound(SND_CLICK);
-        }
-
+        if (ImGui.button("Tutorial", 170, 20)) playSound(SND_CLICK);
 
         ImGui.setCursorPos(134, 440);
-        if(ImGui.button("Salir", 170, 20)) {
+        if (ImGui.button("Salir", 170, 20)) {
             options.saveOptions();
             this.close();
         }
     }
+
 }

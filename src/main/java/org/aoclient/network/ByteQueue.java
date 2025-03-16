@@ -13,7 +13,9 @@ import static org.aoclient.network.Protocol.lastPacket;
 /**
  * Aca es donde se gestiona toda la cola de bytes que entran y salen de nuestro cliente.
  */
+
 public class ByteQueue {
+
     private static final int DATA_BUFFER = 10240;
 
     private byte[] data;
@@ -56,23 +58,16 @@ public class ByteQueue {
     }
 
     private int writeData(byte[] buf, int dataLength) {
-        if (queueCapacity - queueLength - dataLength < 0) {
-            throw new RuntimeException("Not enough space");
-        }
-
+        if (queueCapacity - queueLength - dataLength < 0) throw new RuntimeException("Not enough space");
         //copyMemory(data, buf, dataLength);
         System.arraycopy(buf, 0, data, queueLength, dataLength);
-
         queueLength += dataLength;
         return dataLength;
     }
 
     public int readData(byte[] buf, int dataLength) {
         // Check if we can read the number of bytes requested
-        if (dataLength > queueLength) {
-            throw new RuntimeException("Not enough data");
-        }
-
+        if (dataLength > queueLength) throw new RuntimeException("Not enough data");
         // Copy data to buffer
         System.arraycopy(data, 0, buf, 0, dataLength);
         return dataLength;
@@ -80,17 +75,13 @@ public class ByteQueue {
 
     private int removeData(int dataLength) {
         int removedData = min(dataLength, queueLength);
-
-        if (removedData != queueCapacity) {
-            System.arraycopy(data, removedData, data, 0, queueLength - removedData);
-        }
-
+        if (removedData != queueCapacity) System.arraycopy(data, removedData, data, 0, queueLength - removedData);
         queueLength -= removedData;
         return removedData;
     }
 
     public int writeByte(int value) {
-        byte[] buf = { (byte) value };
+        byte[] buf = {(byte) value};
         return writeData(buf, 1);
     }
 
@@ -137,7 +128,6 @@ public class ByteQueue {
     public int writeASCIIString(String value) {
         byte[] valueBytes = value.getBytes();
         byte[] buf = new byte[value.length() + 2];
-
         ByteBuffer.wrap(buf).put(0, (byte) value.length());
         //buf[0] = (byte) value.length();
         System.arraycopy(valueBytes, 0, buf, 2, value.length());
@@ -147,19 +137,14 @@ public class ByteQueue {
     public int writeUnicodeString(String value) {
         byte[] valueBytes = value.getBytes();
         byte[] buf = new byte[value.length() + 2];
-
         buf[0] = (byte) value.length();
         System.arraycopy(valueBytes, 0, buf, 2, value.length());
-
         return writeData(buf, value.length() + 2);
     }
 
     public int writeBlock(byte[] value, int length) {
         // Prevent from copying memory outside the array
-        if (length > value.length || length < 0) {
-            length = value.length;
-        }
-
+        if (length > value.length || length < 0) length = value.length;
         return writeData(value, length);
     }
 
@@ -198,37 +183,26 @@ public class ByteQueue {
             byte[] buf = new byte[length];
             removeData(readData(buf, length));
             return buf;
-        } else {
-            throw new RuntimeException("Not enough data");
-        }
+        } else throw new RuntimeException("Not enough data");
     }
 
     public String readUnicodeStringFixed(int length) {
-        if (length <= 0) {
-            return "";
-        }
-
+        if (length <= 0) return "";
         if (queueLength >= length * 2) {
             byte[] buf = new byte[length * 2];
             removeData(readData(buf, length * 2));
-
             return new String(buf, StandardCharsets.UTF_16LE);
-        } else {
-            throw new RuntimeException("Not enough data");
-        }
+        } else throw new RuntimeException("Not enough data");
     }
 
     public String readASCIIString() {
         byte[] buf = new byte[2];
         short length = 0;
-
         if (queueLength > 1) {
             readData(buf, 2);
             length = ByteBuffer.wrap(buf).order(ByteOrder.LITTLE_ENDIAN).getShort();
-
             if (queueLength >= length + 2) {
                 removeData(2);
-
                 if (length > 0) {
                     byte[] buf2 = new byte[length];
                     removeData(readData(buf2, length));
@@ -238,41 +212,29 @@ public class ByteQueue {
                         throw new RuntimeException(e);
                     }
                 }
-            } else {
-                throw new RuntimeException("Not enough data");
-            }
-        } else {
-            throw new RuntimeException("Not enough data");
-        }
-
+            } else throw new RuntimeException("Not enough data");
+        } else throw new RuntimeException("Not enough data");
         return "";
     }
 
     public String readUnicodeString() {
         byte[] buf = new byte[2];
         int length;
-
         if (queueLength > 1) {
             removeData(readData(buf, 2));
             length = ByteBuffer.wrap(buf).getShort();
-
             if (queueLength >= length * 2 + 2) {
                 removeData(2);
                 byte[] buf2 = new byte[length * 2];
                 removeData(readData(buf2, length * 2));
                 return new String(buf2, StandardCharsets.UTF_16LE);
-            } else {
-                throw new RuntimeException("Not enough data");
-            }
+            } else throw new RuntimeException("Not enough data");
         }
-
         throw new RuntimeException("Not enough data");
     }
 
     public long readBlock(byte[] block, long dataLength) {
-        if (dataLength > 0) {
-            return removeData(readData(block, (int) dataLength));
-        }
+        if (dataLength > 0) return removeData(readData(block, (int) dataLength));
         return 0;
     }
 
@@ -313,31 +275,21 @@ public class ByteQueue {
     }
 
     public String peekASCIIStringFixed(int length) {
-        if (length <= 0) {
-            return "";
-        }
-
+        if (length <= 0) return "";
         if (queueLength >= length) {
             byte[] buf = new byte[length];
             readData(buf, length);
             return new String(buf, StandardCharsets.UTF_8);
-        } else {
-            throw new RuntimeException("Not enough data");
-        }
+        } else throw new RuntimeException("Not enough data");
     }
 
     public String peekUnicodeStringFixed(int length) {
-        if (length <= 0) {
-            return "";
-        }
-
+        if (length <= 0) return "";
         if (queueLength >= length * 2) {
             byte[] buf = new byte[length * 2];
             readData(buf, length * 2);
             return new String(buf, StandardCharsets.UTF_16LE);
-        } else {
-            throw new RuntimeException("Not enough data");
-        }
+        } else throw new RuntimeException("Not enough data");
     }
 
     public String peekASCIIString() {
@@ -389,10 +341,7 @@ public class ByteQueue {
 
     private int peekBlock(byte[] block, int dataLength) {
         // Read the data
-        if(dataLength > 0) {
-            return readData(block, dataLength);
-        }
-
+        if (dataLength > 0) return readData(block, dataLength);
         return 0;
     }
 
@@ -409,9 +358,7 @@ public class ByteQueue {
         queueCapacity = value;
 
         // All extra data is lost
-        if (queueLength > value) {
-            queueLength = value;
-        }
+        if (queueLength > value) queueLength = value;
 
         // Resize the queue
         byte[] newData = new byte[queueCapacity];
@@ -420,9 +367,8 @@ public class ByteQueue {
     }
 
     /**
-     *
-     * Revisa la cantidad de bytes que tiene que leer de un paquete
-     * en caso de que no coincida la cantidad se presentara un error.
+     * Revisa la cantidad de bytes que tiene que leer de un paquete en caso de que no coincida la cantidad se presentara un
+     * error.
      */
     public boolean checkPacketData(int bytes) {
         if (this.queueLength < bytes) {
@@ -434,11 +380,10 @@ public class ByteQueue {
     }
 
     private void disconnectByMistake(final String typeError) {
-        final String msgErr = "Error al leer datos del servidor, intente actualizar su cliente o solicitar soporte al sitio oficial. Codigo de error: "+ typeError +" packet #" + lastPacket;
+        final String msgErr = "Error al leer datos del servidor, intente actualizar su cliente o solicitar soporte al sitio oficial. Codigo de error: " + typeError + " packet #" + lastPacket;
         ImGUISystem.get().show(new FMessage(msgErr));
         //System.out.println(msgErr);
         SocketConnection.get().disconnect();
-
 
         // reseteamos nuestra cola de bytes para que termine la recursividad de lectura de paquetes.
         data = new byte[DATA_BUFFER];
@@ -446,5 +391,6 @@ public class ByteQueue {
         queueLength = 0;
 
     }
+
 }
 

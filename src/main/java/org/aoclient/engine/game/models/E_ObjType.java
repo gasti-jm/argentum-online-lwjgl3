@@ -1,6 +1,7 @@
 package org.aoclient.engine.game.models;
 
 public enum E_ObjType {
+
     otUseOnce(1),
     otWeapon(2, true),
     otArmor(3, true),
@@ -53,4 +54,5 @@ public enum E_ObjType {
         this.value = value;
         this.equippable = false;
     }
+
 }

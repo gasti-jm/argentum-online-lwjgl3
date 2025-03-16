@@ -3,17 +3,16 @@ package org.aoclient.engine.utils;
 import static org.lwjgl.glfw.GLFW.glfwGetTime;
 
 public final class Time {
+
     // Timers del juego
     private static final int ENGINE_BASE_SPEED = 18;
     public static float timerTicksPerFrame;
-
-    private static float timerFPS = 1.0f; // 1 seg
-    private static int contFPS = 0;
     public static int FPS;
-
     public static float beginTime;
     public static float endTime;
     public static float deltaTime;
+    private static float timerFPS = 1.0f; // 1 seg
+    private static int contFPS = 0;
 
     /**
      * @desc: Inicializamos las variables necesarias para calcular el tiempo
@@ -46,8 +45,8 @@ public final class Time {
             FPS = contFPS;
             contFPS = 0;
         }
-
         contFPS++;
         timerFPS -= deltaTime;
     }
+
 }

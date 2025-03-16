@@ -3,8 +3,10 @@ package org.aoclient.engine.utils.inits;
 /**
  * Simula el "Type" o la estructura de ShieldData.
  */
+
 public final class ShieldData {
-    private GrhInfo[] shieldWalk = new GrhInfo[5];
+
+    private final GrhInfo[] shieldWalk = new GrhInfo[5];
 
     public ShieldData() {
         shieldWalk[1] = new GrhInfo();
@@ -27,4 +29,5 @@ public final class ShieldData {
     public void setShieldWalk(int index, GrhInfo shieldWalk) {
         this.shieldWalk[index] = shieldWalk;
     }
+
 }

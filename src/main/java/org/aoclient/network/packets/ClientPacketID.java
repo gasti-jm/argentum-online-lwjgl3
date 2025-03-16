@@ -1,6 +1,7 @@
 package org.aoclient.network.packets;
 
 public enum ClientPacketID {
+
     LoginExistingChar,       //OLOGIN
     ThrowDices,              //TIRDAD
     LoginNewChar,            //NLOGIN
@@ -131,4 +132,5 @@ public enum ClientPacketID {
     ShareNpc,                ///COMPARTIRNPC
     StopSharingNpc,          ///NOCOMPARTIRNPC
     Consulta
+
 }

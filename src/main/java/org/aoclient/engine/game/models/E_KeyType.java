@@ -1,6 +1,7 @@
 package org.aoclient.engine.game.models;
 
 public enum E_KeyType {
+
     mKeyUp,
     mKeyDown,
     mKeyLeft,
@@ -29,4 +30,5 @@ public enum E_KeyType {
     mKeyWorkMacro,
     mKeyAutoMove,
     mKeyExitGame
+
 }

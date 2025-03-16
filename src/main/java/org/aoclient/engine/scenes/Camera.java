@@ -2,13 +2,15 @@ package org.aoclient.engine.scenes;
 
 /**
  * Aqui es donde se van guardar ciertas variables relacionadas con el campo de vision del juego.
- *
- * Tenemos: La distancia de dibujado, el tamaño del render del frmMain, el tamaño del tile (32x32), los bordes del mapa,
- *          Despues tenemos la funcion de update que actualiza las variables de la distancia del dibujado. Esto es segun
- *          la posicion de donde este parado el usuario. Tambien sirve para MainScene para su "conectar renderizado" y
- *          por ultimo, el resto de funciones son getters y setters que pueden ser leidos en el resto del programa.
+ * <p>
+ * Tenemos: La distancia de dibujado, el tamaño del render del frmMain, el tamaño del tile (32x32), los bordes del mapa, Despues
+ * tenemos la funcion de update que actualiza las variables de la distancia del dibujado. Esto es segun la posicion de donde este
+ * parado el usuario. Tambien sirve para MainScene para su "conectar renderizado" y por ultimo, el resto de funciones son getters
+ * y setters que pueden ser leidos en el resto del programa.
  */
+
 public final class Camera {
+
     public static final int SCREEN_SIZE_X = 546;
     public static final int SCREEN_SIZE_Y = 416;
     public static final int POS_SCREEN_X = 11; // 11
@@ -26,7 +28,11 @@ public final class Camera {
     // Tiles visibles segun la pantalla
     public static final int HALF_WINDOW_TILE_WIDTH = (SCREEN_SIZE_X / TILE_PIXEL_SIZE) / 2;
     public static final int HALF_WINDOW_TILE_HEIGHT = (SCREEN_SIZE_Y / TILE_PIXEL_SIZE) / 2;
-
+    // limites del mapa
+    public static final int minXBorder = XMinMapSize + ((SCREEN_SIZE_X / TILE_PIXEL_SIZE) / 2);
+    public static final int maxXBorder = XMaxMapSize - ((SCREEN_SIZE_X / TILE_PIXEL_SIZE) / 2);
+    public static final int minYBorder = YMinMapSize + ((SCREEN_SIZE_Y / TILE_PIXEL_SIZE) / 2);
+    public static final int maxYBorder = YMaxMapSize - ((SCREEN_SIZE_Y / TILE_PIXEL_SIZE) / 2);
     private int screenminY, screenmaxY;
     private int screenminX, screenmaxX;
     private int minY, maxY;
@@ -34,24 +40,16 @@ public final class Camera {
     private int screenX, screenY;
     private int minXOffset, minYOffset;
 
-    // limites del mapa
-    public static final int minXBorder = XMinMapSize + ( (SCREEN_SIZE_X / TILE_PIXEL_SIZE) / 2);
-    public static final int maxXBorder = XMaxMapSize - ( (SCREEN_SIZE_X / TILE_PIXEL_SIZE) / 2);
-    public static final int minYBorder = YMinMapSize + ( (SCREEN_SIZE_Y / TILE_PIXEL_SIZE) / 2);
-    public static final int maxYBorder = YMaxMapSize - ( (SCREEN_SIZE_Y / TILE_PIXEL_SIZE) / 2);
-
     public Camera() {
 
     }
 
     /**
-     *
      * @param tileX: Posicion X donde este parado nuestro usuario.
      * @param tileY: Posicion Y donde este parado nuestro usuario.
-     *
-     * @desc: Esta es toda la logica que se encontraba al principio del "RenderScreen", permite actualizar la distancia
-     *        de dibujado segun la posicion en la que se encuentre el usuario. Esto sirve para el recorrido de la matriz
-     *        del MapData, cada uno tiene distinto rango segun la capa que se va a dibujar.
+     * @desc: Esta es toda la logica que se encontraba al principio del "RenderScreen", permite actualizar la distancia de
+     * dibujado segun la posicion en la que se encuentre el usuario. Esto sirve para el recorrido de la matriz del MapData, cada
+     * uno tiene distinto rango segun la capa que se va a dibujar.
      */
     public void update(int tileX, int tileY) {
         screenX = 0;
@@ -86,18 +84,16 @@ public final class Camera {
 
         if (maxX > XMaxMapSize) maxX = XMaxMapSize;
 
-        if (screenminY > YMinMapSize) {
-            screenminY--;
-        } else {
+        if (screenminY > YMinMapSize) screenminY--;
+        else {
             screenminY = 1;
             screenY = 1;
         }
 
         if (screenmaxY < YMaxMapSize) screenmaxY++;
 
-        if (screenminX > XMinMapSize) {
-            screenminX--;
-        } else {
+        if (screenminX > XMinMapSize) screenminX--;
+        else {
             screenminX = 1;
             screenX = 1;
         }
@@ -173,16 +169,16 @@ public final class Camera {
         return screenX;
     }
 
-    public void incrementScreenX(){
+    public void setScreenX(int screenX) {
+        this.screenX = screenX;
+    }
+
+    public void incrementScreenX() {
         this.screenX++;
     }
 
-    public void incrementScreenY(){
+    public void incrementScreenY() {
         this.screenY++;
-    }
-
-    public void setScreenX(int screenX) {
-        this.screenX = screenX;
     }
 
     public int getScreenY() {
