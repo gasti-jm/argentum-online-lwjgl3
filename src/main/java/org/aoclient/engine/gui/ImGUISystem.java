@@ -222,7 +222,8 @@ public class ImGUISystem {
     }
 
     private void renderFrms() {
-        for (Form frm : frms) frm.render();
+        for (int i = 0; i < frms.size(); i++)
+            frms.get(i).render();
         ImGui.showDemoWindow();
     }
 
