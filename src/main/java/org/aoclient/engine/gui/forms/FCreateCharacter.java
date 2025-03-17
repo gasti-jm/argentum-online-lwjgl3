@@ -31,6 +31,28 @@ import static org.aoclient.engine.utils.GameData.*;
 import static org.aoclient.network.Protocol.writeLoginNewChar;
 import static org.aoclient.network.Protocol.writeThrowDices;
 
+/**
+ * Formulario para la creacion de nuevos personajes.
+ * <p>
+ * La clase {@code FCreateCharacter} implementa la interfaz grafica que permite a los usuarios crear un nuevo personaje. Esta
+ * pantalla proporciona todas las opciones necesarias para personalizar completamente un personaje antes de ingresar al mundo.
+ * <p>
+ * El formulario ofrece las siguientes funcionalidades principales:
+ * <ul>
+ * <li>Campos para ingresar datos de cuenta (nombre, contraseña, correo electronico)
+ * <li>Selectores para elegir raza, clase, genero y ciudad de origen
+ * <li>Visualizacion en tiempo real del personaje con la apariencia seleccionada
+ * <li>Sistema de navegacion para cambiar entre diferentes cabezas disponibles
+ * <li>Control para cambiar la direccion de visualizacion del personaje
+ * <li>Boton para "tirar dados" y generar atributos de personaje aleatorios
+ * <li>Validaciones de datos y envio de informacion al servidor
+ * </ul>
+ * <p>
+ * Esta clase maneja tanto la presentacion visual de las opciones como la logica de validacion y la comunicacion con el servidor
+ * para registrar el nuevo personaje, permitiendo a los nuevos jugadores personalizar su experiencia de juego desde el primer
+ * momento.
+ */
+
 public final class FCreateCharacter extends Form {
 
     // Necesito hacer esto para dibujar despues el cuerpo y cabeza por encima de la interfaz

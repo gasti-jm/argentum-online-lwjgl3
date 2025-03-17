@@ -13,6 +13,20 @@ import static org.aoclient.engine.Sound.SND_CLICK;
 import static org.aoclient.engine.Sound.playSound;
 import static org.aoclient.engine.utils.GameData.options;
 
+/**
+ * <p>
+ * Proporciona una interfaz grafica completa para que el usuario pueda ver y modificar las diferentes opciones de configuracion.
+ * Permite gestionar ajustes como la pantalla completa, sincronizacion vertical, activacion/desactivacion de musica y sonidos.
+ * <p>
+ * Incluye tambien una serie de botones que dan acceso a otras funcionalidades relacionadas con la configuracion, como la
+ * configuracion de teclas, visualizacion del mapa, acceso al manual, soporte, mensajes personalizados, cambio de contrasena,
+ * radio y tutorial.
+ * <p>
+ * El formulario se encarga de aplicar los cambios de configuracion inmediatamente cuando el usuario modifica las opciones, y
+ * guarda los ajustes en un archivo de configuracion cuando se cierra. Mantiene una interfaz cohesiva y uniforme con el resto de
+ * elementos.
+ */
+
 public class FOptions extends Form {
 
     public FOptions() {

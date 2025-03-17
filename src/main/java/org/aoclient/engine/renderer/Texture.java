@@ -14,8 +14,14 @@ import static org.aoclient.scripts.Compressor.readResource;
 import static org.lwjgl.opengl.GL11.*;
 
 /**
- * OpenGL guarda las texturas creadas con un id, ese id lo almacenamos para despues dibujar la textura. El resto de atributos son
- * para almacenar el tamaño de la textura.
+ * La clase {@code Texture} representa una textura en OpenGL para el renderizado grafico.
+ * <p>
+ * OpenGL guarda las texturas creadas con un identificador numerico (ID), que esta clase almacena junto con informacion sobre el
+ * tamaño de la textura. Proporciona funcionalidad para cargar texturas desde archivos comprimidos, y metodos para vincular y
+ * desvincular texturas durante el proceso de renderizado.
+ * <p>
+ * Esta clase es fundamental en el sistema de renderizado, ya que permite que las texturas sean cargadas en memoria grafica y se
+ * puedan dibujar en pantalla de manera eficiente a traves de OpenGL.
  */
 
 public class Texture {

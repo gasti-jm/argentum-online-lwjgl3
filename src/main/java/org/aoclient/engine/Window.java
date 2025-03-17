@@ -25,8 +25,20 @@ import static org.lwjgl.system.MemoryStack.stackPush;
 import static org.lwjgl.system.MemoryUtil.NULL;
 
 /**
- * Esta es la clase de nuestra Ventana GLFW, donde inicializa una nueva ventana y inicializa y crea nuestro contexto de OpenGL y
- * OpenAL.
+ * Clase encargada de gestionar la ventana principal del juego y sus contextos graficos.
+ * <p>
+ * Esta clase implementa el patron singleton para proporcionar una unica instancia que maneja la ventana GLFW del juego,
+ * inicializando y administrando tanto el contexto grafico (OpenGL) como el de audio (OpenAL).
+ * <p>
+ * Se encarga de configurar las propiedades de la ventana como resolucion, modo de pantalla completa, sincronizacion vertical, asi
+ * como de establecer los callbacks para eventos del teclado y raton.
+ * <p>
+ * Proporciona funcionalidades para alternar entre modo ventana y pantalla completa, minimizar la ventana, y verificar su estado
+ * actual. Al cerrar la aplicacion, esta clase se encarga de liberar correctamente todos los recursos asociados a los contextos de
+ * OpenGL y OpenAL.
+ * <p>
+ * La clase mantiene las dimensiones constantes de la ventana (800x600) y gestiona el posicionamiento centrado en la pantalla del
+ * usuario.
  */
 
 public final class Window {

@@ -8,6 +8,17 @@ import java.nio.charset.StandardCharsets;
 
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_ENTER;
 
+/**
+ * Formulario para mostrar mensajes informativos.
+ * <p>
+ * Esta clase implementa un cuadro de dialogo simple que muestra un mensaje al usuario y proporciona un boton "Aceptar" para
+ * cerrarlo. El mensaje se muestra con formato de texto ajustado para facilitar su lectura.
+ * <p>
+ * {@code FMessage} puede ser utilizado para notificaciones del sistema, mensajes de error, confirmaciones y cualquier
+ * comunicacion importante que requiera la atencion del usuario. El cuadro de dialogo se puede cerrar tanto con el boton "Aceptar"
+ * como presionando la tecla Enter.
+ */
+
 public final class FMessage extends Form {
 
     private final String txtMessage;

@@ -10,7 +10,27 @@ import static org.aoclient.engine.utils.GameData.*;
 import static org.aoclient.engine.utils.Time.timerTicksPerFrame;
 
 /**
- * Clase para un objeto personaje.
+ * Clase que representa a un personaje dentro del mundo de Argentum Online.
+ * <p>
+ * Esta clase implementa toda la funcionalidad relacionada con los personajes, incluyendo jugadores controlados por usuarios, NPCs
+ * y criaturas.
+ * <p>
+ * Gestiona los siguientes aspectos:
+ * <ul>
+ * <li>Atributos fisicos (cuerpo, cabeza, armas, escudos, cascos)
+ * <li>Estados del personaje (vida, invisibilidad, paralisis, etc.)
+ * <li>Posicionamiento y movimiento en el mundo
+ * <li>Renderizado grafico y animaciones
+ * <li>Efectos visuales asociados al personaje
+ * <li>Dialogos y mensajes sobre la cabeza
+ * <li>Faccion, clan y nombre del personaje
+ * </ul>
+ * <p>
+ * La clase contiene numerosas constantes que definen los rangos de indices de cabezas y cuerpos para diferentes razas y generos,
+ * asi como metodos estaticos para operaciones como crear, eliminar o redibujar personajes en el mapa.
+ * <p>
+ * Character es una pieza central del motor grafico, gestionando tanto la representacion visual como la logica de estado de todas
+ * las entidades animadas que pueblan el mundo.
  */
 
 public final class Character {

@@ -10,6 +10,17 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Clase que implementa una consola de texto para mostrar mensajes al usuario.
+ * <p>
+ * La consola mantiene un historial de mensajes con un limite maximo, eliminando automaticamente los mas antiguos cuando se
+ * alcanza dicho limite. Permite personalizar los mensajes con diferentes colores y estilos para categorizar o resaltar la
+ * informacion mostrada al jugador.
+ * <p>
+ * Esta consola es fundamental para la comunicacion unidireccional del sistema hacia el jugador, mostrando eventos importantes,
+ * resultados de acciones, mensajes del servidor y otros datos relevantes durante la experiencia de juego.
+ */
+
 public class Console {
 
     private static final int MAX_SIZE_DATA = 500;

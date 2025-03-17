@@ -1,5 +1,37 @@
 package org.aoclient.network.packets;
 
+import org.aoclient.network.Protocol;
+
+/**
+ * <p>
+ * Enumeracion que define todos los identificadores de paquetes enviados por el servidor al cliente en el protocolo de
+ * comunicacion.
+ * <p>
+ * {@code ServerPacketID} contiene constantes para cada tipo de mensaje que el servidor puede enviar al cliente, permitiendo una
+ * identificacion clara y tipada de los paquetes durante el procesamiento de datos recibidos. Cada valor del enumerador
+ * corresponde a un tipo especifico de operacion o informacion que el servidor transmite.
+ * <p>
+ * Estos identificadores se utilizan en el metodo {@link Protocol#handleIncomingData() handleIncomingData()} para determinar el
+ * tipo de paquete recibido y dirigirlo al manejador correspondiente. La estructura del enumerador refleja todas las posibles
+ * interacciones iniciadas por el servidor, como actualizaciones de estado, notificaciones de eventos, respuestas a solicitudes
+ * del cliente y cambios en el entorno de juego.
+ * <p>
+ * La enumeracion incluye paquetes para funciones como:
+ * <ul>
+ * <li>Gestion de conexion y autenticacion
+ * <li>Actualizacion de estadisticas del personaje
+ * <li>Actualizacion del mundo y sus objetos
+ * <li>Sistema de comercio y economia
+ * <li>Sistema de combate
+ * <li>Comunicacion entre jugadores
+ * <li>Funcionalidades de clanes y grupos
+ * <li>Comandos administrativos
+ * </ul>
+ * <p>
+ * Cada miembro del enum debe mantener la misma posicion ordinal que su correspondiente en el servidor para garantizar la correcta
+ * interpretacion de los paquetes.
+ */
+
 public enum ServerPacketID {
 
     logged,                  // LOGGED

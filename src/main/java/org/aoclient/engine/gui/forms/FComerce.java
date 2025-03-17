@@ -9,6 +9,26 @@ import java.io.IOException;
 
 import static org.aoclient.network.Protocol.writeCommerceEnd;
 
+/**
+ * Formulario de comercio con NPCs.
+ * <p>
+ * La clase {@code FComerce} implementa la interfaz grafica que permite a los jugadores interactuar comercialmente con los
+ * diferentes NPCs mercaderes presentes en el mundo. Esta ventana se abre cuando el jugador inicia una transaccion comercial con
+ * un vendedor.
+ * <p>
+ * El formulario proporciona las siguientes funcionalidades:
+ * <ul>
+ * <li>Visualizacion de los objetos disponibles en el inventario del NPC
+ * <li>Informacion sobre precios y cantidades de los articulos
+ * <li>Interfaz para realizar operaciones de compra
+ * <li>Control para cerrar la ventana de comercio cuando se desee terminar la transaccion
+ * </ul>
+ * <p>
+ * La clase mantiene un inventario estatico para el NPC con el que se esta comerciando, permitiendo que el jugador vea los
+ * articulos que este ofrece. Al finalizar el comercio, se envia un mensaje al servidor para informar que la transaccion ha
+ * concluido.
+ */
+
 public class FComerce extends Form {
 
     public static NPCInventory invNPC = new NPCInventory();

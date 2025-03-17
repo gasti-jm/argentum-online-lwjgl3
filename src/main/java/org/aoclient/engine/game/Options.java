@@ -3,8 +3,20 @@ package org.aoclient.engine.game;
 import java.io.*;
 
 /**
- * La clase Options representa las opciones de configuración del juego. Puede utilizarse para controlar la configuración
- * relacionada con la música, el sonido, la visualización del nombre, el nombre del jugador en el juego, etc.
+ * Clase que gestiona y almacena todas las opciones de configuracion, permitiendo su persistencia entre sesiones.
+ * <p>
+ * Esta clase proporciona un mecanismo para almacenar y recuperar las preferencias del usuario, tales como ajustes graficos,
+ * configuracion de audio, datos de conexion y personalizaciones de la interfaz. Centraliza el acceso a estos ajustes y se encarga
+ * de su lectura y escritura en un archivo de configuracion.
+ * <p>
+ * Entre sus responsabilidades principales se encuentran:
+ * <ul>
+ * <li>Almacenar las configuraciones (audio, video, interfaz)
+ * <li>Cargar las preferencias desde un archivo al iniciar la aplicacion
+ * <li>Guardar los cambios realizados por el usuario en un archivo de configuracion
+ * <li>Proporcionar valores predeterminados para las opciones no configuradas
+ * <li>Mantener datos de conexion como direccion del servidor y credenciales
+ * </ul>
  */
 
 public class Options {

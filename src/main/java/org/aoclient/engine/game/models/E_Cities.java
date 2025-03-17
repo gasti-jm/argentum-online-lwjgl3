@@ -1,5 +1,9 @@
 package org.aoclient.engine.game.models;
 
+/**
+ * Representa las localizaciones urbanas donde los jugadores pueden comenzar su aventura.
+ */
+
 public enum E_Cities {
 
     Ullathorpe(1),

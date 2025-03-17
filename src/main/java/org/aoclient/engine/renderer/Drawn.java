@@ -8,10 +8,22 @@ import static org.aoclient.engine.utils.Time.deltaTime;
 import static org.lwjgl.opengl.GL11.*;
 
 /**
- * Aqui es donde se van a encontrar la mayoria de los metodos que nos permiten dibujar en nuestro renderizado.
  * <p>
- * El dibujado del personaje se encuentra en la clase Character, el de la Interfaz de usuario en ElementGUI y los textos en la
- * clase FontText
+ * Clase utilitaria central para el sistema de renderizado que proporciona metodos de dibujo para todos los elementos visuales.
+ * <p>
+ * Esta clase estatica contiene los metodos principales que permiten dibujar en la pantalla de renderizado, ofreciendo funciones
+ * para renderizar texturas, figuras geometricas, lineas, rectangulos y otros elementos graficos con diferentes propiedades y
+ * transformaciones.
+ * <p>
+ * Implementa la funcionalidad de bajo nivel para el renderizado mediante OpenGL, encapsulando las operaciones complejas en
+ * metodos faciles de usar. Maneja aspectos como la aplicacion de efectos de mezcla (blending), transparencia, colores y
+ * transformaciones de coordenadas.
+ * <p>
+ * Es utilizada por todos los subsistemas graficos del juego para dibujar desde elementos de la interfaz de usuario hasta
+ * personajes, objetos del mapa y efectos visuales. La mayor parte del renderizado visible pasa por los metodos de esta clase.
+ * <p>
+ * El dibujado especifico de personajes se encuentra en la clase {@link Character}, el de la interfaz de usuario en
+ * {@code ElementGUI} y los textos en la clase {@code FontText}.
  */
 
 public final class Drawn {

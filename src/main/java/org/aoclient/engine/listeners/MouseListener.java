@@ -6,9 +6,20 @@ import imgui.ImGuiIO;
 import static org.lwjgl.glfw.GLFW.*;
 
 /**
- * Aca es donde se gestiona la logica de la deteccion de los botones del mouse en nuestro contexto GLFW.
+ * Clase que gestiona todos los eventos y estados del mouse en el contexto GLFW.
  * <p>
- * Hay funciones callBack que se pasan en la configuracion de nuestra ventana.
+ * Proporciona funciones callback para GLFW que permiten detectar movimientos del cursor, pulsaciones de botones y desplazamiento
+ * de la rueda del mouse.
+ * <p>
+ * Esta clase mantiene un registro constante de la posicion actual del mouse, su posicion anterior, el estado de los botones y
+ * detecta acciones como: arrastrar elementos, clic simple, doble clic y desplazamiento. Proporciona funcionalidad para determinar
+ * si el mouse esta sobre areas especificas y gestiona temporizadores para deteccion de doble clic.
+ * <p>
+ * Todos los demas componentes del juego que necesitan informacion sobre el estado del mouse o responder a eventos del mismo
+ * utilizan esta clase a traves de sus metodos estaticos.
+ * <p>
+ * Tambien se encarga de sincronizar adecuadamente con {@code ImGui} para mantener consistencia en los eventos del mouse entre el
+ * motor grafico y la interfaz.
  */
 
 public class MouseListener {
@@ -16,10 +27,10 @@ public class MouseListener {
     private static final double DOUBLE_CLICK_TIME = 0.2;
     private static final ImGuiIO io = ImGui.getIO();
     private static MouseListener instance;
-    private double scrollX, scrollY;
-    private double xPos, yPos, lastY, lastX;
     private final boolean[] mouseButtonPressed = new boolean[3];
     private final boolean[] mouseButtonDobleClickPressed = new boolean[3];
+    private double scrollX, scrollY;
+    private double xPos, yPos, lastY, lastX;
     private boolean isDragging;
     private double lastTimeClick;
 

@@ -9,6 +9,23 @@ import static org.aoclient.engine.renderer.Drawn.drawGrhIndex;
 import static org.aoclient.engine.utils.GameData.grhData;
 import static org.aoclient.scripts.Compressor.readResource;
 
+/**
+ * Clase utilitaria que maneja la carga y renderizado de fuentes de texto.
+ * <p>
+ * Esta clase estatica proporciona funcionalidad para cargar distintos tipos de fuentes desde archivos, renderizar texto en
+ * pantalla con diferentes estilos, y calcular las dimensiones del texto para su correcta ubicacion.
+ * <p>
+ * Contiene constantes predefinidas para los diferentes tipos de fuentes utilizados (como fuente normal y fuente para mostrar
+ * golpes), y metodos para dibujar texto con diferentes colores, alineaciones y formatos. Tambien ofrece funciones para medir el
+ * ancho y alto del texto renderizado.
+ * <p>
+ * La clase utiliza un sistema de codigos ASCII para mapear caracteres a sus representaciones graficas, permitiendo renderizar
+ * texto de manera eficiente mediante el sistema de graficos.
+ * <p>
+ * Es fundamental para mostrar dialogos, mensajes del sistema, nombres de personajes y cualquier otro texto que aparece en el
+ * juego.
+ */
+
 public class FontTypes {
 
     public static final int NORMAL_FONT = 0;

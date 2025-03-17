@@ -1,7 +1,14 @@
 package org.aoclient.engine.utils.inits;
 
 /**
- * Simula el "Type" o la estructura de GrhData.
+ * Simula el "Type" o la estructura de {@code GrhData}, almacenando informacion detallada sobre los recursos graficos.
+ * <p>
+ * Esta clase mantiene los datos necesarios para representar un grafico (Grh), incluyendo su ubicacion en archivos de recursos,
+ * dimensiones, y propiedades de animacion si corresponde.
+ *
+ * @see GrhInfo
+ * @see org.aoclient.engine.utils.GameData
+ * @see org.aoclient.engine.renderer.Drawn
  */
 
 public final class GrhData {

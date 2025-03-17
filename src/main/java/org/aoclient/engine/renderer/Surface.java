@@ -4,12 +4,17 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Aca es donde se gestiona (en gran parte) la carga y el almacen de los graficos que se van renderizar en el juego. El mapa
- * "textures" definida en esta clase se va a utilizar para guardar y encontrar rapido todos los graficos que se van a renderizar,
- * donde la llave es el numero del grafico y el valor la textura en si.
+ * Clase responsable de la gestion y almacenamiento de texturas para el renderizado grafico.
  * <p>
- * Los textos y la interfaz de usuario no van a trabajar con este mapa, cada uno de ellos lo almacenan en su dicha clase, pero los
- * metodos de carga tambien se trabajan desde aqui.
+ * Mantiene un mapa donde las texturas son almacenadas utilizando como clave el numero del grafico, permitiendo un acceso rapido y
+ * eficiente.
+ * <p>
+ * Las texturas de interfaz de usuario y textos son manejadas de forma independiente en sus respectivas clases, pero utilizan los
+ * metodos de carga proporcionados por {@code Surface}. Esta clase se encarga principalmente de las texturas de los elementos del
+ * juego como personajes, objetos y escenarios.
+ * <p>
+ * Ofrece funcionalidad para crear, obtener y eliminar texturas, optimizando el uso de memoria al reutilizar texturas ya
+ * cargadas.
  */
 
 public class Surface {

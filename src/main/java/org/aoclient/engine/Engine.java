@@ -18,6 +18,22 @@ import static org.lwjgl.glfw.GLFW.glfwPollEvents;
 import static org.lwjgl.glfw.GLFW.glfwSwapBuffers;
 import static org.lwjgl.opengl.GL11.*;
 
+/**
+ * <p>
+ * Clase principal del motor grafico que se encarga  de inicializar, ejecutar y finalizar todas las funcionalidades principales
+ * del cliente.
+ * <p>
+ * {@code Engine} gestiona el ciclo principal del juego, inicializando componentes criticos como la ventana, el sistema de sonido
+ * {@code OpenAL}, el motor de renderizado {@code OpenGL} y el sistema de interfaz grafica mediante {@code ImGUI}.
+ * <p>
+ * El motor se encarga de administrar las diferentes escenas del juego, permitiendo transiciones entre
+ * {@link org.aoclient.engine.scenes.IntroScene}, {@link org.aoclient.engine.scenes.MainScene}, y {@link GameScene}. Tambien
+ * coordina la renderizacion de los elementos visuales y el procesamiento de eventos del teclado y raton en cada fotograma.
+ * <p>
+ * Ademas, se encarga de la gestion de recursos del sistema, asegurando la correcta inicializacion y liberacion de memoria al
+ * iniciar o cerrar la aplicacion.
+ */
+
 public final class Engine {
 
     private static boolean prgRun = true;

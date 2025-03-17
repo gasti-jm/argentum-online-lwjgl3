@@ -11,7 +11,26 @@ import java.nio.charset.StandardCharsets;
 import static org.aoclient.network.Protocol.lastPacket;
 
 /**
- * Aca es donde se gestiona toda la cola de bytes que entran y salen de nuestro cliente.
+ * Clase que implementa una cola de bytes para la gestion de datos binarios en la comunicacion cliente-servidor.
+ * <p>
+ * {@code ByteQueue} facilita el manejo de datos binarios estructurados que se intercambian a traves del protocolo de red del
+ * juego. Proporciona metodos para escribir y leer diferentes tipos de datos primitivos y estructuras complejas como cadenas,
+ * asegurando su correcta serializacion y deserializacion.
+ * <p>
+ * La clase mantiene un buffer interno de datos y controla su capacidad, ofreciendo metodos para:
+ * <ul>
+ * <li>Escritura de diversos tipos de datos (bytes, ints, floats, booleans, strings)
+ * <li>Lectura de datos con o sin eliminacion de la cola
+ * <li>Manipulacion del contenido de la cola (copiar, mover, redimensionar)
+ * <li>Verificacion de la integridad de los datos recibidos
+ * </ul>
+ * <p>
+ * {@code ByteQueue} incluye mecanismos de seguridad para detectar errores de comunicacion y paquetes incorrectos o incompletos,
+ * facilitando la recuperacion ante fallos en la transmision de datos. En caso de error, la clase puede notificar al usuario y
+ * cerrar la conexion para prevenir inconsistencias.</p>
+ * <p>
+ * Esta clase es fundamental para la implementacion del protocolo de comunicacion del juego, sirviendo como capa intermedia entre
+ * los datos crudos de red y las estructuras de datos utilizadas por la logica del juego.
  */
 
 public class ByteQueue {

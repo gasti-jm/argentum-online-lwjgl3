@@ -3,8 +3,11 @@ package org.aoclient;
 import org.aoclient.engine.Engine;
 
 /**
- * @desc: Aquí es donde inicia nuestro programa. Crea un objeto de la clase Engine
- *        para que se inicie nuestra ventana GLFW, OpenGL y OpenAL.
+ * Clase principal que actua como punto de entrada de la aplicacion.
+ * <p>
+ * Esta clase contiene el metodo main que sirve como punto de inicio para la ejecucion del cliente. Su unica responsabilidad es
+ * instanciar el motor grafico (Engine) y ejecutar su metodo {@code start()}, iniciando asi toda la secuencia de arranque del
+ * juego.
  */
 
 public class Main {

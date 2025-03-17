@@ -9,7 +9,16 @@ import static org.aoclient.network.Protocol.writeEquipItem;
 import static org.aoclient.network.Protocol.writeUseItem;
 
 /**
- * Clase creada unicamente para el inventario de nuestro usuario, viene heredada de la clase Inventory.
+ * <p>
+ * Esta clase proporciona la implementacion especifica para el manejo del inventario del personaje controlado por el jugador,
+ * incluyendo la visualizacion de los objetos, interaccion mediante clicks y funcionalidades para usar y equipar items.
+ * <p>
+ * El inventario del usuario mantiene temporizadores para controlar la frecuencia con la que se pueden realizar acciones como usar
+ * o equipar objetos, evitando el uso excesivamente rapido de estas funcionalidades.
+ * <p>
+ * A diferencia del inventario de NPCs, el inventario del usuario permite interacciones completas como la seleccion de objetos,
+ * uso de doble click para utilizar o equipar items, y muestra informacion visual sobre que objetos estan equipados actualmente
+ * mediante indicadores especiales en la interfaz.
  */
 
 public final class UserInventory extends Inventory {

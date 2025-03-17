@@ -20,6 +20,21 @@ import java.util.List;
 import static org.aoclient.engine.utils.Time.deltaTime;
 import static org.lwjgl.glfw.GLFW.*;
 
+/**
+ * Sistema centralizado para la gestion de interfaces graficas de usuario basado en {@code ImGui}.
+ * <p>
+ * Se encarga de inicializar, configurar y renderizar todos los elementos de la interfaz de usuario utilizando la biblioteca
+ * <i>Dear ImGui</i> adaptada para {@code LWJGL3}.
+ * <p>
+ * Administra el ciclo de vida de las distintas ventanas y formularios de la interfaz, permitiendo mostrar, ocultar y gestionar
+ * componentes de UI como dialogos, menus, paneles y otros elementos interactivos. Mantiene una coleccion de formularios activos y
+ * coordina su renderizado en cada fotograma.
+ * <p>
+ * Proporciona funcionalidad para la configuracion de estilos, fuentes y comportamientos de la interfaz, y maneja la
+ * sincronizacion entre los eventos de entrada (teclado y raton) entre el sistema de ventanas GLFW y los componentes de ImGui,
+ * asegurando una respuesta coherente de la interfaz.
+ */
+
 public class ImGUISystem {
 
     // Unico objeto del sistema de GUI.

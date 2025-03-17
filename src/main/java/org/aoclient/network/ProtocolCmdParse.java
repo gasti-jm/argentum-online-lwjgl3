@@ -12,6 +12,28 @@ import java.nio.charset.StandardCharsets;
 
 import static org.aoclient.network.Protocol.*;
 
+
+/**
+ * Clase encargada de analizar y procesar los comandos de texto ingresados por el usuario en la consola.
+ * <p>
+ * Esta clase interpreta los comandos ingresados por el usuario y los traduce a los paquetes de protocolo correspondientes que
+ * seran enviados al servidor.
+ * <p>
+ * La clase maneja diferentes tipos de comandos:
+ * <ul>
+ * <li>Comandos que comienzan con {@code /} (p.ej. /ayuda, /online, /meditar)
+ * <li>Comandos que comienzan con {@code -} para gritar
+ * <li>Texto normal para hablar
+ * </ul>
+ * <p>
+ * Incluye validacion de parametros para cada tipo de comando, verificando formatos correctos, rangos numericos, direcciones IP y
+ * otros valores especificos requeridos por cada comando. En caso de error, muestra al usuario mensajes informativos sobre el
+ * formato correcto del comando.
+ * <p>
+ * Esta clase sirve como intermediaria entre la interfaz de usuario y el protocolo de comunicacion, encapsulando la complejidad
+ * del procesamiento de comandos y la construccion de los paquetes de red correspondientes.
+ */
+
 public class ProtocolCmdParse {
 
     private static ProtocolCmdParse instance;

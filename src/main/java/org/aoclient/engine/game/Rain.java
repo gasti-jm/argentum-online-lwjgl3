@@ -4,12 +4,27 @@ import org.aoclient.engine.Sound;
 import org.aoclient.engine.renderer.RGBColor;
 import org.aoclient.engine.renderer.Surface;
 import org.aoclient.engine.renderer.Texture;
-import org.lwjgl.system.windows.RECT;
 
 import static org.aoclient.engine.renderer.Drawn.geometryBoxRender;
 import static org.aoclient.engine.utils.GameData.bLluvia;
 import static org.aoclient.engine.utils.GameData.options;
 import static org.aoclient.engine.utils.Time.deltaTime;
+
+/**
+ * <p>
+ * Esta clase se encarga de renderizar la animacion de lluvia en pantalla y controlar los diferentes sonidos ambientales que se
+ * reproducen cuando llueve, ya sea cuando el personaje se encuentra bajo techo o a la intemperie. Implementa la logica para
+ * mostrar los efectos visuales de la lluvia como un conjunto de frames animados que se actualizan con el tiempo.
+ * <p>
+ * Entre sus responsabilidades principales se encuentran:
+ * <ul>
+ * <li>Renderizar los efectos visuales de lluvia en la pantalla
+ * <li>Gestionar los sonidos ambientales de lluvia (interior/exterior)
+ * <li>Controlar la animacion mediante cambios de frames a lo largo del tiempo
+ * <li>Adaptar los efectos segun la posicion del usuario (bajo techo o al aire libre)
+ * <li>Permitir activar o desactivar la lluvia en determinadas zonas del mapa
+ * </ul>
+ */
 
 public class Rain {
 

@@ -26,7 +26,33 @@ import static org.lwjgl.glfw.GLFW.GLFW_MOUSE_BUTTON_LEFT;
 import static org.lwjgl.glfw.GLFW.GLFW_MOUSE_BUTTON_RIGHT;
 
 /**
- * Esta es la escena donde el usuario jugara. Se recomienda leer el JavaDoc de la clase padre "Scene.java".
+ * <p>
+ * {@code GameScene} es la escena mas compleja, responsable de manejar toda la logica y renderizado del mundo de Argentum Online
+ * cuando el jugador esta activamente conectado y controlando su personaje. Esta escena se activa una vez que el usuario ha
+ * iniciado sesion satisfactoriamente desde {@code MainScene}.
+ * <p>
+ * Funcionalidades principales:
+ * <ul>
+ * <li>Renderizado del mapa con sus multiples capas
+ * <li>Control del personaje del usuario mediante entradas de teclado y raton
+ * <li>Visualizacion de otros personajes y NPCs en el mundo
+ * <li>Manejo de efectos como la lluvia y efectos visuales
+ * <li>Mostrar dialogos sobre los personajes
+ * <li>Control de la camara centrada en el personaje
+ * <li>Renderizado de la interfaz de usuario superpuesta (inventario, chat, estadisticas)
+ * </ul>
+ * <p>
+ * Esta escena monitorea constantemente el estado de conexion del usuario. Si se detecta una desconexion, la escena se cierra
+ * automaticamente y regresa a {@code MainScene} para permitir una nueva conexion.
+ * <p>
+ * El metodo {@link GameScene#render()} es particularmente complejo en esta escena, ya que maneja el renderizado de multiples
+ * capas en orden especifico para lograr el efecto visual correcto del mundo.
+ *
+ * @see Scene
+ * @see MainScene
+ * @see User
+ * @see Camera
+ * @see Rain
  */
 
 public final class GameScene extends Scene {

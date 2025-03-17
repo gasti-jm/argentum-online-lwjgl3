@@ -1,5 +1,28 @@
 package org.aoclient.network.packets;
 
+import org.aoclient.network.Protocol;
+
+/**
+ * <p>
+ * Enumeracion que define todos los identificadores de paquetes enviados por el cliente al servidor en el protocolo de
+ * comunicacion.
+ * <p>
+ * {@code ClientPacketID} contiene constantes para cada tipo de mensaje que el cliente puede enviar al servidor, permitiendo una
+ * identificacion clara y tipada de los paquetes durante el proceso de construccion y envio de datos. Cada valor del enumerador
+ * corresponde a un tipo especifico de accion, solicitud o comando que el cliente puede iniciar.
+ * <p>
+ * Estos identificadores se utilizan en los metodos <b>write</b> de la clase {@link Protocol} para construir los paquetes
+ * correspondientes que seran enviados al servidor. La estructura del enumerador refleja todas las posibles interacciones
+ * iniciadas por el cliente, como movimientos, acciones de combate, uso de objetos, comunicacion y comandos administrativos.
+ * <p>
+ * Junto a cada constante, se incluye como comentario el comando de chat asociado cuando corresponde (por ejemplo, {@code /SALIR}
+ * para {@code Quit}), facilitando la comprension de la relacion entre los comandos ingresados por el usuario y los paquetes
+ * enviados.
+ * <p>
+ * Cada miembro del enum debe mantener la misma posicion ordinal que su correspondiente en el servidor para garantizar la correcta
+ * interpretacion de los paquetes en la comunicacion cliente-servidor.
+ */
+
 public enum ClientPacketID {
 
     LoginExistingChar,       //OLOGIN

@@ -12,6 +12,24 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipOutputStream;
 
+/**
+ * Utilidad para la compresion y extraccion de archivos del juego.
+ * <p>
+ * Esta clase proporciona funcionalidades para comprimir directorios completos en archivos con extension <b>.ao</b> (que son
+ * esencialmente archivos ZIP con extension personalizada) y para extraer recursos especificos de estos archivos comprimidos.
+ * <p>
+ * Permite comprimir carpetas enteras manteniendo su estructura de directorios, lo que resulta util para empaquetar recursos del
+ * juego como graficos, sonidos, o datos de inicializacion. Tambien ofrece la capacidad de leer archivos individuales dentro de
+ * estos paquetes comprimidos buscando coincidencias por nombre base.
+ * <p>
+ * El formato <b>.ao</b> se utiliza como un sistema de empaquetado de recursos para el juego, permitiendo una gestion eficiente de
+ * los archivos y reduciendo el espacio de almacenamiento necesario. La clase incluye un metodo main que proporciona un ejemplo de
+ * compresion y extraccion de recursos.
+ * <p>
+ * Esta utilidad es fundamental para el sistema de carga de recursos del juego, ya que muchos componentes como sonidos, graficos y
+ * datos de inicializacion se almacenan en archivos comprimidos <b>.ao</b>.
+ */
+
 public class Compressor {
 
     // Comprime una carpeta en un archivo .AO
@@ -50,7 +68,8 @@ public class Compressor {
                 }
             }
 
-            if (matchedEntry == null) throw new FileNotFoundException("No se encontró un archivo que coincida con: " + resourceBaseName);
+            if (matchedEntry == null)
+                throw new FileNotFoundException("No se encontró un archivo que coincida con: " + resourceBaseName);
 
             // Lee los datos del recurso encontrado
             try (InputStream is = zipFile.getInputStream(matchedEntry)) {

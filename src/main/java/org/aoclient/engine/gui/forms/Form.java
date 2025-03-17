@@ -16,6 +16,22 @@ import static org.aoclient.scripts.Compressor.readResource;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL12.GL_CLAMP_TO_EDGE;
 
+/**
+ * <p>
+ * Define la estructura comun y comportamiento basico que deben implementar todos los formularios. Proporciona un marco unificado
+ * para la creacion de interfaces de usuario interactivas, obligando a todas las subclases a implementar su propia logica de
+ * renderizado mediante el metodo abstracto {@code render()}.
+ * <p>
+ * Incluye funcionalidad para gestionar recursos graficos comunes como imagenes de fondo, y metodos utilitarios que pueden ser
+ * utilizados por todos los formularios, como la carga de texturas desde archivos comprimidos y la apertura de URLs en el
+ * navegador del sistema.
+ * <p>
+ * Establece el ciclo de vida basico de los formularios, incluyendo su inicializacion, renderizado y cierre, integrandose con el
+ * sistema de gestion de interfaz {@code ImGUISystem} para garantizar un comportamiento coherente de todas las ventanas.
+ * <p>
+ * TODO Cambiar el concepto/palabra "Form" ya que no estamos trabajando mas con formularios, sino con ventanas
+ */
+
 public abstract class Form {
 
     protected int backgroundImage;

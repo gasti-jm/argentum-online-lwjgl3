@@ -7,7 +7,28 @@ import java.io.IOException;
 import static java.nio.charset.StandardCharsets.UTF_8;
 
 /**
- * Aqui solo hay constantes de mensajes, estaria bueno guardarlas en un archivo.
+ * Clase que gestiona los mensajes de texto utilizados en el juego.
+ * <p>
+ * {@code Messages} almacena como variables estaticas todos los mensajes predefinidos que el juego muestra durante su ejecucion.
+ * Estos mensajes incluyen notificaciones de combate, mensajes del sistema, dialogos e instrucciones para el usuario.
+ * <p>
+ * Esta clase implementa funcionalidad de internacionalizacion, permitiendo cargar mensajes desde archivos de configuracion segun
+ * la region o idioma seleccionado. Los mensajes son almacenados en archivos con formato {@code strings_[region].ini} donde
+ * [region] representa el codigo de region (por ejemplo, "es" para español).
+ * <p>
+ * Los mensajes se cargan a traves del metodo {@code loadMessages()} y son accesibles directamente desde otras clases mediante las
+ * variables estaticas publicas. Esta estructura centraliza todos los textos del juego, facilitando su mantenimiento y
+ * traduccion.
+ * <p>
+ * El sistema esta diseñado para manejar diferentes tipos de mensajes como:
+ * <ul>
+ * <li>Mensajes de combate (golpes, daños, muertes)
+ * <li>Notificaciones de estado (seguro, meditacion)
+ * <li>Mensajes de sistema (conexion, desconexion)
+ * <li>Instrucciones para diferentes acciones del juego
+ * </ul>
+ * <p>
+ * TODO Mover a un archivo
  */
 
 public class Messages {
