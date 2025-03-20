@@ -45,6 +45,11 @@ public class Texture {
 
             // Lee los datos del recurso desde el archivo comprimido
             byte[] resourceData = readResource("resources/" + compressedFile, file);
+            /* if (resourceData == null) {
+            System.err.println("No se pudieron cargar los datos de " + file);
+            return -1;
+            } */
+
             InputStream is = new ByteArrayInputStream(resourceData);
 
             //File fil = new File(file);

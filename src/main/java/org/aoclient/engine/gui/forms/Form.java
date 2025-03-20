@@ -45,6 +45,11 @@ public abstract class Form {
     protected int loadTexture(final String file) throws IOException {
         // Lee los datos del recurso desde el archivo comprimido
         byte[] resourceData = readResource("resources/gui.ao", file);
+        /* if (resourceData == null) {
+            System.err.println("No se pudieron cargar los datos de " + file);
+            return -1; // TODO Deberia devolver -1 en este caso?
+        } */
+
         InputStream is = new ByteArrayInputStream(resourceData);
         BufferedImage image = ImageIO.read(is);
 

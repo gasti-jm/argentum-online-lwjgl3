@@ -2,7 +2,6 @@ package org.aoclient.engine.renderer;
 
 import org.aoclient.engine.utils.BinaryDataReader;
 
-import java.io.IOException;
 import java.nio.ByteOrder;
 
 import static org.aoclient.engine.renderer.Drawn.drawGrhIndex;
@@ -34,23 +33,24 @@ public class FontTypes {
     private static Font[] font_types;
 
     public static void loadFontTypes() {
-        try {
-            byte[] data = readResource("resources/inits.ao", "fonts");
-            reader.init(data, ByteOrder.BIG_ENDIAN);
-
-            int cantFontTypes = (int) reader.readInt();
-            font_types = new Font[cantFontTypes];
-
-            for (int i = 0; i < cantFontTypes; i++) {
-                font_types[i] = new Font();
-                font_types[i].fontSize = reader.readInt();
-                for (int k = 0; k < 256; k++)
-                    font_types[i].ascii_code[k] = reader.readInt();
-            }
-
-        } catch (IOException e) {
-            e.printStackTrace();
+        byte[] data = readResource("resources/inits.ao", "fonts");
+        if (data == null) {
+            System.err.println("Could not load fonts data!");
+            return;
         }
+
+        reader.init(data, ByteOrder.BIG_ENDIAN);
+
+        int cantFontTypes = (int) reader.readInt();
+        font_types = new Font[cantFontTypes];
+
+        for (int i = 0; i < cantFontTypes; i++) {
+            font_types[i] = new Font();
+            font_types[i].fontSize = reader.readInt();
+            for (int k = 0; k < 256; k++)
+                font_types[i].ascii_code[k] = reader.readInt();
+        }
+
     }
 
     public static void drawText(String text, int x, int y, RGBColor color, int fontIndex, boolean multiLine) {
