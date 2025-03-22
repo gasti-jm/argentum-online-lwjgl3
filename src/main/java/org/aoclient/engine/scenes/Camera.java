@@ -1,12 +1,18 @@
 package org.aoclient.engine.scenes;
 
 /**
- * Aqui es donde se van guardar ciertas variables relacionadas con el campo de vision del juego.
+ * La clase Camera gestiona la visualizacion del juego y el campo de vision del usuario.
  * <p>
- * Tenemos: La distancia de dibujado, el tamaño del render del frmMain, el tamaño del tile (32x32), los bordes del mapa, Despues
- * tenemos la funcion de update que actualiza las variables de la distancia del dibujado. Esto es segun la posicion de donde este
- * parado el usuario. Tambien sirve para MainScene para su "conectar renderizado" y por ultimo, el resto de funciones son getters
- * y setters que pueden ser leidos en el resto del programa.
+ * Esta clase contiene variables relacionadas con el campo de vision del juego, incluyendo la distancia de dibujado, el tamano del
+ * render en pantalla, el tamano de los tiles (32x32), y los bordes del mapa. Su funcion principal es determinar que elementos del
+ * mapa son visibles en la pantalla y calcular las coordenadas necesarias para renderizar correctamente el mundo.
+ * <p>
+ * Ademas, proporciona el metodo update() que actualiza las variables relacionadas con la distancia de dibujado segun la posicion
+ * del usuario, permitiendo una visualizacion correcta mientras el personaje se desplaza por el mapa. Esto es fundamental para
+ * optimizar el rendimiento, ya que solo se renderizan los elementos que son visibles para el jugador.
+ * <p>
+ * La camara tambien es utilizada en otras escenas para calcular correctamente las posiciones de renderizado y controlar que
+ * sectores del mapa se deben dibujar en cada momento.
  */
 
 public final class Camera {

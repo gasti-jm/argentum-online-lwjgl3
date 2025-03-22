@@ -8,11 +8,24 @@ import static org.aoclient.engine.renderer.Drawn.geometryBoxRenderGUI;
 import static org.aoclient.engine.utils.Time.deltaTime;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_ENTER;
 
-
 /**
- * Escena de presentacion
  * <p>
- * Se recomienda leer el JavaDoc de la clase padre "Scene.java".
+ * {@code IntroScene} es la primera escena que se muestra al jugador y esta diseñada para presentar los logos, creditos iniciales
+ * y elementos visuales de introduccion antes de llegar al menu principal.
+ * <p>
+ * Esta escena maneja un temporizador que controla la duracion de su visualizacion y los efectos de fade-in/fade-out para las
+ * imagenes mostradas. La secuencia incluye varios elementos visuales en el siguiente orden:
+ * <ul>
+ * <li>Logo de NoLand Studios con efecto de aparicion gradual
+ * <li>Serie de imagenes de presentacion que se muestran secuencialmente
+ * <li>Efecto de transicion hacia la {@code MainScene} al finalizar la secuencia
+ * </ul>
+ * <p>
+ * El usuario puede saltar esta escena en cualquier momento presionando la tecla {@code Enter}, lo que provoca una transicion
+ * inmediata hacia {@code MainScene}. Esta funcionalidad se implementa en el metodo {@link IntroScene#keyEvents()}.
+ *
+ * @see Scene
+ * @see MainScene
  */
 
 public final class IntroScene extends Scene {

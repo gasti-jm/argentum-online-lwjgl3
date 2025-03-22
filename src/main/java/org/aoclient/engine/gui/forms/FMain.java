@@ -16,12 +16,33 @@ import static org.aoclient.engine.Sound.SND_CLICK;
 import static org.aoclient.engine.Sound.playSound;
 import static org.aoclient.engine.utils.Time.FPS;
 
+/**
+ * Formulario principal que proporciona la interfaz de usuario durante la partida activa.
+ * <p>
+ * La clase {@code FMain} representa la pantalla principal que se muestra una vez que el usuario ha iniciado sesion correctamente
+ * y esta jugando activamente. Esta clase extiende {@link Form} y actua como el nucleo de la interfaz grafica durante el
+ * gameplay.
+ * <p>
+ * Esta interfaz principal contiene todos los elementos esenciales para que el jugador interactue con el mundo , incluyendo:
+ * <ul>
+ * <li>Estadisticas del personaje (vida, mana, energia, hambre, sed, etc.)
+ * <li>Gestion del inventario y hechizos
+ * <li>Visualizacion de oro y experiencia
+ * <li>Consola de mensajes del sistema
+ * <li>Chat para comunicacion con otros jugadores
+ * <li>Acceso a configuraciones y otras funcionalidades
+ * </ul>
+ * <p>
+ * Ademas de mostrar informacion, esta clase maneja la entrada de texto para comandos y chat, procesando las interacciones del
+ * usuario y comunicandose con el servidor cuando es necesario a traves del sistema de protocolos de red.
+ */
+
 public final class FMain extends Form {
 
     private final ImString sendText = new ImString();
     private final User dataUser = User.get();
-    private boolean viewInventory;
     private final int backgroundInventorySpells;
+    private boolean viewInventory;
 
     public FMain() {
         this.viewInventory = true;

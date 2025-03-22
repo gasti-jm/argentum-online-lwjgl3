@@ -11,6 +11,24 @@ import static org.lwjgl.stb.STBVorbis.stb_vorbis_decode_filename;
 import static org.lwjgl.system.MemoryStack.*;
 import static org.lwjgl.system.libc.LibCStdlib.free;
 
+/**
+ * <p>
+ * Proporciona funcionalidad para cargar, reproducir y administrar sonidos y musica en formato <b>.ogg</b> utilizando
+ * {@code OpenAL} como motor de audio. Mantiene colecciones separadas para los efectos de sonido y la musica, permitiendo un
+ * control independiente de cada tipo de audio.
+ * <p>
+ * Define constantes para los sonidos mas comunes del juego (como clicks, pasos, dados, etc.) y ofrece metodos estaticos para
+ * acceder facilmente a estas funcionalidades desde cualquier parte del codigo. Limita el numero maximo de sonidos y musicas
+ * cargados en memoria para optimizar el uso de recursos.
+ * <p>
+ * Cada instancia de {@code Sound} representa un archivo de audio individual que puede configurarse para reproducirse en bucle
+ * (ideal para musica de fondo) o una sola vez (apropiado para efectos de sonido). La clase tambien gestiona automaticamente la
+ * reproduccion simultanea de multiples instancias del mismo sonido cuando es necesario.
+ * <p>
+ * Incluye funcionalidades para la limpieza de recursos de audio cuando ya no son necesarios, ayudando a prevenir fugas de
+ * memoria.
+ */
+
 public final class Sound {
 
     public static final String SND_CLICK = "click.ogg";

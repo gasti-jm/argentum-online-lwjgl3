@@ -14,6 +14,13 @@ import static org.aoclient.engine.Sound.SND_CLICK;
 import static org.aoclient.engine.Sound.playSound;
 import static org.aoclient.network.Protocol.writeChangePassword;
 
+/**
+ * <p>
+ * Formulario que permite a los usuarios cambiar su contraseña. Proporciona una interfaz grafica con campos para ingresar la
+ * contraseña actual, la nueva contraseña y la confirmacion de la nueva contraseña, asi como botones para ejecutar el cambio o
+ * cancelar la operacion.
+ */
+
 public class FNewPassword extends Form {
 
     private final ImString txtPassword = new ImString();

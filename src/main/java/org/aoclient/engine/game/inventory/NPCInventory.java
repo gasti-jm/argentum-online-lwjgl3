@@ -4,6 +4,12 @@ import imgui.ImGui;
 
 import static org.aoclient.engine.scenes.Camera.TILE_PIXEL_SIZE;
 
+/**
+ * <p>
+ * Proporciona la implementacion especifica para manejar y mostrar los objetos que un NPC tiene en su inventario, permitiendo al
+ * jugador ver e interactuar con estos elementos durante el comercio u otras interacciones con NPCs.
+ */
+
 public class NPCInventory extends Inventory {
 
     // Posicion original del picInv del frmComerciar original de AO

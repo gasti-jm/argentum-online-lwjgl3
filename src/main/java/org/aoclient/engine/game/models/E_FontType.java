@@ -1,5 +1,15 @@
 package org.aoclient.engine.game.models;
 
+/**
+ * <p>
+ * Define los diferentes tipos de fuentes y estilos tipograficos utilizados para mostrar mensajes. Cada tipo de fuente define:
+ * <ul>
+ * <li>Un color especifico mediante valores RGB (r, g, b)
+ * <li>Si el texto debe mostrarse en <b>bold</b>
+ * <li>Si el texto debe mostrarse en <i>italic</i>
+ * </ul>
+ */
+
 public enum E_FontType {
 
     FONTTYPE_TALK(1f, 1f, 1f, false, false),

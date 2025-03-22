@@ -1,5 +1,9 @@
 package org.aoclient.engine.game.models;
 
+/**
+ * Representa las habilidades que un personaje puede desarrollar, como combate, magia y otras destrezas.
+ */
+
 public enum E_Skills {
 
     Magia(1),

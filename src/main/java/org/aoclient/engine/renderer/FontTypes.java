@@ -2,12 +2,28 @@ package org.aoclient.engine.renderer;
 
 import org.aoclient.engine.utils.BinaryDataReader;
 
-import java.io.IOException;
 import java.nio.ByteOrder;
 
 import static org.aoclient.engine.renderer.Drawn.drawGrhIndex;
 import static org.aoclient.engine.utils.GameData.grhData;
 import static org.aoclient.scripts.Compressor.readResource;
+
+/**
+ * Clase utilitaria que maneja la carga y renderizado de fuentes de texto.
+ * <p>
+ * Esta clase estatica proporciona funcionalidad para cargar distintos tipos de fuentes desde archivos, renderizar texto en
+ * pantalla con diferentes estilos, y calcular las dimensiones del texto para su correcta ubicacion.
+ * <p>
+ * Contiene constantes predefinidas para los diferentes tipos de fuentes utilizados (como fuente normal y fuente para mostrar
+ * golpes), y metodos para dibujar texto con diferentes colores, alineaciones y formatos. Tambien ofrece funciones para medir el
+ * ancho y alto del texto renderizado.
+ * <p>
+ * La clase utiliza un sistema de codigos ASCII para mapear caracteres a sus representaciones graficas, permitiendo renderizar
+ * texto de manera eficiente mediante el sistema de graficos.
+ * <p>
+ * Es fundamental para mostrar dialogos, mensajes del sistema, nombres de personajes y cualquier otro texto que aparece en el
+ * juego.
+ */
 
 public class FontTypes {
 
@@ -17,23 +33,24 @@ public class FontTypes {
     private static Font[] font_types;
 
     public static void loadFontTypes() {
-        try {
-            byte[] data = readResource("resources/inits.ao", "fonts");
-            reader.init(data, ByteOrder.BIG_ENDIAN);
-
-            int cantFontTypes = (int) reader.readInt();
-            font_types = new Font[cantFontTypes];
-
-            for (int i = 0; i < cantFontTypes; i++) {
-                font_types[i] = new Font();
-                font_types[i].fontSize = reader.readInt();
-                for (int k = 0; k < 256; k++)
-                    font_types[i].ascii_code[k] = reader.readInt();
-            }
-
-        } catch (IOException e) {
-            e.printStackTrace();
+        byte[] data = readResource("resources/inits.ao", "fonts");
+        if (data == null) {
+            System.err.println("Could not load fonts data!");
+            return;
         }
+
+        reader.init(data, ByteOrder.BIG_ENDIAN);
+
+        int cantFontTypes = (int) reader.readInt();
+        font_types = new Font[cantFontTypes];
+
+        for (int i = 0; i < cantFontTypes; i++) {
+            font_types[i] = new Font();
+            font_types[i].fontSize = reader.readInt();
+            for (int k = 0; k < 256; k++)
+                font_types[i].ascii_code[k] = reader.readInt();
+        }
+
     }
 
     public static void drawText(String text, int x, int y, RGBColor color, int fontIndex, boolean multiLine) {

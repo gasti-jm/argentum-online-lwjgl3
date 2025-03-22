@@ -1,7 +1,14 @@
 package org.aoclient.engine.renderer;
 
 /**
- * Sirve para almacenar una mezcla de colores y se utiliza en el dibujado.
+ * Clase que representa un color en formato RGB utilizando valores de punto flotante.
+ * <p>
+ * Esta clase sirve para almacenar y manipular mezclas de colores utilizados en el sistema de renderizado. Los valores de cada
+ * componente (rojo, verde y azul) son almacenados como numeros de punto flotante en un rango de 0.0 a 1.0, donde 0.0 representa
+ * la ausencia del color y 1.0 la maxima intensidad.
+ * <p>
+ * Por defecto, si se crea una instancia sin parametros, se inicializa con los valores (1.0, 1.0, 1.0) que corresponde al color
+ * blanco.
  */
 
 public class RGBColor {

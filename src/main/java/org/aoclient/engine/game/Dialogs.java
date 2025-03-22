@@ -11,6 +11,24 @@ import static org.aoclient.engine.utils.GameData.charList;
 import static org.aoclient.engine.utils.GameData.mapData;
 import static org.aoclient.engine.utils.Time.deltaTime;
 
+/**
+ * Clase encargada de la gestion de dialogos y mensajes de texto que aparecen sobre los personajes.
+ * <p>
+ * Esta clase proporciona funcionalidad para crear, actualizar y eliminar los dialogos que aparecen flotando sobre los personajes.
+ * Maneja tanto dialogos normales como dialogos especiales para representar golpes, daño y otros eventos.
+ * <p>
+ * Los dialogos tienen un ciclo de vida determinado, desapareciendo automaticamente despues de un periodo de tiempo establecido.
+ * <p>
+ * La clase se encarga de:
+ * <ul>
+ * <li>Mostrar mensajes de texto sobre los personajes
+ * <li>Aplicar colores y estilos diferentes segun el tipo de dialogo
+ * <li>Gestionar la aparicion y desvanecimiento de los textos
+ * <li>Coordinar la posicion de los dialogos para que aparezcan correctamente sobre las cabezas de los personajes
+ * <li>Eliminar dialogos individuales o todos los dialogos en pantalla
+ * </ul>
+ */
+
 public class Dialogs {
 
     private static final RGBColor HIT_COLOR = new RGBColor(1, 0, 0);

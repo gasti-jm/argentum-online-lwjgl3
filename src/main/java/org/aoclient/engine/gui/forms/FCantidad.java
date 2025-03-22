@@ -12,6 +12,26 @@ import java.io.IOException;
 import static org.aoclient.engine.game.inventory.UserInventory.FLAGORO;
 import static org.aoclient.network.Protocol.writeDrop;
 
+/**
+ * Formulario para especificar cantidades al tirar objetos o oro al suelo.
+ * <p>
+ * La clase {@code FCantidad} implementa una interfaz grafica que permite al jugador indicar la cantidad exacta de un objeto o de
+ * oro que desea tirar al suelo. Este formulario aparece como una ventana emergente cuando el usuario inicia la accion de tirar un
+ * item de su inventario o dinero.
+ * <p>
+ * El formulario proporciona las siguientes funcionalidades:
+ * <ul>
+ * <li>Campo de texto para introducir la cantidad numerica deseada
+ * <li>Boton para tirar la cantidad especificada (limitada a un maximo de 10,000)
+ * <li>Boton para tirar la cantidad total disponible del objeto o todo el oro
+ * <li>Validacion de entrada para asegurar que la cantidad sea un valor numerico valido
+ * </ul>
+ * <p>
+ * Esta clase puede funcionar en dos modos diferentes: para tirar oro (indicado por el flag {@code dropOro}) o para tirar un item
+ * del inventario seleccionado actualmente. Cuando el formulario se confirma, se envia la orden correspondiente al servidor a
+ * traves del protocolo de red.
+ */
+
 public final class FCantidad extends Form {
 
     private final ImString cant = new ImString("1");

@@ -11,9 +11,17 @@ import static org.aoclient.engine.game.models.E_KeyType.*;
 import static org.lwjgl.glfw.GLFW.*;
 
 /**
- * Aca es donde se gestiona la logica de la deteccion de las teclas del teclado en nuestro contexto GLFW.
+ * Clase que gestiona todos los eventos y estados del teclado en el contexto GLFW.
  * <p>
- * Hay funciones callBack que se pasan en la configuracion de nuestra ventana.
+ * Proporciona funciones callback para GLFW que permiten detectar las pulsaciones y liberaciones de teclas, manteniendo el estado
+ * actual de todas las teclas del teclado.
+ * <p>
+ * La clase mantiene un registro de la ultima tecla presionada y la ultima tecla de movimiento presionada, lo que facilita la
+ * gestion de las acciones de navegacion del jugador. Ofrece metodos para verificar si una tecla esta siendo presionada en tiempo
+ * real o si se debe procesar una accion especifica una sola vez por cada pulsacion de tecla.
+ * <p>
+ * Incluye funcionalidad para gestionar combinaciones de teclas como {@code Ctrl}, {@code Shift}, {@code Alt} y {@code Super}, y
+ * se integra con {@code ImGui} para sincronizar adecuadamente el estado de las teclas entre el motor grafico y la interfaz.
  */
 
 public class KeyListener {

@@ -11,7 +11,18 @@ import static org.aoclient.engine.scenes.Camera.TILE_PIXEL_SIZE;
 import static org.aoclient.engine.utils.GameData.grhData;
 
 /**
- * Clase padre de inventario, ya que puede existir distintos inventarios (usuario, npc, etc).
+ * Clase abstracta que sirve como base para los diferentes sistemas de inventario.
+ * <p>
+ * Esta clase implementa la funcionalidad comun para almacenar, gestionar y mostrar los items que un personaje o NPC puede
+ * poseer.
+ * <p>
+ * Define la estructura fundamental de todo inventario mediante:
+ * <ul>
+ * <li>Una matriz de slots donde se almacenan los objetos
+ * <li>Control de posicionamiento y dimensiones en pantalla
+ * <li>Manejo de interacciones con el mouse
+ * <li>Sistema de seleccion de slots
+ * </ul>
  */
 
 public abstract class Inventory {
@@ -29,6 +40,7 @@ public abstract class Inventory {
     protected RGBColor amountColor = new RGBColor(1, 1, 1);
     protected Slot[] slots;
     protected int slotSelected;
+
     public Inventory(int posX, int posY, int width, int heigth, int cantSlots) {
         this.visible = true;
         this.slotSelected = 0;

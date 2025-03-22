@@ -1,5 +1,9 @@
 package org.aoclient.engine.game.models;
 
+/**
+ * Representa las razas que un jugador puede seleccionar al momento de crear su personaje.
+ */
+
 public enum E_Raza {
 
     Humano(1),

@@ -1,5 +1,9 @@
 package org.aoclient.engine.game.models;
 
+/**
+ * Representa las atributos que determinan las capacidades de un personaje.
+ */
+
 public enum E_Attributes {
 
     Fuerza(1),

@@ -3,7 +3,15 @@ package org.aoclient.engine.utils.inits;
 import org.aoclient.engine.game.models.Position;
 
 /**
- * Simula el "Type" o la estructura de BodyData.
+ * Simula el "Type" o la estructura de {@code BodyData}, representando los datos graficos del cuerpo de los personajes.
+ * <p>
+ * Esta clase almacena la informacion grafica necesaria para representar los cuerpos de los personajes segun las diferentes
+ * orientaciones durante su desplazamiento por el mapa. Mantiene un arreglo de objetos GrhInfo para las animaciones de caminar
+ * donde cada indice del arreglo (1-4) representa una direccion diferente (Norte, Este, Sur, Oeste).
+ *
+ * @see GrhInfo
+ * @see IndexBodys
+ * @see Character
  */
 
 public final class BodyData {

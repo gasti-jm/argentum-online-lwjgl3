@@ -1,7 +1,37 @@
 package org.aoclient.engine.utils;
 
+import org.aoclient.scripts.Compressor;
+
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
+
+/**
+ * <p>
+ * Proporciona una interfaz simplificada para leer diferentes tipos de datos primitivos y estructurados a partir de un arreglo de
+ * bytes. Esta clase es fundamental para la carga de recursos como graficos, mapas, sonidos y configuraciones que se almacenan en
+ * formato binario.
+ * <p>
+ * La clase permite especificar el orden de bytes durante la inicializacion, lo que facilita la lectura correcta de datos binarios
+ * generados en diferentes plataformas o por diferentes herramientas.
+ * <p>
+ * Funcionalidades principales:
+ * <ul>
+ * <li>Lectura de tipos primitivos
+ * <li>Lectura de cadenas de texto con longitud fija o variable
+ * <li>Soporte para diferentes ordenes de bytes (big-endian, little-endian)
+ * <li>Capacidad para saltar bytes o posicionarse en puntos especificos del buffer
+ * <li>Verificacion de disponibilidad de datos restantes
+ * </ul>
+ * <p>
+ * Esta clase es utilizada extensivamente en el proceso de carga de archivos de inicializacion, como {@code inits.ao} y
+ * otros recursos que definen la apariencia y comportamiento del mundo de Argentum Online.
+ * <p>
+ * Ejemplo de uso tipico: inicializar con un arreglo de bytes proveniente de un archivo comprimido y luego leer secuencialmente
+ * los datos segun la estructura esperada del archivo.
+ *
+ * @see GameData
+ * @see Compressor
+ */
 
 public class BinaryDataReader {
 

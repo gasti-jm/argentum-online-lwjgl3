@@ -1,5 +1,34 @@
 package org.aoclient.network.packets;
 
+/**
+ * <p>
+ * Enumeracion que define todos los comandos administrativos (GM - Game Master) disponibles en el protocolo.
+ * <p>
+ * {@code eGMCommands} contiene las constantes que identifican cada uno de los comandos especiales que pueden ejecutar los
+ * administradores y moderadores del juego. Estos comandos otorgan capacidades especiales de gestion, control y supervision que no
+ * estan disponibles para los jugadores normales.
+ * <p>
+ * La enumeracion es utilizada por {@link org.aoclient.network.Protocol Protocol} y
+ * {@link org.aoclient.network.ProtocolCmdParse ProtocolCmdParse} para identificar y procesar los comandos administrativos
+ * ingresados mediante la consola del juego. Cada constante corresponde a un comando especifico que puede ser ejecutado
+ * anteponiendo {@code /} al nombre del comando.
+ * <p>
+ * Los comandos administrativos incluyen funcionalidades como:
+ * <ul>
+ * <li>Administracion de personajes y cuentas
+ * <li>Manipulacion del mundo y sus objetos
+ * <li>Monitoreo y control de jugadores
+ * <li>Aplicacion de sanciones y restricciones
+ * <li>Configuracion de parametros del servidor
+ * <li>Gestion de clanes y facciones
+ * <li>Control del sistema climatico y ambiental
+ * <li>Herramientas de soporte tecnico
+ * </ul>
+ * <p>
+ * El uso de estos comandos requiere niveles especificos de privilegios administrativos segun la politica de moderacion del
+ * servidor.
+ */
+
 public enum eGMCommands {
 
     StrawBundle,

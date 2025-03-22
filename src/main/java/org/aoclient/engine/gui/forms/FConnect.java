@@ -19,6 +19,28 @@ import static org.aoclient.engine.utils.GameData.options;
 import static org.aoclient.network.Protocol.writeLoginExistingChar;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_ENTER;
 
+/**
+ * Formulario de conexion al servidor.
+ * <p>
+ * La clase {@code FConnect} implementa la interfaz grafica que se muestra al usuario cuando inicia el cliente y necesita
+ * conectarse al servidor. Este formulario es la puerta de entrada principal a la experiencia de juego, permitiendo a los usuarios
+ * autenticarse con sus cuentas existentes.
+ * <p>
+ * El formulario proporciona las siguientes funcionalidades:
+ * <ul>
+ * <li>Campos para ingresar la direccion IP y puerto del servidor
+ * <li>Campos para ingresar nombre de usuario y contraseña
+ * <li>Boton para iniciar la conexion al servidor con las credenciales proporcionadas
+ * <li>Boton para crear un nuevo personaje, dirigiendo al usuario a {@link FCreateCharacter}
+ * <li>Botones adicionales para acceder a opciones como recuperacion de cuenta, manual del juego, reglas, codigo fuente y salida
+ * del programa
+ * </ul>
+ * <p>
+ * Esta clase maneja la validacion basica de campos y establece la comunicacion inicial con el servidor, enviando las credenciales
+ * del usuario y procesando la respuesta para determinar si se permite el acceso. En caso de conexion exitosa, la aplicacion
+ * avanzara a la pantalla principal.
+ */
+
 public final class FConnect extends Form {
 
     private final ImString portStr = new ImString(options.getPortServer());

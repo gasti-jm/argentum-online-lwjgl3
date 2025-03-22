@@ -14,7 +14,19 @@ import static org.aoclient.engine.utils.GameData.options;
 import static org.aoclient.network.Protocol.*;
 
 /**
- * Clase que maneja el socket de conexion.
+ * Clase que maneja la conexion de red entre el cliente y el servidor.
+ * <p>
+ * {@code SocketConnection} implementa el patron de diseño Singleton para garantizar una unica instancia de conexion con el
+ * servidor. Se encarga de establecer, mantener y cerrar la comunicacion via sockets TCP/IP.
+ * <p>
+ * Esta clase provee metodos para conectar con el servidor, enviar datos, recibir y procesar la informacion entrante, y finalmente
+ * desconectar la sesion de manera segura.
+ * <p>
+ * Trabaja en conjunto con {@link Protocol} para manejar el protocolo de comunicacion del juego, utilizando buffers de entrada y
+ * salida para gestionar el flujo de datos.
+ * <p>
+ * La clase maneja automaticamente situaciones como intentos de reconexion, desconexiones inesperadas, y coordina el estado de la
+ * conexion con otros componentes del juego como {@link User} y {@link Rain} para mantener la coherencia del estado del cliente.
  */
 
 public class SocketConnection {

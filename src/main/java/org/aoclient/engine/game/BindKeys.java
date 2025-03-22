@@ -7,6 +7,23 @@ import java.io.RandomAccessFile;
 
 import static org.lwjgl.glfw.GLFW.*;
 
+/**
+ * Clase encargada de la gestion y configuracion de las teclas de control.
+ * <p>
+ * {@code BindKeys} mantiene un mapeo entre las distintas acciones posibles (definidas en el enumerador {@code E_KeyType}) y las
+ * teclas asignadas a estas acciones. Este mapeo puede cargarse desde un archivo de configuracion, permitiendo a los jugadores
+ * personalizar los controles segun sus preferencias.
+ * <p>
+ * Principales funcionalidades:
+ * <ul>
+ * <li>Cargar configuraciones de teclas por defecto
+ * <li>Cargar configuraciones personalizadas desde archivos
+ * <li>Guardar configuraciones de teclas modificadas
+ * <li>Asignar nuevas teclas a acciones especificas
+ * <li>Traducir entre codigos de teclas y acciones del juego
+ * </ul>
+ */
+
 public final class BindKeys {
 
     private static BindKeys instance;

@@ -11,6 +11,16 @@ import java.util.List;
 
 import static org.aoclient.network.Protocol.*;
 
+/**
+ * <p>
+ * Proporciona la funcionalidad para manejar y mostrar la lista de hechizos. Contiene los metodos necesarios para renderizar la
+ * interfaz grafica de los hechizos, agregar nuevos hechizos al inventario, y ejecutar acciones como lanzar un hechizo o solicitar
+ * informacion detallada sobre el mismo.
+ * <p>
+ * El inventario de hechizos se presenta como una lista interactiva donde el jugador puede seleccionar cualquier hechizo
+ * disponible y realizar acciones con el mismo mediante los botones de la interfaz.
+ */
+
 public class InventorySpells {
 
     private static final int MAX_INVENTORY_SPELLS = 35;

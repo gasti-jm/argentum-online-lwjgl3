@@ -1,7 +1,13 @@
 package org.aoclient.engine.utils.inits;
 
 /**
- * Simula el "Type" o la estructura de MapData.
+ * Simula el "Type" o la estructura de {@code MapData}, representando los datos de una celda individual en el mapa.
+ * <p>
+ * Esta clase almacena toda la informacion necesaria para representar una celda especifica del mapa, incluyendo sus capas
+ * graficas, personajes, objetos y propiedades de interaccion.
+ *
+ * @see GrhInfo
+ * @see Obj
  */
 
 public final class MapData {

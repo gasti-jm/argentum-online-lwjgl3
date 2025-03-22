@@ -1,5 +1,15 @@
 package org.aoclient.engine.game.models;
 
+/**
+ * <p>
+ * Cataloga todos los posibles tipos de items que pueden encontrarse en el mundo, desde armas y armaduras hasta recursos, pociones
+ * y elementos decorativos. Cada tipo de objeto tiene un valor numerico asociado que se utiliza en la comunicacion con el servidor
+ * y en el procesamiento interno.
+ * <p>
+ * Adicionalmente, cada tipo de objeto posee un atributo booleano {@code equippable} que indica si dicho objeto puede ser equipado
+ * por un personaje. Por ejemplo, armas, armaduras y cascos son equipables, mientras que pociones, oro o recursos no lo son.
+ */
+
 public enum E_ObjType {
 
     otUseOnce(1),

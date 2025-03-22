@@ -1,6 +1,5 @@
 package org.aoclient.engine.utils;
 
-
 import org.aoclient.engine.Sound;
 import org.aoclient.engine.game.Options;
 import org.aoclient.engine.game.models.Character;
@@ -17,8 +16,26 @@ import static org.aoclient.network.Messages.loadMessages;
 import static org.aoclient.scripts.Compressor.readResource;
 
 /**
- * Clase en donde se carga todos los archivos necesarios del juego.
+ * <p>
+ * Clase central de almacenamiento y gestion de datos del juego. {@code GameData} contiene las referencias a todos los recursos,
+ * estados y configuraciones necesarios para el funcionamiento del cliente.
+ * <p>
+ * Esta clase es de tipo utilidad (utility class) y no debe ser instanciada. Provee metodos estaticos para cargar, inicializar y
+ * acceder a los diferentes elementos del juego como graficos, sonidos, personajes, mapas y configuraciones.
+ * <p>
+ * Entre sus responsabilidades principales se encuentran:
+ * <ul>
+ * <li>Gestionar los arrays estaticos de datos del juego (cuerpos, cabezas, graficos, etc.)
+ * <li>Cargar los recursos desde archivos comprimidos
+ * <li>Inicializar los datos necesarios al inicio del juego
+ * <li>Proporcionar metodos de acceso a los datos del juego
+ * <li>Mantener el estado global de elementos como personajes, mapas y efectos
+ * </ul>
+ * <p>
+ * La clase implementa un sistema de carga secuencial de recursos durante la inicializacion, garantizando que todos los datos
+ * necesarios esten disponibles antes de que el juego comience a ejecutarse.
  */
+
 public final class GameData {
 
     public static BodyData[] bodyData;
@@ -66,8 +83,15 @@ public final class GameData {
      * Cargamos y almacenamos los datos del archivo "graphics.ind".
      */
     private static void loadGrhData() {
+
+        byte[] data = readResource("resources/inits.ao", "graphics");
+        if (data == null) {
+            System.err.println("Could not load graphics data!");
+            return;
+        }
+
         try {
-            byte[] data = readResource("resources/inits.ao", "graphics");
+
             reader.init(data);
 
             final int fileVersion = reader.readInt();
@@ -144,236 +168,240 @@ public final class GameData {
      * Cargamos y almacenamos los datos del archivo "heads.ind".
      */
     private static void loadHeads() {
-        try {
-            byte[] data = readResource("resources/inits.ao", "heads");
-            reader.init(data);
-            reader.skipBytes(263);
-
-            final IndexHeads[] myHeads;
-            final short numHeads = reader.readShort();
-            headData = new HeadData[numHeads + 1];
-            myHeads = new IndexHeads[numHeads + 1];
-
-            headData[0] = new HeadData();
-            for (int i = 1; i <= numHeads; i++) {
-                myHeads[i] = new IndexHeads();
-                myHeads[i].setHead(1, reader.readShort());
-                myHeads[i].setHead(2, reader.readShort());
-                myHeads[i].setHead(3, reader.readShort());
-                myHeads[i].setHead(4, reader.readShort());
-
-                headData[i] = new HeadData();
-                if (myHeads[i].getHead(1) != 0) {
-                    headData[i].setHead(1, initGrh(headData[i].getHead(1), myHeads[i].getHead(1), false));
-                    headData[i].setHead(2, initGrh(headData[i].getHead(2), myHeads[i].getHead(2), false));
-                    headData[i].setHead(3, initGrh(headData[i].getHead(3), myHeads[i].getHead(3), false));
-                    headData[i].setHead(4, initGrh(headData[i].getHead(4), myHeads[i].getHead(4), false));
-                }
-            }
-
-
-        } catch (IOException e) {
-            e.printStackTrace();
+        byte[] data = readResource("resources/inits.ao", "heads");
+        if (data == null) {
+            System.err.println("Could not load heads data!");
+            return;
         }
+
+        reader.init(data);
+        reader.skipBytes(263);
+
+        final IndexHeads[] myHeads;
+        final short numHeads = reader.readShort();
+        headData = new HeadData[numHeads + 1];
+        myHeads = new IndexHeads[numHeads + 1];
+
+        headData[0] = new HeadData();
+        for (int i = 1; i <= numHeads; i++) {
+            myHeads[i] = new IndexHeads();
+            myHeads[i].setHead(1, reader.readShort());
+            myHeads[i].setHead(2, reader.readShort());
+            myHeads[i].setHead(3, reader.readShort());
+            myHeads[i].setHead(4, reader.readShort());
+
+            headData[i] = new HeadData();
+            if (myHeads[i].getHead(1) != 0) {
+                headData[i].setHead(1, initGrh(headData[i].getHead(1), myHeads[i].getHead(1), false));
+                headData[i].setHead(2, initGrh(headData[i].getHead(2), myHeads[i].getHead(2), false));
+                headData[i].setHead(3, initGrh(headData[i].getHead(3), myHeads[i].getHead(3), false));
+                headData[i].setHead(4, initGrh(headData[i].getHead(4), myHeads[i].getHead(4), false));
+            }
+        }
+
     }
 
     /**
      * Cargamos y almacenamos los datos del archivo "helmets.ind".
      */
     private static void loadHelmets() {
-        try {
-            byte[] data = readResource("resources/inits.ao", "helmets");
-            reader.init(data);
-            reader.skipBytes(263);
-
-            final IndexHeads[] myHeads;
-            final short numHeads = reader.readShort();
-            helmetsData = new HeadData[numHeads + 1];
-            myHeads = new IndexHeads[numHeads + 1];
-
-            helmetsData[0] = new HeadData();
-            for (int i = 1; i <= numHeads; i++) {
-                myHeads[i] = new IndexHeads();
-                myHeads[i].setHead(1, reader.readShort());
-                myHeads[i].setHead(2, reader.readShort());
-                myHeads[i].setHead(3, reader.readShort());
-                myHeads[i].setHead(4, reader.readShort());
-
-                helmetsData[i] = new HeadData();
-                if (myHeads[i].getHead(1) != 0) {
-                    helmetsData[i].setHead(1, initGrh(helmetsData[i].getHead(1), myHeads[i].getHead(1), false));
-                    helmetsData[i].setHead(2, initGrh(helmetsData[i].getHead(2), myHeads[i].getHead(2), false));
-                    helmetsData[i].setHead(3, initGrh(helmetsData[i].getHead(3), myHeads[i].getHead(3), false));
-                    helmetsData[i].setHead(4, initGrh(helmetsData[i].getHead(4), myHeads[i].getHead(4), false));
-                }
-            }
-
-        } catch (IOException ex) {
-            ex.printStackTrace();
+        byte[] data = readResource("resources/inits.ao", "helmets");
+        if (data == null) {
+            System.err.println("Could not load helmets data!");
+            return;
         }
+
+        reader.init(data);
+        reader.skipBytes(263);
+
+        final IndexHeads[] myHeads;
+        final short numHeads = reader.readShort();
+        helmetsData = new HeadData[numHeads + 1];
+        myHeads = new IndexHeads[numHeads + 1];
+
+        helmetsData[0] = new HeadData();
+        for (int i = 1; i <= numHeads; i++) {
+            myHeads[i] = new IndexHeads();
+            myHeads[i].setHead(1, reader.readShort());
+            myHeads[i].setHead(2, reader.readShort());
+            myHeads[i].setHead(3, reader.readShort());
+            myHeads[i].setHead(4, reader.readShort());
+
+            helmetsData[i] = new HeadData();
+            if (myHeads[i].getHead(1) != 0) {
+                helmetsData[i].setHead(1, initGrh(helmetsData[i].getHead(1), myHeads[i].getHead(1), false));
+                helmetsData[i].setHead(2, initGrh(helmetsData[i].getHead(2), myHeads[i].getHead(2), false));
+                helmetsData[i].setHead(3, initGrh(helmetsData[i].getHead(3), myHeads[i].getHead(3), false));
+                helmetsData[i].setHead(4, initGrh(helmetsData[i].getHead(4), myHeads[i].getHead(4), false));
+            }
+        }
+
     }
 
     /**
      * Cargamos y almacenamos los datos del archivo "bodys.ind".
      */
     private static void loadBodys() {
-        try {
-            byte[] data = readResource("resources/inits.ao", "bodys");
-            reader.init(data);
-            reader.skipBytes(263);
-
-            final IndexBodys[] myBodys;
-            final short numBodys = reader.readShort();
-            bodyData = new BodyData[numBodys + 1];
-            myBodys = new IndexBodys[numBodys + 1];
-
-            bodyData[0] = new BodyData();
-            for (int i = 1; i <= numBodys; i++) {
-                myBodys[i] = new IndexBodys();
-                myBodys[i].setBody(1, reader.readShort());
-                myBodys[i].setBody(2, reader.readShort());
-                myBodys[i].setBody(3, reader.readShort());
-                myBodys[i].setBody(4, reader.readShort());
-
-                myBodys[i].setHeadOffsetX(reader.readShort());
-                myBodys[i].setHeadOffsetY(reader.readShort());
-
-                bodyData[i] = new BodyData();
-                if (myBodys[i].getBody(1) != 0) {
-                    bodyData[i].setWalk(1, initGrh(bodyData[i].getWalk(1), myBodys[i].getBody(1), false));
-                    bodyData[i].setWalk(2, initGrh(bodyData[i].getWalk(2), myBodys[i].getBody(2), false));
-                    bodyData[i].setWalk(3, initGrh(bodyData[i].getWalk(3), myBodys[i].getBody(3), false));
-                    bodyData[i].setWalk(4, initGrh(bodyData[i].getWalk(4), myBodys[i].getBody(4), false));
-
-                    bodyData[i].getHeadOffset().setX(myBodys[i].getHeadOffsetX());
-                    bodyData[i].getHeadOffset().setY(myBodys[i].getHeadOffsetY());
-                }
-            }
-
-        } catch (IOException e) {
-            e.printStackTrace();
+        byte[] data = readResource("resources/inits.ao", "bodys");
+        if (data == null) {
+            System.err.println("Could not load bodys data!");
+            return;
         }
+
+        reader.init(data);
+        reader.skipBytes(263);
+
+        final IndexBodys[] myBodys;
+        final short numBodys = reader.readShort();
+        bodyData = new BodyData[numBodys + 1];
+        myBodys = new IndexBodys[numBodys + 1];
+
+        bodyData[0] = new BodyData();
+        for (int i = 1; i <= numBodys; i++) {
+            myBodys[i] = new IndexBodys();
+            myBodys[i].setBody(1, reader.readShort());
+            myBodys[i].setBody(2, reader.readShort());
+            myBodys[i].setBody(3, reader.readShort());
+            myBodys[i].setBody(4, reader.readShort());
+
+            myBodys[i].setHeadOffsetX(reader.readShort());
+            myBodys[i].setHeadOffsetY(reader.readShort());
+
+            bodyData[i] = new BodyData();
+            if (myBodys[i].getBody(1) != 0) {
+                bodyData[i].setWalk(1, initGrh(bodyData[i].getWalk(1), myBodys[i].getBody(1), false));
+                bodyData[i].setWalk(2, initGrh(bodyData[i].getWalk(2), myBodys[i].getBody(2), false));
+                bodyData[i].setWalk(3, initGrh(bodyData[i].getWalk(3), myBodys[i].getBody(3), false));
+                bodyData[i].setWalk(4, initGrh(bodyData[i].getWalk(4), myBodys[i].getBody(4), false));
+
+                bodyData[i].getHeadOffset().setX(myBodys[i].getHeadOffsetX());
+                bodyData[i].getHeadOffset().setY(myBodys[i].getHeadOffsetY());
+            }
+        }
+
     }
 
     /**
      * Cargamos y almacenamos los datos del archivo "arms.ind".
      */
     private static void loadWeapons() {
-        try {
-            byte[] data = readResource("resources/inits.ao", "weapons");
-            reader.init(data);
-
-            final int numArms = reader.readShort();
-            weaponData = new WeaponData[numArms + 1];
-
-            weaponData[0] = new WeaponData();
-            for (int loopc = 1; loopc <= numArms; loopc++) {
-                weaponData[loopc] = new WeaponData();
-                weaponData[loopc].setWeaponWalk(1, initGrh(weaponData[loopc].getWeaponWalk(1), reader.readShort(), false));
-                weaponData[loopc].setWeaponWalk(2, initGrh(weaponData[loopc].getWeaponWalk(2), reader.readShort(), false));
-                weaponData[loopc].setWeaponWalk(3, initGrh(weaponData[loopc].getWeaponWalk(3), reader.readShort(), false));
-                weaponData[loopc].setWeaponWalk(4, initGrh(weaponData[loopc].getWeaponWalk(4), reader.readShort(), false));
-            }
-
-        } catch (IOException ex) {
-            ex.printStackTrace();
+        byte[] data = readResource("resources/inits.ao", "weapons");
+        if (data == null) {
+            System.err.println("Could not load weapons data!");
+            return;
         }
+
+        reader.init(data);
+
+        final int numArms = reader.readShort();
+        weaponData = new WeaponData[numArms + 1];
+
+        weaponData[0] = new WeaponData();
+        for (int loopc = 1; loopc <= numArms; loopc++) {
+            weaponData[loopc] = new WeaponData();
+            weaponData[loopc].setWeaponWalk(1, initGrh(weaponData[loopc].getWeaponWalk(1), reader.readShort(), false));
+            weaponData[loopc].setWeaponWalk(2, initGrh(weaponData[loopc].getWeaponWalk(2), reader.readShort(), false));
+            weaponData[loopc].setWeaponWalk(3, initGrh(weaponData[loopc].getWeaponWalk(3), reader.readShort(), false));
+            weaponData[loopc].setWeaponWalk(4, initGrh(weaponData[loopc].getWeaponWalk(4), reader.readShort(), false));
+        }
+
     }
 
     /**
      * Cargamos y almacenamos los datos del archivo "shields.ind".
      */
     private static void loadShields() {
-        try {
-            byte[] data = readResource("resources/inits.ao", "shields");
-            reader.init(data);
-
-            final int numShields = reader.readShort();
-            shieldData = new ShieldData[numShields + 1];
-
-            shieldData[0] = new ShieldData();
-            for (int loopc = 1; loopc <= numShields; loopc++) {
-                shieldData[loopc] = new ShieldData();
-                shieldData[loopc].setShieldWalk(1, initGrh(shieldData[loopc].getShieldWalk(1), reader.readShort(), false));
-                shieldData[loopc].setShieldWalk(2, initGrh(shieldData[loopc].getShieldWalk(2), reader.readShort(), false));
-                shieldData[loopc].setShieldWalk(3, initGrh(shieldData[loopc].getShieldWalk(3), reader.readShort(), false));
-                shieldData[loopc].setShieldWalk(4, initGrh(shieldData[loopc].getShieldWalk(4), reader.readShort(), false));
-            }
-
-        } catch (IOException ex) {
-            ex.printStackTrace();
+        byte[] data = readResource("resources/inits.ao", "shields");
+        if (data == null) {
+            System.err.println("Could not load shields data!");
+            return;
         }
+
+        reader.init(data);
+
+        final int numShields = reader.readShort();
+        shieldData = new ShieldData[numShields + 1];
+
+        shieldData[0] = new ShieldData();
+        for (int loopc = 1; loopc <= numShields; loopc++) {
+            shieldData[loopc] = new ShieldData();
+            shieldData[loopc].setShieldWalk(1, initGrh(shieldData[loopc].getShieldWalk(1), reader.readShort(), false));
+            shieldData[loopc].setShieldWalk(2, initGrh(shieldData[loopc].getShieldWalk(2), reader.readShort(), false));
+            shieldData[loopc].setShieldWalk(3, initGrh(shieldData[loopc].getShieldWalk(3), reader.readShort(), false));
+            shieldData[loopc].setShieldWalk(4, initGrh(shieldData[loopc].getShieldWalk(4), reader.readShort(), false));
+        }
+
     }
 
     /**
      * Cargamos el mapa.
      */
     public static void loadMap(int numMap) {
-        try {
-            byte[] data = readResource("resources/maps.ao", "mapa" + numMap);
-            reader.init(data);
+        byte[] data = readResource("resources/maps.ao", "mapa" + numMap);
+        if (data == null) {
+            System.err.println("Could not load mapa" + numMap + " data!");
+            return;
+        }
 
-            mapData = new MapData[101][101];
+        reader.init(data);
 
-            final short mapversion = reader.readShort();
-            reader.skipBytes(263); // cabecera.
+        mapData = new MapData[101][101];
 
-            byte byflags;
+        final short mapversion = reader.readShort();
+        reader.skipBytes(263); // cabecera.
 
-            // Falta implementar el mapInfo xd....
-            reader.readShort();
-            reader.readShort();
-            reader.readShort();
-            reader.readShort();
+        byte byflags;
 
-            byte bloq;
+        // Falta implementar el mapInfo xd....
+        reader.readShort();
+        reader.readShort();
+        reader.readShort();
+        reader.readShort();
 
-            mapData[0][0] = new MapData();
+        byte bloq;
 
-            for (int y = 1; y <= 100; y++) {
-                for (int x = 1; x <= 100; x++) {
-                    mapData[x][y] = new MapData();
+        mapData[0][0] = new MapData();
 
-                    byflags = reader.readByte();
-                    bloq = (byte) (byflags & 1);
-                    mapData[x][y].setBlocked(bloq == 1);
+        for (int y = 1; y <= 100; y++) {
+            for (int x = 1; x <= 100; x++) {
+                mapData[x][y] = new MapData();
 
-                    mapData[x][y].getLayer(1).setGrhIndex(reader.readShort());
-                    mapData[x][y].setLayer(1, initGrh(mapData[x][y].getLayer(1), mapData[x][y].getLayer(1).getGrhIndex(), true));
+                byflags = reader.readByte();
+                bloq = (byte) (byflags & 1);
+                mapData[x][y].setBlocked(bloq == 1);
 
-                    if ((byte) (byflags & 2) != 0) {
-                        mapData[x][y].getLayer(2).setGrhIndex(reader.readShort());
-                        mapData[x][y].setLayer(2, initGrh(mapData[x][y].getLayer(2), mapData[x][y].getLayer(2).getGrhIndex(), true));
+                mapData[x][y].getLayer(1).setGrhIndex(reader.readShort());
+                mapData[x][y].setLayer(1, initGrh(mapData[x][y].getLayer(1), mapData[x][y].getLayer(1).getGrhIndex(), true));
 
-                    } else mapData[x][y].getLayer(2).setGrhIndex(0);
+                if ((byte) (byflags & 2) != 0) {
+                    mapData[x][y].getLayer(2).setGrhIndex(reader.readShort());
+                    mapData[x][y].setLayer(2, initGrh(mapData[x][y].getLayer(2), mapData[x][y].getLayer(2).getGrhIndex(), true));
 
-                    if ((byte) (byflags & 4) != 0) {
-                        mapData[x][y].getLayer(3).setGrhIndex(reader.readShort());
-                        mapData[x][y].setLayer(3, initGrh(mapData[x][y].getLayer(3), mapData[x][y].getLayer(3).getGrhIndex(), true));
-                    } else mapData[x][y].getLayer(3).setGrhIndex(0);
+                } else mapData[x][y].getLayer(2).setGrhIndex(0);
 
-                    if ((byte) (byflags & 8) != 0) {
-                        mapData[x][y].getLayer(4).setGrhIndex(reader.readShort());
-                        mapData[x][y].setLayer(4, initGrh(mapData[x][y].getLayer(4), mapData[x][y].getLayer(4).getGrhIndex(), true));
-                    } else mapData[x][y].getLayer(4).setGrhIndex(0);
+                if ((byte) (byflags & 4) != 0) {
+                    mapData[x][y].getLayer(3).setGrhIndex(reader.readShort());
+                    mapData[x][y].setLayer(3, initGrh(mapData[x][y].getLayer(3), mapData[x][y].getLayer(3).getGrhIndex(), true));
+                } else mapData[x][y].getLayer(3).setGrhIndex(0);
 
-                    if ((byte) (byflags & 16) != 0) mapData[x][y].setTrigger(reader.readShort());
-                    else mapData[x][y].setTrigger(0);
+                if ((byte) (byflags & 8) != 0) {
+                    mapData[x][y].getLayer(4).setGrhIndex(reader.readShort());
+                    mapData[x][y].setLayer(4, initGrh(mapData[x][y].getLayer(4), mapData[x][y].getLayer(4).getGrhIndex(), true));
+                } else mapData[x][y].getLayer(4).setGrhIndex(0);
+
+                if ((byte) (byflags & 16) != 0) mapData[x][y].setTrigger(reader.readShort());
+                else mapData[x][y].setTrigger(0);
 
 //                    if (mapData[x][y].getCharIndex() > 0) {
 //                        eraseChar(mapData[x][y].getCharIndex());
 //                    }
-                    mapData[x][y].getObjGrh().setGrhIndex(0);
-                }
+                mapData[x][y].getObjGrh().setGrhIndex(0);
             }
-
-            // Liberar memoria
-            Surface.get().deleteAllTextures();
-            eraseAllChars();
-
-        } catch (IOException e) {
-            e.printStackTrace();
         }
+
+        // Liberar memoria
+        Surface.get().deleteAllTextures();
+        eraseAllChars();
 
     }
 
@@ -381,22 +409,23 @@ public final class GameData {
      * Cargamos los indices de animaciones FXs del archivo "fxs.ind"
      */
     private static void loadFxs() {
-        try {
-            byte[] data = readResource("resources/inits.ao", "fxs");
-            reader.init(data);
-            reader.skipBytes(263);
+        byte[] data = readResource("resources/inits.ao", "fxs");
+        if (data == null) {
+            System.err.println("Could not load fxs data!");
+            return;
+        }
 
-            final short numFXs = reader.readShort();
-            fxData = new FxData[numFXs + 1];
+        reader.init(data);
+        reader.skipBytes(263);
 
-            for (int i = 1; i <= numFXs; i++) {
-                fxData[i] = new FxData();
-                fxData[i].setAnimacion(reader.readShort());
-                fxData[i].setOffsetX(reader.readShort());
-                fxData[i].setOffsetY(reader.readShort());
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
+        final short numFXs = reader.readShort();
+        fxData = new FxData[numFXs + 1];
+
+        for (int i = 1; i <= numFXs; i++) {
+            fxData[i] = new FxData();
+            fxData[i].setAnimacion(reader.readShort());
+            fxData[i].setOffsetX(reader.readShort());
+            fxData[i].setOffsetY(reader.readShort());
         }
     }
 
@@ -404,21 +433,22 @@ public final class GameData {
      * Cargamos los indices de mapas donde se puede visualizar la lluvia en el archivo "fk.ind"
      */
     private static void loadFK() {
-        try {
-            byte[] data = readResource("resources/inits.ao", "fk");
-            reader.init(data);
-            reader.skipBytes(263);
-
-            final short Nu = reader.readShort();
-            bLluvia = new boolean[Nu + 1];
-
-            bLluvia[0] = false;
-            for (int i = 1; i <= Nu; i++)
-                bLluvia[i] = reader.readByte() == 1;
-
-        } catch (IOException ex) {
-            ex.printStackTrace();
+        byte[] data = readResource("resources/inits.ao", "fk");
+        if (data == null) {
+            System.err.println("Could not load fk data!");
+            return;
         }
+
+        reader.init(data);
+        reader.skipBytes(263);
+
+        final short Nu = reader.readShort();
+        bLluvia = new boolean[Nu + 1];
+
+        bLluvia[0] = false;
+        for (int i = 1; i <= Nu; i++)
+            bLluvia[i] = reader.readByte() == 1;
+
     }
 
     /**

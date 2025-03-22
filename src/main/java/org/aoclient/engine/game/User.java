@@ -13,6 +13,29 @@ import static org.aoclient.engine.utils.GameData.*;
 import static org.aoclient.network.Protocol.writeChangeHeading;
 import static org.aoclient.network.Protocol.writeWalk;
 
+/**
+ * <p>
+ * Representa el usuario controlado por el jugador. Centraliza toda la informacion, logica de movimiento y estados del personaje
+ * principal.
+ * <p>
+ * Esta clase maneja aspectos fundamentales como la posicion del usuario en el mapa, direccion de movimiento, atributos y
+ * estadisticas, inventario, hechizos y todas las interacciones con el entorno de juego. Actua como una entidad central que
+ * coordina las acciones del jugador con el resto del mundo virtual.
+ * <p>
+ * Entre sus responsabilidades principales se encuentran:
+ * <ul>
+ * <li>Control del movimiento y posicionamiento del usuario</li>
+ * <li>Gestion de estadisticas (vida, mana, stamina, experiencia, etc.)</li>
+ * <li>Manejo del inventario y equipamiento</li>
+ * <li>Administracion de hechizos disponibles</li>
+ * <li>Control de estados especiales (navegando, bajo techo, hablando, etc.)</li>
+ * <li>Interaccion con el entorno y otros personajes</li>
+ * </ul>
+ * <p>
+ * La clase representa el nucleo de la experiencia de juego, siendo el punto de conexion entre las acciones del jugador y su
+ * representacion en el mundo virtual.
+ */
+
 public final class User {
 
     private static User instance;

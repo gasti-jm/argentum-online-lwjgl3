@@ -10,9 +10,26 @@ import org.aoclient.engine.listeners.KeyListener;
 import static org.aoclient.engine.Engine.closeClient;
 
 /**
- * Esta es la escena donde se va a mostrar un conectar renderizado y se va a tener en cuenta el crear personaje.
  * <p>
- * Se recomienda leer el JavaDoc de la clase padre "Scene.java".
+ * {@code MainScene} es la escena donde se muestra el formulario de conexion ({@code FConnect}) que permite al usuario ingresar
+ * sus credenciales para acceder al juego o elegir crear un nuevo personaje. Esta escena sirve como punto de entrada principal a
+ * la experiencia de juego.
+ * <p>
+ * Desde esta escena, el usuario puede:
+ * <ul>
+ * <li>Iniciar sesion con un personaje existente
+ * <li>Navegar hacia la creacion de un nuevo personaje
+ * <li>Salir
+ * </ul>
+ * <p>
+ * La escena se mantiene activa hasta que el usuario establece una conexion exitosa con el servidor, momento en el cual se realiza
+ * una transicion automatica hacia {@code GameScene}. La escena monitorea constantemente el estado de conexion del usuario
+ * mediante la clase {@code User} para determinar cuando realizar esta transicion.
+ *
+ * @see Scene
+ * @see GameScene
+ * @see FConnect
+ * @see User
  */
 
 public final class MainScene extends Scene {
