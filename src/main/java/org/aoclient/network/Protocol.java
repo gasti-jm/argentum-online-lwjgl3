@@ -19,10 +19,7 @@ import org.aoclient.engine.utils.inits.BodyData;
 import org.aoclient.engine.utils.inits.HeadData;
 import org.aoclient.engine.utils.inits.ShieldData;
 import org.aoclient.engine.utils.inits.WeaponData;
-import org.aoclient.network.packets.ClientPacketID;
-import org.aoclient.network.packets.E_Messages;
-import org.aoclient.network.packets.ServerPacketID;
-import org.aoclient.network.packets.eGMCommands;
+import org.aoclient.network.packets.*;
 import org.tinylog.Logger;
 
 import java.nio.charset.StandardCharsets;
@@ -2539,7 +2536,6 @@ public class Protocol {
         short shield = buffer.readInteger();
         short helmet = buffer.readInteger();
 
-
         User.get().setCharacterFx(charIndex, buffer.readInteger(), buffer.readInteger());
 
         charList[charIndex].setName(buffer.readASCIIString());
@@ -2547,26 +2543,25 @@ public class Protocol {
         int nickColor = buffer.readByte();
         int privs = buffer.readByte();
 
-        // falta crear enums de nickcolor y playerType.
-        if ((nickColor & 1) != 0) {
+        if ((nickColor & NickColor.CRIMINAL.getId()) != 0) {
             charList[charIndex].setCriminal(true);
         } else {
             charList[charIndex].setCriminal(false);
         }
 
-        charList[charIndex].setAttackable((nickColor & 4) != 0);
+        charList[charIndex].setAttackable((nickColor & NickColor.ATACABLE.getId()) != 0);
 
-        if (privs != 9) {
-            if ((privs & 64) != 0 && (privs & 1) == 0) {
-                privs = (short) (privs ^ 64);
+        if (privs != 0) {
+            if ((privs & PlayerType.CHAOS_COUNCIL.getId()) != 0 && (privs & PlayerType.USER.getId()) == 0) {
+                privs = (short) (privs ^ PlayerType.CHAOS_COUNCIL.getId());
             }
 
-            if ((privs & 128) != 0 && (privs & 1) == 0) {
-                privs = (short) (privs ^ 128);
+            if ((privs & PlayerType.ROYAL_COUNCIL.getId()) != 0 && (privs & PlayerType.USER.getId()) == 0) {
+                privs = (short) (privs ^ PlayerType.ROYAL_COUNCIL.getId());
             }
 
-            if ((privs & 32) != 0) {
-                privs = 32;
+            if ((privs & PlayerType.ROLE_MASTER.getId()) != 0) {
+                privs = PlayerType.ROLE_MASTER.getId();
             }
 
             final int logPrivs = (int) (Math.log(privs) / Math.log(2));
@@ -2575,36 +2570,10 @@ public class Protocol {
             charList[charIndex].setPriv(0);
         }
 
-
-        /*
-
-        If privs <> 0 Then
-            'If the player belongs to a council AND is an admin, only whos as an admin
-            If (privs And PlayerType.ChaosCouncil) <> 0 And (privs And PlayerType.User) = 0 Then
-                privs = privs Xor PlayerType.ChaosCouncil
-            End If
-
-            If (privs And PlayerType.RoyalCouncil) <> 0 And (privs And PlayerType.User) = 0 Then
-                privs = privs Xor PlayerType.RoyalCouncil
-            End If
-
-            'If the player is a RM, ignore other flags
-            If privs And PlayerType.RoleMaster Then
-                privs = PlayerType.RoleMaster
-            End If
-
-            'Log2 of the bit flags sent by the server gives our numbers ^^
-            .priv = Log(privs) / Log(2)
-        Else
-            .priv = 0
-        End If
-         */
-
         makeChar(charIndex, body, head, heading, x, y, weapon, shield, helmet);
         refreshAllChars();
 
         incomingData.copyBuffer(buffer);
-        Logger.debug("handleCharacterCreate Cargado! - FALTA TERMINAR!");
     }
 
     private static void handleUserCharIndexInServer() {
