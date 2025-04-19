@@ -1,7 +1,7 @@
 <div align='center'>
     <br/>
     <img src="https://github.com/gasti-jm/argentum-online-lwjgl3/assets/82490615/0ad2c3a1-c512-464c-a0a8-2cfc9f06c0f8" width= "300px"/> <br/> <br/>
-    <a target="_blank"><img src="https://img.shields.io/badge/Built%20in-Java_11-43ca1f.svg?style=flat-square"></img></a>
+    <a target="_blank"><img src="https://img.shields.io/badge/Built%20in-Java_17-43ca1f.svg?style=flat-square"></img></a>
     <a target="_blank"><img src="https://img.shields.io/badge/Made%20in-IntelliJ%20Community-be27e9.svg?style=flat-square"></img></a>
     <a target="_blank"><img src="https://img.shields.io/badge/License-GNU%20General%20Public%20License%20-e98227.svg?style=flat-square"></img></a>
 </div>
@@ -26,7 +26,7 @@ Para aquellos que quieran colaborar con el proyecto, ¡son más que bienvenidos!
 # Dependencias
 
 El proyecto utiliza las siguientes dependencias principales (gestionadas por Gradle):
-- LWJGL 3.3.3
+- LWJGL 3.3.4
 - JOML 1.10.5
 - Dear ImGui 1.86.11
 - TinyLog 2.7.0
@@ -54,7 +54,7 @@ git clone https://github.com/gasti-jm/argentum-online-lwjgl3.git
 
 - El proyecto utiliza Gradle para la gestión de dependencias
 - Las librerías nativas se descargan automáticamente según tu sistema operativo
-- Compatible con Windows, Linux y MacOS
+- Compatible con Windows, Linux y MacOS (x64 & arm64)
 - Asegúrate de tener los drivers gráficos actualizados para un rendimiento óptimo de OpenGL
 
 # Imágenes
