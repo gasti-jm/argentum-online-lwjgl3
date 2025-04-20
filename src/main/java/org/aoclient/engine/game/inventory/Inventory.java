@@ -1,6 +1,7 @@
 package org.aoclient.engine.game.inventory;
 
 import imgui.ImGui;
+import imgui.ImVec2;
 import org.aoclient.engine.game.models.E_ObjType;
 import org.aoclient.engine.listeners.MouseListener;
 import org.aoclient.engine.renderer.RGBColor;
@@ -69,6 +70,15 @@ public abstract class Inventory {
     }
 
     /**
+     * @desc: Chekeamos que el mouse este dentro del inventario.
+     */
+    public boolean inInventoryArea(float mouseX, float mouseY) {
+        if (mouseX < posX || mouseX > posX + sWidth) return false;
+        if (mouseY < posY || mouseY > posY + sHeigth) return false;
+        return true;
+    }
+
+    /**
      * @desc: Agregamos un item al slot del inventario.
      */
     public void setItem(int slot, short objIndex, int amount, boolean equipped, short grhIndex, int objType,
@@ -108,6 +118,16 @@ public abstract class Inventory {
     }
 
     /**
+     * @desc Selecciona un slot al hacer un solo click dentro del inventario (Sirve para los frms de ImGUI).
+     */
+    public void clickInventory(float mouseX, float mouseY) {
+        final int x = (int) ((mouseX - posX) / TILE_PIXEL_SIZE);
+        final int y = (int) ((mouseY - posY) / TILE_PIXEL_SIZE);
+        final int slot = x + (this.cantColumns * y);
+        setSelectedSlot(slot); // actualizamos el slot seleccionado
+    }
+
+    /**
      * @return Getter del atributo slotSelected
      */
     public int getSlotSelected() {
@@ -140,6 +160,10 @@ public abstract class Inventory {
 
         Texture objTexture;
 
+    }
+
+    public float getValue(int slot) {
+        return slots[slot].value;
     }
 
 }

@@ -2986,44 +2986,8 @@ public class Protocol {
     private static void handleCommerceInit() {
         // Remove packet ID
         incomingData.readByte();
-
+        // comerciando = true
         ImGUISystem.get().show(new FComerce());
-
-        /*
-            ' Initialize commerce inventories
-            Call InvComUsu.Initialize(DirectDraw, frmComerciar.picInvUser, Inventario.MaxObjs)
-            Call InvComNpc.Initialize(DirectDraw, frmComerciar.picInvNpc, MAX_NPC_INVENTORY_SLOTS)
-
-            'Fill user inventory
-            For i = 1 To MAX_INVENTORY_SLOTS
-                If Inventario.OBJIndex(i) <> 0 Then
-                    With Inventario
-                        Call InvComUsu.SetItem(i, .OBJIndex(i), _
-                        .Amount(i), .Equipped(i), .GrhIndex(i), _
-                        .OBJType(i), .MaxHit(i), .MinHit(i), .MaxDef(i), .MinDef(i), _
-                        .Valor(i), .ItemName(i))
-                    End With
-                End If
-            Next i
-
-            ' Fill Npc inventory
-            For i = 1 To 50
-                If NPCInventory(i).OBJIndex <> 0 Then
-                    With NPCInventory(i)
-                        Call InvComNpc.SetItem(i, .OBJIndex, _
-                        .Amount, 0, .GrhIndex, _
-                        .OBJType, .MaxHit, .MinHit, .MaxDef, .MinDef, _
-                        .Valor, .Name)
-                    End With
-                End If
-            Next i
-
-            'Set state and show form
-            Comerciando = True
-            frmComerciar.Show , //FrmMain
-         */
-
-        Logger.debug("handleCommerceInit CARGADO - FALTA TERMINAR!");
     }
 
     private static void handleBankEnd() {
@@ -4504,6 +4468,18 @@ public class Protocol {
 
     public static void writeHome() {
         outgoingData.writeByte(ClientPacketID.Home.ordinal());
+    }
+
+    public static void writeCommerceBuy(int slot, int amount) {
+        outgoingData.writeByte(ClientPacketID.CommerceBuy.ordinal());
+        outgoingData.writeByte(slot);
+        outgoingData.writeInteger((short) amount);
+    }
+
+    public static void writeCommerceSell(int slot, int amount) {
+        outgoingData.writeByte(ClientPacketID.CommerceSell.ordinal());
+        outgoingData.writeByte(slot);
+        outgoingData.writeInteger((short) amount);
     }
 
 }
