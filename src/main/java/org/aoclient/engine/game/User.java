@@ -47,6 +47,7 @@ public final class User {
     private boolean underCeiling;
     private boolean userMoving;
     private boolean userNavegando;
+    private boolean userComerciando;
     // mapa
     private short userMap;
     private short userCharIndex;
@@ -101,6 +102,7 @@ public final class User {
         this.inventorySpells = new InventorySpells();
         this.talking = false;
         this.userNavegando = false;
+        this.userComerciando = false;
     }
 
     /**
@@ -680,4 +682,11 @@ public final class User {
         this.usingSkill = usingSkill;
     }
 
+    public boolean isUserComerciando() {
+        return userComerciando;
+    }
+
+    public void setUserComerciando(boolean userComerciando) {
+        this.userComerciando = userComerciando;
+    }
 }

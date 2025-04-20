@@ -16,8 +16,7 @@ import java.io.IOException;
 
 import static org.aoclient.engine.Sound.SND_CLICK;
 import static org.aoclient.engine.Sound.playSound;
-import static org.aoclient.network.Protocol.writeCommerceBuy;
-import static org.aoclient.network.Protocol.writeCommerceEnd;
+import static org.aoclient.network.Protocol.*;
 import static org.lwjgl.glfw.GLFW.GLFW_MOUSE_BUTTON_LEFT;
 
 /**
@@ -85,8 +84,7 @@ public class FComerce extends Form {
         ImGui.setCursorPos(256, 402);
         if (ImGui.button("Vender", 172, 31)) {
             playSound(SND_CLICK);
-
-
+            writeCommerceSell(invUser.getSlotSelected() + 1, 1);
         }
 
 

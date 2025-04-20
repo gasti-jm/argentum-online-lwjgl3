@@ -65,7 +65,7 @@ public class Protocol {
 
         if (lastPacket > ServerPacketID.values().length) return;
         ServerPacketID packet = ServerPacketID.values()[lastPacket];
-        //Logger.debug(packet + " #" + p);
+        //Logger.debug(packet + " #" + packet);
 
         switch (packet) {
             case logged:
@@ -2987,6 +2987,7 @@ public class Protocol {
         // Remove packet ID
         incomingData.readByte();
         // comerciando = true
+        User.get().setUserComerciando(true);
         ImGUISystem.get().show(new FComerce());
     }
 
@@ -3057,11 +3058,7 @@ public class Protocol {
     private static void handleCommerceEnd() {
         // Remove packet ID
         incomingData.readByte();
-
-        // Comerciando = false
-        // Unload frmComerciar
-
-        Logger.debug("handleCommerceEnd CARGADO - FALTA TERMINAR!");
+        User.get().setUserComerciando(false);
     }
 
     private static void handleDisconnect() {
