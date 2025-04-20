@@ -28,7 +28,7 @@ For those who want to collaborate with the project, they are more than welcome! 
 # Dependencies
 
 The project uses the following main dependencies (managed by Gradle):
-- LWJGL 3.3.4
+- LWJGL 3.3.3
 - JOML 1.10.5
 - Dear ImGui 1.86.11
 - TinyLog 2.7.0

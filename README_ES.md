@@ -26,7 +26,7 @@ Para aquellos que quieran colaborar con el proyecto, ¡son más que bienvenidos!
 # Dependencias
 
 El proyecto utiliza las siguientes dependencias principales (gestionadas por Gradle):
-- LWJGL 3.3.4
+- LWJGL 3.3.3
 - JOML 1.10.5
 - Dear ImGui 1.86.11
 - TinyLog 2.7.0
