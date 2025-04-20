@@ -78,6 +78,13 @@ public final class FMain extends Form {
 
         this.drawShapes();
 
+        // SKILLS BUTTON
+        ImGui.setCursorPos(670, 45);
+        if (ImGui.invisibleButton("viewSkills", 30, 30)) {
+            playSound(SND_CLICK);
+            ImGUISystem.get().show(new FSkills());
+        }
+
         // LBL FPS
         final String txtFPS = String.valueOf(FPS);
         ImGui.setCursorPos(448, 4);
