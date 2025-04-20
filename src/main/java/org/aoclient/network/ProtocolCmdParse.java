@@ -44,7 +44,7 @@ public class ProtocolCmdParse {
         // Constructor privado para evitar instanciación directa
     }
 
-    // Método estático para obtener la única instancia de ByteMigration
+    // Funcion estática para obtener la única instancia de ByteMigration
     public static ProtocolCmdParse getInstance() {
         if (instance == null) instance = new ProtocolCmdParse();
         return instance;
@@ -317,7 +317,7 @@ public class ProtocolCmdParse {
                     }
                     break;
                 case "/FUNDARCLANGM":
-                    writeGuildFundation(3); //NOTA: En el codigo original clanType pertenece a un Enum que solo se utiliza en este caso, evaluar si crear el Enum o dejarlo así. El 3 pertenece al clan de GM.
+                    writeGuildFundation(3); //NOTA: En el código original clanType pertenece a un Enum que solo se utiliza en este caso, evaluar si crear el Enum o dejarlo así. El 3 pertenece al clan de GM.
                     break;
                 case "/ECHARPARTY":
                     if (notNullArguments) writePartyKick(argumentosRaw);

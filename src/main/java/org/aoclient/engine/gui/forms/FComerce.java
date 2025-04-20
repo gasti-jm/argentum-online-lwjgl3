@@ -1,13 +1,24 @@
 package org.aoclient.engine.gui.forms;
 
 import imgui.ImGui;
+import imgui.ImVec2;
 import imgui.flag.ImGuiCond;
 import imgui.flag.ImGuiWindowFlags;
+import org.aoclient.engine.game.Console;
+import org.aoclient.engine.game.User;
 import org.aoclient.engine.game.inventory.NPCInventory;
+import org.aoclient.engine.game.inventory.UserInventory;
+import org.aoclient.engine.listeners.MouseListener;
+import org.aoclient.engine.renderer.RGBColor;
+import org.tinylog.Logger;
 
 import java.io.IOException;
 
+import static org.aoclient.engine.Sound.SND_CLICK;
+import static org.aoclient.engine.Sound.playSound;
+import static org.aoclient.network.Protocol.writeCommerceBuy;
 import static org.aoclient.network.Protocol.writeCommerceEnd;
+import static org.lwjgl.glfw.GLFW.GLFW_MOUSE_BUTTON_LEFT;
 
 /**
  * Formulario de comercio con NPCs.
@@ -32,14 +43,16 @@ import static org.aoclient.network.Protocol.writeCommerceEnd;
 public class FComerce extends Form {
 
     public static NPCInventory invNPC = new NPCInventory();
+    public static UserInventory invUser = User.get().getUserInventory().clone();
 
     public FComerce() {
-
         try {
             this.backgroundImage = loadTexture("VentanaComercio");
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+
+        invUser.transformInvComerce();
     }
 
     @Override
@@ -57,9 +70,54 @@ public class FComerce extends Form {
             this.close();
         }
 
+        ImGui.setCursorPos(34, 402);
+        if (ImGui.button("Comprar", 172, 31)) {
+            playSound(SND_CLICK);
+
+            if (User.get().getUserGLD() >= invNPC.getValue(invNPC.getSlotSelected())) {
+                writeCommerceBuy(invNPC.getSlotSelected() + 1, 1);
+            } else {
+                Console.get().addMsgToConsole("No tienes oro suficiente.", true, false, new RGBColor(1f, 0.1f, 0.1f));
+            }
+
+        }
+
+        ImGui.setCursorPos(256, 402);
+        if (ImGui.button("Vender", 172, 31)) {
+            playSound(SND_CLICK);
+
+
+        }
+
+
+
+        this.checkInventoryEvents();
+
         invNPC.drawInventory();
+        invUser.drawInventory();
 
         ImGui.end();
+    }
+
+    private void checkInventoryEvents() {
+        ImVec2 mousePos = ImGui.getMousePos();      // posición global del mouse
+        ImVec2 windowPos = ImGui.getWindowPos();    // posición global de la ventana actual
+        ImVec2 localPos = new ImVec2(
+                mousePos.x - windowPos.x,
+                mousePos.y - windowPos.y
+        );
+
+        if (invNPC.inInventoryArea(localPos.x, localPos.y)) {
+            if (ImGui.isMouseClicked(0)) { // click izq
+                invNPC.clickInventory(localPos.x, localPos.y);
+            }
+        }
+
+        if (invUser.inInventoryArea(localPos.x, localPos.y)) {
+            if (ImGui.isMouseClicked(0)) { // click izq
+                invUser.clickInventory(localPos.x, localPos.y);
+            }
+        }
     }
 
 }

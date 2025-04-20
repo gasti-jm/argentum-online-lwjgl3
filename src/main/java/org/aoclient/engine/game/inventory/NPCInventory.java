@@ -1,6 +1,7 @@
 package org.aoclient.engine.game.inventory;
 
 import imgui.ImGui;
+import org.tinylog.Logger;
 
 import static org.aoclient.engine.scenes.Camera.TILE_PIXEL_SIZE;
 
@@ -21,7 +22,7 @@ public class NPCInventory extends Inventory {
     private static final int MAIN_SIZE_HEIGHT = 256;
 
     public NPCInventory() {
-        super(FORM_POS_X, FORM_POS_Y, MAIN_SIZE_WIDTH, MAIN_SIZE_HEIGHT, MAX_INVENTORY_SLOTS);
+        super(FORM_POS_X, FORM_POS_Y, MAIN_SIZE_WIDTH, MAIN_SIZE_HEIGHT, MAX_NPC_INVENTORY_SLOTS);
     }
 
     @Override
@@ -32,15 +33,26 @@ public class NPCInventory extends Inventory {
         int iX = posX;
         int iY = posY;
 
-        for (Slot slot : slots) {
-            if (slot.grhIndex > 0) {
+        final float wposX = ImGui.getWindowPosX() + 5;
+        final float wposY = ImGui.getWindowPosY() + 1;
+
+        for (int i = 0; i < slots.length; i++) {
+            if (slots[i].grhIndex > 0) {
                 ImGui.setCursorPos(iX + 5, iY);
 
-                ImGui.image(slot.objTexture.getId(), 32, 32);
+                if (i == slotSelected) {
+                    ImGui.getWindowDrawList().addLine(wposX + iX + 31, wposY + iY,
+                            wposX + iX + 31, wposY + iY + 31, selectedColor);
+
+                    ImGui.getWindowDrawList().addLine(wposX + iX, wposY + iY + 31,
+                            wposX+ iX + 31, wposY + iY + 31, selectedColor);
+                }
+
+                ImGui.image(slots[i].objTexture.getId(), 32, 32);
 
 
                 ImGui.setCursorPos(iX + 5, iY + 20);
-                ImGui.text(String.valueOf(slot.amount));
+                ImGui.text(String.valueOf(slots[i].amount));
             }
 
             // actualizamos la posicion en forma de tabla.

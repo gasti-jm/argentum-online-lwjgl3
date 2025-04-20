@@ -127,7 +127,6 @@ public final class Window {
             );
         } // the stack frame is popped automatically
 
-
         this.loadIcon();
 
         // Make the OpenGL context current
