@@ -127,6 +127,8 @@ public final class GameScene extends Scene {
      */
     @Override
     public void mouseEvents() {
+        if(user.isUserComerciando()) return;
+
         // Estamos haciendo click en el render?
         if (inGameArea()) {
             if (MouseListener.mouseButtonClick(GLFW_MOUSE_BUTTON_LEFT)) {
@@ -143,20 +145,25 @@ public final class GameScene extends Scene {
             }
         }
 
-        // estamos haciendo click en el inventario?
-        if (user.getUserInventory().inInventoryArea()) {
-            if (MouseListener.mouseButtonClick(GLFW_MOUSE_BUTTON_LEFT)) {
-                // cheakeamos tambien del inventario
-                user.getUserInventory().clickInventory();
-            }
-        }
+            // si no agrego esto, pierde el foco al npc selecionado.
+            // por ende al comerciar no va a permitir comprar o vender.
 
-        // estamos haciendo doble click?
-        if (MouseListener.mouseButtonDoubleClick(GLFW_MOUSE_BUTTON_LEFT)) {
-            user.getUserInventory().dobleClickInventory();
-        } else if (MouseListener.mouseButtonDoubleClick(GLFW_MOUSE_BUTTON_RIGHT)) {
-            writeDoubleClick(getTileMouseX((int) MouseListener.getX() - POS_SCREEN_X), getTileMouseY((int) MouseListener.getY() - POS_SCREEN_Y));
-        }
+
+            // estamos haciendo click en el inventario?
+            if (user.getUserInventory().inInventoryArea()) {
+                if (MouseListener.mouseButtonClick(GLFW_MOUSE_BUTTON_LEFT)) {
+                    // cheakeamos tambien del inventario
+                    user.getUserInventory().clickInventory();
+                }
+            }
+
+            // estamos haciendo doble click?
+            if (MouseListener.mouseButtonDoubleClick(GLFW_MOUSE_BUTTON_LEFT)) {
+                user.getUserInventory().dobleClickInventory();
+            } else if (MouseListener.mouseButtonDoubleClick(GLFW_MOUSE_BUTTON_RIGHT)) {
+                writeDoubleClick(getTileMouseX((int) MouseListener.getX() - POS_SCREEN_X), getTileMouseY((int) MouseListener.getY() - POS_SCREEN_Y));
+            }
+
 
     }
 
@@ -181,6 +188,8 @@ public final class GameScene extends Scene {
      * Chequea y ejecuta la tecla que fue bindeada.
      */
     private void checkBindedKeys() {
+        if(user.isUserComerciando()) return;
+
         final E_KeyType keyPressed = bindKeys.getKeyPressed(KeyListener.getLastKeyPressed());
 
         this.checkWalkKeys();
