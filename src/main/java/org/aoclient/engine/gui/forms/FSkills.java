@@ -3,12 +3,14 @@ package org.aoclient.engine.gui.forms;
 import imgui.ImGui;
 import imgui.flag.ImGuiCond;
 import imgui.flag.ImGuiWindowFlags;
+import org.aoclient.engine.game.User;
 import org.aoclient.engine.game.models.E_Skills;
 
 import java.io.IOException;
 
 import static org.aoclient.engine.Sound.SND_CLICK;
 import static org.aoclient.engine.Sound.playSound;
+import static org.aoclient.network.Protocol.writeModifySkills;
 
 /**
  * Formulario para la visualizacion y gestion de habilidades (skills) del personaje.
@@ -60,6 +62,7 @@ public class FSkills extends Form {
 
         ImGui.setCursorPos(460, 410);
         if (ImGui.button("Aceptar", 97, 24)) {
+            this.saveChanges();
             playSound(SND_CLICK);
             this.close();
         }
@@ -125,3 +128,13 @@ public class FSkills extends Form {
         User.get().setFreeSkillPoints(this.userFreeSkillsPoints);
         User.get().setSkills(this.userSkills);
     }
+
+    private void saveChanges() {
+        int[] modifiedSkills = new int[E_Skills.values().length];
+        for (E_Skills skill : E_Skills.values()) {
+            byte skillIndex = (byte) (skill.getValue() - 1);
+            modifiedSkills[skillIndex] = User.get().getSkill(skill.getValue()) - this.userSkills[skillIndex];
+        }
+        writeModifySkills(modifiedSkills);
+    }
+}
