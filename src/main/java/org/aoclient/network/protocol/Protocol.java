@@ -38,7 +38,7 @@ public class Protocol {
 
     private static final Console console = Console.get();
     private static final PacketReceiver receiver = new PacketReceiver();
-    public static int pingTime = 0;
+    public static int pingTime;
     public static ByteQueue incomingData = new ByteQueue();
     public static ByteQueue outgoingData = new ByteQueue();
 

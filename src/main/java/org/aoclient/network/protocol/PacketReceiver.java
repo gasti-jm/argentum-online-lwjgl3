@@ -15,6 +15,7 @@ import java.util.Map;
 public class PacketReceiver {
 
     private final Map<ServerPacketID, PacketHandler> handlers = new HashMap<>();
+    public static ServerPacketID packetID;
 
     public PacketReceiver() {
         registerHandlers();
@@ -134,6 +135,8 @@ public class PacketReceiver {
         if (packetId >= ServerPacketID.values().length) return;
 
         ServerPacketID packet = ServerPacketID.values()[packetId];
+
+        packetID = packet;
 
         // Logger.debug(packet + " #" + packet); // ?
 
