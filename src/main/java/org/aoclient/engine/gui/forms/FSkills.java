@@ -36,6 +36,9 @@ public class FSkills extends Form {
         ImGui.setCursorPos(0, 0);
         ImGui.image(backgroundImage, 600, 450);
 
+        ImGui.setCursorPos(320, 15);
+        ImGui.text(String.valueOf(User.get().getFreeSkillPoints()));
+
         this.drawSkills();
         this.drawSkillsHovers();
 

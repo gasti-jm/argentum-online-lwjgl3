@@ -77,6 +77,7 @@ public final class User {
     private int userMinAGU;
     private int userMaxHAM;
     private int userMinHAM;
+    private short freeSkillPoints;
 
     private String userWeaponEqpHit = "0/0";
     private String userArmourEqpDef = "0/0";
@@ -688,5 +689,12 @@ public final class User {
 
     public void setUserComerciando(boolean userComerciando) {
         this.userComerciando = userComerciando;
+    }
+    public short getFreeSkillPoints() {
+        return this.freeSkillPoints;
+    }
+
+    public void setFreeSkillPoints(short freeSkillPoints) {
+        this.freeSkillPoints = freeSkillPoints;
     }
 }
