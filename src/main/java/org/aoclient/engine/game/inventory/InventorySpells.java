@@ -9,7 +9,7 @@ import org.aoclient.engine.game.models.E_Skills;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.aoclient.network.Protocol.*;
+import static org.aoclient.network.protocol.Protocol.*;
 
 /**
  * <p>

@@ -1,5 +1,7 @@
 package org.aoclient.network.packets;
 
+import org.aoclient.network.protocol.Protocol;
+
 /**
  * <p>
  * Enumeracion que define todos los comandos administrativos (GM - Game Master) disponibles en el protocolo.
@@ -8,7 +10,7 @@ package org.aoclient.network.packets;
  * administradores y moderadores del juego. Estos comandos otorgan capacidades especiales de gestion, control y supervision que no
  * estan disponibles para los jugadores normales.
  * <p>
- * La enumeracion es utilizada por {@link org.aoclient.network.Protocol Protocol} y
+ * La enumeracion es utilizada por {@link Protocol Protocol} y
  * {@link org.aoclient.network.ProtocolCmdParse ProtocolCmdParse} para identificar y procesar los comandos administrativos
  * ingresados mediante la consola del juego. Cada constante corresponde a un comando especifico que puede ser ejecutado
  * anteponiendo {@code /} al nombre del comando.

@@ -5,8 +5,8 @@ import org.aoclient.engine.game.IntervalTimer;
 import org.aoclient.engine.listeners.MouseListener;
 
 import static org.aoclient.engine.scenes.Camera.TILE_PIXEL_SIZE;
-import static org.aoclient.network.Protocol.writeEquipItem;
-import static org.aoclient.network.Protocol.writeUseItem;
+import static org.aoclient.network.protocol.Protocol.writeEquipItem;
+import static org.aoclient.network.protocol.Protocol.writeUseItem;
 
 /**
  * <p>

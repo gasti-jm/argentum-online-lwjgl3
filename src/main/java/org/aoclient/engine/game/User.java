@@ -10,8 +10,8 @@ import static org.aoclient.engine.game.models.Character.*;
 import static org.aoclient.engine.game.models.E_Heading.*;
 import static org.aoclient.engine.scenes.Camera.*;
 import static org.aoclient.engine.utils.GameData.*;
-import static org.aoclient.network.Protocol.writeChangeHeading;
-import static org.aoclient.network.Protocol.writeWalk;
+import static org.aoclient.network.protocol.Protocol.writeChangeHeading;
+import static org.aoclient.network.protocol.Protocol.writeWalk;
 
 /**
  * <p>

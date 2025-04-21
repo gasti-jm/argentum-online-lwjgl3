@@ -12,7 +12,7 @@ import java.nio.charset.StandardCharsets;
 
 import static org.aoclient.engine.Sound.SND_CLICK;
 import static org.aoclient.engine.Sound.playSound;
-import static org.aoclient.network.Protocol.writeChangePassword;
+import static org.aoclient.network.protocol.Protocol.writeChangePassword;
 
 /**
  * <p>

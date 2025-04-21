@@ -30,6 +30,10 @@ import java.util.zip.ZipOutputStream;
  * Esta utilidad es fundamental para el sistema de carga de recursos del juego, ya que muchos componentes como sonidos, graficos y
  * datos de inicializacion se almacenan en archivos comprimidos ao.
  * <p>
+ * El sistema operativo puede cachear los accesos a recursos mas eficientemente que el ClassLoader. Por esa razon y porque el
+ * proyecto tiene muchas dependencias (classpath extenso), no se usa el ClassLoader, ya que la task {@code processResources} de
+ * Gradle tarda mucho tiempo en procesar los recursos.
+ * <p>
  * TODO Deberia configurar el nivel de compresion?
  */
 
@@ -39,13 +43,15 @@ public class Compressor {
      * <p>
      * Comprime todos los archivos y subcarpetas de una carpeta en un archivo con formato ao (extension zip personalizada).
      * <p>
+     * <b>Por ahora este metodo no admite la compresion de archivos individuales.</b>
+     * <p>
      * Este metodo preserva la estructura jerarquica original de la carpeta dentro del archivo comprimido y utiliza codificacion
-     * UTF-8 para garantizar la compatibilidad de caracteres especiales en los nombres de archivos y carpetas
+     * UTF-8 para garantizar la compatibilidad de caracteres especiales en los nombres de archivos y carpetas.
      * <p>
      * El proceso interno funciona de la siguiente manera:
      * <ol>
-     * <li>Convierte {@code folderName} en un objeto {@link Path} para la manipulacion eficiente de rutas
-     * <li>Valida que la carpeta exista y sea un directorio
+     * <li>Convierte {@code resourceName} en un objeto {@link Path} para la manipulacion eficiente de rutas
+     * <li>Valida que el nombre del recurso (que es una carpeta en este caso) exista y sea un directorio
      * <li>Crea un {@link FileOutputStream} hacia el archivo ao especificado
      * <li>Envuelve este stream en un {@link ZipOutputStream} para manejar la compresion ao
      * <li>Crea un flujo de ruta ({@code pathStream}) utilizando {@link Files#walk} envuelto en <i>try-with-resources</i>
@@ -63,47 +69,33 @@ public class Compressor {
      * <p>
      * Ejemplo de uso:
      * <pre>{@code
-     * String folderName = "resources/sounds";
+     * String resourceName = "resources/sounds";
      * String aoName = "resources/sounds.ao";
-     * int filesCompressed = Compressor.compressFolder(folderName, aoName);
+     * int filesCompressed = Compressor.compressResource(resourceName, aoName);
      * }</pre>
      * <p>
+     * TODO Implementar la compresion de archivos individuales
      *
-     * @param folderName nombre de carpeta a comprimir
-     * @param aoName     nombre de ao resultante
+     * @param resourceName nombre del recurso a comprimir (solo carpetas)
+     * @param aoName       nombre del archivo ao resultante
      * @return el numero de archivos comprimidos exitosamente, o -1 si ocurrio un error
      */
-    public static int compressFolder(String folderName, String aoName) {
+    public static int compressResource(String resourceName, String aoName) {
 
-        if (folderName == null) {
-            System.out.println("Folder cannot be null");
+        if (resourceName == null || resourceName.isEmpty() || aoName == null || aoName.isEmpty()) {
+            System.err.println("resourceName or aoName cannot be null or empty");
             return -1;
         }
 
-        if (folderName.isEmpty()) {
-            System.out.println("Folder cannot be empty"); // throw new IllegalArgumentException("Folder cannot be empty"); // Si lanzo una excepcion, detiene el compresor
-            return -1;
-        }
-
-        if (aoName == null) {
-            System.out.println("ao file cannot be null");
-            return -1;
-        }
-
-        if (aoName.isEmpty()) {
-            System.out.println("ao file cannot be empty");
-            return -1;
-        }
-
-        Path path = Paths.get(folderName);
+        Path path = Paths.get(resourceName);
 
         if (!Files.exists(path)) {
-            System.out.println("'" + folderName + "' does not exist");
+            System.err.println("'" + resourceName + "' does not exist");
             return -1;
         }
 
         if (!Files.isDirectory(path)) {
-            System.out.println("'" + folderName + "' is not a directory");
+            System.err.println("'" + resourceName + "' is not a directory");
             return -1;
         }
 
@@ -114,18 +106,18 @@ public class Compressor {
                     if (compressFile(path, file, zos)) fileCount.incrementAndGet();
                 });
             } catch (IOException e) {
-                System.out.println("Error walking directory structure: " + e.getMessage());
+                System.err.println("Error walking directory structure: " + e.getMessage());
                 return -1;
             } catch (Exception e) {
-                System.out.println("Unexpected error during directory traversal: " + e.getClass().getName() + ": " + e.getMessage());
+                System.err.println("Unexpected error during directory traversal: " + e.getClass().getName() + ": " + e.getMessage());
                 return -1;
             }
             return fileCount.get();
         } catch (IOException e) {
-            System.out.println("Error creating ao file: " + e.getMessage());
+            System.err.println("Error creating ao file: " + e.getMessage());
             return -1;
         } catch (Exception e) {
-            System.out.println("Unexpected error: " + e.getClass().getName() + ": " + e.getMessage());
+            System.err.println("Unexpected error: " + e.getClass().getName() + ": " + e.getMessage());
             return -1;
         }
     }
@@ -195,7 +187,7 @@ public class Compressor {
             System.err.println("No files were found matching '" + resourceName + "' in " + aoName);
 
         } catch (IOException e) {
-            System.err.println("Error accessing ao file '" + aoName + "': " + e.getMessage());
+            System.err.println("Error accessing ao file '" + aoName + "'");
         }
 
         return null;
@@ -320,39 +312,39 @@ public class Compressor {
             zos.closeEntry();
             return true;
         } catch (IOException e) {
-            System.out.println("Error compressing " + file + " file - I/O error: " + e.getMessage());
+            System.err.println("Error compressing '" + file + "' - I/O error: " + e.getMessage());
             return false;
         } catch (Exception e) {
-            System.out.println("Error compressing " + file + " file - Unexpected error: " + e.getClass().getName() + ": " + e.getMessage());
+            System.err.println("Error compressing '" + file + "' - Unexpected error: " + e.getClass().getName() + ": " + e.getMessage());
             return false;
         }
     }
 
     public static void main(String[] args) {
-        // TODO Deberia mover los recursos al modulo resources (que todavia no esta configurado)
-        String folderName = "resources/sounds";
+
+        String resourceName = "resources/sounds";
         String aoName = "resources/sounds.ao";
 
         long start = System.nanoTime();
-        int filesCompressed = compressFolder(folderName, aoName);
+        int filesCompressed = compressResource(resourceName, aoName);
         long time = (System.nanoTime() - start) / 1_000_000;
 
         if (filesCompressed > 0)
-            System.out.println("Compressed " + filesCompressed + " file" + (filesCompressed > 1 ? "s" : "") + " in " + time + " ms from '" + folderName + "' in '" + aoName + "'");
+            System.out.println("Compressed " + filesCompressed + " file" + (filesCompressed > 1 ? "s" : "") + " in " + time + " ms from '" + resourceName + "' in '" + aoName + "'");
         else if (filesCompressed == 0) System.out.println("The folder has no files!");
         else System.err.println("Compression failed!");
 
-        String resourceName = "2"; // 2.ogg
-        byte[] bytes = readResource(aoName, resourceName);
-        if (bytes != null) {
-            System.out.println(bytes.length + " bytes were read from resource '" + resourceName + "'");
-            // Opcional: guarda el recurso leido para verificar
+        String resourceNameToRead = "2"; // 2.ogg
+        // byte[] bytes = readResource(aoName, resourceNameToRead);
+        //if (bytes != null) {
+        // System.out.println(bytes.length + " bytes were read from resource '" + resourceNameToRead + "'");
+        // Opcional: guarda el recurso leido para verificar
             /* try {
-                Files.write(Paths.get("output_" + Paths.get(resourceName).getFileName() + ".map"), bytes);
+                Files.write(Paths.get("output_" + Paths.get(resourceNameToRead).getFileName() + ".map"), bytes);
             } catch (IOException e) {
                 System.err.println("Error: " + e.getMessage());
             } */
-        }
+        //}
 
     }
 
