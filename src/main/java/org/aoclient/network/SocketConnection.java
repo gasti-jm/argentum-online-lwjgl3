@@ -4,6 +4,7 @@ import org.aoclient.engine.game.Rain;
 import org.aoclient.engine.game.User;
 import org.aoclient.engine.gui.ImGUISystem;
 import org.aoclient.engine.gui.forms.FMessage;
+import org.aoclient.network.protocol.Protocol;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -11,7 +12,7 @@ import java.io.IOException;
 import java.net.Socket;
 
 import static org.aoclient.engine.utils.GameData.options;
-import static org.aoclient.network.Protocol.*;
+import static org.aoclient.network.protocol.Protocol.*;
 
 /**
  * Clase que maneja la conexion de red entre el cliente y el servidor.

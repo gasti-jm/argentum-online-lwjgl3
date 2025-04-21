@@ -8,10 +8,11 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.charset.StandardCharsets;
 
-import static org.aoclient.network.Protocol.lastPacket;
+import static org.aoclient.network.protocol.Protocol.lastPacket;
 
 /**
- * Clase que implementa una cola de bytes para la gestion de datos binarios en la comunicacion cliente-servidor.
+ * Clase que implementa una cola de bytes para la gestion de datos binarios en la comunicacion cliente-servidor. Maneja la
+ * serializacion/deserializacion de datos.
  * <p>
  * {@code ByteQueue} facilita el manejo de datos binarios estructurados que se intercambian a traves del protocolo de red del
  * juego. Proporciona metodos para escribir y leer diferentes tipos de datos primitivos y estructuras complejas como cadenas,

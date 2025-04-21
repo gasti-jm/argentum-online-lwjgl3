@@ -21,7 +21,7 @@ import static org.aoclient.engine.scenes.Camera.*;
 import static org.aoclient.engine.utils.GameData.*;
 import static org.aoclient.engine.utils.Time.deltaTime;
 import static org.aoclient.engine.utils.Time.timerTicksPerFrame;
-import static org.aoclient.network.Protocol.*;
+import static org.aoclient.network.protocol.Protocol.*;
 import static org.lwjgl.glfw.GLFW.GLFW_MOUSE_BUTTON_LEFT;
 import static org.lwjgl.glfw.GLFW.GLFW_MOUSE_BUTTON_RIGHT;
 

@@ -10,7 +10,7 @@ import org.aoclient.network.packets.eNumber_Types;
 
 import java.nio.charset.StandardCharsets;
 
-import static org.aoclient.network.Protocol.*;
+import static org.aoclient.network.protocol.Protocol.*;
 
 
 /**

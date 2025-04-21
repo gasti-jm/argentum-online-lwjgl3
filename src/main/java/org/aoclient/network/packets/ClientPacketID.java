@@ -1,6 +1,6 @@
 package org.aoclient.network.packets;
 
-import org.aoclient.network.Protocol;
+import org.aoclient.network.protocol.Protocol;
 
 /**
  * <p>

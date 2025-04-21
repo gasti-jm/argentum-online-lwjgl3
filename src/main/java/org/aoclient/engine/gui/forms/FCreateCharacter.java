@@ -28,8 +28,8 @@ import static org.aoclient.engine.Sound.playMusic;
 import static org.aoclient.engine.game.models.Character.*;
 import static org.aoclient.engine.renderer.Drawn.*;
 import static org.aoclient.engine.utils.GameData.*;
-import static org.aoclient.network.Protocol.writeLoginNewChar;
-import static org.aoclient.network.Protocol.writeThrowDices;
+import static org.aoclient.network.protocol.Protocol.writeLoginNewChar;
+import static org.aoclient.network.protocol.Protocol.writeThrowDices;
 
 /**
  * Formulario para la creacion de nuevos personajes.

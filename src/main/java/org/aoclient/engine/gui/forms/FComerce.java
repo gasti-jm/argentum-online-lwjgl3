@@ -8,16 +8,13 @@ import org.aoclient.engine.game.Console;
 import org.aoclient.engine.game.User;
 import org.aoclient.engine.game.inventory.NPCInventory;
 import org.aoclient.engine.game.inventory.UserInventory;
-import org.aoclient.engine.listeners.MouseListener;
 import org.aoclient.engine.renderer.RGBColor;
-import org.tinylog.Logger;
 
 import java.io.IOException;
 
 import static org.aoclient.engine.Sound.SND_CLICK;
 import static org.aoclient.engine.Sound.playSound;
-import static org.aoclient.network.Protocol.*;
-import static org.lwjgl.glfw.GLFW.GLFW_MOUSE_BUTTON_LEFT;
+import static org.aoclient.network.protocol.Protocol.*;
 
 /**
  * Formulario de comercio con NPCs.

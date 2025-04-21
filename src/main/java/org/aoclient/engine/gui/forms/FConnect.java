@@ -16,7 +16,7 @@ import java.io.IOException;
 
 import static org.aoclient.engine.Sound.playMusic;
 import static org.aoclient.engine.utils.GameData.options;
-import static org.aoclient.network.Protocol.writeLoginExistingChar;
+import static org.aoclient.network.protocol.Protocol.writeLoginExistingChar;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_ENTER;
 
 /**

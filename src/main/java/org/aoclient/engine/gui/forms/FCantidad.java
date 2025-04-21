@@ -10,7 +10,7 @@ import org.aoclient.engine.game.User;
 import java.io.IOException;
 
 import static org.aoclient.engine.game.inventory.UserInventory.FLAGORO;
-import static org.aoclient.network.Protocol.writeDrop;
+import static org.aoclient.network.protocol.Protocol.writeDrop;
 
 /**
  * Formulario para especificar cantidades al tirar objetos o oro al suelo.
