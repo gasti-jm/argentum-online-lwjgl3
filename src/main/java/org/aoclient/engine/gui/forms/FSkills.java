@@ -17,6 +17,8 @@ import static org.aoclient.engine.Sound.playSound;
 public class FSkills extends Form {
 
     private String hoverSkillDescription = "";
+    private final int[] userSkills = User.get().getSkills().clone();
+    private final short userFreeSkillsPoints = User.get().getFreeSkillPoints();
 
     public FSkills() {
         try {
@@ -51,6 +53,7 @@ public class FSkills extends Form {
 
         ImGui.setCursorPos(40, 410);
         if (ImGui.button("Cancelar", 97, 24)) {
+            this.rollbackChanges();
             playSound(SND_CLICK);
             this.close();
         }
@@ -73,11 +76,15 @@ public class FSkills extends Form {
             } else {
                 ImGui.setCursorPos(480, y2 += 24);
             }
-            ImGui.arrowButton("FSkill_" + skill.getValue() + "_sub", 0);
+            if (ImGui.arrowButton("FSkill_" + skill.getValue() + "_sub", 0)) {
+               this.minusSkill(skill.getValue());
+            };
             ImGui.sameLine(0, 10);
-            ImGui.text(String.valueOf(skill.getValue()));
+            ImGui.text(String.valueOf(User.get().getSkill(skill.getValue())));
             ImGui.sameLine(0, 10);
-            ImGui.arrowButton("FSkill_" + skill.getValue() + "_add", 1);
+            if (ImGui.arrowButton("FSkill_" + skill.getValue() + "_add", 1)) {
+                this.plusSkill(skill.getValue());
+            };
         }
     }
 
@@ -99,4 +106,22 @@ public class FSkills extends Form {
         }
     }
 
-}
+    private void plusSkill(byte skill) {
+        if (User.get().getSkill(skill) + 1 <= 100) {
+            User.get().setSkill(skill, User.get().getSkill(skill) + 1);
+            User.get().setFreeSkillPoints((short) (User.get().getFreeSkillPoints() - 1));
+        }
+    }
+
+    private void minusSkill(byte skill) {
+        byte result = (byte) (User.get().getSkill(skill) - 1);
+        if (result >= this.userSkills[skill - 1]) {
+            User.get().setSkill(skill, User.get().getSkill(skill) - 1);
+            User.get().setFreeSkillPoints((short) (User.get().getFreeSkillPoints() + 1));
+        }
+    }
+
+    private void rollbackChanges() {
+        User.get().setFreeSkillPoints(this.userFreeSkillsPoints);
+        User.get().setSkills(this.userSkills);
+    }
