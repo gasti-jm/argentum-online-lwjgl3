@@ -3,6 +3,7 @@ package org.aoclient.engine.game;
 import org.aoclient.engine.game.inventory.InventorySpells;
 import org.aoclient.engine.game.inventory.UserInventory;
 import org.aoclient.engine.game.models.E_Heading;
+import org.aoclient.engine.game.models.E_Skills;
 import org.aoclient.engine.game.models.Position;
 
 import static org.aoclient.engine.Sound.*;
@@ -78,6 +79,7 @@ public final class User {
     private int userMaxHAM;
     private int userMinHAM;
     private short freeSkillPoints;
+    private int[] skills = new int[E_Skills.values().length];
 
     private String userWeaponEqpHit = "0/0";
     private String userArmourEqpDef = "0/0";
@@ -696,5 +698,21 @@ public final class User {
 
     public void setFreeSkillPoints(short freeSkillPoints) {
         this.freeSkillPoints = freeSkillPoints;
+    }
+
+    public int getSkill(byte skill) {
+        return this.skills[skill - 1];
+    }
+
+    public void setSkill(byte skill, int value) {
+        this.skills[skill - 1] = value;
+    }
+
+    public int[] getSkills() {
+        return this.skills;
+    }
+
+    public void setSkills(int[] skills) {
+        this.skills = skills;
     }
 }
