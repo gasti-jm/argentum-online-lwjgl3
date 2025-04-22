@@ -10,7 +10,7 @@ import java.io.IOException;
 
 import static org.aoclient.engine.Sound.SND_CLICK;
 import static org.aoclient.engine.Sound.playSound;
-import static org.aoclient.network.Protocol.writeModifySkills;
+import static org.aoclient.network.protocol.Protocol.writeModifySkills;
 
 /**
  * Formulario para la visualizacion y gestion de habilidades (skills) del personaje.
@@ -71,20 +71,20 @@ public class FSkills extends Form {
     }
 
     private boolean isLeftColumn(E_Skills skill) {
-        return skill.getValue() <= (E_Skills.values().length / 2)
+        return skill.getValue() <= (E_Skills.values().length / 2);
     }
 
     private void drawSkillInput(E_Skills skill) {
         byte spacing = 10;
         if (ImGui.arrowButton("FSkill_" + skill.getValue() + "_sub", 0)) {
             this.minusSkill(skill.getValue());
-        };
+        }
         ImGui.sameLine(0, spacing);
         ImGui.text(String.valueOf(User.get().getSkill(skill.getValue())));
         ImGui.sameLine(0, spacing);
         if (ImGui.arrowButton("FSkill_" + skill.getValue() + "_add", 1)) {
             this.plusSkill(skill.getValue());
-        };
+        }
     }
 
     private void drawSkills() {
