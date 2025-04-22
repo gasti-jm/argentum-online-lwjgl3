@@ -69,7 +69,7 @@ public class InventorySpells {
     public void buttonThrowSpell() {
         if (!spells[currentItemSpell.get()].equals("(None)")) {
             writeCastSpell(currentItemSpell.get() + 1);
-            writeWork(E_Skills.Magia.value);
+            writeWork(E_Skills.MAGIA.getValue());
         }
     }
 

@@ -3,6 +3,7 @@ package org.aoclient.network.protocol;
 import org.aoclient.engine.game.Console;
 import org.aoclient.engine.game.User;
 import org.aoclient.engine.game.models.E_Heading;
+import org.aoclient.engine.game.models.E_Skills;
 import org.aoclient.engine.renderer.RGBColor;
 import org.aoclient.network.ByteQueue;
 import org.aoclient.network.SocketConnection;
@@ -132,6 +133,13 @@ public class Protocol {
     public static void writeChangeHeading(E_Heading direction) {
         outgoingData.writeByte(ClientPacketID.ChangeHeading.ordinal());
         outgoingData.writeByte(direction.value);
+    }
+
+    public static void writeModifySkills(int[] skills) {
+        outgoingData.writeByte(ClientPacketID.ModifySkills.ordinal());
+        for (E_Skills skill: E_Skills.values()) {
+            outgoingData.writeByte(skills[skill.getValue() - 1]);
+        }
     }
 
     public static void writeLeftClick(int x, int y) {

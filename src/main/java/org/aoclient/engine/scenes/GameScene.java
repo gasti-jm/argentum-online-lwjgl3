@@ -233,10 +233,10 @@ public final class GameScene extends Scene {
                     }
                     break;
                 case mKeyHide:
-                    writeWork(E_Skills.Ocultarse.value);
+                    writeWork(E_Skills.OCULTARSE.getValue());
                     break;
                 case mKeySteal:
-                    writeWork(E_Skills.Robar.value);
+                    writeWork(E_Skills.ROBAR.getValue());
                     break;
                 case mKeyRequestRefresh:
                     if (intervalToUpdatePos.check()) writeRequestPositionUpdate();
