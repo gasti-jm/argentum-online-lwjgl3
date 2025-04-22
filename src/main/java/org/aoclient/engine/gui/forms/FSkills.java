@@ -70,37 +70,47 @@ public class FSkills extends Form {
         ImGui.end();
     }
 
+    private boolean isLeftColumn(E_Skills skill) {
+        return skill.getValue() <= (E_Skills.values().length / 2)
+    }
+
+    private void drawSkillInput(E_Skills skill) {
+        byte spacing = 10;
+        if (ImGui.arrowButton("FSkill_" + skill.getValue() + "_sub", 0)) {
+            this.minusSkill(skill.getValue());
+        };
+        ImGui.sameLine(0, spacing);
+        ImGui.text(String.valueOf(User.get().getSkill(skill.getValue())));
+        ImGui.sameLine(0, spacing);
+        if (ImGui.arrowButton("FSkill_" + skill.getValue() + "_add", 1)) {
+            this.plusSkill(skill.getValue());
+        };
+    }
+
     private void drawSkills() {
-        int y = 30;
-        int y2 = 30;
+        int leftY = 30;
+        int rightY = 30;
+        byte rowHeight = 24;
         for (E_Skills skill : E_Skills.values()) {
-            if (skill.getValue() <= (E_Skills.values().length / 2)) {
-                ImGui.setCursorPos(220, y += 24);
+            if (this.isLeftColumn(skill)) {
+                ImGui.setCursorPos(220, leftY += rowHeight);
             } else {
-                ImGui.setCursorPos(480, y2 += 24);
+                ImGui.setCursorPos(480, rightY += rowHeight);
             }
-            if (ImGui.arrowButton("FSkill_" + skill.getValue() + "_sub", 0)) {
-               this.minusSkill(skill.getValue());
-            };
-            ImGui.sameLine(0, 10);
-            ImGui.text(String.valueOf(User.get().getSkill(skill.getValue())));
-            ImGui.sameLine(0, 10);
-            if (ImGui.arrowButton("FSkill_" + skill.getValue() + "_add", 1)) {
-                this.plusSkill(skill.getValue());
-            };
+            this.drawSkillInput(skill);
         }
     }
 
     private void drawSkillsHovers() {
         this.hoverSkillDescription = "";
-
-        int y = 30;
-        int y2 = 30;
+        int leftY = 30;
+        int rightY = 30;
+        int rowHeight = 24;
         for (E_Skills skill : E_Skills.values()) {
-            if (skill.getValue() <= (E_Skills.values().length / 2)) {
-                ImGui.setCursorPos(40, y += 24);
+            if (this.isLeftColumn(skill)) {
+                ImGui.setCursorPos(40, leftY += rowHeight);
             } else {
-                ImGui.setCursorPos(320, y2 += 24);
+                ImGui.setCursorPos(320, rightY += rowHeight);
             }
             ImGui.invisibleButton("FSkill_" + skill.getValue() + "_hover", 132, 18);
             if (ImGui.isItemHovered()) {
