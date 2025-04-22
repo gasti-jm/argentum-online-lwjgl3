@@ -20,24 +20,18 @@ public class DiceRollHandler implements PacketHandler {
         int carisma = data.readByte();
         int constitucion = data.readByte();
 
-        //UserAtributos(eAtributos.Fuerza) = data.ReadByte()
-        //    UserAtributos(eAtributos.Agilidad) = data.ReadByte()
-        //    UserAtributos(eAtributos.Inteligencia) = data.ReadByte()
-        //    UserAtributos(eAtributos.Carisma) = data.ReadByte()
-        //    UserAtributos(eAtributos.Constitucion) = data.ReadByte()
-        //
-        //    With frmCrearPersonaje
-        //        .lblAtributos(eAtributos.Fuerza) = UserAtributos(eAtributos.Fuerza)
-        //        .lblAtributos(eAtributos.Agilidad) = UserAtributos(eAtributos.Agilidad)
-        //        .lblAtributos(eAtributos.Inteligencia) = UserAtributos(eAtributos.Inteligencia)
-        //        .lblAtributos(eAtributos.Carisma) = UserAtributos(eAtributos.Carisma)
-        //        .lblAtributos(eAtributos.Constitucion) = UserAtributos(eAtributos.Constitucion)
-        //
-        //        .UpdateStats
-        //    End With
-
         playSound(SND_DICE);
 
-        Logger.debug("handleDiceRoll Cargado! - FALTA TERMINAR!");
+        try {
+            // Buscar el formulario FCreateCharacter abierto y actualizar atributos
+            for (var frm : org.aoclient.engine.gui.ImGUISystem.get().getActiveForms()) {
+                if (frm instanceof org.aoclient.engine.gui.forms.FCreateCharacter) {
+                    ((org.aoclient.engine.gui.forms.FCreateCharacter) frm).setAtributos(fuerza, agilidad, inteligencia, carisma, constitucion);
+                    break;
+                }
+            }
+        } catch (Exception e) {
+            Logger.error("Error actualizando atributos en FCreateCharacter: " + e.getMessage(), e);
+        }
     }
 }
