@@ -28,22 +28,22 @@ public class WorkRequestTargetHandler implements PacketHandler {
         Window.get().setCursorCrosshair(true);
 
         switch (E_Skills.values()[usingSkill - 1]) {
-            case Magia:
+            case MAGIA:
                 console.addMsgToConsole(MENSAJE_TRABAJO_MAGIA, false, false, new RGBColor());
                 break;
-            case Pesca:
+            case PESCA:
                 console.addMsgToConsole(MENSAJE_TRABAJO_PESCA, false, false, new RGBColor());
                 break;
-            case Robar:
+            case ROBAR:
                 console.addMsgToConsole(MENSAJE_TRABAJO_ROBAR, false, false, new RGBColor());
                 break;
-            case Talar:
+            case TALAR:
                 console.addMsgToConsole(MENSAJE_TRABAJO_TALAR, false, false, new RGBColor());
                 break;
-            case Mineria:
+            case MINERIA:
                 console.addMsgToConsole(MENSAJE_TRABAJO_MINERIA, false, false, new RGBColor());
                 break;
-            case Proyectiles:
+            case PROYECTILES:
                 console.addMsgToConsole(MENSAJE_TRABAJO_PROYECTILES, false, false, new RGBColor());
                 break;
         }
