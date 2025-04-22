@@ -151,6 +151,12 @@ public final class User {
 
     }
 
+    public void resetState() {
+        this.setUserConected(false);
+        this.setUserNavegando(false);
+        this.setFreeSkillPoints((short) 0);
+    }
+
     /**
      * @desc: Checkea si estamos bajo techo segun el trigger en donde esta parado el usuario.
      */
