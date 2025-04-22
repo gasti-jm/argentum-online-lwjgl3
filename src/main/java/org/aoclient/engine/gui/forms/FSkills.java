@@ -120,9 +120,10 @@ public class FSkills extends Form {
     }
 
     private void plusSkill(byte skill) {
-        if (User.get().getSkill(skill) + 1 <= 100) {
+        short freeSkillPts = User.get().getFreeSkillPoints();
+        if (freeSkillPts > 0 && User.get().getSkill(skill) + 1 <= 100) {
             User.get().setSkill(skill, User.get().getSkill(skill) + 1);
-            User.get().setFreeSkillPoints((short) (User.get().getFreeSkillPoints() - 1));
+            User.get().setFreeSkillPoints((short) (freeSkillPts - 1));
         }
     }
 
