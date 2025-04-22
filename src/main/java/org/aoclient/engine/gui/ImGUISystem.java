@@ -278,4 +278,10 @@ public class ImGUISystem {
         frms.clear();
     }
 
+    /**
+     * Devuelve una copia de la lista de formularios activos.
+     */
+    public java.util.List<Form> getActiveForms() {
+        return new java.util.ArrayList<>(frms);
+    }
 }

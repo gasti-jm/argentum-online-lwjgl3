@@ -268,15 +268,15 @@ public final class FCreateCharacter extends Form {
         );
 
         // Mostrar atributos
-        ImGui.setCursorPos(307, 232);
+        ImGui.setCursorPos(310, 232);
         ImGui.text(String.valueOf(fuerza));
-        ImGui.setCursorPos(307, 253);
+        ImGui.setCursorPos(310, 253);
         ImGui.text(String.valueOf(agilidad));
-        ImGui.setCursorPos(307, 275);
+        ImGui.setCursorPos(310, 275);
         ImGui.text(String.valueOf(inteligencia));
-        ImGui.setCursorPos(307, 298);
+        ImGui.setCursorPos(310, 298);
         ImGui.text(String.valueOf(carisma));
-        ImGui.setCursorPos(307, 320);
+        ImGui.setCursorPos(310, 320);
         ImGui.text(String.valueOf(constitucion));
 
         ImGui.end();
