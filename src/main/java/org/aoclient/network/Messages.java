@@ -106,6 +106,7 @@ public class Messages {
 
     public static String MENSAJE_HOGAR;
     public static String MENSAJE_HOGAR_CANCEL;
+    public static String MENSAJE_ESTAS_MUERTO;
 
     public static void loadMessages(String region) {
         try (BufferedReader reader = new BufferedReader(new FileReader("resources/strings_" + region + ".ini"))) {
@@ -113,9 +114,9 @@ public class Messages {
             while ((line = reader.readLine()) != null) {
                 String[] parts = line.split("=");
                 if (parts.length == 2) {
-                    String option = parts[0].trim();
+                    String id = parts[0].trim();
                     String value = parts[1].trim();
-                    updateOption(option, value);
+                    populateMessages(id, value);
                 }
             }
         } catch (IOException e) {
@@ -124,17 +125,17 @@ public class Messages {
     }
 
     /**
-     * @param option El nombre del mensaje.
+     * @param id El nombre del mensaje.
      * @param value  El nuevo valor del mensaje.
      */
-    private static void updateOption(String option, String value) {
+    private static void populateMessages(String id, String value) {
         try {
-            Field field = Messages.class.getDeclaredField(option);
+            Field field = Messages.class.getDeclaredField(id);
             if (Modifier.isStatic(field.getModifiers()) && field.getType() == String.class) {
                 field.set(null, new String(value.getBytes(), UTF_8));
             }
         } catch (NoSuchFieldException | IllegalAccessException e) {
-            System.err.println("Campo inválido en Messages: " + option);
+            System.err.println("Campo inválido en Messages: " + id);
         }
     }
 
