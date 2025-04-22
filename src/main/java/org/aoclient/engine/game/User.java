@@ -154,6 +154,7 @@ public final class User {
     public void resetState() {
         this.setUserConected(false);
         this.setUserNavegando(false);
+        this.setUserComerciando(false);
         this.setFreeSkillPoints((short) 0);
     }
 

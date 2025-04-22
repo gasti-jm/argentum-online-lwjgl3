@@ -152,7 +152,6 @@ public class SocketConnection {
     }
 
     private void setDisconnected() {
-        User.get().setUserComerciando(false);
         User.get().resetState();
         Rain.get().setRainValue(false);
         Rain.get().stopRainingSoundLoop();
