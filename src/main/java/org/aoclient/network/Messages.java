@@ -3,6 +3,8 @@ package org.aoclient.network;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 
@@ -104,6 +106,7 @@ public class Messages {
 
     public static String MENSAJE_HOGAR;
     public static String MENSAJE_HOGAR_CANCEL;
+    public static String MENSAJE_ESTAS_MUERTO;
 
     public static void loadMessages(String region) {
         try (BufferedReader reader = new BufferedReader(new FileReader("resources/strings_" + region + ".ini"))) {
@@ -111,9 +114,9 @@ public class Messages {
             while ((line = reader.readLine()) != null) {
                 String[] parts = line.split("=");
                 if (parts.length == 2) {
-                    String option = parts[0].trim();
+                    String id = parts[0].trim();
                     String value = parts[1].trim();
-                    updateOption(option, value);
+                    populateMessages(id, value);
                 }
             }
         } catch (IOException e) {
@@ -122,184 +125,17 @@ public class Messages {
     }
 
     /**
-     * HAY QUE METER ESTO EN UN ARRAY O UN MAPA POR FAVOR.
-     *
-     * @param option El nombre del mensaje.
+     * @param id El nombre del mensaje.
      * @param value  El nuevo valor del mensaje.
      */
-    private static void updateOption(String option, String value) {
-        switch (option) {
-            case "MENSAJE_CRIATURA_FALLA_GOLPE":
-                MENSAJE_CRIATURA_FALLA_GOLPE = new String(value.getBytes(), UTF_8);
-                break;
-            case "MENSAJE_CRIATURA_MATADO":
-                MENSAJE_CRIATURA_MATADO = new String(value.getBytes(), UTF_8);
-                break;
-            case "MENSAJE_RECHAZO_ATAQUE_ESCUDO":
-                MENSAJE_RECHAZO_ATAQUE_ESCUDO = new String(value.getBytes(), UTF_8);
-                break;
-            case "MENSAJE_USUARIO_RECHAZO_ATAQUE_ESCUDO":
-                MENSAJE_USUARIO_RECHAZO_ATAQUE_ESCUDO = new String(value.getBytes(), UTF_8);
-                break;
-            case "MENSAJE_FALLADO_GOLPE":
-                MENSAJE_FALLADO_GOLPE = new String(value.getBytes(), UTF_8);
-                break;
-            case "MENSAJE_SEGURO_ACTIVADO":
-                MENSAJE_SEGURO_ACTIVADO = new String(value.getBytes(), UTF_8);
-                break;
-            case "MENSAJE_SEGURO_DESACTIVADO":
-                MENSAJE_SEGURO_DESACTIVADO = new String(value.getBytes(), UTF_8);
-                break;
-            case "MENSAJE_PIERDE_NOBLEZA":
-                MENSAJE_PIERDE_NOBLEZA = new String(value.getBytes(), UTF_8);
-                break;
-            case "MENSAJE_USAR_MEDITANDO":
-                MENSAJE_USAR_MEDITANDO = new String(value.getBytes(), UTF_8);
-                break;
-            case "MENSAJE_SEGURO_RESU_ON":
-                MENSAJE_SEGURO_RESU_ON = new String(value.getBytes(), UTF_8);
-                break;
-            case "MENSAJE_SEGURO_RESU_OFF":
-                MENSAJE_SEGURO_RESU_OFF = new String(value.getBytes(), UTF_8);
-                break;
-            case "MENSAJE_GOLPE_CABEZA":
-                MENSAJE_GOLPE_CABEZA = new String(value.getBytes(), UTF_8);
-                break;
-            case "MENSAJE_GOLPE_BRAZO_IZQ":
-                MENSAJE_GOLPE_BRAZO_IZQ = new String(value.getBytes(), UTF_8);
-                break;
-            case "MENSAJE_GOLPE_BRAZO_DER":
-                MENSAJE_GOLPE_BRAZO_DER = new String(value.getBytes(), UTF_8);
-                break;
-            case "MENSAJE_GOLPE_PIERNA_IZQ":
-                MENSAJE_GOLPE_PIERNA_IZQ = new String(value.getBytes(), UTF_8);
-                break;
-            case "MENSAJE_GOLPE_PIERNA_DER":
-                MENSAJE_GOLPE_PIERNA_DER = new String(value.getBytes(), UTF_8);
-                break;
-            case "MENSAJE_GOLPE_TORSO":
-                MENSAJE_GOLPE_TORSO = new String(value.getBytes(), UTF_8);
-                break;
-            case "MENSAJE_1":
-                MENSAJE_1 = new String(value.getBytes(), UTF_8);
-                break;
-            case "MENSAJE_2":
-                MENSAJE_2 = new String(value.getBytes(), UTF_8);
-                break;
-            case "MENSAJE_11":
-                MENSAJE_11 = new String(value.getBytes(), UTF_8);
-                break;
-            case "MENSAJE_22":
-                MENSAJE_22 = new String(value.getBytes(), UTF_8);
-                break;
-            case "MENSAJE_GOLPE_CRIATURA_1":
-                MENSAJE_GOLPE_CRIATURA_1 = new String(value.getBytes(), UTF_8);
-                break;
-            case "MENSAJE_ATAQUE_FALLO":
-                MENSAJE_ATAQUE_FALLO = new String(value.getBytes(), UTF_8);
-                break;
-            case "MENSAJE_RECIVE_IMPACTO_CABEZA":
-                MENSAJE_RECIVE_IMPACTO_CABEZA = new String(value.getBytes(), UTF_8);
-                break;
-            case "MENSAJE_RECIVE_IMPACTO_BRAZO_IZQ":
-                MENSAJE_RECIVE_IMPACTO_BRAZO_IZQ = new String(value.getBytes(), UTF_8);
-                break;
-            case "MENSAJE_RECIVE_IMPACTO_BRAZO_DER":
-                MENSAJE_RECIVE_IMPACTO_BRAZO_DER = new String(value.getBytes(), UTF_8);
-                break;
-            case "MENSAJE_RECIVE_IMPACTO_PIERNA_IZQ":
-                MENSAJE_RECIVE_IMPACTO_PIERNA_IZQ = new String(value.getBytes(), UTF_8);
-                break;
-            case "MENSAJE_RECIVE_IMPACTO_PIERNA_DER":
-                MENSAJE_RECIVE_IMPACTO_PIERNA_DER = new String(value.getBytes(), UTF_8);
-                break;
-            case "MENSAJE_RECIVE_IMPACTO_TORSO":
-                MENSAJE_RECIVE_IMPACTO_TORSO = new String(value.getBytes(), UTF_8);
-                break;
-            case "MENSAJE_PRODUCE_IMPACTO_1":
-                MENSAJE_PRODUCE_IMPACTO_1 = new String(value.getBytes(), UTF_8);
-                break;
-            case "MENSAJE_PRODUCE_IMPACTO_CABEZA":
-                MENSAJE_PRODUCE_IMPACTO_CABEZA = new String(value.getBytes(), UTF_8);
-                break;
-            case "MENSAJE_PRODUCE_IMPACTO_BRAZO_IZQ":
-                MENSAJE_PRODUCE_IMPACTO_BRAZO_IZQ = new String(value.getBytes(), UTF_8);
-                break;
-            case "MENSAJE_PRODUCE_IMPACTO_BRAZO_DER":
-                MENSAJE_PRODUCE_IMPACTO_BRAZO_DER = new String(value.getBytes(), UTF_8);
-                break;
-            case "MENSAJE_PRODUCE_IMPACTO_PIERNA_IZQ":
-                MENSAJE_PRODUCE_IMPACTO_PIERNA_IZQ = new String(value.getBytes(), UTF_8);
-                break;
-            case "MENSAJE_PRODUCE_IMPACTO_PIERNA_DER":
-                MENSAJE_PRODUCE_IMPACTO_PIERNA_DER = new String(value.getBytes(), UTF_8);
-                break;
-            case "MENSAJE_PRODUCE_IMPACTO_TORSO":
-                MENSAJE_PRODUCE_IMPACTO_TORSO = new String(value.getBytes(), UTF_8);
-                break;
-            case "MENSAJE_TRABAJO_MAGIA":
-                MENSAJE_TRABAJO_MAGIA = new String(value.getBytes(), UTF_8);
-                break;
-            case "MENSAJE_TRABAJO_PESCA":
-                MENSAJE_TRABAJO_PESCA = new String(value.getBytes(), UTF_8);
-                break;
-            case "MENSAJE_TRABAJO_ROBAR":
-                MENSAJE_TRABAJO_ROBAR = new String(value.getBytes(), UTF_8);
-                break;
-            case "MENSAJE_TRABAJO_TALAR":
-                MENSAJE_TRABAJO_TALAR = new String(value.getBytes(), UTF_8);
-                break;
-            case "MENSAJE_TRABAJO_MINERIA":
-                MENSAJE_TRABAJO_MINERIA = new String(value.getBytes(), UTF_8);
-                break;
-            case "MENSAJE_TRABAJO_FUNDIRMETAL":
-                MENSAJE_TRABAJO_FUNDIRMETAL = new String(value.getBytes(), UTF_8);
-                break;
-            case "MENSAJE_TRABAJO_PROYECTILES":
-                MENSAJE_TRABAJO_PROYECTILES = new String(value.getBytes(), UTF_8);
-                break;
-            case "MENSAJE_ENTRAR_PARTY_1":
-                MENSAJE_ENTRAR_PARTY_1 = new String(value.getBytes(), UTF_8);
-                break;
-            case "MENSAJE_ENTRAR_PARTY_2":
-                MENSAJE_ENTRAR_PARTY_2 = new String(value.getBytes(), UTF_8);
-                break;
-            case "MENSAJE_NENE":
-                MENSAJE_NENE = new String(value.getBytes(), UTF_8);
-                break;
-            case "MENSAJE_FRAGSHOOTER_TE_HA_MATADO":
-                MENSAJE_FRAGSHOOTER_TE_HA_MATADO = new String(value.getBytes(), UTF_8);
-                break;
-            case "MENSAJE_FRAGSHOOTER_HAS_MATADO":
-                MENSAJE_FRAGSHOOTER_HAS_MATADO = new String(value.getBytes(), UTF_8);
-                break;
-            case "MENSAJE_FRAGSHOOTER_HAS_GANADO":
-                MENSAJE_FRAGSHOOTER_HAS_GANADO = new String(value.getBytes(), UTF_8);
-                break;
-            case "MENSAJE_FRAGSHOOTER_PUNTOS_DE_EXPERIENCIA":
-                MENSAJE_FRAGSHOOTER_PUNTOS_DE_EXPERIENCIA = new String(value.getBytes(), UTF_8);
-                break;
-            case "MENSAJE_NO_VES_NADA_INTERESANTE":
-                MENSAJE_NO_VES_NADA_INTERESANTE = new String(value.getBytes(), UTF_8);
-                break;
-            case "MENSAJE_HAS_MATADO_A":
-                MENSAJE_HAS_MATADO_A = new String(value.getBytes(), UTF_8);
-                break;
-            case "MENSAJE_HAS_GANADO_EXPE_1":
-                MENSAJE_HAS_GANADO_EXPE_1 = new String(value.getBytes(), UTF_8);
-                break;
-            case "MENSAJE_HAS_GANADO_EXPE_2":
-                MENSAJE_HAS_GANADO_EXPE_2 = new String(value.getBytes(), UTF_8);
-                break;
-            case "MENSAJE_TE_HA_MATADO":
-                MENSAJE_TE_HA_MATADO = new String(value.getBytes(), UTF_8);
-                break;
-            case "MENSAJE_HOGAR":
-                MENSAJE_HOGAR = new String(value.getBytes(), UTF_8);
-                break;
-            case "MENSAJE_HOGAR_CANCEL":
-                MENSAJE_HOGAR_CANCEL = new String(value.getBytes(), UTF_8);
-                break;
+    private static void populateMessages(String id, String value) {
+        try {
+            Field field = Messages.class.getDeclaredField(id);
+            if (Modifier.isStatic(field.getModifiers()) && field.getType() == String.class) {
+                field.set(null, new String(value.getBytes(), UTF_8));
+            }
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            System.err.println("Campo inválido en Messages: " + id);
         }
     }
 
