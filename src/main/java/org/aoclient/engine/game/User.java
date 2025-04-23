@@ -2,6 +2,7 @@ package org.aoclient.engine.game;
 
 import org.aoclient.engine.game.inventory.InventorySpells;
 import org.aoclient.engine.game.inventory.UserInventory;
+import org.aoclient.engine.game.models.E_Attributes;
 import org.aoclient.engine.game.models.E_Heading;
 import org.aoclient.engine.game.models.E_Skills;
 import org.aoclient.engine.game.models.Position;
@@ -80,6 +81,7 @@ public final class User {
     private int userMinHAM;
     private short freeSkillPoints;
     private int[] skills = new int[E_Skills.values().length];
+    private int[] attributes = new int[E_Attributes.values().length];
 
     private String userWeaponEqpHit = "0/0";
     private String userArmourEqpDef = "0/0";
@@ -721,5 +723,11 @@ public final class User {
 
     public void setSkills(int[] skills) {
         this.skills = skills;
+    }
+
+    public int[] getAttributes() { return this.attributes; }
+
+    public void setAttributes(int[] attributes) {
+        this.attributes = attributes;
     }
 }

@@ -85,7 +85,7 @@ public enum ServerPacketID {
     ChangeInventorySlot,     // CSI
     ChangeBankSlot,          // SBO
     ChangeSpellSlot,         // SHS
-    Atributes,               // ATR
+    Attributes,               // ATR
     BlacksmithWeapons,       // LAH
     BlacksmithArmors,        // LAR
     CarpenterObjects,        // OBR

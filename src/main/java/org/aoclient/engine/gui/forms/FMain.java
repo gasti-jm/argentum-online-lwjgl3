@@ -248,6 +248,13 @@ public final class FMain extends Form {
             ImGUISystem.get().show(new FOptions());
         }
 
+        // STATS BUTTON
+        ImGui.setCursorPos(681, 510);
+        if (ImGui.invisibleButton("viewStats", 95, 22)) {
+            playSound(SND_CLICK);
+            ImGUISystem.get().show(new FStats());
+        }
+
         // btnMapa
         ImGui.setCursorPos(681, 445);
         if (ImGui.invisibleButton("viewMap", 95, 22)) {

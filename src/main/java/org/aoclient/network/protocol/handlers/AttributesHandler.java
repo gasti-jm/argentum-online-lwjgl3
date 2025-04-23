@@ -1,10 +1,12 @@
 package org.aoclient.network.protocol.handlers;
 
+import org.aoclient.engine.game.User;
+import org.aoclient.engine.game.models.E_Attributes;
 import org.aoclient.network.ByteQueue;
 import org.aoclient.network.protocol.PacketHandler;
 import org.tinylog.Logger;
 
-public class AtributesHandler implements PacketHandler {
+public class AttributesHandler implements PacketHandler {
     
     @Override
     public void handle(ByteQueue data) {
@@ -13,16 +15,11 @@ public class AtributesHandler implements PacketHandler {
         // Remove packet ID
         data.readByte();
 
-        int[] userAtributos = new int[5];
+        int[] attributes = new int[E_Attributes.values().length];
         for (int i = 0; i < 5; i++)
-            userAtributos[i] = data.readByte();
+            attributes[i] = data.readByte();
 
-        //Dim i As Long
-        //
-        //    For i = 1 To NUMATRIBUTES
-        //        UserAtributos(i) = data.ReadByte()
-        //    Next i
-        //
+        User.get().setAttributes(attributes);
         //    'Show them in character creation
         //    If EstadoLogin = E_MODO.Dados Then
         //        With frmCrearPersonaje

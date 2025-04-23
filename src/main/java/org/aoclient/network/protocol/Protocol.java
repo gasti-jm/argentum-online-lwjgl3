@@ -130,6 +130,10 @@ public class Protocol {
         outgoingData.writeByte(ClientPacketID.RequestGuildLeaderInfo.ordinal());
     }
 
+    public static void writeRequestAttributes() {
+        outgoingData.writeByte(ClientPacketID.RequestAttributes.ordinal());
+    }
+
     public static void writeChangeHeading(E_Heading direction) {
         outgoingData.writeByte(ClientPacketID.ChangeHeading.ordinal());
         outgoingData.writeByte(direction.value);

@@ -71,7 +71,7 @@ public class PacketReceiver {
         handlers.put(ServerPacketID.WorkRequestTarget, new WorkRequestTargetHandler());
         handlers.put(ServerPacketID.ChangeInventorySlot, new ChangeInventorySlotHandler());
         handlers.put(ServerPacketID.ChangeSpellSlot, new ChangeSpellSlotHandler());
-        handlers.put(ServerPacketID.Atributes, new AtributesHandler());
+        handlers.put(ServerPacketID.Attributes, new AttributesHandler());
         handlers.put(ServerPacketID.BlacksmithWeapons, new BlacksmithWeaponsHandler());
         handlers.put(ServerPacketID.BlacksmithArmors, new BlacksmithArmorsHandler());
         handlers.put(ServerPacketID.CarpenterObjects, new CarpenterObjectsHandler());
