@@ -134,6 +134,10 @@ public class Protocol {
         outgoingData.writeByte(ClientPacketID.RequestAttributes.ordinal());
     }
 
+    public static void writeRequestFame() {
+        outgoingData.writeByte(ClientPacketID.RequestFame.ordinal());
+    }
+
     public static void writeChangeHeading(E_Heading direction) {
         outgoingData.writeByte(ClientPacketID.ChangeHeading.ordinal());
         outgoingData.writeByte(direction.value);

@@ -2,10 +2,7 @@ package org.aoclient.engine.game;
 
 import org.aoclient.engine.game.inventory.InventorySpells;
 import org.aoclient.engine.game.inventory.UserInventory;
-import org.aoclient.engine.game.models.E_Attributes;
-import org.aoclient.engine.game.models.E_Heading;
-import org.aoclient.engine.game.models.E_Skills;
-import org.aoclient.engine.game.models.Position;
+import org.aoclient.engine.game.models.*;
 
 import static org.aoclient.engine.Sound.*;
 import static org.aoclient.engine.game.models.Character.*;
@@ -82,6 +79,7 @@ public final class User {
     private short freeSkillPoints;
     private int[] skills = new int[E_Skills.values().length];
     private int[] attributes = new int[E_Attributes.values().length];
+    private int[] reputations = new int[E_Reputation.values().length];
 
     private String userWeaponEqpHit = "0/0";
     private String userArmourEqpDef = "0/0";
@@ -94,6 +92,7 @@ public final class User {
     private int userShieldEqpSlot;
 
     private boolean talking;
+    private boolean criminal;
 
     private int usingSkill;
 
@@ -702,7 +701,7 @@ public final class User {
         this.userComerciando = userComerciando;
     }
     public short getFreeSkillPoints() {
-        return this.freeSkillPoints;
+        return freeSkillPoints;
     }
 
     public void setFreeSkillPoints(short freeSkillPoints) {
@@ -710,24 +709,36 @@ public final class User {
     }
 
     public int getSkill(byte skill) {
-        return this.skills[skill - 1];
+        return skills[skill - 1];
     }
 
     public void setSkill(byte skill, int value) {
-        this.skills[skill - 1] = value;
+        skills[skill - 1] = value;
     }
 
     public int[] getSkills() {
-        return this.skills;
+        return skills;
     }
 
     public void setSkills(int[] skills) {
         this.skills = skills;
     }
 
-    public int[] getAttributes() { return this.attributes; }
+    public int[] getAttributes() { return attributes; }
 
     public void setAttributes(int[] attributes) {
         this.attributes = attributes;
+    }
+
+    public int[] getReputations() { return reputations; }
+
+    public void setReputations(int[] reputations) {
+        this.reputations = reputations;
+    }
+
+    public boolean getIsCriminal() { return criminal; }
+
+    public void setIsCriminal(boolean criminal) {
+        this.criminal = criminal;
     }
 }
