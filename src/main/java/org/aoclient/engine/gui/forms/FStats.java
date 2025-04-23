@@ -6,13 +6,13 @@ import imgui.flag.ImGuiWindowFlags;
 import org.aoclient.engine.game.User;
 import org.aoclient.engine.game.models.E_Attributes;
 import org.aoclient.engine.game.models.E_Reputation;
+import org.aoclient.engine.game.models.E_Skills;
 
 import java.io.IOException;
 
 import static org.aoclient.engine.Sound.SND_CLICK;
 import static org.aoclient.engine.Sound.playSound;
-import static org.aoclient.network.protocol.Protocol.writeRequestAttributes;
-import static org.aoclient.network.protocol.Protocol.writeRequestFame;
+import static org.aoclient.network.protocol.Protocol.*;
 
 public class FStats extends Form {
     private final int backgroundImage;
@@ -22,6 +22,7 @@ public class FStats extends Form {
             backgroundImage = loadTexture("VentanaEstadisticas");
             writeRequestAttributes();
             writeRequestFame();
+            writeRequestSkills();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -39,6 +40,7 @@ public class FStats extends Form {
 
         drawAttributes();
         drawReputations();
+        drawSkills();
 
         ImGui.setCursorPos(12, 416);
         if (ImGui.button("Cerrar", 438, 24)) {
@@ -57,7 +59,7 @@ public class FStats extends Form {
         }
     }
 
-    public void drawReputations() {
+    private void drawReputations() {
         short y = 158;
         for (E_Reputation reputation : E_Reputation.values()) {
             if (reputation.ordinal() == E_Reputation.LADRON.ordinal()) continue;
@@ -66,5 +68,13 @@ public class FStats extends Form {
         }
         ImGui.setCursorPos(100, y += 17);
         ImGui.text(User.get().getIsCriminal() ? "Criminal" : "Ciudadano");
+    }
+
+    private void drawSkills() {
+        float y = 40;
+        for (int skill : User.get().getSkills()) {
+            ImGui.setCursorPos(320, y += 17.5f);
+            ImGui.text(String.valueOf(skill));
+        }
     }
 }

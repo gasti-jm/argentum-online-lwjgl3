@@ -11,6 +11,7 @@ import java.io.IOException;
 import static org.aoclient.engine.Sound.SND_CLICK;
 import static org.aoclient.engine.Sound.playSound;
 import static org.aoclient.network.protocol.Protocol.writeModifySkills;
+import static org.aoclient.network.protocol.Protocol.writeRequestSkills;
 
 /**
  * Formulario para la visualizacion y gestion de habilidades (skills) del personaje.
@@ -24,7 +25,8 @@ public class FSkills extends Form {
 
     public FSkills() {
         try {
-            this.backgroundImage = loadTexture("VentanaSkills");
+            backgroundImage = loadTexture("VentanaSkills");
+            writeRequestSkills();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
