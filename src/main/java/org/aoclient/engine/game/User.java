@@ -76,10 +76,11 @@ public final class User {
     private int userMinAGU;
     private int userMaxHAM;
     private int userMinHAM;
-    private short freeSkillPoints;
+    private int freeSkillPoints;
     private int[] skills = new int[E_Skills.values().length];
     private int[] attributes = new int[E_Attributes.values().length];
     private int[] reputations = new int[E_Reputation.values().length];
+    private int[] killCounters = new int [E_KillCounters.values().length];
 
     private String userWeaponEqpHit = "0/0";
     private String userArmourEqpDef = "0/0";
@@ -95,6 +96,9 @@ public final class User {
     private boolean criminal;
 
     private int usingSkill;
+
+    private int role;
+    private int jailTime;
 
     /**
      * @desc: Constructor privado por singleton.
@@ -156,7 +160,7 @@ public final class User {
         this.setUserConected(false);
         this.setUserNavegando(false);
         this.setUserComerciando(false);
-        this.setFreeSkillPoints((short) 0);
+        this.setFreeSkillPoints(0);
     }
 
     /**
@@ -700,19 +704,19 @@ public final class User {
     public void setUserComerciando(boolean userComerciando) {
         this.userComerciando = userComerciando;
     }
-    public short getFreeSkillPoints() {
+    public int getFreeSkillPoints() {
         return freeSkillPoints;
     }
 
-    public void setFreeSkillPoints(short freeSkillPoints) {
+    public void setFreeSkillPoints(int freeSkillPoints) {
         this.freeSkillPoints = freeSkillPoints;
     }
 
-    public int getSkill(byte skill) {
+    public int getSkill(int skill) {
         return skills[skill - 1];
     }
 
-    public void setSkill(byte skill, int value) {
+    public void setSkill(int skill, int value) {
         skills[skill - 1] = value;
     }
 
@@ -736,9 +740,29 @@ public final class User {
         this.reputations = reputations;
     }
 
-    public boolean getIsCriminal() { return criminal; }
+    public boolean isCriminal() { return criminal; }
 
-    public void setIsCriminal(boolean criminal) {
+    public void setCriminal(boolean criminal) {
         this.criminal = criminal;
+    }
+
+    public int getKillCounter(int index) {
+        return killCounters[index];
+    }
+
+    public void setKillCounter(int index, int value) {
+        killCounters[index] = value;
+    }
+
+    public int getRole() { return role; }
+
+    public void setRole(int role) {
+        this.role = role;
+    }
+
+    public int getJailTime() { return jailTime; }
+
+    public void setJailTime(int jailTime) {
+        this.jailTime = jailTime;
     }
 }

@@ -4,7 +4,7 @@ package org.aoclient.engine.game.models;
  * Representa todas las opciones de profesion que un jugador puede seleccionar al momento de crear su personaje.
  */
 
-public enum E_Class {
+public enum E_Roles {
 
     Mago(1),
     Clerigo(2),
@@ -21,7 +21,7 @@ public enum E_Class {
 
     private final int value;
 
-    E_Class(int value) {
+    E_Roles(int value) {
         this.value = value;
     }
 

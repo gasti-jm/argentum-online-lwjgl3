@@ -11,7 +11,7 @@ import imgui.type.ImString;
 import org.aoclient.engine.Window;
 import org.aoclient.engine.game.User;
 import org.aoclient.engine.game.models.E_Cities;
-import org.aoclient.engine.game.models.E_Class;
+import org.aoclient.engine.game.models.E_Roles;
 import org.aoclient.engine.game.models.E_Heading;
 import org.aoclient.engine.game.models.E_Raza;
 import org.aoclient.engine.gui.ImGUISystem;
@@ -72,7 +72,7 @@ public final class FCreateCharacter extends Form {
     private final String[] strRazas = new String[E_Raza.values().length];
 
     private final ImInt currentItemClass = new ImInt(0);
-    private final String[] strClass = new String[E_Class.values().length];
+    private final String[] role = new String[E_Roles.values().length];
 
     private final ImInt currentItemGenero = new ImInt(0);
     private final String[] strGenero = {"Hombre", "Mujer"};
@@ -131,8 +131,8 @@ public final class FCreateCharacter extends Form {
         for (int i = 0; i < E_Raza.values().length; i++)
             strRazas[i] = E_Raza.values()[i].name().replace("_", " "); // para quitar el "_" del enum
         // Clases
-        for (int i = 0; i < E_Class.values().length; i++)
-            strClass[i] = E_Class.values()[i].name();
+        for (int i = 0; i < E_Roles.values().length; i++)
+            role[i] = E_Roles.values()[i].name();
     }
 
     @Override
@@ -231,7 +231,7 @@ public final class FCreateCharacter extends Form {
         ImGui.setCursorPos(408, 269);
         ImGui.pushItemWidth(175);
         ImGui.pushID("cbClase");
-        ImGui.combo("", currentItemClass, strClass, strClass.length);
+        ImGui.combo("", currentItemClass, role, role.length);
         ImGui.popID();
         ImGui.popItemWidth();
 

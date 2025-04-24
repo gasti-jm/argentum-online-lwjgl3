@@ -4,9 +4,7 @@ import imgui.ImGui;
 import imgui.flag.ImGuiCond;
 import imgui.flag.ImGuiWindowFlags;
 import org.aoclient.engine.game.User;
-import org.aoclient.engine.game.models.E_Attributes;
-import org.aoclient.engine.game.models.E_Reputation;
-import org.aoclient.engine.game.models.E_Skills;
+import org.aoclient.engine.game.models.*;
 
 import java.io.IOException;
 
@@ -23,6 +21,7 @@ public class FStats extends Form {
             writeRequestAttributes();
             writeRequestFame();
             writeRequestSkills();
+            writeRequestMiniStats();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -41,6 +40,7 @@ public class FStats extends Form {
         drawAttributes();
         drawReputations();
         drawSkills();
+        drawStatistics();
 
         ImGui.setCursorPos(12, 416);
         if (ImGui.button("Cerrar", 438, 24)) {
@@ -67,14 +67,26 @@ public class FStats extends Form {
             ImGui.text(String.valueOf(User.get().getReputations()[reputation.ordinal()]));
         }
         ImGui.setCursorPos(100, y += 17);
-        ImGui.text(User.get().getIsCriminal() ? "Criminal" : "Ciudadano");
+        ImGui.text(User.get().isCriminal() ? "Criminal" : "Ciudadano");
     }
 
     private void drawSkills() {
         float y = 40;
         for (int skill : User.get().getSkills()) {
-            ImGui.setCursorPos(320, y += 17.5f);
+            ImGui.setCursorPos(320, y += 17.25f);
             ImGui.text(String.valueOf(skill));
         }
+    }
+
+    private void drawStatistics() {
+        float y = 300;
+        for (E_KillCounters counter : E_KillCounters.values()) {
+            ImGui.setCursorPos(160, y += 15.5f);
+            ImGui.text(String.valueOf(User.get().getKillCounter((byte) counter.ordinal())));
+        }
+        ImGui.setCursorPos(65, y += 15);
+        ImGui.text(E_Roles.values()[User.get().getRole()].name());
+        ImGui.setCursorPos(160, y += 15);
+        ImGui.text(String.valueOf(User.get().getJailTime()));
     }
 }

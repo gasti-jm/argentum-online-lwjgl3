@@ -21,9 +21,6 @@ public class FameHandler implements PacketHandler {
 
         User.get().setReputations(reputations);
         long average = data.readLong();
-        User.get().setIsCriminal(average < 0);
-        // LlegoFama = True
-
-        Logger.debug("handleFame Cargado! - FALTA TERMINAR!");
+        User.get().setCriminal(average < 0);
     }
 }
