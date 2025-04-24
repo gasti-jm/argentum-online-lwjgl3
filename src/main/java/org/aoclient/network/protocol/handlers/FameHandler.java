@@ -1,5 +1,7 @@
 package org.aoclient.network.protocol.handlers;
 
+import org.aoclient.engine.game.User;
+import org.aoclient.engine.game.models.E_Reputation;
 import org.aoclient.network.ByteQueue;
 import org.aoclient.network.protocol.PacketHandler;
 import org.tinylog.Logger;
@@ -12,26 +14,13 @@ public class FameHandler implements PacketHandler {
 
         data.readByte();
 
-        data.readLong();
-        data.readLong();
-        data.readLong();
-        data.readLong();
-        data.readLong();
-        data.readLong();
-        data.readLong();
+        int[] reputations = new int[E_Reputation.values().length];
+        for (E_Reputation reputation: E_Reputation.values()) {
+            reputations[reputation.ordinal()] = data.readLong();
+        }
 
-
-        //With UserReputacion
-        //        .AsesinoRep = data.ReadLong()
-        //        .BandidoRep = data.ReadLong()
-        //        .BurguesRep = data.ReadLong()
-        //        .LadronesRep = data.ReadLong()
-        //        .NobleRep = data.ReadLong()
-        //        .PlebeRep = data.ReadLong()
-        //        .Promedio = data.ReadLong()
-        //    End With
-        // LlegoFama = True
-
-        Logger.debug("handleFame Cargado! - FALTA TERMINAR!");
+        User.get().setReputations(reputations);
+        long average = data.readLong();
+        User.get().setCriminal(average < 0);
     }
 }

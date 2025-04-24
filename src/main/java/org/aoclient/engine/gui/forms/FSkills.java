@@ -11,6 +11,7 @@ import java.io.IOException;
 import static org.aoclient.engine.Sound.SND_CLICK;
 import static org.aoclient.engine.Sound.playSound;
 import static org.aoclient.network.protocol.Protocol.writeModifySkills;
+import static org.aoclient.network.protocol.Protocol.writeRequestSkills;
 
 /**
  * Formulario para la visualizacion y gestion de habilidades (skills) del personaje.
@@ -20,11 +21,12 @@ public class FSkills extends Form {
 
     private String hoverSkillDescription = "";
     private final int[] userSkills = User.get().getSkills().clone();
-    private final short userFreeSkillsPoints = User.get().getFreeSkillPoints();
+    private final int userFreeSkillsPoints = User.get().getFreeSkillPoints();
 
     public FSkills() {
         try {
-            this.backgroundImage = loadTexture("VentanaSkills");
+            backgroundImage = loadTexture("VentanaSkills");
+            writeRequestSkills();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -119,19 +121,19 @@ public class FSkills extends Form {
         }
     }
 
-    private void plusSkill(byte skill) {
-        short freeSkillPts = User.get().getFreeSkillPoints();
+    private void plusSkill(int skill) {
+        int freeSkillPts = User.get().getFreeSkillPoints();
         if (freeSkillPts > 0 && User.get().getSkill(skill) + 1 <= 100) {
             User.get().setSkill(skill, User.get().getSkill(skill) + 1);
-            User.get().setFreeSkillPoints((short) (freeSkillPts - 1));
+            User.get().setFreeSkillPoints(freeSkillPts - 1);
         }
     }
 
-    private void minusSkill(byte skill) {
-        byte result = (byte) (User.get().getSkill(skill) - 1);
+    private void minusSkill(int skill) {
+        int result = (User.get().getSkill(skill) - 1);
         if (result >= this.userSkills[skill - 1]) {
             User.get().setSkill(skill, User.get().getSkill(skill) - 1);
-            User.get().setFreeSkillPoints((short) (User.get().getFreeSkillPoints() + 1));
+            User.get().setFreeSkillPoints(User.get().getFreeSkillPoints() + 1);
         }
     }
 
@@ -143,7 +145,7 @@ public class FSkills extends Form {
     private void saveChanges() {
         int[] modifiedSkills = new int[E_Skills.values().length];
         for (E_Skills skill : E_Skills.values()) {
-            byte skillIndex = (byte) (skill.getValue() - 1);
+            int skillIndex = skill.getValue() - 1;
             modifiedSkills[skillIndex] = User.get().getSkill(skill.getValue()) - this.userSkills[skillIndex];
         }
         writeModifySkills(modifiedSkills);

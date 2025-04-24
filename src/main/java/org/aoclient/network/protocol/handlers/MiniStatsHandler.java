@@ -1,8 +1,9 @@
 package org.aoclient.network.protocol.handlers;
 
+import org.aoclient.engine.game.User;
+import org.aoclient.engine.game.models.E_KillCounters;
 import org.aoclient.network.ByteQueue;
 import org.aoclient.network.protocol.PacketHandler;
-import org.tinylog.Logger;
 
 public class MiniStatsHandler implements PacketHandler {
     
@@ -13,12 +14,17 @@ public class MiniStatsHandler implements PacketHandler {
         // Remove packet ID
         data.readByte();
 
-        data.readLong();
-        data.readLong();
-        data.readLong();
-        data.readInteger();
-        data.readByte();
-        data.readLong();
+        int i = 1;
+        for (E_KillCounters counter : E_KillCounters.values()) {
+            if (i < E_KillCounters.values().length) {
+                User.get().setKillCounter(counter.ordinal(), data.readLong());
+            } else {
+                User.get().setKillCounter(counter.ordinal(), data.readInteger());
+            }
+            i++;
+        }
+        User.get().setRole(data.readByte());
+        User.get().setJailTime(data.readLong());
 
         //With UserEstadisticas
         //        .CiudadanosMatados = data.ReadLong()
@@ -28,8 +34,6 @@ public class MiniStatsHandler implements PacketHandler {
         //        .Clase = ListaClases(data.ReadByte())
         //        .PenaCarcel = data.ReadLong()
         //    End With
-
-        Logger.debug("handleMiniStats Cargado! - FALTA TERMINAR!");
     }
     
 }

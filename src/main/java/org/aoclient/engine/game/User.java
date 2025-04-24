@@ -2,9 +2,7 @@ package org.aoclient.engine.game;
 
 import org.aoclient.engine.game.inventory.InventorySpells;
 import org.aoclient.engine.game.inventory.UserInventory;
-import org.aoclient.engine.game.models.E_Heading;
-import org.aoclient.engine.game.models.E_Skills;
-import org.aoclient.engine.game.models.Position;
+import org.aoclient.engine.game.models.*;
 
 import static org.aoclient.engine.Sound.*;
 import static org.aoclient.engine.game.models.Character.*;
@@ -78,8 +76,11 @@ public final class User {
     private int userMinAGU;
     private int userMaxHAM;
     private int userMinHAM;
-    private short freeSkillPoints;
+    private int freeSkillPoints;
     private int[] skills = new int[E_Skills.values().length];
+    private int[] attributes = new int[E_Attributes.values().length];
+    private int[] reputations = new int[E_Reputation.values().length];
+    private int[] killCounters = new int [E_KillCounters.values().length];
 
     private String userWeaponEqpHit = "0/0";
     private String userArmourEqpDef = "0/0";
@@ -92,8 +93,12 @@ public final class User {
     private int userShieldEqpSlot;
 
     private boolean talking;
+    private boolean criminal;
 
     private int usingSkill;
+
+    private int role;
+    private int jailTime;
 
     /**
      * @desc: Constructor privado por singleton.
@@ -155,7 +160,7 @@ public final class User {
         this.setUserConected(false);
         this.setUserNavegando(false);
         this.setUserComerciando(false);
-        this.setFreeSkillPoints((short) 0);
+        this.setFreeSkillPoints(0);
     }
 
     /**
@@ -699,27 +704,65 @@ public final class User {
     public void setUserComerciando(boolean userComerciando) {
         this.userComerciando = userComerciando;
     }
-    public short getFreeSkillPoints() {
-        return this.freeSkillPoints;
+    public int getFreeSkillPoints() {
+        return freeSkillPoints;
     }
 
-    public void setFreeSkillPoints(short freeSkillPoints) {
+    public void setFreeSkillPoints(int freeSkillPoints) {
         this.freeSkillPoints = freeSkillPoints;
     }
 
-    public int getSkill(byte skill) {
-        return this.skills[skill - 1];
+    public int getSkill(int skill) {
+        return skills[skill - 1];
     }
 
-    public void setSkill(byte skill, int value) {
-        this.skills[skill - 1] = value;
+    public void setSkill(int skill, int value) {
+        skills[skill - 1] = value;
     }
 
     public int[] getSkills() {
-        return this.skills;
+        return skills;
     }
 
     public void setSkills(int[] skills) {
         this.skills = skills;
+    }
+
+    public int[] getAttributes() { return attributes; }
+
+    public void setAttributes(int[] attributes) {
+        this.attributes = attributes;
+    }
+
+    public int[] getReputations() { return reputations; }
+
+    public void setReputations(int[] reputations) {
+        this.reputations = reputations;
+    }
+
+    public boolean isCriminal() { return criminal; }
+
+    public void setCriminal(boolean criminal) {
+        this.criminal = criminal;
+    }
+
+    public int getKillCounter(int index) {
+        return killCounters[index];
+    }
+
+    public void setKillCounter(int index, int value) {
+        killCounters[index] = value;
+    }
+
+    public int getRole() { return role; }
+
+    public void setRole(int role) {
+        this.role = role;
+    }
+
+    public int getJailTime() { return jailTime; }
+
+    public void setJailTime(int jailTime) {
+        this.jailTime = jailTime;
     }
 }

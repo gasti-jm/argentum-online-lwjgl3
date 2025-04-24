@@ -38,7 +38,7 @@ public enum ClientPacketID {
     SafeToggle,              ///SEG & SEG  (SEG//s behaviour has to be coded in the client)
     ResuscitationSafeToggle,
     RequestGuildLeaderInfo,  //GLINFO
-    RequestAtributes,        //ATR
+    RequestAttributes,        //ATR
     RequestFame,             //FAMA
     RequestSkills,           //ESKI
     RequestMiniStats,        //FEST
