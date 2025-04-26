@@ -6,13 +6,13 @@ import org.aoclient.engine.game.User;
 import org.aoclient.engine.game.models.E_Skills;
 import org.aoclient.engine.renderer.RGBColor;
 import org.aoclient.network.ByteQueue;
-import org.aoclient.network.protocol.PacketHandler;
-import org.aoclient.network.packets.E_Messages;
+import org.aoclient.network.protocol.handlers.PacketHandler;
+import org.aoclient.network.protocol.types.MessageType;
 
 import static org.aoclient.engine.game.Dialogs.charDialogHitSet;
 import static org.aoclient.engine.game.models.E_Skills.FundirMetal;
 import static org.aoclient.engine.utils.GameData.charList;
-import static org.aoclient.network.Messages.*;
+import static org.aoclient.network.protocol.Messages.*;
 
 public class MultiMessageHandler implements PacketHandler {
 
@@ -28,60 +28,60 @@ public class MultiMessageHandler implements PacketHandler {
 
         int m = data.readByte();
 
-        if (m > E_Messages.values().length) return;
-        E_Messages msg = E_Messages.values()[m];
+        if (m > MessageType.values().length) return;
+        MessageType msg = MessageType.values()[m];
 
         switch (msg) {
-            case DontSeeAnything:
+            case DONT_SEE_ANYTHING:
                 console.addMsgToConsole(MENSAJE_NO_VES_NADA_INTERESANTE, false, false, new RGBColor(0.25f, 0.75f, 0.60f));
                 break;
 
-            case NPCSwing:
+            case NPC_SWING:
                 console.addMsgToConsole(MENSAJE_CRIATURA_FALLA_GOLPE, false, false, new RGBColor(1f, 0f, 0f));
                 break;
 
-            case NPCKillUser:
+            case NPC_KILL_USER:
                 console.addMsgToConsole(MENSAJE_CRIATURA_MATADO, false, false, new RGBColor(1f, 0f, 0f));
                 break;
 
-            case BlockedWithShieldUser:
+            case BLOCKED_WITH_SHIELD_USER:
                 console.addMsgToConsole(MENSAJE_RECHAZO_ATAQUE_ESCUDO, false, false, new RGBColor(1f, 0f, 0f));
                 break;
 
-            case BlockedWithShieldOther:
+            case BLOCKED_WITH_SHIELD_OTHER:
                 console.addMsgToConsole(MENSAJE_USUARIO_RECHAZO_ATAQUE_ESCUDO, false, false, new RGBColor(1f, 0f, 0f));
                 break;
 
-            case UserSwing:
+            case USER_SWING:
                 console.addMsgToConsole(MENSAJE_FALLADO_GOLPE, false, false, new RGBColor(1f, 0f, 0f));
                 charDialogHitSet(User.get().getUserCharIndex(), "*Fallas*");
                 break;
 
-            case SafeModeOn:
+            case SAFE_MODE_ON:
                 console.addMsgToConsole("MODO SEGURO ACTIVADO", false, false, new RGBColor(0f, 1f, 0f));
                 break;
 
-            case SafeModeOff:
+            case SAFE_MODE_OFF:
                 console.addMsgToConsole("MODO SEGURO DESACTIVADO", false, false, new RGBColor(1f, 0f, 0f));
                 break;
 
-            case ResuscitationSafeOff:
+            case RESUSCITATION_SAFE_OFF:
                 console.addMsgToConsole("MODO RESURECCION ACTIVADO", false, false, new RGBColor(0f, 1f, 0f));
                 break;
 
-            case ResuscitationSafeOn:
+            case RESUSCITATION_SAFE_ON:
                 console.addMsgToConsole("MODO RESURECCION DESACTIVADO", false, false, new RGBColor(1f, 0f, 0f));
                 break;
 
-            case NobilityLost:
+            case NOBILITY_LOST:
                 console.addMsgToConsole(MENSAJE_PIERDE_NOBLEZA, false, false, new RGBColor(1f, 0f, 0f));
                 break;
 
-            case CantUseWhileMeditating:
+            case CANT_USE_WHILE_MEDITATING:
                 console.addMsgToConsole(MENSAJE_USAR_MEDITANDO, false, false, new RGBColor(1f, 0f, 0f));
                 break;
 
-            case NPCHitUser:
+            case NPC_HIT_USER:
                 switch (data.readByte()) {
                     case 1: // bCabeza
                         console.addMsgToConsole(MENSAJE_GOLPE_CABEZA + " " + data.readInteger(),
@@ -115,7 +115,7 @@ public class MultiMessageHandler implements PacketHandler {
                 }
                 break;
 
-            case UserHitNPC:
+            case USER_HIT_NPC:
                 final int d = data.readLong();
                 console.addMsgToConsole(MENSAJE_GOLPE_CRIATURA_1 + " " + d,
                         false, false, new RGBColor(1f, 0f, 0f));
@@ -124,7 +124,7 @@ public class MultiMessageHandler implements PacketHandler {
 
                 break;
 
-            case UserAttackedSwing:
+            case USER_ATTACKED_SWING:
                 final short charIndexAttaker = data.readInteger();
 
                 console.addMsgToConsole(MENSAJE_1 + " " + charList[charIndexAttaker].getName() + MENSAJE_ATAQUE_FALLO,
@@ -133,7 +133,7 @@ public class MultiMessageHandler implements PacketHandler {
                 charDialogHitSet(charIndexAttaker, "*Falla*");
                 break;
 
-            case UserHittedByUser:
+            case USER_HITTED_BY_USER:
                 final int charIndexHitAttaker = data.readInteger();
                 String attackerName = "<" + charList[charIndexHitAttaker].getName() + ">";
                 bodyPart = data.readByte();
@@ -175,7 +175,7 @@ public class MultiMessageHandler implements PacketHandler {
 
                 break;
 
-            case UserHittedUser:
+            case USER_HITTED_USER:
                 final int charIndexVictim = data.readInteger();
                 final String victimName = "<" + charList[charIndexVictim].getName() + ">";
                 bodyPart = data.readByte();
@@ -216,7 +216,7 @@ public class MultiMessageHandler implements PacketHandler {
 
                 break;
 
-            case WorkRequestTarget:
+            case WORK_REQUEST_TARGET:
                 final int usingSkill = data.readByte();
                 User.get().setUsingSkill(usingSkill);
 
@@ -253,7 +253,7 @@ public class MultiMessageHandler implements PacketHandler {
                 }
                 break;
 
-            case HaveKilledUser:
+            case HAVE_KILLED_USER:
                 console.addMsgToConsole(MENSAJE_HAS_MATADO_A + charList[data.readInteger()].getName() + MENSAJE_22,
                         false, false, new RGBColor(1f, 0f, 0f));
 
@@ -265,17 +265,17 @@ public class MultiMessageHandler implements PacketHandler {
                 // sistema de captura al matar.
                 break;
 
-            case UserKill:
+            case USER_KILL:
                 console.addMsgToConsole(charList[data.readInteger()].getName() + MENSAJE_TE_HA_MATADO,
                         false, false, new RGBColor(1f, 0f, 0f));
                 break;
 
-            case EarnExp:
+            case EARN_EXP:
                 console.addMsgToConsole(MENSAJE_HAS_GANADO_EXPE_1 + data.readLong() + MENSAJE_HAS_GANADO_EXPE_2,
                         false, false, new RGBColor(1f, 0f, 0f));
                 break;
 
-            case GoHome:
+            case GO_HOME:
                 int distance = data.readByte();
                 short time = data.readInteger();
                 String hogar = data.readASCIIString();
@@ -284,11 +284,11 @@ public class MultiMessageHandler implements PacketHandler {
                         false, false, new RGBColor(1f, 0f, 0f));
                 break;
 
-            case FinishHome:
+            case FINISH_HOME:
                 console.addMsgToConsole(MENSAJE_HOGAR, false, false, new RGBColor());
                 break;
 
-            case CancelGoHome:
+            case CANCEL_GO_HOME:
                 console.addMsgToConsole(MENSAJE_HOGAR_CANCEL, false, false, new RGBColor(1f, 0f, 0f));
                 break;
         }

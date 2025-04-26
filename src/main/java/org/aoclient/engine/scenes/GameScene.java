@@ -10,7 +10,7 @@ import org.aoclient.engine.gui.forms.FMain;
 import org.aoclient.engine.listeners.KeyListener;
 import org.aoclient.engine.listeners.MouseListener;
 import org.aoclient.engine.renderer.RGBColor;
-import org.aoclient.network.ProtocolCmdParse;
+import org.aoclient.network.protocol.ProtocolCmdParse;
 
 import static org.aoclient.engine.game.IntervalTimer.INT_SENTRPU;
 import static org.aoclient.engine.game.models.Character.drawCharacter;

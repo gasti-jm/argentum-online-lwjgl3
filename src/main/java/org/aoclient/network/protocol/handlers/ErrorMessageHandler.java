@@ -5,7 +5,6 @@ import org.aoclient.engine.gui.ImGUISystem;
 import org.aoclient.engine.gui.forms.FMessage;
 import org.aoclient.network.ByteQueue;
 import org.aoclient.network.SocketConnection;
-import org.aoclient.network.protocol.PacketHandler;
 
 public class ErrorMessageHandler implements PacketHandler {
     

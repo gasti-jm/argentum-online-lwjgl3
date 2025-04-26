@@ -4,7 +4,6 @@ import org.aoclient.engine.game.Rain;
 import org.aoclient.engine.game.User;
 import org.aoclient.engine.utils.GameData;
 import org.aoclient.network.ByteQueue;
-import org.aoclient.network.protocol.PacketHandler;
 
 import static org.aoclient.engine.utils.GameData.bLluvia;
 

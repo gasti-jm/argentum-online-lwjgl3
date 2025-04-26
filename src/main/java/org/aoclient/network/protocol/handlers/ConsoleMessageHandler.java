@@ -4,7 +4,6 @@ import org.aoclient.engine.game.Console;
 import org.aoclient.engine.game.models.E_FontType;
 import org.aoclient.engine.renderer.RGBColor;
 import org.aoclient.network.ByteQueue;
-import org.aoclient.network.protocol.PacketHandler;
 import org.tinylog.Logger;
 
 public class ConsoleMessageHandler implements PacketHandler {

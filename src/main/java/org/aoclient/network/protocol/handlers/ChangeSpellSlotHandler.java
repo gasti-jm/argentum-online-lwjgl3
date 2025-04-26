@@ -2,7 +2,6 @@ package org.aoclient.network.protocol.handlers;
 
 import org.aoclient.engine.game.User;
 import org.aoclient.network.ByteQueue;
-import org.aoclient.network.protocol.PacketHandler;
 import org.tinylog.Logger;
 
 public class ChangeSpellSlotHandler implements PacketHandler {

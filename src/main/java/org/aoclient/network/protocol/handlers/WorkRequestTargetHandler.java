@@ -6,11 +6,10 @@ import org.aoclient.engine.game.User;
 import org.aoclient.engine.game.models.E_Skills;
 import org.aoclient.engine.renderer.RGBColor;
 import org.aoclient.network.ByteQueue;
-import org.aoclient.network.protocol.PacketHandler;
 import org.tinylog.Logger;
 
 import static org.aoclient.engine.game.models.E_Skills.FundirMetal;
-import static org.aoclient.network.Messages.*;
+import static org.aoclient.network.protocol.Messages.*;
 
 public class WorkRequestTargetHandler implements PacketHandler {
 

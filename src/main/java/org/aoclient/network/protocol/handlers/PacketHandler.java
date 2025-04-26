@@ -1,4 +1,4 @@
-package org.aoclient.network.protocol;
+package org.aoclient.network.protocol.handlers;
 
 import org.aoclient.network.ByteQueue;
 

@@ -1,4 +1,4 @@
-package org.aoclient.network;
+package org.aoclient.network.protocol;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -30,7 +30,7 @@ import static java.nio.charset.StandardCharsets.UTF_8;
  * <li>Instrucciones para diferentes acciones del juego
  * </ul>
  * <p>
- * TODO Mover a un archivo
+ * TODO Tendria que ser finals?
  */
 
 public class Messages {

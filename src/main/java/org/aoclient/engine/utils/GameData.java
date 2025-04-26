@@ -12,7 +12,7 @@ import java.util.Map;
 
 import static org.aoclient.engine.game.models.Character.eraseAllChars;
 import static org.aoclient.engine.renderer.FontTypes.loadFontTypes;
-import static org.aoclient.network.Messages.loadMessages;
+import static org.aoclient.network.protocol.Messages.loadMessages;
 import static org.aoclient.scripts.Compressor.readResource;
 
 /**

@@ -3,9 +3,8 @@ package org.aoclient.network.protocol.handlers;
 import org.aoclient.engine.game.User;
 import org.aoclient.engine.game.models.E_Heading;
 import org.aoclient.network.ByteQueue;
-import org.aoclient.network.packets.NickColor;
-import org.aoclient.network.packets.PlayerType;
-import org.aoclient.network.protocol.PacketHandler;
+import org.aoclient.network.protocol.types.NickColorType;
+import org.aoclient.network.protocol.types.PlayerType;
 
 import static org.aoclient.engine.game.models.Character.makeChar;
 import static org.aoclient.engine.game.models.Character.refreshAllChars;
@@ -40,13 +39,13 @@ public class CharacterCreateHandler implements PacketHandler {
         int nickColor = buffer.readByte();
         int privs = buffer.readByte();
 
-        if ((nickColor & NickColor.CRIMINAL.getId()) != 0) {
+        if ((nickColor & NickColorType.CRIMINAL.getId()) != 0) {
             charList[charIndex].setCriminal(true);
         } else {
             charList[charIndex].setCriminal(false);
         }
 
-        charList[charIndex].setAttackable((nickColor & NickColor.ATACABLE.getId()) != 0);
+        charList[charIndex].setAttackable((nickColor & NickColorType.ATACABLE.getId()) != 0);
 
         if (privs != 0) {
             if ((privs & PlayerType.CHAOS_COUNCIL.getId()) != 0 && (privs & PlayerType.USER.getId()) == 0) {

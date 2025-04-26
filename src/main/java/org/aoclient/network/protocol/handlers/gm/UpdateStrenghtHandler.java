@@ -2,7 +2,7 @@ package org.aoclient.network.protocol.handlers.gm;
 
 import org.aoclient.engine.game.User;
 import org.aoclient.network.ByteQueue;
-import org.aoclient.network.protocol.PacketHandler;
+import org.aoclient.network.protocol.handlers.PacketHandler;
 
 public class UpdateStrenghtHandler implements PacketHandler {
 

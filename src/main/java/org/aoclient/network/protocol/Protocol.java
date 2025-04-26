@@ -7,9 +7,7 @@ import org.aoclient.engine.game.models.E_Skills;
 import org.aoclient.engine.renderer.RGBColor;
 import org.aoclient.network.ByteQueue;
 import org.aoclient.network.SocketConnection;
-import org.aoclient.network.packets.ClientPacketID;
-import org.aoclient.network.packets.ServerPacketID;
-import org.aoclient.network.packets.eGMCommands;
+import org.aoclient.network.protocol.types.GMCommand;
 
 import java.nio.charset.StandardCharsets;
 
@@ -31,7 +29,7 @@ import static org.lwjgl.glfw.GLFW.glfwGetTime;
  * La mayoria de los metodos de esta clase siguen un patron de nomenclatura donde los metodos que comienzan con <b>write</b>
  * envian comandos al servidor, mientras que los metodos que comienzan con <b>handle</b> procesan las respuestas recibidas.
  * <p>
- * Cada comando de protocolo esta definido en los enumeradores {@link ClientPacketID} y {@link ServerPacketID} para garantizar una
+ * Cada comando de protocolo esta definido en los enumeradores {@link ClientPacket} y {@link ServerPacket} para garantizar una
  * comunicacion estandarizada.
  */
 
@@ -49,7 +47,7 @@ public class Protocol {
     }
 
     public static void writeLoginExistingChar(String username, String password) {
-        outgoingData.writeByte(ClientPacketID.LoginExistingChar.ordinal());
+        outgoingData.writeByte(ClientPacket.LOGIN_EXISTING_CHAR.ordinal());
         outgoingData.writeASCIIString(username);
         outgoingData.writeASCIIString(password);
         outgoingData.writeByte(0);  // App.Major
@@ -58,11 +56,11 @@ public class Protocol {
     }
 
     public static void writeThrowDices() {
-        outgoingData.writeByte(ClientPacketID.ThrowDices.ordinal());
+        outgoingData.writeByte(ClientPacket.THROW_DICES.ordinal());
     }
 
     public static void writeLoginNewChar(String userName, String userPassword, int userRaza, int userSexo, int userClase, int userHead, String userEmail, int userHogar) {
-        outgoingData.writeByte(ClientPacketID.LoginNewChar.ordinal());
+        outgoingData.writeByte(ClientPacket.LOGIN_NEW_CHAR.ordinal());
         outgoingData.writeASCIIString(userName);
         outgoingData.writeASCIIString(userPassword);
 
@@ -80,110 +78,110 @@ public class Protocol {
     }
 
     public static void writeTalk(String chat) {
-        outgoingData.writeByte(ClientPacketID.Talk.ordinal());
+        outgoingData.writeByte(ClientPacket.TALK.ordinal());
         outgoingData.writeASCIIString(chat);
     }
 
     public static void writeYell(String chat) {
-        outgoingData.writeByte(ClientPacketID.Yell.ordinal());
+        outgoingData.writeByte(ClientPacket.YELL.ordinal());
         outgoingData.writeASCIIString(chat);
     }
 
     public static void writeWhisper(short charIndex, String chat) {
-        outgoingData.writeByte(ClientPacketID.Whisper.ordinal());
+        outgoingData.writeByte(ClientPacket.WHISPER.ordinal());
         outgoingData.writeInteger(charIndex);
         outgoingData.writeASCIIString(chat);
     }
 
     public static void writeWalk(E_Heading direction) {
-        outgoingData.writeByte(ClientPacketID.Walk.ordinal());
+        outgoingData.writeByte(ClientPacket.WALK.ordinal());
         outgoingData.writeByte(direction.value);
     }
 
     public static void writeDrop(int slot, int amount) {
-        outgoingData.writeByte(ClientPacketID.Drop.ordinal());
+        outgoingData.writeByte(ClientPacket.DROP.ordinal());
         outgoingData.writeByte((byte) slot);
         outgoingData.writeInteger((short) amount);
     }
 
     public static void writeRequestPositionUpdate() {
-        outgoingData.writeByte(ClientPacketID.RequestPositionUpdate.ordinal());
+        outgoingData.writeByte(ClientPacket.REQUEST_POSITION_UPDATE.ordinal());
     }
 
     public static void writeAttack() {
-        outgoingData.writeByte(ClientPacketID.Attack.ordinal());
+        outgoingData.writeByte(ClientPacket.ATTACK.ordinal());
     }
 
     public static void writePickUp() {
-        outgoingData.writeByte(ClientPacketID.PickUp.ordinal());
+        outgoingData.writeByte(ClientPacket.PICK_UP.ordinal());
     }
 
     public static void writeSafeToggle() {
-        outgoingData.writeByte(ClientPacketID.SafeToggle.ordinal());
+        outgoingData.writeByte(ClientPacket.SAFE_TOGGLE.ordinal());
     }
 
     public static void writeResucitationToggle() {
-        outgoingData.writeByte(ClientPacketID.ResuscitationSafeToggle.ordinal());
+        outgoingData.writeByte(ClientPacket.RESUSCITATION_SAFE_TOGGLE.ordinal());
     }
 
     public static void writeRequestGuildLeaderInfo() {
-        outgoingData.writeByte(ClientPacketID.RequestGuildLeaderInfo.ordinal());
+        outgoingData.writeByte(ClientPacket.REQUEST_GUILD_LEADER_INFO.ordinal());
     }
 
     public static void writeRequestAttributes() {
-        outgoingData.writeByte(ClientPacketID.RequestAttributes.ordinal());
+        outgoingData.writeByte(ClientPacket.REQUEST_ATTRIBUTES.ordinal());
     }
 
     public static void writeRequestFame() {
-        outgoingData.writeByte(ClientPacketID.RequestFame.ordinal());
+        outgoingData.writeByte(ClientPacket.REQUEST_FAME.ordinal());
     }
 
     public static void writeRequestSkills() {
-        outgoingData.writeByte(ClientPacketID.RequestSkills.ordinal());
+        outgoingData.writeByte(ClientPacket.REQUEST_SKILLS.ordinal());
     }
 
     public static void writeRequestMiniStats() {
-        outgoingData.writeByte(ClientPacketID.RequestMiniStats.ordinal());
+        outgoingData.writeByte(ClientPacket.REQUEST_MINI_STATS.ordinal());
     }
 
     public static void writeChangeHeading(E_Heading direction) {
-        outgoingData.writeByte(ClientPacketID.ChangeHeading.ordinal());
+        outgoingData.writeByte(ClientPacket.CHANGE_HEADING.ordinal());
         outgoingData.writeByte(direction.value);
     }
 
     public static void writeModifySkills(int[] skills) {
-        outgoingData.writeByte(ClientPacketID.ModifySkills.ordinal());
+        outgoingData.writeByte(ClientPacket.MODIFY_SKILLS.ordinal());
         for (E_Skills skill: E_Skills.values()) {
             outgoingData.writeByte(skills[skill.getValue() - 1]);
         }
     }
 
     public static void writeLeftClick(int x, int y) {
-        outgoingData.writeByte(ClientPacketID.LeftClick.ordinal());
+        outgoingData.writeByte(ClientPacket.LEFT_CLICK.ordinal());
         outgoingData.writeByte(x);
         outgoingData.writeByte(y);
     }
 
     public static void writeWorkLeftClick(int x, int y, int skill) {
-        outgoingData.writeByte(ClientPacketID.WorkLeftClick.ordinal());
+        outgoingData.writeByte(ClientPacket.WORK_LEFT_CLICK.ordinal());
         outgoingData.writeByte(x);
         outgoingData.writeByte(y);
         outgoingData.writeByte(skill);
     }
 
     public static void writeDoubleClick(int x, int y) {
-        outgoingData.writeByte(ClientPacketID.DoubleClick.ordinal());
+        outgoingData.writeByte(ClientPacket.DOUBLE_CLICK.ordinal());
         outgoingData.writeByte(x);
         outgoingData.writeByte(y);
     }
 
     public static void writeUseItem(int slot) {
-        outgoingData.writeByte(ClientPacketID.UseItem.ordinal());
+        outgoingData.writeByte(ClientPacket.USE_ITEM.ordinal());
         outgoingData.writeByte(slot);
     }
 
     public static void writeEquipItem(int slot) {
-        outgoingData.writeByte(ClientPacketID.EquipItem.ordinal());
+        outgoingData.writeByte(ClientPacket.EQUIP_ITEM.ordinal());
         outgoingData.writeByte(slot);
     }
 
@@ -195,12 +193,12 @@ public class Protocol {
             return;
         }
 
-        outgoingData.writeByte(ClientPacketID.Work.ordinal());
+        outgoingData.writeByte(ClientPacket.WORK.ordinal());
         outgoingData.writeByte(skill);
     }
 
     public static void writeCastSpell(int slot) {
-        outgoingData.writeByte(ClientPacketID.CastSpell.ordinal());
+        outgoingData.writeByte(ClientPacket.CAST_SPELL.ordinal());
         outgoingData.writeByte(slot);
     }
 
@@ -212,26 +210,26 @@ public class Protocol {
             return;
         }
 
-        outgoingData.writeByte(ClientPacketID.Quit.ordinal());
+        outgoingData.writeByte(ClientPacket.QUIT.ordinal());
     }
 
     public static void writeSpellInfo(final int slot) {
-        outgoingData.writeByte(ClientPacketID.SpellInfo.ordinal());
+        outgoingData.writeByte(ClientPacket.SPELL_INFO.ordinal());
         outgoingData.writeByte(slot);
     }
 
     public static void writeCommerceEnd() {
-        outgoingData.writeByte(ClientPacketID.CommerceEnd.ordinal());
+        outgoingData.writeByte(ClientPacket.COMMERCE_END.ordinal());
     }
 
     public static void writeChangePassword(String oldPass, String newPass) {
-        outgoingData.writeByte(ClientPacketID.ChangePassword.ordinal());
+        outgoingData.writeByte(ClientPacket.CHANGE_PASSWORD.ordinal());
         outgoingData.writeASCIIString(oldPass);
         outgoingData.writeASCIIString(newPass);
     }
 
     public static void writeOnline() {
-        outgoingData.writeByte(ClientPacketID.Online.ordinal());
+        outgoingData.writeByte(ClientPacket.ONLINE.ordinal());
     }
 
     public static void writeMeditate() {
@@ -247,19 +245,19 @@ public class Protocol {
             return;
         }
 
-        outgoingData.writeByte(ClientPacketID.Meditate.ordinal());
+        outgoingData.writeByte(ClientPacket.MEDITATE.ordinal());
     }
 
     public static void writeCommerceStart() {
-        outgoingData.writeByte(ClientPacketID.CommerceStart.ordinal());
+        outgoingData.writeByte(ClientPacket.COMMERCE_START.ordinal());
     }
 
     public static void writeBankStart() {
-        outgoingData.writeByte(ClientPacketID.BankStart.ordinal());
+        outgoingData.writeByte(ClientPacket.BANK_START.ordinal());
     }
 
     public static void writeGuildLeave() {
-        outgoingData.writeByte(ClientPacketID.GuildLeave.ordinal());
+        outgoingData.writeByte(ClientPacket.GUILD_LEAVE.ordinal());
     }
 
     public static void writeRequestAccountState() {
@@ -270,7 +268,7 @@ public class Protocol {
             return;
         }
 
-        outgoingData.writeByte(ClientPacketID.RequestAccountState.ordinal());
+        outgoingData.writeByte(ClientPacket.REQUEST_ACCOUNT_STATE.ordinal());
     }
 
     public static void writePetStand() {
@@ -281,7 +279,7 @@ public class Protocol {
             return;
         }
 
-        outgoingData.writeByte(ClientPacketID.PetStand.ordinal());
+        outgoingData.writeByte(ClientPacket.PET_STAND.ordinal());
     }
 
     public static void writePetFollow() {
@@ -292,7 +290,7 @@ public class Protocol {
             return;
         }
 
-        outgoingData.writeByte(ClientPacketID.PetFollow.ordinal());
+        outgoingData.writeByte(ClientPacket.PET_FOLLOW.ordinal());
     }
 
     public static void writeReleasePet() {
@@ -303,7 +301,7 @@ public class Protocol {
             return;
         }
 
-        outgoingData.writeByte(ClientPacketID.ReleasePet.ordinal());
+        outgoingData.writeByte(ClientPacket.RELEASE_PET.ordinal());
     }
 
     public static void writeTrainList() {
@@ -314,7 +312,7 @@ public class Protocol {
             return;
         }
 
-        outgoingData.writeByte(ClientPacketID.TrainList.ordinal());
+        outgoingData.writeByte(ClientPacket.TRAIN_LIST.ordinal());
     }
 
     public static void writeRest() {
@@ -325,51 +323,51 @@ public class Protocol {
             return;
         }
 
-        outgoingData.writeByte(ClientPacketID.Rest.ordinal());
+        outgoingData.writeByte(ClientPacket.REST.ordinal());
     }
 
     public static void writeConsultation() {
-        outgoingData.writeByte(ClientPacketID.Consulta.ordinal());
+        outgoingData.writeByte(ClientPacket.CONSULTA.ordinal());
     }
 
     public static void writeResucitate() {
-        outgoingData.writeByte(ClientPacketID.Resucitate.ordinal());
+        outgoingData.writeByte(ClientPacket.RESUCITATE.ordinal());
     }
 
     public static void writeHeal() {
-        outgoingData.writeByte(ClientPacketID.Heal.ordinal());
+        outgoingData.writeByte(ClientPacket.HEAL.ordinal());
     }
 
     public static void writeRequestStats() {
-        outgoingData.writeByte(ClientPacketID.RequestStats.ordinal());
+        outgoingData.writeByte(ClientPacket.REQUEST_STATS.ordinal());
     }
 
     public static void writeHelp() {
-        outgoingData.writeByte(ClientPacketID.Help.ordinal());
+        outgoingData.writeByte(ClientPacket.HELP.ordinal());
     }
 
     public static void writeEnlist() {
-        outgoingData.writeByte(ClientPacketID.Enlist.ordinal());
+        outgoingData.writeByte(ClientPacket.ENLIST.ordinal());
     }
 
     public static void writeInformation() {
-        outgoingData.writeByte(ClientPacketID.Information.ordinal());
+        outgoingData.writeByte(ClientPacket.INFORMATION.ordinal());
     }
 
     public static void writeReward() {
-        outgoingData.writeByte(ClientPacketID.Reward.ordinal());
+        outgoingData.writeByte(ClientPacket.REWARD.ordinal());
     }
 
     public static void writeRequestMOTD() {
-        outgoingData.writeByte(ClientPacketID.RequestMOTD.ordinal());
+        outgoingData.writeByte(ClientPacket.REQUEST_MOTD.ordinal());
     }
 
     public static void writeUpTime() {
-        outgoingData.writeByte(ClientPacketID.Uptime.ordinal());
+        outgoingData.writeByte(ClientPacket.UPTIME.ordinal());
     }
 
     public static void writePartyLeave() {
-        outgoingData.writeByte(ClientPacketID.PartyLeave.ordinal());
+        outgoingData.writeByte(ClientPacket.PARTY_LEAVE.ordinal());
     }
 
     public static void writePartyCreate() {
@@ -380,7 +378,7 @@ public class Protocol {
             return;
         }
 
-        outgoingData.writeByte(ClientPacketID.PartyCreate.ordinal());
+        outgoingData.writeByte(ClientPacket.PARTY_CREATE.ordinal());
     }
 
     public static void writePartyJoin() {
@@ -391,7 +389,7 @@ public class Protocol {
             return;
         }
 
-        outgoingData.writeByte(ClientPacketID.PartyJoin.ordinal());
+        outgoingData.writeByte(ClientPacket.PARTY_JOIN.ordinal());
     }
 
     public static void writeShareNpc() {
@@ -402,7 +400,7 @@ public class Protocol {
             return;
         }
 
-        outgoingData.writeByte(ClientPacketID.ShareNpc.ordinal());
+        outgoingData.writeByte(ClientPacket.SHARE_NPC.ordinal());
     }
 
     public static void writeStopSharingNpc() {
@@ -413,120 +411,120 @@ public class Protocol {
             return;
         }
 
-        outgoingData.writeByte(ClientPacketID.StopSharingNpc.ordinal());
+        outgoingData.writeByte(ClientPacket.STOP_SHARING_NPC.ordinal());
     }
 
     public static void writeInquiry() {
-        outgoingData.writeByte(ClientPacketID.Inquiry.ordinal());
+        outgoingData.writeByte(ClientPacket.INQUIRY.ordinal());
     }
 
     public static void writeInquiryVote(int opt) {
-        outgoingData.writeByte(ClientPacketID.InquiryVote.ordinal());
+        outgoingData.writeByte(ClientPacket.INQUIRY_VOTE.ordinal());
         outgoingData.writeByte(opt);
     }
 
     public static void writeGuildMessage(String message) {
-        outgoingData.writeByte(ClientPacketID.GuildMessage.ordinal());
+        outgoingData.writeByte(ClientPacket.GUILD_MESSAGE.ordinal());
         outgoingData.writeASCIIString(message);
     }
 
     public static void writePartyMessage(String message) {
-        outgoingData.writeByte(ClientPacketID.PartyMessage.ordinal());
+        outgoingData.writeByte(ClientPacket.PARTY_MESSAGE.ordinal());
         outgoingData.writeASCIIString(message);
     }
 
     public static void writeCentinelReport(int number) {
-        outgoingData.writeByte(ClientPacketID.CentinelReport.ordinal());
+        outgoingData.writeByte(ClientPacket.CENTINEL_REPORT.ordinal());
         outgoingData.writeByte(number);
     }
 
     public static void writeGuildOnline() {
-        outgoingData.writeByte(ClientPacketID.GuildOnline.ordinal());
+        outgoingData.writeByte(ClientPacket.GUILD_ONLINE.ordinal());
     }
 
     public static void writePartyOnline() {
-        outgoingData.writeByte(ClientPacketID.GuildOnline.ordinal());
+        outgoingData.writeByte(ClientPacket.GUILD_ONLINE.ordinal());
     }
 
     public static void writeCouncilMessage(String message) {
-        outgoingData.writeByte(ClientPacketID.CouncilMessage.ordinal());
+        outgoingData.writeByte(ClientPacket.COUNCIL_MESSAGE.ordinal());
         outgoingData.writeASCIIString(message);
     }
 
     public static void writeRoleMasterRequest(String message) {
-        outgoingData.writeByte(ClientPacketID.RoleMasterRequest.ordinal());
+        outgoingData.writeByte(ClientPacket.ROLE_MASTER_REQUEST.ordinal());
         outgoingData.writeASCIIString(message);
     }
 
     public static void writeGMRequest() {
-        outgoingData.writeByte(ClientPacketID.GMRequest.ordinal());
+        outgoingData.writeByte(ClientPacket.GM_REQUEST.ordinal());
     }
 
     public static void writeBugReport(String message) {
-        outgoingData.writeByte(ClientPacketID.bugReport.ordinal());
+        outgoingData.writeByte(ClientPacket.BUG_REPORT.ordinal());
         outgoingData.writeASCIIString(message);
     }
 
     public static void writeChangeDescription(String message) {
-        outgoingData.writeByte(ClientPacketID.ChangeDescription.ordinal());
+        outgoingData.writeByte(ClientPacket.CHANGE_DESCRIPTION.ordinal());
         outgoingData.writeASCIIString(message);
     }
 
     public static void writeGuildVote(String message) {
-        outgoingData.writeByte(ClientPacketID.GuildVote.ordinal());
+        outgoingData.writeByte(ClientPacket.GUILD_VOTE.ordinal());
         outgoingData.writeASCIIString(message);
     }
 
     public static void writePunishments(String message) {
-        outgoingData.writeByte(ClientPacketID.Punishments.ordinal());
+        outgoingData.writeByte(ClientPacket.PUNISHMENTS.ordinal());
         outgoingData.writeASCIIString(message);
     }
 
     public static void writeGamble(short amount) {
-        outgoingData.writeByte(ClientPacketID.Gamble.ordinal());
+        outgoingData.writeByte(ClientPacket.GAMBLE.ordinal());
         outgoingData.writeInteger(amount);
     }
 
     public static void writeLeaveFaction() {
-        outgoingData.writeByte(ClientPacketID.LeaveFaction.ordinal());
+        outgoingData.writeByte(ClientPacket.LEAVE_FACTION.ordinal());
     }
 
     public static void writeBankExtractGold(int amount) {
-        outgoingData.writeByte(ClientPacketID.BankExtractGold.ordinal());
+        outgoingData.writeByte(ClientPacket.BANK_EXTRACT_GOLD.ordinal());
         outgoingData.writeLong(amount);
     }
 
     public static void writeBankDepositGold(int amount) {
-        outgoingData.writeByte(ClientPacketID.BankDepositGold.ordinal());
+        outgoingData.writeByte(ClientPacket.BANK_DEPOSIT_GOLD.ordinal());
         outgoingData.writeLong(amount);
     }
 
     public static void writeDenounce(String message) {
-        outgoingData.writeByte(ClientPacketID.Denounce.ordinal());
+        outgoingData.writeByte(ClientPacket.DENOUNCE.ordinal());
         outgoingData.writeASCIIString(message);
     }
 
     public static void writeGuildFundate() {
-        outgoingData.writeByte(ClientPacketID.GuildFundate.ordinal());
+        outgoingData.writeByte(ClientPacket.GUILD_FUNDATE.ordinal());
     }
 
     public static void writeGuildFundation(int clanType) {
-        outgoingData.writeByte(ClientPacketID.GuildFundation.ordinal());
+        outgoingData.writeByte(ClientPacket.GUILD_FUNDATION.ordinal());
         outgoingData.writeByte(clanType);
     }
 
     public static void writePartyKick(String userName) {
-        outgoingData.writeByte(ClientPacketID.PartyKick.ordinal());
+        outgoingData.writeByte(ClientPacket.PARTY_KICK.ordinal());
         outgoingData.writeASCIIString(userName);
     }
 
     public static void writePartySetLeader(String userName) {
-        outgoingData.writeByte(ClientPacketID.PartySetLeader.ordinal());
+        outgoingData.writeByte(ClientPacket.PARTY_SET_LEADER.ordinal());
         outgoingData.writeASCIIString(userName);
     }
 
     public static void writePartyAcceptMember(String userName) {
-        outgoingData.writeByte(ClientPacketID.PartyAcceptMember.ordinal());
+        outgoingData.writeByte(ClientPacket.PARTY_ACCEPT_MEMBER.ordinal());
         outgoingData.writeASCIIString(userName);
     }
 
@@ -535,74 +533,74 @@ public class Protocol {
         ##############################################*/
 
     public static void writeGMMessage(String message) {
-        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
-        outgoingData.writeByte(eGMCommands.GMMessage.ordinal());
+        outgoingData.writeByte(ClientPacket.GM_COMMANDS.ordinal());
+        outgoingData.writeByte(GMCommand.GM_MESSAGE.ordinal());
 
         outgoingData.writeASCIIString(message);
     }
 
     public static void writeShowName() {
-        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
-        outgoingData.writeByte(eGMCommands.showName.ordinal());
+        outgoingData.writeByte(ClientPacket.GM_COMMANDS.ordinal());
+        outgoingData.writeByte(GMCommand.SHOW_NAME.ordinal());
     }
 
     public static void writeOnlineRoyalArmy() {
-        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
-        outgoingData.writeByte(eGMCommands.OnlineRoyalArmy.ordinal());
+        outgoingData.writeByte(ClientPacket.GM_COMMANDS.ordinal());
+        outgoingData.writeByte(GMCommand.ONLINE_ROYAL_ARMY.ordinal());
     }
 
     public static void writeOnlineChaosLegion() {
-        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
-        outgoingData.writeByte(eGMCommands.OnlineChaosLegion.ordinal());
+        outgoingData.writeByte(ClientPacket.GM_COMMANDS.ordinal());
+        outgoingData.writeByte(GMCommand.ONLINE_CHAOS_LEGION.ordinal());
     }
 
     public static void writeGoNearby(String userName) {
-        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
-        outgoingData.writeByte(eGMCommands.GoNearby.ordinal());
+        outgoingData.writeByte(ClientPacket.GM_COMMANDS.ordinal());
+        outgoingData.writeByte(GMCommand.GO_NEARBY.ordinal());
 
         outgoingData.writeASCIIString(userName);
     }
 
     public static void writeComment(String message) {
-        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
-        outgoingData.writeByte(eGMCommands.Comment.ordinal());
+        outgoingData.writeByte(ClientPacket.GM_COMMANDS.ordinal());
+        outgoingData.writeByte(GMCommand.COMMENT.ordinal());
 
         outgoingData.writeASCIIString(message);
     }
 
     public static void writeServerTime() {
-        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
-        outgoingData.writeByte(eGMCommands.serverTime.ordinal());
+        outgoingData.writeByte(ClientPacket.GM_COMMANDS.ordinal());
+        outgoingData.writeByte(GMCommand.SERVER_TIME.ordinal());
     }
 
     public static void writeWhere(String userName) {
-        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
-        outgoingData.writeByte(eGMCommands.Where.ordinal());
+        outgoingData.writeByte(ClientPacket.GM_COMMANDS.ordinal());
+        outgoingData.writeByte(GMCommand.WHERE.ordinal());
 
         outgoingData.writeASCIIString(userName);
     }
 
     public static void writeCreaturesInMap(short Map) {
-        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
-        outgoingData.writeByte(eGMCommands.CreaturesInMap.ordinal());
+        outgoingData.writeByte(ClientPacket.GM_COMMANDS.ordinal());
+        outgoingData.writeByte(GMCommand.CREATURES_IN_MAP.ordinal());
 
         outgoingData.writeInteger(Map);
     }
 
     public static void writeCreateItem(int itemIndex) {
-        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
-        outgoingData.writeByte(eGMCommands.CreateItem.ordinal());
+        outgoingData.writeByte(ClientPacket.GM_COMMANDS.ordinal());
+        outgoingData.writeByte(GMCommand.CREATE_ITEM.ordinal());
         outgoingData.writeInteger((short) itemIndex);
     }
 
     public static void writeWarpMeToTarget() {
-        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
-        outgoingData.writeByte(eGMCommands.WarpMeToTarget.ordinal());
+        outgoingData.writeByte(ClientPacket.GM_COMMANDS.ordinal());
+        outgoingData.writeByte(GMCommand.WARP_ME_TO_TARGET.ordinal());
     }
 
     public static void writeWarpChar(String userName, short map, int x, int y) {
-        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
-        outgoingData.writeByte(eGMCommands.WarpChar.ordinal());
+        outgoingData.writeByte(ClientPacket.GM_COMMANDS.ordinal());
+        outgoingData.writeByte(GMCommand.WARP_CHAR.ordinal());
 
         outgoingData.writeASCIIString(userName);
         outgoingData.writeInteger(map);
@@ -611,52 +609,52 @@ public class Protocol {
     }
 
     public static void writeSilence(String userName) {
-        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
-        outgoingData.writeByte(eGMCommands.Silence.ordinal());
+        outgoingData.writeByte(ClientPacket.GM_COMMANDS.ordinal());
+        outgoingData.writeByte(GMCommand.SILENCE.ordinal());
 
         outgoingData.writeASCIIString(userName);
     }
 
     public static void writeSOSShowList() {
-        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
-        outgoingData.writeByte(eGMCommands.SOSShowList.ordinal());
+        outgoingData.writeByte(ClientPacket.GM_COMMANDS.ordinal());
+        outgoingData.writeByte(GMCommand.SOS_SHOW_LIST.ordinal());
     }
 
     public static void writeShowServerForm() {
-        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
-        outgoingData.writeByte(eGMCommands.ShowServerForm.ordinal());
+        outgoingData.writeByte(ClientPacket.GM_COMMANDS.ordinal());
+        outgoingData.writeByte(GMCommand.SHOW_SERVER_FORM.ordinal());
     }
 
     public static void writeGoToChar(String userName) {
-        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
-        outgoingData.writeByte(eGMCommands.GoToChar.ordinal());
+        outgoingData.writeByte(ClientPacket.GM_COMMANDS.ordinal());
+        outgoingData.writeByte(GMCommand.GO_TO_CHAR.ordinal());
 
         outgoingData.writeASCIIString(userName);
     }
 
     public static void writeInvisible() {
-        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
-        outgoingData.writeByte(eGMCommands.Invisible.ordinal());
+        outgoingData.writeByte(ClientPacket.GM_COMMANDS.ordinal());
+        outgoingData.writeByte(GMCommand.INVISIBLE.ordinal());
     }
 
     public static void writeGMPanel() {
-        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
-        outgoingData.writeByte(eGMCommands.GMPanel.ordinal());
+        outgoingData.writeByte(ClientPacket.GM_COMMANDS.ordinal());
+        outgoingData.writeByte(GMCommand.GM_PANEL.ordinal());
     }
 
     public static void writeWorking() {
-        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
-        outgoingData.writeByte(eGMCommands.Working.ordinal());
+        outgoingData.writeByte(ClientPacket.GM_COMMANDS.ordinal());
+        outgoingData.writeByte(GMCommand.WORKING.ordinal());
     }
 
     public static void writeHiding() {
-        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
-        outgoingData.writeByte(eGMCommands.Hiding.ordinal());
+        outgoingData.writeByte(ClientPacket.GM_COMMANDS.ordinal());
+        outgoingData.writeByte(GMCommand.HIDING.ordinal());
     }
 
     public static void writeJail(String userName, String reason, int time) {
-        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
-        outgoingData.writeByte(eGMCommands.Jail.ordinal());
+        outgoingData.writeByte(ClientPacket.GM_COMMANDS.ordinal());
+        outgoingData.writeByte(GMCommand.JAIL.ordinal());
 
         outgoingData.writeASCIIString(userName);
         outgoingData.writeASCIIString(reason);
@@ -664,21 +662,21 @@ public class Protocol {
     }
 
     public static void writeKillNPC() {
-        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
-        outgoingData.writeByte(eGMCommands.KillNPC.ordinal());
+        outgoingData.writeByte(ClientPacket.GM_COMMANDS.ordinal());
+        outgoingData.writeByte(GMCommand.KILL_NPC.ordinal());
     }
 
     public static void writeWarnUser(String userName, String reason) {
-        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
-        outgoingData.writeByte(eGMCommands.WarnUser.ordinal());
+        outgoingData.writeByte(ClientPacket.GM_COMMANDS.ordinal());
+        outgoingData.writeByte(GMCommand.WARN_USER.ordinal());
 
         outgoingData.writeASCIIString(userName);
         outgoingData.writeASCIIString(reason);
     }
 
     public static void writeEditChar(String userName, int editOption, String arg1, String arg2) {
-        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
-        outgoingData.writeByte(eGMCommands.EditChar.ordinal());
+        outgoingData.writeByte(ClientPacket.GM_COMMANDS.ordinal());
+        outgoingData.writeByte(GMCommand.EDIT_CHAR.ordinal());
 
         outgoingData.writeASCIIString(userName);
 
@@ -691,135 +689,135 @@ public class Protocol {
     }
 
     public static void writeRequestCharInfo(String userName) {
-        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
-        outgoingData.writeByte(eGMCommands.RequestCharInfo.ordinal());
+        outgoingData.writeByte(ClientPacket.GM_COMMANDS.ordinal());
+        outgoingData.writeByte(GMCommand.REQUEST_CHAR_INFO.ordinal());
 
         outgoingData.writeASCIIString(userName);
     }
 
     public static void writeRequestCharStats(String userName) {
-        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
-        outgoingData.writeByte(eGMCommands.RequestCharStats.ordinal());
+        outgoingData.writeByte(ClientPacket.GM_COMMANDS.ordinal());
+        outgoingData.writeByte(GMCommand.REQUEST_CHAR_STATS.ordinal());
 
         outgoingData.writeASCIIString(userName);
     }
 
     public static void writeRequestCharGold(String userName) {
-        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
-        outgoingData.writeByte(eGMCommands.RequestCharGold.ordinal());
+        outgoingData.writeByte(ClientPacket.GM_COMMANDS.ordinal());
+        outgoingData.writeByte(GMCommand.REQUEST_CHAR_GOLD.ordinal());
 
         outgoingData.writeASCIIString(userName);
     }
 
     public static void writeRequestCharInventory(String userName) {
-        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
-        outgoingData.writeByte(eGMCommands.RequestCharInventory.ordinal());
+        outgoingData.writeByte(ClientPacket.GM_COMMANDS.ordinal());
+        outgoingData.writeByte(GMCommand.REQUEST_CHAR_INVENTORY.ordinal());
 
         outgoingData.writeASCIIString(userName);
     }
 
     public static void writeRequestCharBank(String userName) {
-        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
-        outgoingData.writeByte(eGMCommands.RequestCharBank.ordinal());
+        outgoingData.writeByte(ClientPacket.GM_COMMANDS.ordinal());
+        outgoingData.writeByte(GMCommand.REQUEST_CHAR_BANK.ordinal());
 
         outgoingData.writeASCIIString(userName);
     }
 
     public static void writeRequestCharSkills(String userName) {
-        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
-        outgoingData.writeByte(eGMCommands.RequestCharSkills.ordinal());
+        outgoingData.writeByte(ClientPacket.GM_COMMANDS.ordinal());
+        outgoingData.writeByte(GMCommand.REQUEST_CHAR_SKILLS.ordinal());
 
         outgoingData.writeASCIIString(userName);
     }
 
     public static void writeReviveChar(String userName) {
-        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
-        outgoingData.writeByte(eGMCommands.ReviveChar.ordinal());
+        outgoingData.writeByte(ClientPacket.GM_COMMANDS.ordinal());
+        outgoingData.writeByte(GMCommand.REVIVE_CHAR.ordinal());
 
         outgoingData.writeASCIIString(userName);
     }
 
     public static void writeOnlineGM() {
-        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
-        outgoingData.writeByte(eGMCommands.OnlineGM.ordinal());
+        outgoingData.writeByte(ClientPacket.GM_COMMANDS.ordinal());
+        outgoingData.writeByte(GMCommand.ONLINE_GM.ordinal());
     }
 
     public static void writeOnlineMap(short map) {
-        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
-        outgoingData.writeByte(eGMCommands.OnlineMap.ordinal());
+        outgoingData.writeByte(ClientPacket.GM_COMMANDS.ordinal());
+        outgoingData.writeByte(GMCommand.ONLINE_MAP.ordinal());
 
         outgoingData.writeInteger(map);
     }
 
     public static void writeForgive(String userName) {
-        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
-        outgoingData.writeByte(eGMCommands.Forgive.ordinal());
+        outgoingData.writeByte(ClientPacket.GM_COMMANDS.ordinal());
+        outgoingData.writeByte(GMCommand.FORGIVE.ordinal());
 
         outgoingData.writeASCIIString(userName);
     }
 
     public static void writeKick(String userName) {
-        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
-        outgoingData.writeByte(eGMCommands.Kick.ordinal());
+        outgoingData.writeByte(ClientPacket.GM_COMMANDS.ordinal());
+        outgoingData.writeByte(GMCommand.KICK.ordinal());
 
         outgoingData.writeASCIIString(userName);
     }
 
     public static void writeExecute(String userName) {
-        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
-        outgoingData.writeByte(eGMCommands.Execute.ordinal());
+        outgoingData.writeByte(ClientPacket.GM_COMMANDS.ordinal());
+        outgoingData.writeByte(GMCommand.EXECUTE.ordinal());
 
         outgoingData.writeASCIIString(userName);
     }
 
     public static void writeBanChar(String userName, String reason) {
-        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
-        outgoingData.writeByte(eGMCommands.banChar.ordinal());
+        outgoingData.writeByte(ClientPacket.GM_COMMANDS.ordinal());
+        outgoingData.writeByte(GMCommand.BAN_CHAR.ordinal());
 
         outgoingData.writeASCIIString(userName);
         outgoingData.writeASCIIString(reason);
     }
 
     public static void writeUnbanChar(String userName) {
-        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
-        outgoingData.writeByte(eGMCommands.UnbanChar.ordinal());
+        outgoingData.writeByte(ClientPacket.GM_COMMANDS.ordinal());
+        outgoingData.writeByte(GMCommand.UNBAN_CHAR.ordinal());
 
         outgoingData.writeASCIIString(userName);
     }
 
     public static void writeNPCFollow() {
-        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
-        outgoingData.writeByte(eGMCommands.NPCFollow.ordinal());
+        outgoingData.writeByte(ClientPacket.GM_COMMANDS.ordinal());
+        outgoingData.writeByte(GMCommand.NPC_FOLLOW.ordinal());
     }
 
     public static void writeSummonChar() {
-        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
-        outgoingData.writeByte(eGMCommands.SummonChar.ordinal());
+        outgoingData.writeByte(ClientPacket.GM_COMMANDS.ordinal());
+        outgoingData.writeByte(GMCommand.SUMMON_CHAR.ordinal());
     }
 
     public static void writeSpawnListRequest() {
-        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
-        outgoingData.writeByte(eGMCommands.SpawnListRequest.ordinal());
+        outgoingData.writeByte(ClientPacket.GM_COMMANDS.ordinal());
+        outgoingData.writeByte(GMCommand.SPAWN_LIST_REQUEST.ordinal());
     }
 
     public static void writeResetNPCInventory() {
-        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
-        outgoingData.writeByte(eGMCommands.ResetNPCInventory.ordinal());
+        outgoingData.writeByte(ClientPacket.GM_COMMANDS.ordinal());
+        outgoingData.writeByte(GMCommand.RESET_NPC_INVENTORY.ordinal());
     }
 
     public static void writeCleanWorld() {
-        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
-        outgoingData.writeByte(eGMCommands.CleanWorld.ordinal());
+        outgoingData.writeByte(ClientPacket.GM_COMMANDS.ordinal());
+        outgoingData.writeByte(GMCommand.CLEAN_WORLD.ordinal());
     }
 
     public static void writeServerMessage() {
-        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
-        outgoingData.writeByte(eGMCommands.ServerMessage.ordinal());
+        outgoingData.writeByte(ClientPacket.GM_COMMANDS.ordinal());
+        outgoingData.writeByte(GMCommand.SERVER_MESSAGE.ordinal());
     }
 
     public static void writeNickToIP(String userName) {
-        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
-        outgoingData.writeByte(eGMCommands.nickToIP.ordinal());
+        outgoingData.writeByte(ClientPacket.GM_COMMANDS.ordinal());
+        outgoingData.writeByte(GMCommand.NICK_TO_IP.ordinal());
 
         outgoingData.writeASCIIString(userName);
     }
@@ -829,8 +827,8 @@ public class Protocol {
         if (ip.length != 4) return; // IP inválida
 
         // Escribir el mensaje "IPToNick" en el buffer de datos salientes
-        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
-        outgoingData.writeByte(eGMCommands.IPToNick.ordinal());
+        outgoingData.writeByte(ClientPacket.GM_COMMANDS.ordinal());
+        outgoingData.writeByte(GMCommand.IP_TO_NICK.ordinal());
 
         // Escribir cada byte de la IP en el buffer de datos salientes
         for (int b : ip) {
@@ -839,15 +837,15 @@ public class Protocol {
     }
 
     public static void writeGuildOnlineMembers(String guild) {
-        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
-        outgoingData.writeByte(eGMCommands.GuildOnlineMembers.ordinal());
+        outgoingData.writeByte(ClientPacket.GM_COMMANDS.ordinal());
+        outgoingData.writeByte(GMCommand.GUILD_ONLINE_MEMBERS.ordinal());
 
         outgoingData.writeASCIIString(guild);
     }
 
     public static void writeTeleportCreate(short map, int x, int y, int radio) {
-        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
-        outgoingData.writeByte(eGMCommands.TeleportCreate.ordinal());
+        outgoingData.writeByte(ClientPacket.GM_COMMANDS.ordinal());
+        outgoingData.writeByte(GMCommand.TELEPORT_CREATE.ordinal());
 
         outgoingData.writeInteger(map);
         outgoingData.writeByte(x);
@@ -856,33 +854,33 @@ public class Protocol {
     }
 
     public static void writeTeleportDestroy() {
-        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
-        outgoingData.writeByte(eGMCommands.TeleportDestroy.ordinal());
+        outgoingData.writeByte(ClientPacket.GM_COMMANDS.ordinal());
+        outgoingData.writeByte(GMCommand.TELEPORT_DESTROY.ordinal());
     }
 
     public static void writeRainToggle() {
-        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
-        outgoingData.writeByte(eGMCommands.RainToggle.ordinal());
+        outgoingData.writeByte(ClientPacket.GM_COMMANDS.ordinal());
+        outgoingData.writeByte(GMCommand.RAIN_TOGGLE.ordinal());
     }
 
     public static void writeSetCharDescription(String desc) {
-        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
-        outgoingData.writeByte(eGMCommands.SetCharDescription.ordinal());
+        outgoingData.writeByte(ClientPacket.GM_COMMANDS.ordinal());
+        outgoingData.writeByte(GMCommand.SET_CHAR_DESCRIPTION.ordinal());
 
         outgoingData.writeASCIIString(desc);
     }
 
     public static void writeForceMIDIToMap(int midiID, short map) {
-        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
-        outgoingData.writeByte(eGMCommands.ForceMIDIToMap.ordinal());
+        outgoingData.writeByte(ClientPacket.GM_COMMANDS.ordinal());
+        outgoingData.writeByte(GMCommand.FORCE_MIDI_TO_MAP.ordinal());
 
         outgoingData.writeByte(midiID);
         outgoingData.writeInteger(map);
     }
 
     public static void writeForceWAVEToMap(int waveID, short map, int x, int y) {
-        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
-        outgoingData.writeByte(eGMCommands.ForceWAVEToMap.ordinal());
+        outgoingData.writeByte(ClientPacket.GM_COMMANDS.ordinal());
+        outgoingData.writeByte(GMCommand.FORCE_WAVE_TO_MAP.ordinal());
 
         outgoingData.writeByte(waveID);
 
@@ -893,122 +891,122 @@ public class Protocol {
     }
 
     public static void writeRoyaleArmyMessage(String message) {
-        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
-        outgoingData.writeByte(eGMCommands.RoyalArmyMessage.ordinal());
+        outgoingData.writeByte(ClientPacket.GM_COMMANDS.ordinal());
+        outgoingData.writeByte(GMCommand.ROYAL_ARMY_MESSAGE.ordinal());
 
         outgoingData.writeASCIIString(message);
     }
 
     public static void writeChaosLegionMessage(String message) {
-        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
-        outgoingData.writeByte(eGMCommands.ChaosLegionMessage.ordinal());
+        outgoingData.writeByte(ClientPacket.GM_COMMANDS.ordinal());
+        outgoingData.writeByte(GMCommand.CHAOS_LEGION_MESSAGE.ordinal());
 
         outgoingData.writeASCIIString(message);
     }
 
     public static void writeCitizenMessage(String message) {
-        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
-        outgoingData.writeByte(eGMCommands.CitizenMessage.ordinal());
+        outgoingData.writeByte(ClientPacket.GM_COMMANDS.ordinal());
+        outgoingData.writeByte(GMCommand.CITIZEN_MESSAGE.ordinal());
 
         outgoingData.writeASCIIString(message);
     }
 
     public static void writeCriminalMessage(String message) {
-        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
-        outgoingData.writeByte(eGMCommands.CriminalMessage.ordinal());
+        outgoingData.writeByte(ClientPacket.GM_COMMANDS.ordinal());
+        outgoingData.writeByte(GMCommand.CRIMINAL_MESSAGE.ordinal());
 
         outgoingData.writeASCIIString(message);
     }
 
     public static void writeTalkAsNPC(String message) {
-        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
-        outgoingData.writeByte(eGMCommands.TalkAsNPC.ordinal());
+        outgoingData.writeByte(ClientPacket.GM_COMMANDS.ordinal());
+        outgoingData.writeByte(GMCommand.TALK_AS_NPC.ordinal());
 
         outgoingData.writeASCIIString(message);
     }
 
     public static void writeDestroyAllItemsInArea() {
-        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
-        outgoingData.writeByte(eGMCommands.DestroyAllItemsInArea.ordinal());
+        outgoingData.writeByte(ClientPacket.GM_COMMANDS.ordinal());
+        outgoingData.writeByte(GMCommand.DESTROY_ALL_ITEMS_IN_AREA.ordinal());
     }
 
     public static void writeAcceptRoyalCouncilMember(String userName) {
-        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
-        outgoingData.writeByte(eGMCommands.AcceptRoyalCouncilMember.ordinal());
+        outgoingData.writeByte(ClientPacket.GM_COMMANDS.ordinal());
+        outgoingData.writeByte(GMCommand.ACCEPT_ROYAL_COUNCIL_MEMBER.ordinal());
 
         outgoingData.writeASCIIString(userName);
     }
 
     public static void writeAcceptChaosCouncilMember(String userName) {
-        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
-        outgoingData.writeByte(eGMCommands.AcceptChaosCouncilMember.ordinal());
+        outgoingData.writeByte(ClientPacket.GM_COMMANDS.ordinal());
+        outgoingData.writeByte(GMCommand.ACCEPT_CHAOS_COUNCIL_MEMBER.ordinal());
 
         outgoingData.writeASCIIString(userName);
     }
 
     public static void writeItemsInTheFloor() {
-        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
-        outgoingData.writeByte(eGMCommands.ItemsInTheFloor.ordinal());
+        outgoingData.writeByte(ClientPacket.GM_COMMANDS.ordinal());
+        outgoingData.writeByte(GMCommand.ITEMS_IN_THE_FLOOR.ordinal());
     }
 
     public static void writeMakeDumb(String userName) {
-        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
-        outgoingData.writeByte(eGMCommands.MakeDumb.ordinal());
+        outgoingData.writeByte(ClientPacket.GM_COMMANDS.ordinal());
+        outgoingData.writeByte(GMCommand.MAKE_DUMB.ordinal());
 
         outgoingData.writeASCIIString(userName);
     }
 
     public static void writeMakeDumbNoMore(String userName) {
-        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
-        outgoingData.writeByte(eGMCommands.MakeDumbNoMore.ordinal());
+        outgoingData.writeByte(ClientPacket.GM_COMMANDS.ordinal());
+        outgoingData.writeByte(GMCommand.MAKE_DUMB_NO_MORE.ordinal());
 
         outgoingData.writeASCIIString(userName);
     }
 
     public static void writeDumpIPTables() {
-        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
-        outgoingData.writeByte(eGMCommands.dumpIPTables.ordinal());
+        outgoingData.writeByte(ClientPacket.GM_COMMANDS.ordinal());
+        outgoingData.writeByte(GMCommand.DUMP_IP_TABLES.ordinal());
     }
 
     public static void writeCouncilKick(String userName) {
-        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
-        outgoingData.writeByte(eGMCommands.CouncilKick.ordinal());
+        outgoingData.writeByte(ClientPacket.GM_COMMANDS.ordinal());
+        outgoingData.writeByte(GMCommand.COUNCIL_KICK.ordinal());
 
         outgoingData.writeASCIIString(userName);
     }
 
     public static void writeSetTrigger(int trigger) {
-        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
-        outgoingData.writeByte(eGMCommands.SetTrigger.ordinal());
+        outgoingData.writeByte(ClientPacket.GM_COMMANDS.ordinal());
+        outgoingData.writeByte(GMCommand.SET_TRIGGER.ordinal());
 
         outgoingData.writeByte(trigger);
     }
 
     public static void writeAskTrigger() {
-        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
-        outgoingData.writeByte(eGMCommands.AskTrigger.ordinal());
+        outgoingData.writeByte(ClientPacket.GM_COMMANDS.ordinal());
+        outgoingData.writeByte(GMCommand.ASK_TRIGGER.ordinal());
     }
 
     public static void writeBannedIPList() {
-        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
-        outgoingData.writeByte(eGMCommands.BannedIPList.ordinal());
+        outgoingData.writeByte(ClientPacket.GM_COMMANDS.ordinal());
+        outgoingData.writeByte(GMCommand.BANNED_IP_LIST.ordinal());
     }
 
     public static void writeBannedIPReload() {
-        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
-        outgoingData.writeByte(eGMCommands.BannedIPReload.ordinal());
+        outgoingData.writeByte(ClientPacket.GM_COMMANDS.ordinal());
+        outgoingData.writeByte(GMCommand.BANNED_IP_RELOAD.ordinal());
     }
 
     public static void writeGuildMemberList(String guild) {
-        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
-        outgoingData.writeByte(eGMCommands.GuildMemberList.ordinal());
+        outgoingData.writeByte(ClientPacket.GM_COMMANDS.ordinal());
+        outgoingData.writeByte(GMCommand.GUILD_MEMBER_LIST.ordinal());
 
         outgoingData.writeASCIIString(guild);
     }
 
     public static void writeGuildBan(String guild) {
-        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
-        outgoingData.writeByte(eGMCommands.GuildBan.ordinal());
+        outgoingData.writeByte(ClientPacket.GM_COMMANDS.ordinal());
+        outgoingData.writeByte(GMCommand.GUILD_BAN.ordinal());
 
         outgoingData.writeASCIIString(guild);
     }
@@ -1017,8 +1015,8 @@ public class Protocol {
         if (byIp && ip.length != 4) return; // IP inválida
 
         // Escribir el mensaje "BanIP" en el buffer de datos salientes
-        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
-        outgoingData.writeByte(eGMCommands.BanIP.ordinal());
+        outgoingData.writeByte(ClientPacket.GM_COMMANDS.ordinal());
+        outgoingData.writeByte(GMCommand.BAN_IP.ordinal());
 
         // Escribir si es por IP o por nick
         outgoingData.writeBoolean(byIp);
@@ -1041,8 +1039,8 @@ public class Protocol {
         if (ip.length != 4) return; // IP inválida
 
         // Escribir el mensaje "UnbanIP" en el buffer de datos salientes
-        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
-        outgoingData.writeByte(eGMCommands.UnbanIP.ordinal());
+        outgoingData.writeByte(ClientPacket.GM_COMMANDS.ordinal());
+        outgoingData.writeByte(GMCommand.UNBAN_IP.ordinal());
 
         // Escribir los componentes de la IP
         for (int b : ip) {
@@ -1051,41 +1049,41 @@ public class Protocol {
     }
 
     public static void writeDestroyItems() {
-        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
-        outgoingData.writeByte(eGMCommands.DestroyItems.ordinal());
+        outgoingData.writeByte(ClientPacket.GM_COMMANDS.ordinal());
+        outgoingData.writeByte(GMCommand.DESTROY_ITEMS.ordinal());
     }
 
     public static void writeChaosLegionKick(String userName) {
-        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
-        outgoingData.writeByte(eGMCommands.ChaosLegionKick.ordinal());
+        outgoingData.writeByte(ClientPacket.GM_COMMANDS.ordinal());
+        outgoingData.writeByte(GMCommand.CHAOS_LEGION_KICK.ordinal());
 
         outgoingData.writeASCIIString(userName);
     }
 
     public static void writeRoyalArmyKick(String userName) {
-        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
-        outgoingData.writeByte(eGMCommands.RoyalArmyKick.ordinal());
+        outgoingData.writeByte(ClientPacket.GM_COMMANDS.ordinal());
+        outgoingData.writeByte(GMCommand.ROYAL_ARMY_KICK.ordinal());
 
         outgoingData.writeASCIIString(userName);
     }
 
     public static void writeForceMIDIAll(int midiID) {
-        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
-        outgoingData.writeByte(eGMCommands.ForceMIDIAll.ordinal());
+        outgoingData.writeByte(ClientPacket.GM_COMMANDS.ordinal());
+        outgoingData.writeByte(GMCommand.FORCE_MIDI_ALL.ordinal());
 
         outgoingData.writeByte(midiID);
     }
 
     public static void writeForceWAVEAll(int waveID) {
-        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
-        outgoingData.writeByte(eGMCommands.ForceWAVEAll.ordinal());
+        outgoingData.writeByte(ClientPacket.GM_COMMANDS.ordinal());
+        outgoingData.writeByte(GMCommand.FORCE_WAVE_ALL.ordinal());
 
         outgoingData.writeByte(waveID);
     }
 
     public static void writeRemovePunishment(String userName, int punishment, String newText) {
-        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
-        outgoingData.writeByte(eGMCommands.RemovePunishment.ordinal());
+        outgoingData.writeByte(ClientPacket.GM_COMMANDS.ordinal());
+        outgoingData.writeByte(GMCommand.REMOVE_PUNISHMENT.ordinal());
 
         outgoingData.writeASCIIString(userName);
         outgoingData.writeByte(punishment);
@@ -1093,275 +1091,275 @@ public class Protocol {
     }
 
     public static void writeTileBlockedToggle() {
-        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
-        outgoingData.writeByte(eGMCommands.TileBlockedToggle.ordinal());
+        outgoingData.writeByte(ClientPacket.GM_COMMANDS.ordinal());
+        outgoingData.writeByte(GMCommand.TILE_BLOCKED_TOGGLE.ordinal());
     }
 
     public static void writeKillNPCNoRespawn() {
-        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
-        outgoingData.writeByte(eGMCommands.KillNPCNoRespawn.ordinal());
+        outgoingData.writeByte(ClientPacket.GM_COMMANDS.ordinal());
+        outgoingData.writeByte(GMCommand.KILL_NPC_NO_RESPAWN.ordinal());
     }
 
     public static void writeKillAllNearbyNPCs() {
-        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
-        outgoingData.writeByte(eGMCommands.KillAllNearbyNPCs.ordinal());
+        outgoingData.writeByte(ClientPacket.GM_COMMANDS.ordinal());
+        outgoingData.writeByte(GMCommand.KILL_ALL_NEARBY_NPCS.ordinal());
     }
 
     public static void writeLastIP(String userName) {
-        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
-        outgoingData.writeByte(eGMCommands.LastIP.ordinal());
+        outgoingData.writeByte(ClientPacket.GM_COMMANDS.ordinal());
+        outgoingData.writeByte(GMCommand.LAST_IP.ordinal());
 
         outgoingData.writeASCIIString(userName);
     }
 
     public static void writeChangeMOTD() {
-        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
-        outgoingData.writeByte(eGMCommands.ChangeMOTD.ordinal());
+        outgoingData.writeByte(ClientPacket.GM_COMMANDS.ordinal());
+        outgoingData.writeByte(GMCommand.CHANGE_MOTD.ordinal());
     }
 
     public static void writeSystemMessage(String message) {
-        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
-        outgoingData.writeByte(eGMCommands.SystemMessage.ordinal());
+        outgoingData.writeByte(ClientPacket.GM_COMMANDS.ordinal());
+        outgoingData.writeByte(GMCommand.SYSTEM_MESSAGE.ordinal());
 
         outgoingData.writeASCIIString(message);
     }
 
     public static void writeCreateNPC(Short NPCIndex) {
-        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
-        outgoingData.writeByte(eGMCommands.CreateNPC.ordinal());
+        outgoingData.writeByte(ClientPacket.GM_COMMANDS.ordinal());
+        outgoingData.writeByte(GMCommand.CREATE_NPC.ordinal());
 
         outgoingData.writeInteger(NPCIndex);
     }
 
     public static void writeCreateNPCWithRespawn(Short NPCIndex) {
-        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
-        outgoingData.writeByte(eGMCommands.CreateNPCWithRespawn.ordinal());
+        outgoingData.writeByte(ClientPacket.GM_COMMANDS.ordinal());
+        outgoingData.writeByte(GMCommand.CREATE_NPC_WITH_RESPAWN.ordinal());
 
         outgoingData.writeInteger(NPCIndex);
     }
 
     public static void writeImperialArmour(int armourIndex, short objectIndex) {
-        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
-        outgoingData.writeByte(eGMCommands.ImperialArmour.ordinal());
+        outgoingData.writeByte(ClientPacket.GM_COMMANDS.ordinal());
+        outgoingData.writeByte(GMCommand.IMPERIAL_ARMOUR.ordinal());
 
         outgoingData.writeByte(armourIndex);
         outgoingData.writeInteger(objectIndex);
     }
 
     public static void writeChaosArmour(int armourIndex, short objectIndex) {
-        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
-        outgoingData.writeByte(eGMCommands.ChaosArmour.ordinal());
+        outgoingData.writeByte(ClientPacket.GM_COMMANDS.ordinal());
+        outgoingData.writeByte(GMCommand.CHAOS_ARMOUR.ordinal());
 
         outgoingData.writeByte(armourIndex);
         outgoingData.writeInteger(objectIndex);
     }
 
     public static void writeNavigateToggle() {
-        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
-        outgoingData.writeByte(eGMCommands.NavigateToggle.ordinal());
+        outgoingData.writeByte(ClientPacket.GM_COMMANDS.ordinal());
+        outgoingData.writeByte(GMCommand.NAVIGATE_TOGGLE.ordinal());
     }
 
     public static void writeServerOpenToUsersToggle() {
-        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
-        outgoingData.writeByte(eGMCommands.ServerOpenToUsersToggle.ordinal());
+        outgoingData.writeByte(ClientPacket.GM_COMMANDS.ordinal());
+        outgoingData.writeByte(GMCommand.SERVER_OPEN_TO_USERS_TOGGLE.ordinal());
     }
 
     public static void writeTurnOffServer() {
-        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
-        outgoingData.writeByte(eGMCommands.TurnOffServer.ordinal());
+        outgoingData.writeByte(ClientPacket.GM_COMMANDS.ordinal());
+        outgoingData.writeByte(GMCommand.TURN_OFF_SERVER.ordinal());
     }
 
     public static void writeTurnCriminal(String userName) {
-        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
-        outgoingData.writeByte(eGMCommands.TurnCriminal.ordinal());
+        outgoingData.writeByte(ClientPacket.GM_COMMANDS.ordinal());
+        outgoingData.writeByte(GMCommand.TURN_CRIMINAL.ordinal());
 
         outgoingData.writeASCIIString(userName);
     }
 
     public static void writeResetFactions(String userName) {
-        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
-        outgoingData.writeByte(eGMCommands.ResetFactions.ordinal());
+        outgoingData.writeByte(ClientPacket.GM_COMMANDS.ordinal());
+        outgoingData.writeByte(GMCommand.RESET_FACTIONS.ordinal());
 
         outgoingData.writeASCIIString(userName);
     }
 
     public static void writeRemoveCharFromGuild(String userName) {
-        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
-        outgoingData.writeByte(eGMCommands.RemoveCharFromGuild.ordinal());
+        outgoingData.writeByte(ClientPacket.GM_COMMANDS.ordinal());
+        outgoingData.writeByte(GMCommand.REMOVE_CHAR_FROM_GUILD.ordinal());
 
         outgoingData.writeASCIIString(userName);
     }
 
     public static void writeRequestCharMail(String userName) {
-        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
-        outgoingData.writeByte(eGMCommands.RequestCharMail.ordinal());
+        outgoingData.writeByte(ClientPacket.GM_COMMANDS.ordinal());
+        outgoingData.writeByte(GMCommand.REQUEST_CHAR_MAIL.ordinal());
 
         outgoingData.writeASCIIString(userName);
     }
 
     public static void writeAlterPassword(String userName, String copyFrom) {
-        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
-        outgoingData.writeByte(eGMCommands.AlterPassword.ordinal());
+        outgoingData.writeByte(ClientPacket.GM_COMMANDS.ordinal());
+        outgoingData.writeByte(GMCommand.ALTER_PASSWORD.ordinal());
 
         outgoingData.writeASCIIString(userName);
         outgoingData.writeASCIIString(copyFrom);
     }
 
     public static void writeAlterMail(String userName, String newMail) {
-        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
-        outgoingData.writeByte(eGMCommands.AlterMail.ordinal());
+        outgoingData.writeByte(ClientPacket.GM_COMMANDS.ordinal());
+        outgoingData.writeByte(GMCommand.ALTER_MAIL.ordinal());
 
         outgoingData.writeASCIIString(userName);
         outgoingData.writeASCIIString(newMail);
     }
 
     public static void writeAlterName(String userName, String newName) {
-        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
-        outgoingData.writeByte(eGMCommands.AlterName.ordinal());
+        outgoingData.writeByte(ClientPacket.GM_COMMANDS.ordinal());
+        outgoingData.writeByte(GMCommand.ALTER_NAME.ordinal());
 
         outgoingData.writeASCIIString(userName);
         outgoingData.writeASCIIString(newName);
     }
 
     public static void writeCheckSlot(String userName, int slot) {
-        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
-        outgoingData.writeByte(eGMCommands.AlterName.ordinal());
+        outgoingData.writeByte(ClientPacket.GM_COMMANDS.ordinal());
+        outgoingData.writeByte(GMCommand.CHECK_SLOT.ordinal());
 
         outgoingData.writeASCIIString(userName);
         outgoingData.writeByte(slot);
     }
 
     public static void writeToggleCentinelActivated() {
-        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
-        outgoingData.writeByte(eGMCommands.ToggleCentinelActivated.ordinal());
+        outgoingData.writeByte(ClientPacket.GM_COMMANDS.ordinal());
+        outgoingData.writeByte(GMCommand.TOGGLE_CENTINEL_ACTIVATED.ordinal());
     }
 
     public static void writeDoBackup() {
-        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
-        outgoingData.writeByte(eGMCommands.DoBackUp.ordinal());
+        outgoingData.writeByte(ClientPacket.GM_COMMANDS.ordinal());
+        outgoingData.writeByte(GMCommand.DO_BACKUP.ordinal());
     }
 
     public static void writeShowGuildMessages(String guild) {
-        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
-        outgoingData.writeByte(eGMCommands.ShowGuildMessages.ordinal());
+        outgoingData.writeByte(ClientPacket.GM_COMMANDS.ordinal());
+        outgoingData.writeByte(GMCommand.SHOW_GUILD_MESSAGES.ordinal());
 
         outgoingData.writeASCIIString(guild);
     }
 
     public static void writeSaveMap() {
-        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
-        outgoingData.writeByte(eGMCommands.SaveMap.ordinal());
+        outgoingData.writeByte(ClientPacket.GM_COMMANDS.ordinal());
+        outgoingData.writeByte(GMCommand.SAVE_MAP.ordinal());
     }
 
     public static void writeChangeMapInfoPK(boolean isPK) {
-        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
-        outgoingData.writeByte(eGMCommands.ChangeMapInfoPK.ordinal());
+        outgoingData.writeByte(ClientPacket.GM_COMMANDS.ordinal());
+        outgoingData.writeByte(GMCommand.CHANGE_MAP_INFO_PK.ordinal());
 
         outgoingData.writeBoolean(isPK);
     }
 
     public static void writeChangeMapInfoBackup(boolean backup) {
-        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
-        outgoingData.writeByte(eGMCommands.ChangeMapInfoBackup.ordinal());
+        outgoingData.writeByte(ClientPacket.GM_COMMANDS.ordinal());
+        outgoingData.writeByte(GMCommand.CHANGE_MAP_INFO_BACKUP.ordinal());
 
         outgoingData.writeBoolean(backup);
     }
 
     public static void writeChangeMapInfoRestricted(String restrict) {
-        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
-        outgoingData.writeByte(eGMCommands.ChangeMapInfoBackup.ordinal());
+        outgoingData.writeByte(ClientPacket.GM_COMMANDS.ordinal());
+        outgoingData.writeByte(GMCommand.CHANGE_MAP_INFO_RESTRICTED.ordinal());
 
         outgoingData.writeASCIIString(restrict);
     }
 
     public static void writeChangeMapInfoNoMagic(boolean noMagic) {
-        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
-        outgoingData.writeByte(eGMCommands.ChangeMapInfoNoMagic.ordinal());
+        outgoingData.writeByte(ClientPacket.GM_COMMANDS.ordinal());
+        outgoingData.writeByte(GMCommand.CHANGE_MAP_INFO_NO_MAGIC.ordinal());
 
         outgoingData.writeBoolean(noMagic);
     }
 
     public static void writeChangeMapInfoNoInvi(boolean noInvi) {
-        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
-        outgoingData.writeByte(eGMCommands.ChangeMapInfoNoInvi.ordinal());
+        outgoingData.writeByte(ClientPacket.GM_COMMANDS.ordinal());
+        outgoingData.writeByte(GMCommand.CHANGE_MAP_INFO_NO_INVI.ordinal());
 
         outgoingData.writeBoolean(noInvi);
     }
 
     public static void writeChangeMapInfoNoResu(boolean noResu) {
-        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
-        outgoingData.writeByte(eGMCommands.ChangeMapInfoNoResu.ordinal());
+        outgoingData.writeByte(ClientPacket.GM_COMMANDS.ordinal());
+        outgoingData.writeByte(GMCommand.CHANGE_MAP_INFO_NO_RESU.ordinal());
 
         outgoingData.writeBoolean(noResu);
     }
 
     public static void writeChangeMapInfoLand(String land) {
-        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
-        outgoingData.writeByte(eGMCommands.ChangeMapInfoLand.ordinal());
+        outgoingData.writeByte(ClientPacket.GM_COMMANDS.ordinal());
+        outgoingData.writeByte(GMCommand.CHANGE_MAP_INFO_LAND.ordinal());
 
         outgoingData.writeASCIIString(land);
     }
 
     public static void writeChangeMapInfoZone(String zone) {
-        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
-        outgoingData.writeByte(eGMCommands.ChangeMapInfoZone.ordinal());
+        outgoingData.writeByte(ClientPacket.GM_COMMANDS.ordinal());
+        outgoingData.writeByte(GMCommand.CHANGE_MAP_INFO_ZONE.ordinal());
 
         outgoingData.writeASCIIString(zone);
     }
 
     public static void writeSaveChars() {
-        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
-        outgoingData.writeByte(eGMCommands.SaveChars.ordinal());
+        outgoingData.writeByte(ClientPacket.GM_COMMANDS.ordinal());
+        outgoingData.writeByte(GMCommand.SAVE_CHARS.ordinal());
     }
 
     public static void writeCleanSOS() {
-        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
-        outgoingData.writeByte(eGMCommands.CleanSOS.ordinal());
+        outgoingData.writeByte(ClientPacket.GM_COMMANDS.ordinal());
+        outgoingData.writeByte(GMCommand.CLEAN_SOS.ordinal());
     }
 
     public static void writeNight() {
-        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
-        outgoingData.writeByte(eGMCommands.night.ordinal());
+        outgoingData.writeByte(ClientPacket.GM_COMMANDS.ordinal());
+        outgoingData.writeByte(GMCommand.NIGHT.ordinal());
     }
 
     public static void writeKickAllChars() {
-        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
-        outgoingData.writeByte(eGMCommands.KickAllChars.ordinal());
+        outgoingData.writeByte(ClientPacket.GM_COMMANDS.ordinal());
+        outgoingData.writeByte(GMCommand.KICK_ALL_CHARS.ordinal());
     }
 
     public static void writeReloadNPCs() {
-        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
-        outgoingData.writeByte(eGMCommands.ReloadNPCs.ordinal());
+        outgoingData.writeByte(ClientPacket.GM_COMMANDS.ordinal());
+        outgoingData.writeByte(GMCommand.RELOAD_NPCS.ordinal());
     }
 
     public static void writeReloadServerIni() {
-        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
-        outgoingData.writeByte(eGMCommands.ReloadServerIni.ordinal());
+        outgoingData.writeByte(ClientPacket.GM_COMMANDS.ordinal());
+        outgoingData.writeByte(GMCommand.RELOAD_SERVER_INI.ordinal());
     }
 
     public static void writeReloadSpells() {
-        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
-        outgoingData.writeByte(eGMCommands.ReloadSpells.ordinal());
+        outgoingData.writeByte(ClientPacket.GM_COMMANDS.ordinal());
+        outgoingData.writeByte(GMCommand.RELOAD_SPELLS.ordinal());
     }
 
     public static void writeReloadObjects() {
-        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
-        outgoingData.writeByte(eGMCommands.ReloadObjects.ordinal());
+        outgoingData.writeByte(ClientPacket.GM_COMMANDS.ordinal());
+        outgoingData.writeByte(GMCommand.RELOAD_OBJECTS.ordinal());
     }
 
     public static void writeRestart() {
-        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
-        outgoingData.writeByte(eGMCommands.Restart.ordinal());
+        outgoingData.writeByte(ClientPacket.GM_COMMANDS.ordinal());
+        outgoingData.writeByte(GMCommand.RESTART.ordinal());
     }
 
     public static void writeResetAutoUpdate() {
-        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
-        outgoingData.writeByte(eGMCommands.ResetAutoUpdate.ordinal());
+        outgoingData.writeByte(ClientPacket.GM_COMMANDS.ordinal());
+        outgoingData.writeByte(GMCommand.RESET_AUTO_UPDATE.ordinal());
     }
 
     public static void writeChatColor(int r, int g, int b) {
-        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
-        outgoingData.writeByte(eGMCommands.ChatColor.ordinal());
+        outgoingData.writeByte(ClientPacket.GM_COMMANDS.ordinal());
+        outgoingData.writeByte(GMCommand.CHAT_COLOR.ordinal());
 
         outgoingData.writeByte(r);
         outgoingData.writeByte(g);
@@ -1369,19 +1367,19 @@ public class Protocol {
     }
 
     public static void writeIgnored() {
-        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
-        outgoingData.writeByte(eGMCommands.Ignored.ordinal());
+        outgoingData.writeByte(ClientPacket.GM_COMMANDS.ordinal());
+        outgoingData.writeByte(GMCommand.IGNORED.ordinal());
     }
 
     public static void writePing() {
         if (pingTime != 0) return;
-        outgoingData.writeByte(ClientPacketID.Ping.ordinal());
+        outgoingData.writeByte(ClientPacket.PING.ordinal());
         pingTime = (int) glfwGetTime();
     }
 
     public static void writeSetIniVar(String sLlave, String sClave, String sValor) {
-        outgoingData.writeByte(ClientPacketID.GMCommands.ordinal());
-        outgoingData.writeByte(eGMCommands.SetIniVar.ordinal());
+        outgoingData.writeByte(ClientPacket.GM_COMMANDS.ordinal());
+        outgoingData.writeByte(GMCommand.SET_INI_VAR.ordinal());
 
         outgoingData.writeASCIIString(sLlave);
         outgoingData.writeASCIIString(sClave);
@@ -1389,17 +1387,17 @@ public class Protocol {
     }
 
     public static void writeHome() {
-        outgoingData.writeByte(ClientPacketID.Home.ordinal());
+        outgoingData.writeByte(ClientPacket.HOME.ordinal());
     }
 
     public static void writeCommerceBuy(int slot, int amount) {
-        outgoingData.writeByte(ClientPacketID.CommerceBuy.ordinal());
+        outgoingData.writeByte(ClientPacket.COMMERCE_BUY.ordinal());
         outgoingData.writeByte(slot);
         outgoingData.writeInteger((short) amount);
     }
 
     public static void writeCommerceSell(int slot, int amount) {
-        outgoingData.writeByte(ClientPacketID.CommerceSell.ordinal());
+        outgoingData.writeByte(ClientPacket.COMMERCE_SELL.ordinal());
         outgoingData.writeByte(slot);
         outgoingData.writeInteger((short) amount);
     }

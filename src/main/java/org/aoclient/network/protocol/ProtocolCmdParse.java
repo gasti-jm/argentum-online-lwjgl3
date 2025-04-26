@@ -1,12 +1,12 @@
-package org.aoclient.network;
+package org.aoclient.network.protocol;
 
 import org.aoclient.engine.game.Console;
 import org.aoclient.engine.game.User;
 import org.aoclient.engine.gui.ImGUISystem;
 import org.aoclient.engine.gui.forms.FNewPassword;
 import org.aoclient.engine.renderer.RGBColor;
-import org.aoclient.network.packets.eEditOptions;
-import org.aoclient.network.packets.eNumber_Types;
+import org.aoclient.network.protocol.types.CharacterEditType;
+import org.aoclient.network.protocol.types.NumericType;
 
 import java.nio.charset.StandardCharsets;
 
@@ -169,7 +169,7 @@ public class ProtocolCmdParse {
                 case "/ENCUESTA":
                     if (cantidadArgumentos == 0) writeInquiry();
                     else {
-                        if (validNumber(argumentosRaw, eNumber_Types.ent_Byte)) writeInquiryVote(Integer.parseInt(argumentosRaw));
+                        if (validNumber(argumentosRaw, NumericType.BYTE)) writeInquiryVote(Integer.parseInt(argumentosRaw));
                         else {
                             console.addMsgToConsole(new String("Para votar una opción, escribe /encuesta NUMERODEOPCION, por ejemplo para votar la opción 1, escribe /encuesta 1.".getBytes(), StandardCharsets.UTF_8),
                                     false, true, new RGBColor());
@@ -195,7 +195,7 @@ public class ProtocolCmdParse {
                         console.addMsgToConsole(new String("El comando /CENTINELA requiere un argumento. Por favor, ingrese el código de verificación..".getBytes(), StandardCharsets.UTF_8),
                                 false, true, new RGBColor());
                     } else {
-                        if (validNumber(argumentosRaw, eNumber_Types.ent_Integer))
+                        if (validNumber(argumentosRaw, NumericType.INTEGER))
                             writeCentinelReport(Integer.parseInt(argumentosRaw));
                         else {
                             console.addMsgToConsole(new String("El código de verificación debe ser numérico. Utilice /centinela X, donde X es el código de verificación.".getBytes(), StandardCharsets.UTF_8),
@@ -250,7 +250,7 @@ public class ProtocolCmdParse {
                         console.addMsgToConsole(new String("¡Estás muerto!".getBytes(), StandardCharsets.UTF_8), false, true, new RGBColor());
                     else {
                         if (notNullArguments) {
-                            if (validNumber(argumentosRaw, eNumber_Types.ent_Integer)) {
+                            if (validNumber(argumentosRaw, NumericType.INTEGER)) {
                                 writeGamble(Short.parseShort(argumentosRaw));
                             } else {
                                 console.addMsgToConsole(new String("Faltan parámetros. Utilice /apostar CANTIDAD.".getBytes(), StandardCharsets.UTF_8),
@@ -275,7 +275,7 @@ public class ProtocolCmdParse {
                     } else {
 
                         if (notNullArguments) {
-                            if (validNumber(argumentosRaw, eNumber_Types.ent_Long)) {
+                            if (validNumber(argumentosRaw, NumericType.LONG)) {
                                 writeBankExtractGold(Integer.parseInt(argumentosRaw));
                             } else {
                                 console.addMsgToConsole(new String("Cantidad incorrecta. Utilice /retirar CANTIDAD.".getBytes(), StandardCharsets.UTF_8),
@@ -292,7 +292,7 @@ public class ProtocolCmdParse {
                     } else {
 
                         if (notNullArguments) {
-                            if (validNumber(argumentosRaw, eNumber_Types.ent_Long)) {
+                            if (validNumber(argumentosRaw, NumericType.LONG)) {
                                 writeBankDepositGold(Integer.parseInt(argumentosRaw));
                             } else {
                                 console.addMsgToConsole(new String("Cantidad incorrecta. Utilice /depositar CANTIDAD.".getBytes(), StandardCharsets.UTF_8),
@@ -390,7 +390,7 @@ public class ProtocolCmdParse {
                     break;
                 case "/NENE":
                     if (notNullArguments) {
-                        if (validNumber(argumentosRaw, eNumber_Types.ent_Integer)) {
+                        if (validNumber(argumentosRaw, NumericType.INTEGER)) {
                             writeCreaturesInMap(Short.parseShort(argumentosRaw));
                         } else {
                             // No es numérico.
@@ -407,22 +407,22 @@ public class ProtocolCmdParse {
                     break;
                 case "/TELEP":
                     if (notNullArguments && cantidadArgumentos >= 4) {
-                        if (validNumber(argumentosAll[1], eNumber_Types.ent_Integer) &&
-                                validNumber(argumentosAll[2], eNumber_Types.ent_Byte) &&
-                                validNumber(argumentosAll[3], eNumber_Types.ent_Byte)) {
+                        if (validNumber(argumentosAll[1], NumericType.INTEGER) &&
+                                validNumber(argumentosAll[2], NumericType.BYTE) &&
+                                validNumber(argumentosAll[3], NumericType.BYTE)) {
                             writeWarpChar(argumentosAll[0], Short.parseShort(argumentosAll[1]), Integer.parseInt(argumentosAll[2]), Integer.parseInt(argumentosAll[3]));
                         } else {
                             console.addMsgToConsole(new String("Valor incorrecto. Utilice /telep NICKNAME MAPA X Y.".getBytes(), StandardCharsets.UTF_8),
                                     false, true, new RGBColor());
                         }
                     } else if (cantidadArgumentos == 3) {
-                        if (validNumber(argumentosAll[0], eNumber_Types.ent_Integer) &&
-                                validNumber(argumentosAll[1], eNumber_Types.ent_Byte) &&
-                                validNumber(argumentosAll[2], eNumber_Types.ent_Byte)) {
+                        if (validNumber(argumentosAll[0], NumericType.INTEGER) &&
+                                validNumber(argumentosAll[1], NumericType.BYTE) &&
+                                validNumber(argumentosAll[2], NumericType.BYTE)) {
                             // Por defecto, si no se indica el nombre, se teletransporta el mismo usuario
                             writeWarpChar("YO", Short.parseShort(argumentosAll[0]), Integer.parseInt(argumentosAll[1]), Integer.parseInt(argumentosAll[2]));
-                        } else if (validNumber(argumentosAll[1], eNumber_Types.ent_Byte) &&
-                                validNumber(argumentosAll[2], eNumber_Types.ent_Byte)) {
+                        } else if (validNumber(argumentosAll[1], NumericType.BYTE) &&
+                                validNumber(argumentosAll[2], NumericType.BYTE)) {
                             // Por defecto, si no se indica el mapa, se teletransporta al mismo donde esta el usuario
                             writeWarpChar(argumentosAll[0], User.get().getUserMap(), Integer.parseInt(argumentosAll[1]), Integer.parseInt(argumentosAll[2]));
                         } else {
@@ -431,8 +431,8 @@ public class ProtocolCmdParse {
                                     false, true, new RGBColor());
                         }
                     } else if (cantidadArgumentos == 2) {
-                        if (validNumber(argumentosAll[0], eNumber_Types.ent_Byte) &&
-                                validNumber(argumentosAll[1], eNumber_Types.ent_Byte)) {
+                        if (validNumber(argumentosAll[0], NumericType.BYTE) &&
+                                validNumber(argumentosAll[1], NumericType.BYTE)) {
                             // Por defecto, se considera que se quiere unicamente cambiar las coordenadas del usuario, en el mismo mapa
                             writeWarpChar("YO", User.get().getUserMap(), Integer.parseInt(argumentosAll[0]), Integer.parseInt(argumentosAll[1]));
                         } else {
@@ -489,7 +489,7 @@ public class ProtocolCmdParse {
                     if (notNullArguments) {
                         tmpArr = argumentosRaw.split("@");
                         if (tmpArr.length == 3) {
-                            if (validNumber(tmpArr[2], eNumber_Types.ent_Byte)) {
+                            if (validNumber(tmpArr[2], NumericType.BYTE)) {
                                 writeJail(tmpArr[0], tmpArr[1], Integer.parseInt(tmpArr[2]));
                             } else {
                                 // No es numérico
@@ -530,21 +530,21 @@ public class ProtocolCmdParse {
                     if (notNullArguments && cantidadArgumentos >= 3) {
                         String argumento = argumentosAll[1].toUpperCase();
                         tmpInt = switch (argumento) {
-                            case "BODY" -> eEditOptions.eo_Body.getValue();
-                            case "HEAD" -> eEditOptions.eo_Head.getValue();
-                            case "ORO" -> eEditOptions.eo_Gold.getValue();
-                            case "LEVEL" -> eEditOptions.eo_Level.getValue();
-                            case "SKILLS" -> eEditOptions.eo_Skills.getValue();
-                            case "SKILLSLIBRES" -> eEditOptions.eo_SkillPointsLeft.getValue();
-                            case "CLASE" -> eEditOptions.eo_Class.getValue();
-                            case "EXP" -> eEditOptions.eo_Experience.getValue();
-                            case "CRI" -> eEditOptions.eo_CriminalsKilled.getValue();
-                            case "CIU" -> eEditOptions.eo_CiticensKilled.getValue();
-                            case "NOB" -> eEditOptions.eo_Nobleza.getValue();
-                            case "ASE" -> eEditOptions.eo_Asesino.getValue();
-                            case "SEX" -> eEditOptions.eo_Sex.getValue();
-                            case "RAZA" -> eEditOptions.eo_Raza.getValue();
-                            case "AGREGAR" -> eEditOptions.eo_addGold.getValue();
+                            case "BODY" -> CharacterEditType.BODY.getValue();
+                            case "HEAD" -> CharacterEditType.HEAD.getValue();
+                            case "ORO" -> CharacterEditType.GOLD.getValue();
+                            case "LEVEL" -> CharacterEditType.LEVEL.getValue();
+                            case "SKILLS" -> CharacterEditType.SKILLS.getValue();
+                            case "SKILLSLIBRES" -> CharacterEditType.SKILL_POINTS_LEFT.getValue();
+                            case "CLASE" -> CharacterEditType.CLASS.getValue();
+                            case "EXP" -> CharacterEditType.EXPERIENCE.getValue();
+                            case "CRI" -> CharacterEditType.CRIMINALS_KILLED.getValue();
+                            case "CIU" -> CharacterEditType.CITIZENS_KILLED.getValue();
+                            case "NOB" -> CharacterEditType.NOBILITY.getValue();
+                            case "ASE" -> CharacterEditType.ASSASSIN.getValue();
+                            case "SEX" -> CharacterEditType.SEX.getValue();
+                            case "RAZA" -> CharacterEditType.RACE.getValue();
+                            case "AGREGAR" -> CharacterEditType.ADD_GOLD.getValue();
                             default -> -1;
                         };
                         if (tmpInt > 0) {
@@ -618,7 +618,7 @@ public class ProtocolCmdParse {
                     break;
                 case "/ONLINEMAP":
                     if (notNullArguments) {
-                        if (validNumber(argumentosAll[0], eNumber_Types.ent_Integer)) {
+                        if (validNumber(argumentosAll[0], NumericType.INTEGER)) {
                             writeOnlineMap(Short.parseShort(argumentosAll[0]));
                         } else {
                             console.addMsgToConsole(new String("Mapa incorrecto.".getBytes(), StandardCharsets.UTF_8),
@@ -737,14 +737,14 @@ public class ProtocolCmdParse {
                     break;
                 case "/CT":
                     if (notNullArguments && cantidadArgumentos >= 3) {
-                        if (validNumber(argumentosAll[0], eNumber_Types.ent_Integer) &&
-                                validNumber(argumentosAll[1], eNumber_Types.ent_Byte) &&
-                                validNumber(argumentosAll[2], eNumber_Types.ent_Byte)) {
+                        if (validNumber(argumentosAll[0], NumericType.INTEGER) &&
+                                validNumber(argumentosAll[1], NumericType.BYTE) &&
+                                validNumber(argumentosAll[2], NumericType.BYTE)) {
 
                             if (cantidadArgumentos == 3) {
                                 writeTeleportCreate(Short.parseShort(argumentosAll[0]), Integer.parseInt(argumentosAll[1]), Integer.parseInt(argumentosAll[2]), 0);
                             } else {
-                                if (validNumber(argumentosAll[3], eNumber_Types.ent_Byte)) {
+                                if (validNumber(argumentosAll[3], NumericType.BYTE)) {
                                     writeTeleportCreate(Short.parseShort(argumentosAll[0]), Integer.parseInt(argumentosAll[1]), Integer.parseInt(argumentosAll[2]), Integer.parseInt(argumentosAll[3]));
                                 } else {
                                     // No es numérico
@@ -776,7 +776,7 @@ public class ProtocolCmdParse {
                     if (notNullArguments) {
                         // Elegir el mapa es opcional
                         if (cantidadArgumentos == 1) {
-                            if (validNumber(argumentosAll[0], eNumber_Types.ent_Byte)) {
+                            if (validNumber(argumentosAll[0], NumericType.BYTE)) {
                                 // Enviamos un mapa nulo para que tome el del usuario.
                                 writeForceMIDIToMap(Integer.parseInt(argumentosAll[0]), (short) 0);
                             } else {
@@ -785,8 +785,8 @@ public class ProtocolCmdParse {
                                         false, true, new RGBColor());
                             }
                         } else if (cantidadArgumentos == 2) {
-                            if (validNumber(argumentosAll[0], eNumber_Types.ent_Byte) &&
-                                    validNumber(argumentosAll[1], eNumber_Types.ent_Integer)) {
+                            if (validNumber(argumentosAll[0], NumericType.BYTE) &&
+                                    validNumber(argumentosAll[1], NumericType.INTEGER)) {
                                 writeForceMIDIToMap(Integer.parseInt(argumentosAll[0]), Short.parseShort(argumentosAll[1]));
                             } else {
                                 // No es numérico
@@ -808,7 +808,7 @@ public class ProtocolCmdParse {
                     if (notNullArguments) {
                         // Elegir la posición es opcional
                         if (cantidadArgumentos == 1) {
-                            if (validNumber(argumentosAll[0], eNumber_Types.ent_Byte)) {
+                            if (validNumber(argumentosAll[0], NumericType.BYTE)) {
                                 // Enviamos una posición nula para que tome la del usuario.
                                 writeForceWAVEToMap(Integer.parseInt(argumentosAll[0]), (short) 0, 0, 0);
                             } else {
@@ -817,10 +817,10 @@ public class ProtocolCmdParse {
                                         false, true, new RGBColor());
                             }
                         } else if (cantidadArgumentos == 4) {
-                            if (validNumber(argumentosAll[0], eNumber_Types.ent_Byte) &&
-                                    validNumber(argumentosAll[1], eNumber_Types.ent_Integer) &&
-                                    validNumber(argumentosAll[2], eNumber_Types.ent_Byte) &&
-                                    validNumber(argumentosAll[3], eNumber_Types.ent_Byte)) {
+                            if (validNumber(argumentosAll[0], NumericType.BYTE) &&
+                                    validNumber(argumentosAll[1], NumericType.INTEGER) &&
+                                    validNumber(argumentosAll[2], NumericType.BYTE) &&
+                                    validNumber(argumentosAll[3], NumericType.BYTE)) {
                                 writeForceWAVEToMap(Integer.parseInt(argumentosAll[0]), Short.parseShort(argumentosAll[1]), Integer.parseInt(argumentosAll[2]), Integer.parseInt(argumentosAll[3]));
                             } else {
                                 // No es numérico
@@ -931,7 +931,7 @@ public class ProtocolCmdParse {
                     break;
                 case "/TRIGGER":
                     if (notNullArguments) {
-                        if (validNumber(argumentosRaw, eNumber_Types.ent_Integer))
+                        if (validNumber(argumentosRaw, NumericType.INTEGER))
                             writeSetTrigger(Integer.parseInt(argumentosRaw));
                         else {
                             // No es numerico
@@ -994,7 +994,7 @@ public class ProtocolCmdParse {
                     break;
                 case "/CI":
                     if (notNullArguments) {
-                        if (validNumber(argumentosAll[0], eNumber_Types.ent_Long))
+                        if (validNumber(argumentosAll[0], NumericType.LONG))
                             writeCreateItem(Integer.parseInt(argumentosAll[0]));
                         else console.addMsgToConsole("Objeto incorrecto. Utilice /ci OBJETO.", false, true, new RGBColor());
                     } else console.addMsgToConsole("Faltan parámetros. Utilice /ci OBJETO.", false, true, new RGBColor());
@@ -1020,7 +1020,7 @@ public class ProtocolCmdParse {
                     break;
                 case "/FORCEMIDI":
                     if (notNullArguments) {
-                        if (validNumber(argumentosAll[0], eNumber_Types.ent_Byte)) {
+                        if (validNumber(argumentosAll[0], NumericType.BYTE)) {
                             writeForceMIDIAll(Integer.parseInt(argumentosAll[0]));
                         } else {
                             // No es numérico
@@ -1036,7 +1036,7 @@ public class ProtocolCmdParse {
 
                 case "/FORCEWAV":
                     if (notNullArguments) {
-                        if (validNumber(argumentosAll[0], eNumber_Types.ent_Byte)) {
+                        if (validNumber(argumentosAll[0], NumericType.BYTE)) {
                             writeForceWAVEAll(Integer.parseInt(argumentosAll[0]));
                         } else {
                             // No es numérico
@@ -1105,7 +1105,7 @@ public class ProtocolCmdParse {
 
                 case "/ACC":
                     if (notNullArguments) {
-                        if (validNumber(argumentosAll[0], eNumber_Types.ent_Integer)) {
+                        if (validNumber(argumentosAll[0], NumericType.INTEGER)) {
                             writeCreateNPC(Short.parseShort(argumentosAll[0]));
                         } else {
                             // No es numérico
@@ -1121,7 +1121,7 @@ public class ProtocolCmdParse {
 
                 case "/RACC":
                     if (notNullArguments) {
-                        if (validNumber(argumentosAll[0], eNumber_Types.ent_Integer)) {
+                        if (validNumber(argumentosAll[0], NumericType.INTEGER)) {
                             writeCreateNPCWithRespawn(Short.parseShort(argumentosAll[0]));
                         } else {
                             // No es numérico
@@ -1137,7 +1137,7 @@ public class ProtocolCmdParse {
 
                 case "/AI":
                     if (notNullArguments && cantidadArgumentos >= 2) {
-                        if (validNumber(argumentosAll[0], eNumber_Types.ent_Byte) && validNumber(argumentosAll[1], eNumber_Types.ent_Integer)) {
+                        if (validNumber(argumentosAll[0], NumericType.BYTE) && validNumber(argumentosAll[1], NumericType.INTEGER)) {
                             writeImperialArmour(Integer.parseInt(argumentosAll[0]), Short.parseShort(argumentosAll[1]));
                         } else {
                             // No es numérico
@@ -1152,7 +1152,7 @@ public class ProtocolCmdParse {
                     break;
                 case "/AC":
                     if (notNullArguments && cantidadArgumentos >= 2) {
-                        if (validNumber(argumentosAll[0], eNumber_Types.ent_Byte) && validNumber(argumentosAll[1], eNumber_Types.ent_Integer)) {
+                        if (validNumber(argumentosAll[0], NumericType.BYTE) && validNumber(argumentosAll[1], NumericType.INTEGER)) {
                             writeChaosArmour(Integer.parseInt(argumentosAll[0]), Short.parseShort(argumentosAll[1]));
                         } else {
                             // No es numérico
@@ -1259,7 +1259,7 @@ public class ProtocolCmdParse {
                     if (notNullArguments) {
                         tmpArr = argumentosRaw.split("@", 2);
                         if (tmpArr.length == 2) {
-                            if (validNumber(tmpArr[1], eNumber_Types.ent_Byte)) {
+                            if (validNumber(tmpArr[1], NumericType.BYTE)) {
                                 writeCheckSlot(tmpArr[0], Integer.parseInt(tmpArr[1]));
                             } else {
                                 // Faltan o sobran los parámetros con el formato propio
@@ -1367,9 +1367,9 @@ public class ProtocolCmdParse {
                     break;
                 case "/CHATCOLOR":
                     if (notNullArguments && cantidadArgumentos >= 3) {
-                        if (validNumber(argumentosAll[0], eNumber_Types.ent_Byte) &&
-                                validNumber(argumentosAll[1], eNumber_Types.ent_Byte) &&
-                                validNumber(argumentosAll[2], eNumber_Types.ent_Byte)) {
+                        if (validNumber(argumentosAll[0], NumericType.BYTE) &&
+                                validNumber(argumentosAll[1], NumericType.BYTE) &&
+                                validNumber(argumentosAll[2], NumericType.BYTE)) {
                             writeChatColor(Integer.parseInt(argumentosAll[0]), Integer.parseInt(argumentosAll[1]), Integer.parseInt(argumentosAll[2]));
                         } else
                             // No es numérico
@@ -1401,23 +1401,23 @@ public class ProtocolCmdParse {
         else writeTalk(rawCommand); // Hablar
     }
 
-    public boolean validNumber(String numero, eNumber_Types tipo) {
+    public boolean validNumber(String numero, NumericType tipo) {
         long minimo, maximo;
         if (!numero.matches("-?\\d+(\\.\\d+)?")) return false;
         maximo = switch (tipo) {
-            case ent_Byte -> {
+            case BYTE -> {
                 minimo = 0;
                 yield 255;
             }
-            case ent_Integer -> {
+            case INTEGER -> {
                 minimo = -32768;
                 yield 32767;
             }
-            case ent_Long -> {
+            case LONG -> {
                 minimo = -2147483648L;
                 yield 2147483647L;
             }
-            case ent_Trigger -> {
+            case TRIGGER -> {
                 minimo = 0;
                 yield 6;
             }
@@ -1431,7 +1431,7 @@ public class ProtocolCmdParse {
         String[] tmpArr = ip.split("\\.");
         if (tmpArr.length != 4) return false;
         for (String octet : tmpArr)
-            if (!validNumber(octet, eNumber_Types.ent_Byte)) return false;
+            if (!validNumber(octet, NumericType.BYTE)) return false;
         return true;
     }
 
