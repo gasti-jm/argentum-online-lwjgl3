@@ -22,7 +22,7 @@ public class PacketReceiver {
 
     private void registerHandlers() {
         handlers.put(ServerPacket.LOGGED, new LoggedPacketHandler());
-        handlers.put(ServerPacket.REMOVE_DIALOGS, new LoggedPacketHandler());
+        handlers.put(ServerPacket.REMOVE_DIALOGS, new RemoveDialogsHandler());
         handlers.put(ServerPacket.REMOVE_CHAR_DIALOG, new RemoveCharDialogHandler());
         handlers.put(ServerPacket.NAVIGATE_TOGGLE, new NavigateToggleHandler());
         handlers.put(ServerPacket.DISCONNECT, new DisconnectHandler());
