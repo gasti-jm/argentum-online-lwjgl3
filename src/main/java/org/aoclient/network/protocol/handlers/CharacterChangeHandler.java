@@ -7,7 +7,6 @@ import org.aoclient.engine.utils.inits.HeadData;
 import org.aoclient.engine.utils.inits.ShieldData;
 import org.aoclient.engine.utils.inits.WeaponData;
 import org.aoclient.network.ByteQueue;
-import org.aoclient.network.protocol.PacketHandler;
 import org.tinylog.Logger;
 
 import static org.aoclient.engine.game.models.Character.CASPER_HEAD;

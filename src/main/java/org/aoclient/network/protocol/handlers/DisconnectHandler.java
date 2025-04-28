@@ -4,7 +4,6 @@ import org.aoclient.engine.Sound;
 import org.aoclient.engine.gui.ImGUISystem;
 import org.aoclient.network.ByteQueue;
 import org.aoclient.network.SocketConnection;
-import org.aoclient.network.protocol.PacketHandler;
 import org.tinylog.Logger;
 
 import static org.aoclient.engine.Sound.playMusic;

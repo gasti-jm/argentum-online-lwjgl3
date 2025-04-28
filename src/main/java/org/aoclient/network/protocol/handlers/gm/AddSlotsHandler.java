@@ -1,7 +1,7 @@
 package org.aoclient.network.protocol.handlers.gm;
 
 import org.aoclient.network.ByteQueue;
-import org.aoclient.network.protocol.PacketHandler;
+import org.aoclient.network.protocol.handlers.PacketHandler;
 
 public class AddSlotsHandler implements PacketHandler {
 

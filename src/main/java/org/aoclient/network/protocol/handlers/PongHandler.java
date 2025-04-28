@@ -4,7 +4,6 @@ import org.aoclient.engine.game.Console;
 import org.aoclient.engine.renderer.RGBColor;
 import org.aoclient.network.ByteQueue;
 import org.aoclient.network.protocol.Protocol;
-import org.aoclient.network.protocol.PacketHandler;
 
 import static org.lwjgl.glfw.GLFW.glfwGetTime;
 

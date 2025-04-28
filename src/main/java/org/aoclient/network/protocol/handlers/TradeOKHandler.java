@@ -1,7 +1,6 @@
 package org.aoclient.network.protocol.handlers;
 
 import org.aoclient.network.ByteQueue;
-import org.aoclient.network.protocol.PacketHandler;
 
 public class TradeOKHandler implements PacketHandler {
     @Override

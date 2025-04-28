@@ -3,7 +3,6 @@ package org.aoclient.network.protocol.handlers;
 import org.aoclient.engine.game.Dialogs;
 import org.aoclient.engine.renderer.RGBColor;
 import org.aoclient.network.ByteQueue;
-import org.aoclient.network.protocol.PacketHandler;
 
 import static org.aoclient.engine.game.Dialogs.charDialogSet;
 import static org.aoclient.engine.utils.GameData.charList;

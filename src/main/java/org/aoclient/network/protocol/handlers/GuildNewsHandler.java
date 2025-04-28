@@ -1,7 +1,6 @@
 package org.aoclient.network.protocol.handlers;
 
 import org.aoclient.network.ByteQueue;
-import org.aoclient.network.protocol.PacketHandler;
 import org.tinylog.Logger;
 
 public class GuildNewsHandler implements PacketHandler {
