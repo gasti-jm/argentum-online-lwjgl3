@@ -1,5 +1,6 @@
 package org.aoclient.network.protocol.handlers.gm;
 
+import org.aoclient.engine.Messages;
 import org.aoclient.engine.Window;
 import org.aoclient.engine.game.Console;
 import org.aoclient.engine.game.User;
@@ -9,10 +10,10 @@ import org.aoclient.network.ByteQueue;
 import org.aoclient.network.protocol.handlers.PacketHandler;
 import org.aoclient.network.protocol.types.MessageType;
 
+import static org.aoclient.engine.Messages.MessageKey;
 import static org.aoclient.engine.game.Dialogs.charDialogHitSet;
 import static org.aoclient.engine.game.models.E_Skills.FundirMetal;
 import static org.aoclient.engine.utils.GameData.charList;
-import static org.aoclient.network.protocol.Messages.*;
 
 public class MultiMessageHandler implements PacketHandler {
 
@@ -33,27 +34,27 @@ public class MultiMessageHandler implements PacketHandler {
 
         switch (msg) {
             case DONT_SEE_ANYTHING:
-                console.addMsgToConsole(MENSAJE_NO_VES_NADA_INTERESANTE, false, false, new RGBColor(0.25f, 0.75f, 0.60f));
+                console.addMsgToConsole(Messages.get(MessageKey.NO_VES_NADA_INTERESANTE), false, false, new RGBColor(0.25f, 0.75f, 0.60f));
                 break;
 
             case NPC_SWING:
-                console.addMsgToConsole(MENSAJE_CRIATURA_FALLA_GOLPE, false, false, new RGBColor(1f, 0f, 0f));
+                console.addMsgToConsole(Messages.get(MessageKey.CRIATURA_FALLA_GOLPE), false, false, new RGBColor(1f, 0f, 0f));
                 break;
 
             case NPC_KILL_USER:
-                console.addMsgToConsole(MENSAJE_CRIATURA_MATADO, false, false, new RGBColor(1f, 0f, 0f));
+                console.addMsgToConsole(Messages.get(MessageKey.CRIATURA_MATADO), false, false, new RGBColor(1f, 0f, 0f));
                 break;
 
             case BLOCKED_WITH_SHIELD_USER:
-                console.addMsgToConsole(MENSAJE_RECHAZO_ATAQUE_ESCUDO, false, false, new RGBColor(1f, 0f, 0f));
+                console.addMsgToConsole(Messages.get(MessageKey.RECHAZO_ATAQUE_ESCUDO), false, false, new RGBColor(1f, 0f, 0f));
                 break;
 
             case BLOCKED_WITH_SHIELD_OTHER:
-                console.addMsgToConsole(MENSAJE_USUARIO_RECHAZO_ATAQUE_ESCUDO, false, false, new RGBColor(1f, 0f, 0f));
+                console.addMsgToConsole(Messages.get(MessageKey.USUARIO_RECHAZO_ATAQUE_ESCUDO), false, false, new RGBColor(1f, 0f, 0f));
                 break;
 
             case USER_SWING:
-                console.addMsgToConsole(MENSAJE_FALLADO_GOLPE, false, false, new RGBColor(1f, 0f, 0f));
+                console.addMsgToConsole(Messages.get(MessageKey.FALLADO_GOLPE), false, false, new RGBColor(1f, 0f, 0f));
                 charDialogHitSet(User.get().getUserCharIndex(), "*Fallas*");
                 break;
 
@@ -74,42 +75,42 @@ public class MultiMessageHandler implements PacketHandler {
                 break;
 
             case NOBILITY_LOST:
-                console.addMsgToConsole(MENSAJE_PIERDE_NOBLEZA, false, false, new RGBColor(1f, 0f, 0f));
+                console.addMsgToConsole(Messages.get(MessageKey.PIERDE_NOBLEZA), false, false, new RGBColor(1f, 0f, 0f));
                 break;
 
             case CANT_USE_WHILE_MEDITATING:
-                console.addMsgToConsole(MENSAJE_USAR_MEDITANDO, false, false, new RGBColor(1f, 0f, 0f));
+                console.addMsgToConsole(Messages.get(MessageKey.USAR_MEDITANDO), false, false, new RGBColor(1f, 0f, 0f));
                 break;
 
             case NPC_HIT_USER:
                 switch (data.readByte()) {
                     case 1: // bCabeza
-                        console.addMsgToConsole(MENSAJE_GOLPE_CABEZA + " " + data.readInteger(),
+                        console.addMsgToConsole(Messages.get(MessageKey.GOLPE_CABEZA) + " " + data.readInteger(),
                                 false, false, new RGBColor(1f, 0f, 0f));
                         break;
 
                     case 2: // bBrazoIzquierdo
-                        console.addMsgToConsole(MENSAJE_GOLPE_BRAZO_IZQ + " " + data.readInteger(),
+                        console.addMsgToConsole(Messages.get(MessageKey.GOLPE_BRAZO_IZQ) + " " + data.readInteger(),
                                 false, false, new RGBColor(1f, 0f, 0f));
                         break;
 
                     case 3: // bBrazoDerecho
-                        console.addMsgToConsole(MENSAJE_GOLPE_BRAZO_DER + " " + data.readInteger(),
+                        console.addMsgToConsole(Messages.get(MessageKey.GOLPE_BRAZO_DER) + " " + data.readInteger(),
                                 false, false, new RGBColor(1f, 0f, 0f));
                         break;
 
                     case 4: // bPiernaIzquierda
-                        console.addMsgToConsole(MENSAJE_GOLPE_PIERNA_IZQ + " " + data.readInteger(),
+                        console.addMsgToConsole(Messages.get(MessageKey.GOLPE_PIERNA_IZQ) + " " + data.readInteger(),
                                 false, false, new RGBColor(1f, 0f, 0f));
                         break;
 
                     case 5: // bPiernaDerecha
-                        console.addMsgToConsole(MENSAJE_GOLPE_PIERNA_DER + " " + data.readInteger(),
+                        console.addMsgToConsole(Messages.get(MessageKey.GOLPE_PIERNA_DER) + " " + data.readInteger(),
                                 false, false, new RGBColor(1f, 0f, 0f));
                         break;
 
                     case 6: // bTorso
-                        console.addMsgToConsole(MENSAJE_GOLPE_TORSO + " " + data.readInteger(),
+                        console.addMsgToConsole(Messages.get(MessageKey.GOLPE_TORSO) + " " + data.readInteger(),
                                 false, false, new RGBColor(1f, 0f, 0f));
                         break;
                 }
@@ -117,8 +118,7 @@ public class MultiMessageHandler implements PacketHandler {
 
             case USER_HIT_NPC:
                 final int d = data.readLong();
-                console.addMsgToConsole(MENSAJE_GOLPE_CRIATURA_1 + " " + d,
-                        false, false, new RGBColor(1f, 0f, 0f));
+                console.addMsgToConsole(Messages.get(MessageKey.GOLPE_CRIATURA_1) + " " + d, false, false, new RGBColor(1f, 0f, 0f));
 
                 charDialogHitSet(User.get().getUserCharIndex(), d);
 
@@ -127,7 +127,7 @@ public class MultiMessageHandler implements PacketHandler {
             case USER_ATTACKED_SWING:
                 final short charIndexAttaker = data.readInteger();
 
-                console.addMsgToConsole(MENSAJE_1 + " " + charList[charIndexAttaker].getName() + MENSAJE_ATAQUE_FALLO,
+                console.addMsgToConsole(Messages.get(MessageKey.MENSAJE_1) + " " + charList[charIndexAttaker].getName() + Messages.get(MessageKey.ATAQUE_FALLO),
                         false, false, new RGBColor(1f, 0f, 0f));
 
                 charDialogHitSet(charIndexAttaker, "*Falla*");
@@ -141,32 +141,32 @@ public class MultiMessageHandler implements PacketHandler {
 
                 switch (bodyPart) {
                     case 1: // bCabeza
-                        console.addMsgToConsole(MENSAJE_1 + attackerName + MENSAJE_RECIVE_IMPACTO_CABEZA + damage + MENSAJE_2,
+                        console.addMsgToConsole(Messages.get(MessageKey.MENSAJE_1) + attackerName + Messages.get(MessageKey.RECIVE_IMPACTO_CABEZA) + damage + Messages.get(MessageKey.MENSAJE_2),
                                 false, false, new RGBColor(1f, 0f, 0f));
                         break;
 
                     case 2: // bBrazoIzquierdo
-                        console.addMsgToConsole(MENSAJE_1 + attackerName + MENSAJE_RECIVE_IMPACTO_BRAZO_IZQ + damage + MENSAJE_2,
+                        console.addMsgToConsole(Messages.get(MessageKey.MENSAJE_1) + attackerName + Messages.get(MessageKey.RECIVE_IMPACTO_BRAZO_IZQ) + damage + Messages.get(MessageKey.MENSAJE_2),
                                 false, false, new RGBColor(1f, 0f, 0f));
                         break;
 
                     case 3: // bBrazoDerecho
-                        console.addMsgToConsole(MENSAJE_1 + attackerName + MENSAJE_RECIVE_IMPACTO_BRAZO_DER + damage + MENSAJE_2,
+                        console.addMsgToConsole(Messages.get(MessageKey.MENSAJE_1) + attackerName + Messages.get(MessageKey.RECIVE_IMPACTO_BRAZO_DER) + damage + Messages.get(MessageKey.MENSAJE_2),
                                 false, false, new RGBColor(1f, 0f, 0f));
                         break;
 
                     case 4: // bPiernaIzquierda
-                        console.addMsgToConsole(MENSAJE_1 + attackerName + MENSAJE_RECIVE_IMPACTO_PIERNA_IZQ + damage + MENSAJE_2,
+                        console.addMsgToConsole(Messages.get(MessageKey.MENSAJE_1) + attackerName + Messages.get(MessageKey.RECIVE_IMPACTO_PIERNA_IZQ) + damage + Messages.get(MessageKey.MENSAJE_2),
                                 false, false, new RGBColor(1f, 0f, 0f));
                         break;
 
                     case 5: // bPiernaDerecha
-                        console.addMsgToConsole(MENSAJE_1 + attackerName + MENSAJE_RECIVE_IMPACTO_PIERNA_DER + damage + MENSAJE_2,
+                        console.addMsgToConsole(Messages.get(MessageKey.MENSAJE_1) + attackerName + Messages.get(MessageKey.RECIVE_IMPACTO_PIERNA_DER) + damage + Messages.get(MessageKey.MENSAJE_2),
                                 false, false, new RGBColor(1f, 0f, 0f));
                         break;
 
                     case 6: // bTorso
-                        console.addMsgToConsole(MENSAJE_1 + attackerName + MENSAJE_RECIVE_IMPACTO_TORSO + damage + MENSAJE_2,
+                        console.addMsgToConsole(Messages.get(MessageKey.MENSAJE_1) + attackerName + Messages.get(MessageKey.RECIVE_IMPACTO_TORSO) + damage + Messages.get(MessageKey.MENSAJE_2),
                                 false, false, new RGBColor(1f, 0f, 0f));
                         break;
                 }
@@ -183,32 +183,32 @@ public class MultiMessageHandler implements PacketHandler {
 
                 switch (bodyPart) {
                     case 1: // bCabeza
-                        console.addMsgToConsole(MENSAJE_PRODUCE_IMPACTO_1 + victimName + MENSAJE_PRODUCE_IMPACTO_CABEZA + damage + MENSAJE_2,
+                        console.addMsgToConsole(Messages.get(MessageKey.PRODUCE_IMPACTO_1) + victimName + Messages.get(MessageKey.PRODUCE_IMPACTO_CABEZA) + damage + Messages.get(MessageKey.MENSAJE_2),
                                 false, false, new RGBColor(1f, 0f, 0f));
                         break;
 
                     case 2: // bBrazoIzquierdo
-                        console.addMsgToConsole(MENSAJE_PRODUCE_IMPACTO_1 + victimName + MENSAJE_PRODUCE_IMPACTO_BRAZO_IZQ + damage + MENSAJE_2,
+                        console.addMsgToConsole(Messages.get(MessageKey.PRODUCE_IMPACTO_1) + victimName + Messages.get(MessageKey.PRODUCE_IMPACTO_BRAZO_IZQ) + damage + Messages.get(MessageKey.MENSAJE_2),
                                 false, false, new RGBColor(1f, 0f, 0f));
                         break;
 
                     case 3: // bBrazoDerecho
-                        console.addMsgToConsole(MENSAJE_PRODUCE_IMPACTO_1 + victimName + MENSAJE_RECIVE_IMPACTO_BRAZO_DER + damage + MENSAJE_2,
+                        console.addMsgToConsole(Messages.get(MessageKey.PRODUCE_IMPACTO_1) + victimName + Messages.get(MessageKey.RECIVE_IMPACTO_BRAZO_DER) + damage + Messages.get(MessageKey.MENSAJE_2),
                                 false, false, new RGBColor(1f, 0f, 0f));
                         break;
 
                     case 4: // bPiernaIzquierda
-                        console.addMsgToConsole(MENSAJE_PRODUCE_IMPACTO_1 + victimName + MENSAJE_RECIVE_IMPACTO_PIERNA_IZQ + damage + MENSAJE_2,
+                        console.addMsgToConsole(Messages.get(MessageKey.PRODUCE_IMPACTO_1) + victimName + Messages.get(MessageKey.RECIVE_IMPACTO_PIERNA_IZQ) + damage + Messages.get(MessageKey.MENSAJE_2),
                                 false, false, new RGBColor(1f, 0f, 0f));
                         break;
 
                     case 5: // bPiernaDerecha
-                        console.addMsgToConsole(MENSAJE_PRODUCE_IMPACTO_1 + victimName + MENSAJE_RECIVE_IMPACTO_PIERNA_DER + damage + MENSAJE_2,
+                        console.addMsgToConsole(Messages.get(MessageKey.PRODUCE_IMPACTO_1) + victimName + Messages.get(MessageKey.RECIVE_IMPACTO_PIERNA_DER) + damage + Messages.get(MessageKey.MENSAJE_2),
                                 false, false, new RGBColor(1f, 0f, 0f));
                         break;
 
                     case 6: // bTorso
-                        console.addMsgToConsole(MENSAJE_PRODUCE_IMPACTO_1 + victimName + MENSAJE_RECIVE_IMPACTO_TORSO + damage + MENSAJE_2,
+                        console.addMsgToConsole(Messages.get(MessageKey.PRODUCE_IMPACTO_1) + victimName + Messages.get(MessageKey.RECIVE_IMPACTO_TORSO) + damage + Messages.get(MessageKey.MENSAJE_2),
                                 false, false, new RGBColor(1f, 0f, 0f));
                         break;
                 }
@@ -224,54 +224,54 @@ public class MultiMessageHandler implements PacketHandler {
 
                 switch (E_Skills.values()[usingSkill - 1]) {
                     case MAGIA:
-                        console.addMsgToConsole(MENSAJE_TRABAJO_MAGIA, false, false, new RGBColor(0.39f, 0.39f, 0.47f));
+                        console.addMsgToConsole(Messages.get(MessageKey.TRABAJO_MAGIA), false, false, new RGBColor(0.39f, 0.39f, 0.47f));
                         break;
 
                     case PESCA:
-                        console.addMsgToConsole(MENSAJE_TRABAJO_PESCA, false, false, new RGBColor(0.39f, 0.39f, 0.47f));
+                        console.addMsgToConsole(Messages.get(MessageKey.TRABAJO_PESCA), false, false, new RGBColor(0.39f, 0.39f, 0.47f));
                         break;
 
                     case ROBAR:
-                        console.addMsgToConsole(MENSAJE_TRABAJO_ROBAR, false, false, new RGBColor(0.39f, 0.39f, 0.47f));
+                        console.addMsgToConsole(Messages.get(MessageKey.TRABAJO_ROBAR), false, false, new RGBColor(0.39f, 0.39f, 0.47f));
                         break;
 
                     case TALAR:
-                        console.addMsgToConsole(MENSAJE_TRABAJO_TALAR, false, false, new RGBColor(0.39f, 0.39f, 0.47f));
+                        console.addMsgToConsole(Messages.get(MessageKey.TRABAJO_TALAR), false, false, new RGBColor(0.39f, 0.39f, 0.47f));
                         break;
 
                     case MINERIA:
-                        console.addMsgToConsole(MENSAJE_TRABAJO_MINERIA, false, false, new RGBColor(0.39f, 0.39f, 0.47f));
+                        console.addMsgToConsole(Messages.get(MessageKey.TRABAJO_MINERIA), false, false, new RGBColor(0.39f, 0.39f, 0.47f));
                         break;
 
                     case PROYECTILES:
-                        console.addMsgToConsole(MENSAJE_TRABAJO_PROYECTILES, false, false, new RGBColor(0.39f, 0.39f, 0.47f));
+                        console.addMsgToConsole(Messages.get(MessageKey.TRABAJO_PROYECTILES), false, false, new RGBColor(0.39f, 0.39f, 0.47f));
                         break;
                 }
 
                 if (usingSkill == FundirMetal) {
-                    console.addMsgToConsole(MENSAJE_TRABAJO_FUNDIRMETAL, false, false, new RGBColor(0.39f, 0.39f, 0.47f));
+                    console.addMsgToConsole(Messages.get(MessageKey.TRABAJO_FUNDIRMETAL), false, false, new RGBColor(0.39f, 0.39f, 0.47f));
                 }
                 break;
 
             case HAVE_KILLED_USER:
-                console.addMsgToConsole(MENSAJE_HAS_MATADO_A + charList[data.readInteger()].getName() + MENSAJE_22,
+                console.addMsgToConsole(Messages.get(MessageKey.HAS_MATADO_A) + charList[data.readInteger()].getName() + Messages.get(MessageKey.MENSAJE_22),
                         false, false, new RGBColor(1f, 0f, 0f));
 
                 final int level = data.readLong();
 
-                console.addMsgToConsole(MENSAJE_HAS_GANADO_EXPE_1 + level + MENSAJE_HAS_GANADO_EXPE_2,
+                console.addMsgToConsole(Messages.get(MessageKey.HAS_GANADO_EXPE_1) + level + Messages.get(MessageKey.HAS_GANADO_EXPE_2),
                         false, false, new RGBColor(1f, 0f, 0f));
 
                 // sistema de captura al matar.
                 break;
 
             case USER_KILL:
-                console.addMsgToConsole(charList[data.readInteger()].getName() + MENSAJE_TE_HA_MATADO,
+                console.addMsgToConsole(charList[data.readInteger()].getName() + Messages.get(MessageKey.TE_HA_MATADO),
                         false, false, new RGBColor(1f, 0f, 0f));
                 break;
 
             case EARN_EXP:
-                console.addMsgToConsole(MENSAJE_HAS_GANADO_EXPE_1 + data.readLong() + MENSAJE_HAS_GANADO_EXPE_2,
+                console.addMsgToConsole(Messages.get(MessageKey.HAS_GANADO_EXPE_1) + data.readLong() + Messages.get(MessageKey.HAS_GANADO_EXPE_2),
                         false, false, new RGBColor(1f, 0f, 0f));
                 break;
 
@@ -285,11 +285,11 @@ public class MultiMessageHandler implements PacketHandler {
                 break;
 
             case FINISH_HOME:
-                console.addMsgToConsole(MENSAJE_HOGAR, false, false, new RGBColor());
+                console.addMsgToConsole(Messages.get(MessageKey.HOGAR), false, false, new RGBColor());
                 break;
 
             case CANCEL_GO_HOME:
-                console.addMsgToConsole(MENSAJE_HOGAR_CANCEL, false, false, new RGBColor(1f, 0f, 0f));
+                console.addMsgToConsole(Messages.get(MessageKey.HOGAR_CANCEL), false, false, new RGBColor(1f, 0f, 0f));
                 break;
         }
     }
