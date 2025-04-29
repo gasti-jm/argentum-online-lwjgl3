@@ -8,13 +8,22 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Patron Command para los handlers.
+ * <p>
+ * La clase PacketReceiver es responsable de manejar y procesar paquetes entrantes desde un servidor. Cada tipo de paquete tiene
+ * un controlador especifico que define como procesar los datos correspondientes.
+ * <p>
+ * El flujo principal de trabajo incluye:
+ * <ol>
+ *   <li>Registrar varios controladores asociados a tipos de paquetes durante la inicializacion.
+ *   <li>Analizar y procesar los datos recibidos para determinar el tipo de paquete.
+ *   <li>Delegar el procesamiento al controlador apropiado si existe uno para el tipo de paquete identificado.
+ * </ol>
  */
 
 public class PacketReceiver {
 
-    private final Map<ServerPacket, PacketHandler> handlers = new HashMap<>();
     public static ServerPacket packetID;
+    private final Map<ServerPacket, PacketHandler> handlers = new HashMap<>();
 
     public PacketReceiver() {
         registerHandlers();

@@ -3,16 +3,16 @@ package org.aoclient.network.protocol;
 /**
  * <p>
  * Enumeracion que define todos los identificadores de paquetes enviados por el servidor al cliente en el protocolo de
- * comunicacion.
+ * comunicacion del juego.
  * <p>
- * {@code ServerPacketID} contiene constantes para cada tipo de mensaje que el servidor puede enviar al cliente, permitiendo una
+ * {@code ServerPacket} contiene constantes para cada tipo de mensaje que el servidor puede enviar al cliente, permitiendo una
  * identificacion clara y tipada de los paquetes durante el procesamiento de datos recibidos. Cada valor del enumerador
  * corresponde a un tipo especifico de operacion o informacion que el servidor transmite.
  * <p>
- * Estos identificadores se utilizan en el metodo {@link Protocol#handleIncomingData() handleIncomingData()} para determinar el
- * tipo de paquete recibido y dirigirlo al manejador correspondiente. La estructura del enumerador refleja todas las posibles
- * interacciones iniciadas por el servidor, como actualizaciones de estado, notificaciones de eventos, respuestas a solicitudes
- * del cliente y cambios en el entorno de juego.
+ * Estos identificadores se utilizan en el proceso de manejo de paquetes entrantes para determinar el tipo de paquete recibido y
+ * dirigirlo al manejador correspondiente. La estructura del enumerador refleja todas las posibles interacciones iniciadas por el
+ * servidor, como actualizaciones de estado, notificaciones de eventos, respuestas a solicitudes del cliente y cambios en el
+ * entorno de juego.
  * <p>
  * La enumeracion incluye paquetes para funciones como:
  * <ul>

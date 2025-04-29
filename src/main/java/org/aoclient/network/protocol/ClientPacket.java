@@ -2,23 +2,25 @@ package org.aoclient.network.protocol;
 
 /**
  * <p>
- * Enumeracion que define todos los identificadores de paquetes enviados por el cliente al servidor en el protocolo de
- * comunicacion.
+ * Esta enumeracion representa los distintos comandos y solicitudes que un cliente puede enviar a un servidor en un contexto de
+ * juego en linea. Estos identificadores se utilizan en los metodos <b>write</b> de la clase
+ * {@link org.aoclient.network.protocol.Protocol} para construir los paquetes correspondientes que seran enviados al servidor. La
+ * estructura del enumerador refleja todas las posibles interacciones iniciadas por el cliente, como movimientos, acciones de
+ * combate, uso de objetos, comunicacion y comandos administrativos.
  * <p>
- * {@code ClientPacketID} contiene constantes para cada tipo de mensaje que el cliente puede enviar al servidor, permitiendo una
- * identificacion clara y tipada de los paquetes durante el proceso de construccion y envio de datos. Cada valor del enumerador
- * corresponde a un tipo especifico de accion, solicitud o comando que el cliente puede iniciar.
+ * Los comandos estan referenciados por una descripcion corta que corresponde a una abreviatura o representacion textual del
+ * comando desde el punto de vista del cliente (por ejemplo, {@code /SALIR} para {@code QUIT}).
  * <p>
- * Estos identificadores se utilizan en los metodos <b>write</b> de la clase {@link Protocol} para construir los paquetes
- * correspondientes que seran enviados al servidor. La estructura del enumerador refleja todas las posibles interacciones
- * iniciadas por el cliente, como movimientos, acciones de combate, uso de objetos, comunicacion y comandos administrativos.
+ * Funcionalidades principales:
+ * <ul>
+ * <li>Definir comandos relacionados con la interaccion basica del jugador, como movimiento, combate y comunicacion.
+ * <li>Manejar solicitudes hacia el servidor, como actualizaciones de estado, informacion de clanes, comercio y banca.
+ * <li>Controlar funcionalidades especificas del juego como fabricacion, capacidades de mascotas y configuraciones de guilds.
+ * <li>Admitir comandos administrativos y de consulta hacia el servidor.
+ * </ul>
  * <p>
- * Junto a cada constante, se incluye como comentario el comando de chat asociado cuando corresponde (por ejemplo, {@code /SALIR}
- * para {@code Quit}), facilitando la comprension de la relacion entre los comandos ingresados por el usuario y los paquetes
- * enviados.
- * <p>
- * Cada miembro del enum debe mantener la misma posicion ordinal que su correspondiente en el servidor para garantizar la correcta
- * interpretacion de los paquetes en la comunicacion cliente-servidor.
+ * Es importante mencionar que cada constante posee un papel bien definido dentro de las interacciones cliente-servidor. La
+ * funcionalidad debe ser correctamente implementada en ambos extremos (cliente y servidor) para garantizar una respuesta adecuada.
  */
 
 public enum ClientPacket {

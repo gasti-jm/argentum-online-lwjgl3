@@ -12,26 +12,33 @@ import java.nio.charset.StandardCharsets;
 
 import static org.aoclient.network.protocol.Protocol.*;
 
-
 /**
- * Clase encargada de analizar y procesar los comandos de texto ingresados por el usuario en la consola.
  * <p>
- * Esta clase interpreta los comandos ingresados por el usuario y los traduce a los paquetes de protocolo correspondientes que
- * seran enviados al servidor.
+ * Clase que implementa un interprete de comandos para procesar entradas de texto del usuario y convertirlas en llamadas al
+ * protocolo de comunicacion cliente-servidor.
  * <p>
- * La clase maneja diferentes tipos de comandos:
+ * {@code ProtocolCmdParse} sigue el patron de diseno Singleton para garantizar una unica instancia que procesa todos los comandos
+ * ingresados por el usuario. Su funcion principal es analizar el texto ingresado, identificar el comando correspondiente y
+ * ejecutar la accion apropiada a traves de las funciones del protocolo.
+ * <p>
+ * Esta clase actua como puente entre la interfaz de usuario basada en texto y el protocolo binario de comunicacion. Reconoce
+ * comandos con diferentes prefijos:
  * <ul>
- * <li>Comandos que comienzan con {@code /} (p.ej. /ayuda, /online, /meditar)
- * <li>Comandos que comienzan con {@code -} para gritar
- * <li>Texto normal para hablar
+ * <li>Comandos que comienzan con "/" (como "/ONLINE", "/SALIR", etc.) que ejecutan acciones especificas
+ * <li>Comandos que comienzan con "-" que se interpretan como gritos
+ * <li>Cualquier otro texto se interpreta como habla normal
  * </ul>
  * <p>
- * Incluye validacion de parametros para cada tipo de comando, verificando formatos correctos, rangos numericos, direcciones IP y
- * otros valores especificos requeridos por cada comando. En caso de error, muestra al usuario mensajes informativos sobre el
- * formato correcto del comando.
+ * {@code ProtocolCmdParse} maneja una amplia gama de funcionalidades incluyendo:
+ * <ul>
+ * <li>Comandos basicos de juego (movimiento, comercio, interacciones sociales)
+ * <li>Comandos administrativos o de GM que requieren diferentes niveles de privilegio
+ * <li>Comandos de sistema para control y gestion del servidor
+ * <li>Validacion de parametros para asegurar que se envian datos correctos al servidor
+ * </ul>
  * <p>
- * Esta clase sirve como intermediaria entre la interfaz de usuario y el protocolo de comunicacion, encapsulando la complejidad
- * del procesamiento de comandos y la construccion de los paquetes de red correspondientes.
+ * La estructura de procesamiento incluye analisis de la sintaxis del comando, validacion de parametros y finalmente la invocacion
+ * del metodo correspondiente en el protocolo para enviar la accion al servidor.
  */
 
 public class ProtocolCmdParse {

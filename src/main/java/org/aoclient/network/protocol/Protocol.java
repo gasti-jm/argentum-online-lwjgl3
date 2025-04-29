@@ -151,7 +151,7 @@ public class Protocol {
 
     public static void writeModifySkills(int[] skills) {
         outgoingData.writeByte(ClientPacket.MODIFY_SKILLS.ordinal());
-        for (E_Skills skill: E_Skills.values()) {
+        for (E_Skills skill : E_Skills.values()) {
             outgoingData.writeByte(skills[skill.getValue() - 1]);
         }
     }

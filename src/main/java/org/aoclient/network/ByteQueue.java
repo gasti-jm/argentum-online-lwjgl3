@@ -10,6 +10,7 @@ import java.nio.ByteOrder;
 import java.nio.charset.StandardCharsets;
 
 /**
+ * <p>
  * Clase que implementa una cola de bytes para la gestion de datos binarios en la comunicacion cliente-servidor. Maneja la
  * serializacion/deserializacion de datos.
  * <p>

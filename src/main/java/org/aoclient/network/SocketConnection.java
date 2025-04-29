@@ -27,7 +27,10 @@ import static org.aoclient.network.protocol.Protocol.*;
  * salida para gestionar el flujo de datos.
  * <p>
  * La clase maneja automaticamente situaciones como intentos de reconexion, desconexiones inesperadas, y coordina el estado de la
- * conexion con otros componentes del juego como {@link User} y {@link Rain} para mantener la coherencia del estado del cliente.
+ * conexion con otros componentes del juego para mantener la coherencia del estado del cliente.
+ * <p>
+ * Al desconectarse, esta clase se encarga de limpiar el estado del cliente, restableciendo variables relacionadas con el
+ * personaje del usuario y deteniendo efectos como la lluvia para garantizar una transicion limpia al estado desconectado.
  */
 
 public class SocketConnection {

@@ -1,5 +1,25 @@
 package org.aoclient.network.protocol.types;
 
+/**
+ * <p>
+ * Representa una enumeracion que contiene una lista de comandos disponibles para el Game Master (GM). Estos comandos permiten
+ * realizar diversas acciones administrativas, de moderacion y de gestion dentro del entorno del juego.
+ * <p>
+ * Un Game Master (GM) utiliza estos comandos para interactuar con el servidor, los jugadores y el mundo del juego de manera
+ * eficiente. La mayoria de estos comandos tienen funciones especializadas que facilitan el mantenimiento, la supervision y la
+ * administracion del servidor y su comunidad.
+ * <p>
+ * Caracteristicas principales:
+ * <ul>
+ *   <li>Incluye comandos para enviar mensajes en diferentes canales, como mensajes generales, mensajes dirigidos a facciones o
+ *   gremios.
+ *   <li>Herramientas para gestionar jugadores: teletransportar, enviar advertencias, aplicar sanciones, gestionar inventarios.
+ *   <li>Capacidades para interactuar con PNJ (personajes no jugables), como crear, eliminar o modificar PNJ en el mundo del juego.
+ *   <li>Manejo de configuraciones del servidor y mapas, actualizacion de datos y ejecucion de acciones avanzadas.
+ *   <li>Soporte para tareas relacionadas con el sistema, como reiniciar el servidor, realizar respaldos y cargar datos modificados.
+ * </ul>
+ */
+
 public enum GMCommand {
 
     STRAW_BUNDLE,

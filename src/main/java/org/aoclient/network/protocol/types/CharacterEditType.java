@@ -1,5 +1,13 @@
 package org.aoclient.network.protocol.types;
 
+/**
+ * Representa un conjunto de tipos de edicion que pueden aplicarse a un personaje dentro de un sistema, como cambios en sus
+ * atributos o caracteristicas.
+ * <p>
+ * Esta enumeracion proporciona valores predefinidos que identifican diferentes aspectos del personaje que pueden ser modificados.
+ * Cada elemento tiene un valor entero unico asociado que facilita su manejo interno.
+ */
+
 public enum CharacterEditType {
 
     GOLD(1),
