@@ -160,7 +160,7 @@ public final class FConnect extends Form {
     private void buttonConnect() {
         options.setIpServer(ipStr.get());
         options.setPortServer(portStr.get());
-        if (nickStr.get().isEmpty() || !passStr.get().isEmpty()) {
+        if (!nickStr.get().isEmpty() && !passStr.get().isEmpty()) {
             new Thread(() -> {
                 if (SocketConnection.get().connect()) writeLoginExistingChar(nickStr.get(), passStr.get());
             }).start();
