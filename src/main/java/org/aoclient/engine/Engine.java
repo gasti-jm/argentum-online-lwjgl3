@@ -88,7 +88,7 @@ public final class Engine {
             SocketConnection.getInstance().flushBuffer();
 
             // lo mismo para el handle data, leemos lo que nos envio el servidor.
-            SocketConnection.getInstance().readData();
+            SocketConnection.getInstance().read();
         }
     }
 
