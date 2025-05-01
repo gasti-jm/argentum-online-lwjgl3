@@ -36,15 +36,15 @@ import java.nio.charset.StandardCharsets;
 
 public class ByteQueue {
 
-    private static final int DATA_BUFFER = 10240;
+    private static final int BUFFER_SIZE = 10240; // 10 KB
 
     private byte[] data;
     private int queueCapacity;
     private int queueLength;
 
     public ByteQueue() {
-        data = new byte[DATA_BUFFER];
-        queueCapacity = DATA_BUFFER;
+        data = new byte[BUFFER_SIZE];
+        queueCapacity = BUFFER_SIZE;
     }
 
     /**
@@ -77,12 +77,13 @@ public class ByteQueue {
         return Math.min(val1, val2);
     }
 
-    private int writeData(byte[] buf, int dataLength) {
+    private int writeData(byte[] buf, int dataLength) { // buffer con el elemento 71 (paquete /SALIR) y 1 elemento
+        // Verifica si hay espacio para los datos
         if (queueCapacity - queueLength - dataLength < 0) throw new RuntimeException("Not enough space");
-        //copyMemory(data, buf, dataLength);
+        // copyMemory(data, buf, dataLength);
         System.arraycopy(buf, 0, data, queueLength, dataLength);
         queueLength += dataLength;
-        return dataLength;
+        return dataLength; // TODO Para que se devuelve este valor?
     }
 
     public int readData(byte[] buf, int dataLength) {
@@ -102,7 +103,7 @@ public class ByteQueue {
 
     public int writeByte(int value) {
         byte[] buf = {(byte) value};
-        return writeData(buf, 1);
+        return writeData(buf, 1); // TODO Podria ser buf.length
     }
 
     public int writeInteger(short value) {
@@ -406,11 +407,10 @@ public class ByteQueue {
         SocketConnection.get().disconnect();
 
         // reseteamos nuestra cola de bytes para que termine la recursividad de lectura de paquetes.
-        data = new byte[DATA_BUFFER];
-        queueCapacity = DATA_BUFFER;
+        data = new byte[BUFFER_SIZE];
+        queueCapacity = BUFFER_SIZE;
         queueLength = 0;
 
     }
 
 }
-
