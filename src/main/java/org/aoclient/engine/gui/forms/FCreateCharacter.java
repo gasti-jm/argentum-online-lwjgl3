@@ -444,7 +444,7 @@ public final class FCreateCharacter extends Form {
         final int userHogar = currentItemHogar.get() + 1;
         if (!checkData()) return;
         new Thread(() -> {
-            if (SocketConnection.get().connect())
+            if (SocketConnection.getInstance().connect())
                 writeLoginNewChar(txtNombre.get(), txtPassword.get(), userRaza, userSexo, userClase, userHead, txtMail.get(), userHogar);
         }).start();
         User.get().setUserName(txtNombre.get());
@@ -452,7 +452,7 @@ public final class FCreateCharacter extends Form {
 
     private void buttonThrowDices() {
         new Thread(() -> {
-            if (SocketConnection.get().connect()) writeThrowDices();
+            if (SocketConnection.getInstance().connect()) writeThrowDices();
         }).start();
     }
 

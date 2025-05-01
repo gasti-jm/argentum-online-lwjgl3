@@ -21,7 +21,7 @@ public class ErrorMessageHandler implements PacketHandler {
         String errMsg = buffer.readASCIIString();
         ImGUISystem.get().show(new FMessage(errMsg));
 
-        SocketConnection.get().disconnect();
+        SocketConnection.getInstance().disconnect();
         User.get().setUserConected(false);
 
         data.copyBuffer(buffer);

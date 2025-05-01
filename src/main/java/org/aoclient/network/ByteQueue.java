@@ -404,7 +404,7 @@ public class ByteQueue {
         final String msgErr = "Error al leer datos del servidor, intente actualizar su cliente o solicitar soporte al sitio oficial. Codigo de error: " + typeError + " packet #" + PacketReceiver.packetID;
         ImGUISystem.get().show(new FMessage(msgErr));
         //System.out.println(msgErr);
-        SocketConnection.get().disconnect();
+        SocketConnection.getInstance().disconnect();
 
         // reseteamos nuestra cola de bytes para que termine la recursividad de lectura de paquetes.
         data = new byte[BUFFER_SIZE];

@@ -35,26 +35,17 @@ import static org.aoclient.network.protocol.Protocol.*;
 
 public class SocketConnection {
 
-    private static SocketConnection instance;
-
     private Socket sock;
     private DataOutputStream writeData;
     private DataInputStream handleData;
     private boolean tryConnect;
 
-    /**
-     * @desc: Constructor privado por singleton.
-     */
     private SocketConnection() {
         this.tryConnect = false;
     }
 
-    /**
-     * @return Mismo objeto (Patron de diseño Singleton)
-     */
-    public static SocketConnection get() {
-        if (instance == null) instance = new SocketConnection();
-        return instance;
+    public static SocketConnection getInstance() {
+        return SingletonHolder.INSTANCE;
     }
 
     /**
@@ -158,6 +149,10 @@ public class SocketConnection {
         User.get().resetState();
         Rain.get().setRainValue(false);
         Rain.get().stopRainingSoundLoop();
+    }
+
+    private static class SingletonHolder {
+        private static final SocketConnection INSTANCE = new SocketConnection();
     }
 
 }

@@ -85,10 +85,10 @@ public final class Engine {
             }
 
             // Si hay algo para enviar, lo enviamos
-            SocketConnection.get().flushBuffer();
+            SocketConnection.getInstance().flushBuffer();
 
             // lo mismo para el handle data, leemos lo que nos envio el servidor.
-            SocketConnection.get().readData();
+            SocketConnection.getInstance().readData();
         }
     }
 

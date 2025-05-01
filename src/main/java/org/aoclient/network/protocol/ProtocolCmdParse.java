@@ -43,18 +43,13 @@ import static org.aoclient.network.protocol.Protocol.*;
 
 public class ProtocolCmdParse {
 
-    private static ProtocolCmdParse instance;
     private final Console console = Console.get();
 
-    // Constructor privado para evitar instanciación directa
     private ProtocolCmdParse() {
-        // Constructor privado para evitar instanciación directa
     }
 
-    // Funcion estática para obtener la única instancia de ByteMigration
     public static ProtocolCmdParse getInstance() {
-        if (instance == null) instance = new ProtocolCmdParse();
-        return instance;
+        return SingletonHolder.INSTANCE;
     }
 
     public void parseUserCommand(String rawCommand) {
@@ -1464,6 +1459,10 @@ public class ProtocolCmdParse {
             tmpArr[1] = text.substring(Pos + 1);
         } else tmpArr[0] = "";
         return tmpArr;
+    }
+
+    private static class SingletonHolder {
+        private static final ProtocolCmdParse INSTANCE = new ProtocolCmdParse();
     }
 
 }

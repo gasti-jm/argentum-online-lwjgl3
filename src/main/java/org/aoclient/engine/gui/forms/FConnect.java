@@ -162,7 +162,7 @@ public final class FConnect extends Form {
         options.setPortServer(portStr.get());
         if (!nickStr.get().isEmpty() && !passStr.get().isEmpty()) {
             new Thread(() -> {
-                if (SocketConnection.get().connect()) writeLoginExistingChar(nickStr.get(), passStr.get());
+                if (SocketConnection.getInstance().connect()) writeLoginExistingChar(nickStr.get(), passStr.get());
             }).start();
             options.setNickName(nickStr.get());
             User.get().setUserName(nickStr.get());
