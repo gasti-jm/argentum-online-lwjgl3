@@ -10,48 +10,74 @@ import java.nio.ByteOrder;
 import java.nio.charset.StandardCharsets;
 
 /**
- * Clase que implementa una cola de bytes para la gestion de datos binarios en la comunicacion cliente-servidor. Maneja la
- * serializacion/deserializacion de datos.
  * <p>
- * {@code ByteQueue} facilita el manejo de datos binarios estructurados que se intercambian a traves del protocolo de red del
- * juego. Proporciona metodos para escribir y leer diferentes tipos de datos primitivos y estructuras complejas como cadenas,
- * asegurando su correcta serializacion y deserializacion.
+ * Facilita el manejo de datos binarios estructurados que se intercambian a traves del protocolo de red. Proporciona metodos para
+ * escribir y leer diferentes tipos de datos primitivos y estructuras complejas como cadenas, asegurando su correcta serializacion
+ * y deserializacion.
  * <p>
  * La clase mantiene un buffer interno de datos y controla su capacidad, ofreciendo metodos para:
  * <ul>
- * <li>Escritura de diversos tipos de datos (bytes, ints, floats, booleans, strings)
- * <li>Lectura de datos con o sin eliminacion de la cola
- * <li>Manipulacion del contenido de la cola (copiar, mover, redimensionar)
- * <li>Verificacion de la integridad de los datos recibidos
+ *   <li>Escritura de diversos tipos de datos (bytes, ints, floats, booleans, strings)
+ *   <li>Lectura de datos con o sin eliminacion de la cola
+ *   <li>Manipulacion del contenido de la cola (copiar, mover, redimensionar)
+ *   <li>Verificacion de la integridad de los datos recibidos
  * </ul>
  * <p>
  * {@code ByteQueue} incluye mecanismos de seguridad para detectar errores de comunicacion y paquetes incorrectos o incompletos,
  * facilitando la recuperacion ante fallos en la transmision de datos. En caso de error, la clase puede notificar al usuario y
- * cerrar la conexion para prevenir inconsistencias.</p>
+ * cerrar la conexion para prevenir inconsistencias.
  * <p>
  * Esta clase es fundamental para la implementacion del protocolo de comunicacion del juego, sirviendo como capa intermedia entre
  * los datos crudos de red y las estructuras de datos utilizadas por la logica del juego.
+ * <p>
+ * En el sistema de comunicacion del juego, se utilizan principalmente dos instancias de esta clase:
+ * <ul>
+ *   <li>{@code outgoingData}: Buffer temporal para los datos que el cliente envia al servidor
+ *   <li>{@code incomingData}: Buffer temporal para los datos que el cliente recibe del servidor
+ * </ul>
+ * <p>
+ * Estos buffers temporales proporcionan un desacoplamiento entre la preparacion/procesamiento de los datos y su transmision real
+ * a traves de la red, permitiendo una gestion mas ordenada del flujo de datos y facilitando la deteccion y recuperacion ante
+ * errores de comunicacion.
  */
 
 public class ByteQueue {
 
-    private static final int DATA_BUFFER = 10240;
-
-    private byte[] data;
-    private int queueCapacity;
-    private int queueLength;
+    /** Tamaño del buffer en bytes. */
+    private static final int BUFFER_SIZE = 10240; // 10 KB
+    /** Almacen de datos binarios. Todos los datos escritos y leidos por la cola se guardan temporalmente en este array. */
+    private byte[] data; // Almacen de datos temporal
+    /** Almacena la capacidad total (en bytes) del buffer. */
+    private int queueCapacity; // Espacio disponible
+    /** Tamaño actual de los datos almacenados en la cola. */
+    private int queueLength; // Espacio utilizado
 
     public ByteQueue() {
-        data = new byte[DATA_BUFFER];
-        queueCapacity = DATA_BUFFER;
+        data = new byte[BUFFER_SIZE];
+        queueCapacity = BUFFER_SIZE;
     }
 
     /**
-     * Crea una copia del objeto que se paso por parametro.
+     * Copia el contenido de un buffer fuente en el buffer actual, reemplazando completamente su contenido.
+     * <p>
+     * Este metodo realiza una copia profunda del contenido de otro objeto {@code ByteQueue}, transfiriendo todos sus datos y
+     * ajustando la capacidad del buffer actual para que coincida con la del buffer origen. Si el buffer de origen esta vacio,
+     * simplemente limpia el buffer actual.
+     * <p>
+     * El proceso implica:
+     * <ol>
+     * <li>Verificar si el origen esta vacio; si es asi, eliminar todos los datos del buffer actual
+     * <li>Ajustar la capacidad del buffer actual para que coincida con la del origen
+     * <li>Crear un nuevo array de bytes con la capacidad ajustada
+     * <li>Leer todos los datos del buffer de origen
+     * <li>Reiniciar la longitud del buffer actual y escribir los datos leidos
+     * </ol>
+     *
+     * @param source objeto {@code ByteQueue} cuyo contenido sera copiado al buffer actual
      */
     public void copyBuffer(ByteQueue source) {
+
         if (source.length() == 0) {
-            // Clear the list and exit
             removeData(queueLength);
             return;
         }
@@ -59,13 +85,11 @@ public class ByteQueue {
         queueCapacity = source.getCapacity();
         data = new byte[queueCapacity];
 
-        // Read buffer
         byte[] buf = new byte[source.length()];
         source.peekBlock(buf, source.length());
 
         queueLength = 0;
 
-        // Write buffer
         writeBlock(buf, source.length());
     }
 
@@ -76,12 +100,13 @@ public class ByteQueue {
         return Math.min(val1, val2);
     }
 
-    private int writeData(byte[] buf, int dataLength) {
+    private int writeData(byte[] buf, int dataLength) { // buffer con el elemento 71 (paquete /SALIR) y 1 elemento
+        // Verifica si hay espacio para los datos
         if (queueCapacity - queueLength - dataLength < 0) throw new RuntimeException("Not enough space");
-        //copyMemory(data, buf, dataLength);
+        // copyMemory(data, buf, dataLength);
         System.arraycopy(buf, 0, data, queueLength, dataLength);
         queueLength += dataLength;
-        return dataLength;
+        return dataLength; // TODO Para que se devuelve este valor?
     }
 
     public int readData(byte[] buf, int dataLength) {
@@ -101,7 +126,7 @@ public class ByteQueue {
 
     public int writeByte(int value) {
         byte[] buf = {(byte) value};
-        return writeData(buf, 1);
+        return writeData(buf, 1); // TODO Podria ser buf.length
     }
 
     public int writeInteger(short value) {
@@ -399,17 +424,16 @@ public class ByteQueue {
     }
 
     private void disconnectByMistake(final String typeError) {
-        final String msgErr = "Error al leer datos del servidor, intente actualizar su cliente o solicitar soporte al sitio oficial. Codigo de error: " + typeError + " packet #" + PacketReceiver.packetID;
+        final String msgErr = "Error al leer datos del servidor, intente actualizar su cliente o solicitar soporte al sitio oficial. Codigo de error: " + typeError + " packet #" + PacketReceiver.packet;
         ImGUISystem.get().show(new FMessage(msgErr));
         //System.out.println(msgErr);
-        SocketConnection.get().disconnect();
+        SocketConnection.getInstance().disconnect();
 
         // reseteamos nuestra cola de bytes para que termine la recursividad de lectura de paquetes.
-        data = new byte[DATA_BUFFER];
-        queueCapacity = DATA_BUFFER;
+        data = new byte[BUFFER_SIZE];
+        queueCapacity = BUFFER_SIZE;
         queueLength = 0;
 
     }
 
 }
-

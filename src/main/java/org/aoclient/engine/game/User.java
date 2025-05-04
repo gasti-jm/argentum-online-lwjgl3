@@ -113,6 +113,12 @@ public final class User {
         this.userComerciando = false;
     }
 
+    public void resetGameState() {
+        resetState();
+        Rain.get().setRainValue(false);
+        Rain.get().stopRainingSoundLoop();
+    }
+
     /**
      * @return Mismo objeto (Patron de diseño Singleton)
      */
@@ -156,7 +162,7 @@ public final class User {
 
     }
 
-    public void resetState() {
+    private void resetState() {
         this.setUserConected(false);
         this.setUserNavegando(false);
         this.setUserComerciando(false);

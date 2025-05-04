@@ -2,8 +2,7 @@ package org.aoclient.network.protocol.types;
 
 /**
  * <p>
- * Representa diferentes tipos de mensajes o eventos que pueden ocurrir dentro de un sistema, como por ejemplo en un juego en
- * linea.
+ * Representa diferentes tipos de mensajes o eventos que pueden ocurrir dentro del juego.
  * <p>
  * Cada constante de la enumeracion describe un tipo de evento especifico, ya sea relacionado con interacciones de usuarios,
  * acciones de NPCs, cambios de estado del jugador o el sistema, entre otros. Esto permite clasificar y manejar de forma
