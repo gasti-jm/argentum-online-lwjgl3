@@ -142,18 +142,21 @@ public class PacketReceiver {
         // Obtiene el identificador del paquete
         int packetId = data.peekByte();
 
-        // Comprueba si el identificador del paquete es mayor o igual al tamaño de los valores de ServerPacket
-        if (packetId >= ServerPacket.values().length) return; // TODO Revisar comentario
+        // Valida el ID del paquete antes de procesarlo
+        if (!isValidPacketId(packetId)) {
+            Logger.debug("Invalid package ID received: " + packetId);
+            return;
+        }
 
-        // Identifica el tipo de paquete utilizando el identificador del paquete (definido en ServerPacket)
-        ServerPacket packet = ServerPacket.fromId(packetId);
+        // Obtiene el paquete a partir del ID
+        ServerPacket packet = ServerPacket.getPacket(packetId);
 
-        Logger.debug("Incoming " + packet + " package (ID=" + packetId + ")");
+        Logger.debug("Processing packet " + packet + " with ID " + packetId);
 
         // Guarda la referencia del paquete en la variable estatica packet de esta clase para poder usarla sin instanciarla en el metodo disconnectByMistake() de ByteQueue
         PacketReceiver.packet = packet;
 
-        // Obtiene el handler registrado para el paquete identificado
+        // Obtiene el handler para el paquete identificado
         PacketHandler handler = handlers.get(packet);
 
         if (handler != null) {
@@ -167,5 +170,16 @@ public class PacketReceiver {
         }
 
     }
+
+    /**
+     * Verifica si existe un paquete del servidor con el ID especificado.
+     *
+     * @param packetId ID del paquete a validar
+     * @return true si existe un paquete con el ID especificado, false en caso contrario
+     */
+    private boolean isValidPacketId(int packetId) {
+        return ServerPacket.PACKET_REGISTRY.containsKey(packetId);
+    }
+
 
 }

@@ -1,8 +1,5 @@
 package org.aoclient.network.protocol;
 
-import java.util.HashMap;
-import java.util.Map;
-
 /**
  * <p>
  * Representa los distintos comandos y solicitudes que el cliente puede enviar al servidor. Estos identificadores se utilizan en
@@ -17,12 +14,9 @@ import java.util.Map;
  * <ul>
  * <li>Definir comandos relacionados con la interaccion basica del jugador, como movimiento, combate y comunicacion.
  * <li>Manejar solicitudes hacia el servidor, como actualizaciones de estado, informacion de clanes, comercio y banca.
- * <li>Controlar funcionalidades especificas del juego como fabricacion, capacidades de mascotas y configuraciones de guilds.
+ * <li>Controlar funcionalidades específicas del juego como fabricacion, capacidades de mascotas y configuraciones de guilds.
  * <li>Admitir comandos administrativos y de consulta hacia el servidor.
  * </ul>
- * <p>
- * Es importante mencionar que cada constante posee un papel bien definido dentro de las interacciones cliente-servidor. La
- * funcionalidad debe ser correctamente implementada en ambos extremos (cliente y servidor) para garantizar una respuesta adecuada.
  */
 
 public enum ClientPacket {
@@ -157,23 +151,10 @@ public enum ClientPacket {
     STOP_SHARING_NPC(127),          // /NOCOMPARTIRNPC
     CONSULTA(128);
 
-    private static final Map<Integer, ClientPacket> idToPacket = new HashMap<>();
-
-    static {
-        for (ClientPacket packet : values())
-            idToPacket.put(packet.getId(), packet);
-    }
-
     private final int id;
 
     ClientPacket(int id) {
         this.id = id;
-    }
-
-    public static ClientPacket fromId(int id) {
-        ClientPacket packet = idToPacket.get(id);
-        if (packet == null) throw new IllegalArgumentException("No ClientPacket found with ID: " + id);
-        return packet;
     }
 
     public int getId() {

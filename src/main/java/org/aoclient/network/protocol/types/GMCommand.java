@@ -1,8 +1,5 @@
 package org.aoclient.network.protocol.types;
 
-import java.util.HashMap;
-import java.util.Map;
-
 /**
  * <p>
  * Representa una enumeracion que contiene una lista de comandos disponibles para el Game Master (GM). Estos comandos permiten
@@ -173,23 +170,10 @@ public enum GMCommand {
     RECORD_LIST_REQUEST(145),
     RECORD_DETAILS_REQUEST(146);
 
-    private static final Map<Integer, GMCommand> idToCommand = new HashMap<>();
-
-    static {
-        for (GMCommand command : values())
-            idToCommand.put(command.getId(), command);
-    }
-
     private final int id;
 
     GMCommand(int id) {
         this.id = id;
-    }
-
-    public static GMCommand fromIdFast(int id) {
-        GMCommand command = idToCommand.get(id);
-        if (command == null) throw new IllegalArgumentException("GMCommand with ID: not found" + id);
-        return command;
     }
 
     public int getId() {

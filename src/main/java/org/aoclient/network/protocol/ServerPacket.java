@@ -12,7 +12,7 @@ import java.util.Map;
  * de operacion o informacion que el servidor transmite.
  * <p>
  * Estos identificadores se utilizan en el proceso de manejo de paquetes entrantes para determinar el tipo de paquete recibido y
- * dirigirlo al manejador correspondiente. La estructura del enumerador refleja todas las posibles interacciones iniciadas por el
+ * dirigirlo al handler correspondiente. La estructura del enumerador refleja todas las posibles interacciones iniciadas por el
  * servidor, como actualizaciones de estado, notificaciones de eventos, respuestas a solicitudes del cliente y cambios en el
  * entorno de juego.
  * <p>
@@ -27,9 +27,6 @@ import java.util.Map;
  * <li>Funcionalidades de clanes y grupos
  * <li>Comandos administrativos
  * </ul>
- * <p>
- * Cada miembro del enum debe mantener la misma posicion ordinal que su correspondiente en el servidor para garantizar la correcta
- * interpretacion de los paquetes.
  */
 
 public enum ServerPacket {
@@ -124,7 +121,7 @@ public enum ServerPacket {
     SEND_NIGHT(87),               // NOC
     PONG(88),
     UPDATE_TAG_AND_STATUS(89),
-    //GM messages
+    // GM messages
     SPAWN_LIST(90),               // SPL
     SHOW_SOS_FORM(91),            // MSOS
     SHOW_MOTD_EDITION_FORM(92),   // ZMOTD
@@ -141,12 +138,27 @@ public enum ServerPacket {
     CANCEL_OFFER_ITEM(103);
 
     /** Utiliza un HashMap que proporciona acceso en tiempo constante (complejidad O(1)). */
-    private static final Map<Integer, ServerPacket> idToPacket = new HashMap<>();
+    public static final Map<Integer, ServerPacket> PACKET_REGISTRY = new HashMap<>();
 
-    // Inicializa el mapa una sola vez cuando la clase se carga
+    /* Bloque de inicializacion estatica que construye el mapa de busqueda para conversion eficiente de ID a objetos ServerPacket.
+     *
+     * Este bloque se ejecuta una sola vez cuando la clase ServerPacket se carga en memoria por primera vez, realizando una 
+     * inicializacion anticipada (eager initialization) del mapa de busqueda. El bloque recorre todos los valores del enum 
+     * utilizando values() y registra cada constante enum en el mapa PACKET_REGISTRY, usando su ID numerico como clave.
+     *
+     * La inicializacion estatica ofrece varias ventajas importantes:
+     *
+     * 1. Rendimiento: Elimina la necesidad de inicializar el mapa o verificar su inicializacion en cada llamada al metodo 
+     * getPacket(), mejorando asi el rendimiento del sistema en tiempo de ejecucion.
+     * 2. Seguridad de hilos: Garantiza que el mapa se inicialice correctamente incluso en entornos multi-hilo, ya que la JVM 
+     * asegura que los bloques estaticos se ejecuten una sola vez y de forma segura durante la carga de la clase.
+     * 3. Deteccion temprana de errores: Si hubiera algun problema con la inicializacion del mapa (como IDs duplicados), se 
+     * manifestaria inmediatamente al cargar la clase, en lugar de detectarse mas tarde durante la ejecucion del programa.
+     * 4. Optimizacion de memoria: Al crear el mapa con el tamaño exacto necesario (el numero de constantes enum), se evita la 
+     * sobrecarga de redimensionamientos internos del HashMap. */
     static {
         for (ServerPacket packet : values())
-            idToPacket.put(packet.getId(), packet);
+            PACKET_REGISTRY.put(packet.getId(), packet);
     }
 
     private final int id;
@@ -155,13 +167,24 @@ public enum ServerPacket {
         this.id = id;
     }
 
-    public static ServerPacket fromId(int id) {
-        ServerPacket packet = idToPacket.get(id);
+    /**
+     * Obtiene el paquete del servidor correspondiente al ID proporcionado.
+     * <p>
+     * Este metodo proporciona una forma eficiente de recuperar la constante enum asociada a un ID especifico de paquete del
+     * servidor. Utiliza un mapa de busqueda optimizado para proporcionar acceso en tiempo constante O(1), evitando la necesidad
+     * de realizar busquedas lineales a traves de todos los valores del enum.
+     *
+     * @param id ID del paquete del servidor a obtener
+     * @return el paquete del servidor correspondiente al ID proporcionado
+     * @throws IllegalArgumentException si no existe un ServerPacket con el ID especificado, indicando que se recibio un ID de
+     *                                  paquete desconocido o no implementado
+     */
+    public static ServerPacket getPacket(int id) {
+        ServerPacket packet = PACKET_REGISTRY.get(id);
         if (packet == null) throw new IllegalArgumentException("No ServerPacket found with ID: " + id);
         return packet;
     }
 
-    // TODO Deberia ser privado?
     public int getId() {
         return id;
     }
