@@ -43,3 +43,6 @@ Server/
 git
 ### ImGui ###
 resources/gui.ini
+
+### options.ini ###
+resources/options.ini

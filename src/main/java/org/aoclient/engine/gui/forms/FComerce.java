@@ -3,7 +3,9 @@ package org.aoclient.engine.gui.forms;
 import imgui.ImGui;
 import imgui.ImVec2;
 import imgui.flag.ImGuiCond;
+import imgui.flag.ImGuiInputTextFlags;
 import imgui.flag.ImGuiWindowFlags;
+import imgui.type.ImString;
 import org.aoclient.engine.game.Console;
 import org.aoclient.engine.game.User;
 import org.aoclient.engine.game.inventory.NPCInventory;
@@ -38,6 +40,7 @@ import static org.aoclient.network.protocol.Protocol.*;
 
 public class FComerce extends Form {
 
+    private final ImString cant = new ImString("1");
     public static NPCInventory invNPC = new NPCInventory();
     public static UserInventory invUser = User.get().getUserInventory().clone();
 
@@ -71,7 +74,7 @@ public class FComerce extends Form {
             playSound(SND_CLICK);
 
             if (User.get().getUserGLD() >= invNPC.getValue(invNPC.getSlotSelected())) {
-                writeCommerceBuy(invNPC.getSlotSelected() + 1, 1);
+                writeCommerceBuy(invNPC.getSlotSelected() + 1, Integer.parseInt(cant.get()));
             } else {
                 Console.get().addMsgToConsole("No tienes oro suficiente.", true, false, new RGBColor(1f, 0.1f, 0.1f));
             }
@@ -81,9 +84,16 @@ public class FComerce extends Form {
         ImGui.setCursorPos(256, 402);
         if (ImGui.button("Vender", 172, 31)) {
             playSound(SND_CLICK);
-            writeCommerceSell(invUser.getSlotSelected() + 1, 1);
+            writeCommerceSell(invUser.getSlotSelected() + 1, Integer.parseInt(cant.get()));
         }
 
+
+        ImGui.setCursorPos(215, 438);
+        ImGui.pushItemWidth(42);
+        ImGui.pushID("cantidad");
+        ImGui.inputText("", cant, ImGuiInputTextFlags.CharsDecimal | ImGuiInputTextFlags.CallbackResize);
+        ImGui.popID();
+        ImGui.popItemWidth();
 
 
         this.checkInventoryEvents();
