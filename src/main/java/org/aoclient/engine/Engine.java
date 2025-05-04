@@ -84,11 +84,11 @@ public final class Engine {
                 Time.updateTime();
             }
 
-            // Si hay algo para enviar, lo enviamos
-            SocketConnection.getInstance().flushBuffer();
-
-            // lo mismo para el handle data, leemos lo que nos envio el servidor.
+            // Si hay algo para enviar, lo envia (escribe lo que envia el cliente al servidor, como comandos, acciones, etc.)
+            SocketConnection.getInstance().write();
+            // Si hay algo para recibir, lo recibe (lee lo que recibe el cliente del servidor)
             SocketConnection.getInstance().read();
+
         }
     }
 

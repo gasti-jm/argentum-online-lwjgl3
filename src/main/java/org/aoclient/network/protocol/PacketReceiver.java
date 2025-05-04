@@ -3,26 +3,27 @@ package org.aoclient.network.protocol;
 import org.aoclient.network.ByteQueue;
 import org.aoclient.network.protocol.handlers.*;
 import org.aoclient.network.protocol.handlers.gm.*;
+import org.tinylog.Logger;
 
 import java.util.HashMap;
 import java.util.Map;
 
 /**
  * <p>
- * La clase PacketReceiver es responsable de manejar y procesar paquetes entrantes desde un servidor. Cada tipo de paquete tiene
- * un controlador especifico que define como procesar los datos correspondientes.
+ * La clase PacketReceiver es responsable de manejar y procesar paquetes entrantes desde el servidor. Cada tipo de paquete tiene
+ * un handler especifico que define como procesar los datos correspondientes.
  * <p>
  * El flujo principal de trabajo incluye:
  * <ol>
  *   <li>Registrar varios controladores asociados a tipos de paquetes durante la inicializacion.
  *   <li>Analizar y procesar los datos recibidos para determinar el tipo de paquete.
- *   <li>Delegar el procesamiento al controlador apropiado si existe uno para el tipo de paquete identificado.
+ *   <li>Delegar el procesamiento al handler apropiado si existe uno para el tipo de paquete identificado.
  * </ol>
  */
 
 public class PacketReceiver {
 
-    public static ServerPacket packetID;
+    public static ServerPacket packet;
     private final Map<ServerPacket, PacketHandler> handlers = new HashMap<>();
 
     public PacketReceiver() {
@@ -138,23 +139,29 @@ public class PacketReceiver {
     public void processIncomingData(ByteQueue data) {
         if (data.length() == 0) return; // TODO Y si llega a ser -1?
 
-        // Obtiene el tipo de paquete
+        // Obtiene el identificador del paquete
         int packetId = data.peekByte();
-        if (packetId >= ServerPacket.values().length) return;
 
+        // Comprueba si el identificador del paquete es mayor o igual al tamaño de los valores de ServerPacket
+        if (packetId >= ServerPacket.values().length) return; // TODO Revisar comentario
+
+        // Identifica el tipo de paquete utilizando el identificador del paquete (definido en ServerPacket)
         ServerPacket packet = ServerPacket.values()[packetId];
 
-        packetID = packet;
+        Logger.debug("Incoming " + packet + " package (ID=" + packetId + ")");
 
-        // Logger.debug(packet + " #" + packet); // ?
+        // Guarda la referencia del paquete en la variable estatica packet de esta clase para poder usarla sin instanciarla en el metodo disconnectByMistake() de ByteQueue
+        PacketReceiver.packet = packet;
 
-        // Identifica el tipo de paquete y llama al handler correspondiente
+        // Obtiene el handler registrado para el paquete identificado
         PacketHandler handler = handlers.get(packet);
 
         if (handler != null) {
+
+            // Maneja los datos en el handler correspondiente
             handler.handle(data);
 
-            // Si quedan datos, continua procesando
+            // Si quedan datos, continua procesando los datos de entrada
             if (data.length() > 0) processIncomingData(data);
 
         }

@@ -2,11 +2,10 @@ package org.aoclient.network.protocol;
 
 /**
  * <p>
- * Esta enumeracion representa los distintos comandos y solicitudes que un cliente puede enviar a un servidor en un contexto de
- * juego en linea. Estos identificadores se utilizan en los metodos <b>write</b> de la clase
- * {@link org.aoclient.network.protocol.Protocol} para construir los paquetes correspondientes que seran enviados al servidor. La
- * estructura del enumerador refleja todas las posibles interacciones iniciadas por el cliente, como movimientos, acciones de
- * combate, uso de objetos, comunicacion y comandos administrativos.
+ * Representa los distintos comandos y solicitudes que el cliente puede enviar al servidor. Estos identificadores se utilizan en
+ * los metodos <b>write</b> de la clase {@link org.aoclient.network.protocol.Protocol} para construir los paquetes
+ * correspondientes que seran enviados al servidor. La estructura del enumerador refleja todas las posibles interacciones
+ * iniciadas por el cliente, como movimientos, acciones de combate, uso de objetos, comunicacion y comandos administrativos.
  * <p>
  * Los comandos estan referenciados por una descripcion corta que corresponde a una abreviatura o representacion textual del
  * comando desde el punto de vista del cliente (por ejemplo, {@code /SALIR} para {@code QUIT}).

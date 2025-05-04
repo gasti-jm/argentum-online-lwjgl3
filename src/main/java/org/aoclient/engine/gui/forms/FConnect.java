@@ -43,8 +43,8 @@ import static org.lwjgl.glfw.GLFW.GLFW_KEY_ENTER;
 
 public final class FConnect extends Form {
 
-    private final ImString portStr = new ImString(options.getPortServer());
     private final ImString ipStr = new ImString(options.getIpServer());
+    private final ImString portStr = new ImString(options.getPortServer());
     private final ImString nickStr = new ImString(options.getNickName());
     private final ImString passStr = new ImString();
 
@@ -166,7 +166,7 @@ public final class FConnect extends Form {
             }).start();
             options.setNickName(nickStr.get());
             User.get().setUserName(nickStr.get());
-        } else ImGUISystem.get().show(new FMessage("Por favor, ingrese un nombre de usuario y/o contraseña valida."));
+        } else ImGUISystem.get().show(new FMessage("Please enter a valid username and/or password."));
     }
 
     private void buttonCreateCharacter() {

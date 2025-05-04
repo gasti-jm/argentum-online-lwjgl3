@@ -15,7 +15,7 @@ import static org.aoclient.engine.utils.GameData.charList;
 import static org.lwjgl.glfw.GLFW.glfwGetTime;
 
 /**
- * Clase responsable de manejar el protocolo de comunicacion entre el cliente y el servidor del juego Argentum Online.
+ * Clase responsable de manejar el protocolo de comunicacion entre el cliente y el servidor.
  * <p>
  * {@code Protocol} implementa las operaciones necesarias para la comunicacion de red, procesando los paquetes de datos entrantes
  * desde el servidor y preparando los paquetes salientes hacia el servidor.
@@ -23,8 +23,8 @@ import static org.lwjgl.glfw.GLFW.glfwGetTime;
  * Esta clase contiene implementaciones para todos los comandos del protocolo del juego, incluyendo acciones de personaje,
  * interacciones con el entorno, comunicacion con otros jugadores y comandos administrativos.
  * <p>
- * Protocol trabaja en conjunto con {@link SocketConnection} para la transmision real de los datos, y utiliza {@link ByteQueue}
- * para almacenar temporalmente los datos entrantes y salientes antes de su procesamiento.
+ * Trabaja en conjunto con {@link SocketConnection} para la transmision real de los datos, y utiliza {@link ByteQueue} para
+ * almacenar temporalmente los datos entrantes y salientes antes de su procesamiento.
  * <p>
  * La mayoria de los metodos de esta clase siguen un patron de nomenclatura donde los metodos que comienzan con <b>write</b>
  * envian comandos al servidor, mientras que los metodos que comienzan con <b>handle</b> procesan las respuestas recibidas.
@@ -38,21 +38,89 @@ public class Protocol {
     private static final Console console = Console.get();
     private static final PacketReceiver receiver = new PacketReceiver();
     public static int pingTime;
-    public static ByteQueue incomingData = new ByteQueue();
-    public static ByteQueue outgoingData = new ByteQueue();
+
+    /**
+     * <p>
+     * Buffer de comunicacion que almacena temporalmente todos los mensajes que el cliente necesita enviar al servidor antes de su
+     * transmision efectiva.
+     * <p>
+     * Este objeto actua como una cola intermedia que acumula y estructura los comandos y datos del cliente, permitiendo que sean
+     * procesados y enviados al servidor en el momento adecuado. La separacion entre la preparacion de datos y su transmision
+     * mejora la modularidad del codigo y el control del flujo de comunicacion.
+     * <p>
+     * Caracteristicas principales:
+     * <ul>
+     *   <li>Se crea durante la inicializacion de la clase {@code Protocol} para estar disponible globalmente como recurso
+     *       estatico compartido
+     *   <li>Almacena datos en formato binario con metodos especializados para diferentes tipos
+     *   <li>Todos los metodos {@code write*} añaden datos a este buffer
+     *   <li>Soporta la serializacion de diferentes tipos de datos (enteros, cadenas, booleanos, etc.)
+     *   <li>El tamaño del buffer se amplia automaticamente segun sea necesario
+     * </ul>
+     * <p>
+     * Flujo de trabajo:
+     * <ol>
+     *   <li>Los metodos {@code write*} de {@code Protocol} escriben datos estructurados en este buffer
+     *   <li>La clase {@code SocketConnection}, mediante su metodo {@code write()}, lee los datos
+     *       acumulados en este buffer
+     *   <li>Los datos son enviados a traves del socket al servidor
+     *   <li>El buffer se vacia una vez que los datos han sido transmitidos
+     * </ol>
+     * <p>
+     * Este diseño permite que la creacion y preparacion de paquetes este completamente desacoplada de la logica de transmision de
+     * red, facilitando la depuracion, las pruebas y el mantenimiento del codigo.
+     *
+     * @see ByteQueue Clase que implementa la funcionalidad de cola de bytes con operaciones especializadas para la comunicacion
+     * acion de red
+     * @see SocketConnection Clase responsable de transmitir los datos acumulados en este buffer
+     */
+    public static ByteQueue outgoingData = new ByteQueue(); // Buffer temporal para la salida de datos (escribe lo que envia el cliente al servidor)
+
+    /**
+     * Almacena temporalmente todos los mensajes recibidos del servidor antes de ser procesados por el cliente.
+     * <p>
+     * Este buffer actua como un almacen intermedio donde se acumulan los datos binarios recibidos desde el servidor a traves del
+     * socket de comunicacion. Los datos permanecen en este buffer hasta que son interpretados y procesados por el handler
+     * correspondiente.
+     * <p>
+     * El ciclo de vida de los datos en este buffer es el siguiente:
+     * <ol>
+     *   <li>La clase {@code SocketConnection}, a traves de su metodo {@code read()}, recibe datos
+     *       del servidor y los escribe en este buffer mediante {@code writeBlock()}
+     *   <li>El metodo {@code handleIncomingData()} envia este buffer al {@code PacketReceiver}
+     *       para identificar el tipo de paquete y procesarlo
+     *   <li>Los handlers de paquetes especificos ({@code PacketHandler}) leen y extraen
+     *       los datos necesarios del buffer para su procesamiento
+     *   <li>Los datos ya procesados son eliminados del buffer mediante operaciones de lectura
+     *       que modifican la posicion del puntero interno
+     * </ol>
+     * <p>
+     * Este mecanismo permite que multiples paquetes de datos sean procesados de manera secuencial en un solo ciclo, ya que cada
+     * handler extrae solo la cantidad de datos que le corresponde del flujo de entrada.
+     */
+    public static ByteQueue incomingData = new ByteQueue(); // Buffer temporal para la entrada de datos (lee lo que recibe el cliente del servidor)
 
     public static void handleIncomingData() {
         // Delega el procesamiento de paquetes entrantes a PacketReceiver
         receiver.processIncomingData(incomingData);
     }
 
+    /**
+     * <p>
+     * Escribe en el buffer temporal de salida los datos entrantes del cliente. En otras palabras, construye un paquete para la
+     * accion de logearse.
+     *
+     * @param username nombre de usuario
+     * @param password contraseña
+     */
     public static void writeLoginExistingChar(String username, String password) {
+        // Añade primero el paquete identificador para que al momento de deserializar el paquete entrante, lea primero el ID del paquete
         outgoingData.writeByte(ClientPacket.LOGIN_EXISTING_CHAR.ordinal());
         outgoingData.writeASCIIString(username);
         outgoingData.writeASCIIString(password);
-        outgoingData.writeByte(0);  // App.Major
+        outgoingData.writeByte(0); // App.Major
         outgoingData.writeByte(13); // App.Minor
-        outgoingData.writeByte(0);  // App.Revision
+        outgoingData.writeByte(0); // App.Revision
     }
 
     public static void writeThrowDices() {
@@ -151,9 +219,8 @@ public class Protocol {
 
     public static void writeModifySkills(int[] skills) {
         outgoingData.writeByte(ClientPacket.MODIFY_SKILLS.ordinal());
-        for (E_Skills skill : E_Skills.values()) {
+        for (E_Skills skill : E_Skills.values())
             outgoingData.writeByte(skills[skill.getValue() - 1]);
-        }
     }
 
     public static void writeLeftClick(int x, int y) {
@@ -187,7 +254,7 @@ public class Protocol {
 
     public static void writeWork(int skill) {
         if (User.get().isDead()) {
-            console.addMsgToConsole(new String("¡¡Estás muerto!!".getBytes(), StandardCharsets.UTF_8),
+            console.addMsgToConsole(new String("¡¡Estas muerto!!".getBytes(), StandardCharsets.UTF_8),
                     false, true, new RGBColor());
 
             return;
@@ -824,7 +891,7 @@ public class Protocol {
 
     public static void writeIPToNick(int[] ip) {
         // Validar que el tamaño del array sea 4 bytes
-        if (ip.length != 4) return; // IP inválida
+        if (ip.length != 4) return; // IP invalida
 
         // Escribir el mensaje "IPToNick" en el buffer de datos salientes
         outgoingData.writeByte(ClientPacket.GM_COMMANDS.ordinal());
@@ -1012,7 +1079,7 @@ public class Protocol {
     }
 
     public static void writeBanIP(boolean byIp, int[] ip, String nick, String reason) {
-        if (byIp && ip.length != 4) return; // IP inválida
+        if (byIp && ip.length != 4) return; // IP invalida
 
         // Escribir el mensaje "BanIP" en el buffer de datos salientes
         outgoingData.writeByte(ClientPacket.GM_COMMANDS.ordinal());
@@ -1036,7 +1103,7 @@ public class Protocol {
     }
 
     public static void writeUnbanIP(int[] ip) {
-        if (ip.length != 4) return; // IP inválida
+        if (ip.length != 4) return; // IP invalida
 
         // Escribir el mensaje "UnbanIP" en el buffer de datos salientes
         outgoingData.writeByte(ClientPacket.GM_COMMANDS.ordinal());

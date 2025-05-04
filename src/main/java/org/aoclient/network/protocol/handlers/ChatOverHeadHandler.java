@@ -16,7 +16,6 @@ public class ChatOverHeadHandler implements PacketHandler {
         ByteQueue buffer = new ByteQueue();
         buffer.copyBuffer(data);
 
-        // Remove packet ID
         buffer.readByte();
 
         String chat = buffer.readASCIIString();
@@ -26,12 +25,12 @@ public class ChatOverHeadHandler implements PacketHandler {
         int b = buffer.readByte();
 
         // es un NPC?
-        if (charList[charIndex].getName().length() <= 1) {
-            Dialogs.removeDialogsNPCArea();
-        }
+        if (charList[charIndex].getName().length() <= 1) Dialogs.removeDialogsNPCArea();
 
         charDialogSet(charIndex, chat, new RGBColor((float) r / 255, (float) g / 255, (float) b / 255));
 
         data.copyBuffer(buffer);
+
     }
+
 }
