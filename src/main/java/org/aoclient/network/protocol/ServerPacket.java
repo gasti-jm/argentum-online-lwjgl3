@@ -1,5 +1,8 @@
 package org.aoclient.network.protocol;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * <p>
  * Define todos los identificadores de paquetes enviados por el servidor al cliente.
@@ -31,110 +34,136 @@ package org.aoclient.network.protocol;
 
 public enum ServerPacket {
 
-    LOGGED,                   // LOGGED
-    REMOVE_DIALOGS,           // QTDL
-    REMOVE_CHAR_DIALOG,       // QDL
-    NAVIGATE_TOGGLE,          // NAVEG
-    DISCONNECT,               // FINOK
-    COMMERCE_END,             // FINCOMOK
-    BANK_END,                 // FINBANOK
-    COMMERCE_INIT,            // INITCOM
-    BANK_INIT,                // INITBANCO
-    USER_COMMERCE_INIT,       // INITCOMUSU
-    USER_COMMERCE_END,        // FINCOMUSUOK
-    USER_OFFER_CONFIRM,
-    COMMERCE_CHAT,
-    SHOW_BLACKSMITH_FORM,     // SFH
-    SHOW_CARPENTER_FORM,      // SFC
-    UPDATE_STA,               // ASS
-    UPDATE_MANA,              // ASM
-    UPDATE_HP,                // ASH
-    UPDATE_GOLD,              // ASG
-    UPDATE_BANK_GOLD,
-    UPDATE_EXP,               // ASE
-    CHANGE_MAP,               // CM
-    POS_UPDATE,               // PU
-    CHAT_OVER_HEAD,           // ||
-    CONSOLE_MSG,              // || ¡Cuidado! Es lo mismo que el anterior, pero esta correctamente dividido
-    GUILD_CHAT,               // |+
-    SHOW_MESSAGE_BOX,         // !!
-    USER_INDEX_IN_SERVER,     // IU
-    USER_CHAR_INDEX_IN_SERVER,// IP
-    CHARACTER_CREATE,         // CC
-    CHARACTER_REMOVE,         // BP
-    CHARACTER_CHANGE_NICK,
-    CHARACTER_MOVE,           // MP, +, * and _ //
-    FORCE_CHAR_MOVE,
-    CHARACTER_CHANGE,         // CP
-    OBJECT_CREATE,            // HO
-    OBJECT_DELETE,            // BO
-    BLOCK_POSITION,           // BQ
-    PLAY_MIDI,                // TM
-    PLAY_WAVE,                // TW
-    GUILD_LIST,               // GL
-    AREA_CHANGED,             // CA
-    PAUSE_TOGGLE,             // BKW
-    RAIN_TOGGLE,              // LLU
-    CREATE_FX,                // CFX
-    UPDATE_USER_STATS,        // EST
-    WORK_REQUEST_TARGET,      // T01
-    CHANGE_INVENTORY_SLOT,    // CSI
-    CHANGE_BANK_SLOT,         // SBO
-    CHANGE_SPELL_SLOT,        // SHS
-    ATTRIBUTES,               // ATR
-    BLACKSMITH_WEAPONS,       // LAH
-    BLACKSMITH_ARMORS,        // LAR
-    CARPENTER_OBJECTS,        // OBR
-    REST_OK,                  // DOK
-    ERROR_MSG,                // ERR
-    BLIND,                    // CEGU
-    DUMB,                     // DUMB
-    SHOW_SIGNAL,              // MCAR
-    CHANGE_NPC_INVENTORY_SLOT,// NPCI
-    UPDATE_HUNGER_AND_THIRST, // EHYS
-    FAME,                     // FAMA
-    MINI_STATS,               // MEST
-    LEVEL_UP,                 // SUNI
-    ADD_FORUM_MSG,            // FMSG
-    SHOW_FORUM_FORM,          // MFOR
-    SET_INVISIBLE,            // NOVER
-    DICE_ROLL,                // DADOS
-    MEDITATE_TOGGLE,          // MEDOK
-    BLIND_NO_MORE,            // NSEGUE
-    DUMB_NO_MORE,             // NESTUP
-    SEND_SKILLS,              // SKILLS
-    TRAINER_CREATURE_LIST,    // LSTCRI
-    GUILD_NEWS,               // GUILDNE
-    OFFER_DETAILS,            // PEACEDE & ALLIEDE
-    ALIANCE_PROPOSALS_LIST,   // ALLIEPR
-    PEACE_PROPOSALS_LIST,     // PEACEPR
-    CHARACTER_INFO,           // CHRINFO
-    GUILD_LEADER_INFO,        // LEADERI
-    GUILD_MEMBER_INFO,
-    GUILD_DETAILS,            // CLANDET
-    SHOW_GUILD_FUNDATION_FORM,// SHOWFUN
-    PARALIZE_OK,              // PARADOK
-    SHOW_USER_REQUEST,        // PETICIO
-    TRADE_OK,                 // TRANSOK
-    BANK_OK,                  // BANCOOK
-    CHANGE_USER_TRADE_SLOT,   // COMUSUINV
-    SEND_NIGHT,               // NOC
-    PONG,
-    UPDATE_TAG_AND_STATUS,
+    LOGGED(0),                   // LOGGED
+    REMOVE_DIALOGS(1),           // QTDL
+    REMOVE_CHAR_DIALOG(2),       // QDL
+    NAVIGATE_TOGGLE(3),          // NAVEG
+    DISCONNECT(4),               // FINOK
+    COMMERCE_END(5),             // FINCOMOK
+    BANK_END(6),                 // FINBANOK
+    COMMERCE_INIT(7),            // INITCOM
+    BANK_INIT(8),                // INITBANCO
+    USER_COMMERCE_INIT(9),       // INITCOMUSU
+    USER_COMMERCE_END(10),       // FINCOMUSUOK
+    USER_OFFER_CONFIRM(11),
+    COMMERCE_CHAT(12),
+    SHOW_BLACKSMITH_FORM(13),     // SFH
+    SHOW_CARPENTER_FORM(14),      // SFC
+    UPDATE_STA(15),               // ASS
+    UPDATE_MANA(16),              // ASM
+    UPDATE_HP(17),                // ASH
+    UPDATE_GOLD(18),              // ASG
+    UPDATE_BANK_GOLD(19),
+    UPDATE_EXP(20),               // ASE
+    CHANGE_MAP(21),               // CM
+    POS_UPDATE(22),               // PU
+    CHAT_OVER_HEAD(23),           // ||
+    CONSOLE_MSG(24),              // || ¡Cuidado! Es lo mismo que el anterior, pero esta correctamente dividido
+    GUILD_CHAT(25),               // |+
+    SHOW_MESSAGE_BOX(26),         // !!
+    USER_INDEX_IN_SERVER(27),     // IU
+    USER_CHAR_INDEX_IN_SERVER(28),// IP
+    CHARACTER_CREATE(29),         // CC
+    CHARACTER_REMOVE(30),         // BP
+    CHARACTER_CHANGE_NICK(31),
+    CHARACTER_MOVE(32),           // MP, +, * and _ //
+    FORCE_CHAR_MOVE(33),
+    CHARACTER_CHANGE(34),         // CP
+    OBJECT_CREATE(35),            // HO
+    OBJECT_DELETE(36),            // BO
+    BLOCK_POSITION(37),           // BQ
+    PLAY_MIDI(38),                // TM
+    PLAY_WAVE(39),                // TW
+    GUILD_LIST(40),               // GL
+    AREA_CHANGED(41),             // CA
+    PAUSE_TOGGLE(42),             // BKW
+    RAIN_TOGGLE(43),              // LLU
+    CREATE_FX(44),                // CFX
+    UPDATE_USER_STATS(45),        // EST
+    WORK_REQUEST_TARGET(46),      // T01
+    CHANGE_INVENTORY_SLOT(47),    // CSI
+    CHANGE_BANK_SLOT(48),         // SBO
+    CHANGE_SPELL_SLOT(49),        // SHS
+    ATTRIBUTES(50),               // ATR
+    BLACKSMITH_WEAPONS(51),       // LAH
+    BLACKSMITH_ARMORS(52),        // LAR
+    CARPENTER_OBJECTS(53),        // OBR
+    REST_OK(54),                  // DOK
+    ERROR_MSG(55),                // ERR
+    BLIND(56),                    // CEGU
+    DUMB(57),                     // DUMB
+    SHOW_SIGNAL(58),              // MCAR
+    CHANGE_NPC_INVENTORY_SLOT(59),// NPCI
+    UPDATE_HUNGER_AND_THIRST(60), // EHYS
+    FAME(61),                     // FAMA
+    MINI_STATS(62),               // MEST
+    LEVEL_UP(63),                 // SUNI
+    ADD_FORUM_MSG(64),            // FMSG
+    SHOW_FORUM_FORM(65),          // MFOR
+    SET_INVISIBLE(66),            // NOVER
+    DICE_ROLL(67),                // DADOS
+    MEDITATE_TOGGLE(68),          // MEDOK
+    BLIND_NO_MORE(69),            // NSEGUE
+    DUMB_NO_MORE(70),             // NESTUP
+    SEND_SKILLS(71),              // SKILLS
+    TRAINER_CREATURE_LIST(72),    // LSTCRI
+    GUILD_NEWS(73),               // GUILDNE
+    OFFER_DETAILS(74),            // PEACEDE & ALLIEDE
+    ALIANCE_PROPOSALS_LIST(75),   // ALLIEPR
+    PEACE_PROPOSALS_LIST(76),     // PEACEPR
+    CHARACTER_INFO(77),           // CHRINFO
+    GUILD_LEADER_INFO(78),        // LEADERI
+    GUILD_MEMBER_INFO(79),
+    GUILD_DETAILS(80),            // CLANDET
+    SHOW_GUILD_FUNDATION_FORM(81),// SHOWFUN
+    PARALIZE_OK(82),              // PARADOK
+    SHOW_USER_REQUEST(83),        // PETICIO
+    TRADE_OK(84),                 // TRANSOK
+    BANK_OK(85),                  // BANCOOK
+    CHANGE_USER_TRADE_SLOT(86),   // COMUSUINV
+    SEND_NIGHT(87),               // NOC
+    PONG(88),
+    UPDATE_TAG_AND_STATUS(89),
     //GM messages
-    SPAWN_LIST,               // SPL
-    SHOW_SOS_FORM,            // MSOS
-    SHOW_MOTD_EDITION_FORM,   // ZMOTD
-    SHOW_GM_PANEL_FORM,       // ABPANEL
-    USER_NAME_LIST,           // LISTUSU
-    SHOW_GUILD_ALIGN,
-    SHOW_PARTY_FORM,
-    UPDATE_STRENGHT_AND_DEXTERITY,
-    UPDATE_STRENGHT,
-    UPDATE_DEXTERITY,
-    ADD_SLOTS,
-    MULTI_MESSAGE,
-    STOP_WORKING,
-    CANCEL_OFFER_ITEM
+    SPAWN_LIST(90),               // SPL
+    SHOW_SOS_FORM(91),            // MSOS
+    SHOW_MOTD_EDITION_FORM(92),   // ZMOTD
+    SHOW_GM_PANEL_FORM(93),       // ABPANEL
+    USER_NAME_LIST(94),           // LISTUSU
+    SHOW_GUILD_ALIGN(95),
+    SHOW_PARTY_FORM(96),
+    UPDATE_STRENGHT_AND_DEXTERITY(97),
+    UPDATE_STRENGHT(98),
+    UPDATE_DEXTERITY(99),
+    ADD_SLOTS(100),
+    MULTI_MESSAGE(101),
+    STOP_WORKING(102),
+    CANCEL_OFFER_ITEM(103);
+
+    /** Utiliza un HashMap que proporciona acceso en tiempo constante (complejidad O(1)). */
+    private static final Map<Integer, ServerPacket> idToPacket = new HashMap<>();
+
+    // Inicializa el mapa una sola vez cuando la clase se carga
+    static {
+        for (ServerPacket packet : values())
+            idToPacket.put(packet.getId(), packet);
+    }
+
+    private final int id;
+
+    ServerPacket(int id) {
+        this.id = id;
+    }
+
+    public static ServerPacket fromId(int id) {
+        ServerPacket packet = idToPacket.get(id);
+        if (packet == null) throw new IllegalArgumentException("No ServerPacket found with ID: " + id);
+        return packet;
+    }
+
+    // TODO Deberia ser privado?
+    public int getId() {
+        return id;
+    }
 
 }

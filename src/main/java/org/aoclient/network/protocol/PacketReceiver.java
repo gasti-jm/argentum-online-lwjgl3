@@ -146,7 +146,7 @@ public class PacketReceiver {
         if (packetId >= ServerPacket.values().length) return; // TODO Revisar comentario
 
         // Identifica el tipo de paquete utilizando el identificador del paquete (definido en ServerPacket)
-        ServerPacket packet = ServerPacket.values()[packetId];
+        ServerPacket packet = ServerPacket.fromId(packetId);
 
         Logger.debug("Incoming " + packet + " package (ID=" + packetId + ")");
 
