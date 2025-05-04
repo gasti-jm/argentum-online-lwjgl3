@@ -15,7 +15,7 @@ public class DisconnectHandler implements PacketHandler {
     public void handle(ByteQueue data) {
         data.readByte();
 
-        SocketConnection.get().disconnect();
+        SocketConnection.getInstance().disconnect();
         eraseAllChars();
 
         ImGUISystem.get().closeAllFrms();
