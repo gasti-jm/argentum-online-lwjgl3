@@ -289,6 +289,10 @@ public class Protocol {
         outgoingData.writeByte(ClientPacket.COMMERCE_END.getId());
     }
 
+    public static void writeBankEnd() {
+        outgoingData.writeByte(ClientPacket.BANK_END.getId());
+    }
+
     public static void writeChangePassword(String oldPass, String newPass) {
         outgoingData.writeByte(ClientPacket.CHANGE_PASSWORD.getId());
         outgoingData.writeASCIIString(oldPass);
