@@ -78,6 +78,7 @@ public class PacketReceiver {
         handlers.put(ServerPacket.CREATE_FX, new CreateFXHandler());
         handlers.put(ServerPacket.UPDATE_USER_STATS, new UpdateUserStatsHandler());
         handlers.put(ServerPacket.WORK_REQUEST_TARGET, new WorkRequestTargetHandler());
+        handlers.put(ServerPacket.CHANGE_BANK_SLOT, new ChangeBankSlotHandler());
         handlers.put(ServerPacket.CHANGE_INVENTORY_SLOT, new ChangeInventorySlotHandler());
         handlers.put(ServerPacket.CHANGE_SPELL_SLOT, new ChangeSpellSlotHandler());
         handlers.put(ServerPacket.ATTRIBUTES, new AttributesHandler());

@@ -1,5 +1,8 @@
 package org.aoclient.network.protocol.handlers;
 
+import org.aoclient.engine.game.User;
+import org.aoclient.engine.gui.ImGUISystem;
+import org.aoclient.engine.gui.forms.FBank;
 import org.aoclient.network.ByteQueue;
 import org.tinylog.Logger;
 
@@ -37,6 +40,9 @@ public class BankInitHandler implements PacketHandler {
         //    frmBancoObj.lblUserGld.Caption = BankGold
         //
         //    frmBancoObj.Show , //FrmMain
+
+        User.get().setUserComerciando(true);
+        ImGUISystem.get().show(new FBank());
 
         Logger.debug("handleBankInit CARGADO - FALTA TERMINAR!");
     }
