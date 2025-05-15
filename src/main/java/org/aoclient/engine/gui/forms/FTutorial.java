@@ -11,6 +11,7 @@ import java.io.IOException;
 import static org.aoclient.engine.Sound.SND_CLICK;
 import static org.aoclient.engine.Sound.playSound;
 
+import org.aoclient.engine.gui.widgets.ImageButton3State;
 import org.aoclient.engine.utils.tutorial.TutorialData;
 import org.aoclient.engine.utils.tutorial.TutorialLoader;
 import org.aoclient.engine.utils.tutorial.TutorialPage;
@@ -26,6 +27,10 @@ public class FTutorial extends Form {
     private int botonAnteriorRolloverTextureId;
     private int botonAnteriorClickTextureId;
 
+    // Botones con 3 estados
+    private ImageButton3State btnSiguiente;
+    private ImageButton3State btnAnterior;
+
     private TutorialData tutorialData;
     private boolean tutorialLoaded = false;
     private String tutorialLoadError = null;
@@ -33,11 +38,9 @@ public class FTutorial extends Form {
     public FTutorial() {
         try {
             this.backgroundImage = loadTexture("VentanaTutorial");
-            // Carga las texturas de los botones siguiente
             this.botonSiguienteTextureId = loadTexture("BotonSiguienteTutorial");
             this.botonSiguienteRolloverTextureId = loadTexture("BotonSiguienteRolloverTutorial");
             this.botonSiguienteClickTextureId = loadTexture("BotonSiguienteClickTutorial");
-            // Carga las texturas de los botones anterior
             this.botonAnteriorTextureId = loadTexture("BotonAnteriorTutorial");
             this.botonAnteriorRolloverTextureId = loadTexture("BotonAnteriorRolloverTutorial");
             this.botonAnteriorClickTextureId = loadTexture("BotonAnteriorClickTutorial");
@@ -49,6 +52,15 @@ public class FTutorial extends Form {
                 tutorialLoaded = false;
                 tutorialLoadError = ex.getMessage();
             }
+            // Instanciar botones reutilizando la clase utilitaria
+            btnSiguiente = new ImageButton3State(
+                botonSiguienteTextureId, botonSiguienteRolloverTextureId, botonSiguienteClickTextureId,
+                416, 468, 97, 24
+            );
+            btnAnterior = new ImageButton3State(
+                botonAnteriorTextureId, botonAnteriorRolloverTextureId, botonAnteriorClickTextureId,
+                63, 468, 97, 24
+            );
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -96,68 +108,16 @@ public class FTutorial extends Form {
             close();
         }
 
-        // --- Botón siguiente con imagen y 3 estados ---
-        ImGui.setCursorPos(416, 468);
-        float width = 97, height = 24;
-        ImGui.pushStyleColor(ImGuiCol.Button, 0f, 0f, 0f, 0f);
-        ImGui.pushStyleColor(ImGuiCol.ButtonHovered, 0f, 0f, 0f, 0f);
-        ImGui.pushStyleColor(ImGuiCol.ButtonActive, 0f, 0f, 0f, 0f);
-        ImGui.pushStyleVar(ImGuiStyleVar.FrameBorderSize, 0f);
-
-        int textureIdToUse = botonSiguienteTextureId;
-        boolean clicked = ImGui.imageButton(textureIdToUse, width, height);
-        if (ImGui.isItemActive()) {
-            ImGui.setCursorPos(419, 470); // Ajusta si es necesario
-            ImGui.image(botonSiguienteClickTextureId, width, height);
-            if (ImGui.isMouseClicked(0)) {
-                if (tutorialLoaded && !tutorialData.isLastPage()) tutorialData.nextPage();
-                playSound(SND_CLICK);
-            }
-        } else if (ImGui.isItemHovered()) {
-            ImGui.setCursorPos(419, 470); // Ajusta si es necesario
-            ImGui.image(botonSiguienteRolloverTextureId, width, height);
-            if (ImGui.isMouseClicked(0)) {
-                if (tutorialLoaded && !tutorialData.isLastPage()) tutorialData.nextPage();
-                playSound(SND_CLICK);
-            }
-        } else if (clicked) {
+        // Botón siguiente usando clase utilitaria
+        if (btnSiguiente.render()) {
             if (tutorialLoaded && !tutorialData.isLastPage()) tutorialData.nextPage();
             playSound(SND_CLICK);
         }
 
-        ImGui.popStyleVar();
-        ImGui.popStyleColor(3);
-
-        // --- Botón anterior con imagen y 3 estados ---
-        ImGui.setCursorPos(63, 468);
-        float widthAnterior = 97, heightAnterior = 24;
-        ImGui.pushStyleColor(ImGuiCol.Button, 0f, 0f, 0f, 0f);
-        ImGui.pushStyleColor(ImGuiCol.ButtonHovered, 0f, 0f, 0f, 0f);
-        ImGui.pushStyleColor(ImGuiCol.ButtonActive, 0f, 0f, 0f, 0f);
-        ImGui.pushStyleVar(ImGuiStyleVar.FrameBorderSize, 0f);
-
-        int anteriorTextureIdToUse = botonAnteriorTextureId;
-        boolean anteriorClicked = ImGui.imageButton(anteriorTextureIdToUse, widthAnterior, heightAnterior);
-        if (ImGui.isItemActive()) {
-            ImGui.setCursorPos(66, 470); // Ajusta si es necesario
-            ImGui.image(botonAnteriorClickTextureId, widthAnterior, heightAnterior);
-            if (ImGui.isMouseClicked(0)) {
-                if (tutorialLoaded && !tutorialData.isFirstPage()) tutorialData.prevPage();
-                playSound(SND_CLICK);
-            }
-        } else if (ImGui.isItemHovered()) {
-            ImGui.setCursorPos(66, 470); // Ajusta si es necesario
-            ImGui.image(botonAnteriorRolloverTextureId, widthAnterior, heightAnterior);
-            if (ImGui.isMouseClicked(0)) {
-                if (tutorialLoaded && !tutorialData.isFirstPage()) tutorialData.prevPage();
-                playSound(SND_CLICK);
-            }
-        } else if (anteriorClicked) {
+        // Botón anterior usando clase utilitaria
+        if (btnAnterior.render()) {
             if (tutorialLoaded && !tutorialData.isFirstPage()) tutorialData.prevPage();
             playSound(SND_CLICK);
         }
-
-        ImGui.popStyleVar();
-        ImGui.popStyleColor(3);
     }
 }
