@@ -11,6 +11,10 @@ import java.io.IOException;
 import static org.aoclient.engine.Sound.SND_CLICK;
 import static org.aoclient.engine.Sound.playSound;
 
+import org.aoclient.engine.utils.tutorial.TutorialData;
+import org.aoclient.engine.utils.tutorial.TutorialLoader;
+import org.aoclient.engine.utils.tutorial.TutorialPage;
+
 public class FTutorial extends Form {
 
     // IDs de textura para los botones siguiente (normal, rollover y click)
@@ -21,6 +25,10 @@ public class FTutorial extends Form {
     private int botonAnteriorTextureId;
     private int botonAnteriorRolloverTextureId;
     private int botonAnteriorClickTextureId;
+
+    private TutorialData tutorialData;
+    private boolean tutorialLoaded = false;
+    private String tutorialLoadError = null;
 
     public FTutorial() {
         try {
@@ -33,6 +41,14 @@ public class FTutorial extends Form {
             this.botonAnteriorTextureId = loadTexture("BotonAnteriorTutorial");
             this.botonAnteriorRolloverTextureId = loadTexture("BotonAnteriorRolloverTutorial");
             this.botonAnteriorClickTextureId = loadTexture("BotonAnteriorClickTutorial");
+            // Cargar el tutorial
+            try {
+                tutorialData = TutorialLoader.loadFromFile(new java.io.File("Resources/Tutorial.dat"));
+                tutorialLoaded = true;
+            } catch (Exception ex) {
+                tutorialLoaded = false;
+                tutorialLoadError = ex.getMessage();
+            }
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -47,6 +63,25 @@ public class FTutorial extends Form {
 
         ImGui.setCursorPos(5, 0);
         ImGui.image(backgroundImage, 583, 509);
+
+        // Render info del tutorial
+        if (!tutorialLoaded) {
+            ImGui.setCursorPos(50, 100);
+            ImGui.textColored(1f, 0f, 0f, 1f, "No se pudo cargar el tutorial: " + (tutorialLoadError != null ? tutorialLoadError : "Archivo no encontrado"));
+        } else {
+            TutorialPage page = tutorialData.getCurrentPage();
+            // Título
+            ImGui.setCursorPos(100, 50);
+            ImGui.text("" + page.getTitle());
+            // Texto
+            ImGui.setCursorPos(100, 90);
+            ImGui.beginChild("tutorial_text", 380, 320, false);
+            ImGui.textWrapped(page.getText());
+            ImGui.endChild();
+            // Paginación
+            ImGui.setCursorPos(250, 420);
+            ImGui.text(String.format("Página %d/%d", tutorialData.getCurrentPageIndex() + 1, tutorialData.getNumPages()));
+        }
 
         drawButtons();
 
@@ -75,15 +110,18 @@ public class FTutorial extends Form {
             ImGui.setCursorPos(419, 470); // Ajusta si es necesario
             ImGui.image(botonSiguienteClickTextureId, width, height);
             if (ImGui.isMouseClicked(0)) {
+                if (tutorialLoaded && !tutorialData.isLastPage()) tutorialData.nextPage();
                 playSound(SND_CLICK);
             }
         } else if (ImGui.isItemHovered()) {
             ImGui.setCursorPos(419, 470); // Ajusta si es necesario
             ImGui.image(botonSiguienteRolloverTextureId, width, height);
             if (ImGui.isMouseClicked(0)) {
+                if (tutorialLoaded && !tutorialData.isLastPage()) tutorialData.nextPage();
                 playSound(SND_CLICK);
             }
         } else if (clicked) {
+            if (tutorialLoaded && !tutorialData.isLastPage()) tutorialData.nextPage();
             playSound(SND_CLICK);
         }
 
@@ -104,15 +142,18 @@ public class FTutorial extends Form {
             ImGui.setCursorPos(66, 470); // Ajusta si es necesario
             ImGui.image(botonAnteriorClickTextureId, widthAnterior, heightAnterior);
             if (ImGui.isMouseClicked(0)) {
+                if (tutorialLoaded && !tutorialData.isFirstPage()) tutorialData.prevPage();
                 playSound(SND_CLICK);
             }
         } else if (ImGui.isItemHovered()) {
             ImGui.setCursorPos(66, 470); // Ajusta si es necesario
             ImGui.image(botonAnteriorRolloverTextureId, widthAnterior, heightAnterior);
             if (ImGui.isMouseClicked(0)) {
+                if (tutorialLoaded && !tutorialData.isFirstPage()) tutorialData.prevPage();
                 playSound(SND_CLICK);
             }
         } else if (anteriorClicked) {
+            if (tutorialLoaded && !tutorialData.isFirstPage()) tutorialData.prevPage();
             playSound(SND_CLICK);
         }
 
