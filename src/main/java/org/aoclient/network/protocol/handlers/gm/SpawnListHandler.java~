@@ -23,7 +23,7 @@ public class SpawnListHandler implements PacketHandler  {
         String creatureListString = buffer.readASCIIString();
 
         // Dividimos por el carácter nulo
-        String[] creatureList = creatureListString.split("\0");
+        String[] creatureList = creatureListString.split(SEPARATOR);
 
         // Mostramos la lista en el GUI
         ImGUISystem.get().show(new FSpawnList(creatureList));

@@ -871,11 +871,11 @@ public class Protocol {
         outgoingData.writeByte(GMCommand.SPAWN_LIST_REQUEST.getId());
     }
 
-    public static void writeSpawnCreature(short creatureIndex) {
+    public static void writeSpawnCreature(int creatureIndex) {
         outgoingData.writeByte(ClientPacket.GM_COMMANDS.getId());
         outgoingData.writeByte(GMCommand.SPAWN_CREATURE.getId());
-        outgoingData.writeInteger(creatureIndex);
     }
+
     public static void writeResetNPCInventory() {
         outgoingData.writeByte(ClientPacket.GM_COMMANDS.getId());
         outgoingData.writeByte(GMCommand.RESET_NPC_INVENTORY.getId());
