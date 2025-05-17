@@ -1,5 +1,7 @@
 package org.aoclient.engine.game;
 
+import org.tinylog.Logger;
+
 import java.io.*;
 
 /**
@@ -60,8 +62,22 @@ public class Options {
                 }
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            Logger.error("No se encontro o no se pudo leer el archivo options.ini, creamos uno nuevo con una configuracion default.");
+            createFile();
         }
+    }
+
+    /** Creamos un archivo para la configuracion */
+    private void createFile() {
+        this.fullscreen = true;
+        this.vsync = true;
+        this.music = true;
+        this.sound = true;
+        this.showName = true;
+        this.nickName = "";
+        this.ipServer = "127.0.0.1";
+        this.portServer = "7666";
+        this.saveOptions();
     }
 
     /**
