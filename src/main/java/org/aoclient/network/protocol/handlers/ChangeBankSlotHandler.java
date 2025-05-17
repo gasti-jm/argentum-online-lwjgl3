@@ -1,15 +1,15 @@
 package org.aoclient.network.protocol.handlers;
 
-import org.aoclient.network.ByteQueue;
+import org.aoclient.network.PacketBuffer;
 
 public class ChangeBankSlotHandler implements PacketHandler {
 
     @Override
-    public void handle(ByteQueue data) {
-        if (data.checkPacketData(21)) return;
+    public void handle(PacketBuffer data) {
+        if (data.checkBytes(21)) return;
 
-        ByteQueue buffer = new ByteQueue();
-        buffer.copyBuffer(data);
+        PacketBuffer buffer = new PacketBuffer();
+        buffer.copy(data);
 
         // Remove packet ID
         buffer.readByte();
@@ -17,7 +17,7 @@ public class ChangeBankSlotHandler implements PacketHandler {
         final int slot = buffer.readByte();
 
         final short objIndex = buffer.readInteger();
-        final String name = buffer.readASCIIString();
+        final String name = buffer.readUTF8String();
         final int amount = buffer.readInteger();
         final short grhIndex = buffer.readInteger();
         final int objType = buffer.readByte();
@@ -27,6 +27,6 @@ public class ChangeBankSlotHandler implements PacketHandler {
         final short minDef = buffer.readInteger();
         final float value = buffer.readFloat();
 
-        data.copyBuffer(buffer);
+        data.copy(buffer);
     }
 }

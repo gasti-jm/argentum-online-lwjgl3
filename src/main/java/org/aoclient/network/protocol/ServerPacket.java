@@ -27,6 +27,12 @@ import java.util.Map;
  * <li>Funcionalidades de clanes y grupos
  * <li>Comandos administrativos
  * </ul>
+ * <b>IMPORTANTE</b>: Los IDs de los enums se asignan para que coincidan <b>exactamente</b> con la posicion del paquete
+ * correspondiente en el {@code ServerPacketID} del servidor VB6 dentro de {@code Protocol.bas}. Esta coincidencia es fundamental
+ * para la correcta comunicacion cliente-servidor.
+ * <p>
+ * TODO Creo que el maximo de IDs de paquetes que pueden haber es de 255 (entero sin signo), ya que ese valor es lo maximo que se
+ * puede ocupar en un byte y el ID del paquete ocupa 1 byte... buscar forma de agregar mas paquetes
  */
 
 public enum ServerPacket {
@@ -140,21 +146,21 @@ public enum ServerPacket {
     /** Utiliza un HashMap que proporciona acceso en tiempo constante (complejidad O(1)). */
     public static final Map<Integer, ServerPacket> PACKET_REGISTRY = new HashMap<>();
 
-    /* Bloque de inicializacion estatica que construye el mapa de busqueda para conversion eficiente de ID a objetos ServerPacket.
+    /* Bloque de inicializacion estatico que construye el mapa de busqueda para conversion eficiente de ID a objetos ServerPacket.
      *
-     * Este bloque se ejecuta una sola vez cuando la clase ServerPacket se carga en memoria por primera vez, realizando una 
-     * inicializacion anticipada (eager initialization) del mapa de busqueda. El bloque recorre todos los valores del enum 
+     * Este bloque se ejecuta una sola vez cuando la clase ServerPacket se carga en memoria por primera vez, realizando una
+     * inicializacion anticipada (eager initialization) del mapa de busqueda. El bloque recorre todos los valores del enum
      * utilizando values() y registra cada constante enum en el mapa PACKET_REGISTRY, usando su ID numerico como clave.
      *
      * La inicializacion estatica ofrece varias ventajas importantes:
      *
-     * 1. Rendimiento: Elimina la necesidad de inicializar el mapa o verificar su inicializacion en cada llamada al metodo 
+     * 1. Rendimiento: Elimina la necesidad de inicializar el mapa o verificar su inicializacion en cada llamada al metodo
      * getPacket(), mejorando asi el rendimiento del sistema en tiempo de ejecucion.
-     * 2. Seguridad de hilos: Garantiza que el mapa se inicialice correctamente incluso en entornos multi-hilo, ya que la JVM 
+     * 2. Seguridad de hilos: Garantiza que el mapa se inicialice correctamente incluso en entornos multi-hilo, ya que la JVM
      * asegura que los bloques estaticos se ejecuten una sola vez y de forma segura durante la carga de la clase.
-     * 3. Deteccion temprana de errores: Si hubiera algun problema con la inicializacion del mapa (como IDs duplicados), se 
+     * 3. Deteccion temprana de errores: Si hubiera algun problema con la inicializacion del mapa (como IDs duplicados), se
      * manifestaria inmediatamente al cargar la clase, en lugar de detectarse mas tarde durante la ejecucion del programa.
-     * 4. Optimizacion de memoria: Al crear el mapa con el tamaño exacto necesario (el numero de constantes enum), se evita la 
+     * 4. Optimizacion de memoria: Al crear el mapa con el tamaño exacto necesario (el numero de constantes enum), se evita la
      * sobrecarga de redimensionamientos internos del HashMap. */
     static {
         for (ServerPacket packet : values())

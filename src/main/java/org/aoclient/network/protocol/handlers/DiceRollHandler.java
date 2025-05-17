@@ -1,6 +1,6 @@
 package org.aoclient.network.protocol.handlers;
 
-import org.aoclient.network.ByteQueue;
+import org.aoclient.network.PacketBuffer;
 import org.tinylog.Logger;
 
 import static org.aoclient.engine.Sound.SND_DICE;
@@ -8,8 +8,8 @@ import static org.aoclient.engine.Sound.playSound;
 
 public class DiceRollHandler implements PacketHandler {
     @Override
-    public void handle(ByteQueue data) {
-        if (data.checkPacketData(6)) return;
+    public void handle(PacketBuffer data) {
+        if (data.checkBytes(6)) return;
 
         data.readByte();
 

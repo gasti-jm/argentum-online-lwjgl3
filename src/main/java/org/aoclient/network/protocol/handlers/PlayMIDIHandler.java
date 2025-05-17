@@ -1,6 +1,6 @@
 package org.aoclient.network.protocol.handlers;
 
-import org.aoclient.network.ByteQueue;
+import org.aoclient.network.PacketBuffer;
 import org.tinylog.Logger;
 
 import static org.aoclient.engine.Sound.playMusic;
@@ -8,8 +8,8 @@ import static org.aoclient.engine.Sound.playMusic;
 public class PlayMIDIHandler implements PacketHandler {
 
     @Override
-    public void handle(ByteQueue data) {
-        if (data.checkPacketData(4)) return;
+    public void handle(PacketBuffer data) {
+        if (data.checkBytes(4)) return;
 
         // Remove packet ID
         data.readByte();

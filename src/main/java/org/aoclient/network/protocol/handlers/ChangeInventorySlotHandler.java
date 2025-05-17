@@ -2,23 +2,23 @@ package org.aoclient.network.protocol.handlers;
 
 import org.aoclient.engine.game.User;
 import org.aoclient.engine.game.models.E_ObjType;
-import org.aoclient.network.ByteQueue;
+import org.aoclient.network.PacketBuffer;
 
 public class ChangeInventorySlotHandler implements PacketHandler {
     
     @Override
-    public void handle(ByteQueue data) {
-        if (data.checkPacketData(22)) return;
+    public void handle(PacketBuffer data) {
+        if (data.checkBytes(22)) return;
 
-        ByteQueue buffer = new ByteQueue();
-        buffer.copyBuffer(data);
+        PacketBuffer buffer = new PacketBuffer();
+        buffer.copy(data);
 
         // Remove packet
         buffer.readByte();
 
         final int slot = buffer.readByte();
         final short objIndex = buffer.readInteger();
-        final String name = buffer.readASCIIString();
+        final String name = buffer.readUTF8String();
         final int amount = buffer.readInteger();
         final boolean equipped = buffer.readBoolean();
         final short grhIndex = buffer.readInteger();
@@ -70,7 +70,7 @@ public class ChangeInventorySlotHandler implements PacketHandler {
         User.get().getUserInventory().setItem(slot - 1, objIndex, amount, equipped, grhIndex, objType,
                 maxHit, minHit, maxDef, minDef, value, name);
 
-        data.copyBuffer(buffer);
+        data.copy(buffer);
     }
     
 }

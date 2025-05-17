@@ -96,7 +96,10 @@ public class FOptions extends Form {
         if (ImGui.button("Radio", 170, 20)) playSound(SND_CLICK);
 
         ImGui.setCursorPos(180, 416);
-        if (ImGui.button("Tutorial", 170, 20)) playSound(SND_CLICK);
+        if (ImGui.button("Tutorial", 170, 20)) {
+            playSound(SND_CLICK);
+            ImGUISystem.get().show(new FTutorial());
+        }
 
         ImGui.setCursorPos(134, 440);
         if (ImGui.button("Salir", 170, 20)) {

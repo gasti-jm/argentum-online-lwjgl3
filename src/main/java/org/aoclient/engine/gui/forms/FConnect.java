@@ -10,6 +10,7 @@ import org.aoclient.engine.Engine;
 import org.aoclient.engine.Window;
 import org.aoclient.engine.game.User;
 import org.aoclient.engine.gui.ImGUISystem;
+import org.aoclient.engine.gui.widgets.ImageButton3State;
 import org.aoclient.network.SocketConnection;
 
 import java.io.IOException;
@@ -48,9 +49,68 @@ public final class FConnect extends Form {
     private final ImString nickStr = new ImString(options.getNickName());
     private final ImString passStr = new ImString();
 
+    // Botones gráficos de 3 estados
+    private ImageButton3State btnConnect;
+    private ImageButton3State btnCreateCharacter;
+    private ImageButton3State btnRecovery;
+    private ImageButton3State btnManual;
+    private ImageButton3State btnRules;
+    private ImageButton3State btnSourceCode;
+    private ImageButton3State btnDeleteCharacter;
+    private ImageButton3State btnExit;
+
     public FConnect() {
         try {
             this.backgroundImage = loadTexture("VentanaConectar");
+            // Instanciación de botones con 3 estados (usa los tamaños y posiciones existentes)
+            btnConnect = new ImageButton3State(
+                loadTexture("BotonConectarse"),
+                loadTexture("BotonConectarseRollover"),
+                loadTexture("BotonConectarseClick"),
+                322, 264, 89, 25
+            );
+            btnCreateCharacter = new ImageButton3State(
+                loadTexture("BotonCrearPersonajeConectar"),
+                loadTexture("BotonCrearPersonajeRolloverConectar"),
+                loadTexture("BotonCrearPersonajeClickConectar"),
+                45, 561, 89, 25
+            );
+            btnRecovery = new ImageButton3State(
+                loadTexture("BotonRecuperarPass"),
+                loadTexture("BotonRecuperarPassRollover"),
+                loadTexture("BotonRecuperarPassClick"),
+                149, 561, 89, 25
+            );
+            btnManual = new ImageButton3State(
+                loadTexture("BotonManual"),
+                loadTexture("BotonManualRollover"),
+                loadTexture("BotonManualClick"),
+                253, 561, 89, 25
+            );
+            btnRules = new ImageButton3State(
+                loadTexture("BotonReglamento"),
+                loadTexture("BotonReglamentoRollover"),
+                loadTexture("BotonReglamentoClick"),
+                357, 561, 89, 25
+            );
+            btnSourceCode = new ImageButton3State(
+                loadTexture("BotonCodigoFuente"),
+                loadTexture("BotonCodigoFuenteRollover"),
+                loadTexture("BotonCodigoFuenteClick"),
+                461, 561, 89, 25
+            );
+            btnDeleteCharacter = new ImageButton3State(
+                loadTexture("BotonBorrarPersonaje"),
+                loadTexture("BotonBorrarPersonajeRollover"),
+                loadTexture("BotonBorrarPersonajeClick"),
+                565, 561, 89, 25
+            );
+            btnExit = new ImageButton3State(
+                loadTexture("BotonSalirConnect"),
+                loadTexture("BotonBotonSalirRolloverConnect"),
+                loadTexture("BotonSalirClickConnect"),
+                669, 561, 89, 25
+            );
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -125,34 +185,19 @@ public final class FConnect extends Form {
         ImGui.popStyleColor();
         ImGui.popItemWidth();
 
-
-        ImGui.setCursorPos(325, 266);
-        if (ImGui.invisibleButton("Connect", 89, 25) || ImGui.isKeyPressed(GLFW_KEY_ENTER)) this.buttonConnect();
-
-        ImGui.setCursorPos(45, 561);
-        if (ImGui.invisibleButton("Create Character", 89, 25)) this.buttonCreateCharacter();
-
-        ImGui.setCursorPos(149, 561);
-        if (ImGui.invisibleButton("Recovery", 89, 25)) {
-            // nothing to do yet..
+        // Botones gráficos de 3 estados
+        if (btnConnect.render() || ImGui.isKeyPressed(GLFW_KEY_ENTER)) this.buttonConnect();
+        if (btnCreateCharacter.render()) this.buttonCreateCharacter();
+        if (btnRecovery.render()) {
+            // Acción para recuperar contraseña (a implementar)
         }
-
-        ImGui.setCursorPos(253, 561);
-        if (ImGui.invisibleButton("Manual", 89, 25)) this.abrirURL("http://wiki.argentumonline.org/");
-
-        ImGui.setCursorPos(357, 561);
-        if (ImGui.invisibleButton("Rules", 89, 25)) this.abrirURL("http://wiki.argentumonline.org/reglamento.html");
-
-        ImGui.setCursorPos(461, 561);
-        if (ImGui.invisibleButton("Source code", 89, 25)) this.abrirURL("https://github.com/gasti-jm/argentum-online-lwjgl3");
-
-        ImGui.setCursorPos(565, 561);
-        if (ImGui.invisibleButton("Delete Character", 89, 25)) {
-            // nothing to do yet..
+        if (btnManual.render()) this.abrirURL("http://wiki.argentumonline.org/");
+        if (btnRules.render()) this.abrirURL("http://wiki.argentumonline.org/reglamento.html");
+        if (btnSourceCode.render()) this.abrirURL("https://github.com/gasti-jm/argentum-online-lwjgl3");
+        if (btnDeleteCharacter.render()) {
+            // Acción para borrar personaje (a implementar)
         }
-
-        ImGui.setCursorPos(669, 561);
-        if (ImGui.invisibleButton("Exit", 89, 25)) this.buttonExitGame();
+        if (btnExit.render()) this.buttonExitGame();
 
         ImGui.end();
     }
@@ -166,7 +211,7 @@ public final class FConnect extends Form {
             }).start();
             options.setNickName(nickStr.get());
             User.get().setUserName(nickStr.get());
-        } else ImGUISystem.get().show(new FMessage("Please enter a valid username and/or password."));
+        } else ImGUISystem.get().show(new FMessage("Please enter a username and/or password."));
     }
 
     private void buttonCreateCharacter() {

@@ -5,7 +5,7 @@ import org.aoclient.engine.utils.inits.*;
 
 import static org.aoclient.engine.game.models.E_Heading.SOUTH;
 import static org.aoclient.engine.renderer.Drawn.drawTexture;
-import static org.aoclient.engine.renderer.FontTypes.*;
+import static org.aoclient.engine.renderer.FontRenderer.*;
 import static org.aoclient.engine.utils.GameData.*;
 import static org.aoclient.engine.utils.Time.timerTicksPerFrame;
 

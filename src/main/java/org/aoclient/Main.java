@@ -1,6 +1,9 @@
 package org.aoclient;
 
 import org.aoclient.engine.Engine;
+import org.aoclient.engine.renderer.FontRenderer;
+
+import java.nio.ByteOrder;
 
 /**
  * Clase principal que actua como punto de entrada de la aplicacion.

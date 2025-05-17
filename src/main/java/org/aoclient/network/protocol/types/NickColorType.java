@@ -1,6 +1,7 @@
 package org.aoclient.network.protocol.types;
 
 /**
+ * <p>
  * Representa un conjunto de tipos asociados a los colores de un apodo (nickname). Cada tipo tiene un identificador numerico unico
  * que puede ser utilizado para diferenciarlos.
  * <ul>

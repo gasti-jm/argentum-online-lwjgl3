@@ -1,22 +1,22 @@
 package org.aoclient.network.protocol.handlers;
 
-import org.aoclient.network.ByteQueue;
+import org.aoclient.network.PacketBuffer;
 import org.tinylog.Logger;
 
 public class UpdateTagAndStatusHandler implements PacketHandler {
 
     @Override
-    public void handle(ByteQueue data) {
-        if (data.checkPacketData(6)) return;
+    public void handle(PacketBuffer data) {
+        if (data.checkBytes(6)) return;
 
-        ByteQueue buffer = new ByteQueue();
-        buffer.copyBuffer(data);
+        PacketBuffer buffer = new PacketBuffer();
+        buffer.copy(data);
 
         buffer.readByte();
 
         short charIndex = buffer.readInteger();
         int nickColor = buffer.readByte();
-        String userTag = buffer.readASCIIString();
+        String userTag = buffer.readUTF8String();
 
         //Dim CharIndex As Integer
         //    Dim NickColor As Byte
@@ -39,7 +39,7 @@ public class UpdateTagAndStatusHandler implements PacketHandler {
         //        .Nombre = UserTag
         //    End With
 
-        data.copyBuffer(buffer);
+        data.copy(buffer);
         Logger.debug("handleUpdateTagAndStatus Cargado! - FALTA TERMINAR!");
     }
 

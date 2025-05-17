@@ -1,25 +1,24 @@
 package org.aoclient.network.protocol.handlers;
 
-import org.aoclient.network.ByteQueue;
+import org.aoclient.network.PacketBuffer;
 import org.tinylog.Logger;
 
 public class AddForumMessageHandler implements PacketHandler {
     
     @Override
-    public void handle(ByteQueue data) {
-        if (data.checkPacketData(8)) return;
+    public void handle(PacketBuffer data) {
+        if (data.checkBytes(8)) return;
 
-        ByteQueue buffer = new ByteQueue();
-        buffer.copyBuffer(data);
+        PacketBuffer buffer = new PacketBuffer();
+        buffer.copy(data);
 
         // Remove packet ID
         buffer.readByte();
 
-
         int forumType = buffer.readByte();
-        String title = buffer.readASCIIString();
-        String autor = buffer.readASCIIString();
-        String message = buffer.readASCIIString();
+        String title = buffer.readUTF8String();
+        String autor = buffer.readUTF8String();
+        String message = buffer.readUTF8String();
 
         //If Not frmForo.ForoLimpio Then
         //        clsForos.ClearForums
@@ -29,7 +28,7 @@ public class AddForumMessageHandler implements PacketHandler {
         //    Call clsForos.AddPost(ForumAlignment(ForumType), Title, Author, Message, EsAnuncio(ForumType))
 
 
-        data.copyBuffer(buffer);
+        data.copy(buffer);
         Logger.debug("handleAddForumMessage Cargado! - FALTA TERMINAR!");
     }
 }

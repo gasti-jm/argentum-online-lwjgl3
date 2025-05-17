@@ -1,20 +1,20 @@
 package org.aoclient.network.protocol.handlers.gm;
 
-import org.aoclient.network.ByteQueue;
+import org.aoclient.network.PacketBuffer;
 import org.aoclient.network.protocol.handlers.PacketHandler;
 import org.tinylog.Logger;
 
 public class SpawnListHandler implements PacketHandler  {
     @Override
-    public void handle(ByteQueue data) {
-        if (data.checkPacketData(3)) return;
+    public void handle(PacketBuffer data) {
+        if (data.checkBytes(3)) return;
 
-        ByteQueue buffer = new ByteQueue();
-        buffer.copyBuffer(data);
+        PacketBuffer buffer = new PacketBuffer();
+        buffer.copy(data);
 
         buffer.readByte();
 
-        String creatureList = buffer.readASCIIString();
+        String creatureList = buffer.readUTF8String();
 
         //Dim creatureList() As String
         //    Dim i As Long
@@ -27,7 +27,7 @@ public class SpawnListHandler implements PacketHandler  {
         //    frmSpawnList.Show , //FrmMain
         //
 
-        data.copyBuffer(buffer);
+        data.copy(buffer);
         Logger.debug("handleSpawnList Cargado! - FALTA TERMINAR!");
     }
 }

@@ -1,20 +1,20 @@
 package org.aoclient.network.protocol.handlers;
 
-import org.aoclient.network.ByteQueue;
+import org.aoclient.network.PacketBuffer;
 import org.tinylog.Logger;
 
 public class TrainerCreatureListHandler implements PacketHandler {
 
     @Override
-    public void handle(ByteQueue data) {
-        if (data.checkPacketData(3)) return;
+    public void handle(PacketBuffer data) {
+        if (data.checkBytes(3)) return;
 
-        ByteQueue buffer = new ByteQueue();
-        buffer.copyBuffer(data);
+        PacketBuffer buffer = new PacketBuffer();
+        buffer.copy(data);
 
         buffer.readByte();
 
-        String creatures = buffer.readASCIIString();
+        String creatures = buffer.readUTF8String();
 
         //creatures = Split(Buffer.ReadASCIIString(), SEPARATOR)
         //
@@ -23,7 +23,7 @@ public class TrainerCreatureListHandler implements PacketHandler {
         //    Next i
         //    frmEntrenador.Show , //FrmMain
 
-        data.copyBuffer(buffer);
+        data.copy(buffer);
         Logger.debug("handleTrainerCreatureList Cargado! - FALTA TERMINAR!");
     }
 }

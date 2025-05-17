@@ -1,16 +1,16 @@
 package org.aoclient.network.protocol.handlers;
 
-import org.aoclient.network.ByteQueue;
+import org.aoclient.network.PacketBuffer;
 import org.tinylog.Logger;
 
 public class ChangeUserTradeSlotHandler implements PacketHandler {
 
     @Override
-    public void handle(ByteQueue data) {
-        if (data.checkPacketData(22)) return;
+    public void handle(PacketBuffer data) {
+        if (data.checkBytes(22)) return;
 
-        ByteQueue buffer = new ByteQueue();
-        buffer.copyBuffer(data);
+        PacketBuffer buffer = new PacketBuffer();
+        buffer.copy(data);
 
         buffer.readByte();
 
@@ -25,7 +25,7 @@ public class ChangeUserTradeSlotHandler implements PacketHandler {
         buffer.readInteger();
         buffer.readInteger();
         buffer.readLong();
-        buffer.readASCIIString();
+        buffer.readUTF8String();
 
         buffer.readInteger();
         buffer.readLong();
@@ -36,7 +36,7 @@ public class ChangeUserTradeSlotHandler implements PacketHandler {
         buffer.readInteger();
         buffer.readInteger();
         buffer.readLong();
-        buffer.readASCIIString();
+        buffer.readUTF8String();
 
         //OfferSlot = Buffer.ReadByte
         //
@@ -54,7 +54,7 @@ public class ChangeUserTradeSlotHandler implements PacketHandler {
         //
         //    Call frmComerciarUsu.PrintCommerceMsg(TradingUserName & " ha modificado su oferta.", FontTypeNames.FONTTYPE_VENENO)
 
-        data.copyBuffer(buffer);
+        data.copy(buffer);
         Logger.debug("handleChangeUserTradeSlot Cargado! - FALTA TERMINAR!");
     }
 }

@@ -1,20 +1,22 @@
 package org.aoclient.network.protocol.handlers;
 
-import org.aoclient.network.ByteQueue;
+import org.aoclient.network.PacketBuffer;
 import org.tinylog.Logger;
 
 public class GuildChatHandler implements PacketHandler {
 
     @Override
-    public void handle(ByteQueue data) {
-        if (data.checkPacketData(3)) return;
+    public void handle(PacketBuffer data) {
+        if (data.checkBytes(3)) return;
 
-        ByteQueue buffer = new ByteQueue();
-        buffer.copyBuffer(data);
-
+        // 1. Crean un buffer temporal
+        PacketBuffer buffer = new PacketBuffer();
+        // 2. Copian los datos (bytes) del buffer original
+        buffer.copy(data);
+        // 3. Leen y procesa los bytes
         buffer.readByte();
 
-        String chat = buffer.readASCIIString();
+        String chat = buffer.readUTF8String();
 
         //Dim str As String
         //    Dim r As Byte
@@ -59,7 +61,8 @@ public class GuildChatHandler implements PacketHandler {
         //        Call DialogosClanes.PushBackText(ReadField(1, chat, 126))
         //    End If
 
-        data.copyBuffer(buffer);
+        // 4. Finalmente, copian el buffer modificado de vuelta al original
+        data.copy(buffer);
         Logger.debug("handleGuildChat CARGADO - FALTA TERMINAR");
     }
 

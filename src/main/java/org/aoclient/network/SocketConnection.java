@@ -15,18 +15,19 @@ import static org.aoclient.network.protocol.Protocol.*;
 /**
  * <p>
  * Gestiona la conexion a traves de sockets TCP, permitiendo establecer comunicacion con un servidor. Ofrece metodos para
- * conectar, desconectar, enviar y recibir datos utilizando flujos de entrada y salida.
+ * conectar, desconectar, enviar y recibir bytes utilizando flujos de entrada y salida.
  * <p>
  * TODO Se podria llamar Connection?
+ * TODO Se podria usar NIO?
  */
 
 public class SocketConnection {
 
-    /** Instancia de Socket para la conexion TCP. */
+    /** Socket para la conexion TCP. */
     private Socket socket;
-    /** Flujo de salida para enviar datos. */
+    /** Flujo de salida de bytes. */
     private DataOutputStream outputStream;
-    /** Flujo de entrada para recibir datos. */
+    /** Flujo de entrada de bytes. */
     private DataInputStream inputStream;
     /** Bandera que indica si hay un intento de conexion en curso. */
     private boolean tryConnect;
@@ -40,9 +41,7 @@ public class SocketConnection {
 
     /**
      * <p>
-     * Intenta establecer una conexion con el servidor a traves de un socket. Si la conexion ya esta en proceso, muestra un
-     * mensaje al usuario y no ejecuta ningun procedimiento adicional. En caso de que no exista un socket activo o este cerrado,
-     * intenta abrir uno utilizando las opciones configuradas.
+     * Se conecta a una conexion con el servidor a traves de un socket.
      * <p>
      * Este metodo se llama primero en tres posibles casos: cuando se conecta el usuario por primera vez, cuando se crea un
      * personaje o cuando se lanza los dados. Esto es asi ya que son los tres posibles casos en donde se va a iniciar la conexion
@@ -53,18 +52,14 @@ public class SocketConnection {
      * <ol>
      *   <li>El usuario intenta conectarse al servidor desde la interfaz de usuario
      *   <li>Como resultado, se llama al metodo {@code connect()} de {@code SocketConnection}
-     *   <li>Al ejecutar este metodo, la JVM necesita resolver las referencias a {@code incomingData} y {@code outgoingData}
+     *   <li>Al ejecutar este metodo, la JVM necesita resolver las referencias a {@code inputBuffer} y {@code outputBuffer}
      *   <li>La JVM carga la clase {@code Protocol} en memoria para resolver estas referencias
-     *   <li>Durante la carga de la clase, se inicializan las variables estaticas:
+     *   <li>Durante la carga de la clase, se inicializan los objetos estaticos:
      *   <pre>{@code
-     *      public static ByteQueue outgoingData = new ByteQueue();
-     *      public static ByteQueue incomingData = new ByteQueue();
+     *      public static NetworkBuffer outputBuffer = new NetworkBuffer();
+     *      public static NetworkBuffer inputBuffer = new NetworkBuffer();
      *   }</pre>
      * </ol>
-     * <p>
-     * Por lo tanto, la primera utilizacion de la clase {@code Protocol} ocurre en el primer intento de conexion al servidor,
-     * cuando el codigo llama a {@code SocketConnection.connect()} y necesita acceder a los buffers de datos para limpiarlos como
-     * parte del proceso de inicializacion de la conexion.
      *
      * @return true si la conexion fue exitosa, false en caso de error o si no logra establecerse la conexion con el servidor.
      */
@@ -80,20 +75,18 @@ public class SocketConnection {
             this.tryConnect = true;
 
             try {
-                // Crea un nuevo socket usando la IP y puerto del servidor
+                // Crea un socket a la IP y puerto del servidor especificado
                 socket = new Socket(options.getIpServer(), Integer.parseInt(options.getPortServer()));
-                // Inicializa los flujos de salida y entrada de datos
+                // Inicializa los flujos de salida y entrada de bytes
                 outputStream = new DataOutputStream(socket.getOutputStream());
                 inputStream = new DataInputStream(socket.getInputStream());
 
-                // Si el socket se conecto, lo marca como proceso de conexion, y limpia los buffers de entrada y salida leyendo todos los bytes existentes
+                // Si el socket se conecto, resuelve las referencias de los buffers de entrada y salida
                 if (socket.isConnected()) {
                     this.tryConnect = false;
-                    /* Antes de establecer la conexion, es importante asegurarse de que los buffers esten vacios. Es decir que se
-                     * hace un "reset" completo del estado de comunicacion del cliente, eliminando cualquier dato pendiente tanto
-                     * para envio como para recepcion. */
-                    incomingData.readBytes(incomingData.length());
-                    outgoingData.readBytes(outgoingData.length());
+                    // TODO No hay otra forma de crear estas dos instancias? Me parece raro llamar al metodo readBytes() para crear estas intancias
+                    inputBuffer.readBytes();
+                    outputBuffer.readBytes();
                 }
 
             } catch (Exception e) {
@@ -107,15 +100,10 @@ public class SocketConnection {
     }
 
     /**
-     * Cierra la conexion del socket y los flujos de entrada y salida asociados.
      * <p>
-     * Este metodo verifica si el socket esta preparado para la comunicacion mediante {@code isReadyForCommunication()}. Si no
-     * esta listo, el metodo se interrumpe sin realizar ninguna accion.
-     * <p>
-     * En caso de que la conexion este activa, cierra los flujos de entrada y salida, asi como el socket asociado, manejando
-     * posibles excepciones {@code IOException} que pudieran ocurrir durante el cierre.
-     * <p>
-     * Finalmente, resetea el estado del juego.
+     * Cierra la conexion del socket y los flujos de entrada y salida asociados. En caso de que la conexion este activa, cierra
+     * los flujos de entrada y salida, asi como el socket asociado, manejando posibles excepciones {@code IOException} que
+     * pudieran ocurrir durante el cierre. Finalmente, resetea el estado del juego.
      */
     public void disconnect() {
         if (!isReadyForCommunication()) return;
@@ -131,27 +119,14 @@ public class SocketConnection {
     }
 
     /**
-     * Escribe los datos del buffer interno de salida en el flujo de salida del socket.
-     * <p>
-     * Este metodo gestiona el proceso completo de envio de datos pendientes al servidor:
-     * <ol>
-     * <li>Verifica si el socket esta preparado para realizar operaciones de escritura mediante {@code isReadyForWriting()}. Si el
-     * estado del socket no permite esta operacion, el metodo finaliza sin realizar ninguna accion.
-     * <li>Comprueba si existen datos en el buffer interno de salida ({@code outgoingData}). Si hay datos disponibles, los extrae
-     * utilizando {@code outgoingData.readBytes()}
-     * <li>Envia los datos extraidos al servidor a traves del flujo de salida
-     * <li>Maneja posibles errores durante la transmision, registrando el mensaje de error y desconectando el socket en caso de
-     * fallo
-     * </ol>
-     * <p>
-     * Se debe llamar a este metodo cada vez que sea necesario enviar los datos acumulados en el buffer interno de salida hacia el
-     * servidor.
+     * Escribe los bytes del buffer de salida en el flujo de salida del socket.
      */
     public void write() {
         if (!isReadyForWriting()) return;
-        if (outgoingData != null && outgoingData.length() > 0) {
-            // Extrae los bytes del buffer interno de salida y los almacena en el array de bytes
-            byte[] bytes = outgoingData.readBytes(outgoingData.length());
+        // Si hay bytes en el buffer de salida
+        if (outputBuffer != null && outputBuffer.getLength() > 0) {
+            // Extrae los bytes del buffer de salida (que ya fue llenado con los metodos *write antes de enviarlos a travez del flujo de salida) y los almacena en el array de bytes
+            byte[] bytes = outputBuffer.readBytes();
             try {
                 // Envia los bytes al servidor a traves del flujo de salida
                 outputStream.write(bytes);
@@ -163,35 +138,33 @@ public class SocketConnection {
     }
 
     /**
-     * Lee y procesa los datos disponibles en el flujo de entrada del socket.
+     * Lee y procesa los bytes disponibles en el flujo de entrada del socket.
      * <p>
-     * Este metodo realiza las siguientes operaciones en secuencia:
-     * <ol>
-     * <li>Verifica si el socket esta preparado para realizar operaciones de lectura mediante {@code isReadyForReading()}. Si no
-     * esta listo, el metodo finaliza sin realizar ninguna accion.
-     * <li>Intenta obtener la cantidad de bytes disponibles en el flujo de entrada mediante {@code inputStream.available()}.
-     * <li>Si hay bytes disponibles (mayor que cero), crea un buffer temporal con el tamaño adecuado.
-     * <li>Lee los bytes disponibles del flujo de entrada y los almacena en el buffer temporal.
-     * <li>Si se leyeron bytes correctamente (bytesRead > 0), los escribe en el buffer de datos entrantes mediante
-     * {@code incomingData.writeBlock()}.
-     * <li>Procesa los datos recibidos llamando al metodo {@code handleIncomingData()}.
-     * </ol>
+     * La estructura actual del codigo evita intencionalmente que el metodo {@code read()} bloquee el hilo de ejecucion, lo que es
+     * importante para mantener la capacidad de respuesta de la aplicacion, especialmente si este codigo se ejecuta en el hilo
+     * principal de la interfaz de usuario.
      * <p>
-     * En caso de que ocurra una excepcion {@code IOException} durante cualquiera de estas operaciones, el error es capturado y
-     * registrado en la salida de error estandar.
+     * Solo si {@code available()} indica que hay bytes disponibles, entonces se procede a llamar a {@code read()}, lo que
+     * garantiza que la llamada no bloqueara el hilo porque ya se sabe que hay bytes disponibles.
+     * <p>
+     * Ademas, esta doble verificacion es una tecnica de programacion defensiva en entornos de red, donde las condiciones pueden
+     * cambiar rapidamente. Aunque en la mayoria de los casos ambas verificaciones daran el mismo resultado, mantener ambas
+     * protege contra casos extremos y condiciones de carrera, haciendo el codigo mas robusto.
      */
     public void read() {
         if (!isReadyForReading()) return;
         try {
+            // Si hay bytes disponibles para leer (sin bloquear el hilo) en el flujo de entrada
             int availableBytes = inputStream.available();
             if (availableBytes > 0) {
                 byte[] buffer = new byte[availableBytes];
+                // Si efectivamente se leyeron bytes
                 int bytesRead = inputStream.read(buffer);
                 if (bytesRead > 0) {
-                    /* Escribe los bytes entrantes del servidor en el buffer temporal de entrada y luego delega el procesamiento
-                     * de los datos (bytes) a PacketReceiver. */
-                    incomingData.writeBlock(buffer, -1);
-                    handleIncomingData();
+                    // Escribe los bytes del servidor en el buffer de entrada
+                    inputBuffer.writeBlock(buffer);
+                    // Delega el manejo de los bytes a PacketReceiver
+                    handleIncomingBytes();
                 }
             }
         } catch (IOException e) {
@@ -218,9 +191,9 @@ public class SocketConnection {
     }
 
     /**
-     * Verifica si el socket esta preparado para comunicacion.
+     * Verifica si el socket esta preparado para comunicarse.
      *
-     * @return true si el socket existe y esta conectado
+     * @return true si el socket existe, esta conectado y no esta cerrado
      */
     private boolean isReadyForCommunication() {
         return socket != null && socket.isConnected() && !socket.isClosed();

@@ -1,22 +1,22 @@
 package org.aoclient.network.protocol.handlers;
 
 import org.aoclient.engine.gui.forms.FComerce;
-import org.aoclient.network.ByteQueue;
+import org.aoclient.network.PacketBuffer;
 
 public class ChangeNPCInventorySlotHandler implements PacketHandler {
 
     @Override
-    public void handle(ByteQueue data) {
-        if (data.checkPacketData(21)) return;
+    public void handle(PacketBuffer data) {
+        if (data.checkBytes(21)) return;
 
-        ByteQueue buffer = new ByteQueue();
-        buffer.copyBuffer(data);
+        PacketBuffer buffer = new PacketBuffer();
+        buffer.copy(data);
 
         buffer.readByte();
 
         int slot = buffer.readByte();
 
-        String name = buffer.readASCIIString();
+        String name = buffer.readUTF8String();
         short amount = buffer.readInteger();
         float value = buffer.readFloat();
         short grhIndex = buffer.readInteger();
@@ -28,7 +28,7 @@ public class ChangeNPCInventorySlotHandler implements PacketHandler {
         short minDef = buffer.readInteger();
 
         FComerce.invNPC.setItem(slot - 1, objIndex, amount, false, grhIndex, objType, maxHit, minHit, maxDef, minDef, value, name);
-        data.copyBuffer(buffer);
+        data.copy(buffer);
     }
 
 }

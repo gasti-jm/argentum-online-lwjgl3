@@ -2,7 +2,7 @@ package org.aoclient.network.protocol.handlers;
 
 import org.aoclient.engine.game.User;
 import org.aoclient.engine.game.models.E_Heading;
-import org.aoclient.network.ByteQueue;
+import org.aoclient.network.PacketBuffer;
 import org.aoclient.network.protocol.types.NickColorType;
 import org.aoclient.network.protocol.types.PlayerType;
 
@@ -12,11 +12,11 @@ import static org.aoclient.engine.utils.GameData.charList;
 
 public class CharacterCreateHandler implements PacketHandler {
     @Override
-    public void handle(ByteQueue data) {
-        if (data.checkPacketData(24)) return;
+    public void handle(PacketBuffer data) {
+        if (data.checkBytes(24)) return;
 
-        ByteQueue buffer = new ByteQueue();
-        buffer.copyBuffer(data);
+        PacketBuffer buffer = new PacketBuffer();
+        buffer.copy(data);
 
         // Remove packet ID
         buffer.readByte();
@@ -34,7 +34,7 @@ public class CharacterCreateHandler implements PacketHandler {
 
         User.get().setCharacterFx(charIndex, buffer.readInteger(), buffer.readInteger());
 
-        charList[charIndex].setName(buffer.readASCIIString());
+        charList[charIndex].setName(buffer.readUTF8String());
 
         int nickColor = buffer.readByte();
         int privs = buffer.readByte();
@@ -69,6 +69,6 @@ public class CharacterCreateHandler implements PacketHandler {
         makeChar(charIndex, body, head, heading, x, y, weapon, shield, helmet);
         refreshAllChars();
 
-        data.copyBuffer(buffer);
+        data.copy(buffer);
     }
 }

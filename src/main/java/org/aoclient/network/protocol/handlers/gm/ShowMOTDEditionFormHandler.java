@@ -1,28 +1,28 @@
 package org.aoclient.network.protocol.handlers.gm;
 
-import org.aoclient.network.ByteQueue;
+import org.aoclient.network.PacketBuffer;
 import org.aoclient.network.protocol.handlers.PacketHandler;
 import org.tinylog.Logger;
 
 public class ShowMOTDEditionFormHandler implements PacketHandler {
 
     @Override
-    public void handle(ByteQueue data) {
-        if (data.checkPacketData(3)) return;
+    public void handle(PacketBuffer data) {
+        if (data.checkBytes(3)) return;
 
-        ByteQueue buffer = new ByteQueue();
-        buffer.copyBuffer(data);
+        PacketBuffer buffer = new PacketBuffer();
+        buffer.copy(data);
 
         // Remove packet ID
         buffer.readByte();
 
-        String txtMotd = buffer.readASCIIString();
+        String txtMotd = buffer.readUTF8String();
 
         //frmCambiaMotd.txtMotd.Text = Buffer.ReadASCIIString()
         //    frmCambiaMotd.Show , //FrmMain
         //
 
-        data.copyBuffer(buffer);
+        data.copy(buffer);
         Logger.debug("handleShowMOTDEditionForm Cargado! - FALTA TERMINAR!");
     }
 

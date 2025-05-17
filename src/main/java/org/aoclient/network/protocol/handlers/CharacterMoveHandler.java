@@ -1,7 +1,7 @@
 package org.aoclient.network.protocol.handlers;
 
 import org.aoclient.engine.game.User;
-import org.aoclient.network.ByteQueue;
+import org.aoclient.network.PacketBuffer;
 
 import static org.aoclient.engine.game.models.Character.refreshAllChars;
 import static org.aoclient.engine.utils.GameData.charList;
@@ -9,8 +9,8 @@ import static org.aoclient.engine.utils.GameData.charList;
 public class CharacterMoveHandler implements PacketHandler {
 
     @Override
-    public void handle(ByteQueue data) {
-        if (data.checkPacketData(5)) return;
+    public void handle(PacketBuffer data) {
+        if (data.checkBytes(5)) return;
 
         data.readByte();
 

@@ -17,6 +17,10 @@ package org.aoclient.network.protocol;
  * <li>Controlar funcionalidades específicas del juego como fabricacion, capacidades de mascotas y configuraciones de guilds.
  * <li>Admitir comandos administrativos y de consulta hacia el servidor.
  * </ul>
+ * <p>
+ * <b>IMPORTANTE</b>: Los IDs de los enums se asignan para que coincidan <b>exactamente</b> con la posicion del paquete
+ * correspondiente en el {@code ClientPacketID} del servidor VB6 dentro de {@code Protocol.bas}. Esta coincidencia es fundamental
+ * para la correcta comunicacion cliente-servidor.
  */
 
 public enum ClientPacket {

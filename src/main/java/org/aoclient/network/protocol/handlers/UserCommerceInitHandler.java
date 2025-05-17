@@ -1,16 +1,16 @@
 package org.aoclient.network.protocol.handlers;
 
-import org.aoclient.network.ByteQueue;
+import org.aoclient.network.PacketBuffer;
 import org.tinylog.Logger;
 
 public class UserCommerceInitHandler implements PacketHandler {
     @Override
-    public void handle(ByteQueue data) {
+    public void handle(PacketBuffer data) {
         // Remove packet ID
         data.readByte();
 
         // variable local vb6
-        String tradingUserName = data.readASCIIString();
+        String tradingUserName = data.readUTF8String();
 
         //' Initialize commerce inventories
         //    Call InvComUsu.Initialize(DirectDraw, frmComerciarUsu.picInvComercio, Inventario.MaxObjs)

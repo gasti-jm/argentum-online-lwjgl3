@@ -1,22 +1,22 @@
 package org.aoclient.network.protocol.handlers;
 
-import org.aoclient.network.ByteQueue;
+import org.aoclient.network.PacketBuffer;
 import org.tinylog.Logger;
 
 public class GuildNewsHandler implements PacketHandler {
 
     @Override
-    public void handle(ByteQueue data) {
-        if (data.checkPacketData(7)) return;
+    public void handle(PacketBuffer data) {
+        if (data.checkBytes(7)) return;
 
-        ByteQueue buffer = new ByteQueue();
-        buffer.copyBuffer(data);
+        PacketBuffer buffer = new PacketBuffer();
+        buffer.copy(data);
 
         buffer.readByte();
 
-        String news = buffer.readASCIIString();
-        String guildList = buffer.readASCIIString();
-        guildList = buffer.readASCIIString();
+        String news = buffer.readUTF8String();
+        String guildList = buffer.readUTF8String();
+        guildList = buffer.readUTF8String();
 
         //'Get news' string
         //    frmGuildNews.news = Buffer.ReadASCIIString()
@@ -39,7 +39,7 @@ public class GuildNewsHandler implements PacketHandler {
         //
         //    If ClientSetup.bGuildNews Then frmGuildNews.Show vbModeless, //FrmMain
 
-        data.copyBuffer(buffer);
+        data.copy(buffer);
         Logger.debug("handleGuildNews Cargado! - FALTA TERMINAR!");
     }
 }

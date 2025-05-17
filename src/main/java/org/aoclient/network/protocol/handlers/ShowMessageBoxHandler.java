@@ -2,23 +2,23 @@ package org.aoclient.network.protocol.handlers;
 
 import org.aoclient.engine.gui.ImGUISystem;
 import org.aoclient.engine.gui.forms.FMessage;
-import org.aoclient.network.ByteQueue;
+import org.aoclient.network.PacketBuffer;
 
 public class ShowMessageBoxHandler implements PacketHandler {
 
     @Override
-    public void handle(ByteQueue data) {
-        if (data.checkPacketData(3)) return;
+    public void handle(PacketBuffer data) {
+        if (data.checkBytes(3)) return;
 
-        ByteQueue buffer = new ByteQueue();
-        buffer.copyBuffer(data);
+        PacketBuffer buffer = new PacketBuffer();
+        buffer.copy(data);
 
         buffer.readByte();
 
-        String msg = buffer.readASCIIString();
+        String msg = buffer.readUTF8String();
         ImGUISystem.get().show(new FMessage(msg));
 
-        data.copyBuffer(buffer);
+        data.copy(buffer);
     }
 
 }

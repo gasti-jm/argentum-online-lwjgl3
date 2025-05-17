@@ -1,23 +1,23 @@
 package org.aoclient.network.protocol.handlers;
 
-import org.aoclient.network.ByteQueue;
+import org.aoclient.network.PacketBuffer;
 import org.tinylog.Logger;
 
 public class CarpenterObjectsHandler implements PacketHandler {
     
     @Override
-    public void handle(ByteQueue data) {
-        if (data.checkPacketData(3)) return;
+    public void handle(PacketBuffer data) {
+        if (data.checkBytes(3)) return;
 
-        ByteQueue buffer = new ByteQueue();
-        buffer.copyBuffer(data);
+        PacketBuffer buffer = new PacketBuffer();
+        buffer.copy(data);
 
         buffer.readByte();
 
         short count = buffer.readInteger();
 
         for (int i = 0; i < count; i++) {
-            buffer.readASCIIString();
+            buffer.readUTF8String();
             buffer.readInteger();
             buffer.readInteger();
             buffer.readInteger();
@@ -74,7 +74,7 @@ public class CarpenterObjectsHandler implements PacketHandler {
         //        End With
         //    Next i
 
-        data.copyBuffer(buffer);
+        data.copy(buffer);
         Logger.debug("handleCarpenterObjects Cargado! - FALTA TERMINAR!");
     }
     

@@ -1,7 +1,5 @@
 package org.aoclient.engine.utils;
 
-import org.aoclient.scripts.Compressor;
-
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
@@ -28,9 +26,6 @@ import java.nio.ByteOrder;
  * <p>
  * Ejemplo de uso tipico: inicializar con un arreglo de bytes proveniente de un archivo comprimido y luego leer secuencialmente
  * los datos segun la estructura esperada del archivo.
- *
- * @see GameData
- * @see Compressor
  */
 
 public class BinaryDataReader {
@@ -42,17 +37,19 @@ public class BinaryDataReader {
     }
 
     public void init(byte[] data) {
-        this.buffer = ByteBuffer.wrap(data);
-        this.buffer.order(ByteOrder.LITTLE_ENDIAN); // Especifica el orden de los bytes (BIG_ENDIAN o LITTLE_ENDIAN)
+        buffer = ByteBuffer.wrap(data);
+        buffer.order(ByteOrder.LITTLE_ENDIAN); // Especifica el orden de los bytes (BIG_ENDIAN o LITTLE_ENDIAN)
     }
 
     public void init(byte[] data, ByteOrder order) {
-        this.buffer = ByteBuffer.wrap(data);
-        this.buffer.order(order); // Especifica el orden de los bytes (BIG_ENDIAN o LITTLE_ENDIAN)
+        buffer = ByteBuffer.wrap(data);
+        buffer.order(order); // Especifica el orden de los bytes (BIG_ENDIAN o LITTLE_ENDIAN)
     }
 
     // Lee un entero (4 bytes)
     public int readInt() {
+        /* Lee los siguientes 4 bytes de la posicion actual del buffer, componiendolos en un valor int segun el orden de bytes
+         * actual y luego incrementa la posicion en 4. */
         return buffer.getInt();
     }
 
