@@ -211,7 +211,7 @@ public final class FConnect extends Form {
             }).start();
             options.setNickName(nickStr.get());
             User.get().setUserName(nickStr.get());
-        } else ImGUISystem.get().show(new FMessage("Please enter a valid username and/or password."));
+        } else ImGUISystem.get().show(new FMessage("Please enter a username and/or password."));
     }
 
     private void buttonCreateCharacter() {

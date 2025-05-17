@@ -6,7 +6,7 @@ import org.aoclient.engine.game.Console;
 import org.aoclient.engine.game.User;
 import org.aoclient.engine.game.models.E_Skills;
 import org.aoclient.engine.renderer.RGBColor;
-import org.aoclient.network.ByteQueue;
+import org.aoclient.network.PacketBuffer;
 import org.aoclient.network.protocol.handlers.PacketHandler;
 import org.aoclient.network.protocol.types.MessageType;
 
@@ -20,7 +20,7 @@ public class MultiMessageHandler implements PacketHandler {
     private final Console console = Console.get();
 
     @Override
-    public void handle(ByteQueue data) {
+    public void handle(PacketBuffer data) {
         int bodyPart;
         short damage;
 
@@ -278,7 +278,7 @@ public class MultiMessageHandler implements PacketHandler {
             case GO_HOME:
                 int distance = data.readByte();
                 short time = data.readInteger();
-                String hogar = data.readASCIIString();
+                String hogar = data.readUTF8String();
 
                 console.addMsgToConsole("Estas a " + distance + " mapas de distancia de " + hogar + ", este viaje durara " + time + " segundos.",
                         false, false, new RGBColor(1f, 0f, 0f));

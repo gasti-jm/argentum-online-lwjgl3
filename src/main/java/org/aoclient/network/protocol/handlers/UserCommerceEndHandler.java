@@ -1,11 +1,11 @@
 package org.aoclient.network.protocol.handlers;
 
-import org.aoclient.network.ByteQueue;
+import org.aoclient.network.PacketBuffer;
 import org.tinylog.Logger;
 
 public class UserCommerceEndHandler implements PacketHandler {
     @Override
-    public void handle(ByteQueue data) {
+    public void handle(PacketBuffer data) {
         // Remove packet ID
         data.readByte();
 

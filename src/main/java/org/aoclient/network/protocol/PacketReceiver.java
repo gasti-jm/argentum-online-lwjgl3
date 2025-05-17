@@ -1,6 +1,6 @@
 package org.aoclient.network.protocol;
 
-import org.aoclient.network.ByteQueue;
+import org.aoclient.network.PacketBuffer;
 import org.aoclient.network.protocol.handlers.*;
 import org.aoclient.network.protocol.handlers.gm.*;
 import org.tinylog.Logger;
@@ -10,12 +10,12 @@ import java.util.Map;
 
 /**
  * <p>
- * La clase PacketReceiver es responsable de manejar y procesar paquetes entrantes desde el servidor. Cada tipo de paquete tiene
- * un handler especifico que define como procesar los datos correspondientes.
+ * Esta clase es responsable de manejar y procesar paquetes entrantes desde el servidor. Cada tipo de paquete tiene un handler
+ * especifico que define como procesar los datos correspondientes.
  * <p>
  * El flujo principal de trabajo incluye:
  * <ol>
- *   <li>Registrar varios controladores asociados a tipos de paquetes durante la inicializacion.
+ *   <li>Registrar varios handlers (manejadores) asociados a tipos de paquetes durante la inicializacion.
  *   <li>Analizar y procesar los datos recibidos para determinar el tipo de paquete.
  *   <li>Delegar el procesamiento al handler apropiado si existe uno para el tipo de paquete identificado.
  * </ol>
@@ -137,11 +137,11 @@ public class PacketReceiver {
         handlers.put(ServerPacket.CANCEL_OFFER_ITEM, new CancelOfferItemHandler());
     }
 
-    public void processIncomingData(ByteQueue data) {
-        if (data.length() == 0) return; // TODO Y si llega a ser -1?
+    public void handleIncomingBytes(PacketBuffer packetBuffer) {
+        if (packetBuffer.getLength() == 0) return; // TODO Y si llega a ser -1?
 
         // Obtiene el identificador del paquete
-        int packetId = data.peekByte();
+        int packetId = packetBuffer.peekByte();
 
         // Valida el ID del paquete antes de procesarlo
         if (!isValidPacketId(packetId)) {
@@ -149,7 +149,7 @@ public class PacketReceiver {
             return;
         }
 
-        // Obtiene el paquete a partir del ID
+        // Obtiene el paquete a partir del ID del paquete
         ServerPacket packet = ServerPacket.getPacket(packetId);
 
         Logger.debug("Processing packet " + packet + " with ID " + packetId);
@@ -163,10 +163,10 @@ public class PacketReceiver {
         if (handler != null) {
 
             // Maneja los datos en el handler correspondiente
-            handler.handle(data);
+            handler.handle(packetBuffer);
 
             // Si quedan datos, continua procesando los datos de entrada
-            if (data.length() > 0) processIncomingData(data);
+            if (packetBuffer.getLength() > 0) handleIncomingBytes(packetBuffer);
 
         }
 
@@ -181,6 +181,5 @@ public class PacketReceiver {
     private boolean isValidPacketId(int packetId) {
         return ServerPacket.PACKET_REGISTRY.containsKey(packetId);
     }
-
 
 }

@@ -6,7 +6,7 @@ import org.aoclient.engine.utils.inits.BodyData;
 import org.aoclient.engine.utils.inits.HeadData;
 import org.aoclient.engine.utils.inits.ShieldData;
 import org.aoclient.engine.utils.inits.WeaponData;
-import org.aoclient.network.ByteQueue;
+import org.aoclient.network.PacketBuffer;
 import org.tinylog.Logger;
 
 import static org.aoclient.engine.game.models.Character.CASPER_HEAD;
@@ -16,8 +16,8 @@ import static org.aoclient.engine.utils.GameData.*;
 public class CharacterChangeHandler implements PacketHandler {
     
     @Override
-    public void handle(ByteQueue data) {
-        if (data.checkPacketData(18)) return;
+    public void handle(PacketBuffer data) {
+        if (data.checkBytes(18)) return;
 
         data.readByte();
 

@@ -1,21 +1,21 @@
 package org.aoclient.network.protocol.handlers;
 
-import org.aoclient.network.ByteQueue;
+import org.aoclient.network.PacketBuffer;
 import org.tinylog.Logger;
 
 public class CharacterInfoHandler implements PacketHandler {
     
     @Override
-    public void handle(ByteQueue data) {
+    public void handle(PacketBuffer data) {
 
-        if (data.checkPacketData(35)) return;
+        if (data.checkBytes(35)) return;
 
-        ByteQueue buffer = new ByteQueue();
-        buffer.copyBuffer(data);
+        PacketBuffer buffer = new PacketBuffer();
+        buffer.copy(data);
 
         buffer.readByte();
 
-        String nombre = buffer.readASCIIString();
+        String nombre = buffer.readUTF8String();
         int raza = buffer.readByte();
         int clase = buffer.readByte();
         int genero = buffer.readByte();
@@ -24,9 +24,9 @@ public class CharacterInfoHandler implements PacketHandler {
         int banco = buffer.readLong();
         int reputacion = buffer.readLong();
 
-        String txtPeticiones = buffer.readASCIIString();
-        String guildActual = buffer.readASCIIString();
-        String txtMiembro = buffer.readASCIIString();
+        String txtPeticiones = buffer.readUTF8String();
+        String guildActual = buffer.readUTF8String();
+        String txtMiembro = buffer.readUTF8String();
 
         boolean armada = buffer.readBoolean();
         boolean caos = buffer.readBoolean();
@@ -97,7 +97,7 @@ public class CharacterInfoHandler implements PacketHandler {
         //    End With
 
 
-        data.copyBuffer(buffer);
+        data.copy(buffer);
         Logger.debug("handleCharacterInfo Cargado! - FALTA TERMINAR!");
     }
     

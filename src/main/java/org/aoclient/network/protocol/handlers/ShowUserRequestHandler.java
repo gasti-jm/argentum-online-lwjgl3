@@ -1,27 +1,27 @@
 package org.aoclient.network.protocol.handlers;
 
-import org.aoclient.network.ByteQueue;
+import org.aoclient.network.PacketBuffer;
 import org.tinylog.Logger;
 
 public class ShowUserRequestHandler implements PacketHandler {
 
     @Override
-    public void handle(ByteQueue data) {
-        if (data.checkPacketData(3)) return;
+    public void handle(PacketBuffer data) {
+        if (data.checkBytes(3)) return;
 
-        ByteQueue buffer = new ByteQueue();
-        buffer.copyBuffer(data);
+        PacketBuffer buffer = new PacketBuffer();
+        buffer.copy(data);
 
         // Remove packet ID
         buffer.readByte();
 
-        String recievePeticion = buffer.readASCIIString();
+        String recievePeticion = buffer.readUTF8String();
 
         // Call frmUserRequest.recievePeticion(Buffer.ReadASCIIString())
         //    Call frmUserRequest.Show(vbModeless, //FrmMain)
         //
 
-        data.copyBuffer(buffer);
+        data.copy(buffer);
         Logger.debug("handleShowUserRequest Cargado! - FALTA TERMINAR!");
     }
 

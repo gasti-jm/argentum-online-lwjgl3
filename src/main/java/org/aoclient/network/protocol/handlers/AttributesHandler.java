@@ -2,14 +2,14 @@ package org.aoclient.network.protocol.handlers;
 
 import org.aoclient.engine.game.User;
 import org.aoclient.engine.game.models.E_Attributes;
-import org.aoclient.network.ByteQueue;
+import org.aoclient.network.PacketBuffer;
 import org.tinylog.Logger;
 
 public class AttributesHandler implements PacketHandler {
     
     @Override
-    public void handle(ByteQueue data) {
-        if (data.checkPacketData(6)) return;
+    public void handle(PacketBuffer data) {
+        if (data.checkBytes(6)) return;
 
         // Remove packet ID
         data.readByte();

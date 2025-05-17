@@ -6,7 +6,7 @@ import org.aoclient.engine.game.Console;
 import org.aoclient.engine.game.User;
 import org.aoclient.engine.game.models.E_Skills;
 import org.aoclient.engine.renderer.RGBColor;
-import org.aoclient.network.ByteQueue;
+import org.aoclient.network.PacketBuffer;
 import org.tinylog.Logger;
 
 import static org.aoclient.engine.Messages.MessageKey;
@@ -17,8 +17,8 @@ public class WorkRequestTargetHandler implements PacketHandler {
     private final Console console = Console.get();
 
     @Override
-    public void handle(ByteQueue data) {
-        if (data.checkPacketData(2)) return;
+    public void handle(PacketBuffer data) {
+        if (data.checkBytes(2)) return;
 
         data.readByte();
 

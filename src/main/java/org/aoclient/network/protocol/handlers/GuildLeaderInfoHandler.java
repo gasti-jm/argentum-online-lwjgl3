@@ -1,24 +1,24 @@
 package org.aoclient.network.protocol.handlers;
 
-import org.aoclient.network.ByteQueue;
+import org.aoclient.network.PacketBuffer;
 import org.tinylog.Logger;
 
 public class GuildLeaderInfoHandler implements PacketHandler {
     
     @Override
-    public void handle(ByteQueue data) {
-        if (data.checkPacketData(9)) return;
+    public void handle(PacketBuffer data) {
+        if (data.checkBytes(9)) return;
 
-        ByteQueue buffer = new ByteQueue();
-        buffer.copyBuffer(data);
+        PacketBuffer buffer = new PacketBuffer();
+        buffer.copy(data);
 
         // Remove packet ID
         buffer.readByte();
 
-        String guildNames = buffer.readASCIIString();
-        guildNames = buffer.readASCIIString();
-        String txtGuildNews = buffer.readASCIIString();
-        String list = buffer.readASCIIString();
+        String guildNames = buffer.readUTF8String();
+        guildNames = buffer.readUTF8String();
+        String txtGuildNews = buffer.readUTF8String();
+        String list = buffer.readUTF8String();
 
         //With frmGuildLeader
         //        'Get list of existing guilds
@@ -57,7 +57,7 @@ public class GuildLeaderInfoHandler implements PacketHandler {
         //        .Show , //FrmMain
         //    End With
 
-        data.copyBuffer(buffer);
+        data.copy(buffer);
         Logger.debug("handleGuildLeaderInfo Cargado! - FALTA TERMINAR!");
     }
     

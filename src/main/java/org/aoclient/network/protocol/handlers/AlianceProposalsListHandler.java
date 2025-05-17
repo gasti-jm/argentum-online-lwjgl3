@@ -1,20 +1,20 @@
 package org.aoclient.network.protocol.handlers;
 
-import org.aoclient.network.ByteQueue;
+import org.aoclient.network.PacketBuffer;
 import org.tinylog.Logger;
 
 public class AlianceProposalsListHandler implements PacketHandler {
 
     @Override
-    public void handle(ByteQueue data) {
-        if (data.checkPacketData(3)) return;
+    public void handle(PacketBuffer data) {
+        if (data.checkBytes(3)) return;
 
-        ByteQueue buffer = new ByteQueue();
-        buffer.copyBuffer(data);
+        PacketBuffer buffer = new PacketBuffer();
+        buffer.copy(data);
 
         buffer.readByte();
 
-        String vsGuildList = buffer.readASCIIString();
+        String vsGuildList = buffer.readUTF8String();
 
         //Dim vsGuildList() As String
         //    Dim i As Long
@@ -29,7 +29,7 @@ public class AlianceProposalsListHandler implements PacketHandler {
         //    frmPeaceProp.ProposalType = TIPO_PROPUESTA.ALIANZA
         //    Call frmPeaceProp.Show(vbModeless, //FrmMain)
 
-        data.copyBuffer(buffer);
+        data.copy(buffer);
         Logger.debug("handleAlianceProposalsList Cargado! - FALTA TERMINAR!");
     }
 }

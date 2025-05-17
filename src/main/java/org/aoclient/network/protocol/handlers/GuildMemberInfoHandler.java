@@ -1,21 +1,21 @@
 package org.aoclient.network.protocol.handlers;
 
-import org.aoclient.network.ByteQueue;
+import org.aoclient.network.PacketBuffer;
 import org.tinylog.Logger;
 
 public class GuildMemberInfoHandler implements PacketHandler {
 
     @Override
-    public void handle(ByteQueue data) {
-        if (data.checkPacketData(5)) return;
+    public void handle(PacketBuffer data) {
+        if (data.checkBytes(5)) return;
 
-        ByteQueue buffer = new ByteQueue();
-        buffer.copyBuffer(data);
+        PacketBuffer buffer = new PacketBuffer();
+        buffer.copy(data);
 
         buffer.readByte();
 
-        String guildNames = buffer.readASCIIString();
-        String guildMembers = buffer.readASCIIString();
+        String guildNames = buffer.readUTF8String();
+        String guildMembers = buffer.readUTF8String();
 
 
         //With frmGuildMember
@@ -46,7 +46,7 @@ public class GuildMemberInfoHandler implements PacketHandler {
         //        .Show vbModeless, //FrmMain
         //    End With
 
-        data.copyBuffer(buffer);
+        data.copy(buffer);
         Logger.debug("handleGuildMemberInfo Cargado! - FALTA TERMINAR!");
     }
 

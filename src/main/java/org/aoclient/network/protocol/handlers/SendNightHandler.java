@@ -1,12 +1,12 @@
 package org.aoclient.network.protocol.handlers;
 
-import org.aoclient.network.ByteQueue;
+import org.aoclient.network.PacketBuffer;
 import org.tinylog.Logger;
 
 public class SendNightHandler implements PacketHandler {
     @Override
-    public void handle(ByteQueue data) {
-        if (data.checkPacketData(2)) return;
+    public void handle(PacketBuffer data) {
+        if (data.checkBytes(2)) return;
 
         // Remove packet ID
         data.readByte();

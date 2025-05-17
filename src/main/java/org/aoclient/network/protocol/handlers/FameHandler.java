@@ -2,13 +2,13 @@ package org.aoclient.network.protocol.handlers;
 
 import org.aoclient.engine.game.User;
 import org.aoclient.engine.game.models.E_Reputation;
-import org.aoclient.network.ByteQueue;
+import org.aoclient.network.PacketBuffer;
 
 public class FameHandler implements PacketHandler {
     @Override
-    public void handle(ByteQueue data) {
+    public void handle(PacketBuffer data) {
 
-        if (data.checkPacketData(29)) return;
+        if (data.checkBytes(29)) return;
 
         data.readByte();
 

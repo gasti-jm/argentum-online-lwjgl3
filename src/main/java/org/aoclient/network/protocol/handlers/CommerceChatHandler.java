@@ -1,21 +1,21 @@
 package org.aoclient.network.protocol.handlers;
 
-import org.aoclient.network.ByteQueue;
+import org.aoclient.network.PacketBuffer;
 import org.tinylog.Logger;
 
 public class CommerceChatHandler implements PacketHandler {
 
     @Override
-    public void handle(ByteQueue data) {
-        if (data.checkPacketData(4)) return;
+    public void handle(PacketBuffer data) {
+        if (data.checkBytes(4)) return;
 
-        ByteQueue buffer = new ByteQueue();
-        buffer.copyBuffer(data);
+        PacketBuffer buffer = new PacketBuffer();
+        buffer.copy(data);
 
         // Remove packet ID
         buffer.readByte();
 
-        String chat = buffer.readASCIIString();
+        String chat = buffer.readUTF8String();
         int fontSize = buffer.readByte();
 
         /*
@@ -50,7 +50,7 @@ public class CommerceChatHandler implements PacketHandler {
          */
 
 
-        data.copyBuffer(buffer);
+        data.copy(buffer);
 
         Logger.debug("handleCommerceChat CARGADO - FALTA TERMINAR!");
     }

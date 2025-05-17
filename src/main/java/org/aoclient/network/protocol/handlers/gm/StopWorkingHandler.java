@@ -1,12 +1,12 @@
 package org.aoclient.network.protocol.handlers.gm;
 
-import org.aoclient.network.ByteQueue;
+import org.aoclient.network.PacketBuffer;
 import org.aoclient.network.protocol.handlers.PacketHandler;
 
 public class StopWorkingHandler implements PacketHandler {
 
     @Override
-    public void handle(ByteQueue data) {
+    public void handle(PacketBuffer data) {
         data.readByte();
 
         //With FontTypes(FontTypeNames.FONTTYPE_INFO)

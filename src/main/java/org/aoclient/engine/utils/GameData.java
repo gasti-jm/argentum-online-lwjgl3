@@ -3,6 +3,7 @@ package org.aoclient.engine.utils;
 import org.aoclient.engine.Sound;
 import org.aoclient.engine.game.Options;
 import org.aoclient.engine.game.models.Character;
+import org.aoclient.engine.renderer.FontRenderer;
 import org.aoclient.engine.renderer.Surface;
 import org.aoclient.engine.utils.inits.*;
 
@@ -12,7 +13,7 @@ import java.util.Map;
 
 import static org.aoclient.engine.Messages.loadMessages;
 import static org.aoclient.engine.game.models.Character.eraseAllChars;
-import static org.aoclient.engine.renderer.FontTypes.loadFontTypes;
+import static org.aoclient.engine.renderer.FontRenderer.loadFonts;
 import static org.aoclient.scripts.Compressor.readResource;
 
 /**
@@ -74,7 +75,7 @@ public final class GameData {
         loadShields();
         loadFxs();
         loadFK();
-        loadFontTypes();
+        loadFonts();
         loadMessages("es");
     }
 

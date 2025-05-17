@@ -5,7 +5,7 @@ import org.aoclient.engine.renderer.RGBColor;
 import org.aoclient.engine.scenes.Camera;
 
 import static org.aoclient.engine.game.models.Character.lastChar;
-import static org.aoclient.engine.renderer.FontTypes.*;
+import static org.aoclient.engine.renderer.FontRenderer.*;
 import static org.aoclient.engine.scenes.Camera.*;
 import static org.aoclient.engine.utils.GameData.charList;
 import static org.aoclient.engine.utils.GameData.mapData;
@@ -112,7 +112,7 @@ public class Dialogs {
                 // Render dialog
                 drawText(chrActual.getDialog(),
                         dX + 16 - getTextWidth(chrActual.getDialog(), true) / 2,
-                        dY - 24 + chrActual.getBody().getHeadOffset().getY() - getTextHeight(chrActual.getDialog(), true) - (int) chrActual.getDialog_offset_counter_y(),
+                        dY - 13 + chrActual.getBody().getHeadOffset().getY() - getTextHeight(chrActual.getDialog(), true) - (int) chrActual.getDialog_offset_counter_y(),
                         chrActual.getDialog_color(),
                         chrActual.getDialog_font_index(), true);
             }

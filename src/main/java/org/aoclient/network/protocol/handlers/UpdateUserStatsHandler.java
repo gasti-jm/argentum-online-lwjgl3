@@ -1,15 +1,15 @@
 package org.aoclient.network.protocol.handlers;
 
 import org.aoclient.engine.game.User;
-import org.aoclient.network.ByteQueue;
+import org.aoclient.network.PacketBuffer;
 
 import static org.aoclient.engine.utils.GameData.charList;
 
 public class UpdateUserStatsHandler implements PacketHandler {
     
     @Override
-    public void handle(ByteQueue data) {
-        if (data.checkPacketData(26)) return;
+    public void handle(PacketBuffer data) {
+        if (data.checkBytes(26)) return;
 
         // Remove packet ID
         data.readByte();

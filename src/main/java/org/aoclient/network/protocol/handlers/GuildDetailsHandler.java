@@ -1,37 +1,37 @@
 package org.aoclient.network.protocol.handlers;
 
-import org.aoclient.network.ByteQueue;
+import org.aoclient.network.PacketBuffer;
 import org.tinylog.Logger;
 
 public class GuildDetailsHandler implements PacketHandler {
 
     @Override
-    public void handle(ByteQueue data) {
-        if (data.checkPacketData(26)) return;
+    public void handle(PacketBuffer data) {
+        if (data.checkBytes(26)) return;
 
-        ByteQueue buffer = new ByteQueue();
-        buffer.copyBuffer(data);
+        PacketBuffer buffer = new PacketBuffer();
+        buffer.copy(data);
 
         // Remove packet ID
         buffer.readByte();
 
-        buffer.readASCIIString();
-        buffer.readASCIIString();
-        buffer.readASCIIString();
-        buffer.readASCIIString();
-        buffer.readASCIIString();
+        buffer.readUTF8String();
+        buffer.readUTF8String();
+        buffer.readUTF8String();
+        buffer.readUTF8String();
+        buffer.readUTF8String();
         buffer.readInteger();
 
         buffer.readBoolean();
 
-        buffer.readASCIIString();
+        buffer.readUTF8String();
         buffer.readInteger();
         buffer.readInteger();
-        buffer.readASCIIString();
+        buffer.readUTF8String();
 
-        buffer.readASCIIString();
+        buffer.readUTF8String();
 
-        buffer.readASCIIString();
+        buffer.readUTF8String();
 
         //With frmGuildBrief
         //        .imgDeclararGuerra.Visible = .EsLeader
@@ -68,7 +68,7 @@ public class GuildDetailsHandler implements PacketHandler {
         //        .Desc.Text = Buffer.ReadASCIIString()
         //    End With
 
-        data.copyBuffer(buffer);
+        data.copy(buffer);
         Logger.debug("handleGuildDetails Cargado! - FALTA TERMINAR!");
     }
 }

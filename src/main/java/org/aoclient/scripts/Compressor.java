@@ -131,15 +131,12 @@ public class Compressor {
      * <pre>{@code
      * // Lee un archivo desde un ao
      * byte[] data = readResource("resources/inits.ao", "heads");
-     * if (data != null) {
-     *     // Procesa el recurso normalmente
-     *     reader.init(data);
-     *     // ...
-     * } else {
+     * if (data == null) {
      *     // Maneja el caso de error
-     *      System.err.println("Could not load heads data!");
-     *      return;
+     *    System.err.println("Could not load heads data!");
+     *    return;
      * }
+     * // Procesa el recurso normalmente...
      * }</pre>
      *
      * @param aoName       nombre del archivo ao que contiene el recurso

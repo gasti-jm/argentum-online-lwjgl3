@@ -1,22 +1,22 @@
 package org.aoclient.network.protocol.handlers.gm;
 
-import org.aoclient.network.ByteQueue;
+import org.aoclient.network.PacketBuffer;
 import org.aoclient.network.protocol.handlers.PacketHandler;
 import org.tinylog.Logger;
 
 public class ShowPartyFormHandler implements PacketHandler {
 
     @Override
-    public void handle(ByteQueue data) {
-        if (data.checkPacketData(4)) return;
+    public void handle(PacketBuffer data) {
+        if (data.checkBytes(4)) return;
 
-        ByteQueue buffer = new ByteQueue();
-        buffer.copyBuffer(data);
+        PacketBuffer buffer = new PacketBuffer();
+        buffer.copy(data);
 
         buffer.readByte();
 
         int esPartyLeader = buffer.readByte();
-        String members = buffer.readASCIIString();
+        String members = buffer.readUTF8String();
 
         //Dim members() As String
         //    Dim i As Long
@@ -31,7 +31,7 @@ public class ShowPartyFormHandler implements PacketHandler {
         //    frmParty.lblTotalExp.Caption = Buffer.ReadLong
         //    frmParty.Show , //FrmMain
 
-        data.copyBuffer(buffer);
+        data.copy(buffer);
         Logger.debug("handleShowPartyForm Cargado! - FALTA TERMINAR!");
     }
 

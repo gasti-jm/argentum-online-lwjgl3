@@ -1,17 +1,17 @@
 package org.aoclient.network.protocol.handlers;
 
 import org.aoclient.engine.game.User;
-import org.aoclient.network.ByteQueue;
+import org.aoclient.network.PacketBuffer;
 import org.tinylog.Logger;
 
 public class ChangeSpellSlotHandler implements PacketHandler {
 
     @Override
-    public void handle(ByteQueue data) {
-        if (data.checkPacketData(6)) return;
+    public void handle(PacketBuffer data) {
+        if (data.checkBytes(6)) return;
 
-        ByteQueue buffer = new ByteQueue();
-        buffer.copyBuffer(data);
+        PacketBuffer buffer = new PacketBuffer();
+        buffer.copy(data);
 
         buffer.readByte();
 
@@ -19,11 +19,11 @@ public class ChangeSpellSlotHandler implements PacketHandler {
         buffer.readByte();
         //short hechizoNum = buffer.readInteger();
         buffer.readInteger();
-        String hechizoName = buffer.readASCIIString();
+        String hechizoName = buffer.readUTF8String();
 
         User.get().getInventorySpells().addSpell(hechizoName);
 
-        data.copyBuffer(buffer);
+        data.copy(buffer);
         Logger.debug("ChangeSpellSlot Cargado! - FALTA TERMINAR!");
     }
 

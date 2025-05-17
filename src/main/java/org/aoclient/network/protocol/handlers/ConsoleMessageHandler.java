@@ -3,20 +3,20 @@ package org.aoclient.network.protocol.handlers;
 import org.aoclient.engine.game.Console;
 import org.aoclient.engine.game.models.E_FontType;
 import org.aoclient.engine.renderer.RGBColor;
-import org.aoclient.network.ByteQueue;
+import org.aoclient.network.PacketBuffer;
 import org.tinylog.Logger;
 
 public class ConsoleMessageHandler implements PacketHandler {
     @Override
-    public void handle(ByteQueue data) {
-        if (data.checkPacketData(4)) return;
+    public void handle(PacketBuffer data) {
+        if (data.checkBytes(4)) return;
 
-        ByteQueue buffer = new ByteQueue();
-        buffer.copyBuffer(data);
+        PacketBuffer buffer = new PacketBuffer();
+        buffer.copy(data);
 
         buffer.readByte();
 
-        String chat = buffer.readASCIIString();
+        String chat = buffer.readUTF8String();
         E_FontType fontType = E_FontType.values()[buffer.readByte()];
 
         Console.get().addMsgToConsole(chat, false, false, new RGBColor(fontType.r, fontType.g, fontType.b));
@@ -32,7 +32,7 @@ public class ConsoleMessageHandler implements PacketHandler {
         //        End If
         //    End If
 
-        data.copyBuffer(buffer);
+        data.copy(buffer);
         Logger.debug("handleConsoleMessage CARGADO - FALTA TERMINAR!");
     }
 }
