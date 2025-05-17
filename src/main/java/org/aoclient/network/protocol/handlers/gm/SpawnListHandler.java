@@ -1,6 +1,9 @@
 package org.aoclient.network.protocol.handlers.gm;
 
 import org.aoclient.network.PacketBuffer;
+import org.aoclient.engine.gui.ImGUISystem;
+import org.aoclient.engine.gui.forms.FSpawnList;
+import org.aoclient.engine.gui.forms.FTutorial;
 import org.aoclient.network.protocol.handlers.PacketHandler;
 import org.tinylog.Logger;
 
@@ -14,18 +17,13 @@ public class SpawnListHandler implements PacketHandler  {
 
         buffer.readByte();
 
-        String creatureList = buffer.readUTF8String();
+        String creatureListString = buffer.readUTF8String();
+  
+        // Dividimos por el carácter nulo
+        String[] creatureList = creatureListString.split("\0");
 
-        //Dim creatureList() As String
-        //    Dim i As Long
-        //
-        //    creatureList = Split(Buffer.ReadASCIIString(), SEPARATOR)
-        //
-        //    For i = 0 To UBound(creatureList())
-        //        Call frmSpawnList.lstCriaturas.AddItem(creatureList(i))
-        //    Next i
-        //    frmSpawnList.Show , //FrmMain
-        //
+        // Mostramos la lista en el GUI
+        ImGUISystem.get().show(new FSpawnList(creatureList));
 
         data.copy(buffer);
         Logger.debug("handleSpawnList Cargado! - FALTA TERMINAR!");
