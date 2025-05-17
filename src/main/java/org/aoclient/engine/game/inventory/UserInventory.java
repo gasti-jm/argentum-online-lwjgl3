@@ -32,6 +32,9 @@ public final class UserInventory extends Inventory implements Cloneable {
     public static final int COMERCE_POS_X = 263;
     public static final int COMERCE_POS_Y = 131;
 
+    public static final int BANK_POS_X = 268;
+    public static final int BANK_POS_Y = 160;
+
     // Tamaño del inventario segun el frmMain original de AO
     private static final int MAIN_SIZE_WIDTH = 160;
     private static final int MAIN_SIZE_HEIGHT = 128;
@@ -156,9 +159,15 @@ public final class UserInventory extends Inventory implements Cloneable {
         this.visible = value;
     }
 
-    public void transformInvComerce() {
-        this.posX = COMERCE_POS_X;
-        this.posY = COMERCE_POS_Y;
+    public void transformInvComerce(boolean bank) {
+        if (bank) {
+            this.posX = BANK_POS_X;
+            this.posY = BANK_POS_Y;
+        } else {
+            this.posX = COMERCE_POS_X;
+            this.posY = COMERCE_POS_Y;
+        }
+
         this.invComerce = true;
     }
 

@@ -41,7 +41,7 @@ import static org.aoclient.network.protocol.Protocol.*;
 public class FComerce extends Form {
 
     private final ImString cant = new ImString("1");
-    public static NPCInventory invNPC = new NPCInventory();
+    public static NPCInventory invNPC = new NPCInventory(false);
     public static UserInventory invUser = User.get().getUserInventory().clone();
 
     public FComerce() {
@@ -51,7 +51,7 @@ public class FComerce extends Form {
             throw new RuntimeException(e);
         }
 
-        invUser.transformInvComerce();
+        invUser.transformInvComerce(false);
     }
 
     @Override
