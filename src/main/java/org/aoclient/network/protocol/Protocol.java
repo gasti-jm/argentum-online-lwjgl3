@@ -1463,4 +1463,16 @@ public class Protocol {
         outputBuffer.writeInteger((short) amount);
     }
 
+    public static void writeBankDeposit(int slot, int amount) {
+        outputBuffer.writeByte(ClientPacket.BANK_DEPOSIT.getId());
+        outputBuffer.writeByte(slot);
+        outputBuffer.writeInteger((short) amount);
+    }
+
+    public static void writeBankExtractItem(int slot, int amount) {
+        outputBuffer.writeByte(ClientPacket.BANK_EXTRACT_ITEM.getId());
+        outputBuffer.writeByte(slot);
+        outputBuffer.writeInteger((short) amount);
+    }
+
 }

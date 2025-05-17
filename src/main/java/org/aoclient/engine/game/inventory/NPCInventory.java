@@ -1,7 +1,6 @@
 package org.aoclient.engine.game.inventory;
 
 import imgui.ImGui;
-import org.tinylog.Logger;
 
 import static org.aoclient.engine.scenes.Camera.TILE_PIXEL_SIZE;
 
@@ -14,15 +13,25 @@ import static org.aoclient.engine.scenes.Camera.TILE_PIXEL_SIZE;
 public class NPCInventory extends Inventory {
 
     // Posicion original del picInv del frmComerciar original de AO
-    private static final int FORM_POS_X = 40;
-    private static final int FORM_POS_Y = 131;
+    private static final int FORM_COMERCE_POS_X = 40;
+    private static final int FORM_COMERCE_POS_Y = 131;
 
-    // Tamaño del inventario segun el frmComerciar original de AO
+    private static final int FORM_BANK_POS_X = 36;
+    private static final int FORM_BANK_POS_Y = 160;
+
+    // 36 x 160
+
+    // Tamaño del inventario segun el frmComerciar-frmBanco original de AO
     private static final int MAIN_SIZE_WIDTH = 160;
     private static final int MAIN_SIZE_HEIGHT = 256;
 
-    public NPCInventory() {
-        super(FORM_POS_X, FORM_POS_Y, MAIN_SIZE_WIDTH, MAIN_SIZE_HEIGHT, MAX_NPC_INVENTORY_SLOTS);
+    public NPCInventory(boolean bank) {
+        super(FORM_COMERCE_POS_X, FORM_COMERCE_POS_Y, MAIN_SIZE_WIDTH, MAIN_SIZE_HEIGHT, MAX_NPC_INVENTORY_SLOTS);
+
+        if (bank) {
+            this.posX = FORM_BANK_POS_X;
+            this.posY = FORM_BANK_POS_Y;
+        }
     }
 
     @Override
