@@ -103,7 +103,7 @@ public final class FOptions extends Form {
 
         ImGui.setCursorPos(134, 440);
         if (ImGui.button("Salir", 170, 20)) {
-            options.saveOptions();
+            options.save();
             this.close();
         }
     }
