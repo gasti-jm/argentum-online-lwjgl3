@@ -2,6 +2,7 @@ package org.aoclient.engine;
 
 import org.aoclient.engine.game.BindKeys;
 import org.aoclient.engine.gui.ImGUISystem;
+import org.aoclient.engine.listeners.MouseListener;
 import org.aoclient.engine.renderer.Surface;
 import org.aoclient.engine.scenes.*;
 import org.aoclient.engine.utils.GameData;
@@ -83,6 +84,8 @@ public final class Engine {
                 glfwSwapBuffers(window.getWindow());
                 Time.updateTime();
             }
+
+            MouseListener.resetReleasedButtons();
 
             // Si hay algo para enviar, lo envia (escribe lo que envia el cliente al servidor, como comandos, acciones, etc.)
             SocketConnection.getInstance().write();

@@ -23,7 +23,6 @@ public class FBank extends Form{
     public static UserInventory invUser = User.get().getUserInventory().clone();
     private final int goldDeposited;
 
-
     public FBank(int goldDeposited) {
         this.goldDeposited = goldDeposited;
 
@@ -44,8 +43,6 @@ public class FBank extends Form{
 
         ImGui.setCursorPos(5, 0);
         ImGui.image(backgroundImage, 461, 530);
-
-
 
         ImGui.setCursorPos(218, 262);
         ImGui.pushItemWidth(42);
@@ -90,7 +87,7 @@ public class FBank extends Form{
         }
 
         ImGui.setCursorPos(109, 63);
-        if (ImGui.button("DepositarGOLD", 62, 70)) {
+        if (ImGui.invisibleButton("DepositarGOLD", 62, 70)) {
             playSound(SND_CLICK);
 
             if(!cantGOLD.isEmpty()) {
@@ -99,14 +96,13 @@ public class FBank extends Form{
         }
 
         ImGui.setCursorPos(318, 63);
-        if (ImGui.button("RetirarGOLD", 63, 51)) {
+        if (ImGui.invisibleButton("RetirarGOLD", 63, 51)) {
             playSound(SND_CLICK);
 
             if(!cantGOLD.isEmpty()) {
                 writeBankExtractGold(Integer.parseInt(cantGOLD.get()));
             }
         }
-
 
         this.checkInventoryEvents();
 
