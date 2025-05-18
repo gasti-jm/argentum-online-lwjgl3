@@ -2,6 +2,7 @@ package org.aoclient.engine.gui.widgets;
 
 import imgui.ImGui;
 import imgui.flag.ImGuiCol;
+import imgui.flag.ImGuiMouseButton;
 import imgui.flag.ImGuiStyleVar;
 
 /**
@@ -40,7 +41,7 @@ public class ImageButton3State {
      * @return true si el botón fue clickeado
      */
     public boolean render() {
-        ImGui.setCursorPos(x, y);
+        ImGui.setCursorPos(x - 4, y - 3); // me parece raro pero bueno, es el unico que queda descoordinado.
         ImGui.pushStyleColor(ImGuiCol.Button, 0f, 0f, 0f, 0f);
         ImGui.pushStyleColor(ImGuiCol.ButtonHovered, 0f, 0f, 0f, 0f);
         ImGui.pushStyleColor(ImGuiCol.ButtonActive, 0f, 0f, 0f, 0f);
@@ -50,23 +51,37 @@ public class ImageButton3State {
         if (ImGui.isItemActive()) {
             ImGui.setCursorPos(x, y);
             ImGui.image(clickId, width, height);
-            if (ImGui.isMouseClicked(0)) {
-                ImGui.popStyleVar();
-                ImGui.popStyleColor(3);
-                return true;
-            }
+
+
+//            if (ImGui.isItemClicked(0)) {
+//                ImGui.popStyleVar();
+//                ImGui.popStyleColor(3);
+//                return true;
+//            }
+
         } else if (ImGui.isItemHovered()) {
             ImGui.setCursorPos(x, y);
             ImGui.image(hoverId, width, height);
-            if (ImGui.isMouseClicked(0)) {
+
+//            if (ImGui.isMouseClicked(0)) {
+//                ImGui.popStyleVar();
+//                ImGui.popStyleColor(3);
+//                return true;
+//            }
+        }
+
+        // si esta en estado de clickeo y suelto el click izq, se realiza la accion del boton.
+        if (clicked) {
+
+            if(ImGui.isMouseReleased(ImGuiMouseButton.Left)) {
                 ImGui.popStyleVar();
                 ImGui.popStyleColor(3);
                 return true;
             }
-        } else if (clicked) {
-            ImGui.popStyleVar();
-            ImGui.popStyleColor(3);
-            return true;
+
+            //ImGui.popStyleVar();
+            //ImGui.popStyleColor(3);
+            //return true;
         }
 
         ImGui.popStyleVar();

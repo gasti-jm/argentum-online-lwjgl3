@@ -67,7 +67,7 @@ public final class FConnect extends Form {
                 loadTexture("BotonConectarse"),
                 loadTexture("BotonConectarseRollover"),
                 loadTexture("BotonConectarseClick"),
-                322, 264, 89, 25
+                    325, 264, 89, 25
             );
             btnCreateCharacter = new ImageButton3State(
                 loadTexture("BotonCrearPersonajeConectar"),
