@@ -12,7 +12,7 @@ import static org.aoclient.engine.Sound.SND_CLICK;
 import static org.aoclient.engine.Sound.playSound;
 import static org.aoclient.network.protocol.Protocol.*;
 
-public class FStats extends Form {
+public final class FStats extends Form {
     private final int backgroundImage;
 
     public FStats() {

@@ -3,6 +3,8 @@ package org.aoclient.engine.renderer;
 import java.util.HashMap;
 import java.util.Map;
 
+import static org.lwjgl.opengl.GL11.glDeleteTextures;
+
 /**
  * Clase responsable de la gestion y almacenamiento de texturas para el renderizado grafico.
  * <p>
@@ -46,6 +48,10 @@ public class Surface {
      * texturas que no se van a dibujar y deben eliminarse para ahorrar espacio.
      */
     public void deleteAllTextures() {
+//        for (Map.Entry<Integer, Texture> entry : textures.entrySet()) {
+//            glDeleteTextures(entry.getValue().getId());
+//        }
+
         this.textures.clear();
     }
 

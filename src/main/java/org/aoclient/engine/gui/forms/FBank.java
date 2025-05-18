@@ -16,12 +16,12 @@ import static org.aoclient.engine.Sound.SND_CLICK;
 import static org.aoclient.engine.Sound.playSound;
 import static org.aoclient.network.protocol.Protocol.*;
 
-public class FBank extends Form{
+public final class FBank extends Form{
     private final ImString cant = new ImString("1");
     private final ImString cantGOLD = new ImString("1");
     public static NPCInventory invNPC = new NPCInventory(true);
     public static UserInventory invUser = User.get().getUserInventory().clone();
-    private final int goldDeposited;
+    private int goldDeposited;
 
     public FBank(int goldDeposited) {
         this.goldDeposited = goldDeposited;
@@ -91,7 +91,7 @@ public class FBank extends Form{
             playSound(SND_CLICK);
 
             if(!cantGOLD.isEmpty()) {
-                writeBankDepositGold( Integer.parseInt(cantGOLD.get()));
+                writeBankDepositGold(Integer.parseInt(cantGOLD.get()));
             }
         }
 

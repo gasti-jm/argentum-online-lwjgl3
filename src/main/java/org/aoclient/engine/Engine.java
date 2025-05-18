@@ -13,7 +13,7 @@ import org.tinylog.Logger;
 
 import static org.aoclient.engine.Sound.playMusic;
 import static org.aoclient.engine.scenes.SceneType.INTRO_SCENE;
-import static org.aoclient.engine.utils.GameData.options;
+import static org.aoclient.engine.utils.GameData.*;
 import static org.aoclient.engine.utils.Time.deltaTime;
 import static org.lwjgl.glfw.GLFW.glfwPollEvents;
 import static org.lwjgl.glfw.GLFW.glfwSwapBuffers;
@@ -83,6 +83,7 @@ public final class Engine {
 
                 glfwSwapBuffers(window.getWindow());
                 Time.updateTime();
+
             }
 
             MouseListener.resetReleasedButtons();
@@ -157,6 +158,7 @@ public final class Engine {
         currentScene.keyEvents();
         currentScene.render();
         guiSystem.renderGUI();
+        Sound.renderMusic();
     }
 
     /**

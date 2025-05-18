@@ -16,7 +16,7 @@ import org.aoclient.engine.utils.tutorial.TutorialData;
 import org.aoclient.engine.utils.tutorial.TutorialLoader;
 import org.aoclient.engine.utils.tutorial.TutorialPage;
 
-public class FTutorial extends Form {
+public final class FTutorial extends Form {
 
     // IDs de textura para los botones siguiente (normal, rollover y click)
     private int botonSiguienteTextureId;

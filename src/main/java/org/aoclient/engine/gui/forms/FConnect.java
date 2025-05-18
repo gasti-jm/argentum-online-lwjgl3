@@ -217,6 +217,15 @@ public final class FConnect extends Form {
     private void buttonCreateCharacter() {
         ImGUISystem.get().show(new FCreateCharacter());
         playMusic("7.ogg");
+
+        btnConnect.delete();
+        btnCreateCharacter.delete();
+        btnExit.delete();
+        btnManual.delete();
+        btnRecovery.delete();
+        btnDeleteCharacter.delete();
+        btnRules.delete();
+        btnSourceCode.delete();
         this.close();
     }
 

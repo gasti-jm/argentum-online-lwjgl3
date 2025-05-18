@@ -38,7 +38,7 @@ import static org.aoclient.network.protocol.Protocol.*;
  * concluido.
  */
 
-public class FComerce extends Form {
+public final class FComerce extends Form {
 
     private final ImString cant = new ImString("1");
     public static NPCInventory invNPC = new NPCInventory(false);

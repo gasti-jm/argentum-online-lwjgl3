@@ -5,6 +5,8 @@ import imgui.flag.ImGuiCol;
 import imgui.flag.ImGuiMouseButton;
 import imgui.flag.ImGuiStyleVar;
 
+import static org.lwjgl.opengl.GL11.glDeleteTextures;
+
 /**
  * Utilidad para dibujar un botón con 3 estados gráficos (normal, rollover, click) usando ImGui.
  * Permite centralizar la lógica visual y simplificar el código de los formularios.
@@ -87,5 +89,11 @@ public class ImageButton3State {
         ImGui.popStyleVar();
         ImGui.popStyleColor(3);
         return false;
+    }
+
+    public void delete() {
+        glDeleteTextures(normalId);
+        glDeleteTextures(hoverId);
+        glDeleteTextures(clickId);
     }
 }

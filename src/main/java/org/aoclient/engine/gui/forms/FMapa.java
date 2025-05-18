@@ -25,7 +25,7 @@ import static org.aoclient.engine.Sound.playSound;
  * necesario.
  */
 
-public class FMapa extends Form {
+public final class FMapa extends Form {
 
     private boolean overWorld;
 
