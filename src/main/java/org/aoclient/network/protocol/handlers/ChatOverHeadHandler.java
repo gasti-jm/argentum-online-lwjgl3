@@ -33,7 +33,7 @@ public class ChatOverHeadHandler implements PacketHandler {
         buffer.readByte(); // Descarta el ID del paquete (ya sabemos que es CHAT_OVER_HEAD)
 
         // Lee el contenido del paquete
-        String chat = buffer.readUTF8String();
+        String chat = buffer.readCp1252String();
         short charIndex = buffer.readInteger(); // El servidor añadio esto!
         int r = buffer.readByte(); // El servidor añadio esto!
         int g = buffer.readByte(); // El servidor añadio esto!

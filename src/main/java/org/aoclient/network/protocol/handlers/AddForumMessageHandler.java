@@ -16,9 +16,9 @@ public class AddForumMessageHandler implements PacketHandler {
         buffer.readByte();
 
         int forumType = buffer.readByte();
-        String title = buffer.readUTF8String();
-        String autor = buffer.readUTF8String();
-        String message = buffer.readUTF8String();
+        String title = buffer.readCp1252String();
+        String autor = buffer.readCp1252String();
+        String message = buffer.readCp1252String();
 
         //If Not frmForo.ForoLimpio Then
         //        clsForos.ClearForums

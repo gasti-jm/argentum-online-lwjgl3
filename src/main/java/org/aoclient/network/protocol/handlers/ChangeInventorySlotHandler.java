@@ -18,7 +18,7 @@ public class ChangeInventorySlotHandler implements PacketHandler {
 
         final int slot = buffer.readByte();
         final short objIndex = buffer.readInteger();
-        final String name = buffer.readUTF8String();
+        final String name = buffer.readCp1252String();
         final int amount = buffer.readInteger();
         final boolean equipped = buffer.readBoolean();
         final short grhIndex = buffer.readInteger();

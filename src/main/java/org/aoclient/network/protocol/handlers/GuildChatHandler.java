@@ -16,7 +16,7 @@ public class GuildChatHandler implements PacketHandler {
         // 3. Leen y procesa los bytes
         buffer.readByte();
 
-        String chat = buffer.readUTF8String();
+        String chat = buffer.readCp1252String();
 
         //Dim str As String
         //    Dim r As Byte

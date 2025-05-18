@@ -278,7 +278,7 @@ public class MultiMessageHandler implements PacketHandler {
             case GO_HOME:
                 int distance = data.readByte();
                 short time = data.readInteger();
-                String hogar = data.readUTF8String();
+                String hogar = data.readCp1252String();
 
                 console.addMsgToConsole("Estas a " + distance + " mapas de distancia de " + hogar + ", este viaje durara " + time + " segundos.",
                         false, false, new RGBColor(1f, 0f, 0f));

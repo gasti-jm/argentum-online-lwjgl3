@@ -15,7 +15,7 @@ public class UserNameListHandler implements PacketHandler {
 
         buffer.readByte();
 
-        String userList = buffer.readUTF8String();
+        String userList = buffer.readCp1252String();
 
         //Dim userList() As String
         //    Dim i As Long

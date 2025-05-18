@@ -18,7 +18,7 @@ public class ErrorMessageHandler implements PacketHandler {
         // Remove packet ID
         buffer.readByte();
 
-        String errMsg = buffer.readUTF8String();
+        String errMsg = buffer.readCp1252String();
         ImGUISystem.get().show(new FMessage(errMsg));
 
         SocketConnection.getInstance().disconnect();

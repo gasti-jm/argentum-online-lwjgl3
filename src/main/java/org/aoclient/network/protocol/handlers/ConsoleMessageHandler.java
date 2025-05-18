@@ -16,7 +16,7 @@ public class ConsoleMessageHandler implements PacketHandler {
 
         buffer.readByte();
 
-        String chat = buffer.readUTF8String();
+        String chat = buffer.readCp1252String();
         E_FontType fontType = E_FontType.values()[buffer.readByte()];
 
         Console.get().addMsgToConsole(chat, false, false, new RGBColor(fontType.r, fontType.g, fontType.b));

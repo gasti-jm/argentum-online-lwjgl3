@@ -14,7 +14,7 @@ public class OfferDetailsHandler implements PacketHandler {
 
         buffer.readByte();
 
-        String recievePeticion = buffer.readUTF8String();
+        String recievePeticion = buffer.readCp1252String();
 
         data.copy(buffer);
         Logger.debug("handleOfferDetails Cargado! - FALTA TERMINAR!");

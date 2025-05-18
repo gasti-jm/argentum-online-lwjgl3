@@ -10,7 +10,7 @@ public class UserCommerceInitHandler implements PacketHandler {
         data.readByte();
 
         // variable local vb6
-        String tradingUserName = data.readUTF8String();
+        String tradingUserName = data.readCp1252String();
 
         //' Initialize commerce inventories
         //    Call InvComUsu.Initialize(DirectDraw, frmComerciarUsu.picInvComercio, Inventario.MaxObjs)

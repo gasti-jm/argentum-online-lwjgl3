@@ -6,6 +6,7 @@ import org.aoclient.network.protocol.PacketReceiver;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
+import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 
 /**
@@ -32,10 +33,10 @@ import java.nio.charset.StandardCharsets;
 public class PacketBuffer {
 
     /**
-     * Tamaño en bytes para almacenar la longitud de una cadena UTF-8 utilizado para mantener compatibilidad con el protocolo
-     * original de AO.
+     * Tamaño en bytes para almacenar la longitud de una cadena utilizado para mantener compatibilidad con el protocolo original
+     * de AO.
      */
-    private static final int UTF8_STRING_LENGTH_BYTES = 2;
+    private static final int STRING_LENGTH_BYTES = 2;
     /** Tamaño en bytes del tipo Integer en VB6 utilizado para mantener compatibilidad con el protocolo original de AO. */
     private static final int VB6_INTEGER_BYTES = 2;
     /** Tamaño en bytes del tipo Long en VB6 utilizado para mantener compatibilidad con el protocolo original de AO. */
@@ -228,10 +229,25 @@ public class PacketBuffer {
     /**
      * Escribe una cadena de texto en formato ASCII en el buffer.
      *
-     * @param value cadena de texto que sera codificada en ASCII y escrita en el buffer
+     * @param string cadena de texto que sera codificada en ASCII y escrita en el buffer
      */
-    public void writeASCIIStringFixed(String value) {
-        write(value.getBytes(StandardCharsets.US_ASCII));
+    public void writeASCIIStringFixed(String string) {
+        write(string.getBytes(StandardCharsets.US_ASCII));
+    }
+
+    /**
+     * Escribe una cadena de texto en formato Cp1252 en el buffer.
+     *
+     * @param string cadena de texto que sera codificada en Cp1252 y escrita en el buffer
+     */
+    public void writeCp1252String(String string) {
+        byte[] stringBytes = string.getBytes(java.nio.charset.Charset.forName("Cp1252"));
+        byte[] buffer = new byte[STRING_LENGTH_BYTES + string.length()];
+        /* Como se esta escribiendo una cadena codificada en Cp1252, entonces los caracteres ocupan solo 1 byte, por lo tanto es
+         * valido obtener la longitud de la cadena con string.length(). */
+        ByteBuffer.wrap(buffer).put(0, (byte) string.length());
+        System.arraycopy(stringBytes, 0, buffer, STRING_LENGTH_BYTES, string.length());
+        write(buffer);
     }
 
     /**
@@ -252,11 +268,11 @@ public class PacketBuffer {
          * eso es necesario usar la longitud en bytes de la cadena, no en caracteres. */
         int bytes = stringBytes.length;
         // Crea un buffer local con la capacidad para almacenar la longitud y los bytes de la cadena
-        byte[] buffer = new byte[UTF8_STRING_LENGTH_BYTES + bytes];
+        byte[] buffer = new byte[STRING_LENGTH_BYTES + bytes];
         // Agrega la longitud de la cadena en los primeros 2 bytes del buffer
         ByteBuffer.wrap(buffer).order(ByteOrder.LITTLE_ENDIAN).putShort((short) bytes);
         // Agrega los bytes de la cadena a partir de la posicion 2 del buffer, es decir, despues de haber agregado los dos bytes que representan la longitud de la cadena
-        System.arraycopy(stringBytes, 0, buffer, UTF8_STRING_LENGTH_BYTES, bytes);
+        System.arraycopy(stringBytes, 0, buffer, STRING_LENGTH_BYTES, bytes);
         write(buffer);
     }
 
@@ -372,52 +388,55 @@ public class PacketBuffer {
     }
 
     /**
-     * Lee una cadena codificada en UTF-8 desde el buffer.
+     * Lee una cadena codificada en Cp1252 del buffer.
      * <p>
      * El metodo primero interpreta los primeros 2 bytes en formato little-endian como un valor short, el cual determina la
-     * longitud de la cadena a leer. Despues, lee la cantidad especificada de bytes y los decodifica como texto en formato UTF-8.
+     * longitud de la cadena a leer. Despues, lee la cantidad especificada de bytes y los decodifica como texto en formato
+     * Cp1252.
      *
-     * @return la cadena leida en formato UTF-8, si la longitud de la cadena es 0, se devuelve una cadena vacia
-     * @throws RuntimeException si no hay suficientes bytes en el buffer para completar la operacion
+     * @return la cadena leida en formato Cp1252, si la longitud de la cadena es 0, se devuelve una cadena vacia
+     * @throws RuntimeException si no hay suficientes bytes en el buffer
      */
-    public String readUTF8String() {
-        // Verifica si hay suficientes datos para leer la longitud
+    public String readCp1252String() {
+        // Verifica si hay suficientes bytes para leer la longitud de la cadena
         if (bufferLength <= 1) throw new RuntimeException("Not enough byte!");
-        // Lee la longitud de la cadena
         short stringLength = readStringLength();
-        // Verifica si hay suficientes datos para leer la cadena completa
+        // Verifica si hay suficientes bytes para leer la cadena completa
         if (bufferLength < stringLength) throw new RuntimeException("Not enough byte!");
         // Si la longitud es cero, devuelve cadena vacia
         if (stringLength <= 0) return "";
-        // Lee y decodifica la cadena UTF-8
-        return readStringData(stringLength);
+        return readString(stringLength, java.nio.charset.Charset.forName("Cp1252"));
     }
 
     /**
-     * Lee e interpreta la longitud de la cadena desde el buffer.
+     * Lee la longitud de una cadena desde un array de bytes.
+     * <p>
+     * El metodo asume que los bytes correspondientes a la longitud se encuentran al principio del buffer y se almacenan en
+     * formato LITTLE_ENDIAN.
      *
-     * @return la longitud de la cadena como un valor short
+     * @return La longitud de la cadena representada como un valor de tipo short
      */
     private short readStringLength() {
-        byte[] lengthBuffer = new byte[UTF8_STRING_LENGTH_BYTES];
-        read(lengthBuffer);
-        short length = ByteBuffer.wrap(lengthBuffer).order(ByteOrder.LITTLE_ENDIAN).getShort();
-        // Elimina los bytes de longitud que ya fueron procesados
-        remove(UTF8_STRING_LENGTH_BYTES);
+        byte[] buffer = new byte[STRING_LENGTH_BYTES];
+        read(buffer);
+        short length = ByteBuffer.wrap(buffer).order(ByteOrder.LITTLE_ENDIAN).getShort();
+        // Elimina los bytes de la longitud de la cadena que ya fueron leidos
+        remove(STRING_LENGTH_BYTES);
         return length;
     }
 
     /**
-     * Lee y decodifica los datos de la cadena UTF-8.
+     * Lee una cadena de texto desde el buffer utilizando la longitud especificada y el conjunto de caracteres proporcionado.
      *
-     * @param length la longitud de la cadena a leer
+     * @param stringLength longitud de la cadena en bytes
+     * @param charset      charset utilizado para decodificar los bytes
      * @return la cadena decodificada
      */
-    private String readStringData(short length) {
-        byte[] stringData = new byte[length];
-        read(stringData);
-        remove(length);
-        return new String(stringData, StandardCharsets.UTF_8);
+    private String readString(short stringLength, Charset charset) {
+        byte[] bytes = new byte[stringLength];
+        read(bytes);
+        remove(stringLength);
+        return new String(bytes, charset);
     }
 
     public String readUnicodeString() {

@@ -19,7 +19,7 @@ public class ChangeSpellSlotHandler implements PacketHandler {
         //buffer.readByte();
         //short hechizoNum = buffer.readInteger();
         buffer.readInteger();
-        String hechizoName = buffer.readUTF8String();
+        String hechizoName = buffer.readCp1252String();
 
         User.get().getInventorySpells().addSpell(slot - 1, hechizoName);
 

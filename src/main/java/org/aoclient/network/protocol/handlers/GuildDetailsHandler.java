@@ -15,23 +15,23 @@ public class GuildDetailsHandler implements PacketHandler {
         // Remove packet ID
         buffer.readByte();
 
-        buffer.readUTF8String();
-        buffer.readUTF8String();
-        buffer.readUTF8String();
-        buffer.readUTF8String();
-        buffer.readUTF8String();
+        buffer.readCp1252String();
+        buffer.readCp1252String();
+        buffer.readCp1252String();
+        buffer.readCp1252String();
+        buffer.readCp1252String();
         buffer.readInteger();
 
         buffer.readBoolean();
 
-        buffer.readUTF8String();
+        buffer.readCp1252String();
         buffer.readInteger();
         buffer.readInteger();
-        buffer.readUTF8String();
+        buffer.readCp1252String();
 
-        buffer.readUTF8String();
+        buffer.readCp1252String();
 
-        buffer.readUTF8String();
+        buffer.readCp1252String();
 
         //With frmGuildBrief
         //        .imgDeclararGuerra.Visible = .EsLeader

@@ -14,7 +14,7 @@ public class TrainerCreatureListHandler implements PacketHandler {
 
         buffer.readByte();
 
-        String creatures = buffer.readUTF8String();
+        String creatures = buffer.readCp1252String();
 
         //creatures = Split(Buffer.ReadASCIIString(), SEPARATOR)
         //

@@ -25,7 +25,7 @@ public class ChangeUserTradeSlotHandler implements PacketHandler {
         buffer.readInteger();
         buffer.readInteger();
         buffer.readLong();
-        buffer.readUTF8String();
+        buffer.readCp1252String();
 
         buffer.readInteger();
         buffer.readLong();
@@ -36,7 +36,7 @@ public class ChangeUserTradeSlotHandler implements PacketHandler {
         buffer.readInteger();
         buffer.readInteger();
         buffer.readLong();
-        buffer.readUTF8String();
+        buffer.readCp1252String();
 
         //OfferSlot = Buffer.ReadByte
         //

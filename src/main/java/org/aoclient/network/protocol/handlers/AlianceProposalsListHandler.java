@@ -14,7 +14,7 @@ public class AlianceProposalsListHandler implements PacketHandler {
 
         buffer.readByte();
 
-        String vsGuildList = buffer.readUTF8String();
+        String vsGuildList = buffer.readCp1252String();
 
         //Dim vsGuildList() As String
         //    Dim i As Long

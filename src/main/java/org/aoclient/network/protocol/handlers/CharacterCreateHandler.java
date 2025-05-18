@@ -34,7 +34,7 @@ public class CharacterCreateHandler implements PacketHandler {
 
         User.get().setCharacterFx(charIndex, buffer.readInteger(), buffer.readInteger());
 
-        charList[charIndex].setName(buffer.readUTF8String());
+        charList[charIndex].setName(buffer.readCp1252String());
 
         int nickColor = buffer.readByte();
         int privs = buffer.readByte();

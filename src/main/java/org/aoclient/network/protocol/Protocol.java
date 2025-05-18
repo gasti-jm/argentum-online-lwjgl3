@@ -53,8 +53,8 @@ public class Protocol {
     public static void writeLoginExistingChar(String username, String password) {
         // Primero escribe el ID del paquete para que al momento de deserializar el paquete entrante, lea primero el ID del paquete
         outputBuffer.writeByte(ClientPacket.LOGIN_EXISTING_CHAR.getId());
-        outputBuffer.writeUTF8String(username);
-        outputBuffer.writeUTF8String(password);
+        outputBuffer.writeCp1252String(username);
+        outputBuffer.writeCp1252String(password);
         outputBuffer.writeByte(0); // App.Major ?
         outputBuffer.writeByte(13); // App.Minor ?
         outputBuffer.writeByte(0); // App.Revision ?
@@ -66,8 +66,8 @@ public class Protocol {
 
     public static void writeLoginNewChar(String userName, String userPassword, int userRaza, int userSexo, int userClase, int userHead, String userEmail, int userHogar) {
         outputBuffer.writeByte(ClientPacket.LOGIN_NEW_CHAR.getId());
-        outputBuffer.writeUTF8String(userName);
-        outputBuffer.writeUTF8String(userPassword);
+        outputBuffer.writeCp1252String(userName);
+        outputBuffer.writeCp1252String(userPassword);
 
         outputBuffer.writeByte(0);  // App.Major
         outputBuffer.writeByte(13); // App.Minor
@@ -79,7 +79,7 @@ public class Protocol {
         outputBuffer.writeInteger((short) userHead); // Convierte el valor int (32 bits) a short (16 bits) descartando los 16 bits mas significativos para ser compatible con el tipo Integer de VB6 (2 bytes)
 
 
-        outputBuffer.writeUTF8String(userEmail);
+        outputBuffer.writeCp1252String(userEmail);
         outputBuffer.writeByte(userHogar);
     }
 
@@ -132,18 +132,18 @@ public class Protocol {
      */
     public static void writeTalk(String chat) {
         outputBuffer.writeByte(ClientPacket.TALK.getId());
-        outputBuffer.writeUTF8String(chat);
+        outputBuffer.writeCp1252String(chat);
     }
 
     public static void writeYell(String chat) {
         outputBuffer.writeByte(ClientPacket.YELL.getId());
-        outputBuffer.writeUTF8String(chat);
+        outputBuffer.writeCp1252String(chat);
     }
 
     public static void writeWhisper(short charIndex, String chat) {
         outputBuffer.writeByte(ClientPacket.WHISPER.getId());
         outputBuffer.writeInteger(charIndex);
-        outputBuffer.writeUTF8String(chat);
+        outputBuffer.writeCp1252String(chat);
     }
 
     public static void writeWalk(E_Heading direction) {
@@ -280,8 +280,8 @@ public class Protocol {
 
     public static void writeChangePassword(String oldPass, String newPass) {
         outputBuffer.writeByte(ClientPacket.CHANGE_PASSWORD.getId());
-        outputBuffer.writeUTF8String(oldPass);
-        outputBuffer.writeUTF8String(newPass);
+        outputBuffer.writeCp1252String(oldPass);
+        outputBuffer.writeCp1252String(newPass);
     }
 
     public static void writeOnline() {
@@ -481,12 +481,12 @@ public class Protocol {
 
     public static void writeGuildMessage(String message) {
         outputBuffer.writeByte(ClientPacket.GUILD_MESSAGE.getId());
-        outputBuffer.writeUTF8String(message);
+        outputBuffer.writeCp1252String(message);
     }
 
     public static void writePartyMessage(String message) {
         outputBuffer.writeByte(ClientPacket.PARTY_MESSAGE.getId());
-        outputBuffer.writeUTF8String(message);
+        outputBuffer.writeCp1252String(message);
     }
 
     public static void writeCentinelReport(int number) {
@@ -504,12 +504,12 @@ public class Protocol {
 
     public static void writeCouncilMessage(String message) {
         outputBuffer.writeByte(ClientPacket.COUNCIL_MESSAGE.getId());
-        outputBuffer.writeUTF8String(message);
+        outputBuffer.writeCp1252String(message);
     }
 
     public static void writeRoleMasterRequest(String message) {
         outputBuffer.writeByte(ClientPacket.ROLE_MASTER_REQUEST.getId());
-        outputBuffer.writeUTF8String(message);
+        outputBuffer.writeCp1252String(message);
     }
 
     public static void writeGMRequest() {
@@ -518,22 +518,22 @@ public class Protocol {
 
     public static void writeBugReport(String message) {
         outputBuffer.writeByte(ClientPacket.BUG_REPORT.getId());
-        outputBuffer.writeUTF8String(message);
+        outputBuffer.writeCp1252String(message);
     }
 
     public static void writeChangeDescription(String message) {
         outputBuffer.writeByte(ClientPacket.CHANGE_DESCRIPTION.getId());
-        outputBuffer.writeUTF8String(message);
+        outputBuffer.writeCp1252String(message);
     }
 
     public static void writeGuildVote(String message) {
         outputBuffer.writeByte(ClientPacket.GUILD_VOTE.getId());
-        outputBuffer.writeUTF8String(message);
+        outputBuffer.writeCp1252String(message);
     }
 
     public static void writePunishments(String message) {
         outputBuffer.writeByte(ClientPacket.PUNISHMENTS.getId());
-        outputBuffer.writeUTF8String(message);
+        outputBuffer.writeCp1252String(message);
     }
 
     public static void writeGamble(short amount) {
@@ -557,7 +557,7 @@ public class Protocol {
 
     public static void writeDenounce(String message) {
         outputBuffer.writeByte(ClientPacket.DENOUNCE.getId());
-        outputBuffer.writeUTF8String(message);
+        outputBuffer.writeCp1252String(message);
     }
 
     public static void writeGuildFundate() {
@@ -571,17 +571,17 @@ public class Protocol {
 
     public static void writePartyKick(String userName) {
         outputBuffer.writeByte(ClientPacket.PARTY_KICK.getId());
-        outputBuffer.writeUTF8String(userName);
+        outputBuffer.writeCp1252String(userName);
     }
 
     public static void writePartySetLeader(String userName) {
         outputBuffer.writeByte(ClientPacket.PARTY_SET_LEADER.getId());
-        outputBuffer.writeUTF8String(userName);
+        outputBuffer.writeCp1252String(userName);
     }
 
     public static void writePartyAcceptMember(String userName) {
         outputBuffer.writeByte(ClientPacket.PARTY_ACCEPT_MEMBER.getId());
-        outputBuffer.writeUTF8String(userName);
+        outputBuffer.writeCp1252String(userName);
     }
 
      /* ##############################################
@@ -592,7 +592,7 @@ public class Protocol {
         outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
         outputBuffer.writeByte(GMCommand.GM_MESSAGE.getId());
 
-        outputBuffer.writeUTF8String(message);
+        outputBuffer.writeCp1252String(message);
     }
 
     public static void writeShowName() {
@@ -614,14 +614,14 @@ public class Protocol {
         outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
         outputBuffer.writeByte(GMCommand.GO_NEARBY.getId());
 
-        outputBuffer.writeUTF8String(userName);
+        outputBuffer.writeCp1252String(userName);
     }
 
     public static void writeComment(String message) {
         outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
         outputBuffer.writeByte(GMCommand.COMMENT.getId());
 
-        outputBuffer.writeUTF8String(message);
+        outputBuffer.writeCp1252String(message);
     }
 
     public static void writeServerTime() {
@@ -633,7 +633,7 @@ public class Protocol {
         outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
         outputBuffer.writeByte(GMCommand.WHERE.getId());
 
-        outputBuffer.writeUTF8String(userName);
+        outputBuffer.writeCp1252String(userName);
     }
 
     public static void writeCreaturesInMap(short Map) {
@@ -658,7 +658,7 @@ public class Protocol {
         outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
         outputBuffer.writeByte(GMCommand.WARP_CHAR.getId());
 
-        outputBuffer.writeUTF8String(userName);
+        outputBuffer.writeCp1252String(userName);
         outputBuffer.writeInteger(map);
         outputBuffer.writeByte(x);
         outputBuffer.writeByte(y);
@@ -668,7 +668,7 @@ public class Protocol {
         outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
         outputBuffer.writeByte(GMCommand.SILENCE.getId());
 
-        outputBuffer.writeUTF8String(userName);
+        outputBuffer.writeCp1252String(userName);
     }
 
     public static void writeSOSShowList() {
@@ -685,7 +685,7 @@ public class Protocol {
         outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
         outputBuffer.writeByte(GMCommand.GO_TO_CHAR.getId());
 
-        outputBuffer.writeUTF8String(userName);
+        outputBuffer.writeCp1252String(userName);
     }
 
     public static void writeInvisible() {
@@ -712,8 +712,8 @@ public class Protocol {
         outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
         outputBuffer.writeByte(GMCommand.JAIL.getId());
 
-        outputBuffer.writeUTF8String(userName);
-        outputBuffer.writeUTF8String(reason);
+        outputBuffer.writeCp1252String(userName);
+        outputBuffer.writeCp1252String(reason);
         outputBuffer.writeByte(time);
     }
 
@@ -726,20 +726,20 @@ public class Protocol {
         outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
         outputBuffer.writeByte(GMCommand.WARN_USER.getId());
 
-        outputBuffer.writeUTF8String(userName);
-        outputBuffer.writeUTF8String(reason);
+        outputBuffer.writeCp1252String(userName);
+        outputBuffer.writeCp1252String(reason);
     }
 
     public static void writeEditChar(String userName, int editOption, String arg1, String arg2) {
         outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
         outputBuffer.writeByte(GMCommand.EDIT_CHAR.getId());
 
-        outputBuffer.writeUTF8String(userName);
+        outputBuffer.writeCp1252String(userName);
 
         outputBuffer.writeByte(editOption);
 
-        outputBuffer.writeUTF8String(arg1);
-        outputBuffer.writeUTF8String(arg2);
+        outputBuffer.writeCp1252String(arg1);
+        outputBuffer.writeCp1252String(arg2);
 
 
     }
@@ -748,49 +748,49 @@ public class Protocol {
         outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
         outputBuffer.writeByte(GMCommand.REQUEST_CHAR_INFO.getId());
 
-        outputBuffer.writeUTF8String(userName);
+        outputBuffer.writeCp1252String(userName);
     }
 
     public static void writeRequestCharStats(String userName) {
         outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
         outputBuffer.writeByte(GMCommand.REQUEST_CHAR_STATS.getId());
 
-        outputBuffer.writeUTF8String(userName);
+        outputBuffer.writeCp1252String(userName);
     }
 
     public static void writeRequestCharGold(String userName) {
         outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
         outputBuffer.writeByte(GMCommand.REQUEST_CHAR_GOLD.getId());
 
-        outputBuffer.writeUTF8String(userName);
+        outputBuffer.writeCp1252String(userName);
     }
 
     public static void writeRequestCharInventory(String userName) {
         outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
         outputBuffer.writeByte(GMCommand.REQUEST_CHAR_INVENTORY.getId());
 
-        outputBuffer.writeUTF8String(userName);
+        outputBuffer.writeCp1252String(userName);
     }
 
     public static void writeRequestCharBank(String userName) {
         outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
         outputBuffer.writeByte(GMCommand.REQUEST_CHAR_BANK.getId());
 
-        outputBuffer.writeUTF8String(userName);
+        outputBuffer.writeCp1252String(userName);
     }
 
     public static void writeRequestCharSkills(String userName) {
         outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
         outputBuffer.writeByte(GMCommand.REQUEST_CHAR_SKILLS.getId());
 
-        outputBuffer.writeUTF8String(userName);
+        outputBuffer.writeCp1252String(userName);
     }
 
     public static void writeReviveChar(String userName) {
         outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
         outputBuffer.writeByte(GMCommand.REVIVE_CHAR.getId());
 
-        outputBuffer.writeUTF8String(userName);
+        outputBuffer.writeCp1252String(userName);
     }
 
     public static void writeOnlineGM() {
@@ -809,36 +809,36 @@ public class Protocol {
         outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
         outputBuffer.writeByte(GMCommand.FORGIVE.getId());
 
-        outputBuffer.writeUTF8String(userName);
+        outputBuffer.writeCp1252String(userName);
     }
 
     public static void writeKick(String userName) {
         outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
         outputBuffer.writeByte(GMCommand.KICK.getId());
 
-        outputBuffer.writeUTF8String(userName);
+        outputBuffer.writeCp1252String(userName);
     }
 
     public static void writeExecute(String userName) {
         outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
         outputBuffer.writeByte(GMCommand.EXECUTE.getId());
 
-        outputBuffer.writeUTF8String(userName);
+        outputBuffer.writeCp1252String(userName);
     }
 
     public static void writeBanChar(String userName, String reason) {
         outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
         outputBuffer.writeByte(GMCommand.BAN_CHAR.getId());
 
-        outputBuffer.writeUTF8String(userName);
-        outputBuffer.writeUTF8String(reason);
+        outputBuffer.writeCp1252String(userName);
+        outputBuffer.writeCp1252String(reason);
     }
 
     public static void writeUnbanChar(String userName) {
         outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
         outputBuffer.writeByte(GMCommand.UNBAN_CHAR.getId());
 
-        outputBuffer.writeUTF8String(userName);
+        outputBuffer.writeCp1252String(userName);
     }
 
     public static void writeNPCFollow() {
@@ -880,7 +880,7 @@ public class Protocol {
         outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
         outputBuffer.writeByte(GMCommand.NICK_TO_IP.getId());
 
-        outputBuffer.writeUTF8String(userName);
+        outputBuffer.writeCp1252String(userName);
     }
 
     public static void writeIPToNick(int[] ip) {
@@ -901,7 +901,7 @@ public class Protocol {
         outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
         outputBuffer.writeByte(GMCommand.GUILD_ONLINE_MEMBERS.getId());
 
-        outputBuffer.writeUTF8String(guild);
+        outputBuffer.writeCp1252String(guild);
     }
 
     public static void writeTeleportCreate(short map, int x, int y, int radio) {
@@ -928,7 +928,7 @@ public class Protocol {
         outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
         outputBuffer.writeByte(GMCommand.SET_CHAR_DESCRIPTION.getId());
 
-        outputBuffer.writeUTF8String(desc);
+        outputBuffer.writeCp1252String(desc);
     }
 
     public static void writeForceMIDIToMap(int midiID, short map) {
@@ -955,35 +955,35 @@ public class Protocol {
         outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
         outputBuffer.writeByte(GMCommand.ROYAL_ARMY_MESSAGE.getId());
 
-        outputBuffer.writeUTF8String(message);
+        outputBuffer.writeCp1252String(message);
     }
 
     public static void writeChaosLegionMessage(String message) {
         outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
         outputBuffer.writeByte(GMCommand.CHAOS_LEGION_MESSAGE.getId());
 
-        outputBuffer.writeUTF8String(message);
+        outputBuffer.writeCp1252String(message);
     }
 
     public static void writeCitizenMessage(String message) {
         outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
         outputBuffer.writeByte(GMCommand.CITIZEN_MESSAGE.getId());
 
-        outputBuffer.writeUTF8String(message);
+        outputBuffer.writeCp1252String(message);
     }
 
     public static void writeCriminalMessage(String message) {
         outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
         outputBuffer.writeByte(GMCommand.CRIMINAL_MESSAGE.getId());
 
-        outputBuffer.writeUTF8String(message);
+        outputBuffer.writeCp1252String(message);
     }
 
     public static void writeTalkAsNPC(String message) {
         outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
         outputBuffer.writeByte(GMCommand.TALK_AS_NPC.getId());
 
-        outputBuffer.writeUTF8String(message);
+        outputBuffer.writeCp1252String(message);
     }
 
     public static void writeDestroyAllItemsInArea() {
@@ -995,14 +995,14 @@ public class Protocol {
         outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
         outputBuffer.writeByte(GMCommand.ACCEPT_ROYAL_COUNCIL_MEMBER.getId());
 
-        outputBuffer.writeUTF8String(userName);
+        outputBuffer.writeCp1252String(userName);
     }
 
     public static void writeAcceptChaosCouncilMember(String userName) {
         outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
         outputBuffer.writeByte(GMCommand.ACCEPT_CHAOS_COUNCIL_MEMBER.getId());
 
-        outputBuffer.writeUTF8String(userName);
+        outputBuffer.writeCp1252String(userName);
     }
 
     public static void writeItemsInTheFloor() {
@@ -1014,14 +1014,14 @@ public class Protocol {
         outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
         outputBuffer.writeByte(GMCommand.MAKE_DUMB.getId());
 
-        outputBuffer.writeUTF8String(userName);
+        outputBuffer.writeCp1252String(userName);
     }
 
     public static void writeMakeDumbNoMore(String userName) {
         outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
         outputBuffer.writeByte(GMCommand.MAKE_DUMB_NO_MORE.getId());
 
-        outputBuffer.writeUTF8String(userName);
+        outputBuffer.writeCp1252String(userName);
     }
 
     public static void writeDumpIPTables() {
@@ -1033,7 +1033,7 @@ public class Protocol {
         outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
         outputBuffer.writeByte(GMCommand.COUNCIL_KICK.getId());
 
-        outputBuffer.writeUTF8String(userName);
+        outputBuffer.writeCp1252String(userName);
     }
 
     public static void writeSetTrigger(int trigger) {
@@ -1062,14 +1062,14 @@ public class Protocol {
         outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
         outputBuffer.writeByte(GMCommand.GUILD_MEMBER_LIST.getId());
 
-        outputBuffer.writeUTF8String(guild);
+        outputBuffer.writeCp1252String(guild);
     }
 
     public static void writeGuildBan(String guild) {
         outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
         outputBuffer.writeByte(GMCommand.GUILD_BAN.getId());
 
-        outputBuffer.writeUTF8String(guild);
+        outputBuffer.writeCp1252String(guild);
     }
 
     public static void writeBanIP(boolean byIp, int[] ip, String nick, String reason) {
@@ -1089,11 +1089,11 @@ public class Protocol {
             }
         } else {
             // Si es por nick, escribir el nick
-            outputBuffer.writeUTF8String(nick);
+            outputBuffer.writeCp1252String(nick);
         }
 
         // Escribir el motivo del baneo
-        outputBuffer.writeUTF8String(reason);
+        outputBuffer.writeCp1252String(reason);
     }
 
     public static void writeUnbanIP(int[] ip) {
@@ -1118,14 +1118,14 @@ public class Protocol {
         outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
         outputBuffer.writeByte(GMCommand.CHAOS_LEGION_KICK.getId());
 
-        outputBuffer.writeUTF8String(userName);
+        outputBuffer.writeCp1252String(userName);
     }
 
     public static void writeRoyalArmyKick(String userName) {
         outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
         outputBuffer.writeByte(GMCommand.ROYAL_ARMY_KICK.getId());
 
-        outputBuffer.writeUTF8String(userName);
+        outputBuffer.writeCp1252String(userName);
     }
 
     public static void writeForceMIDIAll(int midiID) {
@@ -1146,9 +1146,9 @@ public class Protocol {
         outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
         outputBuffer.writeByte(GMCommand.REMOVE_PUNISHMENT.getId());
 
-        outputBuffer.writeUTF8String(userName);
+        outputBuffer.writeCp1252String(userName);
         outputBuffer.writeByte(punishment);
-        outputBuffer.writeUTF8String(newText);
+        outputBuffer.writeCp1252String(newText);
     }
 
     public static void writeTileBlockedToggle() {
@@ -1170,7 +1170,7 @@ public class Protocol {
         outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
         outputBuffer.writeByte(GMCommand.LAST_IP.getId());
 
-        outputBuffer.writeUTF8String(userName);
+        outputBuffer.writeCp1252String(userName);
     }
 
     public static void writeChangeMOTD() {
@@ -1182,7 +1182,7 @@ public class Protocol {
         outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
         outputBuffer.writeByte(GMCommand.SYSTEM_MESSAGE.getId());
 
-        outputBuffer.writeUTF8String(message);
+        outputBuffer.writeCp1252String(message);
     }
 
     public static void writeCreateNPC(Short NPCIndex) {
@@ -1234,59 +1234,59 @@ public class Protocol {
         outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
         outputBuffer.writeByte(GMCommand.TURN_CRIMINAL.getId());
 
-        outputBuffer.writeUTF8String(userName);
+        outputBuffer.writeCp1252String(userName);
     }
 
     public static void writeResetFactions(String userName) {
         outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
         outputBuffer.writeByte(GMCommand.RESET_FACTIONS.getId());
 
-        outputBuffer.writeUTF8String(userName);
+        outputBuffer.writeCp1252String(userName);
     }
 
     public static void writeRemoveCharFromGuild(String userName) {
         outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
         outputBuffer.writeByte(GMCommand.REMOVE_CHAR_FROM_GUILD.getId());
 
-        outputBuffer.writeUTF8String(userName);
+        outputBuffer.writeCp1252String(userName);
     }
 
     public static void writeRequestCharMail(String userName) {
         outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
         outputBuffer.writeByte(GMCommand.REQUEST_CHAR_MAIL.getId());
 
-        outputBuffer.writeUTF8String(userName);
+        outputBuffer.writeCp1252String(userName);
     }
 
     public static void writeAlterPassword(String userName, String copyFrom) {
         outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
         outputBuffer.writeByte(GMCommand.ALTER_PASSWORD.getId());
 
-        outputBuffer.writeUTF8String(userName);
-        outputBuffer.writeUTF8String(copyFrom);
+        outputBuffer.writeCp1252String(userName);
+        outputBuffer.writeCp1252String(copyFrom);
     }
 
     public static void writeAlterMail(String userName, String newMail) {
         outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
         outputBuffer.writeByte(GMCommand.ALTER_MAIL.getId());
 
-        outputBuffer.writeUTF8String(userName);
-        outputBuffer.writeUTF8String(newMail);
+        outputBuffer.writeCp1252String(userName);
+        outputBuffer.writeCp1252String(newMail);
     }
 
     public static void writeAlterName(String userName, String newName) {
         outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
         outputBuffer.writeByte(GMCommand.ALTER_NAME.getId());
 
-        outputBuffer.writeUTF8String(userName);
-        outputBuffer.writeUTF8String(newName);
+        outputBuffer.writeCp1252String(userName);
+        outputBuffer.writeCp1252String(newName);
     }
 
     public static void writeCheckSlot(String userName, int slot) {
         outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
         outputBuffer.writeByte(GMCommand.CHECK_SLOT.getId());
 
-        outputBuffer.writeUTF8String(userName);
+        outputBuffer.writeCp1252String(userName);
         outputBuffer.writeByte(slot);
     }
 
@@ -1304,7 +1304,7 @@ public class Protocol {
         outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
         outputBuffer.writeByte(GMCommand.SHOW_GUILD_MESSAGES.getId());
 
-        outputBuffer.writeUTF8String(guild);
+        outputBuffer.writeCp1252String(guild);
     }
 
     public static void writeSaveMap() {
@@ -1330,7 +1330,7 @@ public class Protocol {
         outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
         outputBuffer.writeByte(GMCommand.CHANGE_MAP_INFO_RESTRICTED.getId());
 
-        outputBuffer.writeUTF8String(restrict);
+        outputBuffer.writeCp1252String(restrict);
     }
 
     public static void writeChangeMapInfoNoMagic(boolean noMagic) {
@@ -1358,14 +1358,14 @@ public class Protocol {
         outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
         outputBuffer.writeByte(GMCommand.CHANGE_MAP_INFO_LAND.getId());
 
-        outputBuffer.writeUTF8String(land);
+        outputBuffer.writeCp1252String(land);
     }
 
     public static void writeChangeMapInfoZone(String zone) {
         outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
         outputBuffer.writeByte(GMCommand.CHANGE_MAP_INFO_ZONE.getId());
 
-        outputBuffer.writeUTF8String(zone);
+        outputBuffer.writeCp1252String(zone);
     }
 
     public static void writeSaveChars() {
@@ -1442,9 +1442,9 @@ public class Protocol {
         outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
         outputBuffer.writeByte(GMCommand.SET_INI_VAR.getId());
 
-        outputBuffer.writeUTF8String(sLlave);
-        outputBuffer.writeUTF8String(sClave);
-        outputBuffer.writeUTF8String(sValor);
+        outputBuffer.writeCp1252String(sLlave);
+        outputBuffer.writeCp1252String(sClave);
+        outputBuffer.writeCp1252String(sValor);
     }
 
     public static void writeHome() {

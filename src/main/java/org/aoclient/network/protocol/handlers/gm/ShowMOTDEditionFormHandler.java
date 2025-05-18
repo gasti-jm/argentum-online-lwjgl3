@@ -16,7 +16,7 @@ public class ShowMOTDEditionFormHandler implements PacketHandler {
         // Remove packet ID
         buffer.readByte();
 
-        String txtMotd = buffer.readUTF8String();
+        String txtMotd = buffer.readCp1252String();
 
         //frmCambiaMotd.txtMotd.Text = Buffer.ReadASCIIString()
         //    frmCambiaMotd.Show , //FrmMain

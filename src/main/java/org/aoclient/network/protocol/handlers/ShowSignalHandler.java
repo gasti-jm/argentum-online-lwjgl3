@@ -15,7 +15,7 @@ public class ShowSignalHandler implements PacketHandler {
         // Remove packet ID
         buffer.readByte();
 
-        String tmp = buffer.readUTF8String();
+        String tmp = buffer.readCp1252String();
         short param = buffer.readInteger();
         // Call InitCartel(tmp, Buffer.ReadInteger())
 

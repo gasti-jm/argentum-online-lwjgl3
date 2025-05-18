@@ -15,7 +15,7 @@ public class ShowUserRequestHandler implements PacketHandler {
         // Remove packet ID
         buffer.readByte();
 
-        String recievePeticion = buffer.readUTF8String();
+        String recievePeticion = buffer.readCp1252String();
 
         // Call frmUserRequest.recievePeticion(Buffer.ReadASCIIString())
         //    Call frmUserRequest.Show(vbModeless, //FrmMain)

@@ -15,10 +15,10 @@ public class GuildLeaderInfoHandler implements PacketHandler {
         // Remove packet ID
         buffer.readByte();
 
-        String guildNames = buffer.readUTF8String();
-        guildNames = buffer.readUTF8String();
-        String txtGuildNews = buffer.readUTF8String();
-        String list = buffer.readUTF8String();
+        String guildNames = buffer.readCp1252String();
+        guildNames = buffer.readCp1252String();
+        String txtGuildNews = buffer.readCp1252String();
+        String list = buffer.readCp1252String();
 
         //With frmGuildLeader
         //        'Get list of existing guilds

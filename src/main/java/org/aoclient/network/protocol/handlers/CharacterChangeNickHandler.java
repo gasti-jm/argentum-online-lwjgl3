@@ -10,7 +10,7 @@ public class CharacterChangeNickHandler implements PacketHandler {
     public void handle(PacketBuffer data) {
         if (data.checkBytes(5)) return;
         data.readByte();
-        charList[data.readInteger()].setName(data.readUTF8String());
+        charList[data.readInteger()].setName(data.readCp1252String());
     }
 
 }

@@ -14,8 +14,8 @@ public class GuildMemberInfoHandler implements PacketHandler {
 
         buffer.readByte();
 
-        String guildNames = buffer.readUTF8String();
-        String guildMembers = buffer.readUTF8String();
+        String guildNames = buffer.readCp1252String();
+        String guildMembers = buffer.readCp1252String();
 
 
         //With frmGuildMember

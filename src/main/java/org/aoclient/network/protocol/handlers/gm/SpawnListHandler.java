@@ -3,7 +3,6 @@ package org.aoclient.network.protocol.handlers.gm;
 import org.aoclient.network.PacketBuffer;
 import org.aoclient.engine.gui.ImGUISystem;
 import org.aoclient.engine.gui.forms.FSpawnList;
-import org.aoclient.engine.gui.forms.FTutorial;
 import org.aoclient.network.protocol.handlers.PacketHandler;
 import org.tinylog.Logger;
 
@@ -17,7 +16,7 @@ public class SpawnListHandler implements PacketHandler  {
 
         buffer.readByte();
 
-        String creatureListString = buffer.readUTF8String();
+        String creatureListString = buffer.readCp1252String();
   
         // Dividimos por el carácter nulo
         String[] creatureList = creatureListString.split("\0");
