@@ -22,7 +22,6 @@ import static org.aoclient.network.protocol.Protocol.*;
  */
 
 public class InventorySpells {
-
     private static final int MAX_INVENTORY_SPELLS = 35;
     private final ImInt currentItemSpell = new ImInt(0);
     private final String[] spells;
