@@ -134,7 +134,11 @@ public final class GameScene extends Scene {
             if (MouseListener.mouseButtonClick(GLFW_MOUSE_BUTTON_LEFT)) {
                 if (user.getUsingSkill() == 0) {
                     writeLeftClick(getTileMouseX((int) MouseListener.getX() - POS_SCREEN_X), getTileMouseY((int) MouseListener.getY() - POS_SCREEN_Y));
-                } else {
+                }
+            }
+
+            if (MouseListener.mouseButtonReleased(GLFW_MOUSE_BUTTON_LEFT)) {
+                if (user.getUsingSkill() != 0) {
                     writeWorkLeftClick(getTileMouseX((int) MouseListener.getX() - POS_SCREEN_X),
                             getTileMouseY((int) MouseListener.getY() - POS_SCREEN_Y),
                             user.getUsingSkill());

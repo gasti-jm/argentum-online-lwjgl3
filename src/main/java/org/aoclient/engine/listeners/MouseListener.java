@@ -29,6 +29,8 @@ public class MouseListener {
     private static MouseListener instance;
     private final boolean[] mouseButtonPressed = new boolean[3];
     private final boolean[] mouseButtonDobleClickPressed = new boolean[3];
+    private final boolean[] mouseButtonReleased = new boolean[3];
+
     private double scrollX, scrollY;
     private double xPos, yPos, lastY, lastX;
     private boolean isDragging;
@@ -97,6 +99,7 @@ public class MouseListener {
         } else if (action == GLFW_RELEASE) {
             if (button < get().mouseButtonPressed.length) {
                 get().mouseButtonPressed[button] = false;
+                get().mouseButtonReleased[button] = true;
                 get().isDragging = false;
             }
         }
@@ -187,5 +190,22 @@ public class MouseListener {
         return false;
     }
 
+    /**
+     * Detecta si se soltó un botón del mouse en este frame.
+     */
+    public static boolean mouseButtonReleased(int button) {
+        if (button < get().mouseButtonReleased.length) {
+            boolean retVal = get().mouseButtonReleased[button];
+            get().mouseButtonReleased[button] = false; // consumir evento
+            return retVal;
+        }
+        return false;
+    }
+
+    public static void resetReleasedButtons() {
+        for (int i = 0; i < get().mouseButtonReleased.length; i++) {
+            get().mouseButtonReleased[i] = false;
+        }
+    }
 }
 

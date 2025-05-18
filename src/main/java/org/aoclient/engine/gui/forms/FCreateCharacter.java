@@ -15,12 +15,14 @@ import org.aoclient.engine.game.models.E_Roles;
 import org.aoclient.engine.game.models.E_Heading;
 import org.aoclient.engine.game.models.E_Raza;
 import org.aoclient.engine.gui.ImGUISystem;
+import org.aoclient.engine.gui.widgets.ImageButton3State;
 import org.aoclient.engine.renderer.RGBColor;
 import org.aoclient.engine.renderer.Surface;
 import org.aoclient.engine.renderer.Texture;
 import org.aoclient.engine.utils.inits.BodyData;
 import org.aoclient.network.SocketConnection;
 
+import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -56,7 +58,22 @@ import static org.aoclient.network.protocol.Protocol.writeThrowDices;
 public final class FCreateCharacter extends Form {
 
     // Necesito hacer esto para dibujar despues el cuerpo y cabeza por encima de la interfaz
-    private final Texture background;
+    private Texture background;
+
+    // Botones
+    // IDs de textura para los botones Volver (normal, rollover y click)
+    private int botonVolverTextureId;
+    private int botonVolverRolloverTextureId;
+    private int botonVolverClickTextureId;
+
+    // IDs de textura para el botón crear personaje (normal, rollover y click)
+    private int botonCrearTextureId;
+    private int botonCrearRolloverTextureId;
+    private int botonCrearClickTextureId;
+
+    // Botones con 3 estados
+    private ImageButton3State btnVolver;
+    private ImageButton3State btnCrearPj;
 
     // Text Boxes
     private final ImString txtNombre = new ImString(20);
@@ -76,8 +93,8 @@ public final class FCreateCharacter extends Form {
 
     private final ImInt currentItemGenero = new ImInt(0);
     private final String[] strGenero = {"Hombre", "Mujer"};
-    private final RGBColor color;
-    private final RECT characterPos;
+    private RGBColor color;
+    private RECT characterPos;
     // para el dibujado
     private int dir;
     private int userHead;
@@ -100,23 +117,52 @@ public final class FCreateCharacter extends Form {
     }
 
     public FCreateCharacter() {
-        this.background = Surface.get().createTexture("gui.ao", "VentanaCrearPersonaje", true);
-        this.userHead = HUMANO_H_PRIMER_CABEZA;
-        this.userBody = HUMANO_H_CUERPO_DESNUDO;
-        this.dir = E_Heading.SOUTH.value;
-        this.bodyGraphic = new BodyData(bodyData[userBody]);
-        this.color = new RGBColor(1, 1, 1);
-        this.characterPos = new RECT();
+        try {
+            this.background = Surface.get().createTexture("gui.ao", "VentanaCrearPersonaje", true);
+            this.userHead = HUMANO_H_PRIMER_CABEZA;
+            this.userBody = HUMANO_H_CUERPO_DESNUDO;
+            this.dir = E_Heading.SOUTH.value;
+            this.bodyGraphic = new BodyData(bodyData[userBody]);
+            this.color = new RGBColor(1, 1, 1);
+            this.characterPos = new RECT();
 
-        // pos
-        this.characterPos.left = 472;
-        this.characterPos.top = 425;
-        // size
-        this.characterPos.right = 41;
-        this.characterPos.bottom = 65;
+            // pos
+            this.characterPos.left = 472;
+            this.characterPos.top = 425;
+            // size
+            this.characterPos.right = 41;
+            this.characterPos.bottom = 65;
 
-        this.loadComboBoxes();
-        this.giveBodyAndHead();
+            this.loadComboBoxes();
+            this.giveBodyAndHead();
+
+
+            // botones
+            this.botonVolverTextureId = loadTexture("BotonVolverRollover");
+            this.botonVolverRolloverTextureId = loadTexture("BotonVolverRollover");
+            this.botonVolverClickTextureId = loadTexture("BotonVolverClick");
+
+            this.botonCrearTextureId = loadTexture("BotonCrearPersonajeRollover");
+            this.botonCrearRolloverTextureId = loadTexture("BotonCrearPersonajeRollover");
+            this.botonCrearClickTextureId = loadTexture("BotonCrearPersonajeClick");
+
+
+            // Instanciar botones reutilizando la clase utilitaria
+            btnVolver = new ImageButton3State(
+                    botonVolverTextureId, botonVolverRolloverTextureId, botonVolverClickTextureId,
+                    94, 546, 86, 30
+            );
+
+            btnCrearPj = new ImageButton3State(
+                    botonCrearTextureId, botonCrearRolloverTextureId, botonCrearClickTextureId,
+                    611, 546, 174, 29
+            );
+
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
     }
 
     /**
@@ -159,12 +205,14 @@ public final class FCreateCharacter extends Form {
         final int shpColor = ImGui.getColorU32(1f, 0f, 0f, 1f);
 
         // btnVolver
-        ImGui.setCursorPos(92, 548);
-        if (ImGui.invisibleButton("btnVolver", 86, 30)) this.buttonGoBack();
+        if(btnVolver.render()) {
+            this.buttonGoBack();
+        }
 
         // btnCreateCharacter
-        ImGui.setCursorPos(610, 546);
-        if (ImGui.invisibleButton("btnCreate", 174, 29)) this.buttonCreateCharacter();
+        if(btnCrearPj.render()) {
+            this.buttonCreateCharacter();
+        }
 
         //  btnTirarDados
         ImGui.setCursorPos(13, 185);
