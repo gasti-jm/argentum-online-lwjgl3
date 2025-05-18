@@ -218,7 +218,6 @@ public final class User {
 
         charList[charIndex].setScrollDirectionX(addX);
         charList[charIndex].setScrollDirectionY(addY);
-        charList[charIndex].setFxIndex(0);
 
         doPasosFx(charIndex);
 
