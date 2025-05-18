@@ -13,7 +13,7 @@ public class ShowSOSFormHandler implements PacketHandler  {
         buffer.copy(data);
 
         buffer.readByte();
-        String sosList = buffer.readUTF8String();
+        String sosList = buffer.readCp1252String();
 
         //Dim sosList() As String
         //    Dim i As Long

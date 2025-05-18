@@ -16,7 +16,7 @@ public class ShowPartyFormHandler implements PacketHandler {
         buffer.readByte();
 
         int esPartyLeader = buffer.readByte();
-        String members = buffer.readUTF8String();
+        String members = buffer.readCp1252String();
 
         //Dim members() As String
         //    Dim i As Long

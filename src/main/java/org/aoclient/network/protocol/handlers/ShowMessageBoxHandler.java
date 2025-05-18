@@ -15,7 +15,7 @@ public class ShowMessageBoxHandler implements PacketHandler {
 
         buffer.readByte();
 
-        String msg = buffer.readUTF8String();
+        String msg = buffer.readCp1252String();
         ImGUISystem.get().show(new FMessage(msg));
 
         data.copy(buffer);

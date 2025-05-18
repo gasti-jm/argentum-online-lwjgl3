@@ -15,7 +15,7 @@ public class CommerceChatHandler implements PacketHandler {
         // Remove packet ID
         buffer.readByte();
 
-        String chat = buffer.readUTF8String();
+        String chat = buffer.readCp1252String();
         int fontSize = buffer.readByte();
 
         /*

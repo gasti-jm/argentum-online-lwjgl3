@@ -3,7 +3,6 @@ package org.aoclient.engine.utils;
 import org.aoclient.engine.Sound;
 import org.aoclient.engine.game.Options;
 import org.aoclient.engine.game.models.Character;
-import org.aoclient.engine.renderer.FontRenderer;
 import org.aoclient.engine.renderer.Surface;
 import org.aoclient.engine.utils.inits.*;
 
@@ -51,7 +50,7 @@ public final class GameData {
     public static Character[] charList = new Character[10000 + 1]; // se agrega aca porque hay mapas que tienen NPCs.
     public static Map<String, Sound> sounds = new HashMap<>();
     public static Map<String, Sound> musics = new HashMap<>();
-    public static Options options;
+    public static Options options = Options.INSTANCE;
     private static BinaryDataReader reader;
 
     /**
@@ -63,9 +62,7 @@ public final class GameData {
 
         reader = new BinaryDataReader();
 
-        // Creamos el objeto de las opciones.
-        options = new Options();
-        options.loadOptions();
+        options.load();
 
         loadGrhData();
         loadHeads();

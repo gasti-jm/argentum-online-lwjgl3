@@ -16,7 +16,7 @@ public class UpdateTagAndStatusHandler implements PacketHandler {
 
         short charIndex = buffer.readInteger();
         int nickColor = buffer.readByte();
-        String userTag = buffer.readUTF8String();
+        String userTag = buffer.readCp1252String();
 
         //Dim CharIndex As Integer
         //    Dim NickColor As Byte

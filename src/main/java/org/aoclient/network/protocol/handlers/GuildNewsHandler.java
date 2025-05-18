@@ -14,9 +14,9 @@ public class GuildNewsHandler implements PacketHandler {
 
         buffer.readByte();
 
-        String news = buffer.readUTF8String();
-        String guildList = buffer.readUTF8String();
-        guildList = buffer.readUTF8String();
+        String news = buffer.readCp1252String();
+        String guildList = buffer.readCp1252String();
+        guildList = buffer.readCp1252String();
 
         //'Get news' string
         //    frmGuildNews.news = Buffer.ReadASCIIString()

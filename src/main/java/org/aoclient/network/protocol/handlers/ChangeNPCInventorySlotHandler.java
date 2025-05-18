@@ -16,7 +16,7 @@ public class ChangeNPCInventorySlotHandler implements PacketHandler {
 
         int slot = buffer.readByte();
 
-        String name = buffer.readUTF8String();
+        String name = buffer.readCp1252String();
         short amount = buffer.readInteger();
         float value = buffer.readFloat();
         short grhIndex = buffer.readInteger();

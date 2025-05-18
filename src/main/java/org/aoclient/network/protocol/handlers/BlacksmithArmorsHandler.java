@@ -19,7 +19,7 @@ public class BlacksmithArmorsHandler implements PacketHandler {
         short count = buffer.readInteger();
 
         for (int i = 0; i < count; i++) {
-            buffer.readUTF8String();
+            buffer.readCp1252String();
             buffer.readInteger();
             buffer.readInteger();
             buffer.readInteger();

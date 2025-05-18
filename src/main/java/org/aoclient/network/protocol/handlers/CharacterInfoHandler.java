@@ -15,7 +15,7 @@ public class CharacterInfoHandler implements PacketHandler {
 
         buffer.readByte();
 
-        String nombre = buffer.readUTF8String();
+        String nombre = buffer.readCp1252String();
         int raza = buffer.readByte();
         int clase = buffer.readByte();
         int genero = buffer.readByte();
@@ -24,9 +24,9 @@ public class CharacterInfoHandler implements PacketHandler {
         int banco = buffer.readLong();
         int reputacion = buffer.readLong();
 
-        String txtPeticiones = buffer.readUTF8String();
-        String guildActual = buffer.readUTF8String();
-        String txtMiembro = buffer.readUTF8String();
+        String txtPeticiones = buffer.readCp1252String();
+        String guildActual = buffer.readCp1252String();
+        String txtMiembro = buffer.readCp1252String();
 
         boolean armada = buffer.readBoolean();
         boolean caos = buffer.readBoolean();

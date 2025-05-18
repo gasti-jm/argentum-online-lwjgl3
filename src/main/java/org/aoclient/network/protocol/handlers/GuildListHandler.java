@@ -15,7 +15,7 @@ public class GuildListHandler implements PacketHandler {
         // Remove packet ID
         buffer.readByte();
 
-        String guildNames = buffer.readUTF8String();
+        String guildNames = buffer.readCp1252String();
 
         //With frmGuildAdm
         //        'Clear guild's list

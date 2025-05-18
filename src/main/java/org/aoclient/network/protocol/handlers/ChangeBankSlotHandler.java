@@ -1,7 +1,6 @@
 package org.aoclient.network.protocol.handlers;
 
 import org.aoclient.engine.gui.forms.FBank;
-import org.aoclient.engine.gui.forms.FComerce;
 import org.aoclient.network.PacketBuffer;
 
 public class ChangeBankSlotHandler implements PacketHandler {
@@ -19,7 +18,7 @@ public class ChangeBankSlotHandler implements PacketHandler {
         final int slot = buffer.readByte();
 
         final short objIndex = buffer.readInteger();
-        final String name = buffer.readUTF8String();
+        final String name = buffer.readCp1252String();
         final int amount = buffer.readInteger();
         final short grhIndex = buffer.readInteger();
         final int objType = buffer.readByte();

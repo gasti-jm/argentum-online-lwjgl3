@@ -15,7 +15,7 @@ public class PeaceProposalsListHandler implements PacketHandler {
         // Remove packet ID
         buffer.readByte();
 
-        String guildList = buffer.readUTF8String();
+        String guildList = buffer.readCp1252String();
 
         //Dim guildList() As String
         //    Dim i As Long

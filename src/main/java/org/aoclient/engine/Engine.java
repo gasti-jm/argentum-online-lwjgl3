@@ -51,7 +51,7 @@ public final class Engine {
      * booleano del MainLoop para que se cierre el juego.
      */
     public static void closeClient() {
-        options.saveOptions();
+        options.save();
         prgRun = false;
     }
 
