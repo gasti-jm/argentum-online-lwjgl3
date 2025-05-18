@@ -11,6 +11,7 @@ import org.aoclient.engine.listeners.KeyListener;
 import org.aoclient.engine.listeners.MouseListener;
 import org.aoclient.engine.renderer.RGBColor;
 import org.aoclient.network.protocol.ProtocolCmdParse;
+import org.lwjgl.glfw.GLFW;
 
 import static org.aoclient.engine.game.IntervalTimer.INT_SENTRPU;
 import static org.aoclient.engine.game.models.Character.drawCharacter;
@@ -22,8 +23,7 @@ import static org.aoclient.engine.utils.GameData.*;
 import static org.aoclient.engine.utils.Time.deltaTime;
 import static org.aoclient.engine.utils.Time.timerTicksPerFrame;
 import static org.aoclient.network.protocol.Protocol.*;
-import static org.lwjgl.glfw.GLFW.GLFW_MOUSE_BUTTON_LEFT;
-import static org.lwjgl.glfw.GLFW.GLFW_MOUSE_BUTTON_RIGHT;
+import static org.lwjgl.glfw.GLFW.*;
 
 /**
  * <p>
@@ -133,7 +133,24 @@ public final class GameScene extends Scene {
         if (inGameArea()) {
             if (MouseListener.mouseButtonClick(GLFW_MOUSE_BUTTON_LEFT)) {
                 if (user.getUsingSkill() == 0) {
-                    writeLeftClick(getTileMouseX((int) MouseListener.getX() - POS_SCREEN_X), getTileMouseY((int) MouseListener.getY() - POS_SCREEN_Y));
+
+                    // Estamos manteniendo Shift derecho?
+                    if(KeyListener.isKeyPressed(GLFW_KEY_RIGHT_SHIFT) &&
+                            charList[user.getUserCharIndex()].getPriv() != 0) {
+
+                        writeWarpChar("YO",
+                                User.get().getUserMap(),
+                                getTileMouseX((int) MouseListener.getX() - POS_SCREEN_X),
+                                getTileMouseY((int) MouseListener.getY() - POS_SCREEN_Y));
+
+                    } else {
+
+                        writeLeftClick(
+                                getTileMouseX((int) MouseListener.getX() - POS_SCREEN_X),
+                                getTileMouseY((int) MouseListener.getY() - POS_SCREEN_Y));
+
+                    }
+
                 }
             }
 
