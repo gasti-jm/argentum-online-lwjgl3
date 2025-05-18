@@ -30,7 +30,6 @@ import static org.lwjgl.system.libc.LibCStdlib.free;
  */
 
 public final class Sound {
-
     public static final String SND_CLICK = "click.ogg";
     public static final String SND_PASOS1 = "23.ogg";
     public static final String SND_PASOS2 = "24.ogg";
@@ -48,7 +47,7 @@ public final class Sound {
     public static DecodedSoundData preloadedMusic = null;
 
     /**
-     * @desc: Carga nuestro sonido en formato .ogg y activa si es en un loop infinito o no (ya sea para musica o sonido)
+     * Carga nuestro sonido en formato .ogg y activa si es en un loop infinito o no (ya sea para musica o sonido)
      */
     public Sound(final String filepath, final boolean loops) {
         this.filepath = filepath;
@@ -97,7 +96,9 @@ public final class Sound {
         free(rawAudioBuffer);
     }
 
-    // para crear musica en un hilo aparte
+    /**
+     * Constructor para crear un sonido en un hilo aparte
+     */
     public Sound(String filepath, DecodedSoundData data) {
         bufferId = alGenBuffers();
         alBufferData(bufferId, data.format, data.pcm, data.sampleRate);
@@ -117,14 +118,7 @@ public final class Sound {
     }
 
     /**
-     * @desc: Devuelve todos los sonidos
-     */
-    public static Collection<Sound> getAllSounds() {
-        return sounds.values();
-    }
-
-    /**
-     * @desc: Nos devuelve un sonido cargado a nuestro mapa.
+     * Nos devuelve un sonido cargado a nuestro mapa.
      */
     public static Sound getSound(String soundFile) {
         File file = new File(soundFile);
@@ -134,7 +128,7 @@ public final class Sound {
     }
 
     /**
-     * @desc: Agregamos un sonido a nuestro mapa.
+     * Agregamos un sonido a nuestro mapa.
      */
     public static Sound addSound(String soundFile, boolean loops) {
         final File file = new File(soundFile);
@@ -148,7 +142,7 @@ public final class Sound {
     }
 
     /**
-     * @desc: Agregamos una musica a nuestro mapa.
+     * Agregamos una musica a nuestro mapa.
      */
     public static Sound addMusic(String soundFile) {
         if (musics.containsKey(soundFile))
@@ -164,7 +158,7 @@ public final class Sound {
     }
 
     /**
-     * @desc: Reproduce un sonido, primero checkea si existe en nuestro mapa, en caso de que exista lo reproduce, caso contrario:
+     * Reproduce un sonido, primero checkea si existe en nuestro mapa, en caso de que exista lo reproduce, caso contrario:
      * crea uno, lo guarda en el mapa y lo reproduce.
      */
     public static void playSound(String soundName) {
@@ -177,7 +171,7 @@ public final class Sound {
     }
 
     /**
-     * @desc: Agregamos musica a nuestro objeto de musica y lo reproduce.
+     * Agregamos musica a nuestro objeto de musica y lo reproduce.
      */
     public static void playMusic(String musicName) {
         stopMusic();
@@ -206,7 +200,7 @@ public final class Sound {
         if (preloadedMusic != null) {
             stopMusic();
 
-            // existe en nuestro array de musicas?
+            // existe en nuestro array de musica?
             if (musics.containsKey(preloadedMusic.filepath)) {
                 if (options.isMusic())
                     musics.get(preloadedMusic.filepath).play();
@@ -223,24 +217,30 @@ public final class Sound {
     }
 
     /**
-     * @desc: Vacia y elimina todos los sonidos de nuestro mapa.
+     * Vacia y elimina todos los sonidos de nuestro mapa.
      */
     public static void clearSounds() {
         sounds.forEach((s, sound) -> sound.delete());
         sounds.clear();
     }
 
+    /**
+     * Elimina y vacia la musica de nuestra lista
+     */
     public static void clearMusics() {
         musics.forEach((s, sound) -> sound.delete());
         musics.clear();
     }
 
+    /**
+     * Deja de reproducir la musica, en este caso si hay mas se van a desactivar todas.
+     */
     private static void stopMusic() {
         musics.forEach((m, musicReproducing) -> musicReproducing.stop());
     }
 
     /**
-     * @desc: Destruye el sonido creado en OpenAL.
+     * Destruye el sonido creado en OpenAL y libera memoria.
      */
     public void delete() {
         alDeleteSources(sourceId);
@@ -248,7 +248,7 @@ public final class Sound {
     }
 
     /**
-     * @desc: Reproduce un sonido. Primero checkea si se esta reproduciendo el mismo sonido, si es asi crea el mismo sonido y lo
+     * Reproduce un sonido. Primero checkea si se esta reproduciendo el mismo sonido, si es asi crea el mismo sonido y lo
      * reproduce, ya que en el AO cuando se reproduce el mismo sonido, se reproduce varias veces por encima del otro. En caso
      * contrario, se comienza a reproducir el sonido 1 sola vez.
      */
@@ -261,20 +261,13 @@ public final class Sound {
     }
 
     /**
-     * @desc: Detiene el sonido que se esta reproduciendo.
+     * Detiene el sonido que se esta reproduciendo.
      */
     public void stop() {
         if (isPlaying) {
             alSourceStop(sourceId);
             isPlaying = false;
         }
-    }
-
-    /**
-     * @return Getter del atributo filepath.
-     */
-    public String getFilepath() {
-        return this.filepath;
     }
 
     /**

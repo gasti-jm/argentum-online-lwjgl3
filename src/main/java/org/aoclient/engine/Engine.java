@@ -47,7 +47,7 @@ public final class Engine {
     }
 
     /**
-     * @desc: Funcion publica y estatica que permite ser utilizada en cualquier parte del programa, basicamente desactiva nuestro
+     * Funcion publica y estatica que permite ser utilizada en cualquier parte del programa, basicamente desactiva nuestro
      * booleano del MainLoop para que se cierre el juego.
      */
     public static void closeClient() {
@@ -67,7 +67,7 @@ public final class Engine {
     }
 
     /**
-     * @desc: Main loop del juego, se empieza a correr ni bien se inicia nuestro motor grafico.
+     * Main loop del juego, se empieza a correr ni bien se inicia nuestro motor grafico.
      */
     private void loop() {
         Time.initTime();
@@ -97,7 +97,7 @@ public final class Engine {
     }
 
     /**
-     * @desc: Inicia nuestro motor grafico con su ventana, gestor de texturas (surface), inits (gamedata) y escenas.
+     * Inicia nuestro motor grafico con su ventana, gestor de texturas (surface), inits (gamedata) y escenas.
      */
     public void init() {
         Logger.info("Starting LWJGL {} !", Version.getVersion());
@@ -122,9 +122,11 @@ public final class Engine {
     }
 
     /**
+     * Funcion que permite cambiar nuestro atributo de escena y cambiar de una a otra.
+     *
      * @param scene: SceneType es un enumerador definido en el package de scenes, bascicamente recibe un tipo de este enumerador y
      *               segun el elegido realiza el cambio de escena.
-     * @desc: funcion que permite cambiar nuestro atributo de escena y cambiar de una a otra.
+     *
      */
     private void changeScene(SceneType scene) {
         switch (scene) {
@@ -142,7 +144,7 @@ public final class Engine {
     }
 
     /**
-     * @desc: Renderizado general
+     * <b>Renderizado general</b>
      * <p>
      * Luego checkea si nuestra escena es visible, todas las escenas guardan un atributo de la posible escena en la que deba ir
      * cada una. Por ejemplo: En la escena de "IntroScene.java" tiene guardado para que su siguente escena sea la de la clase
@@ -162,7 +164,7 @@ public final class Engine {
     }
 
     /**
-     * @desc: Inicia nuestro motor grafico.
+     * Inicia nuestro motor grafico.
      */
     public void start() {
         init();
