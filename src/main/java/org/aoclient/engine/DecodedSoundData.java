@@ -12,7 +12,7 @@ import static org.lwjgl.system.MemoryStack.stackMallocInt;
 import static org.lwjgl.system.MemoryStack.stackPush;
 
 /**
- * Esta clase nos permite precargar los datos de algun sonido en .ogg
+ * Esta clase nos permite precargar los datos de algun sonido en {@code .ogg }
  * lo vamos a utilizar para que en un hilo podamos cargar un sonido
  * y evitar lag a la hora de pasar de mapa o de cargar algun sonido con mucho peso.
  */

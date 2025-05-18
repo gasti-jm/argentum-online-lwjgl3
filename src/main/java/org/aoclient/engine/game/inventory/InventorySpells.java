@@ -25,7 +25,6 @@ public class InventorySpells {
 
     private static final int MAX_INVENTORY_SPELLS = 35;
     private final ImInt currentItemSpell = new ImInt(0);
-    private final List<String> spellsAdded = new ArrayList<>();
     private final String[] spells;
 
     public InventorySpells() {
@@ -57,13 +56,8 @@ public class InventorySpells {
 
     }
 
-    public void addSpell(final String spell) {
-        if (spellsAdded.size() == MAX_INVENTORY_SPELLS - 1) {
-            spellsAdded.add(spell);
-            for (int i = 0; i < MAX_INVENTORY_SPELLS; i++)
-                spells[i] = spellsAdded.get(i);
-            spellsAdded.clear();
-        } else spellsAdded.add(spell);
+    public void addSpell(final int slot, final String spell) {
+        spells[slot] = spell;
     }
 
     public void buttonThrowSpell() {
