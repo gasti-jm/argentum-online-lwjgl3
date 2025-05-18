@@ -17,7 +17,7 @@ import static org.aoclient.network.protocol.Protocol.writeRequestSkills;
  * Formulario para la visualizacion y gestion de habilidades (skills) del personaje.
  */
 
-public class FSkills extends Form {
+public final class FSkills extends Form {
 
     private String hoverSkillDescription = "";
     private final int[] userSkills = User.get().getSkills().clone();

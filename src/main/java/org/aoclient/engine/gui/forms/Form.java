@@ -39,6 +39,7 @@ public abstract class Form {
     public abstract void render();
 
     public void close() {
+        glDeleteTextures(backgroundImage);
         ImGUISystem.get().deleteFrmArray(this);
     }
 

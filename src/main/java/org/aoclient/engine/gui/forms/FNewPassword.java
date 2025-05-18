@@ -21,7 +21,7 @@ import static org.aoclient.network.protocol.Protocol.writeChangePassword;
  * cancelar la operacion.
  */
 
-public class FNewPassword extends Form {
+public final class FNewPassword extends Form {
 
     private final ImString txtPassword = new ImString();
 

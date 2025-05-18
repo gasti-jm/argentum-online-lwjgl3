@@ -507,6 +507,9 @@ public final class FCreateCharacter extends Form {
     private void buttonGoBack() {
         ImGUISystem.get().show(new FConnect());
         playMusic("6.ogg");
+
+        btnVolver.delete();
+        btnCrearPj.delete();
         this.close();
     }
 

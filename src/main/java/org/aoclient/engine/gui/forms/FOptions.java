@@ -27,7 +27,7 @@ import static org.aoclient.engine.utils.GameData.options;
  * elementos.
  */
 
-public class FOptions extends Form {
+public final class FOptions extends Form {
 
     public FOptions() {
         try {

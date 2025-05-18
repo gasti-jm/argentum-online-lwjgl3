@@ -39,11 +39,13 @@ public final class Sound {
     public static final String SND_DICE = "cupdice.ogg";
 
     public static final int MAX_SOUNDS = 30; // cantidad maxima de sondios almacenadas en memoria.
-    public static final int MAX_MUSIC = 10; // cantidad maxima de musica almacenada en memoria.
-    private final String filepath;
+    public static final int MAX_MUSIC = 2; // cantidad maxima de musica almacenada en memoria.
+    private String filepath;
     private int bufferId;
     private int sourceId;
     private boolean isPlaying = false;
+
+    public static DecodedSoundData preloadedMusic = null;
 
     /**
      * @desc: Carga nuestro sonido en formato .ogg y activa si es en un loop infinito o no (ya sea para musica o sonido)
@@ -95,6 +97,25 @@ public final class Sound {
         free(rawAudioBuffer);
     }
 
+    // para crear musica en un hilo aparte
+    public Sound(String filepath, DecodedSoundData data) {
+        bufferId = alGenBuffers();
+        alBufferData(bufferId, data.format, data.pcm, data.sampleRate);
+        sourceId = alGenSources();
+
+        alSourcei(sourceId, AL_BUFFER, bufferId);
+        alSourcei(sourceId, AL_LOOPING, 1);
+        alSourcei(sourceId, AL_POSITION, 0);
+        alSourcef(sourceId, AL_GAIN, 1f);
+
+        free(data.pcm);
+    }
+
+    public static Sound createSoundFromDecoded(String filepath, DecodedSoundData data) {
+        Sound sound = new Sound(filepath, data);
+        return sound;
+    }
+
     /**
      * @desc: Devuelve todos los sonidos
      */
@@ -129,13 +150,15 @@ public final class Sound {
     /**
      * @desc: Agregamos una musica a nuestro mapa.
      */
-    public static Sound addMusic(String soundFile, boolean loops) {
-        final File file = new File(soundFile);
-        if (musics.containsKey(file.getAbsolutePath())) return musics.get(file.getAbsolutePath());
+    public static Sound addMusic(String soundFile) {
+        if (musics.containsKey(soundFile))
+            return musics.get(soundFile);
         else {
-            if (musics.size() == MAX_MUSIC) clearMusics();
-            Sound sound = new Sound(file.getAbsolutePath(), loops);
-            musics.put(file.getAbsolutePath(), sound);
+            if (musics.size() == MAX_MUSIC)
+                clearMusics();
+
+            Sound sound = createSoundFromDecoded(soundFile, preloadedMusic);
+            musics.put(soundFile, sound);
             return sound;
         }
     }
@@ -165,7 +188,36 @@ public final class Sound {
         if (musics.containsKey(file.getAbsolutePath())) {
             if (options.isMusic()) musics.get(file.getAbsolutePath()).play();
         } else {
-            if (options.isMusic()) addMusic("resources/music/" + musicName, true).play();
+            if (options.isMusic()) {
+                // leemos el ogg en un hilo aparte.
+                new Thread(() -> {
+                    preloadedMusic = DecodedSoundData.decodeOgg(file.getAbsolutePath());
+                }).start();
+            }
+        }
+
+    }
+
+    /**
+     * Va a estar checkenado en nuestro main loop si ya se puede reproducir la musica que se precargo
+     * en un hilo externo.
+     */
+    public static void renderMusic() {
+        if (preloadedMusic != null) {
+            stopMusic();
+
+            // existe en nuestro array de musicas?
+            if (musics.containsKey(preloadedMusic.filepath)) {
+                if (options.isMusic())
+                    musics.get(preloadedMusic.filepath).play();
+            } else {
+                // agregamos uno nuevo y lo reproducimos.
+                if (options.isMusic())
+                    addMusic(preloadedMusic.filepath).play();
+            }
+
+            // seteamos como null y que se prepare para cargar otro archivo.
+            preloadedMusic = null;
         }
 
     }
