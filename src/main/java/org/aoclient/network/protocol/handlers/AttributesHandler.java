@@ -18,7 +18,7 @@ public class AttributesHandler implements PacketHandler {
         for (int i = 0; i < 5; i++)
             attributes[i] = data.readByte();
 
-        User.get().setAttributes(attributes);
+        User.INSTANCE.setAttributes(attributes);
         //    'Show them in character creation
         //    If EstadoLogin = E_MODO.Dados Then
         //        With frmCrearPersonaje

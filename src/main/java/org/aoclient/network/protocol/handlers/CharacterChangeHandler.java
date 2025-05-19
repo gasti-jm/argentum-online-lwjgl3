@@ -56,7 +56,7 @@ public class CharacterChangeHandler implements PacketHandler {
         tempint = data.readInteger();
         if (tempint != 0) charList[charIndex].setHelmet(new HeadData(helmetsData[tempint]));
 
-        User.get().setCharacterFx(charIndex, data.readInteger(), data.readInteger());
+        User.INSTANCE.setCharacterFx(charIndex, data.readInteger(), data.readInteger());
 
         refreshAllChars();
         Logger.debug("handleCharacterChange Cargado! - FALTA TERMINAR!");

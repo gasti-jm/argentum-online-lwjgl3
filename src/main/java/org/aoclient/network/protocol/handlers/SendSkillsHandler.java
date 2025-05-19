@@ -24,7 +24,7 @@ public class SendSkillsHandler implements PacketHandler {
         int porcentajeSkills[] = new int[20];
 
         for (E_Skills skill: E_Skills.values()) {
-            User.get().setSkill(skill.getValue(), data.readByte());
+            User.INSTANCE.setSkill(skill.getValue(), data.readByte());
             porcentajeSkills[skill.getValue() - 1] = data.readByte();
         }
 

@@ -22,7 +22,7 @@ public class SpawnListHandler implements PacketHandler  {
         String[] creatureList = creatureListString.split("\0");
 
         // Mostramos la lista en el GUI
-        ImGUISystem.get().show(new FSpawnList(creatureList));
+        ImGUISystem.INSTANCE.show(new FSpawnList(creatureList));
 
         data.copy(buffer);
         Logger.debug("handleSpawnList Cargado! - FALTA TERMINAR!");

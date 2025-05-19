@@ -11,9 +11,9 @@ public class UpdateHungerAndThirstHandler implements PacketHandler {
         // Remove packet ID
         data.readByte();
 
-        User.get().setUserMaxAGU(data.readByte());
-        User.get().setUserMinAGU(data.readByte());
-        User.get().setUserMaxHAM(data.readByte());
-        User.get().setUserMinHAM(data.readByte());
+        User.INSTANCE.setUserMaxAGU(data.readByte());
+        User.INSTANCE.setUserMinAGU(data.readByte());
+        User.INSTANCE.setUserMaxHAM(data.readByte());
+        User.INSTANCE.setUserMinHAM(data.readByte());
     }
 }

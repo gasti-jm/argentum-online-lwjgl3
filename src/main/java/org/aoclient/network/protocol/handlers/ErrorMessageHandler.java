@@ -19,10 +19,10 @@ public class ErrorMessageHandler implements PacketHandler {
         buffer.readByte();
 
         String errMsg = buffer.readCp1252String();
-        ImGUISystem.get().show(new FMessage(errMsg));
+        ImGUISystem.INSTANCE.show(new FMessage(errMsg));
 
-        SocketConnection.getInstance().disconnect();
-        User.get().setUserConected(false);
+        SocketConnection.INSTANCE.disconnect();
+        User.INSTANCE.setUserConected(false);
 
         data.copy(buffer);
     }

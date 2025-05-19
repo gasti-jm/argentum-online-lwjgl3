@@ -15,9 +15,9 @@ public class PosUpdateHandler implements PacketHandler {
         // Remove packet ID
         data.readByte();
 
-        int x = User.get().getUserPos().getX();
-        int y = User.get().getUserPos().getY();
-        int userCharIndex = User.get().getUserCharIndex();
+        int x = User.INSTANCE.getUserPos().getX();
+        int y = User.INSTANCE.getUserPos().getY();
+        int userCharIndex = User.INSTANCE.getUserCharIndex();
 
         // Remove char form old position
         if (mapData[x][y].getCharIndex() == userCharIndex) {
@@ -25,12 +25,12 @@ public class PosUpdateHandler implements PacketHandler {
         }
 
         // Set new pos
-        User.get().getUserPos().setX(data.readByte());
-        User.get().getUserPos().setY(data.readByte());
+        User.INSTANCE.getUserPos().setX(data.readByte());
+        User.INSTANCE.getUserPos().setY(data.readByte());
 
         // again xd
-        x = User.get().getUserPos().getX();
-        y = User.get().getUserPos().getY();
+        x = User.INSTANCE.getUserPos().getX();
+        y = User.INSTANCE.getUserPos().getY();
 
         mapData[x][y].setCharIndex(userCharIndex);
         charList[userCharIndex].getPos().setX(x);

@@ -10,7 +10,7 @@ public class CommerceInitHandler implements PacketHandler {
     public void handle(PacketBuffer data) {
         data.readByte();
         // comerciando = true
-        User.get().setUserComerciando(true);
-        ImGUISystem.get().show(new FComerce());
+        User.INSTANCE.setUserComerciando(true);
+        ImGUISystem.INSTANCE.show(new FComerce());
     }
 }

@@ -12,7 +12,7 @@ public class ShowGMPanelFormHandler implements PacketHandler {
     public void handle(PacketBuffer data) {
         data.readByte();
 
-        ImGUISystem.get().show(new FPanelGM());
+        ImGUISystem.INSTANCE.show(new FPanelGM());
     }
 
 }

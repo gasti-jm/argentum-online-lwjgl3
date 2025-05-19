@@ -9,6 +9,6 @@ public class UpdateExpHandler implements PacketHandler {
         if (data.checkBytes(5)) return;
         data.readByte();
         // Get data and update
-        User.get().setUserExp(data.readLong());
+        User.INSTANCE.setUserExp(data.readLong());
     }
 }

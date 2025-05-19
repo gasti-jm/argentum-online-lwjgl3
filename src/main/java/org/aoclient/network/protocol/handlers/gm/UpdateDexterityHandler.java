@@ -10,7 +10,7 @@ public class UpdateDexterityHandler implements PacketHandler {
     public void handle(PacketBuffer data) {
         if (data.checkBytes(2)) return;
         data.readByte();
-        User.get().setUserDext(data.readByte());
+        User.INSTANCE.setUserDext(data.readByte());
     }
 
 }

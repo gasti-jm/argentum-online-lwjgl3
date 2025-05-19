@@ -1,5 +1,7 @@
 package org.aoclient.network.protocol.handlers;
 
+import org.aoclient.engine.gui.ImGUISystem;
+import org.aoclient.engine.gui.forms.FCreateCharacter;
 import org.aoclient.network.PacketBuffer;
 import org.tinylog.Logger;
 
@@ -23,9 +25,9 @@ public class DiceRollHandler implements PacketHandler {
 
         try {
             // Buscar el formulario FCreateCharacter abierto y actualizar atributos
-            for (var frm : org.aoclient.engine.gui.ImGUISystem.get().getActiveForms()) {
-                if (frm instanceof org.aoclient.engine.gui.forms.FCreateCharacter) {
-                    ((org.aoclient.engine.gui.forms.FCreateCharacter) frm).setAtributos(fuerza, agilidad, inteligencia, carisma, constitucion);
+            for (var frm : ImGUISystem.INSTANCE.getActiveForms()) {
+                if (frm instanceof FCreateCharacter) {
+                    ((FCreateCharacter) frm).setAtributos(fuerza, agilidad, inteligencia, carisma, constitucion);
                     break;
                 }
             }

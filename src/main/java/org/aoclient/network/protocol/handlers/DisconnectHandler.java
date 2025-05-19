@@ -15,10 +15,10 @@ public class DisconnectHandler implements PacketHandler {
     public void handle(PacketBuffer data) {
         data.readByte();
 
-        SocketConnection.getInstance().disconnect();
+        SocketConnection.INSTANCE.disconnect();
         eraseAllChars();
 
-        ImGUISystem.get().closeAllFrms();
+        ImGUISystem.INSTANCE.closeAllFrms();
 
         Sound.clearSounds();
 

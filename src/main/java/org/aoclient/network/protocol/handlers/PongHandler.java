@@ -13,7 +13,7 @@ public class PongHandler implements PacketHandler {
     public void handle(PacketBuffer data) {
         data.readByte();
 
-        Console.get().addMsgToConsole("El ping es " + (int) (glfwGetTime() - Protocol.pingTime) + " ms.", false, false, new RGBColor(1f, 0f, 0f));
+        Console.INSTANCE.addMsgToConsole("El ping es " + (int) (glfwGetTime() - Protocol.pingTime) + " ms.", false, false, new RGBColor(1f, 0f, 0f));
         Protocol.pingTime = 0;
     }
 

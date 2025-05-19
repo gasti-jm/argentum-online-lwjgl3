@@ -22,50 +22,31 @@ import static org.lwjgl.glfw.GLFW.*;
  * motor grafico y la interfaz.
  */
 
-public class MouseListener {
+public enum MouseListener {
+
+    INSTANCE;
 
     private static final double DOUBLE_CLICK_TIME = 0.2;
-    private static final ImGuiIO io = ImGui.getIO();
-    private static MouseListener instance;
-    private final boolean[] mouseButtonPressed = new boolean[3];
-    private final boolean[] mouseButtonDobleClickPressed = new boolean[3];
-    private final boolean[] mouseButtonReleased = new boolean[3];
+    private static final ImGuiIO IM_GUI_IO = ImGui.getIO();
+    private static final boolean[] MOUSE_BUTTON_PRESSED = new boolean[3];
+    private static final boolean[] MOUSE_BUTTON_DOBLE_CLICK_PRESSED = new boolean[3];
+    private static final boolean[] MOUSE_BUTTON_RELEASED = new boolean[3];
 
-    private double scrollX, scrollY;
-    private double xPos, yPos, lastY, lastX;
-    private boolean isDragging;
-    private double lastTimeClick;
-
-    /**
-     * Constructor privado para nuestro Singleton.
-     */
-    private MouseListener() {
-        this.scrollX = 0.0;
-        this.scrollY = 0.0;
-        this.xPos = 0.0;
-        this.yPos = 0.0;
-        this.lastX = 0.0;
-        this.lastY = 0.0;
-        this.lastTimeClick = 0;
-    }
-
-    /**
-     * @return Mismo objeto (Patron de diseño Singleton).
-     */
-    public static MouseListener get() {
-        if (MouseListener.instance == null) MouseListener.instance = new MouseListener();
-        return MouseListener.instance;
-    }
+    private static double scrollX, scrollY;
+    private static double xPos, yPos;
+    private static double lastY, lastX;
+    private static boolean isDragging;
+    private static double lastTimeClick;
 
     /**
      * @desc: Funcion callBack para detectar y actualizar la posicion del mouse.
      */
     public static void mousePosCallback(long window, double xpos, double ypos) {
-        get().lastX = get().xPos;
-        get().lastY = get().yPos;
-        get().xPos = xpos;
-        get().yPos = ypos;
-        get().isDragging = get().mouseButtonPressed[0] || get().mouseButtonPressed[1] || get().mouseButtonPressed[2];
+        lastX = xPos;
+        lastY = yPos;
+        xPos = xpos;
+        yPos = ypos;
+        isDragging = MOUSE_BUTTON_PRESSED[0] || MOUSE_BUTTON_PRESSED[1] || MOUSE_BUTTON_PRESSED[2];
     }
 
     /**
@@ -80,27 +61,27 @@ public class MouseListener {
         mouseDown[3] = button == GLFW_MOUSE_BUTTON_4 && action != GLFW_RELEASE;
         mouseDown[4] = button == GLFW_MOUSE_BUTTON_5 && action != GLFW_RELEASE;
 
-        io.setMouseDown(mouseDown);
+        IM_GUI_IO.setMouseDown(mouseDown);
 
-        if (!io.getWantCaptureMouse() && mouseDown[1]) ImGui.setWindowFocus(null);
+        if (!IM_GUI_IO.getWantCaptureMouse() && mouseDown[1]) ImGui.setWindowFocus(null);
 
         if (action == GLFW_PRESS) {
-            if (button < get().mouseButtonPressed.length) {
-                get().mouseButtonPressed[button] = true;
-                get().isDragging = true;
+            if (button < MOUSE_BUTTON_PRESSED.length) {
+                MOUSE_BUTTON_PRESSED[button] = true;
+                isDragging = true;
 
                 // Doble click!
                 double currentTime = glfwGetTime();
 
-                get().mouseButtonDobleClickPressed[button] = currentTime - get().lastTimeClick <= DOUBLE_CLICK_TIME;
+                MOUSE_BUTTON_DOBLE_CLICK_PRESSED[button] = currentTime - lastTimeClick <= DOUBLE_CLICK_TIME;
 
-                get().lastTimeClick = currentTime;
+                lastTimeClick = currentTime;
             }
         } else if (action == GLFW_RELEASE) {
-            if (button < get().mouseButtonPressed.length) {
-                get().mouseButtonPressed[button] = false;
-                get().mouseButtonReleased[button] = true;
-                get().isDragging = false;
+            if (button < MOUSE_BUTTON_PRESSED.length) {
+                MOUSE_BUTTON_PRESSED[button] = false;
+                MOUSE_BUTTON_RELEASED[button] = true;
+                isDragging = false;
             }
         }
     }
@@ -109,49 +90,49 @@ public class MouseListener {
      * @desc: Funcion callBack para detectar el desplazamiento del mouse de una posicion a otra.
      */
     public static void mouseScrollCallback(long window, double xOffset, double yOffset) {
-        io.setMouseWheelH(io.getMouseWheelH() + (float) xOffset);
-        io.setMouseWheel(io.getMouseWheel() + (float) yOffset);
-        get().scrollX = xOffset;
-        get().scrollY = yOffset;
+        IM_GUI_IO.setMouseWheelH(IM_GUI_IO.getMouseWheelH() + (float) xOffset);
+        IM_GUI_IO.setMouseWheel(IM_GUI_IO.getMouseWheel() + (float) yOffset);
+        scrollX = xOffset;
+        scrollY = yOffset;
     }
 
     public static void endFrame() {
-        get().scrollX = 0;
-        get().scrollY = 0;
-        get().lastX = get().xPos;
-        get().lastY = get().yPos;
+        scrollX = 0;
+        scrollY = 0;
+        lastX = xPos;
+        lastY = yPos;
     }
 
     public static float getX() {
-        return (float) get().xPos;
+        return (float) xPos;
     }
 
     public static float getY() {
-        return (float) get().yPos;
+        return (float) yPos;
     }
 
     public static float getDx() {
-        return (float) (get().lastX - get().xPos);
+        return (float) (lastX - xPos);
     }
 
     public static float getDy() {
-        return (float) (get().lastY - get().yPos);
+        return (float) (lastY - yPos);
     }
 
     public static float getScrollX() {
-        return (float) get().scrollX;
+        return (float) scrollX;
     }
 
     public static float getScrollY() {
-        return (float) get().scrollY;
+        return (float) scrollY;
     }
 
     public static boolean isDragging() {
-        return get().isDragging;
+        return isDragging;
     }
 
     public static boolean pressing(int button) {
-        return get().mouseButtonPressed[button];
+        return MOUSE_BUTTON_PRESSED[button];
     }
 
     /**
@@ -159,7 +140,7 @@ public class MouseListener {
      * @return True si estamos apretamos un dicho boton, caso contrario false.
      */
     public static boolean mouseButtonDown(int button) {
-        if (button < get().mouseButtonPressed.length) return get().mouseButtonPressed[button];
+        if (button < MOUSE_BUTTON_PRESSED.length) return MOUSE_BUTTON_PRESSED[button];
         return false;
     }
 
@@ -167,9 +148,9 @@ public class MouseListener {
      * Detecta si hicimos 1 click
      */
     public static boolean mouseButtonClick(int button) {
-        if (button < get().mouseButtonPressed.length) {
-            boolean retVal = get().mouseButtonPressed[button];
-            if (retVal) get().mouseButtonPressed[button] = false;
+        if (button < MOUSE_BUTTON_PRESSED.length) {
+            boolean retVal = MOUSE_BUTTON_PRESSED[button];
+            if (retVal) MOUSE_BUTTON_PRESSED[button] = false;
             return retVal;
         }
         return false;
@@ -179,11 +160,11 @@ public class MouseListener {
      * Detecta si hicimos doble click
      */
     public static boolean mouseButtonDoubleClick(int button) {
-        if (button < get().mouseButtonPressed.length) {
-            boolean retVal = get().mouseButtonDobleClickPressed[button];
+        if (button < MOUSE_BUTTON_PRESSED.length) {
+            boolean retVal = MOUSE_BUTTON_DOBLE_CLICK_PRESSED[button];
             if (retVal) {
-                get().lastTimeClick = 0;
-                get().mouseButtonDobleClickPressed[button] = false;
+                lastTimeClick = 0;
+                MOUSE_BUTTON_DOBLE_CLICK_PRESSED[button] = false;
             }
             return retVal;
         }
@@ -194,17 +175,17 @@ public class MouseListener {
      * Detecta si se soltó un botón del mouse en este frame.
      */
     public static boolean mouseButtonReleased(int button) {
-        if (button < get().mouseButtonReleased.length) {
-            boolean retVal = get().mouseButtonReleased[button];
-            get().mouseButtonReleased[button] = false; // consumir evento
+        if (button < MOUSE_BUTTON_RELEASED.length) {
+            boolean retVal = MOUSE_BUTTON_RELEASED[button];
+            MOUSE_BUTTON_RELEASED[button] = false; // consumir evento
             return retVal;
         }
         return false;
     }
 
     public static void resetReleasedButtons() {
-        for (int i = 0; i < get().mouseButtonReleased.length; i++) {
-            get().mouseButtonReleased[i] = false;
+        for (int i = 0; i < MOUSE_BUTTON_RELEASED.length; i++) {
+            MOUSE_BUTTON_RELEASED[i] = false;
         }
     }
 }

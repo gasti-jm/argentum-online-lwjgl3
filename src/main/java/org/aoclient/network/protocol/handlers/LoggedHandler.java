@@ -8,7 +8,7 @@ public class LoggedHandler implements PacketHandler {
     @Override
     public void handle(PacketBuffer data) {
         data.readByte();
-        User.get().setUserConected(true);
+        User.INSTANCE.setUserConected(true);
     }
 
 }

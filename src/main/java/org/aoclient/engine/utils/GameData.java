@@ -397,7 +397,7 @@ public final class GameData {
         }
 
         // Liberar memoria
-        Surface.get().deleteAllTextures();
+        Surface.INSTANCE.deleteAllTextures();
         eraseAllChars();
 
     }

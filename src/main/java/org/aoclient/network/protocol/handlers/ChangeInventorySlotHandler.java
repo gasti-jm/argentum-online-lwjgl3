@@ -5,7 +5,9 @@ import org.aoclient.engine.game.models.E_ObjType;
 import org.aoclient.network.PacketBuffer;
 
 public class ChangeInventorySlotHandler implements PacketHandler {
-    
+
+    private final User user = User.INSTANCE;
+
     @Override
     public void handle(PacketBuffer data) {
         if (data.checkBytes(22)) return;
@@ -13,7 +15,6 @@ public class ChangeInventorySlotHandler implements PacketHandler {
         PacketBuffer buffer = new PacketBuffer();
         buffer.copy(data);
 
-        // Remove packet
         buffer.readByte();
 
         final int slot = buffer.readByte();
@@ -32,45 +33,45 @@ public class ChangeInventorySlotHandler implements PacketHandler {
         if (equipped) {
             switch (E_ObjType.values()[objType - 1]) {
                 case otWeapon:
-                    User.get().setUserWeaponEqpHit(minHit + "/" + maxHit);
-                    User.get().setUserWeaponEqpSlot(slot);
+                    user.setUserWeaponEqpHit(minHit + "/" + maxHit);
+                    user.setUserWeaponEqpSlot(slot);
                     break;
                 case otArmor:
-                    User.get().setUserArmourEqpDef(minDef + "/" + maxDef);
-                    User.get().setUserArmourEqpSlot(slot);
+                    user.setUserArmourEqpDef(minDef + "/" + maxDef);
+                    user.setUserArmourEqpSlot(slot);
                     break;
                 case otShield:
-                    User.get().setUserShieldEqpDef(minDef + "/" + maxDef);
-                    User.get().setUserShieldEqpSlot(slot);
+                    user.setUserShieldEqpDef(minDef + "/" + maxDef);
+                    user.setUserShieldEqpSlot(slot);
                     break;
                 case otHelmet:
-                    User.get().setUserHelmEqpDef(minDef + "/" + maxDef);
-                    User.get().setUserHelmEqpSlot(slot);
+                    user.setUserHelmEqpDef(minDef + "/" + maxDef);
+                    user.setUserHelmEqpSlot(slot);
                     break;
             }
         } else {
-            if (slot == User.get().getUserWeaponEqpSlot()) {
-                User.get().setUserWeaponEqpHit("0/0");
-                User.get().setUserWeaponEqpSlot((byte) 0);
+            if (slot == user.getUserWeaponEqpSlot()) {
+                user.setUserWeaponEqpHit("0/0");
+                user.setUserWeaponEqpSlot((byte) 0);
 
-            } else if (slot == User.get().getUserArmourEqpSlot()) {
-                User.get().setUserArmourEqpDef("0/0");
-                User.get().setUserArmourEqpSlot((byte) 0);
+            } else if (slot == user.getUserArmourEqpSlot()) {
+                user.setUserArmourEqpDef("0/0");
+                user.setUserArmourEqpSlot((byte) 0);
 
-            } else if (slot == User.get().getUserShieldEqpSlot()) {
-                User.get().setUserShieldEqpDef("0/0");
-                User.get().setUserShieldEqpSlot((byte) 0);
+            } else if (slot == user.getUserShieldEqpSlot()) {
+                user.setUserShieldEqpDef("0/0");
+                user.setUserShieldEqpSlot((byte) 0);
 
-            } else if (slot == User.get().getUserHelmEqpSlot()) {
-                User.get().setUserHelmEqpDef("0/0");
-                User.get().setUserHelmEqpSlot((byte) 0);
+            } else if (slot == user.getUserHelmEqpSlot()) {
+                user.setUserHelmEqpDef("0/0");
+                user.setUserHelmEqpSlot((byte) 0);
             }
         }
 
-        User.get().getUserInventory().setItem(slot - 1, objIndex, amount, equipped, grhIndex, objType,
+        user.getUserInventory().setItem(slot - 1, objIndex, amount, equipped, grhIndex, objType,
                 maxHit, minHit, maxDef, minDef, value, name);
 
         data.copy(buffer);
     }
-    
+
 }

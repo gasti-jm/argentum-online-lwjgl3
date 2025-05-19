@@ -89,9 +89,9 @@ public final class Engine {
             MouseListener.resetReleasedButtons();
 
             // Si hay algo para enviar, lo envia (escribe lo que envia el cliente al servidor, como comandos, acciones, etc.)
-            SocketConnection.getInstance().write();
+            SocketConnection.INSTANCE.write();
             // Si hay algo para recibir, lo recibe (lee lo que recibe el cliente del servidor)
-            SocketConnection.getInstance().read();
+            SocketConnection.INSTANCE.read();
 
         }
     }
@@ -108,14 +108,14 @@ public final class Engine {
 
         GameData.initialize();
 
-        window = Window.get();
+        window = Window.INSTANCE;
         window.initialize();
 
-        guiSystem = ImGUISystem.get();
+        guiSystem = ImGUISystem.INSTANCE;
         guiSystem.init();
 
-        Surface.get().initialize();
-        BindKeys bindKeys = BindKeys.get();
+        Surface.INSTANCE.initialize();
+        BindKeys bindKeys = BindKeys.INSTANCE;
 
         changeScene(INTRO_SCENE);
         playMusic("intro.ogg");

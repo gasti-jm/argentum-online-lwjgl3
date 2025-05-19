@@ -13,8 +13,8 @@ public class UpdateStrenghtAndDexterityHandler implements PacketHandler {
         // Remove packet ID
         data.readByte();
 
-        User.get().setUserStrg(data.readByte());
-        User.get().setUserDext(data.readByte());
+        User.INSTANCE.setUserStrg(data.readByte());
+        User.INSTANCE.setUserDext(data.readByte());
     }
     
 }

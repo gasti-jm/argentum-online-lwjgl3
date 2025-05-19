@@ -24,9 +24,10 @@ import static org.lwjgl.glfw.GLFW.*;
  * </ul>
  */
 
-public final class BindKeys {
+public enum BindKeys {
 
-    private static BindKeys instance;
+    INSTANCE;
+
     private final int[] mappedKeys;
 
     /**
@@ -40,14 +41,6 @@ public final class BindKeys {
             loadDefaultKeys();
             saveBindKeys();
         }
-    }
-
-    /**
-     * @return Mismo objeto (Patron de diseño Singleton)
-     */
-    public static BindKeys get() {
-        if (instance == null) instance = new BindKeys();
-        return instance;
     }
 
     /**

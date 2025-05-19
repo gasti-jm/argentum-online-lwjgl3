@@ -7,8 +7,6 @@ import imgui.type.ImString;
 import org.aoclient.engine.Engine;
 import org.aoclient.engine.Window;
 import org.aoclient.engine.game.Console;
-import org.aoclient.engine.game.User;
-import org.aoclient.engine.gui.ImGUISystem;
 
 import java.io.IOException;
 
@@ -40,15 +38,14 @@ import static org.aoclient.engine.utils.Time.FPS;
 public final class FMain extends Form {
 
     private final ImString sendText = new ImString();
-    private final User dataUser = User.get();
     private final int backgroundInventorySpells;
     private boolean viewInventory;
 
     public FMain() {
         this.viewInventory = true;
-        User.get().getUserInventory().setVisible(true);
+        USER.getUserInventory().setVisible(true);
 
-        Console.get().clearConsole();
+        Console.INSTANCE.clearConsole();
 
         try {
             this.backgroundImage = loadTexture("VentanaPrincipal");
@@ -60,7 +57,7 @@ public final class FMain extends Form {
 
     @Override
     public void render() {
-        ImGui.setNextWindowSize(Window.get().getWidth() + 10, Window.get().getHeight() + 5, ImGuiCond.Once);
+        ImGui.setNextWindowSize(Window.INSTANCE.getWidth() + 10, Window.INSTANCE.getHeight() + 5, ImGuiCond.Once);
         ImGui.setNextWindowPos(-5, -1, ImGuiCond.Once);
 
         // Start Custom window
@@ -74,7 +71,7 @@ public final class FMain extends Form {
                 ImGuiWindowFlags.NoBringToFrontOnFocus);
 
 
-        ImGui.getWindowDrawList().addImage(backgroundImage, 0, 0, Window.get().getWidth(), Window.get().getHeight());
+        ImGui.getWindowDrawList().addImage(backgroundImage, 0, 0, Window.INSTANCE.getWidth(), Window.INSTANCE.getHeight());
 
         this.drawShapes();
 
@@ -82,7 +79,7 @@ public final class FMain extends Form {
         ImGui.setCursorPos(670, 45);
         if (ImGui.invisibleButton("viewSkills", 30, 30)) {
             playSound(SND_CLICK);
-            ImGUISystem.get().show(new FSkills());
+            IM_GUI_SYSTEM.show(new FSkills());
         }
 
         // LBL FPS
@@ -101,7 +98,7 @@ public final class FMain extends Form {
         ImGui.pushStyleVar(ImGuiStyleVar.SelectableTextAlign, 0.5f, 0.5f);
         ImGui.pushStyleColor(ImGuiCol.HeaderHovered, ImGui.getColorU32(0f, 0f, 0f, 0f));
         ImGui.pushStyleColor(ImGuiCol.HeaderActive, ImGui.getColorU32(0f, 0f, 0f, 0f));
-        ImGui.selectable(dataUser.getUserMinSTA() + "/" + dataUser.getUserMaxSTA(), false, ImGuiSelectableFlags.None, 69, 10);
+        ImGui.selectable(USER.getUserMinSTA() + "/" + USER.getUserMaxSTA(), false, ImGuiSelectableFlags.None, 69, 10);
         ImGui.popStyleColor();
         ImGui.popStyleColor();
         ImGui.popStyleVar();
@@ -111,7 +108,7 @@ public final class FMain extends Form {
         ImGui.pushStyleVar(ImGuiStyleVar.SelectableTextAlign, 0.5f, 0.5f);
         ImGui.pushStyleColor(ImGuiCol.HeaderHovered, ImGui.getColorU32(0f, 0f, 0f, 0f));
         ImGui.pushStyleColor(ImGuiCol.HeaderActive, ImGui.getColorU32(0f, 0f, 0f, 0f));
-        ImGui.selectable(dataUser.getUserMinMAN() + "/" + dataUser.getUserMaxMAN(), false, ImGuiSelectableFlags.None, 69, 10);
+        ImGui.selectable(USER.getUserMinMAN() + "/" + USER.getUserMaxMAN(), false, ImGuiSelectableFlags.None, 69, 10);
         ImGui.popStyleColor();
         ImGui.popStyleColor();
         ImGui.popStyleVar();
@@ -121,7 +118,7 @@ public final class FMain extends Form {
         ImGui.pushStyleVar(ImGuiStyleVar.SelectableTextAlign, 0.5f, 0.5f);
         ImGui.pushStyleColor(ImGuiCol.HeaderHovered, ImGui.getColorU32(0f, 0f, 0f, 0f));
         ImGui.pushStyleColor(ImGuiCol.HeaderActive, ImGui.getColorU32(0f, 0f, 0f, 0f));
-        ImGui.selectable(dataUser.getUserMinHP() + "/" + dataUser.getUserMaxHP(), false, ImGuiSelectableFlags.None, 69, 10);
+        ImGui.selectable(USER.getUserMinHP() + "/" + USER.getUserMaxHP(), false, ImGuiSelectableFlags.None, 69, 10);
         ImGui.popStyleColor();
         ImGui.popStyleColor();
         ImGui.popStyleVar();
@@ -131,7 +128,7 @@ public final class FMain extends Form {
         ImGui.pushStyleVar(ImGuiStyleVar.SelectableTextAlign, 0.5f, 0.5f);
         ImGui.pushStyleColor(ImGuiCol.HeaderHovered, ImGui.getColorU32(0f, 0f, 0f, 0f));
         ImGui.pushStyleColor(ImGuiCol.HeaderActive, ImGui.getColorU32(0f, 0f, 0f, 0f));
-        ImGui.selectable(dataUser.getUserMinHAM() + "/" + dataUser.getUserMaxHAM(), false, ImGuiSelectableFlags.None, 69, 10);
+        ImGui.selectable(USER.getUserMinHAM() + "/" + USER.getUserMaxHAM(), false, ImGuiSelectableFlags.None, 69, 10);
         ImGui.popStyleColor();
         ImGui.popStyleColor();
         ImGui.popStyleVar();
@@ -141,38 +138,38 @@ public final class FMain extends Form {
         ImGui.pushStyleVar(ImGuiStyleVar.SelectableTextAlign, 0.5f, 0.5f);
         ImGui.pushStyleColor(ImGuiCol.HeaderHovered, ImGui.getColorU32(0f, 0f, 0f, 0f));
         ImGui.pushStyleColor(ImGuiCol.HeaderActive, ImGui.getColorU32(0f, 0f, 0f, 0f));
-        ImGui.selectable(dataUser.getUserMinAGU() + "/" + dataUser.getUserMaxAGU(), false, ImGuiSelectableFlags.None, 69, 10);
+        ImGui.selectable(USER.getUserMinAGU() + "/" + USER.getUserMaxAGU(), false, ImGuiSelectableFlags.None, 69, 10);
         ImGui.popStyleColor();
         ImGui.popStyleColor();
         ImGui.popStyleVar();
 
         // lblLvl
         ImGui.setCursorPos(625, 78);
-        ImGui.text("Nivel: " + dataUser.getUserLvl());
+        ImGui.text("Nivel: " + USER.getUserLvl());
 
         //lblPorcLvl
         ImGui.setCursorPos(624, 90);
-        if (dataUser.getUserPasarNivel() > 0) {
+        if (USER.getUserPasarNivel() > 0) {
             ImGui.textColored(0.5f, 1, 1, 1,
-                    "[" + Math.round((float) (dataUser.getUserExp() * 100) / dataUser.getUserPasarNivel()) + "%]");
+                    "[" + Math.round((float) (USER.getUserExp() * 100) / USER.getUserPasarNivel()) + "%]");
         } else ImGui.textColored(0.5f, 1, 1, 1, "[N/A]");
 
 
         //lblExp
         ImGui.setCursorPos(625, 102);
-        ImGui.text("Exp: " + dataUser.getUserExp() + "/" + dataUser.getUserPasarNivel());
+        ImGui.text("Exp: " + USER.getUserExp() + "/" + USER.getUserPasarNivel());
 
         // gldLbl (color)
         ImGui.setCursorPos(730, 419);
-        ImGui.textColored(1, 1, 0.0f, 1, String.valueOf(dataUser.getUserGLD()));
+        ImGui.textColored(1, 1, 0.0f, 1, String.valueOf(USER.getUserGLD()));
 
         // lblDext (color)
         ImGui.setCursorPos(613, 413);
-        ImGui.textColored(1, 0.5f, 0.0f, 1, String.valueOf(dataUser.getUserDext()));
+        ImGui.textColored(1, 0.5f, 0.0f, 1, String.valueOf(USER.getUserDext()));
 
         // lblStrg (color)
         ImGui.setCursorPos(650, 413);
-        ImGui.textColored(0.1f, 0.6f, 0.1f, 1, String.valueOf(dataUser.getUserStrg()));
+        ImGui.textColored(0.1f, 0.6f, 0.1f, 1, String.valueOf(USER.getUserStrg()));
 
         // lblArmor (color)
         ImGui.setCursorPos(88, 579);
@@ -180,7 +177,7 @@ public final class FMain extends Form {
         ImGui.pushStyleColor(ImGuiCol.HeaderHovered, ImGui.getColorU32(0f, 0f, 0f, 0f));
         ImGui.pushStyleColor(ImGuiCol.HeaderActive, ImGui.getColorU32(0f, 0f, 0f, 0f));
         ImGui.pushStyleColor(ImGuiCol.Text, ImGui.getColorU32(1f, 0f, 0f, 1f));
-        ImGui.selectable(dataUser.getUserArmourEqpDef(), false, ImGuiSelectableFlags.None, 45, 10);
+        ImGui.selectable(USER.getUserArmourEqpDef(), false, ImGuiSelectableFlags.None, 45, 10);
         ImGui.popStyleColor();
         ImGui.popStyleColor();
         ImGui.popStyleColor();
@@ -192,7 +189,7 @@ public final class FMain extends Form {
         ImGui.pushStyleColor(ImGuiCol.HeaderHovered, ImGui.getColorU32(0f, 0f, 0f, 0f));
         ImGui.pushStyleColor(ImGuiCol.HeaderActive, ImGui.getColorU32(0f, 0f, 0f, 0f));
         ImGui.pushStyleColor(ImGuiCol.Text, ImGui.getColorU32(1f, 0f, 0f, 1f));
-        ImGui.selectable(dataUser.getUserShieldEqpDef(), false, ImGuiSelectableFlags.None, 45, 10);
+        ImGui.selectable(USER.getUserShieldEqpDef(), false, ImGuiSelectableFlags.None, 45, 10);
         ImGui.popStyleColor();
         ImGui.popStyleColor();
         ImGui.popStyleColor();
@@ -204,7 +201,7 @@ public final class FMain extends Form {
         ImGui.pushStyleColor(ImGuiCol.HeaderHovered, ImGui.getColorU32(0f, 0f, 0f, 0f));
         ImGui.pushStyleColor(ImGuiCol.HeaderActive, ImGui.getColorU32(0f, 0f, 0f, 0f));
         ImGui.pushStyleColor(ImGuiCol.Text, ImGui.getColorU32(1f, 0f, 0f, 1f));
-        ImGui.selectable(dataUser.getUserHelmEqpDef(), false, ImGuiSelectableFlags.None, 45, 10);
+        ImGui.selectable(USER.getUserHelmEqpDef(), false, ImGuiSelectableFlags.None, 45, 10);
         ImGui.popStyleColor();
         ImGui.popStyleColor();
         ImGui.popStyleColor();
@@ -216,7 +213,7 @@ public final class FMain extends Form {
         ImGui.pushStyleColor(ImGuiCol.HeaderHovered, ImGui.getColorU32(0f, 0f, 0f, 0f));
         ImGui.pushStyleColor(ImGuiCol.HeaderActive, ImGui.getColorU32(0f, 0f, 0f, 0f));
         ImGui.pushStyleColor(ImGuiCol.Text, ImGui.getColorU32(1f, 0f, 0f, 1f));
-        ImGui.selectable(dataUser.getUserWeaponEqpHit(), false, ImGuiSelectableFlags.None, 45, 10);
+        ImGui.selectable(USER.getUserWeaponEqpHit(), false, ImGuiSelectableFlags.None, 45, 10);
         ImGui.popStyleColor();
         ImGui.popStyleColor();
         ImGui.popStyleColor();
@@ -229,7 +226,7 @@ public final class FMain extends Form {
         ImGui.pushStyleColor(ImGuiCol.HeaderActive, ImGui.getColorU32(0f, 0f, 0f, 0f));
         ImGui.pushStyleColor(ImGuiCol.Text, ImGui.getColorU32(1f, 1f, 0f, 1f));
 
-        ImGui.selectable(dataUser.getUserMap() + " X:" + User.get().getUserPos().getX() + " Y:" + User.get().getUserPos().getY(),
+        ImGui.selectable(USER.getUserMap() + " X:" + USER.getUserPos().getX() + " Y:" + USER.getUserPos().getY(),
                 false, ImGuiSelectableFlags.None, 90, 12);
 
         ImGui.popStyleColor();
@@ -239,27 +236,27 @@ public final class FMain extends Form {
 
         // lblName
         ImGui.setCursorPos(584, 24);
-        ImGui.textColored(1, 0.0f, 0.0f, 1, dataUser.getUserName());
+        ImGui.textColored(1, 0.0f, 0.0f, 1, USER.getUserName());
 
         // btnOptions
         ImGui.setCursorPos(681, 485);
         if (ImGui.invisibleButton("viewOptions", 95, 22)) {
             playSound(SND_CLICK);
-            ImGUISystem.get().show(new FOptions());
+            IM_GUI_SYSTEM.show(new FOptions());
         }
 
         // STATS BUTTON
         ImGui.setCursorPos(681, 510);
         if (ImGui.invisibleButton("viewStats", 95, 22)) {
             playSound(SND_CLICK);
-            ImGUISystem.get().show(new FStats());
+            IM_GUI_SYSTEM.show(new FStats());
         }
 
         // btnMapa
         ImGui.setCursorPos(681, 445);
         if (ImGui.invisibleButton("viewMap", 95, 22)) {
             playSound(SND_CLICK);
-            ImGUISystem.get().show(new FMapa());
+            IM_GUI_SYSTEM.show(new FMapa());
         }
 
         // btnClose
@@ -273,7 +270,7 @@ public final class FMain extends Form {
         ImGui.setCursorPos(755, 3);
         if (ImGui.invisibleButton("minimizar", 17, 17)) {
             playSound(SND_CLICK);
-            Window.get().minimizar();
+            Window.INSTANCE.minimizar();
         }
 
         // btnGLD
@@ -281,7 +278,7 @@ public final class FMain extends Form {
         ImGui.invisibleButton("Tirar Oro", 17, 17);
 
         // txtSend
-        if (dataUser.isTalking()) {
+        if (USER.isTalking()) {
             ImGui.setCursorPos(15, 123);
 
             ImGui.pushItemWidth(546);
@@ -299,36 +296,36 @@ public final class FMain extends Form {
         // para hacer click derecho y abrir el frm
         if (ImGui.beginPopupContextItem("Tirar Oro")) {
             playSound(SND_CLICK);
-            ImGUISystem.get().show(new FCantidad(true));
+            IM_GUI_SYSTEM.show(new FCantidad(true));
             ImGui.endPopup();
         }
 
         ImGui.setCursorPos(592, 128);
         if (ImGui.invisibleButton("ViewInvetory", 93, 30)) {
             playSound(SND_CLICK);
-            User.get().getUserInventory().setVisible(true);
+            USER.getUserInventory().setVisible(true);
             this.viewInventory = true;
         }
 
         ImGui.setCursorPos(688, 128);
         if (ImGui.invisibleButton("ViewInvetorySpells", 75, 30)) {
             playSound(SND_CLICK);
-            User.get().getUserInventory().setVisible(false);
+            USER.getUserInventory().setVisible(false);
             this.viewInventory = false;
         }
 
         /////// Inventory
-        if (viewInventory) User.get().getUserInventory().drawInventory();
+        if (viewInventory) USER.getUserInventory().drawInventory();
         else {
             ImGui.setCursorPos(586, 126);
             ImGui.image(backgroundInventorySpells, 198, 282);
-            User.get().getInventorySpells().draw();
+            USER.getInventorySpells().draw();
         }
 
-        User.get().getUserInventory().updateTimers();
+        USER.getUserInventory().updateTimers();
 
         /////// Console
-        Console.get().drawConsole();
+        Console.INSTANCE.drawConsole();
 
         ImGui.end();
     }
@@ -338,7 +335,7 @@ public final class FMain extends Form {
         final int shpColor = ImGui.getColorU32(0, 0, 0, 1);
 
         // shpEnergia
-        float bWidth = (((float) (dataUser.getUserMinSTA()) / ((float) dataUser.getUserMaxSTA())) * 75);
+        float bWidth = (((float) (USER.getUserMinSTA()) / ((float) USER.getUserMaxSTA())) * 75);
         drawList.addRectFilled(
                 (584 + bWidth), 453,
                 584 + 75,
@@ -346,7 +343,7 @@ public final class FMain extends Form {
         );
 
         // shpMana
-        bWidth = (((float) (dataUser.getUserMinMAN()) / ((float) dataUser.getUserMaxMAN())) * 75);
+        bWidth = (((float) (USER.getUserMinMAN()) / ((float) USER.getUserMaxMAN())) * 75);
         drawList.addRectFilled(
                 (584 + bWidth), 477,
                 584 + 75,
@@ -354,7 +351,7 @@ public final class FMain extends Form {
         );
 
         // shpVida
-        bWidth = (((float) (dataUser.getUserMinHP()) / ((float) dataUser.getUserMaxHP())) * 75);
+        bWidth = (((float) (USER.getUserMinHP()) / ((float) USER.getUserMaxHP())) * 75);
         drawList.addRectFilled(
                 (584 + bWidth), 498,
                 584 + 75,
@@ -362,7 +359,7 @@ public final class FMain extends Form {
         );
 
         // shpHambre
-        bWidth = (((float) (dataUser.getUserMinHAM()) / ((float) dataUser.getUserMaxHAM())) * 75);
+        bWidth = (((float) (USER.getUserMinHAM()) / ((float) USER.getUserMaxHAM())) * 75);
         drawList.addRectFilled(
                 (584 + bWidth), 521,
                 584 + 75,
@@ -370,7 +367,7 @@ public final class FMain extends Form {
         );
 
         // shpSed
-        bWidth = (((float) (dataUser.getUserMinAGU()) / ((float) dataUser.getUserMaxAGU())) * 75);
+        bWidth = (((float) (USER.getUserMinAGU()) / ((float) USER.getUserMaxAGU())) * 75);
         drawList.addRectFilled(
                 (584 + bWidth), 542,
                 584 + 75,

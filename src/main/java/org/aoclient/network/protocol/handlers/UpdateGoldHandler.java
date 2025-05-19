@@ -9,7 +9,7 @@ public class UpdateGoldHandler implements PacketHandler {
     public void handle(PacketBuffer data) {
         if (data.checkBytes(5)) return;
         data.readByte();
-        User.get().setUserGLD(data.readLong());
+        User.INSTANCE.setUserGLD(data.readLong());
     }
 
 }

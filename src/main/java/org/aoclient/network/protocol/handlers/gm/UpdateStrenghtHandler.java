@@ -10,7 +10,7 @@ public class UpdateStrenghtHandler implements PacketHandler {
     public void handle(PacketBuffer data) {
         if (data.checkBytes(2)) return;
         data.readByte();
-        User.get().setUserStrg(data.readByte());
+        User.INSTANCE.setUserStrg(data.readByte());
     }
 
 }

@@ -12,8 +12,8 @@ public class LevelUpHandler implements PacketHandler {
         // Remove packet ID
         data.readByte();
 
-        short skillPoints = (short) (User.get().getFreeSkillPoints() + data.readInteger());
-        User.get().setFreeSkillPoints(skillPoints);
+        short skillPoints = (short) (User.INSTANCE.getFreeSkillPoints() + data.readInteger());
+        User.INSTANCE.setFreeSkillPoints(skillPoints);
     }
     
 }

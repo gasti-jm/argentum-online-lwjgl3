@@ -11,6 +11,6 @@ public class UpdateStaHandler implements PacketHandler {
         data.readByte();
 
         // variable global
-        User.get().setUserMinSTA(data.readInteger());
+        User.INSTANCE.setUserMinSTA(data.readInteger());
     }
 }

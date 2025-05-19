@@ -17,7 +17,7 @@ import static org.aoclient.engine.utils.GameData.charList;
 
 public class MultiMessageHandler implements PacketHandler {
 
-    private final Console console = Console.get();
+    private final Console console = Console.INSTANCE;
 
     @Override
     public void handle(PacketBuffer data) {
@@ -55,7 +55,7 @@ public class MultiMessageHandler implements PacketHandler {
 
             case USER_SWING:
                 console.addMsgToConsole(Messages.get(MessageKey.FALLADO_GOLPE), false, false, new RGBColor(1f, 0f, 0f));
-                charDialogHitSet(User.get().getUserCharIndex(), "*Fallas*");
+                charDialogHitSet(User.INSTANCE.getUserCharIndex(), "*Fallas*");
                 break;
 
             case SAFE_MODE_ON:
@@ -120,7 +120,7 @@ public class MultiMessageHandler implements PacketHandler {
                 final int d = data.readLong();
                 console.addMsgToConsole(Messages.get(MessageKey.GOLPE_CRIATURA_1) + " " + d, false, false, new RGBColor(1f, 0f, 0f));
 
-                charDialogHitSet(User.get().getUserCharIndex(), d);
+                charDialogHitSet(User.INSTANCE.getUserCharIndex(), d);
 
                 break;
 
@@ -218,9 +218,9 @@ public class MultiMessageHandler implements PacketHandler {
 
             case WORK_REQUEST_TARGET:
                 final int usingSkill = data.readByte();
-                User.get().setUsingSkill(usingSkill);
+                User.INSTANCE.setUsingSkill(usingSkill);
 
-                Window.get().setCursorCrosshair(true);
+                Window.INSTANCE.setCursorCrosshair(true);
 
                 switch (E_Skills.values()[usingSkill - 1]) {
                     case MAGIA:

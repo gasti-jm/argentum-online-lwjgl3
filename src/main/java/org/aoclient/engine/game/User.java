@@ -35,9 +35,9 @@ import static org.aoclient.network.protocol.Protocol.writeWalk;
  * representacion en el mundo virtual.
  */
 
-public final class User {
+public enum User {
 
-    private static User instance;
+    INSTANCE;
 
     private final UserInventory userInventory;
     private final InventorySpells inventorySpells;
@@ -100,10 +100,7 @@ public final class User {
     private int role;
     private int jailTime;
 
-    /**
-     * @desc: Constructor privado por singleton.
-     */
-    private User() {
+    User() {
         this.userPos = new Position();
         this.addToUserPos = new Position();
         this.userInventory = new UserInventory();
@@ -115,16 +112,8 @@ public final class User {
 
     public void resetGameState() {
         resetState();
-        Rain.get().setRainValue(false);
-        Rain.get().stopRainingSoundLoop();
-    }
-
-    /**
-     * @return Mismo objeto (Patron de diseño Singleton)
-     */
-    public static User get() {
-        if (instance == null) instance = new User();
-        return instance;
+        Rain.INSTANCE.setRainValue(false);
+        Rain.INSTANCE.stopRainingSoundLoop();
     }
 
     /**
@@ -303,7 +292,7 @@ public final class User {
 
         }
 
-        if (User.get().isUserNavegando() != hayAgua(x, y)) return false;
+        if (userNavegando != hayAgua(x, y)) return false;
 
         return true;
     }
@@ -402,7 +391,7 @@ public final class User {
      * EN PROGRESO....
      */
     public void doPasosFx(int charIndex) {
-        if (!User.get().isUserNavegando()) {
+        if (!userNavegando) {
             if (!charList[charIndex].isDead()
                     && estaPCarea(charIndex)
                     && (charList[charIndex].getPriv() == 0 || charList[charIndex].getPriv() > 5)) {

@@ -10,7 +10,7 @@ public class ParalizeOKHandler implements PacketHandler {
     @Override
     public void handle(PacketBuffer data) {
         data.readByte();
-        charList[User.get().getUserCharIndex()].setParalizado(!charList[User.get().getUserCharIndex()].isParalizado());
+        charList[User.INSTANCE.getUserCharIndex()].setParalizado(!charList[User.INSTANCE.getUserCharIndex()].isParalizado());
     }
 
 }

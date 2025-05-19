@@ -4,7 +4,6 @@ import imgui.ImGui;
 import imgui.flag.ImGuiCond;
 import imgui.flag.ImGuiWindowFlags;
 import org.aoclient.engine.Window;
-import org.aoclient.engine.gui.ImGUISystem;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -47,12 +46,12 @@ public final class FOptions extends Form {
 
         if (ImGui.checkbox("Pantalla Completa", options.isFullscreen())) {
             options.setFullscreen(!options.isFullscreen());
-            Window.get().toggleWindow();
+            Window.INSTANCE.toggleWindow();
         }
 
         if (ImGui.checkbox("Sincronizacion Vertical", options.isVsync())) {
             options.setVsync(!options.isVsync());
-            Window.get().toggleWindow();
+            Window.INSTANCE.toggleWindow();
         }
 
         ImGui.separator();
@@ -74,7 +73,7 @@ public final class FOptions extends Form {
         ImGui.setCursorPos(6, 368);
         if (ImGui.button("Mapa", 170, 20)) {
             playSound(SND_CLICK);
-            ImGUISystem.get().show(new FMapa());
+            IM_GUI_SYSTEM.show(new FMapa());
         }
 
         ImGui.setCursorPos(6, 392);
@@ -89,7 +88,7 @@ public final class FOptions extends Form {
         ImGui.setCursorPos(180, 368);
         if (ImGui.button(new String("Cambiar Contraseña".getBytes(), StandardCharsets.UTF_8), 170, 20)) {
             playSound(SND_CLICK);
-            ImGUISystem.get().show(new FNewPassword());
+            IM_GUI_SYSTEM.show(new FNewPassword());
         }
 
         ImGui.setCursorPos(180, 392);
@@ -98,7 +97,7 @@ public final class FOptions extends Form {
         ImGui.setCursorPos(180, 416);
         if (ImGui.button("Tutorial", 170, 20)) {
             playSound(SND_CLICK);
-            ImGUISystem.get().show(new FTutorial());
+            IM_GUI_SYSTEM.show(new FTutorial());
         }
 
         ImGui.setCursorPos(134, 440);

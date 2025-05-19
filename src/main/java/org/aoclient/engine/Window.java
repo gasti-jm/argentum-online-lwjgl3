@@ -41,12 +41,13 @@ import static org.lwjgl.system.MemoryUtil.NULL;
  * usuario.
  */
 
-public final class Window {
+public enum Window {
+
+    INSTANCE;
 
     private static final int SCREEN_WIDTH = 800;
     private static final int SCREEN_HEIGHT = 600;
 
-    private static Window instance;
     private final String title;
     private final int width, height;
     private long window;
@@ -54,22 +55,11 @@ public final class Window {
     private long audioDevice;
     private boolean cursorCrosshair;
 
-    /**
-     * @desc: Constructor privado por singleton.
-     */
-    private Window() {
+    Window() {
         this.title = "Argentum Online Java";
         this.width = SCREEN_WIDTH;
         this.height = SCREEN_HEIGHT;
         this.cursorCrosshair = false;
-    }
-
-    /**
-     * @return Mismo objeto (Patron de diseño Singleton)
-     */
-    public static Window get() {
-        if (instance == null) instance = new Window();
-        return instance;
     }
 
     /**

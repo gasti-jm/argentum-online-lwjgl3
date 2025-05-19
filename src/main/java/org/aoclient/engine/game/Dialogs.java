@@ -88,8 +88,8 @@ public class Dialogs {
     }
 
     public static void removeDialogsNPCArea() {
-        for (int x = charList[User.get().getUserCharIndex()].getPos().getX() - HALF_WINDOW_TILE_WIDTH; x <= charList[User.get().getUserCharIndex()].getPos().getX() + HALF_WINDOW_TILE_WIDTH; x++) {
-            for (int y = charList[User.get().getUserCharIndex()].getPos().getY() - HALF_WINDOW_TILE_HEIGHT; y <= charList[User.get().getUserCharIndex()].getPos().getY() + HALF_WINDOW_TILE_HEIGHT; y++) {
+        for (int x = charList[User.INSTANCE.getUserCharIndex()].getPos().getX() - HALF_WINDOW_TILE_WIDTH; x <= charList[User.INSTANCE.getUserCharIndex()].getPos().getX() + HALF_WINDOW_TILE_WIDTH; x++) {
+            for (int y = charList[User.INSTANCE.getUserCharIndex()].getPos().getY() - HALF_WINDOW_TILE_HEIGHT; y <= charList[User.INSTANCE.getUserCharIndex()].getPos().getY() + HALF_WINDOW_TILE_HEIGHT; y++) {
                 if (mapData[x][y].getCharIndex() > 0) {
                     if (charList[mapData[x][y].getCharIndex()].getName().length() <= 1)
                         removeDialog(mapData[x][y].getCharIndex());

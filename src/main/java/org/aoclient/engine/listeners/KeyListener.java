@@ -24,64 +24,53 @@ import static org.lwjgl.glfw.GLFW.*;
  * se integra con {@code ImGui} para sincronizar adecuadamente el estado de las teclas entre el motor grafico y la interfaz.
  */
 
-public class KeyListener {
+public enum KeyListener {
 
-    private static final ImGuiIO io = ImGui.getIO();
-    public static List<Integer> lastKeysMovedPressed = new ArrayList<>();
-    private static KeyListener instance;
-    private final BindKeys bindKeys = BindKeys.get();
-    private final boolean[] keyPressed = new boolean[350];
-    private int lastKeyMovedPressed;
-    private int lastKeyPressed;
+    INSTANCE;
 
-    private KeyListener() {
-
-    }
-
-    /**
-     * @return Mismo objeto (Patron de diseño Singleton).
-     */
-    public static KeyListener get() {
-        if (KeyListener.instance == null) KeyListener.instance = new KeyListener();
-        return KeyListener.instance;
-    }
+    private static final ImGuiIO IM_GUI_IO = ImGui.getIO();
+    private static final BindKeys BIND_KEYS = BindKeys.INSTANCE;
+    private static final boolean[] KEY_PRESSED = new boolean[350];
+    public static final List<Integer> LAST_KEYS_MOVED_PRESSED = new ArrayList<>();
+    private static int lastKeyMovedPressed;
+    private static int lastKeyPressed;
 
     /**
      * @desc: Funcion callBack para gestionar el listener de teclas de nuestra ventana GLFW
      */
     public static void keyCallback(long window, int key, int scancode, int action, int mods) {
         if (action == GLFW_PRESS) {
-            get().keyPressed[key] = true;
-            io.setKeysDown(key, true);
+            KEY_PRESSED[key] = true;
+            IM_GUI_IO.setKeysDown(key, true);
 
-            get().lastKeyPressed = key;
+            lastKeyPressed = key;
 
-            if (key == get().bindKeys.getBindedKey(mKeyUp) || key == get().bindKeys.getBindedKey(mKeyLeft) ||
-                    key == get().bindKeys.getBindedKey(mKeyDown) || key == get().bindKeys.getBindedKey(mKeyRight)) {
-                get().lastKeyMovedPressed = key;
-                lastKeysMovedPressed.add(key);
+            if (key == BIND_KEYS.getBindedKey(mKeyUp) || key == BIND_KEYS.getBindedKey(mKeyLeft) ||
+                    key == BIND_KEYS.getBindedKey(mKeyDown) || key == BIND_KEYS.getBindedKey(mKeyRight)) {
+                lastKeyMovedPressed = key;
+                LAST_KEYS_MOVED_PRESSED.add(key);
             }
 
         } else if (action == GLFW_RELEASE) {
-            get().keyPressed[key] = false;
-            io.setKeysDown(key, false);
-            if (key == get().bindKeys.getBindedKey(mKeyUp) || key == get().bindKeys.getBindedKey(mKeyLeft) ||
-                    key == get().bindKeys.getBindedKey(mKeyDown) || key == get().bindKeys.getBindedKey(mKeyRight)) {
-                lastKeysMovedPressed.remove(lastKeysMovedPressed.indexOf(key));
+            KEY_PRESSED[key] = false;
+            IM_GUI_IO.setKeysDown(key, false);
+            if (key == BIND_KEYS.getBindedKey(mKeyUp) || key == BIND_KEYS.getBindedKey(mKeyLeft) ||
+                    key == BIND_KEYS.getBindedKey(mKeyDown) || key == BIND_KEYS.getBindedKey(mKeyRight)) {
+                LAST_KEYS_MOVED_PRESSED.remove(LAST_KEYS_MOVED_PRESSED.indexOf(key));
             }
         }
 
-        io.setKeyCtrl(io.getKeysDown(GLFW_KEY_LEFT_CONTROL) || io.getKeysDown(GLFW_KEY_RIGHT_CONTROL));
-        io.setKeyShift(io.getKeysDown(GLFW_KEY_LEFT_SHIFT) || io.getKeysDown(GLFW_KEY_RIGHT_SHIFT));
-        io.setKeyAlt(io.getKeysDown(GLFW_KEY_LEFT_ALT) || io.getKeysDown(GLFW_KEY_RIGHT_ALT));
-        io.setKeySuper(io.getKeysDown(GLFW_KEY_LEFT_SUPER) || io.getKeysDown(GLFW_KEY_RIGHT_SUPER));
+        IM_GUI_IO.setKeyCtrl(IM_GUI_IO.getKeysDown(GLFW_KEY_LEFT_CONTROL) || IM_GUI_IO.getKeysDown(GLFW_KEY_RIGHT_CONTROL));
+        IM_GUI_IO.setKeyShift(IM_GUI_IO.getKeysDown(GLFW_KEY_LEFT_SHIFT) || IM_GUI_IO.getKeysDown(GLFW_KEY_RIGHT_SHIFT));
+        IM_GUI_IO.setKeyAlt(IM_GUI_IO.getKeysDown(GLFW_KEY_LEFT_ALT) || IM_GUI_IO.getKeysDown(GLFW_KEY_RIGHT_ALT));
+        IM_GUI_IO.setKeySuper(IM_GUI_IO.getKeysDown(GLFW_KEY_LEFT_SUPER) || IM_GUI_IO.getKeysDown(GLFW_KEY_RIGHT_SUPER));
     }
 
     /**
      * @desc: Devuelve true si la tecla esta siendo presionada, caso contrario false.
      */
     public static boolean isKeyPressed(int keyCode) {
-        return get().keyPressed[keyCode];
+        return KEY_PRESSED[keyCode];
     }
 
     /**
@@ -89,8 +78,8 @@ public class KeyListener {
      * funcion "isKeyPressed" va a seguir ejecutando la accion en el main loop del juego (como hacemos con la caminata).
      */
     public static boolean isKeyReadyForAction(int keyCode) {
-        boolean retVal = get().keyPressed[keyCode];
-        if (retVal) get().keyPressed[keyCode] = false;
+        boolean retVal = KEY_PRESSED[keyCode];
+        if (retVal) KEY_PRESSED[keyCode] = false;
         return retVal;
     }
 
@@ -98,19 +87,19 @@ public class KeyListener {
      * @desc: Devulve la ultima tecla presionada por el usuario.
      */
     public static int getLastKeyPressed() {
-        return get().lastKeyPressed;
+        return lastKeyPressed;
     }
 
     public static void setLastKeyPressed(int value) {
-        get().lastKeyPressed = value;
+        lastKeyPressed = value;
     }
 
     public static int getLastKeyMovedPressed() {
-        return get().lastKeyMovedPressed;
+        return lastKeyMovedPressed;
     }
 
     public static void setLastKeyMovedPressed(int value) {
-        get().lastKeyMovedPressed = value;
+        lastKeyMovedPressed = value;
     }
 
 }

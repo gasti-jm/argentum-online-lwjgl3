@@ -11,6 +11,6 @@ public class UpdateManaHandler implements PacketHandler {
         data.readByte();
 
         // variable global
-        User.get().setUserMinMAN(data.readInteger());
+        User.INSTANCE.setUserMinMAN(data.readInteger());
     }
 }

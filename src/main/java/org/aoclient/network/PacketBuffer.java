@@ -610,9 +610,9 @@ public class PacketBuffer {
 
     private void disconnect() {
         String msgErr = "Not enough bytes to read from the packet " + PacketReceiver.packet;
-        ImGUISystem.get().show(new FMessage(msgErr));
+        ImGUISystem.INSTANCE.show(new FMessage(msgErr));
         System.out.println(msgErr);
-        SocketConnection.getInstance().disconnect();
+        SocketConnection.INSTANCE.disconnect();
         // Resetea el buffer para que termine la recursividad de lectura de paquetes
         buffer = new byte[DEFAULT_BUFFER_SIZE];
         bufferCapacity = DEFAULT_BUFFER_SIZE;

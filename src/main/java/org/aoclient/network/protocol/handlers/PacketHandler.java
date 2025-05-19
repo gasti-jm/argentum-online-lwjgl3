@@ -1,5 +1,6 @@
 package org.aoclient.network.protocol.handlers;
 
+import org.aoclient.engine.game.User;
 import org.aoclient.network.PacketBuffer;
 
 /**

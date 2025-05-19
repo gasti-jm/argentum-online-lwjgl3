@@ -26,10 +26,10 @@ public class CharacterMoveHandler implements PacketHandler {
         // Play steps sounds if the user is not an admin of any kind
         int priv = charList[charIndex].getPriv();
         if (priv != 1 && priv != 2 && priv != 3 && priv != 5 && priv != 25) {
-            User.get().doPasosFx(charIndex);
+            User.INSTANCE.doPasosFx(charIndex);
         }
 
-        User.get().moveCharbyPos(charIndex, x, y);
+        User.INSTANCE.moveCharbyPos(charIndex, x, y);
         refreshAllChars();
     }
 

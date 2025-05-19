@@ -8,7 +8,7 @@ public class CommerceEndHandler implements PacketHandler {
     @Override
     public void handle(PacketBuffer data) {
         data.readByte();
-        User.get().setUserComerciando(false);
+        User.INSTANCE.setUserComerciando(false);
     }
 
 }

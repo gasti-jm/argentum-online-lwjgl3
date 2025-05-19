@@ -8,7 +8,7 @@ public class NavigateToggleHandler implements PacketHandler {
     @Override
     public void handle(PacketBuffer data) {
         data.readByte();
-        User.get().setUserNavegando(!User.get().isUserNavegando());
+        User.INSTANCE.setUserNavegando(!User.INSTANCE.isUserNavegando());
     }
 
 }

@@ -9,12 +9,10 @@ import imgui.flag.ImGuiWindowFlags;
 import imgui.type.ImInt;
 import imgui.type.ImString;
 import org.aoclient.engine.Window;
-import org.aoclient.engine.game.User;
 import org.aoclient.engine.game.models.E_Cities;
 import org.aoclient.engine.game.models.E_Roles;
 import org.aoclient.engine.game.models.E_Heading;
 import org.aoclient.engine.game.models.E_Raza;
-import org.aoclient.engine.gui.ImGUISystem;
 import org.aoclient.engine.gui.widgets.ImageButton3State;
 import org.aoclient.engine.renderer.RGBColor;
 import org.aoclient.engine.renderer.Surface;
@@ -118,7 +116,7 @@ public final class FCreateCharacter extends Form {
 
     public FCreateCharacter() {
         try {
-            this.background = Surface.get().createTexture("gui.ao", "VentanaCrearPersonaje", true);
+            this.background = Surface.INSTANCE.createTexture("gui.ao", "VentanaCrearPersonaje", true);
             this.userHead = HUMANO_H_PRIMER_CABEZA;
             this.userBody = HUMANO_H_CUERPO_DESNUDO;
             this.dir = E_Heading.SOUTH.value;
@@ -186,7 +184,7 @@ public final class FCreateCharacter extends Form {
         geometryBoxRenderGUI(background, 0, 0, 1.0f);
         this.updateHeadSelection();
 
-        ImGui.setNextWindowSize(Window.get().getWidth() + 10, Window.get().getHeight() + 5, ImGuiCond.Once);
+        ImGui.setNextWindowSize(Window.INSTANCE.getWidth() + 10, Window.INSTANCE.getHeight() + 5, ImGuiCond.Once);
         ImGui.setNextWindowPos(-5, -1, ImGuiCond.Once);
 
         // Start Custom window
@@ -492,20 +490,20 @@ public final class FCreateCharacter extends Form {
         final int userHogar = currentItemHogar.get() + 1;
         if (!checkData()) return;
         new Thread(() -> {
-            if (SocketConnection.getInstance().connect())
+            if (SocketConnection.INSTANCE.connect())
                 writeLoginNewChar(txtNombre.get(), txtPassword.get(), userRaza, userSexo, userClase, userHead, txtMail.get(), userHogar);
         }).start();
-        User.get().setUserName(txtNombre.get());
+        USER.setUserName(txtNombre.get());
     }
 
     private void buttonThrowDices() {
         new Thread(() -> {
-            if (SocketConnection.getInstance().connect()) writeThrowDices();
+            if (SocketConnection.INSTANCE.connect()) writeThrowDices();
         }).start();
     }
 
     private void buttonGoBack() {
-        ImGUISystem.get().show(new FConnect());
+        IM_GUI_SYSTEM.show(new FConnect());
         playMusic("6.ogg");
 
         btnVolver.delete();
@@ -585,28 +583,28 @@ public final class FCreateCharacter extends Form {
 
     private boolean checkData() {
         if (txtNombre.get().isEmpty() || txtPassword.get().isEmpty() || txtMail.get().isEmpty()) {
-            ImGUISystem.get().show(new FMessage("Por favor, rellene todos los campos."));
+            IM_GUI_SYSTEM.show(new FMessage("Por favor, rellene todos los campos."));
             return false;
         }
 
         if (txtNombre.get().endsWith(" ")) {
-            ImGUISystem.get().show(new FMessage("Nombre invalido, se ha removido un espacio en blanco al final del nombre."));
+            IM_GUI_SYSTEM.show(new FMessage("Nombre invalido, se ha removido un espacio en blanco al final del nombre."));
             txtNombre.set(txtNombre.get().substring(0, txtNombre.get().length() - 1));
             return false;
         }
 
         if (!txtPassword.get().equals(txtConfirmPassword.get())) {
-            ImGUISystem.get().show(new FMessage("Las contraseñas no son iguales. Recuerde que no se permite caracteres especiales."));
+            IM_GUI_SYSTEM.show(new FMessage("Las contraseñas no son iguales. Recuerde que no se permite caracteres especiales."));
             return false;
         }
 
         if (!checkEmail(txtMail.get())) {
-            ImGUISystem.get().show(new FMessage("Direccion de correo electronico invalido."));
+            IM_GUI_SYSTEM.show(new FMessage("Direccion de correo electronico invalido."));
             return false;
         }
 
         if (checkSpecialChar(txtPassword.get()) || txtPassword.get().contains(" ")) {
-            ImGUISystem.get().show(new FMessage("Password invalido, no puede contener caracteres especiales ni espacios en blanco."));
+            IM_GUI_SYSTEM.show(new FMessage("Password invalido, no puede contener caracteres especiales ni espacios en blanco."));
             return false;
         }
 

@@ -21,7 +21,9 @@ import static org.aoclient.network.protocol.Protocol.*;
  * TODO Se podria usar NIO?
  */
 
-public class SocketConnection {
+public enum SocketConnection {
+
+    INSTANCE;
 
     /** Socket para la conexion TCP. */
     private Socket socket;
@@ -31,13 +33,6 @@ public class SocketConnection {
     private DataInputStream inputStream;
     /** Bandera que indica si hay un intento de conexion en curso. */
     private boolean tryConnect;
-
-    private SocketConnection() {
-    }
-
-    public static SocketConnection getInstance() {
-        return SingletonHolder.INSTANCE;
-    }
 
     /**
      * <p>
@@ -66,7 +61,7 @@ public class SocketConnection {
     public boolean connect() {
         // Comprueba si ya esta intentando conectarse
         if (tryConnect) {
-            ImGUISystem.get().show(new FMessage("Trying to connect to the server, please wait..."));
+            ImGUISystem.INSTANCE.show(new FMessage("Trying to connect to the server, please wait..."));
             return false;
         }
 
@@ -90,7 +85,7 @@ public class SocketConnection {
                 }
 
             } catch (Exception e) {
-                ImGUISystem.get().show(new FMessage(e.getMessage()));
+                ImGUISystem.INSTANCE.show(new FMessage(e.getMessage()));
                 this.tryConnect = false;
                 return false;
             }
@@ -114,7 +109,7 @@ public class SocketConnection {
         } catch (IOException e) {
             System.err.println("Error closing connection: " + e.getMessage());
         } finally {
-            User.get().resetGameState();
+            User.INSTANCE.resetGameState();
         }
     }
 
@@ -197,10 +192,6 @@ public class SocketConnection {
      */
     private boolean isReadyForCommunication() {
         return socket != null && socket.isConnected() && !socket.isClosed();
-    }
-
-    private static class SingletonHolder {
-        private static final SocketConnection INSTANCE = new SocketConnection();
     }
 
 }

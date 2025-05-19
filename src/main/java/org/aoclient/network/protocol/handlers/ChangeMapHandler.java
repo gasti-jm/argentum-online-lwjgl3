@@ -15,7 +15,7 @@ public class ChangeMapHandler implements PacketHandler {
         data.readByte();
 
         short userMap = data.readInteger();
-        User.get().setUserMap(userMap);
+        User.INSTANCE.setUserMap(userMap);
 
         // Once on-the-fly editor is implemented check for map version before loading....
         // For now we just drop it
@@ -24,7 +24,7 @@ public class ChangeMapHandler implements PacketHandler {
         GameData.loadMap(userMap);
 
         if (!bLluvia[userMap]) {
-            if (Rain.get().isRaining()) Rain.get().stopRainingSoundLoop();
+            if (Rain.INSTANCE.isRaining()) Rain.INSTANCE.stopRainingSoundLoop();
         }
     }
 

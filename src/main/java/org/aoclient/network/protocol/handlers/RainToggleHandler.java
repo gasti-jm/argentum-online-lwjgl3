@@ -6,21 +6,22 @@ import org.aoclient.network.PacketBuffer;
 
 public class RainToggleHandler implements PacketHandler {
 
+
     @Override
     public void handle(PacketBuffer data) {
         data.readByte();
 
-        final int userX = User.get().getUserPos().getX();
-        final int userY = User.get().getUserPos().getY();
-        if (User.get().inMapBounds(userX, userY)) return;
+        int userX = User.INSTANCE.getUserPos().getX();
+        int userY = User.INSTANCE.getUserPos().getY();
+        if (User.INSTANCE.inMapBounds(userX, userY)) return;
 
-        User.get().setUnderCeiling(User.get().checkUnderCeiling());
+        User.INSTANCE.setUnderCeiling(User.INSTANCE.checkUnderCeiling());
 
-        if (Rain.get().isRaining()) {
-            Rain.get().setRainValue(false);
-            Rain.get().stopRainingSoundLoop();
-            Rain.get().playEndRainSound();
-        } else Rain.get().setRainValue(true);
+        if (Rain.INSTANCE.isRaining()) {
+            Rain.INSTANCE.setRainValue(false);
+            Rain.INSTANCE.stopRainingSoundLoop();
+            Rain.INSTANCE.playEndRainSound();
+        } else Rain.INSTANCE.setRainValue(true);
 
     }
 

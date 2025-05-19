@@ -15,9 +15,9 @@ public class ForceCharMoveHandler implements PacketHandler {
         data.readByte();
 
         E_Heading direction = E_Heading.values()[data.readByte() - 1];
-        short userCharIndex = User.get().getUserCharIndex();
-        User.get().moveCharbyHead(userCharIndex, direction);
-        User.get().moveScreen(direction);
+        short userCharIndex = User.INSTANCE.getUserCharIndex();
+        User.INSTANCE.moveCharbyHead(userCharIndex, direction);
+        User.INSTANCE.moveScreen(direction);
 
         refreshAllChars();
     }

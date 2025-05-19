@@ -14,7 +14,7 @@ import static org.aoclient.engine.game.models.E_Skills.FundirMetal;
 
 public class WorkRequestTargetHandler implements PacketHandler {
 
-    private final Console console = Console.get();
+    private final Console console = Console.INSTANCE;
 
     @Override
     public void handle(PacketBuffer data) {
@@ -23,9 +23,9 @@ public class WorkRequestTargetHandler implements PacketHandler {
         data.readByte();
 
         final int usingSkill = data.readByte();
-        User.get().setUsingSkill(usingSkill);
+        User.INSTANCE.setUsingSkill(usingSkill);
 
-        Window.get().setCursorCrosshair(true);
+        Window.INSTANCE.setCursorCrosshair(true);
 
         switch (E_Skills.values()[usingSkill - 1]) {
             case MAGIA:

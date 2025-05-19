@@ -13,9 +13,9 @@ public class UpdateHPHandler implements PacketHandler {
 
         data.readByte();
 
-        User.get().setUserMinHP(data.readInteger());
+        User.INSTANCE.setUserMinHP(data.readInteger());
 
-        charList[User.get().getUserCharIndex()].setDead(User.get().getUserMinHP() <= 0);
+        charList[User.INSTANCE.getUserCharIndex()].setDead(User.INSTANCE.getUserMinHP() <= 0);
 
         //
         //    'Is the user alive??

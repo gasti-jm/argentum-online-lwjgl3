@@ -4,17 +4,14 @@ import org.aoclient.engine.game.User;
 import org.aoclient.network.PacketBuffer;
 
 public class AreaChangedHandler implements PacketHandler {
-    
+
     @Override
     public void handle(PacketBuffer data) {
         if (data.checkBytes(3)) return;
-
         data.readByte();
-
         int x = data.readByte();
         int y = data.readByte();
-
-        User.get().areaChange(x, y);
+        User.INSTANCE.areaChange(x, y);
     }
-    
+
 }

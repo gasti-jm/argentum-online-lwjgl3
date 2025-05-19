@@ -7,13 +7,13 @@ import org.aoclient.network.PacketBuffer;
 import org.tinylog.Logger;
 
 public class BankInitHandler implements PacketHandler {
+
     @Override
     public void handle(PacketBuffer data) {
-        // Remove packet ID
         data.readByte();
-
         int bankGold = data.readLong();
-        User.get().setUserComerciando(true);
-        ImGUISystem.get().show(new FBank(bankGold));
+        User.INSTANCE.setUserComerciando(true);
+        ImGUISystem.INSTANCE.show(new FBank(bankGold));
     }
+
 }

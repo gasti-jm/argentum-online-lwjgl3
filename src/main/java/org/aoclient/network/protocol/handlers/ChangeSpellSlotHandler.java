@@ -21,7 +21,7 @@ public class ChangeSpellSlotHandler implements PacketHandler {
         buffer.readInteger();
         String hechizoName = buffer.readCp1252String();
 
-        User.get().getInventorySpells().addSpell(slot - 1, hechizoName);
+        User.INSTANCE.getInventorySpells().addSpell(slot - 1, hechizoName);
 
         data.copy(buffer);
         Logger.debug("ChangeSpellSlot Cargado! - FALTA TERMINAR!");

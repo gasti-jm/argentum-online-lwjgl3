@@ -90,7 +90,7 @@ public abstract class Inventory {
         slots[slot].equipped = equipped;
         slots[slot].grhIndex = grhIndex;
 
-        if (grhIndex > 0) slots[slot].objTexture = Surface.get().getTexture(grhData[grhIndex].getFileNum());
+        if (grhIndex > 0) slots[slot].objTexture = Surface.INSTANCE.getTexture(grhData[grhIndex].getFileNum());
 
         slots[slot].maxHit = maxHit;
         slots[slot].minHit = minHit;

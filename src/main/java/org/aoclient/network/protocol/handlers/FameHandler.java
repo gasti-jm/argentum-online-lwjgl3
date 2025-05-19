@@ -17,8 +17,8 @@ public class FameHandler implements PacketHandler {
             reputations[reputation.ordinal()] = data.readLong();
         }
 
-        User.get().setReputations(reputations);
+        User.INSTANCE.setReputations(reputations);
         long average = data.readLong();
-        User.get().setCriminal(average < 0);
+        User.INSTANCE.setCriminal(average < 0);
     }
 }

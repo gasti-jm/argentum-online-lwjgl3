@@ -16,14 +16,14 @@ public class MiniStatsHandler implements PacketHandler {
         int i = 1;
         for (E_KillCounters counter : E_KillCounters.values()) {
             if (i < E_KillCounters.values().length) {
-                User.get().setKillCounter(counter.ordinal(), data.readLong());
+                User.INSTANCE.setKillCounter(counter.ordinal(), data.readLong());
             } else {
-                User.get().setKillCounter(counter.ordinal(), data.readInteger());
+                User.INSTANCE.setKillCounter(counter.ordinal(), data.readInteger());
             }
             i++;
         }
-        User.get().setRole(data.readByte());
-        User.get().setJailTime(data.readLong());
+        User.INSTANCE.setRole(data.readByte());
+        User.INSTANCE.setJailTime(data.readLong());
 
         //With UserEstadisticas
         //        .CiudadanosMatados = data.ReadLong()

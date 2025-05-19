@@ -6,6 +6,8 @@ import org.aoclient.network.PacketBuffer;
 import static org.aoclient.engine.utils.GameData.charList;
 
 public class UserCharIndexInServerHandler implements PacketHandler {
+    
+    private final User user = User.INSTANCE;
 
     @Override
     public void handle(PacketBuffer data) {
@@ -13,10 +15,10 @@ public class UserCharIndexInServerHandler implements PacketHandler {
 
         data.readByte();
 
-        User.get().setUserCharIndex(data.readInteger());
-        User.get().getUserPos().setX(charList[User.get().getUserCharIndex()].getPos().getX());
-        User.get().getUserPos().setY(charList[User.get().getUserCharIndex()].getPos().getY());
-        User.get().setUnderCeiling(User.get().checkUnderCeiling());
+        user.setUserCharIndex(data.readInteger());
+        user.getUserPos().setX(charList[user.getUserCharIndex()].getPos().getX());
+        user.getUserPos().setY(charList[user.getUserCharIndex()].getPos().getY());
+        user.setUnderCeiling(user.checkUnderCeiling());
     }
 
 }

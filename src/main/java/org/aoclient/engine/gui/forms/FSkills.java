@@ -3,7 +3,6 @@ package org.aoclient.engine.gui.forms;
 import imgui.ImGui;
 import imgui.flag.ImGuiCond;
 import imgui.flag.ImGuiWindowFlags;
-import org.aoclient.engine.game.User;
 import org.aoclient.engine.game.models.E_Skills;
 
 import java.io.IOException;
@@ -20,8 +19,8 @@ import static org.aoclient.network.protocol.Protocol.writeRequestSkills;
 public final class FSkills extends Form {
 
     private String hoverSkillDescription = "";
-    private final int[] userSkills = User.get().getSkills().clone();
-    private final int userFreeSkillsPoints = User.get().getFreeSkillPoints();
+    private final int[] userSkills = USER.getSkills().clone();
+    private final int userFreeSkillsPoints = USER.getFreeSkillPoints();
 
     public FSkills() {
         try {
@@ -43,7 +42,7 @@ public final class FSkills extends Form {
         ImGui.image(backgroundImage, 600, 450);
 
         ImGui.setCursorPos(320, 15);
-        ImGui.text(String.valueOf(User.get().getFreeSkillPoints()));
+        ImGui.text(String.valueOf(USER.getFreeSkillPoints()));
 
         this.drawSkills();
         this.drawSkillsHovers();
@@ -82,7 +81,7 @@ public final class FSkills extends Form {
             this.minusSkill(skill.getValue());
         }
         ImGui.sameLine(0, spacing);
-        ImGui.text(String.valueOf(User.get().getSkill(skill.getValue())));
+        ImGui.text(String.valueOf(USER.getSkill(skill.getValue())));
         ImGui.sameLine(0, spacing);
         if (ImGui.arrowButton("FSkill_" + skill.getValue() + "_add", 1)) {
             this.plusSkill(skill.getValue());
@@ -122,31 +121,31 @@ public final class FSkills extends Form {
     }
 
     private void plusSkill(int skill) {
-        int freeSkillPts = User.get().getFreeSkillPoints();
-        if (freeSkillPts > 0 && User.get().getSkill(skill) + 1 <= 100) {
-            User.get().setSkill(skill, User.get().getSkill(skill) + 1);
-            User.get().setFreeSkillPoints(freeSkillPts - 1);
+        int freeSkillPts = USER.getFreeSkillPoints();
+        if (freeSkillPts > 0 && USER.getSkill(skill) + 1 <= 100) {
+            USER.setSkill(skill, USER.getSkill(skill) + 1);
+            USER.setFreeSkillPoints(freeSkillPts - 1);
         }
     }
 
     private void minusSkill(int skill) {
-        int result = (User.get().getSkill(skill) - 1);
+        int result = (USER.getSkill(skill) - 1);
         if (result >= this.userSkills[skill - 1]) {
-            User.get().setSkill(skill, User.get().getSkill(skill) - 1);
-            User.get().setFreeSkillPoints(User.get().getFreeSkillPoints() + 1);
+            USER.setSkill(skill, USER.getSkill(skill) - 1);
+            USER.setFreeSkillPoints(USER.getFreeSkillPoints() + 1);
         }
     }
 
     private void rollbackChanges() {
-        User.get().setFreeSkillPoints(this.userFreeSkillsPoints);
-        User.get().setSkills(this.userSkills);
+        USER.setFreeSkillPoints(this.userFreeSkillsPoints);
+        USER.setSkills(this.userSkills);
     }
 
     private void saveChanges() {
         int[] modifiedSkills = new int[E_Skills.values().length];
         for (E_Skills skill : E_Skills.values()) {
             int skillIndex = skill.getValue() - 1;
-            modifiedSkills[skillIndex] = User.get().getSkill(skill.getValue()) - this.userSkills[skillIndex];
+            modifiedSkills[skillIndex] = USER.getSkill(skill.getValue()) - this.userSkills[skillIndex];
         }
         writeModifySkills(modifiedSkills);
     }

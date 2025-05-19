@@ -7,6 +7,8 @@ import static org.aoclient.engine.utils.GameData.charList;
 
 public class UpdateUserStatsHandler implements PacketHandler {
     
+    private final User user = User.INSTANCE;
+    
     @Override
     public void handle(PacketBuffer data) {
         if (data.checkBytes(26)) return;
@@ -14,19 +16,19 @@ public class UpdateUserStatsHandler implements PacketHandler {
         // Remove packet ID
         data.readByte();
 
-        User.get().setUserMaxHP(data.readInteger());
-        User.get().setUserMinHP(data.readInteger());
-        User.get().setUserMaxMAN(data.readInteger());
-        User.get().setUserMinMAN(data.readInteger());
-        User.get().setUserMaxSTA(data.readInteger());
-        User.get().setUserMinSTA(data.readInteger());
-        User.get().setUserGLD(data.readLong());
-        User.get().setUserLvl(data.readByte());
-        User.get().setUserPasarNivel(data.readLong());
-        User.get().setUserExp(data.readLong());
+        user.setUserMaxHP(data.readInteger());
+        user.setUserMinHP(data.readInteger());
+        user.setUserMaxMAN(data.readInteger());
+        user.setUserMinMAN(data.readInteger());
+        user.setUserMaxSTA(data.readInteger());
+        user.setUserMinSTA(data.readInteger());
+        user.setUserGLD(data.readLong());
+        user.setUserLvl(data.readByte());
+        user.setUserPasarNivel(data.readLong());
+        user.setUserExp(data.readLong());
 
 
-        charList[User.get().getUserCharIndex()].setDead(User.get().getUserMinHP() <= 0);
+        charList[user.getUserCharIndex()].setDead(user.getUserMinHP() <= 0);
 
         //
         //    If UserMinHP = 0 Then

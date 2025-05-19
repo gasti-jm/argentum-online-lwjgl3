@@ -16,7 +16,7 @@ public class CreateFXHandler implements PacketHandler {
         short fX = data.readInteger();
         short loops = data.readInteger();
 
-        User.get().setCharacterFx(charIndex, fX, loops);
+        User.INSTANCE.setCharacterFx(charIndex, fX, loops);
     }
     
 }
