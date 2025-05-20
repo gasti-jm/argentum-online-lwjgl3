@@ -4,28 +4,24 @@ import org.aoclient.network.PacketBuffer;
 import org.tinylog.Logger;
 
 public class BlacksmithWeaponsHandler implements PacketHandler {
-    
+
     @Override
-    public void handle(PacketBuffer data) {
-        if (data.checkBytes(3)) return;
+    public void handle(PacketBuffer buffer) {
+        if (buffer.checkBytes(3)) return;
+        PacketBuffer tempBuffer = new PacketBuffer();
+        tempBuffer.copy(buffer);
+        tempBuffer.readByte();
 
-        PacketBuffer buffer = new PacketBuffer();
-        buffer.copy(data);
-
-        // Remove packet ID
-        buffer.readByte();
-
-        short count = buffer.readInteger();
-
+        short count = tempBuffer.readInteger();
 
         for (int i = 0; i < count; i++) {
-            buffer.readCp1252String();
-            buffer.readInteger();
-            buffer.readInteger();
-            buffer.readInteger();
-            buffer.readInteger();
-            buffer.readInteger();
-            buffer.readInteger();
+            tempBuffer.readCp1252String();
+            tempBuffer.readInteger();
+            tempBuffer.readInteger();
+            tempBuffer.readInteger();
+            tempBuffer.readInteger();
+            tempBuffer.readInteger();
+            tempBuffer.readInteger();
         }
 
         //ReDim ArmasHerrero(Count) As tItemsConstruibles
@@ -79,8 +75,8 @@ public class BlacksmithWeaponsHandler implements PacketHandler {
         //        End With
         //    Next i
 
-        data.copy(buffer);
+        buffer.copy(tempBuffer);
         Logger.debug("handleBlacksmithWeapons Cargado! - FALTA TERMINAR!");
     }
-    
+
 }

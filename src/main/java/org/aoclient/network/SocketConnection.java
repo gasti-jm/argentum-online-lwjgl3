@@ -14,8 +14,8 @@ import static org.aoclient.network.protocol.Protocol.*;
 
 /**
  * <p>
- * Gestiona la conexion a traves de sockets TCP, permitiendo establecer comunicacion con un servidor. Ofrece metodos para
- * conectar, desconectar, enviar y recibir bytes utilizando flujos de entrada y salida.
+ * Gestiona la conexion cliente-servidor a traves de sockets TCP. Ofrece metodos para conectar y desconectar a un servidor, y
+ * metodos para enviar y recibir bytes dentro de un buffer por medio de los flujos de entrada y salida del socket.
  * <p>
  * TODO Se podria llamar Connection?
  * TODO Se podria usar NIO?
@@ -133,7 +133,7 @@ public enum SocketConnection {
     }
 
     /**
-     * Lee y procesa los bytes disponibles en el flujo de entrada del socket.
+     * Lee los bytes del flujo de entrada del socket y los almacena en el buffer de entrada.
      * <p>
      * La estructura actual del codigo evita intencionalmente que el metodo {@code read()} bloquee el hilo de ejecucion, lo que es
      * importante para mantener la capacidad de respuesta de la aplicacion, especialmente si este codigo se ejecuta en el hilo

@@ -20,14 +20,14 @@ public class MultiMessageHandler implements PacketHandler {
     private final Console console = Console.INSTANCE;
 
     @Override
-    public void handle(PacketBuffer data) {
+    public void handle(PacketBuffer buffer) {
         int bodyPart;
         short damage;
 
-        // Remove packet ID
-        data.readByte();
+        // TODO No se esta leyendo dos veces el ID (o eso supongo)?
+        buffer.readByte();
 
-        int m = data.readByte();
+        int m = buffer.readByte();
 
         if (m > MessageType.values().length) return;
         MessageType msg = MessageType.values()[m];
@@ -83,41 +83,41 @@ public class MultiMessageHandler implements PacketHandler {
                 break;
 
             case NPC_HIT_USER:
-                switch (data.readByte()) {
+                switch (buffer.readByte()) {
                     case 1: // bCabeza
-                        console.addMsgToConsole(Messages.get(MessageKey.GOLPE_CABEZA) + " " + data.readInteger(),
+                        console.addMsgToConsole(Messages.get(MessageKey.GOLPE_CABEZA) + " " + buffer.readInteger(),
                                 false, false, new RGBColor(1f, 0f, 0f));
                         break;
 
                     case 2: // bBrazoIzquierdo
-                        console.addMsgToConsole(Messages.get(MessageKey.GOLPE_BRAZO_IZQ) + " " + data.readInteger(),
+                        console.addMsgToConsole(Messages.get(MessageKey.GOLPE_BRAZO_IZQ) + " " + buffer.readInteger(),
                                 false, false, new RGBColor(1f, 0f, 0f));
                         break;
 
                     case 3: // bBrazoDerecho
-                        console.addMsgToConsole(Messages.get(MessageKey.GOLPE_BRAZO_DER) + " " + data.readInteger(),
+                        console.addMsgToConsole(Messages.get(MessageKey.GOLPE_BRAZO_DER) + " " + buffer.readInteger(),
                                 false, false, new RGBColor(1f, 0f, 0f));
                         break;
 
                     case 4: // bPiernaIzquierda
-                        console.addMsgToConsole(Messages.get(MessageKey.GOLPE_PIERNA_IZQ) + " " + data.readInteger(),
+                        console.addMsgToConsole(Messages.get(MessageKey.GOLPE_PIERNA_IZQ) + " " + buffer.readInteger(),
                                 false, false, new RGBColor(1f, 0f, 0f));
                         break;
 
                     case 5: // bPiernaDerecha
-                        console.addMsgToConsole(Messages.get(MessageKey.GOLPE_PIERNA_DER) + " " + data.readInteger(),
+                        console.addMsgToConsole(Messages.get(MessageKey.GOLPE_PIERNA_DER) + " " + buffer.readInteger(),
                                 false, false, new RGBColor(1f, 0f, 0f));
                         break;
 
                     case 6: // bTorso
-                        console.addMsgToConsole(Messages.get(MessageKey.GOLPE_TORSO) + " " + data.readInteger(),
+                        console.addMsgToConsole(Messages.get(MessageKey.GOLPE_TORSO) + " " + buffer.readInteger(),
                                 false, false, new RGBColor(1f, 0f, 0f));
                         break;
                 }
                 break;
 
             case USER_HIT_NPC:
-                final int d = data.readLong();
+                final int d = buffer.readLong();
                 console.addMsgToConsole(Messages.get(MessageKey.GOLPE_CRIATURA_1) + " " + d, false, false, new RGBColor(1f, 0f, 0f));
 
                 charDialogHitSet(User.INSTANCE.getUserCharIndex(), d);
@@ -125,7 +125,7 @@ public class MultiMessageHandler implements PacketHandler {
                 break;
 
             case USER_ATTACKED_SWING:
-                final short charIndexAttaker = data.readInteger();
+                final short charIndexAttaker = buffer.readInteger();
 
                 console.addMsgToConsole(Messages.get(MessageKey.MENSAJE_1) + " " + charList[charIndexAttaker].getName() + Messages.get(MessageKey.ATAQUE_FALLO),
                         false, false, new RGBColor(1f, 0f, 0f));
@@ -134,10 +134,10 @@ public class MultiMessageHandler implements PacketHandler {
                 break;
 
             case USER_HITTED_BY_USER:
-                final int charIndexHitAttaker = data.readInteger();
+                final int charIndexHitAttaker = buffer.readInteger();
                 String attackerName = "<" + charList[charIndexHitAttaker].getName() + ">";
-                bodyPart = data.readByte();
-                damage = data.readInteger();
+                bodyPart = buffer.readByte();
+                damage = buffer.readInteger();
 
                 switch (bodyPart) {
                     case 1: // bCabeza
@@ -176,10 +176,10 @@ public class MultiMessageHandler implements PacketHandler {
                 break;
 
             case USER_HITTED_USER:
-                final int charIndexVictim = data.readInteger();
+                final int charIndexVictim = buffer.readInteger();
                 final String victimName = "<" + charList[charIndexVictim].getName() + ">";
-                bodyPart = data.readByte();
-                damage = data.readInteger();
+                bodyPart = buffer.readByte();
+                damage = buffer.readInteger();
 
                 switch (bodyPart) {
                     case 1: // bCabeza
@@ -217,7 +217,7 @@ public class MultiMessageHandler implements PacketHandler {
                 break;
 
             case WORK_REQUEST_TARGET:
-                final int usingSkill = data.readByte();
+                final int usingSkill = buffer.readByte();
                 User.INSTANCE.setUsingSkill(usingSkill);
 
                 Window.INSTANCE.setCursorCrosshair(true);
@@ -254,10 +254,10 @@ public class MultiMessageHandler implements PacketHandler {
                 break;
 
             case HAVE_KILLED_USER:
-                console.addMsgToConsole(Messages.get(MessageKey.HAS_MATADO_A) + charList[data.readInteger()].getName() + Messages.get(MessageKey.MENSAJE_22),
+                console.addMsgToConsole(Messages.get(MessageKey.HAS_MATADO_A) + charList[buffer.readInteger()].getName() + Messages.get(MessageKey.MENSAJE_22),
                         false, false, new RGBColor(1f, 0f, 0f));
 
-                final int level = data.readLong();
+                final int level = buffer.readLong();
 
                 console.addMsgToConsole(Messages.get(MessageKey.HAS_GANADO_EXPE_1) + level + Messages.get(MessageKey.HAS_GANADO_EXPE_2),
                         false, false, new RGBColor(1f, 0f, 0f));
@@ -266,19 +266,19 @@ public class MultiMessageHandler implements PacketHandler {
                 break;
 
             case USER_KILL:
-                console.addMsgToConsole(charList[data.readInteger()].getName() + Messages.get(MessageKey.TE_HA_MATADO),
+                console.addMsgToConsole(charList[buffer.readInteger()].getName() + Messages.get(MessageKey.TE_HA_MATADO),
                         false, false, new RGBColor(1f, 0f, 0f));
                 break;
 
             case EARN_EXP:
-                console.addMsgToConsole(Messages.get(MessageKey.HAS_GANADO_EXPE_1) + data.readLong() + Messages.get(MessageKey.HAS_GANADO_EXPE_2),
+                console.addMsgToConsole(Messages.get(MessageKey.HAS_GANADO_EXPE_1) + buffer.readLong() + Messages.get(MessageKey.HAS_GANADO_EXPE_2),
                         false, false, new RGBColor(1f, 0f, 0f));
                 break;
 
             case GO_HOME:
-                int distance = data.readByte();
-                short time = data.readInteger();
-                String hogar = data.readCp1252String();
+                int distance = buffer.readByte();
+                short time = buffer.readInteger();
+                String hogar = buffer.readCp1252String();
 
                 console.addMsgToConsole("Estas a " + distance + " mapas de distancia de " + hogar + ", este viaje durara " + time + " segundos.",
                         false, false, new RGBColor(1f, 0f, 0f));

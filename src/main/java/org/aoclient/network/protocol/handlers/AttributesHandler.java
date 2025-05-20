@@ -6,17 +6,15 @@ import org.aoclient.network.PacketBuffer;
 import org.tinylog.Logger;
 
 public class AttributesHandler implements PacketHandler {
-    
-    @Override
-    public void handle(PacketBuffer data) {
-        if (data.checkBytes(6)) return;
 
-        // Remove packet ID
-        data.readByte();
+    @Override
+    public void handle(PacketBuffer buffer) {
+        if (buffer.checkBytes(6)) return;
+        buffer.readByte();
 
         int[] attributes = new int[E_Attributes.values().length];
         for (int i = 0; i < 5; i++)
-            attributes[i] = data.readByte();
+            attributes[i] = buffer.readByte();
 
         User.INSTANCE.setAttributes(attributes);
         //    'Show them in character creation
@@ -36,5 +34,5 @@ public class AttributesHandler implements PacketHandler {
 
         Logger.debug("handleAtributes Cargado! - FALTA TERMINAR!");
     }
-    
+
 }

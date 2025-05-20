@@ -9,12 +9,11 @@ import static org.aoclient.engine.game.models.Character.refreshAllChars;
 public class ForceCharMoveHandler implements PacketHandler {
 
     @Override
-    public void handle(PacketBuffer data) {
-        if (data.checkBytes(2)) return;
+    public void handle(PacketBuffer buffer) {
+        if (buffer.checkBytes(2)) return;
+        buffer.readByte();
 
-        data.readByte();
-
-        E_Heading direction = E_Heading.values()[data.readByte() - 1];
+        E_Heading direction = E_Heading.values()[buffer.readByte() - 1];
         short userCharIndex = User.INSTANCE.getUserCharIndex();
         User.INSTANCE.moveCharbyHead(userCharIndex, direction);
         User.INSTANCE.moveScreen(direction);

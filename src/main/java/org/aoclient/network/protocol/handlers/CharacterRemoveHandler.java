@@ -6,13 +6,14 @@ import static org.aoclient.engine.game.models.Character.eraseChar;
 import static org.aoclient.engine.game.models.Character.refreshAllChars;
 
 public class CharacterRemoveHandler implements PacketHandler {
+
     @Override
-    public void handle(PacketBuffer data) {
-        if (data.checkBytes(3)) return;
+    public void handle(PacketBuffer buffer) {
+        if (buffer.checkBytes(3)) return;
+        buffer.readByte();
 
-        data.readByte();
-
-        eraseChar(data.readInteger());
+        eraseChar(buffer.readInteger());
         refreshAllChars();
     }
+
 }

@@ -5,25 +5,20 @@ import org.aoclient.engine.game.models.E_KillCounters;
 import org.aoclient.network.PacketBuffer;
 
 public class MiniStatsHandler implements PacketHandler {
-    
-    @Override
-    public void handle(PacketBuffer data) {
-        if (data.checkBytes(20)) return;
 
-        // Remove packet ID
-        data.readByte();
+    @Override
+    public void handle(PacketBuffer buffer) {
+        if (buffer.checkBytes(20)) return;
+        buffer.readByte();
 
         int i = 1;
         for (E_KillCounters counter : E_KillCounters.values()) {
-            if (i < E_KillCounters.values().length) {
-                User.INSTANCE.setKillCounter(counter.ordinal(), data.readLong());
-            } else {
-                User.INSTANCE.setKillCounter(counter.ordinal(), data.readInteger());
-            }
+            if (i < E_KillCounters.values().length) User.INSTANCE.setKillCounter(counter.ordinal(), buffer.readLong());
+            else User.INSTANCE.setKillCounter(counter.ordinal(), buffer.readInteger());
             i++;
         }
-        User.INSTANCE.setRole(data.readByte());
-        User.INSTANCE.setJailTime(data.readLong());
+        User.INSTANCE.setRole(buffer.readByte());
+        User.INSTANCE.setJailTime(buffer.readLong());
 
         //With UserEstadisticas
         //        .CiudadanosMatados = data.ReadLong()
@@ -34,5 +29,5 @@ public class MiniStatsHandler implements PacketHandler {
         //        .PenaCarcel = data.ReadLong()
         //    End With
     }
-    
+
 }

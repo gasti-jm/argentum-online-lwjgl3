@@ -4,13 +4,14 @@ import org.aoclient.network.PacketBuffer;
 import org.tinylog.Logger;
 
 public class UserIndexInServerHandler implements PacketHandler {
+
     @Override
-    public void handle(PacketBuffer data) {
-        if (data.checkBytes(3)) return;
+    public void handle(PacketBuffer buffer) {
+        if (buffer.checkBytes(3)) return;
+        buffer.readByte();
 
-        data.readByte();
-
-        int userIndex = data.readInteger();
+        int userIndex = buffer.readInteger();
         Logger.debug("No le encontre utilidad a este paquete....");
     }
+
 }

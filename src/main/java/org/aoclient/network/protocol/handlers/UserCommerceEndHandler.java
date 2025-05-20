@@ -4,10 +4,10 @@ import org.aoclient.network.PacketBuffer;
 import org.tinylog.Logger;
 
 public class UserCommerceEndHandler implements PacketHandler {
+
     @Override
-    public void handle(PacketBuffer data) {
-        // Remove packet ID
-        data.readByte();
+    public void handle(PacketBuffer buffer) {
+        buffer.readByte();
 
         //Set InvComUsu = Nothing
         //    Set InvOroComUsu(0) = Nothing
@@ -22,4 +22,5 @@ public class UserCommerceEndHandler implements PacketHandler {
 
         Logger.debug("handleUserCommerceEnd CARGADO - FALTA TERMINAR!");
     }
+
 }

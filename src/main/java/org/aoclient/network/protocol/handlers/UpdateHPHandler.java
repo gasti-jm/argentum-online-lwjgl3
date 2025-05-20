@@ -7,13 +7,13 @@ import org.tinylog.Logger;
 import static org.aoclient.engine.utils.GameData.charList;
 
 public class UpdateHPHandler implements PacketHandler {
+
     @Override
-    public void handle(PacketBuffer data) {
-        if (data.checkBytes(3)) return;
+    public void handle(PacketBuffer buffer) {
+        if (buffer.checkBytes(3)) return;
+        buffer.readByte();
 
-        data.readByte();
-
-        User.INSTANCE.setUserMinHP(data.readInteger());
+        User.INSTANCE.setUserMinHP(buffer.readInteger());
 
         charList[User.INSTANCE.getUserCharIndex()].setDead(User.INSTANCE.getUserMinHP() <= 0);
 
@@ -29,4 +29,5 @@ public class UpdateHPHandler implements PacketHandler {
 
         Logger.debug("handleUpdateHP CARGADO - FALTA DESACTIVAR MACROS DE TRABAJO!");
     }
+
 }

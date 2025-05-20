@@ -3,10 +3,10 @@ package org.aoclient.network.protocol.handlers;
 import org.aoclient.network.PacketBuffer;
 
 public class TradeOKHandler implements PacketHandler {
+
     @Override
-    public void handle(PacketBuffer data) {
-        // Remove packet ID
-        data.readByte();
+    public void handle(PacketBuffer buffer) {
+        buffer.readByte();
 
         //If frmComerciar.Visible Then
         //        Dim i As Long
@@ -45,4 +45,5 @@ public class TradeOKHandler implements PacketHandler {
         //
         //    End If
     }
+
 }

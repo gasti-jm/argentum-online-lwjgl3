@@ -5,9 +5,8 @@ import org.aoclient.network.PacketBuffer;
 public class BankOKHandler implements PacketHandler {
 
     @Override
-    public void handle(PacketBuffer data) {
-        // Remove packet ID
-        data.readByte();
+    public void handle(PacketBuffer buffer) {
+        buffer.readByte();
 
         //Dim i As Long
         //

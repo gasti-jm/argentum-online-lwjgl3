@@ -6,15 +6,13 @@ import org.tinylog.Logger;
 public class TrainerCreatureListHandler implements PacketHandler {
 
     @Override
-    public void handle(PacketBuffer data) {
-        if (data.checkBytes(3)) return;
+    public void handle(PacketBuffer buffer) {
+        if (buffer.checkBytes(3)) return;
+        PacketBuffer tempBuffer = new PacketBuffer();
+        tempBuffer.copy(buffer);
+        tempBuffer.readByte();
 
-        PacketBuffer buffer = new PacketBuffer();
-        buffer.copy(data);
-
-        buffer.readByte();
-
-        String creatures = buffer.readCp1252String();
+        String creatures = tempBuffer.readCp1252String();
 
         //creatures = Split(Buffer.ReadASCIIString(), SEPARATOR)
         //
@@ -23,7 +21,8 @@ public class TrainerCreatureListHandler implements PacketHandler {
         //    Next i
         //    frmEntrenador.Show , //FrmMain
 
-        data.copy(buffer);
+        buffer.copy(tempBuffer);
         Logger.debug("handleTrainerCreatureList Cargado! - FALTA TERMINAR!");
     }
+
 }

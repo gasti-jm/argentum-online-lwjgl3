@@ -4,13 +4,13 @@ import org.aoclient.engine.game.User;
 import org.aoclient.network.PacketBuffer;
 
 public class UpdateManaHandler implements PacketHandler {
+
     @Override
-    public void handle(PacketBuffer data) {
-        if (data.checkBytes(3)) return;
+    public void handle(PacketBuffer buffer) {
+        if (buffer.checkBytes(3)) return;
+        buffer.readByte();
 
-        data.readByte();
-
-        // variable global
-        User.INSTANCE.setUserMinMAN(data.readInteger());
+        User.INSTANCE.setUserMinMAN(buffer.readInteger());
     }
+
 }

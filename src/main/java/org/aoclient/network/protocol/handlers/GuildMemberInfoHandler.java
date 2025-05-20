@@ -6,16 +6,14 @@ import org.tinylog.Logger;
 public class GuildMemberInfoHandler implements PacketHandler {
 
     @Override
-    public void handle(PacketBuffer data) {
-        if (data.checkBytes(5)) return;
+    public void handle(PacketBuffer buffer) {
+        if (buffer.checkBytes(5)) return;
+        PacketBuffer tempBuffer = new PacketBuffer();
+        tempBuffer.copy(buffer);
+        tempBuffer.readByte();
 
-        PacketBuffer buffer = new PacketBuffer();
-        buffer.copy(data);
-
-        buffer.readByte();
-
-        String guildNames = buffer.readCp1252String();
-        String guildMembers = buffer.readCp1252String();
+        String guildNames = tempBuffer.readCp1252String();
+        String guildMembers = tempBuffer.readCp1252String();
 
 
         //With frmGuildMember
@@ -46,7 +44,7 @@ public class GuildMemberInfoHandler implements PacketHandler {
         //        .Show vbModeless, //FrmMain
         //    End With
 
-        data.copy(buffer);
+        buffer.copy(tempBuffer);
         Logger.debug("handleGuildMemberInfo Cargado! - FALTA TERMINAR!");
     }
 

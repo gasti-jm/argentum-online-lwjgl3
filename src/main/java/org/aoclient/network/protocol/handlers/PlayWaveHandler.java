@@ -5,19 +5,18 @@ import org.aoclient.network.PacketBuffer;
 import static org.aoclient.engine.Sound.playSound;
 
 public class PlayWaveHandler implements PacketHandler {
-    
+
     @Override
-    public void handle(PacketBuffer data) {
-        if (data.checkBytes(3)) return;
+    public void handle(PacketBuffer buffer) {
+        if (buffer.checkBytes(3)) return;
+        buffer.readByte();
 
-        data.readByte();
-
-        int wave = data.readByte();
-        int srcX = data.readByte();
-        int srcY = data.readByte();
+        int wave = buffer.readByte();
+        int srcX = buffer.readByte();
+        int srcY = buffer.readByte();
 
         // Call Audio.PlayWave(CStr(wave) & ".wav", srcX, srcY)
         playSound(String.valueOf(wave) + ".ogg");
     }
-    
+
 }

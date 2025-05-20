@@ -5,17 +5,16 @@ import org.aoclient.network.PacketBuffer;
 import static org.aoclient.engine.utils.GameData.mapData;
 
 public class BlockPositionHandler implements PacketHandler {
-    
+
     @Override
-    public void handle(PacketBuffer data) {
-        if (data.checkBytes(4)) return;
+    public void handle(PacketBuffer buffer) {
+        if (buffer.checkBytes(4)) return;
+        buffer.readByte();
 
-        data.readByte();
+        int x = buffer.readByte();
+        int y = buffer.readByte();
 
-        int x = data.readByte();
-        int y = data.readByte();
-
-        mapData[x][y].setBlocked(data.readBoolean());
+        mapData[x][y].setBlocked(buffer.readBoolean());
     }
-    
+
 }

@@ -4,23 +4,20 @@ import org.aoclient.network.PacketBuffer;
 import org.tinylog.Logger;
 
 public class ShowSignalHandler implements PacketHandler {
-    
+
     @Override
-    public void handle(PacketBuffer data) {
-        if (data.checkBytes(5)) return;
+    public void handle(PacketBuffer buffer) {
+        if (buffer.checkBytes(5)) return;
+        PacketBuffer tempBuffer = new PacketBuffer();
+        tempBuffer.copy(buffer);
+        tempBuffer.readByte();
 
-        PacketBuffer buffer = new PacketBuffer();
-        buffer.copy(data);
-
-        // Remove packet ID
-        buffer.readByte();
-
-        String tmp = buffer.readCp1252String();
-        short param = buffer.readInteger();
+        String tmp = tempBuffer.readCp1252String();
+        short param = tempBuffer.readInteger();
         // Call InitCartel(tmp, Buffer.ReadInteger())
 
-        data.copy(buffer);
+        buffer.copy(tempBuffer);
         Logger.debug("handleShowSignal Cargado! - FALTA TERMINAR!");
     }
-    
+
 }

@@ -8,22 +8,14 @@ import static org.aoclient.engine.Sound.playMusic;
 public class PlayMIDIHandler implements PacketHandler {
 
     @Override
-    public void handle(PacketBuffer data) {
-        if (data.checkBytes(4)) return;
+    public void handle(PacketBuffer buffer) {
+        if (buffer.checkBytes(4)) return;
+        buffer.readByte();
 
-        // Remove packet ID
-        data.readByte();
+        int currentMusic = buffer.readByte();
 
-        int currentMusic = data.readByte();
-
-        if (currentMusic > 0) {
-            data.readInteger();
-            // play music
-            playMusic(String.valueOf(currentMusic) + ".ogg");
-        } else {
-            // Remove the bytes to prevent errors
-            data.readInteger();
-        }
+        buffer.readInteger(); // Remove the bytes to prevent errors
+        if (currentMusic > 0) playMusic(currentMusic + ".ogg"); // play music
 
         Logger.debug("handlePlayMIDI Cargado! - FALTA TERMINAR!");
     }

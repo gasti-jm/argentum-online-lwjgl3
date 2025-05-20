@@ -7,23 +7,21 @@ import org.tinylog.Logger;
 public class ChangeSpellSlotHandler implements PacketHandler {
 
     @Override
-    public void handle(PacketBuffer data) {
-        if (data.checkBytes(6)) return;
+    public void handle(PacketBuffer buffer) {
+        if (buffer.checkBytes(6)) return;
+        PacketBuffer tempBuffer = new PacketBuffer();
+        tempBuffer.copy(buffer);
+        tempBuffer.readByte();
 
-        PacketBuffer buffer = new PacketBuffer();
-        buffer.copy(data);
-
-        buffer.readByte();
-
-        int slot = buffer.readByte();
-        //buffer.readByte();
-        //short hechizoNum = buffer.readInteger();
-        buffer.readInteger();
-        String hechizoName = buffer.readCp1252String();
+        int slot = tempBuffer.readByte();
+        // tempBuffer.readByte();
+        // short hechizoNum = tempBuffer.readInteger();
+        tempBuffer.readInteger();
+        String hechizoName = tempBuffer.readCp1252String();
 
         User.INSTANCE.getInventorySpells().addSpell(slot - 1, hechizoName);
 
-        data.copy(buffer);
+        buffer.copy(tempBuffer);
         Logger.debug("ChangeSpellSlot Cargado! - FALTA TERMINAR!");
     }
 

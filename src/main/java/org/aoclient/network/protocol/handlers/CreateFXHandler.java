@@ -4,19 +4,17 @@ import org.aoclient.engine.game.User;
 import org.aoclient.network.PacketBuffer;
 
 public class CreateFXHandler implements PacketHandler {
-    
+
     @Override
-    public void handle(PacketBuffer data) {
-        if (data.checkBytes(7)) return;
+    public void handle(PacketBuffer buffer) {
+        if (buffer.checkBytes(7)) return;
+        buffer.readByte();
 
-        // Remove packet ID
-        data.readByte();
-
-        short charIndex = data.readInteger();
-        short fX = data.readInteger();
-        short loops = data.readInteger();
+        short charIndex = buffer.readInteger();
+        short fX = buffer.readInteger();
+        short loops = buffer.readInteger();
 
         User.INSTANCE.setCharacterFx(charIndex, fX, loops);
     }
-    
+
 }

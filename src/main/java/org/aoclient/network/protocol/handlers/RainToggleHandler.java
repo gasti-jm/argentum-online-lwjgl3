@@ -6,10 +6,9 @@ import org.aoclient.network.PacketBuffer;
 
 public class RainToggleHandler implements PacketHandler {
 
-
     @Override
-    public void handle(PacketBuffer data) {
-        data.readByte();
+    public void handle(PacketBuffer buffer) {
+        buffer.readByte();
 
         int userX = User.INSTANCE.getUserPos().getX();
         int userY = User.INSTANCE.getUserPos().getY();

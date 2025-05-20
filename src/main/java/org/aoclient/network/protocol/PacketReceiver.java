@@ -9,27 +9,23 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * <p>
- * Esta clase es responsable de manejar y procesar paquetes entrantes desde el servidor. Cada tipo de paquete tiene un handler
- * especifico que define como procesar los datos correspondientes.
- * <p>
- * El flujo principal de trabajo incluye:
- * <ol>
- *   <li>Registrar varios handlers (manejadores) asociados a tipos de paquetes durante la inicializacion.
- *   <li>Analizar y procesar los datos recibidos para determinar el tipo de paquete.
- *   <li>Delegar el procesamiento al handler apropiado si existe uno para el tipo de paquete identificado.
- * </ol>
+ * Actua como un despachador que redirige cada paquete a su correspondiente manejador mediante una asociacion entre el tipo de
+ * paquete del servidor y una implementacion concreta del manejador.
  */
 
 public class PacketReceiver {
 
-    public static ServerPacket packet;
+    public static ServerPacket serverPacket;
+    /** Almacena la asociacion entre paquetes del servidor y sus respectivos handlers. */
     private final Map<ServerPacket, PacketHandler> handlers = new HashMap<>();
 
     public PacketReceiver() {
         registerHandlers();
     }
 
+    /**
+     * Registra los handlers asociados a los diferentes paquetes del servidor.
+     */
     private void registerHandlers() {
         handlers.put(ServerPacket.LOGGED, new LoggedHandler());
         handlers.put(ServerPacket.REMOVE_DIALOGS, new RemoveDialogsHandler());
@@ -137,36 +133,42 @@ public class PacketReceiver {
         handlers.put(ServerPacket.CANCEL_OFFER_ITEM, new CancelOfferItemHandler());
     }
 
-    public void handleIncomingBytes(PacketBuffer packetBuffer) {
-        if (packetBuffer.getLength() == 0) return; // TODO Y si llega a ser -1?
+    /**
+     * Maneja los bytes entrantes desde el buffer del paquete del servidor, validando el paquete y procesandolo a traves del
+     * handler correspondiente, si esta disponible.
+     *
+     * @param buffer buffer que contiene los bytes del paquete recibido del servidor
+     */
+    public void handleIncomingBytes(PacketBuffer buffer) {
+        if (buffer.getLength() == 0) return; // TODO Y si llega a ser -1?
 
-        // Obtiene el identificador del paquete
-        int packetId = packetBuffer.peekByte();
+        // Obtiene el ID del paquete del servidor
+        int packetId = buffer.peekByte();
 
-        // Valida el ID del paquete antes de procesarlo
+        // Valida el ID del paquete del servidor antes de procesarlo
         if (!isValidPacketId(packetId)) {
             Logger.debug("Invalid package ID received: " + packetId);
             return;
         }
 
-        // Obtiene el paquete a partir del ID del paquete
-        ServerPacket packet = ServerPacket.getPacket(packetId);
+        // Obtiene el paquete del servidor a partir del ID del paquete del servidor
+        ServerPacket serverPacket = ServerPacket.getPacket(packetId);
 
-        Logger.debug("Processing packet " + packet + " with ID " + packetId);
+        Logger.debug("Processing server packet " + serverPacket + " with ID " + packetId);
 
-        // Guarda la referencia del paquete en la variable estatica packet de esta clase para poder usarla sin instanciarla en el metodo disconnectByMistake() de ByteQueue
-        PacketReceiver.packet = packet;
+        // Guarda la referencia del paquete del servidor en la variable estatica serverPacket de clase para poder usarla sin instanciarla en el metodo disconnect() de PacketBuffer
+        PacketReceiver.serverPacket = serverPacket;
 
-        // Obtiene el handler para el paquete identificado
-        PacketHandler handler = handlers.get(packet);
+        // Obtiene el handler del paquete del servidor
+        PacketHandler handler = handlers.get(serverPacket);
 
         if (handler != null) {
 
-            // Maneja los datos en el handler correspondiente
-            handler.handle(packetBuffer);
+            // Maneja los bytes del buffer del paquete del servidor en el handler correspondiente
+            handler.handle(buffer);
 
-            // Si quedan datos, continua procesando los datos de entrada
-            if (packetBuffer.getLength() > 0) handleIncomingBytes(packetBuffer);
+            // Si quedan bytes, continua manejando los bytes del buffer del paquete del servidor
+            if (buffer.getLength() > 0) handleIncomingBytes(buffer);
 
         }
 

@@ -6,27 +6,24 @@ import org.aoclient.network.PacketBuffer;
 import static org.aoclient.engine.utils.GameData.charList;
 
 public class UpdateUserStatsHandler implements PacketHandler {
-    
+
     private final User user = User.INSTANCE;
-    
+
     @Override
-    public void handle(PacketBuffer data) {
-        if (data.checkBytes(26)) return;
+    public void handle(PacketBuffer buffer) {
+        if (buffer.checkBytes(26)) return;
+        buffer.readByte();
 
-        // Remove packet ID
-        data.readByte();
-
-        user.setUserMaxHP(data.readInteger());
-        user.setUserMinHP(data.readInteger());
-        user.setUserMaxMAN(data.readInteger());
-        user.setUserMinMAN(data.readInteger());
-        user.setUserMaxSTA(data.readInteger());
-        user.setUserMinSTA(data.readInteger());
-        user.setUserGLD(data.readLong());
-        user.setUserLvl(data.readByte());
-        user.setUserPasarNivel(data.readLong());
-        user.setUserExp(data.readLong());
-
+        user.setUserMaxHP(buffer.readInteger());
+        user.setUserMinHP(buffer.readInteger());
+        user.setUserMaxMAN(buffer.readInteger());
+        user.setUserMinMAN(buffer.readInteger());
+        user.setUserMaxSTA(buffer.readInteger());
+        user.setUserMinSTA(buffer.readInteger());
+        user.setUserGLD(buffer.readLong());
+        user.setUserLvl(buffer.readByte());
+        user.setUserPasarNivel(buffer.readLong());
+        user.setUserExp(buffer.readLong());
 
         charList[user.getUserCharIndex()].setDead(user.getUserMinHP() <= 0);
 
@@ -40,5 +37,5 @@ public class UpdateUserStatsHandler implements PacketHandler {
         //    End If
         //
     }
-    
+
 }

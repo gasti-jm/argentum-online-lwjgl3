@@ -17,12 +17,11 @@ public class WorkRequestTargetHandler implements PacketHandler {
     private final Console console = Console.INSTANCE;
 
     @Override
-    public void handle(PacketBuffer data) {
-        if (data.checkBytes(2)) return;
+    public void handle(PacketBuffer buffer) {
+        if (buffer.checkBytes(2)) return;
+        buffer.readByte();
 
-        data.readByte();
-
-        final int usingSkill = data.readByte();
+        final int usingSkill = buffer.readByte();
         User.INSTANCE.setUsingSkill(usingSkill);
 
         Window.INSTANCE.setCursorCrosshair(true);
@@ -53,4 +52,5 @@ public class WorkRequestTargetHandler implements PacketHandler {
 
         Logger.debug("handleWorkRequestTarget Cargado! - FALTA TESTIAR!");
     }
+
 }

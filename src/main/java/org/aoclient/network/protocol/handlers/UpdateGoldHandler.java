@@ -6,10 +6,10 @@ import org.aoclient.network.PacketBuffer;
 public class UpdateGoldHandler implements PacketHandler {
 
     @Override
-    public void handle(PacketBuffer data) {
-        if (data.checkBytes(5)) return;
-        data.readByte();
-        User.INSTANCE.setUserGLD(data.readLong());
+    public void handle(PacketBuffer buffer) {
+        if (buffer.checkBytes(5)) return;
+        buffer.readByte();
+        User.INSTANCE.setUserGLD(buffer.readLong());
     }
 
 }

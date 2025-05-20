@@ -6,32 +6,29 @@ import org.tinylog.Logger;
 public class GuildDetailsHandler implements PacketHandler {
 
     @Override
-    public void handle(PacketBuffer data) {
-        if (data.checkBytes(26)) return;
+    public void handle(PacketBuffer buffer) {
+        if (buffer.checkBytes(26)) return;
+        PacketBuffer tempBuffer = new PacketBuffer();
+        tempBuffer.copy(buffer);
+        tempBuffer.readByte();
 
-        PacketBuffer buffer = new PacketBuffer();
-        buffer.copy(data);
+        tempBuffer.readCp1252String();
+        tempBuffer.readCp1252String();
+        tempBuffer.readCp1252String();
+        tempBuffer.readCp1252String();
+        tempBuffer.readCp1252String();
+        tempBuffer.readInteger();
 
-        // Remove packet ID
-        buffer.readByte();
+        tempBuffer.readBoolean();
 
-        buffer.readCp1252String();
-        buffer.readCp1252String();
-        buffer.readCp1252String();
-        buffer.readCp1252String();
-        buffer.readCp1252String();
-        buffer.readInteger();
+        tempBuffer.readCp1252String();
+        tempBuffer.readInteger();
+        tempBuffer.readInteger();
+        tempBuffer.readCp1252String();
 
-        buffer.readBoolean();
+        tempBuffer.readCp1252String();
 
-        buffer.readCp1252String();
-        buffer.readInteger();
-        buffer.readInteger();
-        buffer.readCp1252String();
-
-        buffer.readCp1252String();
-
-        buffer.readCp1252String();
+        tempBuffer.readCp1252String();
 
         //With frmGuildBrief
         //        .imgDeclararGuerra.Visible = .EsLeader
@@ -68,7 +65,8 @@ public class GuildDetailsHandler implements PacketHandler {
         //        .Desc.Text = Buffer.ReadASCIIString()
         //    End With
 
-        data.copy(buffer);
+        buffer.copy(tempBuffer);
         Logger.debug("handleGuildDetails Cargado! - FALTA TERMINAR!");
     }
+
 }

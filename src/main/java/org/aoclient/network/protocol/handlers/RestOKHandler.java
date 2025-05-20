@@ -6,8 +6,8 @@ import org.tinylog.Logger;
 public class RestOKHandler implements PacketHandler {
 
     @Override
-    public void handle(PacketBuffer data) {
-        data.readByte();
+    public void handle(PacketBuffer buffer) {
+        buffer.readByte();
 
         //UserDescansar = Not UserDescansar
         Logger.debug("handleCarpenterObjects Cargado! - FALTA TERMINAR!");

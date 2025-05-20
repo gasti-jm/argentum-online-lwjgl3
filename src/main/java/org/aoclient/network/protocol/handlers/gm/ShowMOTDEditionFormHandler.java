@@ -7,22 +7,19 @@ import org.tinylog.Logger;
 public class ShowMOTDEditionFormHandler implements PacketHandler {
 
     @Override
-    public void handle(PacketBuffer data) {
-        if (data.checkBytes(3)) return;
+    public void handle(PacketBuffer buffer) {
+        if (buffer.checkBytes(3)) return;
+        PacketBuffer tempBuffer = new PacketBuffer();
+        tempBuffer.copy(buffer);
+        tempBuffer.readByte();
 
-        PacketBuffer buffer = new PacketBuffer();
-        buffer.copy(data);
-
-        // Remove packet ID
-        buffer.readByte();
-
-        String txtMotd = buffer.readCp1252String();
+        String txtMotd = tempBuffer.readCp1252String();
 
         //frmCambiaMotd.txtMotd.Text = Buffer.ReadASCIIString()
         //    frmCambiaMotd.Show , //FrmMain
         //
 
-        data.copy(buffer);
+        buffer.copy(tempBuffer);
         Logger.debug("handleShowMOTDEditionForm Cargado! - FALTA TERMINAR!");
     }
 

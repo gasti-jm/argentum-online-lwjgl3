@@ -4,18 +4,15 @@ import org.aoclient.network.PacketBuffer;
 import org.tinylog.Logger;
 
 public class GuildListHandler implements PacketHandler {
-    
+
     @Override
-    public void handle(PacketBuffer data) {
-        if (data.checkBytes(3)) return;
+    public void handle(PacketBuffer buffer) {
+        if (buffer.checkBytes(3)) return;
+        PacketBuffer tempBuffer = new PacketBuffer();
+        tempBuffer.copy(buffer);
+        tempBuffer.readByte();
 
-        PacketBuffer buffer = new PacketBuffer();
-        buffer.copy(data);
-
-        // Remove packet ID
-        buffer.readByte();
-
-        String guildNames = buffer.readCp1252String();
+        String guildNames = tempBuffer.readCp1252String();
 
         //With frmGuildAdm
         //        'Clear guild's list
@@ -34,8 +31,8 @@ public class GuildListHandler implements PacketHandler {
         //        .Show vbModeless, //FrmMain
         //    End With
 
-        data.copy(buffer);
+        buffer.copy(tempBuffer);
         Logger.debug("handleGuildList CARGADO - FALTA TERMINAR!");
     }
-    
+
 }

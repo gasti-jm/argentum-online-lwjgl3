@@ -6,17 +6,14 @@ import org.tinylog.Logger;
 public class CommerceChatHandler implements PacketHandler {
 
     @Override
-    public void handle(PacketBuffer data) {
-        if (data.checkBytes(4)) return;
+    public void handle(PacketBuffer buffer) {
+        if (buffer.checkBytes(4)) return;
+        PacketBuffer tempBuffer = new PacketBuffer();
+        tempBuffer.copy(buffer);
+        tempBuffer.readByte();
 
-        PacketBuffer buffer = new PacketBuffer();
-        buffer.copy(data);
-
-        // Remove packet ID
-        buffer.readByte();
-
-        String chat = buffer.readCp1252String();
-        int fontSize = buffer.readByte();
+        String chat = tempBuffer.readCp1252String();
+        int fontSize = tempBuffer.readByte();
 
         /*
         If InStr(1, chat, "~") Then
@@ -49,9 +46,9 @@ public class CommerceChatHandler implements PacketHandler {
     End If
          */
 
-
-        data.copy(buffer);
+        buffer.copy(tempBuffer);
 
         Logger.debug("handleCommerceChat CARGADO - FALTA TERMINAR!");
     }
+
 }

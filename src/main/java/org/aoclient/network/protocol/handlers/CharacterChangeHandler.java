@@ -14,15 +14,14 @@ import static org.aoclient.engine.game.models.Character.refreshAllChars;
 import static org.aoclient.engine.utils.GameData.*;
 
 public class CharacterChangeHandler implements PacketHandler {
-    
+
     @Override
-    public void handle(PacketBuffer data) {
-        if (data.checkBytes(18)) return;
+    public void handle(PacketBuffer buffer) {
+        if (buffer.checkBytes(18)) return;
+        buffer.readByte();
 
-        data.readByte();
-
-        short charIndex = data.readInteger();
-        short tempint = data.readInteger();
+        short charIndex = buffer.readInteger();
+        short tempint = buffer.readInteger();
 
         // esta dentro del rango del array de bodydata?
         if (tempint < 1 || tempint > bodyData.length) {
@@ -33,7 +32,7 @@ public class CharacterChangeHandler implements PacketHandler {
             charList[charIndex].setiBody(tempint);
         }
 
-        short headIndex = data.readInteger();
+        short headIndex = buffer.readInteger();
 
         if (headIndex < 1 || headIndex > headData.length) {
             charList[charIndex].setHead(headData[0]);
@@ -44,22 +43,22 @@ public class CharacterChangeHandler implements PacketHandler {
         }
 
         charList[charIndex].setDead(headIndex == CASPER_HEAD);
-        charList[charIndex].setHeading(E_Heading.values()[data.readByte() - 1]);
+        charList[charIndex].setHeading(E_Heading.values()[buffer.readByte() - 1]);
 
-        tempint = data.readInteger();
+        tempint = buffer.readInteger();
         if (tempint != 0) charList[charIndex].setWeapon(new WeaponData(weaponData[tempint]));
 
 
-        tempint = data.readInteger();
+        tempint = buffer.readInteger();
         if (tempint != 0) charList[charIndex].setShield(new ShieldData(shieldData[tempint]));
 
-        tempint = data.readInteger();
+        tempint = buffer.readInteger();
         if (tempint != 0) charList[charIndex].setHelmet(new HeadData(helmetsData[tempint]));
 
-        User.INSTANCE.setCharacterFx(charIndex, data.readInteger(), data.readInteger());
+        User.INSTANCE.setCharacterFx(charIndex, buffer.readInteger(), buffer.readInteger());
 
         refreshAllChars();
         Logger.debug("handleCharacterChange Cargado! - FALTA TERMINAR!");
     }
-    
+
 }

@@ -6,17 +6,15 @@ import org.tinylog.Logger;
 public class UpdateTagAndStatusHandler implements PacketHandler {
 
     @Override
-    public void handle(PacketBuffer data) {
-        if (data.checkBytes(6)) return;
+    public void handle(PacketBuffer buffer) {
+        if (buffer.checkBytes(6)) return;
+        PacketBuffer tempBuffer = new PacketBuffer();
+        tempBuffer.copy(buffer);
+        tempBuffer.readByte();
 
-        PacketBuffer buffer = new PacketBuffer();
-        buffer.copy(data);
-
-        buffer.readByte();
-
-        short charIndex = buffer.readInteger();
-        int nickColor = buffer.readByte();
-        String userTag = buffer.readCp1252String();
+        short charIndex = tempBuffer.readInteger();
+        int nickColor = tempBuffer.readByte();
+        String userTag = tempBuffer.readCp1252String();
 
         //Dim CharIndex As Integer
         //    Dim NickColor As Byte
@@ -39,7 +37,7 @@ public class UpdateTagAndStatusHandler implements PacketHandler {
         //        .Nombre = UserTag
         //    End With
 
-        data.copy(buffer);
+        buffer.copy(tempBuffer);
         Logger.debug("handleUpdateTagAndStatus Cargado! - FALTA TERMINAR!");
     }
 

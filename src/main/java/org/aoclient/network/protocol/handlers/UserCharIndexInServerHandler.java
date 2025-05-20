@@ -10,12 +10,11 @@ public class UserCharIndexInServerHandler implements PacketHandler {
     private final User user = User.INSTANCE;
 
     @Override
-    public void handle(PacketBuffer data) {
-        if (data.checkBytes(3)) return;
+    public void handle(PacketBuffer buffer) {
+        if (buffer.checkBytes(3)) return;
+        buffer.readByte();
 
-        data.readByte();
-
-        user.setUserCharIndex(data.readInteger());
+        user.setUserCharIndex(buffer.readInteger());
         user.getUserPos().setX(charList[user.getUserCharIndex()].getPos().getX());
         user.getUserPos().setY(charList[user.getUserCharIndex()].getPos().getY());
         user.setUnderCeiling(user.checkUnderCeiling());

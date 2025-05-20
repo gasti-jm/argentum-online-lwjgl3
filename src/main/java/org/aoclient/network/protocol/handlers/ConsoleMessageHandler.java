@@ -7,17 +7,16 @@ import org.aoclient.network.PacketBuffer;
 import org.tinylog.Logger;
 
 public class ConsoleMessageHandler implements PacketHandler {
+
     @Override
-    public void handle(PacketBuffer data) {
-        if (data.checkBytes(4)) return;
+    public void handle(PacketBuffer buffer) {
+        if (buffer.checkBytes(4)) return;
+        PacketBuffer tempBuffer = new PacketBuffer();
+        tempBuffer.copy(buffer);
+        tempBuffer.readByte();
 
-        PacketBuffer buffer = new PacketBuffer();
-        buffer.copy(data);
-
-        buffer.readByte();
-
-        String chat = buffer.readCp1252String();
-        E_FontType fontType = E_FontType.values()[buffer.readByte()];
+        String chat = tempBuffer.readCp1252String();
+        E_FontType fontType = E_FontType.values()[tempBuffer.readByte()];
 
         Console.INSTANCE.addMsgToConsole(chat, false, false, new RGBColor(fontType.r, fontType.g, fontType.b));
 
@@ -32,7 +31,8 @@ public class ConsoleMessageHandler implements PacketHandler {
         //        End If
         //    End If
 
-        data.copy(buffer);
+        buffer.copy(tempBuffer);
         Logger.debug("handleConsoleMessage CARGADO - FALTA TERMINAR!");
     }
+
 }

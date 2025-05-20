@@ -7,24 +7,21 @@ import org.aoclient.network.PacketBuffer;
 import org.aoclient.network.SocketConnection;
 
 public class ErrorMessageHandler implements PacketHandler {
-    
+
     @Override
-    public void handle(PacketBuffer data) {
-        if (data.checkBytes(3)) return;
+    public void handle(PacketBuffer buffer) {
+        if (buffer.checkBytes(3)) return;
+        PacketBuffer tempBuffer = new PacketBuffer();
+        tempBuffer.copy(buffer);
+        tempBuffer.readByte();
 
-        PacketBuffer buffer = new PacketBuffer();
-        buffer.copy(data);
-
-        // Remove packet ID
-        buffer.readByte();
-
-        String errMsg = buffer.readCp1252String();
+        String errMsg = tempBuffer.readCp1252String();
         ImGUISystem.INSTANCE.show(new FMessage(errMsg));
 
         SocketConnection.INSTANCE.disconnect();
         User.INSTANCE.setUserConected(false);
 
-        data.copy(buffer);
+        buffer.copy(tempBuffer);
     }
-    
+
 }
