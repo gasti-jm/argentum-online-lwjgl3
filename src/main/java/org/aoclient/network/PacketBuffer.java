@@ -61,21 +61,17 @@ public class PacketBuffer {
     }
 
     /**
-     * Copia los bytes del buffer de origen al buffer. Si el buffer de origen esta vacio, se eliminan todos los bytes del buffer.
+     * Copia los bytes del buffer de origen al buffer.
      *
      * @param srcBuffer buffer de origen desde el cual se copiaran los bytes
      */
     public void copy(PacketBuffer srcBuffer) {
-        // Si el buffer de origen (tempBuffer) esta vacio
+        // Si el buffer de origen esta vacio
         if (srcBuffer.getLength() == 0) {
-            // Entonces el buffer tambien debe quedar en 0 para poder recibir el siguiente paquete
+            // "Elimina" todos los bytes del buffer ya que tambien debe quedar en 0 para poder recibir el siguiente paquete
             remove(bufferLength);
             return;
         }
-
-        // Ajusta la capacidad del buffer para que coincida con la del origen
-        bufferCapacity = srcBuffer.getCapacity();
-        buffer = new byte[bufferCapacity];
 
         // Crea un buffer local con la capacidad del buffer de origen (mejorando el rendimiento)
         byte[] buffer = new byte[srcBuffer.getLength()];
