@@ -66,13 +66,11 @@ public final class GameScene extends Scene {
     private float alphaCeiling = 1.0f;
     private boolean autoMove = false;
     private FMain frmMain;
-    private ProtocolCmdParse protocolCmdParse;
+    private ProtocolCmdParse protocolCmdParse = ProtocolCmdParse.INSTANCE;
 
     @Override
     public void init() {
         super.init();
-
-        protocolCmdParse = ProtocolCmdParse.getInstance();
 
         canChangeTo = SceneType.MAIN_SCENE;
         ambientColor = new RGBColor(1.0f, 1.0f, 1.0f);

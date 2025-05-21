@@ -14,7 +14,7 @@ import static org.aoclient.engine.utils.GameData.options;
 public final class FPanelGM extends Form {
 
     private final ImString myText = new ImString(64);
-    private ProtocolCmdParse protocolCmdParse;
+    private final ProtocolCmdParse protocolCmdParse = ProtocolCmdParse.INSTANCE;
 
     @Override
     public void render() {
@@ -23,8 +23,6 @@ public final class FPanelGM extends Form {
 
         ImGui.text("Panel GM:");
         ImGui.separator();
-
-        protocolCmdParse = ProtocolCmdParse.getInstance();
 
         this.drawButtons();
 

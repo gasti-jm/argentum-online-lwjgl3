@@ -41,16 +41,14 @@ import static org.aoclient.network.protocol.Protocol.*;
  * del metodo correspondiente en el protocolo para enviar la accion al servidor.
  */
 
-public class ProtocolCmdParse {
+public enum ProtocolCmdParse {
+
+    INSTANCE;
 
     private final Console console = Console.INSTANCE;
     private final User user = User.INSTANCE;
 
     private ProtocolCmdParse() {
-    }
-
-    public static ProtocolCmdParse getInstance() {
-        return SingletonHolder.INSTANCE;
     }
 
     public void parseUserCommand(String rawCommand) {
@@ -1460,10 +1458,6 @@ public class ProtocolCmdParse {
             tmpArr[1] = text.substring(Pos + 1);
         } else tmpArr[0] = "";
         return tmpArr;
-    }
-
-    private static class SingletonHolder {
-        private static final ProtocolCmdParse INSTANCE = new ProtocolCmdParse();
     }
 
 }
