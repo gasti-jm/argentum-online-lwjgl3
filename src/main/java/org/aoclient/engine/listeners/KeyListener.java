@@ -7,7 +7,7 @@ import org.aoclient.engine.game.BindKeys;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.aoclient.engine.game.models.E_KeyType.*;
+import static org.aoclient.engine.game.models.Key.*;
 import static org.lwjgl.glfw.GLFW.*;
 
 /**
@@ -45,8 +45,8 @@ public enum KeyListener {
 
             lastKeyPressed = key;
 
-            if (key == BIND_KEYS.getBindedKey(mKeyUp) || key == BIND_KEYS.getBindedKey(mKeyLeft) ||
-                    key == BIND_KEYS.getBindedKey(mKeyDown) || key == BIND_KEYS.getBindedKey(mKeyRight)) {
+            if (key == BIND_KEYS.getBindedKey(UP) || key == BIND_KEYS.getBindedKey(LEFT) ||
+                    key == BIND_KEYS.getBindedKey(DOWN) || key == BIND_KEYS.getBindedKey(RIGHT)) {
                 lastKeyMovedPressed = key;
                 LAST_KEYS_MOVED_PRESSED.add(key);
             }
@@ -54,8 +54,8 @@ public enum KeyListener {
         } else if (action == GLFW_RELEASE) {
             KEY_PRESSED[key] = false;
             IM_GUI_IO.setKeysDown(key, false);
-            if (key == BIND_KEYS.getBindedKey(mKeyUp) || key == BIND_KEYS.getBindedKey(mKeyLeft) ||
-                    key == BIND_KEYS.getBindedKey(mKeyDown) || key == BIND_KEYS.getBindedKey(mKeyRight)) {
+            if (key == BIND_KEYS.getBindedKey(UP) || key == BIND_KEYS.getBindedKey(LEFT) ||
+                    key == BIND_KEYS.getBindedKey(DOWN) || key == BIND_KEYS.getBindedKey(RIGHT)) {
                 LAST_KEYS_MOVED_PRESSED.remove(LAST_KEYS_MOVED_PRESSED.indexOf(key));
             }
         }

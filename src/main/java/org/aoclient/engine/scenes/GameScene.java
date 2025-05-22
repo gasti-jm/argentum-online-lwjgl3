@@ -2,8 +2,9 @@ package org.aoclient.engine.scenes;
 
 import org.aoclient.engine.Window;
 import org.aoclient.engine.game.*;
-import org.aoclient.engine.game.models.E_KeyType;
-import org.aoclient.engine.game.models.E_Skills;
+import org.aoclient.engine.game.models.Direction;
+import org.aoclient.engine.game.models.Key;
+import org.aoclient.engine.game.models.Skill;
 import org.aoclient.engine.gui.ImGUISystem;
 import org.aoclient.engine.gui.forms.FCantidad;
 import org.aoclient.engine.gui.forms.FMain;
@@ -14,8 +15,7 @@ import org.aoclient.network.protocol.ProtocolCmdParse;
 
 import static org.aoclient.engine.game.IntervalTimer.INT_SENTRPU;
 import static org.aoclient.engine.game.models.Character.drawCharacter;
-import static org.aoclient.engine.game.models.E_Heading.*;
-import static org.aoclient.engine.game.models.E_KeyType.*;
+import static org.aoclient.engine.game.models.Key.*;
 import static org.aoclient.engine.renderer.Drawn.drawTexture;
 import static org.aoclient.engine.scenes.Camera.*;
 import static org.aoclient.engine.utils.GameData.*;
@@ -187,7 +187,7 @@ public final class GameScene extends Scene {
      */
     @Override
     public void keyEvents() {
-        if (KeyListener.isKeyPressed(bindKeys.getBindedKey(E_KeyType.mKeyExitGame))) writeQuit();
+        if (KeyListener.isKeyPressed(bindKeys.getBindedKey(Key.EXIT_GAME))) writeQuit();
         this.checkBindedKeys();
     }
 
@@ -205,7 +205,7 @@ public final class GameScene extends Scene {
     private void checkBindedKeys() {
         if(user.isUserComerciando()) return;
 
-        final E_KeyType keyPressed = bindKeys.getKeyPressed(KeyListener.getLastKeyPressed());
+        final Key keyPressed = bindKeys.getKeyPressed(KeyListener.getLastKeyPressed());
 
         this.checkWalkKeys();
 
@@ -214,29 +214,29 @@ public final class GameScene extends Scene {
         if (KeyListener.isKeyReadyForAction(bindKeys.getBindedKey(keyPressed))) {
 
             // Para que al hablar no ejecute teclas bindeadas y solo permita cerrar nuevamente el sendText
-            if (user.isTalking() && keyPressed != mKeyTalk) return;
+            if (user.isTalking() && keyPressed != TALK) return;
 
             switch (keyPressed) {
-                case mKeyUseObject:
+                case USE_OBJECT:
                     user.getUserInventory().useItem();
                     break;
-                case mKeyGetObject:
+                case GET_OBJECT:
                     writePickUp();
                     break;
-                case mKeyAttack:
+                case ATTACK:
                     writeAttack();
                     break;
-                case mKeyEquipObject:
+                case EQUIP_OBJECT:
                     user.getUserInventory().equipItem();
                     break;
-                case mKeyAutoMove:
+                case AUTO_MOVE:
                     KeyListener.setLastKeyMovedPressed(0);
                     autoMove = !autoMove;
                     break;
-                case mKeyDropObject:
+                case DROP_OBJECT:
                     ImGUISystem.INSTANCE.show(new FCantidad());
                     break;
-                case mKeyTalk:
+                case TALK:
                     if (!ImGUISystem.INSTANCE.isFormVisible(FCantidad.class.getSimpleName())) {
                         if (user.isTalking()) {
                             // send msg
@@ -247,13 +247,13 @@ public final class GameScene extends Scene {
                         frmMain.clearSendTxt();
                     }
                     break;
-                case mKeyHide:
-                    writeWork(E_Skills.OCULTARSE.getValue());
+                case HIDE:
+                    writeWork(Skill.CONCEALMENT.getId());
                     break;
-                case mKeySteal:
-                    writeWork(E_Skills.ROBAR.getValue());
+                case STEAL:
+                    writeWork(Skill.THEFT.getId());
                     break;
-                case mKeyRequestRefresh:
+                case REQUEST_REFRESH:
                     if (intervalToUpdatePos.check()) writeRequestPositionUpdate();
                     break;
             }
@@ -266,14 +266,14 @@ public final class GameScene extends Scene {
         if (!user.isUserMoving()) {
             if (!autoMove) {
                 if (!KeyListener.LAST_KEYS_MOVED_PRESSED.isEmpty()) {
-                    if (KeyListener.LAST_KEYS_MOVED_PRESSED.get(KeyListener.LAST_KEYS_MOVED_PRESSED.size() - 1) == bindKeys.getBindedKey(mKeyUp))
-                        user.moveTo(NORTH);
-                    else if (KeyListener.LAST_KEYS_MOVED_PRESSED.get(KeyListener.LAST_KEYS_MOVED_PRESSED.size() - 1) == bindKeys.getBindedKey(mKeyDown))
-                        user.moveTo(SOUTH);
-                    else if (KeyListener.LAST_KEYS_MOVED_PRESSED.get(KeyListener.LAST_KEYS_MOVED_PRESSED.size() - 1) == bindKeys.getBindedKey(mKeyLeft))
-                        user.moveTo(WEST);
-                    else if (KeyListener.LAST_KEYS_MOVED_PRESSED.get(KeyListener.LAST_KEYS_MOVED_PRESSED.size() - 1) == bindKeys.getBindedKey(mKeyRight))
-                        user.moveTo(EAST);
+                    if (KeyListener.LAST_KEYS_MOVED_PRESSED.get(KeyListener.LAST_KEYS_MOVED_PRESSED.size() - 1) == bindKeys.getBindedKey(Key.UP))
+                        user.moveTo(Direction.UP);
+                    else if (KeyListener.LAST_KEYS_MOVED_PRESSED.get(KeyListener.LAST_KEYS_MOVED_PRESSED.size() - 1) == bindKeys.getBindedKey(Key.DOWN))
+                        user.moveTo(Direction.DOWN);
+                    else if (KeyListener.LAST_KEYS_MOVED_PRESSED.get(KeyListener.LAST_KEYS_MOVED_PRESSED.size() - 1) == bindKeys.getBindedKey(Key.LEFT))
+                        user.moveTo(Direction.LEFT);
+                    else if (KeyListener.LAST_KEYS_MOVED_PRESSED.get(KeyListener.LAST_KEYS_MOVED_PRESSED.size() - 1) == bindKeys.getBindedKey(Key.RIGHT))
+                        user.moveTo(Direction.RIGHT);
                 }
             } else autoWalk();
         }
@@ -283,20 +283,20 @@ public final class GameScene extends Scene {
      * Permite que si caminar automaticamente si el usuario activa la opcion de "autoMove"
      */
     private void autoWalk() {
-        E_KeyType keyPressed = bindKeys.getKeyPressed(KeyListener.getLastKeyMovedPressed());
+        Key keyPressed = bindKeys.getKeyPressed(KeyListener.getLastKeyMovedPressed());
         if (keyPressed == null) return;
         switch (keyPressed) {
-            case mKeyUp:
-                user.moveTo(NORTH);
+            case UP:
+                user.moveTo(Direction.UP);
                 break;
-            case mKeyDown:
-                user.moveTo(SOUTH);
+            case DOWN:
+                user.moveTo(Direction.DOWN);
                 break;
-            case mKeyLeft:
-                user.moveTo(WEST);
+            case LEFT:
+                user.moveTo(Direction.LEFT);
                 break;
-            case mKeyRight:
-                user.moveTo(EAST);
+            case RIGHT:
+                user.moveTo(Direction.RIGHT);
                 break;
         }
     }

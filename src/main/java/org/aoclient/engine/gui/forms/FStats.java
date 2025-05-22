@@ -53,7 +53,7 @@ public final class FStats extends Form {
 
     private void drawAttributes() {
         short y = 40;
-        for (E_Attributes attributes : E_Attributes.values()) {
+        for (Attribute attributes : Attribute.values()) {
             ImGui.setCursorPos(100, y += 17);
             ImGui.text(String.valueOf(USER.getAttributes()[attributes.ordinal()]));
         }
@@ -61,8 +61,8 @@ public final class FStats extends Form {
 
     private void drawReputations() {
         short y = 158;
-        for (E_Reputation reputation : E_Reputation.values()) {
-            if (reputation.ordinal() == E_Reputation.LADRON.ordinal()) continue;
+        for (Reputation reputation : Reputation.values()) {
+            if (reputation.ordinal() == Reputation.THIEF.ordinal()) continue;
             ImGui.setCursorPos(100, y += 17);
             ImGui.text(String.valueOf(USER.getReputations()[reputation.ordinal()]));
         }
@@ -80,12 +80,12 @@ public final class FStats extends Form {
 
     private void drawStatistics() {
         float y = 300;
-        for (E_KillCounters counter : E_KillCounters.values()) {
+        for (KillCounter counter : KillCounter.values()) {
             ImGui.setCursorPos(160, y += 15.5f);
             ImGui.text(String.valueOf(USER.getKillCounter((byte) counter.ordinal())));
         }
         ImGui.setCursorPos(65, y += 15);
-        ImGui.text(E_Roles.values()[USER.getRole()].name());
+        ImGui.text(Role.values()[USER.getRole()].name());
         ImGui.setCursorPos(160, y += 15);
         ImGui.text(String.valueOf(USER.getJailTime()));
     }

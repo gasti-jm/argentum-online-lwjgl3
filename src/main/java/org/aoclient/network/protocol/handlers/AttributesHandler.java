@@ -1,7 +1,7 @@
 package org.aoclient.network.protocol.handlers;
 
 import org.aoclient.engine.game.User;
-import org.aoclient.engine.game.models.E_Attributes;
+import org.aoclient.engine.game.models.Attribute;
 import org.aoclient.network.PacketBuffer;
 import org.tinylog.Logger;
 
@@ -12,7 +12,7 @@ public class AttributesHandler implements PacketHandler {
         if (buffer.checkBytes(6)) return;
         buffer.readByte();
 
-        int[] attributes = new int[E_Attributes.values().length];
+        int[] attributes = new int[Attribute.values().length];
         for (int i = 0; i < 5; i++)
             attributes[i] = buffer.readByte();
 

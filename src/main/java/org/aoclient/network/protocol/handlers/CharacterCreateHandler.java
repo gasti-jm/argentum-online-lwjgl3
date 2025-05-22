@@ -1,7 +1,7 @@
 package org.aoclient.network.protocol.handlers;
 
 import org.aoclient.engine.game.User;
-import org.aoclient.engine.game.models.E_Heading;
+import org.aoclient.engine.game.models.Direction;
 import org.aoclient.network.PacketBuffer;
 import org.aoclient.network.protocol.types.NickColorType;
 import org.aoclient.network.protocol.types.PlayerType;
@@ -23,7 +23,7 @@ public class CharacterCreateHandler implements PacketHandler {
         short body = tempBuffer.readInteger();
         short head = tempBuffer.readInteger();
         int numHeading = tempBuffer.readByte();
-        E_Heading heading = E_Heading.values()[numHeading - 1];
+        Direction direction = Direction.values()[numHeading - 1];
         int x = tempBuffer.readByte();
         int y = tempBuffer.readByte();
         short weapon = tempBuffer.readInteger();
@@ -54,7 +54,7 @@ public class CharacterCreateHandler implements PacketHandler {
 
         } else charList[charIndex].setPriv(0);
 
-        makeChar(charIndex, body, head, heading, x, y, weapon, shield, helmet);
+        makeChar(charIndex, body, head, direction, x, y, weapon, shield, helmet);
         refreshAllChars();
 
         buffer.copy(tempBuffer);

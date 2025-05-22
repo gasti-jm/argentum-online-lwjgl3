@@ -2,8 +2,8 @@ package org.aoclient.network.protocol;
 
 import org.aoclient.engine.game.Console;
 import org.aoclient.engine.game.User;
-import org.aoclient.engine.game.models.E_Heading;
-import org.aoclient.engine.game.models.E_Skills;
+import org.aoclient.engine.game.models.Direction;
+import org.aoclient.engine.game.models.Skill;
 import org.aoclient.engine.renderer.RGBColor;
 import org.aoclient.network.PacketBuffer;
 import org.aoclient.network.SocketConnection;
@@ -147,9 +147,9 @@ public class Protocol {
         outputBuffer.writeCp1252String(chat);
     }
 
-    public static void writeWalk(E_Heading direction) {
+    public static void writeWalk(Direction direction) {
         outputBuffer.writeByte(ClientPacket.WALK.getId());
-        outputBuffer.writeByte(direction.value);
+        outputBuffer.writeByte(direction.getId());
     }
 
     public static void writeDrop(int slot, int amount) {
@@ -198,15 +198,15 @@ public class Protocol {
         outputBuffer.writeByte(ClientPacket.REQUEST_MINI_STATS.getId());
     }
 
-    public static void writeChangeHeading(E_Heading direction) {
+    public static void writeChangeHeading(Direction direction) {
         outputBuffer.writeByte(ClientPacket.CHANGE_HEADING.getId());
-        outputBuffer.writeByte(direction.value);
+        outputBuffer.writeByte(direction.getId());
     }
 
     public static void writeModifySkills(int[] skills) {
         outputBuffer.writeByte(ClientPacket.MODIFY_SKILLS.getId());
-        for (E_Skills skill : E_Skills.values())
-            outputBuffer.writeByte(skills[skill.getValue() - 1]);
+        for (Skill skill : Skill.values())
+            outputBuffer.writeByte(skills[skill.getId() - 1]);
     }
 
     public static void writeLeftClick(int x, int y) {

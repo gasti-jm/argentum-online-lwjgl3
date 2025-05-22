@@ -9,10 +9,10 @@ import imgui.flag.ImGuiWindowFlags;
 import imgui.type.ImInt;
 import imgui.type.ImString;
 import org.aoclient.engine.Window;
-import org.aoclient.engine.game.models.E_Cities;
-import org.aoclient.engine.game.models.E_Roles;
-import org.aoclient.engine.game.models.E_Heading;
-import org.aoclient.engine.game.models.E_Raza;
+import org.aoclient.engine.game.models.City;
+import org.aoclient.engine.game.models.Role;
+import org.aoclient.engine.game.models.Direction;
+import org.aoclient.engine.game.models.Race;
 import org.aoclient.engine.gui.widgets.ImageButton3State;
 import org.aoclient.engine.renderer.RGBColor;
 import org.aoclient.engine.renderer.Surface;
@@ -81,13 +81,13 @@ public final class FCreateCharacter extends Form {
 
     // Combo Boxes
     private final ImInt currentItemHogar = new ImInt(0);
-    private final String[] strCities = new String[E_Cities.values().length];
+    private final String[] strCities = new String[City.values().length];
 
     private final ImInt currentItemRaza = new ImInt(0);
-    private final String[] strRazas = new String[E_Raza.values().length];
+    private final String[] strRazas = new String[Race.values().length];
 
     private final ImInt currentItemClass = new ImInt(0);
-    private final String[] role = new String[E_Roles.values().length];
+    private final String[] role = new String[Role.values().length];
 
     private final ImInt currentItemGenero = new ImInt(0);
     private final String[] strGenero = {"Hombre", "Mujer"};
@@ -119,7 +119,7 @@ public final class FCreateCharacter extends Form {
             this.background = Surface.INSTANCE.createTexture("gui.ao", "VentanaCrearPersonaje", true);
             this.userHead = HUMANO_H_PRIMER_CABEZA;
             this.userBody = HUMANO_H_CUERPO_DESNUDO;
-            this.dir = E_Heading.SOUTH.value;
+            this.dir = Direction.DOWN.getId();
             this.bodyGraphic = new BodyData(bodyData[userBody]);
             this.color = new RGBColor(1, 1, 1);
             this.characterPos = new RECT();
@@ -169,14 +169,14 @@ public final class FCreateCharacter extends Form {
     private void loadComboBoxes() {
         // Esto hay que internacionalizarlo en algun momento, es puro hardcodeo.
         // Hogar
-        for (int i = 0; i < E_Cities.values().length; i++)
-            strCities[i] = E_Cities.values()[i].name();
+        for (int i = 0; i < City.values().length; i++)
+            strCities[i] = City.values()[i].name();
         // Raza
-        for (int i = 0; i < E_Raza.values().length; i++)
-            strRazas[i] = E_Raza.values()[i].name().replace("_", " "); // para quitar el "_" del enum
+        for (int i = 0; i < Race.values().length; i++)
+            strRazas[i] = Race.values()[i].name().replace("_", " "); // para quitar el "_" del enum
         // Clases
-        for (int i = 0; i < E_Roles.values().length; i++)
-            role[i] = E_Roles.values()[i].name();
+        for (int i = 0; i < Role.values().length; i++)
+            role[i] = Role.values()[i].name();
     }
 
     @Override
@@ -339,8 +339,8 @@ public final class FCreateCharacter extends Form {
     }
 
     private int checkDir(int direction) {
-        if (direction > E_Heading.WEST.value) direction = E_Heading.NORTH.value;
-        if (direction < E_Heading.NORTH.value) direction = E_Heading.WEST.value;
+        if (direction > Direction.LEFT.getId()) direction = Direction.UP.getId();
+        if (direction < Direction.UP.getId()) direction = Direction.LEFT.getId();
         this.bodyGraphic.getWalk(dir).setFrameCounter(1);
         this.bodyGraphic.getWalk(dir).setStarted(false);
         return direction;
@@ -411,35 +411,35 @@ public final class FCreateCharacter extends Form {
 
     private int checkCabeza(int head) {
         int retHead = head;
-        E_Raza razaSelected = E_Raza.values()[currentItemRaza.get()];
+        Race razaSelected = Race.values()[currentItemRaza.get()];
 
         switch (currentItemGenero.get()) {
             case 0: // hombre
                 switch (razaSelected) {
-                    case Humano:
+                    case HUMAN:
                         if (head > HUMANO_H_ULTIMA_CABEZA) retHead = HUMANO_H_PRIMER_CABEZA + (head - HUMANO_H_ULTIMA_CABEZA) - 1;
                         else if (head < HUMANO_H_PRIMER_CABEZA)
                             retHead = HUMANO_H_ULTIMA_CABEZA - (HUMANO_H_PRIMER_CABEZA - head) + 1;
                         break;
-                    case Elfo:
+                    case ELF:
                         if (head > ELFO_H_ULTIMA_CABEZA)
                             retHead = ELFO_H_PRIMER_CABEZA + (head - ELFO_H_ULTIMA_CABEZA) - 1;
                         else if (head < ELFO_H_PRIMER_CABEZA)
                             retHead = ELFO_H_ULTIMA_CABEZA - (ELFO_H_PRIMER_CABEZA - head) + 1;
                         break;
-                    case Elfo_Drow:
+                    case DROW_ELF:
                         if (head > DROW_H_ULTIMA_CABEZA)
                             retHead = DROW_H_PRIMER_CABEZA + (head - DROW_H_ULTIMA_CABEZA) - 1;
                         else if (head < DROW_H_PRIMER_CABEZA)
                             retHead = DROW_H_ULTIMA_CABEZA - (DROW_H_PRIMER_CABEZA - head) + 1;
                         break;
-                    case Enano:
+                    case DWARF:
                         if (head > ENANO_H_ULTIMA_CABEZA)
                             retHead = ENANO_H_PRIMER_CABEZA + (head - ENANO_H_ULTIMA_CABEZA) - 1;
                         else if (head < ENANO_H_PRIMER_CABEZA)
                             retHead = ENANO_H_ULTIMA_CABEZA - (ENANO_H_PRIMER_CABEZA - head) + 1;
                         break;
-                    case Gnomo:
+                    case GNOME:
                         if (head > GNOMO_H_ULTIMA_CABEZA)
                             retHead = GNOMO_H_PRIMER_CABEZA + (head - GNOMO_H_ULTIMA_CABEZA) - 1;
                         else if (head < GNOMO_H_PRIMER_CABEZA)
@@ -448,31 +448,31 @@ public final class FCreateCharacter extends Form {
                 break;
             case 1: // mujer
                 switch (razaSelected) {
-                    case Humano:
+                    case HUMAN:
                         if (head > HUMANO_M_ULTIMA_CABEZA)
                             retHead = HUMANO_M_PRIMER_CABEZA + (head - HUMANO_M_ULTIMA_CABEZA) - 1;
                         else if (head < HUMANO_M_PRIMER_CABEZA)
                             retHead = HUMANO_M_ULTIMA_CABEZA - (HUMANO_M_PRIMER_CABEZA - head) + 1;
                         break;
-                    case Elfo:
+                    case ELF:
                         if (head > ELFO_M_ULTIMA_CABEZA)
                             retHead = ELFO_M_PRIMER_CABEZA + (head - ELFO_M_ULTIMA_CABEZA) - 1;
                         else if (head < ELFO_M_PRIMER_CABEZA)
                             retHead = ELFO_M_ULTIMA_CABEZA - (ELFO_M_PRIMER_CABEZA - head) + 1;
                         break;
-                    case Elfo_Drow:
+                    case DROW_ELF:
                         if (head > DROW_M_ULTIMA_CABEZA)
                             retHead = DROW_M_PRIMER_CABEZA + (head - DROW_M_ULTIMA_CABEZA) - 1;
                         else if (head < DROW_M_PRIMER_CABEZA)
                             retHead = DROW_M_ULTIMA_CABEZA - (DROW_M_PRIMER_CABEZA - head) + 1;
                         break;
-                    case Enano:
+                    case DWARF:
                         if (head > ENANO_M_ULTIMA_CABEZA)
                             retHead = ENANO_M_PRIMER_CABEZA + (head - ENANO_M_ULTIMA_CABEZA) - 1;
                         else if (head < ENANO_M_PRIMER_CABEZA)
                             retHead = ENANO_M_ULTIMA_CABEZA - (ENANO_M_PRIMER_CABEZA - head) + 1;
                         break;
-                    case Gnomo:
+                    case GNOME:
                         if (head > GNOMO_M_ULTIMA_CABEZA)
                             retHead = GNOMO_M_PRIMER_CABEZA + (head - GNOMO_M_ULTIMA_CABEZA) - 1;
                         else if (head < GNOMO_M_PRIMER_CABEZA)
@@ -512,28 +512,28 @@ public final class FCreateCharacter extends Form {
     }
 
     private void giveBodyAndHead() {
-        E_Raza razaSelected = E_Raza.values()[currentItemRaza.get()];
+        Race razaSelected = Race.values()[currentItemRaza.get()];
 
         switch (currentItemGenero.get()) {
             case 0: // hombre
                 switch (razaSelected) {
-                    case Humano:
+                    case HUMAN:
                         this.userHead = HUMANO_H_PRIMER_CABEZA;
                         this.userBody = HUMANO_H_CUERPO_DESNUDO;
                         break;
-                    case Elfo:
+                    case ELF:
                         this.userHead = ELFO_H_PRIMER_CABEZA;
                         this.userBody = ELFO_H_CUERPO_DESNUDO;
                         break;
-                    case Elfo_Drow:
+                    case DROW_ELF:
                         this.userHead = DROW_H_PRIMER_CABEZA;
                         this.userBody = DROW_H_CUERPO_DESNUDO;
                         break;
-                    case Enano:
+                    case DWARF:
                         this.userHead = ENANO_H_PRIMER_CABEZA;
                         this.userBody = ENANO_H_CUERPO_DESNUDO;
                         break;
-                    case Gnomo:
+                    case GNOME:
                         this.userHead = GNOMO_H_PRIMER_CABEZA;
                         this.userBody = GNOMO_H_CUERPO_DESNUDO;
                         break;
@@ -545,23 +545,23 @@ public final class FCreateCharacter extends Form {
 
             case 1: // mujer
                 switch (razaSelected) {
-                    case Humano:
+                    case HUMAN:
                         this.userHead = HUMANO_M_PRIMER_CABEZA;
                         this.userBody = HUMANO_M_CUERPO_DESNUDO;
                         break;
-                    case Elfo:
+                    case ELF:
                         this.userHead = ELFO_M_PRIMER_CABEZA;
                         this.userBody = ELFO_M_CUERPO_DESNUDO;
                         break;
-                    case Elfo_Drow:
+                    case DROW_ELF:
                         this.userHead = DROW_M_PRIMER_CABEZA;
                         this.userBody = DROW_M_CUERPO_DESNUDO;
                         break;
-                    case Enano:
+                    case DWARF:
                         this.userHead = ENANO_M_PRIMER_CABEZA;
                         this.userBody = ENANO_M_CUERPO_DESNUDO;
                         break;
-                    case Gnomo:
+                    case GNOME:
                         this.userHead = GNOMO_M_PRIMER_CABEZA;
                         this.userBody = GNOMO_M_CUERPO_DESNUDO;
                         break;

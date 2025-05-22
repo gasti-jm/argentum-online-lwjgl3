@@ -1,7 +1,7 @@
 package org.aoclient.network.protocol.handlers;
 
 import org.aoclient.engine.game.User;
-import org.aoclient.engine.game.models.E_Reputation;
+import org.aoclient.engine.game.models.Reputation;
 import org.aoclient.network.PacketBuffer;
 
 public class FameHandler implements PacketHandler {
@@ -11,8 +11,8 @@ public class FameHandler implements PacketHandler {
         if (buffer.checkBytes(29)) return;
         buffer.readByte();
 
-        int[] reputations = new int[E_Reputation.values().length];
-        for (E_Reputation reputation : E_Reputation.values())
+        int[] reputations = new int[Reputation.values().length];
+        for (Reputation reputation : Reputation.values())
             reputations[reputation.ordinal()] = buffer.readLong();
 
         User.INSTANCE.setReputations(reputations);

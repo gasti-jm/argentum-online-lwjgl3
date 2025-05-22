@@ -1,8 +1,7 @@
 package org.aoclient.engine.game.inventory;
 
 import imgui.ImGui;
-import imgui.ImVec2;
-import org.aoclient.engine.game.models.E_ObjType;
+import org.aoclient.engine.game.models.ObjectType;
 import org.aoclient.engine.listeners.MouseListener;
 import org.aoclient.engine.renderer.RGBColor;
 import org.aoclient.engine.renderer.Surface;
@@ -97,7 +96,7 @@ public abstract class Inventory {
         slots[slot].name = name;
         slots[slot].objIndex = objIndex;
 
-        if (objType > 0) slots[slot].objType = E_ObjType.values()[objType - 1];
+        if (objType > 0) slots[slot].objType = ObjectType.values()[objType - 1];
 
         slots[slot].value = value;
     }
@@ -152,7 +151,7 @@ public abstract class Inventory {
         int amount;
         boolean equipped;
         float value;
-        E_ObjType objType;
+        ObjectType objType;
         short maxDef;
         short minDef;
         short maxHit;

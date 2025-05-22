@@ -1,7 +1,7 @@
 package org.aoclient.network.protocol.handlers;
 
 import org.aoclient.engine.game.User;
-import org.aoclient.engine.game.models.E_Skills;
+import org.aoclient.engine.game.models.Skill;
 import org.aoclient.network.PacketBuffer;
 import org.tinylog.Logger;
 
@@ -22,9 +22,9 @@ public class SendSkillsHandler implements PacketHandler {
          */
         int porcentajeSkills[] = new int[20];
 
-        for (E_Skills skill : E_Skills.values()) {
-            User.INSTANCE.setSkill(skill.getValue(), buffer.readByte());
-            porcentajeSkills[skill.getValue() - 1] = buffer.readByte();
+        for (Skill skill : Skill.values()) {
+            User.INSTANCE.setSkill(skill.getId(), buffer.readByte());
+            porcentajeSkills[skill.getId() - 1] = buffer.readByte();
         }
 
         /* TODO: este flag es para mostrar el boton de asignar skills '+' del main

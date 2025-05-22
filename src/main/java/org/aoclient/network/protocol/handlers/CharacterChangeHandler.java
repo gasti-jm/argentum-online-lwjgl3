@@ -1,7 +1,7 @@
 package org.aoclient.network.protocol.handlers;
 
 import org.aoclient.engine.game.User;
-import org.aoclient.engine.game.models.E_Heading;
+import org.aoclient.engine.game.models.Direction;
 import org.aoclient.engine.utils.inits.BodyData;
 import org.aoclient.engine.utils.inits.HeadData;
 import org.aoclient.engine.utils.inits.ShieldData;
@@ -43,7 +43,7 @@ public class CharacterChangeHandler implements PacketHandler {
         }
 
         charList[charIndex].setDead(headIndex == CASPER_HEAD);
-        charList[charIndex].setHeading(E_Heading.values()[buffer.readByte() - 1]);
+        charList[charIndex].setHeading(Direction.values()[buffer.readByte() - 1]);
 
         tempint = buffer.readInteger();
         if (tempint != 0) charList[charIndex].setWeapon(new WeaponData(weaponData[tempint]));

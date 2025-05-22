@@ -137,7 +137,7 @@ public final class UserInventory extends Inventory implements Cloneable {
             if (x + (this.cantColumns * y) == this.slotSelected) {
                 if (slots[slotSelected].grhIndex > 0) {
                     // es equipable?
-                    if (slots[slotSelected].objType.equippable) equipItem();
+                    if (slots[slotSelected].objType.isEquippable()) equipItem();
                     else useItem();
                 }
             }
@@ -150,7 +150,7 @@ public final class UserInventory extends Inventory implements Cloneable {
 
     public void equipItem() {
         // no vamos a mandar un paquete al pedo.
-        if (slots[slotSelected].grhIndex > 0 && slots[slotSelected].objType.equippable && intervalEquipItem.check())
+        if (slots[slotSelected].grhIndex > 0 && slots[slotSelected].objType.isEquippable() && intervalEquipItem.check())
             writeEquipItem(this.slotSelected + 1);
 
     }

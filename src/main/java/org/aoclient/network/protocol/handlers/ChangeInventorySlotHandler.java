@@ -1,7 +1,7 @@
 package org.aoclient.network.protocol.handlers;
 
 import org.aoclient.engine.game.User;
-import org.aoclient.engine.game.models.E_ObjType;
+import org.aoclient.engine.game.models.ObjectType;
 import org.aoclient.network.PacketBuffer;
 
 public class ChangeInventorySlotHandler implements PacketHandler {
@@ -29,20 +29,20 @@ public class ChangeInventorySlotHandler implements PacketHandler {
         float value = tempBuffer.readFloat();
 
         if (equipped) {
-            switch (E_ObjType.values()[objType - 1]) {
-                case otWeapon:
+            switch (ObjectType.values()[objType - 1]) {
+                case WEAPON:
                     user.setUserWeaponEqpHit(minHit + "/" + maxHit);
                     user.setUserWeaponEqpSlot(slot);
                     break;
-                case otArmor:
+                case ARMOR:
                     user.setUserArmourEqpDef(minDef + "/" + maxDef);
                     user.setUserArmourEqpSlot(slot);
                     break;
-                case otShield:
+                case SHIELD:
                     user.setUserShieldEqpDef(minDef + "/" + maxDef);
                     user.setUserShieldEqpSlot(slot);
                     break;
-                case otHelmet:
+                case HELMET:
                     user.setUserHelmEqpDef(minDef + "/" + maxDef);
                     user.setUserHelmEqpSlot(slot);
                     break;

@@ -4,10 +4,7 @@ import imgui.ImGui;
 import imgui.flag.ImGuiCond;
 import imgui.flag.ImGuiWindowFlags;
 import imgui.type.ImInt;
-import org.aoclient.engine.game.models.E_Skills;
-
-import java.util.ArrayList;
-import java.util.List;
+import org.aoclient.engine.game.models.Skill;
 
 import static org.aoclient.network.protocol.Protocol.*;
 
@@ -62,7 +59,7 @@ public class InventorySpells {
     public void buttonThrowSpell() {
         if (!spells[currentItemSpell.get()].equals("(None)")) {
             writeCastSpell(currentItemSpell.get() + 1);
-            writeWork(E_Skills.MAGIA.getValue());
+            writeWork(Skill.MAGIC.getId());
         }
     }
 

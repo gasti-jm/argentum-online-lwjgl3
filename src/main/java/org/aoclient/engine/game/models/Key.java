@@ -1,7 +1,6 @@
 package org.aoclient.engine.game.models;
 
 /**
- * <p>
  * Define todas las acciones posibles que un usuario puede realizar mediante pulsaciones de teclas, constituyendo el sistema de
  * control del personaje y de la interfaz del juego. Cada valor del enum representa una accion especifica que puede ser vinculada
  * a una tecla fisica del teclado.
@@ -14,35 +13,35 @@ package org.aoclient.engine.game.models;
  * teclas fisicas y estas acciones, permitiendo personalizar los controles y procesar las entradas del usuario durante el juego.
  */
 
-public enum E_KeyType {
+public enum Key {
 
-    mKeyUp,
-    mKeyDown,
-    mKeyLeft,
-    mKeyRight,
-    mKeyToggleMusic,
-    mKeyToggleSound,
-    mKeyToggleFxs,
-    mKeyRequestRefresh,
-    mKeyToggleNames,
-    mKeyGetObject,
-    mKeyEquipObject,
-    mKeyTamAnimal,
-    mKeySteal,
-    mKeyToggleSafeMode,
-    mKeyToggleResuscitationSafe,
-    mKeyHide,
-    mKeyDropObject,
-    mKeyUseObject,
-    mKeyAttack,
-    mKeyTalk,
-    mKeyTalkWithGuild,
-    mKeyTakeScreenShot,
-    mKeyShowOptions,
-    mKeyMeditate,
-    mKeyCastSpellMacro,
-    mKeyWorkMacro,
-    mKeyAutoMove,
-    mKeyExitGame
+    UP,
+    DOWN,
+    LEFT,
+    RIGHT,
+    TOGGLE_MUSIC,
+    TOGGLE_SOUND,
+    TOGGLE_FXS,
+    REQUEST_REFRESH,
+    TOGGLE_NAMES,
+    GET_OBJECT,
+    EQUIP_OBJECT,
+    TAME_ANIMAL,
+    STEAL,
+    TOGGLE_SAFE_MODE,
+    TOGGLE_RESUSCITATION_SAFE,
+    HIDE,
+    DROP_OBJECT,
+    USE_OBJECT,
+    ATTACK,
+    TALK,
+    TALK_WITH_GUILD,
+    TAKE_SCREENSHOT,
+    SHOW_OPTIONS,
+    MEDITATE,
+    CAST_SPELL_MACRO,
+    WORK_MACRO,
+    AUTO_MOVE,
+    EXIT_GAME
 
 }

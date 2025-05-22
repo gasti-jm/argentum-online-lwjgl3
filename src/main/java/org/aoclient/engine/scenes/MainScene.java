@@ -2,7 +2,7 @@ package org.aoclient.engine.scenes;
 
 import org.aoclient.engine.game.BindKeys;
 import org.aoclient.engine.game.User;
-import org.aoclient.engine.game.models.E_KeyType;
+import org.aoclient.engine.game.models.Key;
 import org.aoclient.engine.gui.ImGUISystem;
 import org.aoclient.engine.gui.forms.FConnect;
 import org.aoclient.engine.listeners.KeyListener;
@@ -50,7 +50,7 @@ public final class MainScene extends Scene {
 
     @Override
     public void keyEvents() {
-        if (KeyListener.isKeyPressed(BindKeys.INSTANCE.getBindedKey(E_KeyType.mKeyExitGame))) closeClient();
+        if (KeyListener.isKeyPressed(BindKeys.INSTANCE.getBindedKey(Key.EXIT_GAME))) closeClient();
     }
 
     /**

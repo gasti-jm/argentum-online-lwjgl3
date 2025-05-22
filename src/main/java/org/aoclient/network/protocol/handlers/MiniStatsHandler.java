@@ -1,7 +1,7 @@
 package org.aoclient.network.protocol.handlers;
 
 import org.aoclient.engine.game.User;
-import org.aoclient.engine.game.models.E_KillCounters;
+import org.aoclient.engine.game.models.KillCounter;
 import org.aoclient.network.PacketBuffer;
 
 public class MiniStatsHandler implements PacketHandler {
@@ -12,8 +12,8 @@ public class MiniStatsHandler implements PacketHandler {
         buffer.readByte();
 
         int i = 1;
-        for (E_KillCounters counter : E_KillCounters.values()) {
-            if (i < E_KillCounters.values().length) User.INSTANCE.setKillCounter(counter.ordinal(), buffer.readLong());
+        for (KillCounter counter : KillCounter.values()) {
+            if (i < KillCounter.values().length) User.INSTANCE.setKillCounter(counter.ordinal(), buffer.readLong());
             else User.INSTANCE.setKillCounter(counter.ordinal(), buffer.readInteger());
             i++;
         }
