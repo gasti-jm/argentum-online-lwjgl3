@@ -65,7 +65,7 @@ public enum Window {
     /**
      *  Inicializamos nuestro contexto GLFW (ventana) con sus sistemas (OpenGL y OpenAL)
      */
-    public void initialize() {
+    public void init() {
         // Setup an error callback
         GLFWErrorCallback.createPrint(System.err).set();
 
