@@ -3,8 +3,6 @@ package org.aoclient.engine.renderer;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.lwjgl.opengl.GL11.glDeleteTextures;
-
 /**
  * Clase responsable de la gestion y almacenamiento de texturas para el renderizado grafico.
  * <p>
@@ -33,8 +31,8 @@ public enum Surface {
     }
 
     /**
-     * @desc: Elimina todas las texturas del mapa, esto se utiliza al pasar de mapa en el juego, ya que en algun momento las
-     * texturas que no se van a dibujar y deben eliminarse para ahorrar espacio.
+     * Elimina todas las texturas del mapa, esto se utiliza al pasar de mapa en el juego, ya que en algun momento las texturas que
+     * no se van a dibujar y deben eliminarse para ahorrar espacio.
      */
     public void deleteAllTextures() {
 //        for (Map.Entry<Integer, Texture> entry : textures.entrySet()) {
@@ -55,7 +53,7 @@ public enum Surface {
     }
 
     /**
-     * @desc: Crea una textura y lo guarda en nuestro mapa de texturas con su id (en este caso el numero del archivo).
+     * Crea una textura y lo guarda en nuestro mapa de texturas con su id (en este caso el numero del archivo).
      */
     private Texture createTexture(String fileCompressed, int fileNum) {
         Texture texture = new Texture();
@@ -65,7 +63,7 @@ public enum Surface {
     }
 
     /**
-     * @desc: Crea y retorna una textura
+     * Crea y retorna una textura
      */
     public Texture createTexture(String fileCompressed, String file, boolean isGUI) {
         if (file.isEmpty()) return null;

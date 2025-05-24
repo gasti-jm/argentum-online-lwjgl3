@@ -39,7 +39,7 @@ public enum MouseListener {
     private static double lastTimeClick;
 
     /**
-     * @desc: Funcion callBack para detectar y actualizar la posicion del mouse.
+     *  Funcion callBack para detectar y actualizar la posicion del mouse.
      */
     public static void mousePosCallback(long window, double xpos, double ypos) {
         lastX = xPos;
@@ -50,7 +50,7 @@ public enum MouseListener {
     }
 
     /**
-     * @desc: Funcion callBack para detectar los botones pulsados.
+     *  Funcion callBack para detectar los botones pulsados.
      */
     public static void mouseButtonCallback(long window, int button, int action, int mods) {
         final boolean[] mouseDown = new boolean[5];
@@ -87,7 +87,7 @@ public enum MouseListener {
     }
 
     /**
-     * @desc: Funcion callBack para detectar el desplazamiento del mouse de una posicion a otra.
+     *  Funcion callBack para detectar el desplazamiento del mouse de una posicion a otra.
      */
     public static void mouseScrollCallback(long window, double xOffset, double yOffset) {
         IM_GUI_IO.setMouseWheelH(IM_GUI_IO.getMouseWheelH() + (float) xOffset);

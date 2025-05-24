@@ -159,7 +159,7 @@ public enum User {
     }
 
     /**
-     * @desc: Checkea si estamos bajo techo segun el trigger en donde esta parado el usuario.
+     *  Checkea si estamos bajo techo segun el trigger en donde esta parado el usuario.
      */
     public boolean checkUnderCeiling() {
         return mapData[userPos.getX()][userPos.getY()].getTrigger() == 1 ||
@@ -217,7 +217,7 @@ public enum User {
     }
 
     /**
-     * @desc: Actualiza las areas de vision de objetos y personajes.
+     *  Actualiza las areas de vision de objetos y personajes.
      */
     public void areaChange(int x, int y) {
         minLimiteX = (x / 9 - 1) * 9;

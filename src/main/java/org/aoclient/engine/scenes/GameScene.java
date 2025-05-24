@@ -117,7 +117,7 @@ public final class GameScene extends Scene {
     }
 
     /**
-     * @desc: Escucha los eventos del mouse.
+     *  Escucha los eventos del mouse.
      */
     @Override
     public void mouseEvents() {
@@ -183,7 +183,7 @@ public final class GameScene extends Scene {
     }
 
     /**
-     * @desc: Escucha los eventos del teclado.
+     *  Escucha los eventos del teclado.
      */
     @Override
     public void keyEvents() {
@@ -302,7 +302,7 @@ public final class GameScene extends Scene {
     }
 
     /**
-     * @desc: Dibuja cada capa y objeto del mapa, el personaje, la interfaz y demas.
+     *  Dibuja cada capa y objeto del mapa, el personaje, la interfaz y demas.
      */
     private void renderScreen(int tileX, int tileY, int pixelOffsetX, int pixelOffsetY) {
         camera.update(tileX, tileY);
@@ -434,7 +434,7 @@ public final class GameScene extends Scene {
 
 
     /**
-     * @desc: Detecta si el usuario esta debajo del techo. Si es asi, se desvanecera y en caso contrario re aparece.
+     *  Detecta si el usuario esta debajo del techo. Si es asi, se desvanecera y en caso contrario re aparece.
      */
     private void checkEffectCeiling() {
         if (user.isUnderCeiling()) {
@@ -445,7 +445,7 @@ public final class GameScene extends Scene {
     }
 
     /**
-     * @desc: Detecta si tenemos el mouse adentro del "render MainViewPic".
+     *  Detecta si tenemos el mouse adentro del "render MainViewPic".
      */
     private boolean inGameArea() {
         if (MouseListener.getX() < POS_SCREEN_X || MouseListener.getX() > POS_SCREEN_X + SCREEN_SIZE_X) return false;
@@ -456,7 +456,7 @@ public final class GameScene extends Scene {
     /**
      * @param mouseX: Posicion X del mouse en la pantalla
      * @return: Devuelve la posicion en tile del eje X del mouse.
-     * @desc: Se utiliza al hacer click izquierdo por el mapa, para interactuar con NPCs, etc.
+     *  Se utiliza al hacer click izquierdo por el mapa, para interactuar con NPCs, etc.
      */
     private byte getTileMouseX(int mouseX) {
         return (byte) (user.getUserPos().getX() + mouseX / TILE_PIXEL_SIZE - HALF_WINDOW_TILE_WIDTH);
@@ -465,7 +465,7 @@ public final class GameScene extends Scene {
     /**
      * @param mouseY: Posicion X del mouse en la pantalla
      * @return: Devuelve la posicion en tile del eje Y del mouse.
-     * @desc: Se utiliza al hacer click izquierdo por el mapa, para interactuar con NPCs, etc.
+     *  Se utiliza al hacer click izquierdo por el mapa, para interactuar con NPCs, etc.
      */
     private byte getTileMouseY(int mouseY) {
         return (byte) (user.getUserPos().getY() + mouseY / TILE_PIXEL_SIZE - HALF_WINDOW_TILE_HEIGHT);

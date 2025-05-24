@@ -6,11 +6,11 @@ package org.aoclient.engine.game.models;
 
 public enum Attribute {
 
-    FUERZA(1),
-    AGILIDAD(2),
-    INTELIGENCIA(3),
-    CARISMA(4),
-    CONSTITUCION(5);
+    STRENGTH(1),
+    AGILITY(2),
+    INTELLIGENCE(3),
+    CHARISMA(4),
+    CONSTITUTION(5);
 
     private final int id;
 

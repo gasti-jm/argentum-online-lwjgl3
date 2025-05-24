@@ -34,7 +34,7 @@ public abstract class Scene {
     protected SceneType canChangeTo; // posible cambio de escena.
 
     /**
-     * @desc: Inicializa la escena. No se crea un constructor ya que cada escena distinta puede estar compuesta por distintos
+     *  Inicializa la escena. No se crea un constructor ya que cada escena distinta puede estar compuesta por distintos
      * atributos...
      */
     public void init() {
@@ -44,17 +44,17 @@ public abstract class Scene {
     }
 
     /**
-     * @desc: Escucha cada del mouse, segun lo definido en el MouseListener.
+     *  Escucha cada del mouse, segun lo definido en el MouseListener.
      */
     public abstract void mouseEvents();
 
     /**
-     * @desc: Escucha cada evento del teclado, segun lo definido en el KeyListener.
+     *  Escucha cada evento del teclado, segun lo definido en el KeyListener.
      */
     public abstract void keyEvents();
 
     /**
-     * @desc: Dibujado
+     *  Dibujado
      */
     public abstract void render();
 

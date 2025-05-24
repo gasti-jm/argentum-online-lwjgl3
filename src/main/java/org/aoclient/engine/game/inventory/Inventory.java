@@ -60,7 +60,7 @@ public abstract class Inventory {
     }
 
     /**
-     * @desc: Chekeamos que el mouse este dentro del inventario.
+     *  Chekeamos que el mouse este dentro del inventario.
      */
     public boolean inInventoryArea() {
         if (MouseListener.getX() < posX || MouseListener.getX() > posX + sWidth) return false;
@@ -69,7 +69,7 @@ public abstract class Inventory {
     }
 
     /**
-     * @desc: Chekeamos que el mouse este dentro del inventario.
+     *  Chekeamos que el mouse este dentro del inventario.
      */
     public boolean inInventoryArea(float mouseX, float mouseY) {
         if (mouseX < posX || mouseX > posX + sWidth) return false;
@@ -78,7 +78,7 @@ public abstract class Inventory {
     }
 
     /**
-     * @desc: Agregamos un item al slot del inventario.
+     *  Agregamos un item al slot del inventario.
      */
     public void setItem(int slot, short objIndex, int amount, boolean equipped, short grhIndex, int objType,
                         short maxHit, short minHit, short maxDef, short minDef, float value, String name) {
@@ -102,7 +102,7 @@ public abstract class Inventory {
     }
 
     /**
-     * @desc: Dibujamos el inventario.
+     *  Dibujamos el inventario.
      */
     public abstract void drawInventory();
 
