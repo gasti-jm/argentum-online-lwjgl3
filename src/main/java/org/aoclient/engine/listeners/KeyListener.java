@@ -11,32 +11,33 @@ import static org.aoclient.engine.game.models.Key.*;
 import static org.lwjgl.glfw.GLFW.*;
 
 /**
- * Clase que gestiona todos los eventos y estados del teclado en el contexto GLFW.
+ * Gestiona las entradas del teclado en una ventana GLFW. Proporciona funciones para detectar eventos de teclas, conocer
+ * estados actuales y gestionar la asignacion de teclas a acciones especificas utilizando el binding definido en la
+ * clase {@code BindKeys}.
  * <p>
- * Proporciona funciones callback para GLFW que permiten detectar las pulsaciones y liberaciones de teclas, manteniendo el estado
- * actual de todas las teclas del teclado.
- * <p>
- * La clase mantiene un registro de la ultima tecla presionada y la ultima tecla de movimiento presionada, lo que facilita la
- * gestion de las acciones de navegacion del jugador. Ofrece metodos para verificar si una tecla esta siendo presionada en tiempo
- * real o si se debe procesar una accion especifica una sola vez por cada pulsacion de tecla.
- * <p>
- * Incluye funcionalidad para gestionar combinaciones de teclas como {@code Ctrl}, {@code Shift}, {@code Alt} y {@code Super}, y
- * se integra con {@code ImGui} para sincronizar adecuadamente el estado de las teclas entre el motor grafico y la interfaz.
+ * Esta clase actua como listener para los eventos del teclado, permitiendo manejar acciones realizadas por el usuario y
+ * traducirlas a las acciones vinculadas en el contexto del.
  */
 
 public enum KeyListener {
 
     INSTANCE;
 
-    private static final ImGuiIO IM_GUI_IO = ImGui.getIO();
-    private static final BindKeys BIND_KEYS = BindKeys.INSTANCE;
-    private static final boolean[] KEY_PRESSED = new boolean[350];
+    /** Lista de teclas recientemente presionadas para movimiento. */
     public static final List<Integer> LAST_KEYS_MOVED_PRESSED = new ArrayList<>();
-    private static int lastKeyMovedPressed;
+    /** Objeto para gestionar la integracion ImGui y GLFW, manejando eventos y estados de entrada y salida. */
+    private static final ImGuiIO IM_GUI_IO = ImGui.getIO();
+    /** Referencia a la instancia unica del manejador de teclas vinculadas. */
+    private static final BindKeys BIND_KEYS = BindKeys.INSTANCE;
+    /** Array que almacena el estado actual de cada tecla (true si esta presionada, false si no). */
+    private static final boolean[] KEY_PRESSED = new boolean[350];
+    /** Almacena el codigo de la ultima tecla presionada. */
     private static int lastKeyPressed;
+    /** Almacena el codigo de la ultima tecla de direccion presionada. */
+    private static int lastKeyMovedPressed;
 
     /**
-     * @desc: Funcion callBack para gestionar el listener de teclas de nuestra ventana GLFW
+     * Funcion callBack para gestionar el listener de teclas de la ventana GLFW.
      */
     public static void keyCallback(long window, int key, int scancode, int action, int mods) {
         if (action == GLFW_PRESS) {
@@ -67,39 +68,47 @@ public enum KeyListener {
     }
 
     /**
-     * @desc: Devuelve true si la tecla esta siendo presionada, caso contrario false.
+     * Verifica si la tecla especificada esta siendo presionada.
+     *
+     * @param keyCode codigo de la tecla que se desea verificar
+     * @return {@code true} si la tecla esta presionada, en caso contrario {@code false}
      */
     public static boolean isKeyPressed(int keyCode) {
         return KEY_PRESSED[keyCode];
     }
 
     /**
-     * @desc: Sirve para que cuando presionemos una tecla detecte si realizo su accion correspondiente, ya que si utilizamos la
-     * funcion "isKeyPressed" va a seguir ejecutando la accion en el main loop del juego (como hacemos con la caminata).
+     * Verifica si una tecla especificada esta lista para realizar una accion. Esto incluye verificar si la tecla fue
+     * presionada y, en caso afirmativo, limpiar su estado para evitar acciones repetidas en el mismo ciclo.
+     *
+     * @param keyCode codigo de la tecla que se desea verificar
+     * @return {@code true} si la tecla estaba presionada y lista para realizar una accion, en caso contrario
+     * {@code false}
      */
     public static boolean isKeyReadyForAction(int keyCode) {
-        boolean retVal = KEY_PRESSED[keyCode];
-        if (retVal) KEY_PRESSED[keyCode] = false;
-        return retVal;
+        // Si la tecla estaba presionada en un momento anterior
+        boolean wasKeyPressed = KEY_PRESSED[keyCode];
+        if (wasKeyPressed) KEY_PRESSED[keyCode] = false;
+        return wasKeyPressed;
     }
 
     /**
-     * @desc: Devulve la ultima tecla presionada por el usuario.
+     * Devulve la ultima tecla presionada por el usuario.
      */
     public static int getLastKeyPressed() {
         return lastKeyPressed;
     }
 
-    public static void setLastKeyPressed(int value) {
-        lastKeyPressed = value;
+    public static void setLastKeyPressed(int keyCode) {
+        lastKeyPressed = keyCode;
     }
 
     public static int getLastKeyMovedPressed() {
         return lastKeyMovedPressed;
     }
 
-    public static void setLastKeyMovedPressed(int value) {
-        lastKeyMovedPressed = value;
+    public static void setLastKeyMovedPressed(int keyCode) {
+        lastKeyMovedPressed = keyCode;
     }
 
 }

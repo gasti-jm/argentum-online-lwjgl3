@@ -1,6 +1,5 @@
 package org.aoclient.engine.game.models;
 
-
 /**
  * Representa las direcciones cardinales disponibles para el movimiento dentro del juego.
  * <p>

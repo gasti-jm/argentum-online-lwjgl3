@@ -1,7 +1,7 @@
 package org.aoclient.engine.game.models;
 
 /**
-a * Atributos que determinan las capacidades del personaje.
+ * Atributos que determinan las capacidades del personaje.
  */
 
 public enum Attribute {

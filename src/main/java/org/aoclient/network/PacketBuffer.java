@@ -237,7 +237,7 @@ public class PacketBuffer {
      * @param string cadena de texto que sera codificada en Cp1252 y escrita en el buffer
      */
     public void writeCp1252String(String string) {
-        byte[] stringBytes = string.getBytes(java.nio.charset.Charset.forName("Cp1252"));
+        byte[] stringBytes = string.getBytes(Charset.forName("Cp1252"));
         byte[] buffer = new byte[STRING_LENGTH_BYTES + string.length()];
         /* Como se esta escribiendo una cadena codificada en Cp1252, entonces los caracteres ocupan solo 1 byte, por lo tanto es
          * valido obtener la longitud de la cadena con string.length(). */
@@ -403,7 +403,7 @@ public class PacketBuffer {
         if (bufferLength < stringLength) throw new RuntimeException("Not enough byte!");
         // Si la longitud es cero, devuelve cadena vacia
         if (stringLength <= 0) return "";
-        return readString(stringLength, java.nio.charset.Charset.forName("Cp1252"));
+        return readString(stringLength, Charset.forName("Cp1252"));
     }
 
     /**
