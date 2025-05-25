@@ -57,7 +57,7 @@ import static org.lwjgl.glfw.GLFW.*;
 public final class GameScene extends Scene {
 
     private final IntervalTimer intervalToUpdatePos = new IntervalTimer(INT_SENTRPU);
-    private final BindKeys bindKeys = BindKeys.INSTANCE;
+    private final KeyManager keyManager = KeyManager.INSTANCE;
     private final User user = User.INSTANCE;
     RGBColor ambientColor; // color de ambiente.
     private float offSetCounterX = 0;
@@ -186,7 +186,7 @@ public final class GameScene extends Scene {
      */
     @Override
     public void keyEvents() {
-        if (KeyListener.isKeyPressed(bindKeys.getBindedKey(Key.EXIT_GAME))) writeQuit();
+        if (KeyListener.isKeyPressed(keyManager.getKeyCode(Key.EXIT_GAME))) writeQuit();
         this.checkBindedKeys();
     }
 
@@ -204,13 +204,13 @@ public final class GameScene extends Scene {
     private void checkBindedKeys() {
         if (user.isUserComerciando()) return;
 
-        final Key keyPressed = bindKeys.getKeyPressed(KeyListener.getLastKeyPressed());
+        final Key keyPressed = keyManager.getKeyPressed(KeyListener.getLastKeyPressed());
 
         this.checkWalkKeys();
 
         if (keyPressed == null) return; // ni me gasto si la tecla presionada no existe en nuestro bind.
 
-        if (KeyListener.isKeyReadyForAction(bindKeys.getBindedKey(keyPressed))) {
+        if (KeyListener.isKeyReadyForAction(keyManager.getKeyCode(keyPressed))) {
 
             // Para que al hablar no ejecute teclas bindeadas y solo permita cerrar nuevamente el sendText
             if (user.isTalking() && keyPressed != TALK) return;
@@ -263,13 +263,13 @@ public final class GameScene extends Scene {
         if (!user.isUserMoving()) {
             if (!autoMove) {
                 if (!KeyListener.LAST_KEYS_MOVED_PRESSED.isEmpty()) {
-                    if (KeyListener.LAST_KEYS_MOVED_PRESSED.get(KeyListener.LAST_KEYS_MOVED_PRESSED.size() - 1) == bindKeys.getBindedKey(Key.UP))
+                    if (KeyListener.LAST_KEYS_MOVED_PRESSED.get(KeyListener.LAST_KEYS_MOVED_PRESSED.size() - 1) == keyManager.getKeyCode(Key.UP))
                         user.moveTo(Direction.UP);
-                    else if (KeyListener.LAST_KEYS_MOVED_PRESSED.get(KeyListener.LAST_KEYS_MOVED_PRESSED.size() - 1) == bindKeys.getBindedKey(Key.DOWN))
+                    else if (KeyListener.LAST_KEYS_MOVED_PRESSED.get(KeyListener.LAST_KEYS_MOVED_PRESSED.size() - 1) == keyManager.getKeyCode(Key.DOWN))
                         user.moveTo(Direction.DOWN);
-                    else if (KeyListener.LAST_KEYS_MOVED_PRESSED.get(KeyListener.LAST_KEYS_MOVED_PRESSED.size() - 1) == bindKeys.getBindedKey(Key.LEFT))
+                    else if (KeyListener.LAST_KEYS_MOVED_PRESSED.get(KeyListener.LAST_KEYS_MOVED_PRESSED.size() - 1) == keyManager.getKeyCode(Key.LEFT))
                         user.moveTo(Direction.LEFT);
-                    else if (KeyListener.LAST_KEYS_MOVED_PRESSED.get(KeyListener.LAST_KEYS_MOVED_PRESSED.size() - 1) == bindKeys.getBindedKey(Key.RIGHT))
+                    else if (KeyListener.LAST_KEYS_MOVED_PRESSED.get(KeyListener.LAST_KEYS_MOVED_PRESSED.size() - 1) == keyManager.getKeyCode(Key.RIGHT))
                         user.moveTo(Direction.RIGHT);
                 }
             } else autoWalk();
@@ -287,10 +287,10 @@ public final class GameScene extends Scene {
      */
     private void autoWalk() {
         int lastKeyCode = KeyListener.getLastKeyMovedPressed();
-        if (lastKeyCode == bindKeys.getBindedKey(Key.UP)) user.moveTo(Direction.UP);
-        else if (lastKeyCode == bindKeys.getBindedKey(Key.DOWN)) user.moveTo(Direction.DOWN);
-        else if (lastKeyCode == bindKeys.getBindedKey(Key.LEFT)) user.moveTo(Direction.LEFT);
-        else if (lastKeyCode == bindKeys.getBindedKey(Key.RIGHT)) user.moveTo(Direction.RIGHT);
+        if (lastKeyCode == keyManager.getKeyCode(Key.UP)) user.moveTo(Direction.UP);
+        else if (lastKeyCode == keyManager.getKeyCode(Key.DOWN)) user.moveTo(Direction.DOWN);
+        else if (lastKeyCode == keyManager.getKeyCode(Key.LEFT)) user.moveTo(Direction.LEFT);
+        else if (lastKeyCode == keyManager.getKeyCode(Key.RIGHT)) user.moveTo(Direction.RIGHT);
     }
 
     /**

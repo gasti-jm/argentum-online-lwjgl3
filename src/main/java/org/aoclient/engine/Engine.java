@@ -1,6 +1,6 @@
 package org.aoclient.engine;
 
-import org.aoclient.engine.game.BindKeys;
+import org.aoclient.engine.game.KeyManager;
 import org.aoclient.engine.gui.ImGUISystem;
 import org.aoclient.engine.listeners.MouseListener;
 import org.aoclient.engine.renderer.Surface;
@@ -124,7 +124,7 @@ public final class Engine {
         window.init();
         guiSystem.init();
         Surface.INSTANCE.init();
-        BindKeys bindKeys = BindKeys.INSTANCE; // ?
+        KeyManager keyManager = KeyManager.INSTANCE; // ?
 
         changeScene(INTRO_SCENE);
         playMusic("intro.ogg");
