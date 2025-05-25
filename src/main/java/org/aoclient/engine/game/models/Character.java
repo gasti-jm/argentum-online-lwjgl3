@@ -160,7 +160,7 @@ public final class Character {
     }
 
     /**
-     * @desc Crea un nuevo personaje segun los parametros establecidos.
+     *  Crea un nuevo personaje segun los parametros establecidos.
      */
     public static void makeChar(short charIndex, int body, int head, Direction direction, int x, int y, int weapon, int shield, int helmet) {
         // apuntamos al ultimo char
@@ -206,7 +206,7 @@ public final class Character {
 
     /**
      * @param charIndex Numero de identificador de personaje
-     * @desc Elimina un personaje del array de personajes.
+     *  Elimina un personaje del array de personajes.
      */
     public static void eraseChar(short charIndex) {
         charList[charIndex].setActive(false);
@@ -229,7 +229,7 @@ public final class Character {
     }
 
     /**
-     * @desc elimina todos los personajes de nuestro array charList.
+     *  elimina todos los personajes de nuestro array charList.
      */
     public static void eraseAllChars() {
         for (short i = 1; i < charList.length; i++) {
@@ -241,14 +241,14 @@ public final class Character {
 
     /**
      * @param charIndex Numero de identificador del personaje
-     * @desc Resetea los atributos del personaje.
+     *  Resetea los atributos del personaje.
      */
     private static void resetCharInfo(short charIndex) {
         charList[charIndex] = new Character(); // al crear un obj nuevo, el viejo sera eliminado por el recolector de basura de java.
     }
 
     /**
-     * @desc Actualiza todos los personajes visibles.
+     *  Actualiza todos los personajes visibles.
      */
     public static void refreshAllChars() {
         for (int loopC = 1; loopC <= lastChar; loopC++)
@@ -257,7 +257,7 @@ public final class Character {
     }
 
     /**
-     * @desc Dibuja nuestro personaje!
+     *  Dibuja nuestro personaje!
      */
     public static void drawCharacter(int charIndex, int PixelOffsetX, int PixelOffsetY, RGBColor ambientcolor) {
         boolean moved = false;

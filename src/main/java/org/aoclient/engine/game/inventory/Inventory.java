@@ -107,7 +107,7 @@ public abstract class Inventory {
     public abstract void drawInventory();
 
     /**
-     * @desc Selecciona un slot al hacer un solo click dentro del inventario.
+     *  Selecciona un slot al hacer un solo click dentro del inventario.
      */
     public void clickInventory() {
         final int x = (int) ((MouseListener.getX() - posX) / TILE_PIXEL_SIZE);
@@ -117,7 +117,7 @@ public abstract class Inventory {
     }
 
     /**
-     * @desc Selecciona un slot al hacer un solo click dentro del inventario (Sirve para los frms de ImGUI).
+     *  Selecciona un slot al hacer un solo click dentro del inventario (Sirve para los frms de ImGUI).
      */
     public void clickInventory(float mouseX, float mouseY) {
         final int x = (int) ((mouseX - posX) / TILE_PIXEL_SIZE);
@@ -134,7 +134,7 @@ public abstract class Inventory {
     }
 
     /**
-     * @desc Setter del atributo slotSelected
+     *  Setter del atributo slotSelected
      */
     private void setSelectedSlot(int slot) {
         slotSelected = slot;

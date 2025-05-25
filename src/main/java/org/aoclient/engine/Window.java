@@ -257,7 +257,7 @@ public enum Window {
     }
 
     /**
-     * @desc Minimiza nuestra ventana
+     *  Minimiza nuestra ventana
      */
     public void minimizar() {
         glfwIconifyWindow(window);
