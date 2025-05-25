@@ -154,7 +154,7 @@ public class PacketReceiver {
         // Obtiene el paquete del servidor a partir del ID del paquete del servidor
         ServerPacket serverPacket = ServerPacket.getPacket(packetId);
 
-        Logger.debug("Processing server packet " + serverPacket + " with ID " + packetId);
+        Logger.debug("Processing server packet [" + serverPacket + "] with ID " + packetId);
 
         // Guarda la referencia del paquete del servidor en la variable estatica serverPacket de clase para poder usarla sin instanciarla en el metodo disconnect() de PacketBuffer
         PacketReceiver.serverPacket = serverPacket;

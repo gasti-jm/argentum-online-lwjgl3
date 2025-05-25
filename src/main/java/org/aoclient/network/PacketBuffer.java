@@ -42,7 +42,7 @@ public class PacketBuffer {
     /** Tamaño en bytes del tipo Long en VB6 utilizado para mantener compatibilidad con el protocolo original de AO. */
     private static final int VB6_LONG_BYTES = 4;
     /** Tamaño predeterminado del buffer en bytes. */
-    private static final int DEFAULT_BUFFER_SIZE = 10240;
+    private static final int DEFAULT_BUFFER_SIZE = 2048; // 2 KB para una latencia baja
     /**
      * Array de bytes que actua como un almacen temporal para los bytes que entran y salen del flujo de comunicacion.
      * <p>
