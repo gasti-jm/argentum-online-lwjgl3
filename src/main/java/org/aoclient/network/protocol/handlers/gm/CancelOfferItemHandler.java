@@ -6,10 +6,10 @@ import org.aoclient.network.protocol.handlers.PacketHandler;
 public class CancelOfferItemHandler implements PacketHandler {
 
     @Override
-    public void handle(PacketBuffer data) {
-        data.readByte();
+    public void handle(PacketBuffer buffer) {
+        buffer.readByte();
 
-        int slot = data.readByte();
+        int slot = buffer.readByte();
 
         //With InvOfferComUsu(0)
         //        Amount = .Amount(slot)

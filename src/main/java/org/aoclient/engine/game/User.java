@@ -6,7 +6,7 @@ import org.aoclient.engine.game.models.*;
 
 import static org.aoclient.engine.Sound.*;
 import static org.aoclient.engine.game.models.Character.*;
-import static org.aoclient.engine.game.models.E_Heading.*;
+import static org.aoclient.engine.game.models.Direction.*;
 import static org.aoclient.engine.scenes.Camera.*;
 import static org.aoclient.engine.utils.GameData.*;
 import static org.aoclient.network.protocol.Protocol.writeChangeHeading;
@@ -35,9 +35,9 @@ import static org.aoclient.network.protocol.Protocol.writeWalk;
  * representacion en el mundo virtual.
  */
 
-public final class User {
+public enum User {
 
-    private static User instance;
+    INSTANCE;
 
     private final UserInventory userInventory;
     private final InventorySpells inventorySpells;
@@ -77,10 +77,10 @@ public final class User {
     private int userMaxHAM;
     private int userMinHAM;
     private int freeSkillPoints;
-    private int[] skills = new int[E_Skills.values().length];
-    private int[] attributes = new int[E_Attributes.values().length];
-    private int[] reputations = new int[E_Reputation.values().length];
-    private int[] killCounters = new int [E_KillCounters.values().length];
+    private int[] skills = new int[Skill.values().length];
+    private int[] attributes = new int[Attribute.values().length];
+    private int[] reputations = new int[Reputation.values().length];
+    private int[] killCounters = new int [KillCounter.values().length];
 
     private String userWeaponEqpHit = "0/0";
     private String userArmourEqpDef = "0/0";
@@ -100,10 +100,7 @@ public final class User {
     private int role;
     private int jailTime;
 
-    /**
-     * @desc: Constructor privado por singleton.
-     */
-    private User() {
+    User() {
         this.userPos = new Position();
         this.addToUserPos = new Position();
         this.userInventory = new UserInventory();
@@ -115,35 +112,27 @@ public final class User {
 
     public void resetGameState() {
         resetState();
-        Rain.get().setRainValue(false);
-        Rain.get().stopRainingSoundLoop();
+        Rain.INSTANCE.setRainValue(false);
+        Rain.INSTANCE.stopRainingSoundLoop();
     }
 
     /**
-     * @return Mismo objeto (Patron de diseño Singleton)
-     */
-    public static User get() {
-        if (instance == null) instance = new User();
-        return instance;
-    }
-
-    /**
-     * @param nHeading direccion pasada por parametro
+     * @param nDirection direccion pasada por parametro
      * @desc Mueve la camara hacia una direccion.
      */
-    public void moveScreen(E_Heading nHeading) {
+    public void moveScreen(Direction nDirection) {
         int x = 0, y = 0;
-        switch (nHeading) {
-            case NORTH:
+        switch (nDirection) {
+            case UP:
                 y = -1;
                 break;
-            case EAST:
+            case RIGHT:
                 x = 1;
                 break;
-            case SOUTH:
+            case DOWN:
                 y = 1;
                 break;
-            case WEST:
+            case LEFT:
                 x = -1;
                 break;
         }
@@ -180,22 +169,22 @@ public final class User {
 
     /**
      * @param charIndex Numero de identificador de personaje
-     * @param nHeading  Direccion del personaje
+     * @param nDirection  Direccion del personaje
      * @desc Mueve el personaje segun la direccion establecida en "nHeading".
      */
-    public void moveCharbyHead(short charIndex, E_Heading nHeading) {
+    public void moveCharbyHead(short charIndex, Direction nDirection) {
         int addX = 0, addY = 0;
-        switch (nHeading) {
-            case NORTH:
+        switch (nDirection) {
+            case UP:
                 addY = -1;
                 break;
-            case EAST:
+            case RIGHT:
                 addX = 1;
                 break;
-            case SOUTH:
+            case DOWN:
                 addY = 1;
                 break;
-            case WEST:
+            case LEFT:
                 addX = -1;
                 break;
         }
@@ -214,7 +203,7 @@ public final class User {
         charList[charIndex].setMoveOffsetY(-1 * (TILE_PIXEL_SIZE * addY));
 
         charList[charIndex].setMoving(true);
-        charList[charIndex].setHeading(nHeading);
+        charList[charIndex].setHeading(nDirection);
 
         charList[charIndex].setScrollDirectionX(addX);
         charList[charIndex].setScrollDirectionY(addY);
@@ -303,7 +292,7 @@ public final class User {
 
         }
 
-        if (User.get().isUserNavegando() != hayAgua(x, y)) return false;
+        if (userNavegando != hayAgua(x, y)) return false;
 
         return true;
     }
@@ -342,10 +331,10 @@ public final class User {
         final int addX = nX - x;
         final int addY = nY - y;
 
-        if (sgn((short) addX) == 1) charList[charIndex].setHeading(EAST);
-        else if (sgn((short) addX) == -1) charList[charIndex].setHeading(WEST);
-        else if (sgn((short) addY) == -1) charList[charIndex].setHeading(NORTH);
-        else if (sgn((short) addY) == 1) charList[charIndex].setHeading(SOUTH);
+        if (sgn((short) addX) == 1) charList[charIndex].setHeading(RIGHT);
+        else if (sgn((short) addX) == -1) charList[charIndex].setHeading(LEFT);
+        else if (sgn((short) addY) == -1) charList[charIndex].setHeading(UP);
+        else if (sgn((short) addY) == 1) charList[charIndex].setHeading(DOWN);
 
         mapData[nX][nY].setCharIndex(charIndex);
         charList[charIndex].getPos().setX(nX);
@@ -380,12 +369,12 @@ public final class User {
      * @param direction
      * @desc Mueve nuestro personaje a una cierta direccion si es posible.
      */
-    public void moveTo(E_Heading direction) {
+    public void moveTo(Direction direction) {
         boolean legalOk = switch (direction) {
-            case NORTH -> moveToLegalPos(userPos.getX(), userPos.getY() - 1);
-            case EAST -> moveToLegalPos(userPos.getX() + 1, userPos.getY());
-            case SOUTH -> moveToLegalPos(userPos.getX(), userPos.getY() + 1);
-            case WEST -> moveToLegalPos(userPos.getX() - 1, userPos.getY());
+            case UP -> moveToLegalPos(userPos.getX(), userPos.getY() - 1);
+            case RIGHT -> moveToLegalPos(userPos.getX() + 1, userPos.getY());
+            case DOWN -> moveToLegalPos(userPos.getX(), userPos.getY() + 1);
+            case LEFT -> moveToLegalPos(userPos.getX() - 1, userPos.getY());
         };
         if (legalOk && !charList[userCharIndex].isParalizado()) {
             writeWalk(direction);
@@ -402,7 +391,7 @@ public final class User {
      * EN PROGRESO....
      */
     public void doPasosFx(int charIndex) {
-        if (!User.get().isUserNavegando()) {
+        if (!userNavegando) {
             if (!charList[charIndex].isDead()
                     && estaPCarea(charIndex)
                     && (charList[charIndex].getPriv() == 0 || charList[charIndex].getPriv() > 5)) {

@@ -8,7 +8,6 @@ import imgui.flag.ImGuiWindowFlags;
 import imgui.type.ImString;
 import org.aoclient.engine.Engine;
 import org.aoclient.engine.Window;
-import org.aoclient.engine.game.User;
 import org.aoclient.engine.gui.ImGUISystem;
 import org.aoclient.engine.gui.widgets.ImageButton3State;
 import org.aoclient.network.SocketConnection;
@@ -118,7 +117,7 @@ public final class FConnect extends Form {
 
     @Override
     public void render() {
-        ImGui.setNextWindowSize(Window.get().getWidth() + 10, Window.get().getHeight() + 5, ImGuiCond.Once);
+        ImGui.setNextWindowSize(Window.INSTANCE.getWidth() + 10, Window.INSTANCE.getHeight() + 5, ImGuiCond.Once);
         ImGui.setNextWindowPos(-5, -1, ImGuiCond.Once);
 
         // Start Custom window
@@ -131,7 +130,7 @@ public final class FConnect extends Form {
                 ImGuiWindowFlags.NoSavedSettings |
                 ImGuiWindowFlags.NoBringToFrontOnFocus);
 
-        ImGui.getWindowDrawList().addImage(backgroundImage, 0, 0, Window.get().getWidth(), Window.get().getHeight());
+        ImGui.getWindowDrawList().addImage(backgroundImage, 0, 0, Window.INSTANCE.getWidth(), Window.INSTANCE.getHeight());
 
         //txtPort
         ImGui.setCursorPos(329, 180);
@@ -207,15 +206,15 @@ public final class FConnect extends Form {
         options.setPortServer(portStr.get());
         if (!nickStr.get().isEmpty() && !passStr.get().isEmpty()) {
             new Thread(() -> {
-                if (SocketConnection.getInstance().connect()) writeLoginExistingChar(nickStr.get(), passStr.get());
+                if (SocketConnection.INSTANCE.connect()) writeLoginExistingChar(nickStr.get(), passStr.get());
             }).start();
             options.setNickName(nickStr.get());
-            User.get().setUserName(nickStr.get());
-        } else ImGUISystem.get().show(new FMessage("Please enter a username and/or password."));
+            USER.setUserName(nickStr.get());
+        } else ImGUISystem.INSTANCE.show(new FMessage("Please enter a username and/or password."));
     }
 
     private void buttonCreateCharacter() {
-        ImGUISystem.get().show(new FCreateCharacter());
+        ImGUISystem.INSTANCE.show(new FCreateCharacter());
         playMusic("7.ogg");
 
         btnConnect.delete();

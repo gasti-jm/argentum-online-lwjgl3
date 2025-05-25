@@ -41,15 +41,14 @@ import static org.aoclient.network.protocol.Protocol.*;
  * del metodo correspondiente en el protocolo para enviar la accion al servidor.
  */
 
-public class ProtocolCmdParse {
+public enum ProtocolCmdParse {
 
-    private final Console console = Console.get();
+    INSTANCE;
+
+    private final Console console = Console.INSTANCE;
+    private final User user = User.INSTANCE;
 
     private ProtocolCmdParse() {
-    }
-
-    public static ProtocolCmdParse getInstance() {
-        return SingletonHolder.INSTANCE;
     }
 
     public void parseUserCommand(String rawCommand) {
@@ -230,7 +229,7 @@ public class ProtocolCmdParse {
                         console.addMsgToConsole(new String("Escriba una descripción del bug.".getBytes(), StandardCharsets.UTF_8), false, true, new RGBColor());
                     break;
                 case "/DESC":
-                    if (User.get().isDead())
+                    if (user.isDead())
                         console.addMsgToConsole(new String("¡Estás muerto!".getBytes(), StandardCharsets.UTF_8), false, true, new RGBColor());
                     else writeChangeDescription(argumentosRaw);
                     break;
@@ -245,10 +244,10 @@ public class ProtocolCmdParse {
                         console.addMsgToConsole(new String("Faltan parámetros. Utilice /penas NICKNAME.".getBytes(), StandardCharsets.UTF_8), false, true, new RGBColor());
                     break;
                 case "/CONTRASEÑA":
-                    ImGUISystem.get().show(new FNewPassword());
+                    ImGUISystem.INSTANCE.show(new FNewPassword());
                     break;
                 case "/APOSTAR":
-                    if (User.get().isDead())
+                    if (user.isDead())
                         console.addMsgToConsole(new String("¡Estás muerto!".getBytes(), StandardCharsets.UTF_8), false, true, new RGBColor());
                     else {
                         if (notNullArguments) {
@@ -265,13 +264,13 @@ public class ProtocolCmdParse {
                     }
                     break;
                 case "/RETIRARFACCION":
-                    if (User.get().isDead()) {
+                    if (user.isDead()) {
                         console.addMsgToConsole(new String("¡Estás muerto!".getBytes(), StandardCharsets.UTF_8),
                                 false, true, new RGBColor());
                     } else writeLeaveFaction();
                     break;
                 case "/RETIRAR":
-                    if (User.get().isDead()) {
+                    if (user.isDead()) {
                         console.addMsgToConsole(new String("¡Estás muerto!".getBytes(), StandardCharsets.UTF_8),
                                 false, true, new RGBColor());
                     } else {
@@ -288,7 +287,7 @@ public class ProtocolCmdParse {
                     }
                     break;
                 case "/DEPOSITAR":
-                    if (User.get().isDead()) {
+                    if (user.isDead()) {
                         console.addMsgToConsole(new String("¡Estás muerto!".getBytes(), StandardCharsets.UTF_8),
                                 false, true, new RGBColor());
                     } else {
@@ -312,7 +311,7 @@ public class ProtocolCmdParse {
                     }
                     break;
                 case "/FUNDARCLAN":
-                    if (User.get().getUserLvl() >= 25) writeGuildFundate();
+                    if (user.getUserLvl() >= 25) writeGuildFundate();
                     else {
                         console.addMsgToConsole(new String("Para fundar un clan tenés que ser nivel 25 y tener 90 skills en liderazgo.".getBytes(), StandardCharsets.UTF_8),
                                 false, true, new RGBColor());
@@ -401,7 +400,7 @@ public class ProtocolCmdParse {
                         }
                     } else {
                         // Por defecto toma el mapa en el que está.
-                        writeCreaturesInMap(User.get().getUserMap());
+                        writeCreaturesInMap(user.getUserMap());
                     }
                     break;
                 case "/TELEPLOC":
@@ -426,7 +425,7 @@ public class ProtocolCmdParse {
                         } else if (validNumber(argumentosAll[1], NumericType.BYTE) &&
                                 validNumber(argumentosAll[2], NumericType.BYTE)) {
                             // Por defecto, si no se indica el mapa, se teletransporta al mismo donde esta el usuario
-                            writeWarpChar(argumentosAll[0], User.get().getUserMap(), Integer.parseInt(argumentosAll[1]), Integer.parseInt(argumentosAll[2]));
+                            writeWarpChar(argumentosAll[0], user.getUserMap(), Integer.parseInt(argumentosAll[1]), Integer.parseInt(argumentosAll[2]));
                         } else {
                             // No uso ningun formato por defecto
                             console.addMsgToConsole(new String("Valor incorrecto. Utilice /telep NICKNAME MAPA X Y.".getBytes(), StandardCharsets.UTF_8),
@@ -436,7 +435,7 @@ public class ProtocolCmdParse {
                         if (validNumber(argumentosAll[0], NumericType.BYTE) &&
                                 validNumber(argumentosAll[1], NumericType.BYTE)) {
                             // Por defecto, se considera que se quiere unicamente cambiar las coordenadas del usuario, en el mismo mapa
-                            writeWarpChar("YO", User.get().getUserMap(), Integer.parseInt(argumentosAll[0]), Integer.parseInt(argumentosAll[1]));
+                            writeWarpChar("YO", user.getUserMap(), Integer.parseInt(argumentosAll[0]), Integer.parseInt(argumentosAll[1]));
                         } else {
                             // No uso ningun formato por defecto
                             console.addMsgToConsole(new String("Valor incorrecto. Utilice /telep NICKNAME MAPA X Y.".getBytes(), StandardCharsets.UTF_8),
@@ -626,7 +625,7 @@ public class ProtocolCmdParse {
                             console.addMsgToConsole(new String("Mapa incorrecto.".getBytes(), StandardCharsets.UTF_8),
                                     false, true, new RGBColor());
                         }
-                    } else writeOnlineMap(User.get().getUserMap());
+                    } else writeOnlineMap(user.getUserMap());
                     break;
                 case "/PERDON":
                     if (notNullArguments) writeForgive(argumentosRaw);
@@ -1459,10 +1458,6 @@ public class ProtocolCmdParse {
             tmpArr[1] = text.substring(Pos + 1);
         } else tmpArr[0] = "";
         return tmpArr;
-    }
-
-    private static class SingletonHolder {
-        private static final ProtocolCmdParse INSTANCE = new ProtocolCmdParse();
     }
 
 }

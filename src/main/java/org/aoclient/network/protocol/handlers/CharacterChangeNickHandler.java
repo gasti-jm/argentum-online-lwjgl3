@@ -7,10 +7,10 @@ import static org.aoclient.engine.utils.GameData.charList;
 public class CharacterChangeNickHandler implements PacketHandler {
 
     @Override
-    public void handle(PacketBuffer data) {
-        if (data.checkBytes(5)) return;
-        data.readByte();
-        charList[data.readInteger()].setName(data.readCp1252String());
+    public void handle(PacketBuffer buffer) {
+        if (buffer.checkBytes(5)) return;
+        buffer.readByte();
+        charList[buffer.readInteger()].setName(buffer.readCp1252String());
     }
 
 }

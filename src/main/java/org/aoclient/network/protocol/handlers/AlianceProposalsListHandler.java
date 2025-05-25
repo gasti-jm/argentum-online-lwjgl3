@@ -6,15 +6,13 @@ import org.tinylog.Logger;
 public class AlianceProposalsListHandler implements PacketHandler {
 
     @Override
-    public void handle(PacketBuffer data) {
-        if (data.checkBytes(3)) return;
+    public void handle(PacketBuffer buffer) {
+        if (buffer.checkBytes(3)) return;
+        PacketBuffer tempBuffer = new PacketBuffer();
+        tempBuffer.copy(buffer);
+        tempBuffer.readByte();
 
-        PacketBuffer buffer = new PacketBuffer();
-        buffer.copy(data);
-
-        buffer.readByte();
-
-        String vsGuildList = buffer.readCp1252String();
+        String vsGuildList = tempBuffer.readCp1252String();
 
         //Dim vsGuildList() As String
         //    Dim i As Long
@@ -29,7 +27,8 @@ public class AlianceProposalsListHandler implements PacketHandler {
         //    frmPeaceProp.ProposalType = TIPO_PROPUESTA.ALIANZA
         //    Call frmPeaceProp.Show(vbModeless, //FrmMain)
 
-        data.copy(buffer);
+        buffer.copy(tempBuffer);
         Logger.debug("handleAlianceProposalsList Cargado! - FALTA TERMINAR!");
     }
+
 }

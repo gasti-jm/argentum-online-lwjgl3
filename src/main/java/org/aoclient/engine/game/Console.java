@@ -21,10 +21,11 @@ import java.util.List;
  * resultados de acciones, mensajes del servidor y otros datos relevantes durante la experiencia de juego.
  */
 
-public class Console {
+public enum Console {
+
+    INSTANCE;
 
     private static final int MAX_SIZE_DATA = 500;
-    private static Console instance;
     private boolean autoScroll;
     private boolean scrollToBottom;
     private List<ConsoleData> data;
@@ -36,14 +37,6 @@ public class Console {
         this.autoScroll = true;
         this.scrollToBottom = false;
         this.data = new ArrayList<>();
-    }
-
-    /**
-     * @return Mismo objeto (Patron de diseño Singleton)
-     */
-    public static Console get() {
-        if (instance == null) instance = new Console();
-        return instance;
     }
 
     /**

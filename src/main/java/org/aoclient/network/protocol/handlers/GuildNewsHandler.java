@@ -6,17 +6,15 @@ import org.tinylog.Logger;
 public class GuildNewsHandler implements PacketHandler {
 
     @Override
-    public void handle(PacketBuffer data) {
-        if (data.checkBytes(7)) return;
+    public void handle(PacketBuffer buffer) {
+        if (buffer.checkBytes(7)) return;
+        PacketBuffer tempBuffer = new PacketBuffer();
+        tempBuffer.copy(buffer);
+        tempBuffer.readByte();
 
-        PacketBuffer buffer = new PacketBuffer();
-        buffer.copy(data);
-
-        buffer.readByte();
-
-        String news = buffer.readCp1252String();
-        String guildList = buffer.readCp1252String();
-        guildList = buffer.readCp1252String();
+        String news = tempBuffer.readCp1252String();
+        String guildList = tempBuffer.readCp1252String();
+        guildList = tempBuffer.readCp1252String();
 
         //'Get news' string
         //    frmGuildNews.news = Buffer.ReadASCIIString()
@@ -39,7 +37,8 @@ public class GuildNewsHandler implements PacketHandler {
         //
         //    If ClientSetup.bGuildNews Then frmGuildNews.Show vbModeless, //FrmMain
 
-        data.copy(buffer);
+        buffer.copy(tempBuffer);
         Logger.debug("handleGuildNews Cargado! - FALTA TERMINAR!");
     }
+
 }

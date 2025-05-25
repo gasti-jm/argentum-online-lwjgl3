@@ -26,14 +26,15 @@ import static org.aoclient.engine.utils.Time.deltaTime;
  * </ul>
  */
 
-public class Rain {
+public enum Rain {
+
+    INSTANCE;
 
     // sonidos de la lluvia
     private static final String SND_LLUVIAIN = "resources/sounds/lluviain.ogg";
     private static final String SND_LLUVIAOUT = "resources/sounds/lluviaout.ogg";
     private static final String SND_LLUVIAINEND = "resources/sounds/lluviainend.ogg";
     private static final String SND_LLUVIAOUTEND = "resources/sounds/lluviaoutend.ogg";
-    private static Rain instance;
     private final Texture rainTexture;
     private final RECT[] RLluvia;
     private final int[] LTLluvia;
@@ -41,8 +42,10 @@ public class Rain {
     private boolean bRain;
     private float timeToChangeFrame;
     private int iFrameIndex;
+    
+    private final User user = User.INSTANCE;
 
-    private Rain() {
+    Rain() {
         this.bRain = false;
         this.RLluvia = new RECT[8];
         this.LTLluvia = new int[5];
@@ -60,12 +63,7 @@ public class Rain {
         this.loadData();
 
         // dios mio.
-        this.rainTexture = Surface.get().createTexture("graphics.ao", "15168", false);
-    }
-
-    public static Rain get() {
-        if (instance == null) instance = new Rain();
-        return instance;
+        this.rainTexture = Surface.INSTANCE.createTexture("graphics.ao", "15168", false);
     }
 
     private void loadData() {
@@ -115,7 +113,7 @@ public class Rain {
     }
 
     public void render(RGBColor color) {
-        if (!bLluvia[User.get().getUserMap()] || !bRain) return;
+        if (!bLluvia[user.getUserMap()] || !bRain) return;
 
         this.renderSound();
 
@@ -141,8 +139,8 @@ public class Rain {
 
     private void renderSound() {
         if (!options.isSound()) return;
-        if (bLluvia[User.get().getUserMap()] && bRain) {
-            if (User.get().isUnderCeiling()) {
+        if (bLluvia[user.getUserMap()] && bRain) {
+            if (user.isUnderCeiling()) {
                 if (rainSounds[1].isPlaying()) rainSounds[1].stop();
                 if (!rainSounds[0].isPlaying()) rainSounds[0].play();
             } else {
@@ -154,14 +152,14 @@ public class Rain {
 
     public void stopRainingSoundLoop() {
         if (!options.isSound()) return;
-        if (User.get().isUnderCeiling()) rainSounds[0].stop();
+        if (user.isUnderCeiling()) rainSounds[0].stop();
         else rainSounds[1].stop();
     }
 
     public void playEndRainSound() {
         if (!options.isSound()) return;
-        if (bLluvia[User.get().getUserMap()]) {
-            if (User.get().isUnderCeiling()) rainSounds[2].play();
+        if (bLluvia[user.getUserMap()]) {
+            if (user.isUnderCeiling()) rainSounds[2].play();
             else rainSounds[3].play();
         }
     }

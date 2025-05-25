@@ -2,8 +2,9 @@ package org.aoclient.engine.scenes;
 
 import org.aoclient.engine.Window;
 import org.aoclient.engine.game.*;
-import org.aoclient.engine.game.models.E_KeyType;
-import org.aoclient.engine.game.models.E_Skills;
+import org.aoclient.engine.game.models.Direction;
+import org.aoclient.engine.game.models.Key;
+import org.aoclient.engine.game.models.Skill;
 import org.aoclient.engine.gui.ImGUISystem;
 import org.aoclient.engine.gui.forms.FCantidad;
 import org.aoclient.engine.gui.forms.FMain;
@@ -11,12 +12,10 @@ import org.aoclient.engine.listeners.KeyListener;
 import org.aoclient.engine.listeners.MouseListener;
 import org.aoclient.engine.renderer.RGBColor;
 import org.aoclient.network.protocol.ProtocolCmdParse;
-import org.lwjgl.glfw.GLFW;
 
 import static org.aoclient.engine.game.IntervalTimer.INT_SENTRPU;
 import static org.aoclient.engine.game.models.Character.drawCharacter;
-import static org.aoclient.engine.game.models.E_Heading.*;
-import static org.aoclient.engine.game.models.E_KeyType.*;
+import static org.aoclient.engine.game.models.Key.*;
 import static org.aoclient.engine.renderer.Drawn.drawTexture;
 import static org.aoclient.engine.scenes.Camera.*;
 import static org.aoclient.engine.utils.GameData.*;
@@ -59,30 +58,25 @@ public final class GameScene extends Scene {
 
     private final IntervalTimer intervalToUpdatePos = new IntervalTimer(INT_SENTRPU);
     RGBColor ambientColor; // color de ambiente.
-    private BindKeys bindKeys;
-    private User user;
-    private Rain rain;
+    private final BindKeys bindKeys = BindKeys.INSTANCE;
+    private final User user = User.INSTANCE;
+
     private float offSetCounterX = 0;
     private float offSetCounterY = 0;
     private float alphaCeiling = 1.0f;
     private boolean autoMove = false;
     private FMain frmMain;
-    private ProtocolCmdParse protocolCmdParse;
+    private ProtocolCmdParse protocolCmdParse = ProtocolCmdParse.INSTANCE;
 
     @Override
     public void init() {
         super.init();
 
-        protocolCmdParse = ProtocolCmdParse.getInstance();
-
         canChangeTo = SceneType.MAIN_SCENE;
-        bindKeys = BindKeys.get();
-        user = User.get();
-        rain = Rain.get();
         ambientColor = new RGBColor(1.0f, 1.0f, 1.0f);
         frmMain = new FMain();
 
-        ImGUISystem.get().addFrm(frmMain);
+        ImGUISystem.INSTANCE.addFrm(frmMain);
     }
 
     @Override
@@ -139,7 +133,7 @@ public final class GameScene extends Scene {
                             charList[user.getUserCharIndex()].getPriv() != 0) {
 
                         writeWarpChar("YO",
-                                User.get().getUserMap(),
+                                user.getUserMap(),
                                 getTileMouseX((int) MouseListener.getX() - POS_SCREEN_X),
                                 getTileMouseY((int) MouseListener.getY() - POS_SCREEN_Y));
 
@@ -161,7 +155,7 @@ public final class GameScene extends Scene {
                             user.getUsingSkill());
 
                     user.setUsingSkill(0);
-                    Window.get().setCursorCrosshair(false);
+                    Window.INSTANCE.setCursorCrosshair(false);
                 }
             }
         }
@@ -193,7 +187,7 @@ public final class GameScene extends Scene {
      */
     @Override
     public void keyEvents() {
-        if (KeyListener.isKeyPressed(bindKeys.getBindedKey(E_KeyType.mKeyExitGame))) writeQuit();
+        if (KeyListener.isKeyPressed(bindKeys.getBindedKey(Key.EXIT_GAME))) writeQuit();
         this.checkBindedKeys();
     }
 
@@ -211,7 +205,7 @@ public final class GameScene extends Scene {
     private void checkBindedKeys() {
         if(user.isUserComerciando()) return;
 
-        final E_KeyType keyPressed = bindKeys.getKeyPressed(KeyListener.getLastKeyPressed());
+        final Key keyPressed = bindKeys.getKeyPressed(KeyListener.getLastKeyPressed());
 
         this.checkWalkKeys();
 
@@ -220,46 +214,46 @@ public final class GameScene extends Scene {
         if (KeyListener.isKeyReadyForAction(bindKeys.getBindedKey(keyPressed))) {
 
             // Para que al hablar no ejecute teclas bindeadas y solo permita cerrar nuevamente el sendText
-            if (User.get().isTalking() && keyPressed != mKeyTalk) return;
+            if (user.isTalking() && keyPressed != TALK) return;
 
             switch (keyPressed) {
-                case mKeyUseObject:
+                case USE_OBJECT:
                     user.getUserInventory().useItem();
                     break;
-                case mKeyGetObject:
+                case GET_OBJECT:
                     writePickUp();
                     break;
-                case mKeyAttack:
+                case ATTACK:
                     writeAttack();
                     break;
-                case mKeyEquipObject:
+                case EQUIP_OBJECT:
                     user.getUserInventory().equipItem();
                     break;
-                case mKeyAutoMove:
+                case AUTO_MOVE:
                     KeyListener.setLastKeyMovedPressed(0);
                     autoMove = !autoMove;
                     break;
-                case mKeyDropObject:
-                    ImGUISystem.get().show(new FCantidad());
+                case DROP_OBJECT:
+                    ImGUISystem.INSTANCE.show(new FCantidad());
                     break;
-                case mKeyTalk:
-                    if (!ImGUISystem.get().isFormVisible(FCantidad.class.getSimpleName())) {
-                        if (User.get().isTalking()) {
+                case TALK:
+                    if (!ImGUISystem.INSTANCE.isFormVisible(FCantidad.class.getSimpleName())) {
+                        if (user.isTalking()) {
                             // send msg
                             // No vamos a mandar paquetes con datos vacios.
                             if (!frmMain.getSendText().isBlank()) protocolCmdParse.parseUserCommand(frmMain.getSendText());
-                            User.get().setTalking(false);
-                        } else User.get().setTalking(true);
+                            user.setTalking(false);
+                        } else user.setTalking(true);
                         frmMain.clearSendTxt();
                     }
                     break;
-                case mKeyHide:
-                    writeWork(E_Skills.OCULTARSE.getValue());
+                case HIDE:
+                    writeWork(Skill.CONCEALMENT.getId());
                     break;
-                case mKeySteal:
-                    writeWork(E_Skills.ROBAR.getValue());
+                case STEAL:
+                    writeWork(Skill.THEFT.getId());
                     break;
-                case mKeyRequestRefresh:
+                case REQUEST_REFRESH:
                     if (intervalToUpdatePos.check()) writeRequestPositionUpdate();
                     break;
             }
@@ -271,15 +265,15 @@ public final class GameScene extends Scene {
         // Caminata!
         if (!user.isUserMoving()) {
             if (!autoMove) {
-                if (!KeyListener.lastKeysMovedPressed.isEmpty()) {
-                    if (KeyListener.lastKeysMovedPressed.get(KeyListener.lastKeysMovedPressed.size() - 1) == bindKeys.getBindedKey(mKeyUp))
-                        user.moveTo(NORTH);
-                    else if (KeyListener.lastKeysMovedPressed.get(KeyListener.lastKeysMovedPressed.size() - 1) == bindKeys.getBindedKey(mKeyDown))
-                        user.moveTo(SOUTH);
-                    else if (KeyListener.lastKeysMovedPressed.get(KeyListener.lastKeysMovedPressed.size() - 1) == bindKeys.getBindedKey(mKeyLeft))
-                        user.moveTo(WEST);
-                    else if (KeyListener.lastKeysMovedPressed.get(KeyListener.lastKeysMovedPressed.size() - 1) == bindKeys.getBindedKey(mKeyRight))
-                        user.moveTo(EAST);
+                if (!KeyListener.LAST_KEYS_MOVED_PRESSED.isEmpty()) {
+                    if (KeyListener.LAST_KEYS_MOVED_PRESSED.get(KeyListener.LAST_KEYS_MOVED_PRESSED.size() - 1) == bindKeys.getBindedKey(Key.UP))
+                        user.moveTo(Direction.UP);
+                    else if (KeyListener.LAST_KEYS_MOVED_PRESSED.get(KeyListener.LAST_KEYS_MOVED_PRESSED.size() - 1) == bindKeys.getBindedKey(Key.DOWN))
+                        user.moveTo(Direction.DOWN);
+                    else if (KeyListener.LAST_KEYS_MOVED_PRESSED.get(KeyListener.LAST_KEYS_MOVED_PRESSED.size() - 1) == bindKeys.getBindedKey(Key.LEFT))
+                        user.moveTo(Direction.LEFT);
+                    else if (KeyListener.LAST_KEYS_MOVED_PRESSED.get(KeyListener.LAST_KEYS_MOVED_PRESSED.size() - 1) == bindKeys.getBindedKey(Key.RIGHT))
+                        user.moveTo(Direction.RIGHT);
                 }
             } else autoWalk();
         }
@@ -289,20 +283,20 @@ public final class GameScene extends Scene {
      * Permite que si caminar automaticamente si el usuario activa la opcion de "autoMove"
      */
     private void autoWalk() {
-        E_KeyType keyPressed = bindKeys.getKeyPressed(KeyListener.getLastKeyMovedPressed());
+        Key keyPressed = bindKeys.getKeyPressed(KeyListener.getLastKeyMovedPressed());
         if (keyPressed == null) return;
         switch (keyPressed) {
-            case mKeyUp:
-                user.moveTo(NORTH);
+            case UP:
+                user.moveTo(Direction.UP);
                 break;
-            case mKeyDown:
-                user.moveTo(SOUTH);
+            case DOWN:
+                user.moveTo(Direction.DOWN);
                 break;
-            case mKeyLeft:
-                user.moveTo(WEST);
+            case LEFT:
+                user.moveTo(Direction.LEFT);
                 break;
-            case mKeyRight:
-                user.moveTo(EAST);
+            case RIGHT:
+                user.moveTo(Direction.RIGHT);
                 break;
         }
     }
@@ -331,7 +325,7 @@ public final class GameScene extends Scene {
         renderFourthLayer(pixelOffsetX, pixelOffsetY);
 
         Dialogs.updateDialogs();
-        rain.render(ambientColor);
+        Rain.INSTANCE.render(ambientColor);
     }
 
 

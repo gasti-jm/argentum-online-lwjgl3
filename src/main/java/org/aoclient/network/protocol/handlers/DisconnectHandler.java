@@ -12,13 +12,13 @@ import static org.aoclient.engine.game.models.Character.eraseAllChars;
 public class DisconnectHandler implements PacketHandler {
 
     @Override
-    public void handle(PacketBuffer data) {
-        data.readByte();
+    public void handle(PacketBuffer buffer) {
+        buffer.readByte();
 
-        SocketConnection.getInstance().disconnect();
+        SocketConnection.INSTANCE.disconnect();
         eraseAllChars();
 
-        ImGUISystem.get().closeAllFrms();
+        ImGUISystem.INSTANCE.closeAllFrms();
 
         Sound.clearSounds();
 

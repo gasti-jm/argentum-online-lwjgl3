@@ -1,149 +1,168 @@
 package org.aoclient.engine.game;
 
-import org.aoclient.engine.game.models.E_KeyType;
+import org.aoclient.engine.game.models.Key;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
-
-import static org.lwjgl.glfw.GLFW.*;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 /**
- * Clase encargada de la gestion y configuracion de las teclas de control.
+ * Gestiona la configuracion y asignacion de teclas para las acciones del juego. Este controlador permite personalizar
+ * las teclas para cada accion, cargar configuraciones desde un archivo, restaurar valores predeterminados y verificar
+ * si las teclas ya estan asignadas.
  * <p>
- * {@code BindKeys} mantiene un mapeo entre las distintas acciones posibles (definidas en el enumerador {@code E_KeyType}) y las
- * teclas asignadas a estas acciones. Este mapeo puede cargarse desde un archivo de configuracion, permitiendo a los jugadores
- * personalizar los controles segun sus preferencias.
+ * Las teclas se representan como objetos del enum Key, que define todas las posibles acciones del juego y permite
+ * asignarles codigos de teclas asociados.
  * <p>
- * Principales funcionalidades:
+ * Funcionalidades principales:
  * <ul>
- * <li>Cargar configuraciones de teclas por defecto
- * <li>Cargar configuraciones personalizadas desde archivos
- * <li>Guardar configuraciones de teclas modificadas
- * <li>Asignar nuevas teclas a acciones especificas
- * <li>Traducir entre codigos de teclas y acciones del juego
+ * <li>Asignacion de teclas a acciones especificas.
+ * <li>Cargar y guardar configuraciones de teclas en un archivo binario.
+ * <li>Actualizar y verificar asignaciones de teclas.
+ * <li>Restaurar a la configuracion predeterminada en caso de que no se pueda cargar un archivo valido.
  * </ul>
+ * TODO No descartar la opcion de usar JSON para guardar las teclas en un futuro aunque es "menos eficiente" pero con la
+ * ventaja de editar manualmente el archivo
  */
 
-public final class BindKeys {
+public enum BindKeys {
 
-    private static BindKeys instance;
-    private final int[] mappedKeys;
+    INSTANCE;
+
+    private static final String KEYS_CONFIG_FILE = "resources/keys.bin";
+    /** Mapa de teclas en donde cada una esta asociada a un codigo. */
+    private final Map<Integer, Key> keys;
+    /** Set para detectar teclas duplicadas. */
+    private final Set<Integer> assignedKey;
+
+    BindKeys() {
+        keys = new HashMap<>();
+        assignedKey = new HashSet<>();
+        initializeKeyBindings();
+    }
 
     /**
-     * @desc Constructor privado por singleton.
+     * Inicializa las asignaciones de teclas intentando cargar desde el archivo o usando valores predeterminados si no
+     * es posible.
      */
-    private BindKeys() {
-        mappedKeys = new int[E_KeyType.values().length];
+    private void initializeKeyBindings() {
+        boolean useDefaultKeys = false;
+
+        // Intenta cargar desde el archivo primero
         try {
             loadBindKeys();
-        } catch (IOException ex) {
+        } catch (IOException e) {
+            System.err.println("Failed to load key configuration: " + e.getMessage());
+            useDefaultKeys = true;
+        }
+
+        // Si no se pudo cargar el archivo, carga las teclas predeterminadas
+        if (useDefaultKeys) {
             loadDefaultKeys();
-            saveBindKeys();
+            // Intenta guardar las teclas predeterminadas
+            try {
+                saveBindKeys();
+            } catch (IOException e) {
+                System.err.println("Could not save default key configuration: " + e.getMessage());
+                // No es crítico, podemos continuar con las teclas predeterminadas en memoria
+            }
         }
     }
 
     /**
-     * @return Mismo objeto (Patron de diseño Singleton)
+     * Actualiza las colecciones para reflejar el estado actual de las teclas asignadas.
      */
-    public static BindKeys get() {
-        if (instance == null) instance = new BindKeys();
-        return instance;
+    private void updateKeyMaps() {
+        keys.clear();
+        assignedKey.clear();
+        for (Key key : Key.values()) {
+            keys.put(key.getKeyCode(), key);
+            assignedKey.add(key.getKeyCode());
+        }
     }
 
     /**
-     * @desc Carga una configuracion por defecto.
+     * Carga las teclas por defecto segun lo definido en el enum Key.
      */
     public void loadDefaultKeys() {
-        mappedKeys[E_KeyType.mKeyUp.ordinal()] = GLFW_KEY_W;
-        mappedKeys[E_KeyType.mKeyDown.ordinal()] = GLFW_KEY_S;
-        mappedKeys[E_KeyType.mKeyLeft.ordinal()] = GLFW_KEY_A;
-        mappedKeys[E_KeyType.mKeyRight.ordinal()] = GLFW_KEY_D;
-
-        mappedKeys[E_KeyType.mKeyToggleMusic.ordinal()] = GLFW_KEY_M;
-        mappedKeys[E_KeyType.mKeyToggleSound.ordinal()] = GLFW_KEY_S;
-        mappedKeys[E_KeyType.mKeyToggleFxs.ordinal()] = GLFW_KEY_F;
-
-        mappedKeys[E_KeyType.mKeyRequestRefresh.ordinal()] = GLFW_KEY_L;
-
-        mappedKeys[E_KeyType.mKeyToggleNames.ordinal()] = GLFW_KEY_N;
-
-        mappedKeys[E_KeyType.mKeyGetObject.ordinal()] = GLFW_KEY_Q;
-        mappedKeys[E_KeyType.mKeyEquipObject.ordinal()] = GLFW_KEY_E;
-
-        mappedKeys[E_KeyType.mKeyTamAnimal.ordinal()] = GLFW_KEY_D;
-        mappedKeys[E_KeyType.mKeySteal.ordinal()] = GLFW_KEY_R;
-        mappedKeys[E_KeyType.mKeyToggleSafeMode.ordinal()] = GLFW_KEY_KP_MULTIPLY;
-        mappedKeys[E_KeyType.mKeyToggleResuscitationSafe.ordinal()] = GLFW_KEY_END;
-
-        mappedKeys[E_KeyType.mKeyHide.ordinal()] = GLFW_KEY_O;
-        mappedKeys[E_KeyType.mKeyDropObject.ordinal()] = GLFW_KEY_T;
-        mappedKeys[E_KeyType.mKeyUseObject.ordinal()] = GLFW_KEY_SPACE;
-        mappedKeys[E_KeyType.mKeyAttack.ordinal()] = GLFW_KEY_LEFT_CONTROL;
-
-        mappedKeys[E_KeyType.mKeyTalk.ordinal()] = GLFW_KEY_ENTER;
-        mappedKeys[E_KeyType.mKeyTalkWithGuild.ordinal()] = GLFW_KEY_DELETE;
-        mappedKeys[E_KeyType.mKeyTakeScreenShot.ordinal()] = GLFW_KEY_F2;
-
-        mappedKeys[E_KeyType.mKeyShowOptions.ordinal()] = GLFW_KEY_F5;
-        mappedKeys[E_KeyType.mKeyMeditate.ordinal()] = GLFW_KEY_F6;
-        mappedKeys[E_KeyType.mKeyCastSpellMacro.ordinal()] = GLFW_KEY_F7;
-        mappedKeys[E_KeyType.mKeyWorkMacro.ordinal()] = GLFW_KEY_F8;
-
-        mappedKeys[E_KeyType.mKeyAutoMove.ordinal()] = GLFW_KEY_TAB;
-        mappedKeys[E_KeyType.mKeyExitGame.ordinal()] = GLFW_KEY_ESCAPE;
+        for (Key key : Key.values())
+            key.resetToDefault();
+        updateKeyMaps();
     }
 
     /**
-     * @throws IOException: Puede suceder que no encuentre el archivo o que tenga menos informacion de lo que se esperaba desde el
-     *                      programa (en caso de que agregemos una tecla nueva).
-     * @desc: Carga todas las teclas guardadas por el usuario.
+     * Carga las teclas guardadas desde un archivo.
+     *
+     * @throws IOException si hay un error al leer el archivo o si contiene menos datos de los esperados
      */
     public void loadBindKeys() throws IOException {
-        RandomAccessFile f = new RandomAccessFile("resources/keys.bin", "rw");
-        f.seek(0);
-        for (int i = 0; i < E_KeyType.values().length; i++) mappedKeys[i] = f.readInt();
-        f.close();
+        try (RandomAccessFile f = new RandomAccessFile(KEYS_CONFIG_FILE, "rw")) {
+            f.seek(0); // Establece el puntero del archivo en 0, es decir, el indice de la matriz de bytes del archivo
+            for (Key key : Key.values())
+                key.setKeyCode(f.readInt()); // Establece el codigo de tecla del archivo keys.bin a la tecla actual
+        }
+        updateKeyMaps();
     }
 
     /**
-     * @desc Guarda la configuracion de teclas.
+     * Guarda la configuracion actual de teclas en un archivo.
      */
-    public void saveBindKeys() {
-        RandomAccessFile f;
-        try {
-            f = new RandomAccessFile("resources/keys.bin", "rw");
+    public void saveBindKeys() throws IOException {
+        try (RandomAccessFile f = new RandomAccessFile(KEYS_CONFIG_FILE, "rw")) {
             f.seek(0);
-            for (int i = 0; i < E_KeyType.values().length; i++)
-                f.writeInt(mappedKeys[i]);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+            for (Key key : Key.values())
+                f.writeInt(key.getKeyCode());
         }
     }
 
     /**
-     * @desc: Permite bindear una nueva tecla.
+     * Cambia la tecla asignada a una accion especifica.
+     *
+     * @param key        accion a la que se asignara una nueva tecla
+     * @param newKeyCode codigo de la nueva tecla
+     * @return true si la asignacion fue exitosa, false si la tecla ya esta asignada a otra accion
      */
-    public void changeBindedKey(E_KeyType key, int newKey) {
-        mappedKeys[key.ordinal()] = newKey;
+    public boolean changeBindedKey(Key key, int newKeyCode) {
+        // Verifica si la tecla ya esta asignada a otra accion
+        Key existingKey = keys.get(newKeyCode);
+        if (existingKey != null && existingKey != key) return false; // La tecla ya esta asignada a otra accion
+        // Actualizar la tecla
+        key.setKeyCode(newKeyCode);
+        updateKeyMaps();
+        return true;
     }
 
     /**
-     * @param key Tecla del enumerador E_KeyType
-     * @return Entero que representa a una tecla de nuestra ventana GLFW.
+     * Obtiene el codigo de la tecla asignada a una accion especifica.
+     *
+     * @param key accion para la que se quiere obtener la tecla asignada
+     * @return codigo de la tecla asignada
      */
-    public int getBindedKey(E_KeyType key) {
-        return mappedKeys[key.ordinal()];
+    public int getBindedKey(Key key) {
+        return key.getKeyCode();
     }
 
     /**
-     * @param keyCode entero que representa a una tecla de nuestra ventana GLFW.
-     * @return Devuelve un E_KeyType segun la tecla que tenga bindeada ese entero pasado por parametro. Si no existe devuelve
-     * null.
+     * Obtiene la tecla presionada.
+     *
+     * @param keyCode codigo de la tecla presionada
+     * @return la tecla, o null si no hay ninguna tecla asociada al codigo
      */
-    public E_KeyType getKeyPressed(int keyCode) {
-        for (int i = 0; i < mappedKeys.length; i++)
-            if (keyCode == mappedKeys[i]) return E_KeyType.values()[i];
-        return null;
+    public Key getKeyPressed(int keyCode) {
+        return keys.get(keyCode);
+    }
+
+    /**
+     * Verifica si la tecla ya esta asignada a alguna accion.
+     *
+     * @param keyCode codigo de la tecla a verificar
+     * @return true si la tecla ya esta asignada, false en caso contrario
+     */
+    public boolean isKeyAssigned(int keyCode) {
+        return assignedKey.contains(keyCode);
     }
 
 }

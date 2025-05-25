@@ -5,17 +5,15 @@ import org.aoclient.network.protocol.handlers.PacketHandler;
 import org.tinylog.Logger;
 
 public class UserNameListHandler implements PacketHandler {
-    
+
     @Override
-    public void handle(PacketBuffer data) {
-        if (data.checkBytes(3)) return;
+    public void handle(PacketBuffer buffer) {
+        if (buffer.checkBytes(3)) return;
+        PacketBuffer tempBuffer = new PacketBuffer();
+        tempBuffer.copy(buffer);
+        tempBuffer.readByte();
 
-        PacketBuffer buffer = new PacketBuffer();
-        buffer.copy(data);
-
-        buffer.readByte();
-
-        String userList = buffer.readCp1252String();
+        String userList = tempBuffer.readCp1252String();
 
         //Dim userList() As String
         //    Dim i As Long
@@ -31,8 +29,8 @@ public class UserNameListHandler implements PacketHandler {
         //    End If
 
 
-        data.copy(buffer);
+        buffer.copy(tempBuffer);
         Logger.debug("handleUserNameList Cargado! - FALTA TERMINAR!");
     }
-    
+
 }

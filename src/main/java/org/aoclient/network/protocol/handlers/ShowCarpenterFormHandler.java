@@ -4,9 +4,10 @@ import org.aoclient.network.PacketBuffer;
 import org.tinylog.Logger;
 
 public class ShowCarpenterFormHandler implements PacketHandler {
+
     @Override
-    public void handle(PacketBuffer data) {
-        data.readByte();
+    public void handle(PacketBuffer buffer) {
+        buffer.readByte();
 
         //If //FrmMain.macrotrabajo.Enabled And (MacroBltIndex > 0) Then
         //        Call WriteCraftCarpenter(MacroBltIndex)
@@ -16,4 +17,5 @@ public class ShowCarpenterFormHandler implements PacketHandler {
 
         Logger.debug("handleShowCarpenterForm CARGADO - FALTA TERMINAR!");
     }
+
 }

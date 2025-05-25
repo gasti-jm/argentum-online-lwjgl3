@@ -3,7 +3,6 @@ package org.aoclient.engine.gui.forms;
 import imgui.ImGui;
 import imgui.flag.ImGuiCond;
 import imgui.flag.ImGuiWindowFlags;
-import org.aoclient.engine.game.User;
 import org.aoclient.engine.game.models.*;
 
 import java.io.IOException;
@@ -13,6 +12,7 @@ import static org.aoclient.engine.Sound.playSound;
 import static org.aoclient.network.protocol.Protocol.*;
 
 public final class FStats extends Form {
+    
     private final int backgroundImage;
 
     public FStats() {
@@ -53,26 +53,26 @@ public final class FStats extends Form {
 
     private void drawAttributes() {
         short y = 40;
-        for (E_Attributes attributes : E_Attributes.values()) {
+        for (Attribute attributes : Attribute.values()) {
             ImGui.setCursorPos(100, y += 17);
-            ImGui.text(String.valueOf(User.get().getAttributes()[attributes.ordinal()]));
+            ImGui.text(String.valueOf(USER.getAttributes()[attributes.ordinal()]));
         }
     }
 
     private void drawReputations() {
         short y = 158;
-        for (E_Reputation reputation : E_Reputation.values()) {
-            if (reputation.ordinal() == E_Reputation.LADRON.ordinal()) continue;
+        for (Reputation reputation : Reputation.values()) {
+            if (reputation.ordinal() == Reputation.THIEF.ordinal()) continue;
             ImGui.setCursorPos(100, y += 17);
-            ImGui.text(String.valueOf(User.get().getReputations()[reputation.ordinal()]));
+            ImGui.text(String.valueOf(USER.getReputations()[reputation.ordinal()]));
         }
         ImGui.setCursorPos(100, y += 17);
-        ImGui.text(User.get().isCriminal() ? "Criminal" : "Ciudadano");
+        ImGui.text(USER.isCriminal() ? "Criminal" : "Ciudadano");
     }
 
     private void drawSkills() {
         float y = 40;
-        for (int skill : User.get().getSkills()) {
+        for (int skill : USER.getSkills()) {
             ImGui.setCursorPos(320, y += 17.25f);
             ImGui.text(String.valueOf(skill));
         }
@@ -80,13 +80,13 @@ public final class FStats extends Form {
 
     private void drawStatistics() {
         float y = 300;
-        for (E_KillCounters counter : E_KillCounters.values()) {
+        for (KillCounter counter : KillCounter.values()) {
             ImGui.setCursorPos(160, y += 15.5f);
-            ImGui.text(String.valueOf(User.get().getKillCounter((byte) counter.ordinal())));
+            ImGui.text(String.valueOf(USER.getKillCounter((byte) counter.ordinal())));
         }
         ImGui.setCursorPos(65, y += 15);
-        ImGui.text(E_Roles.values()[User.get().getRole()].name());
+        ImGui.text(Role.values()[USER.getRole()].name());
         ImGui.setCursorPos(160, y += 15);
-        ImGui.text(String.valueOf(User.get().getJailTime()));
+        ImGui.text(String.valueOf(USER.getJailTime()));
     }
 }

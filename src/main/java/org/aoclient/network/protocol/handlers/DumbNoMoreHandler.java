@@ -6,11 +6,11 @@ import org.tinylog.Logger;
 public class DumbNoMoreHandler implements PacketHandler {
 
     @Override
-    public void handle(PacketBuffer data) {
-        // Remove packet ID
-        data.readByte();
+    public void handle(PacketBuffer buffer) {
+        buffer.readByte();
 
         // userEstupido = false;
         Logger.debug("handleDumbNoMore Cargado! - FALTA TERMINAR!");
     }
+
 }

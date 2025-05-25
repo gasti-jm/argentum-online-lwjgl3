@@ -4,14 +4,13 @@ import org.aoclient.network.PacketBuffer;
 import org.tinylog.Logger;
 
 public class ShowForumFormHandler implements PacketHandler {
-    
-    @Override
-    public void handle(PacketBuffer data) {
-        // Remove packet ID
-        data.readByte();
 
-        int privilegios = data.readByte();
-        int canPostSticky = data.readByte();
+    @Override
+    public void handle(PacketBuffer buffer) {
+        buffer.readByte();
+
+        int privilegios = buffer.readByte();
+        int canPostSticky = buffer.readByte();
 
         //frmForo.Privilegios = data.ReadByte
         //    frmForo.CanPostSticky = data.ReadByte
@@ -21,4 +20,5 @@ public class ShowForumFormHandler implements PacketHandler {
         //    End If
         Logger.debug("handleShowForumForm Cargado! - FALTA TERMINAR!");
     }
+
 }

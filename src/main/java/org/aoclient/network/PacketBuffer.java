@@ -42,7 +42,7 @@ public class PacketBuffer {
     /** Tamaño en bytes del tipo Long en VB6 utilizado para mantener compatibilidad con el protocolo original de AO. */
     private static final int VB6_LONG_BYTES = 4;
     /** Tamaño predeterminado del buffer en bytes. */
-    private static final int DEFAULT_BUFFER_SIZE = 10240; // 10 KB
+    private static final int DEFAULT_BUFFER_SIZE = 10240; // 10 KB Serial tamaño ideal?
     /**
      * Array de bytes que actua como un almacen temporal para los bytes que entran y salen del flujo de comunicacion.
      * <p>
@@ -61,29 +61,25 @@ public class PacketBuffer {
     }
 
     /**
-     * <p>
-     * Copia los bytes desde el buffer de origen al buffer, ajustando la capacidad del buffer si es necesario. Si el buffer de
-     * origen esta vacio, el metodo elimina todos los bytes del buffer. Este metodo garantiza que el contenido del buffer sea una
-     * copia completa del buffer de origen.
+     * Copia los bytes del buffer de origen al buffer.
      *
      * @param srcBuffer buffer de origen desde el cual se copiaran los bytes
      */
     public void copy(PacketBuffer srcBuffer) {
-        // Verifica si el buffer de origen esta vacio
-        if (srcBuffer.getLength() == 0) { // CREO QUE ESTE SERIA EL ULTIMO PASO DEL CICLO DE COMUNICACION, EN DONDE UNA VEZ LEIDO LOS BYTES DESDE UN HANDLER, SE LIMPIA EL BUFFER...
-            // Si es asi, elimina todos los bytes del buffer
+        // Si el buffer de origen esta vacio
+        if (srcBuffer.getLength() == 0) {
+            // "Elimina" todos los bytes del buffer ya que tambien debe quedar en 0 para poder recibir el siguiente paquete
             remove(bufferLength);
             return;
         }
-        // Ajusta la capacidad del buffer para que coincida con la del origen
-        bufferCapacity = srcBuffer.getCapacity(); // TODO No se estaria modificando la capacidad del buffer?
-        buffer = new byte[bufferCapacity];
-        // Crea un buffer local para leer los bytes del buffer de origen
+
+        // Crea un buffer local con la capacidad del buffer de origen (mejorando el rendimiento)
         byte[] buffer = new byte[srcBuffer.getLength()];
-        srcBuffer.peekBlock(buffer, srcBuffer.getLength()); // Ahora el buffer local tiene los bytes del buffer de origen
+        // Lee los bytes del buffer de origen y los copia al buffer local
+        srcBuffer.peekBlock(buffer, srcBuffer.getLength());
         // Reinicia la longitud del buffer
         bufferLength = 0;
-        // Escribe los bytes leidos desde el buffer de origen en el buffer
+        // Escribe los bytes del buffer local en el buffer
         writeBlock(buffer);
     }
 
@@ -105,7 +101,7 @@ public class PacketBuffer {
     /**
      * Lee una cantidad especifica de bytes desde el buffer al buffer de destino.
      *
-     * @param destBuffer buffer de origen en el que se copiaran los bytes leidos desde el buffer
+     * @param destBuffer buffer de destino en el que se copiaran los bytes leidos desde el buffer
      * @return la cantidad de bytes leidos
      * @throws IllegalArgumentException si la cantidad de bytes a leer es mayor a la longitud del buffer
      */
@@ -241,7 +237,7 @@ public class PacketBuffer {
      * @param string cadena de texto que sera codificada en Cp1252 y escrita en el buffer
      */
     public void writeCp1252String(String string) {
-        byte[] stringBytes = string.getBytes(java.nio.charset.Charset.forName("Cp1252"));
+        byte[] stringBytes = string.getBytes(Charset.forName("Cp1252"));
         byte[] buffer = new byte[STRING_LENGTH_BYTES + string.length()];
         /* Como se esta escribiendo una cadena codificada en Cp1252, entonces los caracteres ocupan solo 1 byte, por lo tanto es
          * valido obtener la longitud de la cadena con string.length(). */
@@ -317,8 +313,10 @@ public class PacketBuffer {
      */
     public int readByte() {
         byte[] buffer = new byte[Byte.BYTES];
+        // Copia el byte leido al buffer local
         int bytesRead = read(buffer);
-        remove(bytesRead); // "Elimina" el byte leido y avanza el puntero de lectura en el buffer con get() ya que no se estan "eliminando" todos los bytes como en el caso de readBytes()
+        // "Elimina" el byte leido del buffer, avanzando efectivamente el puntero
+        remove(bytesRead);
         return ByteBuffer.wrap(buffer).order(ByteOrder.LITTLE_ENDIAN).get() & 0xFF;
     }
 
@@ -405,7 +403,7 @@ public class PacketBuffer {
         if (bufferLength < stringLength) throw new RuntimeException("Not enough byte!");
         // Si la longitud es cero, devuelve cadena vacia
         if (stringLength <= 0) return "";
-        return readString(stringLength, java.nio.charset.Charset.forName("Cp1252"));
+        return readString(stringLength, Charset.forName("Cp1252"));
     }
 
     /**
@@ -609,10 +607,10 @@ public class PacketBuffer {
     }
 
     private void disconnect() {
-        String msgErr = "Not enough bytes to read from the packet " + PacketReceiver.packet;
-        ImGUISystem.get().show(new FMessage(msgErr));
+        String msgErr = "Not enough bytes to read from the packet " + PacketReceiver.serverPacket;
+        ImGUISystem.INSTANCE.show(new FMessage(msgErr));
         System.out.println(msgErr);
-        SocketConnection.getInstance().disconnect();
+        SocketConnection.INSTANCE.disconnect();
         // Resetea el buffer para que termine la recursividad de lectura de paquetes
         buffer = new byte[DEFAULT_BUFFER_SIZE];
         bufferCapacity = DEFAULT_BUFFER_SIZE;

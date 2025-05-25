@@ -7,48 +7,59 @@ import org.aoclient.network.PacketBuffer;
 import static org.aoclient.engine.game.Dialogs.charDialogSet;
 import static org.aoclient.engine.utils.GameData.charList;
 
+/**
+ * En este handler y en algunos otros se utiliza un buffer temporal ({@code tempBuffer}) como "espacio seguro" para leer los bytes
+ * antes de actualizar el buffer del servidor, funcionando como una "transaccion" que se confirma al finalizar.
+ * <p>
+ * Por lo tanto, se evita leer directamente del buffer del servidor para prevenir estados inconsistentes (paquetes concatenados o
+ * recibidos parcialmente) durante errores. Es un patron comun en protocolos de red para garantizar integridad de datos y el
+ * avance correcto del puntero de lectura.
+ */
+
 public class ChatOverHeadHandler implements PacketHandler {
 
+    /**
+     * Este valor representa el numero minimo de bytes necesarios para procesar correctamente el paquete:
+     * <ul>
+     * <li>1 byte: identificador del paquete
+     * <li>n bytes: cadena de texto (variable pero necesita al menos 1) TODO No se referiere a la longitud de la cadena que son 2 bytes?
+     * <li>2 bytes: indice del personaje
+     * <li>3 bytes: componentes de color (r,g,b)
+     * </ul>
+     */
+    private static final int MIN_REQUIRED_BYTES = 8;
+
     @Override
-    public void handle(PacketBuffer srcBuffer) {
-        /* El valor 8 representa el numero minimo de bytes que deben estar disponibles en el buffer para poder procesar
-         * correctamente este paquete. Estos 8 bytes corresponden un byte para identificar el paquete, bytes para la cadena de
-         * texto del chat (variable, pero necesita al menos algo), dos bytes para el indice del personaje, un byte para el
-         * componente rojo del color (r), un byte para el componente verde del color (g) y un byte para el componente azul del
-         * color (b). Al verificar que haya al menos 8 bytes disponibles, el manjeador se asegura de que puede leer el paquete
-         * para mostrar correctamente el mensaje sobre la cabeza del personaje. */
-        if (srcBuffer.checkBytes(8)) return; // TODO Reemplazar el valor magico 8
+    public void handle(PacketBuffer buffer) {
 
-        // Crea un buffer temporal
-        PacketBuffer buffer = new PacketBuffer();
+        // Verifica que el buffer del servidor tenga el minimo de bytes requeridos para procesar el paquete
+        if (buffer.checkBytes(MIN_REQUIRED_BYTES)) return;
 
-        // Copia el buffer de origen al buffer temporal
-        buffer.copy(srcBuffer);
+        // Crea un buffer temporal para almacenar los bytes del buffer del servidor
+        PacketBuffer tempBuffer = new PacketBuffer();
 
-        // Lee los bytes del buffer de origen usando el buffer temporal
+        // Copia el buffer del servidor en el buffer temporal
+        tempBuffer.copy(buffer);
 
         /* Este byte identificador ya fue utilizado previamente para determinar que handler debe procesar el paquete (en la clase
          * PacketReceiver). Una vez que el paquete llega al handler correcto, este byte identificador ya no es necesario para el
          * procesamiento posterior, por lo que se lee para "consumirlo" y avanzar en el buffer, pero su valor no se usa. */
-        buffer.readByte(); // Descarta el ID del paquete (ya sabemos que es CHAT_OVER_HEAD)
+        tempBuffer.readByte(); // Descarta el ID "CHAT_OVER_HEAD" del paquete
 
-        // Lee el contenido del paquete
-        String chat = buffer.readCp1252String();
-        short charIndex = buffer.readInteger(); // El servidor añadio esto!
-        int r = buffer.readByte(); // El servidor añadio esto!
-        int g = buffer.readByte(); // El servidor añadio esto!
-        int b = buffer.readByte(); // El servidor añadio esto!
+        // Lee el contenido del buffer
+        String chat = tempBuffer.readCp1252String(); // El cliente añadio esto!
+        short charIndex = tempBuffer.readInteger(); // El servidor desde el codigo de VB6 añadio esto!
+        int r = tempBuffer.readByte(); // El servidor desde el codigo de VB6 añadio esto!
+        int g = tempBuffer.readByte(); // El servidor desde el codigo de VB6 añadio esto!
+        int b = tempBuffer.readByte(); // El servidor desde el codigo de VB6 añadio esto!
 
-        if (charList[charIndex].getName().length() <= 1) Dialogs.removeDialogsNPCArea(); // TODO es un NPC?
-
+        // Realiza la accion correspondiente con los bytes leidos
+        if (charList[charIndex].getName().length() <= 1) Dialogs.removeDialogsNPCArea();
         charDialogSet(charIndex, chat, new RGBColor((float) r / 255, (float) g / 255, (float) b / 255));
 
-        // Copia el buffer temporal de vuelta al original
-        srcBuffer.copy(buffer); // TODO Pero no se supone que el buffer temporal ya esta vacio ya que se leyeron todos sus bytes?
-
-        /* Este patron (de usar un buffer temporal para lo bytes entrantes) permite manipular los bytes entrantes sin alterar el
-         * buffer de origen hasta que se completan todas las operaciones necesarias, proporcionando una forma segura de procesar
-         * los paquetes de red. */
+        /* Despues de leer todos los bytes del buffer temporal, este queda con una longitud 0, por lo tanto se pasa este estado
+         * al buffer del servidor para "eliminar" los bytes leidos dejandolo limpio para recibir el siguiente paquete. */
+        buffer.copy(tempBuffer);
 
     }
 

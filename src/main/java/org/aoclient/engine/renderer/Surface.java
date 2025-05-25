@@ -19,22 +19,11 @@ import static org.lwjgl.opengl.GL11.glDeleteTextures;
  * cargadas.
  */
 
-public class Surface {
+public enum Surface {
 
-    private static Surface instance;
+    INSTANCE;
+
     private Map<Integer, Texture> textures;
-
-    private Surface() {
-
-    }
-
-    /**
-     * @return Mismo objeto (Patron de diseño Singleton).
-     */
-    public static Surface get() {
-        if (instance == null) instance = new Surface();
-        return instance;
-    }
 
     /**
      * Constructor que solo inicializa nuestro mapa.

@@ -6,7 +6,6 @@ import imgui.flag.ImGuiCond;
 import imgui.flag.ImGuiInputTextFlags;
 import imgui.flag.ImGuiWindowFlags;
 import imgui.type.ImString;
-import org.aoclient.engine.game.User;
 import org.aoclient.engine.game.inventory.NPCInventory;
 import org.aoclient.engine.game.inventory.UserInventory;
 
@@ -20,7 +19,7 @@ public final class FBank extends Form{
     private final ImString cant = new ImString("1");
     private final ImString cantGOLD = new ImString("1");
     public static NPCInventory invNPC = new NPCInventory(true);
-    public static UserInventory invUser = User.get().getUserInventory().clone();
+    public static UserInventory invUser = USER.getUserInventory().clone();
     private int goldDeposited;
 
     public FBank(int goldDeposited) {

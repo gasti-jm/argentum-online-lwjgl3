@@ -7,18 +7,16 @@ import org.aoclient.network.PacketBuffer;
 public class ShowMessageBoxHandler implements PacketHandler {
 
     @Override
-    public void handle(PacketBuffer data) {
-        if (data.checkBytes(3)) return;
+    public void handle(PacketBuffer buffer) {
+        if (buffer.checkBytes(3)) return;
+        PacketBuffer tempBuffer = new PacketBuffer();
+        tempBuffer.copy(buffer);
+        tempBuffer.readByte();
 
-        PacketBuffer buffer = new PacketBuffer();
-        buffer.copy(data);
+        String msg = tempBuffer.readCp1252String();
+        ImGUISystem.INSTANCE.show(new FMessage(msg));
 
-        buffer.readByte();
-
-        String msg = buffer.readCp1252String();
-        ImGUISystem.get().show(new FMessage(msg));
-
-        data.copy(buffer);
+        buffer.copy(tempBuffer);
     }
 
 }

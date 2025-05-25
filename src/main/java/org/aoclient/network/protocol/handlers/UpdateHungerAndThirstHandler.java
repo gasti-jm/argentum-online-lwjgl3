@@ -4,16 +4,16 @@ import org.aoclient.engine.game.User;
 import org.aoclient.network.PacketBuffer;
 
 public class UpdateHungerAndThirstHandler implements PacketHandler {
+
     @Override
-    public void handle(PacketBuffer data) {
-        if (data.checkBytes(5)) return;
+    public void handle(PacketBuffer buffer) {
+        if (buffer.checkBytes(5)) return;
+        buffer.readByte();
 
-        // Remove packet ID
-        data.readByte();
-
-        User.get().setUserMaxAGU(data.readByte());
-        User.get().setUserMinAGU(data.readByte());
-        User.get().setUserMaxHAM(data.readByte());
-        User.get().setUserMinHAM(data.readByte());
+        User.INSTANCE.setUserMaxAGU(buffer.readByte());
+        User.INSTANCE.setUserMinAGU(buffer.readByte());
+        User.INSTANCE.setUserMaxHAM(buffer.readByte());
+        User.INSTANCE.setUserMinHAM(buffer.readByte());
     }
+
 }

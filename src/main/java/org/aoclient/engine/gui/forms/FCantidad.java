@@ -5,7 +5,6 @@ import imgui.flag.ImGuiCond;
 import imgui.flag.ImGuiInputTextFlags;
 import imgui.flag.ImGuiWindowFlags;
 import imgui.type.ImString;
-import org.aoclient.engine.game.User;
 
 import java.io.IOException;
 
@@ -79,7 +78,7 @@ public final class FCantidad extends Form {
                 final int cantToDrop = Integer.parseInt(cant.get());
                 if (cantToDrop > 0 && cantToDrop <= 10000) {
                     if (dropOro) writeDrop(FLAGORO, cantToDrop);
-                    else writeDrop(User.get().getUserInventory().getSlotSelected() + 1, cantToDrop);
+                    else writeDrop(USER.getUserInventory().getSlotSelected() + 1, cantToDrop);
                 }
             }
             this.close();
@@ -90,9 +89,9 @@ public final class FCantidad extends Form {
             if (!cant.get().isEmpty()) {
                 final int cantToDrop = Integer.parseInt(cant.get());
                 if (cantToDrop > 0 && cantToDrop <= 10000) {
-                    if (dropOro) writeDrop(FLAGORO, Math.min(User.get().getUserGLD(), 10000));
+                    if (dropOro) writeDrop(FLAGORO, Math.min(USER.getUserGLD(), 10000));
                     else
-                        writeDrop(User.get().getUserInventory().getSlotSelected() + 1, User.get().getUserInventory().getAmountSlotSelected());
+                        writeDrop(USER.getUserInventory().getSlotSelected() + 1, USER.getUserInventory().getAmountSlotSelected());
                 }
             }
             this.close();

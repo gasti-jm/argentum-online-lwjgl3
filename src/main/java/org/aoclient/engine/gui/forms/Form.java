@@ -1,5 +1,6 @@
 package org.aoclient.engine.gui.forms;
 
+import org.aoclient.engine.game.User;
 import org.aoclient.engine.gui.ImGUISystem;
 import org.lwjgl.BufferUtils;
 
@@ -36,11 +37,14 @@ public abstract class Form {
 
     protected int backgroundImage;
 
+    protected static final User USER = User.INSTANCE;
+    protected static final ImGUISystem IM_GUI_SYSTEM = ImGUISystem.INSTANCE;
+
     public abstract void render();
 
     public void close() {
         glDeleteTextures(backgroundImage);
-        ImGUISystem.get().deleteFrmArray(this);
+        IM_GUI_SYSTEM.deleteFrmArray(this);
     }
 
     protected int loadTexture(final String file) throws IOException {

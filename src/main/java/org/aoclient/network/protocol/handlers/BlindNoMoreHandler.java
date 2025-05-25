@@ -6,8 +6,8 @@ import org.tinylog.Logger;
 public class BlindNoMoreHandler implements PacketHandler {
 
     @Override
-    public void handle(PacketBuffer data) {
-        data.readByte();
+    public void handle(PacketBuffer buffer) {
+        buffer.readByte();
 
         //UserCiego = False
         Logger.debug("handleBlindNoMore Cargado! - FALTA TERMINAR!");

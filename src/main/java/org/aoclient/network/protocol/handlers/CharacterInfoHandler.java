@@ -4,35 +4,32 @@ import org.aoclient.network.PacketBuffer;
 import org.tinylog.Logger;
 
 public class CharacterInfoHandler implements PacketHandler {
-    
+
     @Override
-    public void handle(PacketBuffer data) {
+    public void handle(PacketBuffer buffer) {
+        if (buffer.checkBytes(35)) return;
+        PacketBuffer tempBuffer = new PacketBuffer();
+        tempBuffer.copy(buffer);
+        tempBuffer.readByte();
 
-        if (data.checkBytes(35)) return;
+        String nombre = tempBuffer.readCp1252String();
+        int raza = tempBuffer.readByte();
+        int clase = tempBuffer.readByte();
+        int genero = tempBuffer.readByte();
+        int nivel = tempBuffer.readByte();
+        int oro = tempBuffer.readLong();
+        int banco = tempBuffer.readLong();
+        int reputacion = tempBuffer.readLong();
 
-        PacketBuffer buffer = new PacketBuffer();
-        buffer.copy(data);
+        String txtPeticiones = tempBuffer.readCp1252String();
+        String guildActual = tempBuffer.readCp1252String();
+        String txtMiembro = tempBuffer.readCp1252String();
 
-        buffer.readByte();
+        boolean armada = tempBuffer.readBoolean();
+        boolean caos = tempBuffer.readBoolean();
 
-        String nombre = buffer.readCp1252String();
-        int raza = buffer.readByte();
-        int clase = buffer.readByte();
-        int genero = buffer.readByte();
-        int nivel = buffer.readByte();
-        int oro = buffer.readLong();
-        int banco = buffer.readLong();
-        int reputacion = buffer.readLong();
-
-        String txtPeticiones = buffer.readCp1252String();
-        String guildActual = buffer.readCp1252String();
-        String txtMiembro = buffer.readCp1252String();
-
-        boolean armada = buffer.readBoolean();
-        boolean caos = buffer.readBoolean();
-
-        int ciudadanos = buffer.readLong();
-        int criminales = buffer.readLong();
+        int ciudadanos = tempBuffer.readLong();
+        int criminales = tempBuffer.readLong();
 
         //With frmCharInfo
         //        If .frmType = CharInfoFrmType.frmMembers Then
@@ -96,9 +93,8 @@ public class CharacterInfoHandler implements PacketHandler {
         //        Call .Show(vbModeless, //FrmMain)
         //    End With
 
-
-        data.copy(buffer);
+        buffer.copy(tempBuffer);
         Logger.debug("handleCharacterInfo Cargado! - FALTA TERMINAR!");
     }
-    
+
 }

@@ -7,10 +7,10 @@ import org.aoclient.network.protocol.handlers.PacketHandler;
 public class UpdateDexterityHandler implements PacketHandler {
 
     @Override
-    public void handle(PacketBuffer data) {
-        if (data.checkBytes(2)) return;
-        data.readByte();
-        User.get().setUserDext(data.readByte());
+    public void handle(PacketBuffer buffer) {
+        if (buffer.checkBytes(2)) return;
+        buffer.readByte();
+        User.INSTANCE.setUserDext(buffer.readByte());
     }
 
 }

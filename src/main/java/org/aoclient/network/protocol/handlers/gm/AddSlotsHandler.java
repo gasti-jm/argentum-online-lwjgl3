@@ -6,9 +6,9 @@ import org.aoclient.network.protocol.handlers.PacketHandler;
 public class AddSlotsHandler implements PacketHandler {
 
     @Override
-    public void handle(PacketBuffer data) {
-        data.readByte();
-        int maxInventorySlots = data.readByte();
+    public void handle(PacketBuffer buffer) {
+        buffer.readByte();
+        int maxInventorySlots = buffer.readByte();
     }
 
 }

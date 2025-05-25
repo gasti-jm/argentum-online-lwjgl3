@@ -6,11 +6,13 @@ import org.aoclient.engine.gui.forms.FComerce;
 import org.aoclient.network.PacketBuffer;
 
 public class CommerceInitHandler implements PacketHandler {
+
     @Override
-    public void handle(PacketBuffer data) {
-        data.readByte();
+    public void handle(PacketBuffer buffer) {
+        buffer.readByte();
         // comerciando = true
-        User.get().setUserComerciando(true);
-        ImGUISystem.get().show(new FComerce());
+        User.INSTANCE.setUserComerciando(true);
+        ImGUISystem.INSTANCE.show(new FComerce());
     }
+
 }

@@ -5,7 +5,6 @@ import imgui.flag.ImGuiCond;
 import imgui.flag.ImGuiInputTextFlags;
 import imgui.flag.ImGuiWindowFlags;
 import imgui.type.ImString;
-import org.aoclient.engine.gui.ImGUISystem;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -99,9 +98,9 @@ public final class FNewPassword extends Form {
         if (ImGui.button("Cambiar", 110, 20)) {
             playSound(SND_CLICK);
             if (this.txtPassword.get().isEmpty() || this.txtNewPassword.get().isEmpty() || this.txtNewrePassword.get().isEmpty()) {
-                ImGUISystem.get().show(new FMessage("Por favor, completa todos los campos."));
+                IM_GUI_SYSTEM.show(new FMessage("Por favor, completa todos los campos."));
             } else if (!this.txtNewPassword.get().equals(this.txtNewrePassword.get())) {
-                ImGUISystem.get().show(new FMessage("Las contraseñas no coinciden."));
+                IM_GUI_SYSTEM.show(new FMessage("Las contraseñas no coinciden."));
             } else
                 // Si está correcto enviamos paquete para cambiar la contraseña.
                 writeChangePassword(this.txtPassword.get(), this.txtNewPassword.get());

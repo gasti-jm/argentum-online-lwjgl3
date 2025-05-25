@@ -41,7 +41,7 @@ public final class Drawn {
     public static void geometryBoxRender(int grh_index, int x, int y, int src_width, int src_height, float sX, float sY, boolean blend, float alpha, RGBColor color) {
         if (blend) glBlendFunc(GL_SRC_ALPHA, GL_ONE);
 
-        final Texture texture = Surface.get().getTexture(grhData[grh_index].getFileNum());
+        final Texture texture = Surface.INSTANCE.getTexture(grhData[grh_index].getFileNum());
         final float src_right = sX + src_width;
         final float src_bottom = sY + src_height;
 

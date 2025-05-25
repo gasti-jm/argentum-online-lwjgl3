@@ -14,14 +14,16 @@ import static org.aoclient.network.protocol.Protocol.*;
 
 /**
  * <p>
- * Gestiona la conexion a traves de sockets TCP, permitiendo establecer comunicacion con un servidor. Ofrece metodos para
- * conectar, desconectar, enviar y recibir bytes utilizando flujos de entrada y salida.
+ * Gestiona la conexion cliente-servidor a traves de sockets TCP. Ofrece metodos para conectar y desconectar a un servidor, y
+ * metodos para enviar y recibir bytes dentro de un buffer por medio de los flujos de entrada y salida del socket.
  * <p>
  * TODO Se podria llamar Connection?
  * TODO Se podria usar NIO?
  */
 
-public class SocketConnection {
+public enum SocketConnection {
+
+    INSTANCE;
 
     /** Socket para la conexion TCP. */
     private Socket socket;
@@ -31,13 +33,6 @@ public class SocketConnection {
     private DataInputStream inputStream;
     /** Bandera que indica si hay un intento de conexion en curso. */
     private boolean tryConnect;
-
-    private SocketConnection() {
-    }
-
-    public static SocketConnection getInstance() {
-        return SingletonHolder.INSTANCE;
-    }
 
     /**
      * <p>
@@ -66,7 +61,7 @@ public class SocketConnection {
     public boolean connect() {
         // Comprueba si ya esta intentando conectarse
         if (tryConnect) {
-            ImGUISystem.get().show(new FMessage("Trying to connect to the server, please wait..."));
+            ImGUISystem.INSTANCE.show(new FMessage("Trying to connect to the server, please wait..."));
             return false;
         }
 
@@ -90,7 +85,7 @@ public class SocketConnection {
                 }
 
             } catch (Exception e) {
-                ImGUISystem.get().show(new FMessage(e.getMessage()));
+                ImGUISystem.INSTANCE.show(new FMessage(e.getMessage()));
                 this.tryConnect = false;
                 return false;
             }
@@ -114,7 +109,7 @@ public class SocketConnection {
         } catch (IOException e) {
             System.err.println("Error closing connection: " + e.getMessage());
         } finally {
-            User.get().resetGameState();
+            User.INSTANCE.resetGameState();
         }
     }
 
@@ -138,7 +133,7 @@ public class SocketConnection {
     }
 
     /**
-     * Lee y procesa los bytes disponibles en el flujo de entrada del socket.
+     * Lee los bytes del flujo de entrada del socket y los almacena en el buffer de entrada.
      * <p>
      * La estructura actual del codigo evita intencionalmente que el metodo {@code read()} bloquee el hilo de ejecucion, lo que es
      * importante para mantener la capacidad de respuesta de la aplicacion, especialmente si este codigo se ejecuta en el hilo
@@ -197,10 +192,6 @@ public class SocketConnection {
      */
     private boolean isReadyForCommunication() {
         return socket != null && socket.isConnected() && !socket.isClosed();
-    }
-
-    private static class SingletonHolder {
-        private static final SocketConnection INSTANCE = new SocketConnection();
     }
 
 }

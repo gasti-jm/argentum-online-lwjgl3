@@ -35,10 +35,9 @@ import static org.lwjgl.glfw.GLFW.*;
  * asegurando una respuesta coherente de la interfaz.
  */
 
-public class ImGUISystem {
+public enum ImGUISystem {
 
-    // Unico objeto del sistema de GUI.
-    private static ImGUISystem instance;
+    INSTANCE;
 
     // LWJGL3 rendered itself (SHOULD be initialized)
     private final ImGuiImplGl3 imGuiGl3 = new ImGuiImplGl3();
@@ -58,15 +57,13 @@ public class ImGUISystem {
 
     // arreglo de ventanas gui
     private final List<Form> frms = new ArrayList<>();
+    
+    private final Window window = Window.INSTANCE;
 
     private ImGUISystem() {
 
     }
 
-    public static ImGUISystem get() {
-        if (instance == null) instance = new ImGUISystem();
-        return instance;
-    }
 
     public void init() {
         ImGui.createContext();
@@ -140,21 +137,21 @@ public class ImGUISystem {
     }
 
     private void setCallbacks(ImGuiIO io) {
-        glfwSetCharCallback(Window.get().getWindow(), (w, c) -> {
+        glfwSetCharCallback(window.getWindow(), (w, c) -> {
             if (c != GLFW_KEY_DELETE) io.addInputCharacter(c);
         });
 
         io.setSetClipboardTextFn(new ImStrConsumer() {
             @Override
             public void accept(final String s) {
-                glfwSetClipboardString(Window.get().getWindow(), s);
+                glfwSetClipboardString(window.getWindow(), s);
             }
         });
 
         io.setGetClipboardTextFn(new ImStrSupplier() {
             @Override
             public String get() {
-                return glfwGetClipboardString(Window.get().getWindow());
+                return glfwGetClipboardString(window.getWindow());
             }
         });
     }
@@ -205,9 +202,9 @@ public class ImGUISystem {
 
     public void renderGUI() {
         // Get window size properties and mouse position
-        glfwGetWindowSize(Window.get().getWindow(), winWidth, winHeight);
-        glfwGetFramebufferSize(Window.get().getWindow(), fbWidth, fbHeight);
-        glfwGetCursorPos(Window.get().getWindow(), mousePosX, mousePosY);
+        glfwGetWindowSize(window.getWindow(), winWidth, winHeight);
+        glfwGetFramebufferSize(window.getWindow(), fbWidth, fbHeight);
+        glfwGetCursorPos(window.getWindow(), mousePosX, mousePosY);
 
         // IMPORTANT!!
         // We SHOULD call those methods to update ImGui state for current frame
@@ -218,11 +215,11 @@ public class ImGUISystem {
         io.setDeltaTime(deltaTime);
 
         // ACA HAY QUE LABURAR CON LOS CURSORES.
-        if (Window.get().isCursorCrosshair())
-            glfwSetCursor(Window.get().getWindow(), glfwCreateStandardCursor(GLFW_CROSSHAIR_CURSOR));
+        if (window.isCursorCrosshair())
+            glfwSetCursor(window.getWindow(), glfwCreateStandardCursor(GLFW_CROSSHAIR_CURSOR));
         else {
-            glfwSetCursor(Window.get().getWindow(), mouseCursors[ImGui.getMouseCursor()]);
-            glfwSetInputMode(Window.get().getWindow(), GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+            glfwSetCursor(window.getWindow(), mouseCursors[ImGui.getMouseCursor()]);
+            glfwSetInputMode(window.getWindow(), GLFW_CURSOR, GLFW_CURSOR_NORMAL);
         }
 
         // IMPORTANT!!

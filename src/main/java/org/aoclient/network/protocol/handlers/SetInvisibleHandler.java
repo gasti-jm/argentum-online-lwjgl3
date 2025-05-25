@@ -6,14 +6,14 @@ import org.tinylog.Logger;
 import static org.aoclient.engine.utils.GameData.charList;
 
 public class SetInvisibleHandler implements PacketHandler {
-    
-    @Override
-    public void handle(PacketBuffer data) {
-        if (data.checkBytes(4)) return;
 
-        // Remove packet ID
-        data.readByte();
-        charList[data.readInteger()].setInvisible(data.readBoolean());
+    @Override
+    public void handle(PacketBuffer buffer) {
+        if (buffer.checkBytes(4)) return;
+        buffer.readByte();
+
+        charList[buffer.readInteger()].setInvisible(buffer.readBoolean());
         Logger.debug("handleSetInvisible Cargado!");
     }
+
 }

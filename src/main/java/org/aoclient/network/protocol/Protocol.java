@@ -2,8 +2,8 @@ package org.aoclient.network.protocol;
 
 import org.aoclient.engine.game.Console;
 import org.aoclient.engine.game.User;
-import org.aoclient.engine.game.models.E_Heading;
-import org.aoclient.engine.game.models.E_Skills;
+import org.aoclient.engine.game.models.Direction;
+import org.aoclient.engine.game.models.Skill;
 import org.aoclient.engine.renderer.RGBColor;
 import org.aoclient.network.PacketBuffer;
 import org.aoclient.network.SocketConnection;
@@ -29,7 +29,8 @@ import static org.lwjgl.glfw.GLFW.glfwGetTime;
 
 public class Protocol {
 
-    private static final Console CONSOLE = Console.get();
+    private static final Console CONSOLE = Console.INSTANCE;
+    private static final User USER = User.INSTANCE;
     private static final PacketReceiver PACKET_RECEIVER = new PacketReceiver();
     public static int pingTime;
     /** Buffer para la salida de bytes (escribe lo que envia el cliente al servidor). */
@@ -146,9 +147,9 @@ public class Protocol {
         outputBuffer.writeCp1252String(chat);
     }
 
-    public static void writeWalk(E_Heading direction) {
+    public static void writeWalk(Direction direction) {
         outputBuffer.writeByte(ClientPacket.WALK.getId());
-        outputBuffer.writeByte(direction.value);
+        outputBuffer.writeByte(direction.getId());
     }
 
     public static void writeDrop(int slot, int amount) {
@@ -197,15 +198,15 @@ public class Protocol {
         outputBuffer.writeByte(ClientPacket.REQUEST_MINI_STATS.getId());
     }
 
-    public static void writeChangeHeading(E_Heading direction) {
+    public static void writeChangeHeading(Direction direction) {
         outputBuffer.writeByte(ClientPacket.CHANGE_HEADING.getId());
-        outputBuffer.writeByte(direction.value);
+        outputBuffer.writeByte(direction.getId());
     }
 
     public static void writeModifySkills(int[] skills) {
         outputBuffer.writeByte(ClientPacket.MODIFY_SKILLS.getId());
-        for (E_Skills skill : E_Skills.values())
-            outputBuffer.writeByte(skills[skill.getValue() - 1]);
+        for (Skill skill : Skill.values())
+            outputBuffer.writeByte(skills[skill.getId() - 1]);
     }
 
     public static void writeLeftClick(int x, int y) {
@@ -238,7 +239,7 @@ public class Protocol {
     }
 
     public static void writeWork(int skill) {
-        if (User.get().isDead()) {
+        if (USER.isDead()) {
             CONSOLE.addMsgToConsole(new String("¡¡Estas muerto!!".getBytes(), StandardCharsets.UTF_8),
                     false, true, new RGBColor());
 
@@ -255,7 +256,7 @@ public class Protocol {
     }
 
     public static void writeQuit() {
-        if (charList[User.get().getUserCharIndex()].isParalizado()) {
+        if (charList[USER.getUserCharIndex()].isParalizado()) {
             CONSOLE.addMsgToConsole(new String("No puedes salir estando paralizado.".getBytes(), StandardCharsets.UTF_8),
                     false, true, new RGBColor());
 
@@ -290,11 +291,11 @@ public class Protocol {
 
     public static void writeMeditate() {
 
-        if (User.get().getUserMaxMAN() == User.get().getUserMinMAN()) {
+        if (USER.getUserMaxMAN() == USER.getUserMinMAN()) {
             return;
         }
 
-        if (charList[User.get().getUserCharIndex()].isDead()) {
+        if (charList[USER.getUserCharIndex()].isDead()) {
             CONSOLE.addMsgToConsole(new String("¡Estas muerto!".getBytes(), StandardCharsets.UTF_8),
                     false, true, new RGBColor());
 
@@ -317,7 +318,7 @@ public class Protocol {
     }
 
     public static void writeRequestAccountState() {
-        if (charList[User.get().getUserCharIndex()].isDead()) {
+        if (charList[USER.getUserCharIndex()].isDead()) {
             CONSOLE.addMsgToConsole(new String("¡Estas muerto!".getBytes(), StandardCharsets.UTF_8),
                     false, true, new RGBColor());
 
@@ -328,7 +329,7 @@ public class Protocol {
     }
 
     public static void writePetStand() {
-        if (charList[User.get().getUserCharIndex()].isDead()) {
+        if (charList[USER.getUserCharIndex()].isDead()) {
             CONSOLE.addMsgToConsole(new String("¡Estas muerto!".getBytes(), StandardCharsets.UTF_8),
                     false, true, new RGBColor());
 
@@ -339,7 +340,7 @@ public class Protocol {
     }
 
     public static void writePetFollow() {
-        if (charList[User.get().getUserCharIndex()].isDead()) {
+        if (charList[USER.getUserCharIndex()].isDead()) {
             CONSOLE.addMsgToConsole(new String("¡Estas muerto!".getBytes(), StandardCharsets.UTF_8),
                     false, true, new RGBColor());
 
@@ -350,7 +351,7 @@ public class Protocol {
     }
 
     public static void writeReleasePet() {
-        if (charList[User.get().getUserCharIndex()].isDead()) {
+        if (charList[USER.getUserCharIndex()].isDead()) {
             CONSOLE.addMsgToConsole(new String("¡Estas muerto!".getBytes(), StandardCharsets.UTF_8),
                     false, true, new RGBColor());
 
@@ -361,7 +362,7 @@ public class Protocol {
     }
 
     public static void writeTrainList() {
-        if (charList[User.get().getUserCharIndex()].isDead()) {
+        if (charList[USER.getUserCharIndex()].isDead()) {
             CONSOLE.addMsgToConsole(new String("¡Estas muerto!".getBytes(), StandardCharsets.UTF_8),
                     false, true, new RGBColor());
 
@@ -372,7 +373,7 @@ public class Protocol {
     }
 
     public static void writeRest() {
-        if (charList[User.get().getUserCharIndex()].isDead()) {
+        if (charList[USER.getUserCharIndex()].isDead()) {
             CONSOLE.addMsgToConsole(new String("¡Estas muerto!".getBytes(), StandardCharsets.UTF_8),
                     false, true, new RGBColor());
 
@@ -427,7 +428,7 @@ public class Protocol {
     }
 
     public static void writePartyCreate() {
-        if (charList[User.get().getUserCharIndex()].isDead()) {
+        if (charList[USER.getUserCharIndex()].isDead()) {
             CONSOLE.addMsgToConsole(new String("¡Estas muerto!".getBytes(), StandardCharsets.UTF_8),
                     false, true, new RGBColor());
 
@@ -438,7 +439,7 @@ public class Protocol {
     }
 
     public static void writePartyJoin() {
-        if (charList[User.get().getUserCharIndex()].isDead()) {
+        if (charList[USER.getUserCharIndex()].isDead()) {
             CONSOLE.addMsgToConsole(new String("¡Estas muerto!".getBytes(), StandardCharsets.UTF_8),
                     false, true, new RGBColor());
 
@@ -449,7 +450,7 @@ public class Protocol {
     }
 
     public static void writeShareNpc() {
-        if (charList[User.get().getUserCharIndex()].isDead()) {
+        if (charList[USER.getUserCharIndex()].isDead()) {
             CONSOLE.addMsgToConsole(new String("¡Estas muerto!".getBytes(), StandardCharsets.UTF_8),
                     false, true, new RGBColor());
 
@@ -460,7 +461,7 @@ public class Protocol {
     }
 
     public static void writeStopSharingNpc() {
-        if (charList[User.get().getUserCharIndex()].isDead()) {
+        if (charList[USER.getUserCharIndex()].isDead()) {
             CONSOLE.addMsgToConsole(new String("¡Estas muerto!".getBytes(), StandardCharsets.UTF_8),
                     false, true, new RGBColor());
 
@@ -861,6 +862,7 @@ public class Protocol {
         outputBuffer.writeByte(GMCommand.SPAWN_CREATURE.getId());
         outputBuffer.writeInteger(creatureIndex);
     }
+
     public static void writeResetNPCInventory() {
         outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
         outputBuffer.writeByte(GMCommand.RESET_NPC_INVENTORY.getId());

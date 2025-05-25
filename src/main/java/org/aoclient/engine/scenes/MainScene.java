@@ -2,7 +2,7 @@ package org.aoclient.engine.scenes;
 
 import org.aoclient.engine.game.BindKeys;
 import org.aoclient.engine.game.User;
-import org.aoclient.engine.game.models.E_KeyType;
+import org.aoclient.engine.game.models.Key;
 import org.aoclient.engine.gui.ImGUISystem;
 import org.aoclient.engine.gui.forms.FConnect;
 import org.aoclient.engine.listeners.KeyListener;
@@ -35,15 +35,12 @@ import static org.aoclient.engine.Engine.closeClient;
 public final class MainScene extends Scene {
 
     private final FConnect frmConnect = new FConnect();
-    private BindKeys bindKeys;
 
     @Override
     public void init() {
         super.init();
         canChangeTo = SceneType.GAME_SCENE;
-        bindKeys = BindKeys.get();
-
-        ImGUISystem.get().addFrm(frmConnect);
+        ImGUISystem.INSTANCE.addFrm(frmConnect);
     }
 
     @Override
@@ -53,7 +50,7 @@ public final class MainScene extends Scene {
 
     @Override
     public void keyEvents() {
-        if (KeyListener.isKeyPressed(bindKeys.getBindedKey(E_KeyType.mKeyExitGame))) closeClient();
+        if (KeyListener.isKeyPressed(BindKeys.INSTANCE.getBindedKey(Key.EXIT_GAME))) closeClient();
     }
 
     /**
@@ -66,9 +63,9 @@ public final class MainScene extends Scene {
 
     @Override
     public void render() {
-        if (User.get().isUserConected()) {
+        if (User.INSTANCE.isUserConected()) {
             this.close();
-            ImGUISystem.get().closeAllFrms();
+            ImGUISystem.INSTANCE.closeAllFrms();
         }
     }
 

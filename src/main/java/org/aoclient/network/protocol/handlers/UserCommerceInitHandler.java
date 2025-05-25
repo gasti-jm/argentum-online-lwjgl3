@@ -4,13 +4,13 @@ import org.aoclient.network.PacketBuffer;
 import org.tinylog.Logger;
 
 public class UserCommerceInitHandler implements PacketHandler {
+
     @Override
-    public void handle(PacketBuffer data) {
-        // Remove packet ID
-        data.readByte();
+    public void handle(PacketBuffer buffer) {
+        buffer.readByte();
 
         // variable local vb6
-        String tradingUserName = data.readCp1252String();
+        String tradingUserName = buffer.readCp1252String();
 
         //' Initialize commerce inventories
         //    Call InvComUsu.Initialize(DirectDraw, frmComerciarUsu.picInvComercio, Inventario.MaxObjs)
@@ -44,4 +44,5 @@ public class UserCommerceInitHandler implements PacketHandler {
 
         Logger.debug("handleUserCommerceInit CARGADO - FALTA TERMINAR!");
     }
+
 }

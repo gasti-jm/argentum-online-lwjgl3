@@ -6,17 +6,13 @@ import org.tinylog.Logger;
 public class GuildChatHandler implements PacketHandler {
 
     @Override
-    public void handle(PacketBuffer data) {
-        if (data.checkBytes(3)) return;
+    public void handle(PacketBuffer buffer) {
+        if (buffer.checkBytes(3)) return;
+        PacketBuffer tempBuffer = new PacketBuffer();
+        tempBuffer.copy(buffer);
+        tempBuffer.readByte();
 
-        // 1. Crean un buffer temporal
-        PacketBuffer buffer = new PacketBuffer();
-        // 2. Copian los datos (bytes) del buffer original
-        buffer.copy(data);
-        // 3. Leen y procesa los bytes
-        buffer.readByte();
-
-        String chat = buffer.readCp1252String();
+        String chat = tempBuffer.readCp1252String();
 
         //Dim str As String
         //    Dim r As Byte
@@ -61,8 +57,7 @@ public class GuildChatHandler implements PacketHandler {
         //        Call DialogosClanes.PushBackText(ReadField(1, chat, 126))
         //    End If
 
-        // 4. Finalmente, copian el buffer modificado de vuelta al original
-        data.copy(buffer);
+        buffer.copy(tempBuffer);
         Logger.debug("handleGuildChat CARGADO - FALTA TERMINAR");
     }
 

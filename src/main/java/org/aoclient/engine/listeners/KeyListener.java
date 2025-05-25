@@ -7,110 +7,108 @@ import org.aoclient.engine.game.BindKeys;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.aoclient.engine.game.models.E_KeyType.*;
+import static org.aoclient.engine.game.models.Key.*;
 import static org.lwjgl.glfw.GLFW.*;
 
 /**
- * Clase que gestiona todos los eventos y estados del teclado en el contexto GLFW.
+ * Gestiona las entradas del teclado en una ventana GLFW. Proporciona funciones para detectar eventos de teclas, conocer
+ * estados actuales y gestionar la asignacion de teclas a acciones especificas utilizando el binding definido en la
+ * clase {@code BindKeys}.
  * <p>
- * Proporciona funciones callback para GLFW que permiten detectar las pulsaciones y liberaciones de teclas, manteniendo el estado
- * actual de todas las teclas del teclado.
- * <p>
- * La clase mantiene un registro de la ultima tecla presionada y la ultima tecla de movimiento presionada, lo que facilita la
- * gestion de las acciones de navegacion del jugador. Ofrece metodos para verificar si una tecla esta siendo presionada en tiempo
- * real o si se debe procesar una accion especifica una sola vez por cada pulsacion de tecla.
- * <p>
- * Incluye funcionalidad para gestionar combinaciones de teclas como {@code Ctrl}, {@code Shift}, {@code Alt} y {@code Super}, y
- * se integra con {@code ImGui} para sincronizar adecuadamente el estado de las teclas entre el motor grafico y la interfaz.
+ * Esta clase actua como listener para los eventos del teclado, permitiendo manejar acciones realizadas por el usuario y
+ * traducirlas a las acciones vinculadas en el contexto del.
  */
 
-public class KeyListener {
+public enum KeyListener {
 
-    private static final ImGuiIO io = ImGui.getIO();
-    public static List<Integer> lastKeysMovedPressed = new ArrayList<>();
-    private static KeyListener instance;
-    private final BindKeys bindKeys = BindKeys.get();
-    private final boolean[] keyPressed = new boolean[350];
-    private int lastKeyMovedPressed;
-    private int lastKeyPressed;
+    INSTANCE;
 
-    private KeyListener() {
-
-    }
-
-    /**
-     * @return Mismo objeto (Patron de diseño Singleton).
-     */
-    public static KeyListener get() {
-        if (KeyListener.instance == null) KeyListener.instance = new KeyListener();
-        return KeyListener.instance;
-    }
+    /** Lista de teclas recientemente presionadas para movimiento. */
+    public static final List<Integer> LAST_KEYS_MOVED_PRESSED = new ArrayList<>();
+    /** Objeto para gestionar la integracion ImGui y GLFW, manejando eventos y estados de entrada y salida. */
+    private static final ImGuiIO IM_GUI_IO = ImGui.getIO();
+    /** Referencia a la instancia unica del manejador de teclas vinculadas. */
+    private static final BindKeys BIND_KEYS = BindKeys.INSTANCE;
+    /** Array que almacena el estado actual de cada tecla (true si esta presionada, false si no). */
+    private static final boolean[] KEY_PRESSED = new boolean[350];
+    /** Almacena el codigo de la ultima tecla presionada. */
+    private static int lastKeyPressed;
+    /** Almacena el codigo de la ultima tecla de direccion presionada. */
+    private static int lastKeyMovedPressed;
 
     /**
-     * @desc: Funcion callBack para gestionar el listener de teclas de nuestra ventana GLFW
+     * Funcion callBack para gestionar el listener de teclas de la ventana GLFW.
      */
     public static void keyCallback(long window, int key, int scancode, int action, int mods) {
         if (action == GLFW_PRESS) {
-            get().keyPressed[key] = true;
-            io.setKeysDown(key, true);
+            KEY_PRESSED[key] = true;
+            IM_GUI_IO.setKeysDown(key, true);
 
-            get().lastKeyPressed = key;
+            lastKeyPressed = key;
 
-            if (key == get().bindKeys.getBindedKey(mKeyUp) || key == get().bindKeys.getBindedKey(mKeyLeft) ||
-                    key == get().bindKeys.getBindedKey(mKeyDown) || key == get().bindKeys.getBindedKey(mKeyRight)) {
-                get().lastKeyMovedPressed = key;
-                lastKeysMovedPressed.add(key);
+            if (key == BIND_KEYS.getBindedKey(UP) || key == BIND_KEYS.getBindedKey(LEFT) ||
+                    key == BIND_KEYS.getBindedKey(DOWN) || key == BIND_KEYS.getBindedKey(RIGHT)) {
+                lastKeyMovedPressed = key;
+                LAST_KEYS_MOVED_PRESSED.add(key);
             }
 
         } else if (action == GLFW_RELEASE) {
-            get().keyPressed[key] = false;
-            io.setKeysDown(key, false);
-            if (key == get().bindKeys.getBindedKey(mKeyUp) || key == get().bindKeys.getBindedKey(mKeyLeft) ||
-                    key == get().bindKeys.getBindedKey(mKeyDown) || key == get().bindKeys.getBindedKey(mKeyRight)) {
-                lastKeysMovedPressed.remove(lastKeysMovedPressed.indexOf(key));
+            KEY_PRESSED[key] = false;
+            IM_GUI_IO.setKeysDown(key, false);
+            if (key == BIND_KEYS.getBindedKey(UP) || key == BIND_KEYS.getBindedKey(LEFT) ||
+                    key == BIND_KEYS.getBindedKey(DOWN) || key == BIND_KEYS.getBindedKey(RIGHT)) {
+                LAST_KEYS_MOVED_PRESSED.remove(LAST_KEYS_MOVED_PRESSED.indexOf(key));
             }
         }
 
-        io.setKeyCtrl(io.getKeysDown(GLFW_KEY_LEFT_CONTROL) || io.getKeysDown(GLFW_KEY_RIGHT_CONTROL));
-        io.setKeyShift(io.getKeysDown(GLFW_KEY_LEFT_SHIFT) || io.getKeysDown(GLFW_KEY_RIGHT_SHIFT));
-        io.setKeyAlt(io.getKeysDown(GLFW_KEY_LEFT_ALT) || io.getKeysDown(GLFW_KEY_RIGHT_ALT));
-        io.setKeySuper(io.getKeysDown(GLFW_KEY_LEFT_SUPER) || io.getKeysDown(GLFW_KEY_RIGHT_SUPER));
+        IM_GUI_IO.setKeyCtrl(IM_GUI_IO.getKeysDown(GLFW_KEY_LEFT_CONTROL) || IM_GUI_IO.getKeysDown(GLFW_KEY_RIGHT_CONTROL));
+        IM_GUI_IO.setKeyShift(IM_GUI_IO.getKeysDown(GLFW_KEY_LEFT_SHIFT) || IM_GUI_IO.getKeysDown(GLFW_KEY_RIGHT_SHIFT));
+        IM_GUI_IO.setKeyAlt(IM_GUI_IO.getKeysDown(GLFW_KEY_LEFT_ALT) || IM_GUI_IO.getKeysDown(GLFW_KEY_RIGHT_ALT));
+        IM_GUI_IO.setKeySuper(IM_GUI_IO.getKeysDown(GLFW_KEY_LEFT_SUPER) || IM_GUI_IO.getKeysDown(GLFW_KEY_RIGHT_SUPER));
     }
 
     /**
-     * @desc: Devuelve true si la tecla esta siendo presionada, caso contrario false.
+     * Verifica si la tecla especificada esta siendo presionada.
+     *
+     * @param keyCode codigo de la tecla que se desea verificar
+     * @return {@code true} si la tecla esta presionada, en caso contrario {@code false}
      */
     public static boolean isKeyPressed(int keyCode) {
-        return get().keyPressed[keyCode];
+        return KEY_PRESSED[keyCode];
     }
 
     /**
-     * @desc: Sirve para que cuando presionemos una tecla detecte si realizo su accion correspondiente, ya que si utilizamos la
-     * funcion "isKeyPressed" va a seguir ejecutando la accion en el main loop del juego (como hacemos con la caminata).
+     * Verifica si una tecla especificada esta lista para realizar una accion. Esto incluye verificar si la tecla fue
+     * presionada y, en caso afirmativo, limpiar su estado para evitar acciones repetidas en el mismo ciclo.
+     *
+     * @param keyCode codigo de la tecla que se desea verificar
+     * @return {@code true} si la tecla estaba presionada y lista para realizar una accion, en caso contrario
+     * {@code false}
      */
     public static boolean isKeyReadyForAction(int keyCode) {
-        boolean retVal = get().keyPressed[keyCode];
-        if (retVal) get().keyPressed[keyCode] = false;
-        return retVal;
+        // Si la tecla estaba presionada en un momento anterior
+        boolean wasKeyPressed = KEY_PRESSED[keyCode];
+        if (wasKeyPressed) KEY_PRESSED[keyCode] = false;
+        return wasKeyPressed;
     }
 
     /**
-     * @desc: Devulve la ultima tecla presionada por el usuario.
+     * Devulve la ultima tecla presionada por el usuario.
      */
     public static int getLastKeyPressed() {
-        return get().lastKeyPressed;
+        return lastKeyPressed;
     }
 
-    public static void setLastKeyPressed(int value) {
-        get().lastKeyPressed = value;
+    public static void setLastKeyPressed(int keyCode) {
+        lastKeyPressed = keyCode;
     }
 
     public static int getLastKeyMovedPressed() {
-        return get().lastKeyMovedPressed;
+        return lastKeyMovedPressed;
     }
 
-    public static void setLastKeyMovedPressed(int value) {
-        get().lastKeyMovedPressed = value;
+    public static void setLastKeyMovedPressed(int keyCode) {
+        lastKeyMovedPressed = keyCode;
     }
 
 }

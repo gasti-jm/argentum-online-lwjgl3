@@ -1,24 +1,22 @@
 package org.aoclient.network.protocol.handlers;
 
 import org.aoclient.engine.game.User;
-import org.aoclient.engine.game.models.E_Attributes;
+import org.aoclient.engine.game.models.Attribute;
 import org.aoclient.network.PacketBuffer;
 import org.tinylog.Logger;
 
 public class AttributesHandler implements PacketHandler {
-    
+
     @Override
-    public void handle(PacketBuffer data) {
-        if (data.checkBytes(6)) return;
+    public void handle(PacketBuffer buffer) {
+        if (buffer.checkBytes(6)) return;
+        buffer.readByte();
 
-        // Remove packet ID
-        data.readByte();
-
-        int[] attributes = new int[E_Attributes.values().length];
+        int[] attributes = new int[Attribute.values().length];
         for (int i = 0; i < 5; i++)
-            attributes[i] = data.readByte();
+            attributes[i] = buffer.readByte();
 
-        User.get().setAttributes(attributes);
+        User.INSTANCE.setAttributes(attributes);
         //    'Show them in character creation
         //    If EstadoLogin = E_MODO.Dados Then
         //        With frmCrearPersonaje
@@ -36,5 +34,5 @@ public class AttributesHandler implements PacketHandler {
 
         Logger.debug("handleAtributes Cargado! - FALTA TERMINAR!");
     }
-    
+
 }

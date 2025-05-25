@@ -4,16 +4,15 @@ import org.aoclient.network.PacketBuffer;
 import org.aoclient.network.protocol.handlers.PacketHandler;
 import org.tinylog.Logger;
 
-public class ShowSOSFormHandler implements PacketHandler  {
+public class ShowSOSFormHandler implements PacketHandler {
+
     @Override
-    public void handle(PacketBuffer data) {
-        if (data.checkBytes(3)) return;
-
-        PacketBuffer buffer = new PacketBuffer();
-        buffer.copy(data);
-
-        buffer.readByte();
-        String sosList = buffer.readCp1252String();
+    public void handle(PacketBuffer buffer) {
+        if (buffer.checkBytes(3)) return;
+        PacketBuffer tempBuffer = new PacketBuffer();
+        tempBuffer.copy(buffer);
+        tempBuffer.readByte();
+        String sosList = tempBuffer.readCp1252String();
 
         //Dim sosList() As String
         //    Dim i As Long
@@ -26,7 +25,8 @@ public class ShowSOSFormHandler implements PacketHandler  {
         //
         //    frmMSG.Show , //FrmMain
 
-        data.copy(buffer);
+        buffer.copy(tempBuffer);
         Logger.debug("handleShowSOSForm Cargado! - FALTA TERMINAR!");
     }
+
 }

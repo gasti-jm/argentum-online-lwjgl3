@@ -6,22 +6,19 @@ import org.tinylog.Logger;
 public class ShowUserRequestHandler implements PacketHandler {
 
     @Override
-    public void handle(PacketBuffer data) {
-        if (data.checkBytes(3)) return;
+    public void handle(PacketBuffer buffer) {
+        if (buffer.checkBytes(3)) return;
+        PacketBuffer tempBuffer = new PacketBuffer();
+        tempBuffer.copy(buffer);
+        tempBuffer.readByte();
 
-        PacketBuffer buffer = new PacketBuffer();
-        buffer.copy(data);
-
-        // Remove packet ID
-        buffer.readByte();
-
-        String recievePeticion = buffer.readCp1252String();
+        String recievePeticion = tempBuffer.readCp1252String();
 
         // Call frmUserRequest.recievePeticion(Buffer.ReadASCIIString())
         //    Call frmUserRequest.Show(vbModeless, //FrmMain)
         //
 
-        data.copy(buffer);
+        buffer.copy(tempBuffer);
         Logger.debug("handleShowUserRequest Cargado! - FALTA TERMINAR!");
     }
 

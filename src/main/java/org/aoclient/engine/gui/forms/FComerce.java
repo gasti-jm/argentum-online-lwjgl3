@@ -7,7 +7,6 @@ import imgui.flag.ImGuiInputTextFlags;
 import imgui.flag.ImGuiWindowFlags;
 import imgui.type.ImString;
 import org.aoclient.engine.game.Console;
-import org.aoclient.engine.game.User;
 import org.aoclient.engine.game.inventory.NPCInventory;
 import org.aoclient.engine.game.inventory.UserInventory;
 import org.aoclient.engine.renderer.RGBColor;
@@ -42,7 +41,7 @@ public final class FComerce extends Form {
 
     private final ImString cant = new ImString("1");
     public static NPCInventory invNPC = new NPCInventory(false);
-    public static UserInventory invUser = User.get().getUserInventory().clone();
+    public static UserInventory invUser = USER.getUserInventory().clone();
 
     public FComerce() {
         try {
@@ -73,12 +72,12 @@ public final class FComerce extends Form {
         if (ImGui.button("Comprar", 172, 31)) {
             playSound(SND_CLICK);
 
-            if (User.get().getUserGLD() >= invNPC.getValue(invNPC.getSlotSelected())) {
+            if (USER.getUserGLD() >= invNPC.getValue(invNPC.getSlotSelected())) {
                 if (!cant.isEmpty()) {
                     writeCommerceBuy(invNPC.getSlotSelected() + 1, Integer.parseInt(cant.get()));
                 }
             } else {
-                Console.get().addMsgToConsole("No tienes oro suficiente.", true, false, new RGBColor(1f, 0.1f, 0.1f));
+                Console.INSTANCE.addMsgToConsole("No tienes oro suficiente.", true, false, new RGBColor(1f, 0.1f, 0.1f));
             }
 
         }

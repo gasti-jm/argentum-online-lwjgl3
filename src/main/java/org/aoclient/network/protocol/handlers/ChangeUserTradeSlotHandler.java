@@ -6,37 +6,35 @@ import org.tinylog.Logger;
 public class ChangeUserTradeSlotHandler implements PacketHandler {
 
     @Override
-    public void handle(PacketBuffer data) {
-        if (data.checkBytes(22)) return;
+    public void handle(PacketBuffer buffer) {
+        if (buffer.checkBytes(22)) return;
+        PacketBuffer tempBuffer = new PacketBuffer();
+        tempBuffer.copy(buffer);
+        tempBuffer.readByte();
 
-        PacketBuffer buffer = new PacketBuffer();
-        buffer.copy(data);
+        int offerSlot = tempBuffer.readByte();
 
-        buffer.readByte();
+        tempBuffer.readInteger();
+        tempBuffer.readLong();
+        tempBuffer.readInteger();
+        tempBuffer.readByte();
+        tempBuffer.readInteger();
+        tempBuffer.readInteger();
+        tempBuffer.readInteger();
+        tempBuffer.readInteger();
+        tempBuffer.readLong();
+        tempBuffer.readCp1252String();
 
-        int offerSlot = buffer.readByte();
-
-        buffer.readInteger();
-        buffer.readLong();
-        buffer.readInteger();
-        buffer.readByte();
-        buffer.readInteger();
-        buffer.readInteger();
-        buffer.readInteger();
-        buffer.readInteger();
-        buffer.readLong();
-        buffer.readCp1252String();
-
-        buffer.readInteger();
-        buffer.readLong();
-        buffer.readInteger();
-        buffer.readByte();
-        buffer.readInteger();
-        buffer.readInteger();
-        buffer.readInteger();
-        buffer.readInteger();
-        buffer.readLong();
-        buffer.readCp1252String();
+        tempBuffer.readInteger();
+        tempBuffer.readLong();
+        tempBuffer.readInteger();
+        tempBuffer.readByte();
+        tempBuffer.readInteger();
+        tempBuffer.readInteger();
+        tempBuffer.readInteger();
+        tempBuffer.readInteger();
+        tempBuffer.readLong();
+        tempBuffer.readCp1252String();
 
         //OfferSlot = Buffer.ReadByte
         //
@@ -54,7 +52,8 @@ public class ChangeUserTradeSlotHandler implements PacketHandler {
         //
         //    Call frmComerciarUsu.PrintCommerceMsg(TradingUserName & " ha modificado su oferta.", FontTypeNames.FONTTYPE_VENENO)
 
-        data.copy(buffer);
+        buffer.copy(tempBuffer);
         Logger.debug("handleChangeUserTradeSlot Cargado! - FALTA TERMINAR!");
     }
+
 }
