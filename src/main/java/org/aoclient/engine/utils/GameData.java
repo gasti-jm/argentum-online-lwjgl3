@@ -56,7 +56,7 @@ public final class GameData {
     /**
      * Inicializamos todos los datos almacenados en archivos.
      */
-    public static void initialize() {
+    public static void init() {
 
         for (int i = 0; i < charList.length; i++) charList[i] = new Character();
 

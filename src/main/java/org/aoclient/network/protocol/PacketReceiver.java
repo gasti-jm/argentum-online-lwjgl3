@@ -140,7 +140,7 @@ public class PacketReceiver {
      * @param buffer buffer que contiene los bytes del paquete recibido del servidor
      */
     public void handleIncomingBytes(PacketBuffer buffer) {
-        if (buffer.getLength() == 0) return; // TODO Y si llega a ser -1?
+        if (buffer.getLength() <= 0) return;
 
         // Obtiene el ID del paquete del servidor
         int packetId = buffer.peekByte();

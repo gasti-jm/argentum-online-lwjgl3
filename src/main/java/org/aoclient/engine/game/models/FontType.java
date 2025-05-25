@@ -20,7 +20,7 @@ public enum FontType {
     INFO_BOLD(0.25f, 0.74f, 0.61f, true, false),
     EJECUCION(0.5f, 0.5f, 0.5f, true, false),
     PARTY(1f, 0.70f, 0.98f, false, false),
-    VENENO(0f, 1f, 0f, false, false),
+    POISON(0f, 1f, 0f, false, false),
     GUILD(1f, 1f, 1f, true, false),
     SERVER(0f, 0.72f, 0f, false, false),
     GUILDMSG(0.89f, 0.78f, 0.1f, false, false),

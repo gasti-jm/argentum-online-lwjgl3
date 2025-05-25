@@ -57,7 +57,7 @@ public final class IntroScene extends Scene {
     }
 
     /**
-     * @desc: En caso de apretar enter: cerrame la presentacion y mostrame el conectar.
+     *  En caso de apretar enter: cerrame la presentacion y mostrame el conectar.
      */
     @Override
     public void keyEvents() {
@@ -65,7 +65,7 @@ public final class IntroScene extends Scene {
     }
 
     /**
-     * @desc: Renderiza nuestra escena y actualiza el efecto y el tiempo de presentancion.
+     *  Renderiza nuestra escena y actualiza el efecto y el tiempo de presentancion.
      */
     @Override
     public void render() {
@@ -77,7 +77,7 @@ public final class IntroScene extends Scene {
     }
 
     /**
-     * @desc: Muestra y cambia la interfaz de presentacion (ya que son varias imagenes)
+     *  Muestra y cambia la interfaz de presentacion (ya que son varias imagenes)
      */
     private void showPresentation() {
         if (timePresentation <= 0 && nextInterface < 3) {
@@ -89,7 +89,7 @@ public final class IntroScene extends Scene {
     }
 
     /**
-     * @desc: Actualiza el tiempo total de la escena y al finalizar cambia de escena.
+     *  Actualiza el tiempo total de la escena y al finalizar cambia de escena.
      */
     private void checkEndScene() {
         timeScene -= deltaTime;
@@ -97,7 +97,7 @@ public final class IntroScene extends Scene {
     }
 
     /**
-     * @desc: Prepara el cierre de la escena.
+     *  Prepara el cierre de la escena.
      */
     @Override
     public void close() {
@@ -105,7 +105,7 @@ public final class IntroScene extends Scene {
     }
 
     /**
-     * @desc: Efecto de logo No-Land Studios
+     *  Efecto de logo No-Land Studios
      */
     private void effectNoLandStudios() {
         alphaInterface += 0.3f * deltaTime;

@@ -53,7 +53,7 @@ public final class Camera {
     /**
      * @param tileX: Posicion X donde este parado nuestro usuario.
      * @param tileY: Posicion Y donde este parado nuestro usuario.
-     * @desc: Esta es toda la logica que se encontraba al principio del "RenderScreen", permite actualizar la distancia de
+     *  Esta es toda la logica que se encontraba al principio del "RenderScreen", permite actualizar la distancia de
      * dibujado segun la posicion en la que se encuentre el usuario. Esto sirve para el recorrido de la matriz del MapData, cada
      * uno tiene distinto rango segun la capa que se va a dibujar.
      */

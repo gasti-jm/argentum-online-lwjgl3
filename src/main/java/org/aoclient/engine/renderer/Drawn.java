@@ -36,7 +36,7 @@ public final class Drawn {
      * @param: blend: efecto blend
      * @param: alpha: efecto de transparencia (0 a 1)
      * @param: color: objeto que contiene valores RGB como punto flotante (0 a 1).
-     * @desc: Se encargara de guardar la textura en la grafica y prepararla para su dibujado (en pocas palabras).
+     *  Se encargara de guardar la textura en la grafica y prepararla para su dibujado (en pocas palabras).
      */
     public static void geometryBoxRender(int grh_index, int x, int y, int src_width, int src_height, float sX, float sY, boolean blend, float alpha, RGBColor color) {
         if (blend) glBlendFunc(GL_SRC_ALPHA, GL_ONE);
@@ -85,7 +85,7 @@ public final class Drawn {
     }
 
     /**
-     * @desc: Lo mismo pero para interfaces de usuario.
+     *  Lo mismo pero para interfaces de usuario.
      */
     public static void geometryBoxRenderGUI(Texture texture, int x, int y, float alpha) {
         texture.bind();
@@ -175,7 +175,7 @@ public final class Drawn {
     }
 
     /**
-     * @desc: Dibuja un cuadrado o rectangulo segun la dimencion que le asignemos.
+     *  Dibuja un cuadrado o rectangulo segun la dimencion que le asignemos.
      */
     public static void drawRectangle(int x, int y, int width, int height, RGBColor color) {
         if (color == null) color = new RGBColor(0.0f, 0.0f, 0.0f);
@@ -217,7 +217,7 @@ public final class Drawn {
     }
 
     /**
-     * @desc: Dibuja una linea seun las dimenciones que les demos.
+     *  Dibuja una linea seun las dimenciones que les demos.
      */
     public static void drawLine(int x, int y, int width, int height, RGBColor color) {
         if (color == null)
@@ -251,7 +251,7 @@ public final class Drawn {
     }
 
     /**
-     * @desc: Dibuja una textura en la pantalla
+     *  Dibuja una textura en la pantalla
      */
     public static void drawTexture(GrhInfo grh, int x, int y, boolean center, boolean animate, boolean blend, float alpha, RGBColor color) {
         if (grh.getGrhIndex() == 0 || grhData[grh.getGrhIndex()].getNumFrames() == 0) return;
@@ -285,7 +285,7 @@ public final class Drawn {
     }
 
     /**
-     * @desc: Dibujamos sin animacion
+     *  Dibujamos sin animacion
      */
     public static void drawGrhIndex(int grhIndex, int x, int y, RGBColor color) {
         if (color == null) color = new RGBColor(1.0f, 1.0f, 1.0f);

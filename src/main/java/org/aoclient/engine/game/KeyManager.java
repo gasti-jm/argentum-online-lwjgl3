@@ -10,54 +10,51 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * Gestiona la configuracion y asignacion de teclas para las acciones del juego. Este controlador permite personalizar
- * las teclas para cada accion, cargar configuraciones desde un archivo, restaurar valores predeterminados y verificar
- * si las teclas ya estan asignadas.
+ * Administrador de teclas utilizado para mapear comandos a acciones especificas dentro del sistema.
  * <p>
- * Las teclas se representan como objetos del enum Key, que define todas las posibles acciones del juego y permite
- * asignarles codigos de teclas asociados.
+ * Proporciona mecanismos para cargar y guardar configuraciones de teclas desde un archivo, redefinir mapeos, y consultar teclas
+ * actualmente asignadas. Este gestor asegura que cada tecla pueda ser configurada de acuerdo con las preferencias del usuario,
+ * permitiendo cambiar o restablecer configuraciones por defecto si es necesario.
  * <p>
- * Funcionalidades principales:
- * <ul>
- * <li>Asignacion de teclas a acciones especificas.
- * <li>Cargar y guardar configuraciones de teclas en un archivo binario.
- * <li>Actualizar y verificar asignaciones de teclas.
- * <li>Restaurar a la configuracion predeterminada en caso de que no se pueda cargar un archivo valido.
- * </ul>
- * TODO No descartar la opcion de usar JSON para guardar las teclas en un futuro aunque es "menos eficiente" pero con la
- * ventaja de editar manualmente el archivo
+ * Los datos de configuracion de las teclas se almacenan en el archivo binario {@code keys.bin}.
+ * <p>
+ * TODO No descartar la opcion de usar JSON para guardar las teclas en un futuro aunque es "menos eficiente" pero con la ventaja
+ * de editar manualmente el archivo
  */
 
-public enum BindKeys {
+public enum KeyManager {
 
     INSTANCE;
 
+    /** Nombre del archivo que almacena la configuracion de las teclas en formato binario. */
     private static final String KEYS_CONFIG_FILE = "resources/keys.bin";
     /** Mapa de teclas en donde cada una esta asociada a un codigo. */
     private final Map<Integer, Key> keys;
     /** Set para detectar teclas duplicadas. */
     private final Set<Integer> assignedKey;
 
-    BindKeys() {
+    KeyManager() {
         keys = new HashMap<>();
         assignedKey = new HashSet<>();
-        initializeKeyBindings();
+        initKeys();
     }
 
     /**
-     * Inicializa las asignaciones de teclas intentando cargar desde el archivo o usando valores predeterminados si no
-     * es posible.
+     * Inicializa las teclas intentando cargarlas desde el archivo {@code keys.bin} o usando valores predeterminados si no es
+     * posible.
      */
-    private void initializeKeyBindings() {
+    private void initKeys() {
         boolean useDefaultKeys = false;
 
-        // Intenta cargar desde el archivo primero
+        // Primero intenta cargar las teclas desde el archivo
         try {
-            loadBindKeys();
+            loadKeys();
         } catch (IOException e) {
             System.err.println("Failed to load key configuration: " + e.getMessage());
             useDefaultKeys = true;
         }
+
+        updateKeyMaps();
 
         // Si no se pudo cargar el archivo, carga las teclas predeterminadas
         if (useDefaultKeys) {
@@ -98,11 +95,17 @@ public enum BindKeys {
      *
      * @throws IOException si hay un error al leer el archivo o si contiene menos datos de los esperados
      */
-    public void loadBindKeys() throws IOException {
+    public void loadKeys() throws IOException {
         try (RandomAccessFile f = new RandomAccessFile(KEYS_CONFIG_FILE, "rw")) {
             f.seek(0); // Establece el puntero del archivo en 0, es decir, el indice de la matriz de bytes del archivo
-            for (Key key : Key.values())
-                key.setKeyCode(f.readInt()); // Establece el codigo de tecla del archivo keys.bin a la tecla actual
+            for (Key key : Key.values()) {
+                int keyCode = f.readInt();
+                // System.out.println("Key code [" + keyCode + "] was loaded on the " + key.name() + " key");
+                // Verifica que el codigo de la tecla leido desde el archivo este en un rango razonable para teclas GLFW
+                if (keyCode < 0 || keyCode > 1000)
+                    key.resetToDefault(); // Usa el valor predeterminado si esta fuera del rango
+                else key.setKeyCode(keyCode); // Establece el codigo de tecla del archivo keys.bin a la tecla actual
+            }
         }
         updateKeyMaps();
     }
@@ -114,7 +117,7 @@ public enum BindKeys {
         try (RandomAccessFile f = new RandomAccessFile(KEYS_CONFIG_FILE, "rw")) {
             f.seek(0);
             for (Key key : Key.values())
-                f.writeInt(key.getKeyCode());
+                f.writeInt(key.getKeyCode()); // Escribe el codigo de las teclas del enum Key en el archivo keys.bin ordenadas tal cual estan en el enum
         }
     }
 
@@ -136,12 +139,12 @@ public enum BindKeys {
     }
 
     /**
-     * Obtiene el codigo de la tecla asignada a una accion especifica.
+     * Obtiene el codigo de la tecla presionada.
      *
      * @param key accion para la que se quiere obtener la tecla asignada
      * @return codigo de la tecla asignada
      */
-    public int getBindedKey(Key key) {
+    public int getKeyCode(Key key) {
         return key.getKeyCode();
     }
 

@@ -3,69 +3,77 @@ package org.aoclient.engine.renderer;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.lwjgl.opengl.GL11.glDeleteTextures;
-
 /**
- * Clase responsable de la gestion y almacenamiento de texturas para el renderizado grafico.
- * <p>
- * Mantiene un mapa donde las texturas son almacenadas utilizando como clave el numero del grafico, permitiendo un acceso rapido y
- * eficiente.
- * <p>
- * Las texturas de interfaz de usuario y textos son manejadas de forma independiente en sus respectivas clases, pero utilizan los
- * metodos de carga proporcionados por {@code Surface}. Esta clase se encarga principalmente de las texturas de los elementos del
- * juego como personajes, objetos y escenarios.
- * <p>
- * Ofrece funcionalidad para crear, obtener y eliminar texturas, optimizando el uso de memoria al reutilizar texturas ya
- * cargadas.
+ * Gestiona un conjunto de texturas (instancias de la clase {@code Texture}) mediante un mapa de identificadores numericos.
+ * Proporciona metodos para inicializar, obtener, crear y eliminar texturas.
  */
 
 public enum Surface {
 
     INSTANCE;
 
+    /** Mapa que asocia identificadores numericos con sus correspondientes texturas en memoria. */
     private Map<Integer, Texture> textures;
 
     /**
-     * Constructor que solo inicializa nuestro mapa.
+     * Inicializa el contenedor de texturas.
+     * <p>
+     * Este metodo establece un nuevo mapa de texturas vacio, preparando la instancia para gestionar texturas asociadas en el
+     * ciclo de vida del objeto.
      */
-    public void initialize() {
-        this.textures = new HashMap<>();
+    public void init() {
+        textures = new HashMap<>();
     }
 
     /**
-     * @desc: Elimina todas las texturas del mapa, esto se utiliza al pasar de mapa en el juego, ya que en algun momento las
-     * texturas que no se van a dibujar y deben eliminarse para ahorrar espacio.
+     * Elimina todas las texturas gestionadas en el mapa de texturas.
+     * <p>
+     * Este metodo limpia completamente el contenedor que almacena las texturas, liberando todas las referencias a dichas
+     * instancias. Es util para liberar recursos o reinicializar el estado del sistema de gestion de texturas.
      */
     public void deleteAllTextures() {
-//        for (Map.Entry<Integer, Texture> entry : textures.entrySet()) {
-//            glDeleteTextures(entry.getValue().getId());
-//        }
-
-        this.textures.clear();
+        // for (Map.Entry<Integer, Texture> entry : textures.entrySet()) glDeleteTextures(entry.getValue().getId());
+        textures.clear();
     }
 
     /**
-     * @param fileNum: Nombre del archivo del grafico (en este caso siempre es un numero)
-     * @return Textura. Si existe: la devuelve segun la llave pasada por parametro. En caso contrario crea una nueva, la guarda en
-     * el mapa y la retorna.
+     * Obtiene una textura asociada al identificador numerico especificado.
+     * <p>
+     * Si la textura no existe en el mapa, se crea y se agrega al mismo.
+     *
+     * @param fileNum identificador numerico asociado al archivo de textura
+     * @return la textura obtenida o creada asociada al identificador proporcionado
      */
     public Texture getTexture(int fileNum) {
         if (textures.containsKey(fileNum)) return textures.get(fileNum);
-        return createTexture("graphics.ao", fileNum);
+        return createTexture(fileNum);
     }
 
     /**
-     * @desc: Crea una textura y lo guarda en nuestro mapa de texturas con su id (en este caso el numero del archivo).
+     * Crea una nueva textura asociada a un identificador numerico y la agrega al mapa de texturas.
+     * <p>
+     * La textura es cargada desde un archivo comprimido especificado y configurada adecuadamente.
+     *
+     * @param fileNum identificador numerico unico asociado a la textura que se desea crear
+     * @return la nueva textura creada asociada al identificador proporcionado
      */
-    private Texture createTexture(String fileCompressed, int fileNum) {
+    private Texture createTexture(int fileNum) {
         Texture texture = new Texture();
-        texture.loadTexture(texture, fileCompressed, String.valueOf(fileNum), false);
+        texture.loadTexture(texture, "graphics.ao", String.valueOf(fileNum), false);
         textures.put(fileNum, texture);
         return texture;
     }
 
     /**
-     * @desc: Crea y retorna una textura
+     * Crea una nueva textura a partir de un archivo especificado.
+     * <p>
+     * La textura es inicializada con la informacion proporcionada, incluyendo el archivo comprimido, el archivo de textura y si
+     * esta destinada a interfaces graficas de usuario (GUI).
+     *
+     * @param fileCompressed nombre del archivo comprimido que contiene la textura
+     * @param file           nombre del archivo dentro del archivo comprimido que contiene los datos de la textura
+     * @param isGUI          indica si la textura esta destinada a ser utilizada en interfaces graficas de usuario (GUI)
+     * @return la textura creada, o {@code null} si el nombre del archivo especificado esta vacio
      */
     public Texture createTexture(String fileCompressed, String file, boolean isGUI) {
         if (file.isEmpty()) return null;

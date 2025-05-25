@@ -32,7 +32,7 @@ public final class Time {
     private static int contFPS = 0;
 
     /**
-     * @desc: Inicializamos las variables necesarias para calcular el tiempo
+     *  Inicializamos las variables necesarias para calcular el tiempo
      */
     public static void initTime() {
         beginTime = (float) glfwGetTime();
@@ -40,7 +40,7 @@ public final class Time {
     }
 
     /**
-     * @desc: Actualizamos los timers, incluido los FPS
+     *  Actualizamos los timers, incluido los FPS
      */
     public static void updateTime() {
         updateFPS();
@@ -53,7 +53,7 @@ public final class Time {
     }
 
     /**
-     * @desc: Actualizamos los FPS
+     *  Actualizamos los FPS
      */
     private static void updateFPS() {
         // paso 1 seg?

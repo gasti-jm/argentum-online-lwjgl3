@@ -63,7 +63,7 @@ public final class UserInventory extends Inventory implements Cloneable {
     }
 
     /**
-     * @desc: Actualiza y dibuja el inventario.
+     *  Actualiza y dibuja el inventario.
      */
     @Override
     public void drawInventory() {
