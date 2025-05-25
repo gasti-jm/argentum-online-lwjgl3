@@ -204,7 +204,7 @@ public final class GameScene extends Scene {
     private void checkBindedKeys() {
         if (user.isUserComerciando()) return;
 
-        final Key keyPressed = keyManager.getKeyPressed(KeyListener.getLastKeyPressed());
+        final Key keyPressed = keyManager.getKey(KeyListener.getLastKeyPressed());
 
         this.checkWalkKeys();
 

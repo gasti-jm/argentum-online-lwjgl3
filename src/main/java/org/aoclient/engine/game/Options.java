@@ -10,7 +10,7 @@ import java.io.*;
 
 public enum Options {
 
-    INSTANCE; // Impementacion del patron Singleton de Joshua Bloch (considerada la mejor)
+    INSTANCE; // Implementacion del patron Singleton de Joshua Bloch (considerada la mejor)
 
     private static final String OPTIONS_FILE_PATH = "resources/options.ini";
 
@@ -62,38 +62,6 @@ public enum Options {
             write(writer, "VSYNC", vsync);
         } catch (IOException e) {
             Logger.error("Could not write to options.ini file!");
-        }
-    }
-
-    /**
-     * Escribe una opcion con su valor asociado en un objeto {@code BufferedWriter}.
-     *
-     * @param writer objeto {@code BufferedWriter} que sera utilizado para escribir la opcion
-     * @param option nombre de la opcion
-     * @param value  valor de la opcion
-     */
-    private void write(BufferedWriter writer, String option, Object value) throws IOException {
-        writer.write(option + " = " + value);
-        writer.newLine();
-    }
-
-    /**
-     * Carga una opcion.
-     *
-     * @param option nombre de la opcion
-     * @param value  valor de la opcion
-     */
-    private void load(String option, String value) {
-        switch (option) {
-            case "Music" -> music = Boolean.parseBoolean(value);
-            case "Sound" -> sound = Boolean.parseBoolean(value);
-            case "ShowName" -> showName = Boolean.parseBoolean(value);
-            case "Name" -> nickName = value;
-            case "IP" -> ipServer = value;
-            case "PORT" -> portServer = value;
-            case "Fullscreen" -> fullscreen = Boolean.parseBoolean(value);
-            case "VSYNC" -> vsync = Boolean.parseBoolean(value);
-            default -> Logger.warn("Unknown option ignored: {}", option);
         }
     }
 
@@ -159,6 +127,38 @@ public enum Options {
 
     public void setVsync(boolean vsync) {
         this.vsync = vsync;
+    }
+
+    /**
+     * Escribe una opcion con su valor asociado en un objeto {@code BufferedWriter}.
+     *
+     * @param writer objeto {@code BufferedWriter} que sera utilizado para escribir la opcion
+     * @param option nombre de la opcion
+     * @param value  valor de la opcion
+     */
+    private void write(BufferedWriter writer, String option, Object value) throws IOException {
+        writer.write(option + " = " + value);
+        writer.newLine();
+    }
+
+    /**
+     * Carga una opcion.
+     *
+     * @param option nombre de la opcion
+     * @param value  valor de la opcion
+     */
+    private void load(String option, String value) {
+        switch (option) {
+            case "Music" -> music = Boolean.parseBoolean(value);
+            case "Sound" -> sound = Boolean.parseBoolean(value);
+            case "ShowName" -> showName = Boolean.parseBoolean(value);
+            case "Name" -> nickName = value;
+            case "IP" -> ipServer = value;
+            case "PORT" -> portServer = value;
+            case "Fullscreen" -> fullscreen = Boolean.parseBoolean(value);
+            case "VSYNC" -> vsync = Boolean.parseBoolean(value);
+            default -> Logger.warn("Unknown option ignored: {}", option);
+        }
     }
 
 }

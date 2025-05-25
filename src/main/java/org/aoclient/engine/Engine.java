@@ -53,6 +53,39 @@ public final class Engine {
     }
 
     /**
+     * Inicializa los componentes esenciales del motor grafico.
+     */
+    public void init() {
+        Logger.info("Starting LWJGL {}!", Version.getVersion());
+        Logger.info("Running on {} / v{} [{}]", System.getProperty("os.name"), System.getProperty("os.version"), System.getProperty("os.arch"));
+        Logger.info("Java version: {}", System.getProperty("java.version"));
+
+        GameData.init();
+        window.init();
+        guiSystem.init();
+        Surface.INSTANCE.init();
+        KeyManager keyManager = KeyManager.INSTANCE; // ?
+
+        changeScene(INTRO_SCENE);
+        playMusic("intro.ogg");
+    }
+
+    /**
+     * Metodo principal para iniciar el motor grafico.
+     * <p>
+     * Este metodo coordina el flujo principal de ejecucion del motor. Primero, inicializa los elementos necesarios como la
+     * ventana, gestor de texturas, escenas, y otros componentes fundamentales llamando al metodo {@code init()}. A continuacion,
+     * se ejecuta el bucle principal del juego mediante el metodo {@code loop()}, que gestiona los eventos, la logica, el
+     * renderizado y la comunicacion con el servidor. Finalmente, se limpian y cierran los recursos utilizados llamando al metodo
+     * {@code close()}.
+     */
+    public void start() {
+        init();
+        loop();
+        close();
+    }
+
+    /**
      * Cierra los recursos y finaliza el funcionamiento del motor grafico.
      */
     private void close() {
@@ -113,30 +146,11 @@ public final class Engine {
     }
 
     /**
-     * Inicializa los componentes esenciales del motor grafico.
-     */
-    public void init() {
-        Logger.info("Starting LWJGL {}!", Version.getVersion());
-        Logger.info("Running on {} / v{} [{}]", System.getProperty("os.name"), System.getProperty("os.version"), System.getProperty("os.arch"));
-        Logger.info("Java version: {}", System.getProperty("java.version"));
-
-        GameData.init();
-        window.init();
-        guiSystem.init();
-        Surface.INSTANCE.init();
-        KeyManager keyManager = KeyManager.INSTANCE; // ?
-
-        changeScene(INTRO_SCENE);
-        playMusic("intro.ogg");
-    }
-
-    /**
      * Cambia la escena actual del juego a una nueva basada en el tipo de escena proporcionado.
      * <p>
      * Inicializa la nueva escena una vez que se ha creado.
      *
-     * @param scene El tipo de la nueva escena a la cual se desea cambiar. Puede ser uno de los valores definidos en
-     *              {@code SceneType}.
+     * @param scene tipo de escena
      */
     private void changeScene(SceneType scene) {
         switch (scene) {
@@ -164,21 +178,6 @@ public final class Engine {
         currentScene.render();
         guiSystem.renderGUI();
         Sound.renderMusic();
-    }
-
-    /**
-     * Metodo principal para iniciar el motor grafico.
-     * <p>
-     * Este metodo coordina el flujo principal de ejecucion del motor. Primero, inicializa los elementos necesarios como la
-     * ventana, gestor de texturas, escenas, y otros componentes fundamentales llamando al metodo {@code init()}. A continuacion,
-     * se ejecuta el bucle principal del juego mediante el metodo {@code loop()}, que gestiona los eventos, la logica, el
-     * renderizado y la comunicacion con el servidor. Finalmente, se limpian y cierran los recursos utilizados llamando al metodo
-     * {@code close()}.
-     */
-    public void start() {
-        init();
-        loop();
-        close();
     }
 
 }

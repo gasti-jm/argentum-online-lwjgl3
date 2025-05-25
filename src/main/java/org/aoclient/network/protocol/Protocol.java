@@ -107,7 +107,7 @@ public class Protocol {
      * <pre>{@code
      * public static void writeTalk(String chat) {
      *     outputBuffer.writeByte(ClientPacket.TALK.getId());
-     *     outputBuffer.writeUTF8String(chat);
+     *     outputBuffer.writeCp1252String(chat);
      * }
      * }</pre>
      * <li><b>El servidor VB6 procesa el paquete en {@code HandleTalk}</b>:
@@ -121,15 +121,15 @@ public class Protocol {
      * <li><b>El cliente Java recibe y procesa un paquete CHAT_OVER_HEAD completo</b>:
      * <pre>{@code
      * // En ChatOverHeadHandler.java
-     * String chat = buffer.readUTF8String(); // El mensaje
-     * short charIndex = buffer.readInteger(); // El indice del personaje (añadido por el servidor)
-     * int r = buffer.readByte(); // Componente rojo (añadido por el servidor)
-     * int g = buffer.readByte(); // Componente verde (añadido por el servidor)
-     * int b = buffer.readByte(); // Componente azul (añadido por el servidor)
+     * String chat = tempBuffer.readCp1252String(); // El cliente añadio esto!
+     * short charIndex = tempBuffer.readInteger(); // El servidor desde el codigo de VB6 añadio esto!
+     * int r = tempBuffer.readByte(); // El servidor desde el codigo de VB6 añadio esto!
+     * int g = tempBuffer.readByte(); // El servidor desde el codigo de VB6 añadio esto!
+     * int b = tempBuffer.readByte(); // El servidor desde el codigo de VB6 añadio esto!
      * }</pre>
      * </ol>
      * <p>
-     * Ver: estructura-general-de-los-paquetes.md
+     * Ver: communication-protocol.md
      */
     public static void writeTalk(String chat) {
         outputBuffer.writeByte(ClientPacket.TALK.getId());
