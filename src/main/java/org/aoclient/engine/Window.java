@@ -63,7 +63,7 @@ public enum Window {
     }
 
     /**
-     *  Inicializamos nuestro contexto GLFW (ventana) con sus sistemas (OpenGL y OpenAL)
+     * Inicializamos nuestro contexto GLFW (ventana) con sus sistemas (OpenGL y OpenAL)
      */
     public void init() {
         // Setup an error callback
@@ -160,7 +160,7 @@ public enum Window {
     }
 
     /**
-     *  Destruye el contexto de LWJGL3 para el cierre del programa.
+     * Destruye el contexto de LWJGL3 para el cierre del programa.
      */
     public void close() {
         // Destroy the audio context

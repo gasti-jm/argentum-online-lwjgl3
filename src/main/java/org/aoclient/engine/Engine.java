@@ -20,19 +20,14 @@ import static org.lwjgl.glfw.GLFW.glfwSwapBuffers;
 import static org.lwjgl.opengl.GL11.*;
 
 /**
+ * Clase principal que representa el motor grafico del proyecto.
  * <p>
- * Clase principal del motor grafico que se encarga  de inicializar, ejecutar y finalizar todas las funcionalidades principales
- * del cliente.
+ * Esta clase gestiona la inicializacion, ejecucion y finalizacion de los componentes esenciales del motor. Es responsable de
+ * coordinar el renderizado, la logica principal, el manejo de eventos y la comunicacion con el servidor.
  * <p>
- * {@code Engine} gestiona el ciclo principal del juego, inicializando componentes criticos como la ventana, el sistema de sonido
- * {@code OpenAL}, el motor de renderizado {@code OpenGL} y el sistema de interfaz grafica mediante {@code ImGUI}.
- * <p>
- * El motor se encarga de administrar las diferentes escenas del juego, permitiendo transiciones entre
- * {@link org.aoclient.engine.scenes.IntroScene}, {@link org.aoclient.engine.scenes.MainScene}, y {@link GameScene}. Tambien
- * coordina la renderizacion de los elementos visuales y el procesamiento de eventos del teclado y raton en cada fotograma.
- * <p>
- * Ademas, se encarga de la gestion de recursos del sistema, asegurando la correcta inicializacion y liberacion de memoria al
- * iniciar o cerrar la aplicacion.
+ * El ciclo de vida del motor incluye tres etapas principales: inicializacion de recursos mediante el metodo {@code init()},
+ * ejecucion del bucle principal con {@code loop()} y cierre de recursos junto con la terminacion del programa a traves del metodo
+ * {@code close()}.
  */
 
 public final class Engine {
@@ -40,9 +35,9 @@ public final class Engine {
     /** Flag que indica si el programa esta corriendo. */
     private static boolean prgRun = true;
     /** Ventana principal del motor grafico. */
-    private Window window;
+    private final Window window = Window.INSTANCE;
     /** Sistema de interfaz grafica de usuario. */
-    private ImGUISystem guiSystem;
+    private final ImGUISystem guiSystem = ImGUISystem.INSTANCE;
     /** Escena actual que esta siendo renderizada y actualizada en el motor. */
     private Scene currentScene;
 
@@ -109,7 +104,7 @@ public final class Engine {
 
             MouseListener.resetReleasedButtons();
 
-            // Si hay algo para enviar, lo envia (escribe lo que envia el cliente al servidor, como comandos, acciones, etc.)
+            // Si hay algo para enviar, lo envia (escribe lo que envia el cliente al servidor)
             SocketConnection.INSTANCE.write();
             // Si hay algo para recibir, lo recibe (lee lo que recibe el cliente del servidor)
             SocketConnection.INSTANCE.read();
@@ -118,25 +113,18 @@ public final class Engine {
     }
 
     /**
-     * Inicia nuestro motor grafico con su ventana, gestor de texturas (surface), inits (gamedata) y escenas.
+     * Inicializa los componentes esenciales del motor grafico.
      */
     public void init() {
-        Logger.info("Starting LWJGL {} !", Version.getVersion());
-        Logger.info("Running on {} / v{} [{}]",
-                System.getProperty("os.name"), System.getProperty("os.version"), System.getProperty("os.arch"));
-
+        Logger.info("Starting LWJGL {}!", Version.getVersion());
+        Logger.info("Running on {} / v{} [{}]", System.getProperty("os.name"), System.getProperty("os.version"), System.getProperty("os.arch"));
         Logger.info("Java version: {}", System.getProperty("java.version"));
 
         GameData.init();
-
-        window = Window.INSTANCE;
         window.init();
-
-        guiSystem = ImGUISystem.INSTANCE;
         guiSystem.init();
-
         Surface.INSTANCE.init();
-        BindKeys bindKeys = BindKeys.INSTANCE;
+        BindKeys bindKeys = BindKeys.INSTANCE; // ?
 
         changeScene(INTRO_SCENE);
         playMusic("intro.ogg");
@@ -148,7 +136,7 @@ public final class Engine {
      * Inicializa la nueva escena una vez que se ha creado.
      *
      * @param scene El tipo de la nueva escena a la cual se desea cambiar. Puede ser uno de los valores definidos en
-     *              {@code SceneType},
+     *              {@code SceneType}.
      */
     private void changeScene(SceneType scene) {
         switch (scene) {
@@ -170,7 +158,6 @@ public final class Engine {
      * Por ultimo, dibuja la escena en la que estemos y renderiza nuestra GUI del framework "Dear ImGUI".
      */
     private void render() {
-        // Check change screen
         if (!currentScene.isVisible()) changeScene(currentScene.getChangeScene());
         currentScene.mouseEvents();
         currentScene.keyEvents();
