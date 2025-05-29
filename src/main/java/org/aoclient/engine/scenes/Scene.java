@@ -49,7 +49,7 @@ public abstract class Scene {
     public abstract void mouseEvents();
 
     /**
-     * Escucha cada evento del teclado, segun lo definido en el KeyListener.
+     * Escucha cada evento del teclado, segun lo definido en el KeyHandler.
      */
     public abstract void keyEvents();
 

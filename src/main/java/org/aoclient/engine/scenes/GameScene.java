@@ -1,14 +1,17 @@
 package org.aoclient.engine.scenes;
 
 import org.aoclient.engine.Window;
-import org.aoclient.engine.game.*;
+import org.aoclient.engine.game.Dialogs;
+import org.aoclient.engine.game.IntervalTimer;
+import org.aoclient.engine.game.Rain;
+import org.aoclient.engine.game.User;
 import org.aoclient.engine.game.models.Direction;
 import org.aoclient.engine.game.models.Key;
 import org.aoclient.engine.game.models.Skill;
 import org.aoclient.engine.gui.ImGUISystem;
 import org.aoclient.engine.gui.forms.FCantidad;
 import org.aoclient.engine.gui.forms.FMain;
-import org.aoclient.engine.listeners.KeyListener;
+import org.aoclient.engine.listeners.KeyHandler;
 import org.aoclient.engine.listeners.MouseListener;
 import org.aoclient.engine.renderer.RGBColor;
 import org.aoclient.network.protocol.ProtocolCmdParse;
@@ -57,7 +60,6 @@ import static org.lwjgl.glfw.GLFW.*;
 public final class GameScene extends Scene {
 
     private final IntervalTimer intervalToUpdatePos = new IntervalTimer(INT_SENTRPU);
-    private final KeyManager keyManager = KeyManager.INSTANCE;
     private final User user = User.INSTANCE;
     RGBColor ambientColor; // color de ambiente.
     private float offSetCounterX = 0;
@@ -128,7 +130,7 @@ public final class GameScene extends Scene {
                 if (user.getUsingSkill() == 0) {
 
                     // Estamos manteniendo Shift derecho?
-                    if (KeyListener.isKeyPressed(GLFW_KEY_RIGHT_SHIFT) &&
+                    if (KeyHandler.isKeyPressed(GLFW_KEY_RIGHT_SHIFT) &&
                             charList[user.getUserCharIndex()].getPriv() != 0) {
 
                         writeWarpChar("YO",
@@ -186,7 +188,7 @@ public final class GameScene extends Scene {
      */
     @Override
     public void keyEvents() {
-        if (KeyListener.isKeyPressed(keyManager.getKeyCode(Key.EXIT_GAME))) writeQuit();
+        if (KeyHandler.isKeyPressed(Key.EXIT_GAME.getKeyCode())) writeQuit();
         this.checkBindedKeys();
     }
 
@@ -195,7 +197,7 @@ public final class GameScene extends Scene {
      */
     @Override
     public void close() {
-        this.visible = false;
+        visible = false;
     }
 
     /**
@@ -204,18 +206,19 @@ public final class GameScene extends Scene {
     private void checkBindedKeys() {
         if (user.isUserComerciando()) return;
 
-        final Key keyPressed = keyManager.getKey(KeyListener.getLastKeyPressed());
+        // Usando el metodo estatico de Key para obtener la tecla desde el codigo
+        final Key key = Key.getKey(KeyHandler.getLastKeyPressed());
 
-        this.checkWalkKeys();
+        checkWalkKeys();
 
-        if (keyPressed == null) return; // ni me gasto si la tecla presionada no existe en nuestro bind.
+        if (key == null) return; // ni me gasto si la tecla presionada no existe en nuestro bind.
 
-        if (KeyListener.isKeyReadyForAction(keyManager.getKeyCode(keyPressed))) {
+        if (KeyHandler.isActionKeyJustPressed(key)) {
 
             // Para que al hablar no ejecute teclas bindeadas y solo permita cerrar nuevamente el sendText
-            if (user.isTalking() && keyPressed != TALK) return;
+            if (user.isTalking() && key != TALK) return;
 
-            switch (keyPressed) {
+            switch (key) {
                 case USE_OBJECT:
                     user.getUserInventory().useItem();
                     break;
@@ -262,15 +265,12 @@ public final class GameScene extends Scene {
     private void checkWalkKeys() {
         if (!user.isUserMoving()) {
             if (!autoMove) {
-                if (!KeyListener.LAST_KEYS_MOVED_PRESSED.isEmpty()) {
-                    if (KeyListener.LAST_KEYS_MOVED_PRESSED.get(KeyListener.LAST_KEYS_MOVED_PRESSED.size() - 1) == keyManager.getKeyCode(Key.UP))
-                        user.moveTo(Direction.UP);
-                    else if (KeyListener.LAST_KEYS_MOVED_PRESSED.get(KeyListener.LAST_KEYS_MOVED_PRESSED.size() - 1) == keyManager.getKeyCode(Key.DOWN))
-                        user.moveTo(Direction.DOWN);
-                    else if (KeyListener.LAST_KEYS_MOVED_PRESSED.get(KeyListener.LAST_KEYS_MOVED_PRESSED.size() - 1) == keyManager.getKeyCode(Key.LEFT))
-                        user.moveTo(Direction.LEFT);
-                    else if (KeyListener.LAST_KEYS_MOVED_PRESSED.get(KeyListener.LAST_KEYS_MOVED_PRESSED.size() - 1) == keyManager.getKeyCode(Key.RIGHT))
-                        user.moveTo(Direction.RIGHT);
+                if (KeyHandler.isAnyMovementKeyPressed()) {
+                    int keyCode = KeyHandler.getLastMovementKeyPressed();
+                    if (keyCode == Key.UP.getKeyCode()) user.moveTo(Direction.UP);
+                    else if (keyCode == Key.DOWN.getKeyCode()) user.moveTo(Direction.DOWN);
+                    else if (keyCode == Key.LEFT.getKeyCode()) user.moveTo(Direction.LEFT);
+                    else if (keyCode == Key.RIGHT.getKeyCode()) user.moveTo(Direction.RIGHT);
                 }
             } else autoWalk();
         }
@@ -281,16 +281,16 @@ public final class GameScene extends Scene {
      * direccion presionada. Verifica si la tecla presionada corresponde a una tecla bindeada para movimientos y ejecuta el
      * desplazamiento del usuario en la direccion correspondiente.
      * <p>
-     * Este metodo utiliza {@code KeyListener.getLastKeyMovedPressed()} para obtener el codigo de la ultima tecla de direccion
+     * Este metodo utiliza {@code KeyHandler.getLastMovementKeyPressed()} para obtener el codigo de la ultima tecla de direccion
      * presionada y {@code bindKeys.getBindedKey()} para comparar dicho codigo con las teclas asociadas a cada direccion posible.
      * Al determinar la direccion, invoca el metodo {@code moveTo()} del usuario para ejecutar el movimiento.
      */
     private void autoWalk() {
-        int lastKeyCode = KeyListener.getLastKeyMovedPressed();
-        if (lastKeyCode == keyManager.getKeyCode(Key.UP)) user.moveTo(Direction.UP);
-        else if (lastKeyCode == keyManager.getKeyCode(Key.DOWN)) user.moveTo(Direction.DOWN);
-        else if (lastKeyCode == keyManager.getKeyCode(Key.LEFT)) user.moveTo(Direction.LEFT);
-        else if (lastKeyCode == keyManager.getKeyCode(Key.RIGHT)) user.moveTo(Direction.RIGHT);
+        int keyCode = KeyHandler.getLastMovementKeyPressed();
+        if (keyCode == Key.UP.getKeyCode()) user.moveTo(Direction.UP);
+        else if (keyCode == Key.DOWN.getKeyCode()) user.moveTo(Direction.DOWN);
+        else if (keyCode == Key.LEFT.getKeyCode()) user.moveTo(Direction.LEFT);
+        else if (keyCode == Key.RIGHT.getKeyCode()) user.moveTo(Direction.RIGHT);
     }
 
     /**

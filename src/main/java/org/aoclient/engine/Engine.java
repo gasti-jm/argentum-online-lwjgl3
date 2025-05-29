@@ -1,7 +1,7 @@
 package org.aoclient.engine;
 
-import org.aoclient.engine.game.KeyManager;
 import org.aoclient.engine.gui.ImGUISystem;
+import org.aoclient.engine.listeners.KeyHandler;
 import org.aoclient.engine.listeners.MouseListener;
 import org.aoclient.engine.renderer.Surface;
 import org.aoclient.engine.scenes.*;
@@ -64,7 +64,6 @@ public final class Engine {
         window.init();
         guiSystem.init();
         Surface.INSTANCE.init();
-        KeyManager keyManager = KeyManager.INSTANCE; // ?
 
         changeScene(INTRO_SCENE);
         playMusic("intro.ogg");
@@ -178,6 +177,7 @@ public final class Engine {
         currentScene.render();
         guiSystem.renderGUI();
         Sound.renderMusic();
+        KeyHandler.update();
     }
 
 }

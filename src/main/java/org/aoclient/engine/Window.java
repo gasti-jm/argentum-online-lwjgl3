@@ -1,6 +1,6 @@
 package org.aoclient.engine;
 
-import org.aoclient.engine.listeners.KeyListener;
+import org.aoclient.engine.listeners.KeyHandler;
 import org.aoclient.engine.listeners.MouseListener;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.glfw.GLFWImage;
@@ -96,7 +96,7 @@ public enum Window {
         glfwSetCursorPosCallback(window, MouseListener::mousePosCallback);
         glfwSetMouseButtonCallback(window, MouseListener::mouseButtonCallback);
         glfwSetScrollCallback(window, MouseListener::mouseScrollCallback);
-        glfwSetKeyCallback(window, KeyListener::keyCallback);
+        glfwSetKeyCallback(window, KeyHandler::keyCallback);
 
         // Get the thread stack and push a new frame
         try (MemoryStack stack = stackPush()) {
@@ -176,6 +176,72 @@ public enum Window {
         glfwSetErrorCallback(null).free();
     }
 
+    public void toggleWindow() {
+        if (options.isFullscreen()) glfwSetWindowMonitor(window, glfwGetPrimaryMonitor(), 0, 0, width, height, GLFW_DONT_CARE);
+        else {
+            glfwSetWindowMonitor(window, NULL,
+                    0,
+                    0,
+                    width, height, GLFW_DONT_CARE);
+
+            // Get the thread stack and push a new frame
+            try (MemoryStack stack = stackPush()) {
+                IntBuffer pWidth = stack.mallocInt(1); // int*
+                IntBuffer pHeight = stack.mallocInt(1); // int*
+
+                // Get the window size passed to glfwCreateWindow
+                glfwGetWindowSize(window, pWidth, pHeight);
+
+                GLFWVidMode vidmode = glfwGetVideoMode(glfwGetPrimaryMonitor());
+
+                // Center the window
+                glfwSetWindowPos(
+                        window,
+                        (vidmode.width() - pWidth.get(0)) / 2,
+                        (vidmode.height() - pHeight.get(0)) / 2
+                );
+            } // the stack frame is popped automatically
+        }
+
+        if (options.isVsync()) glfwSwapInterval(1);
+        else glfwSwapInterval(0);
+
+    }
+
+    /**
+     * Minimiza nuestra ventana
+     */
+    public void minimizar() {
+        glfwIconifyWindow(window);
+    }
+
+    /**
+     * @return True si la ventana esta minimizada, caso contrario falso.
+     */
+    public boolean isMinimized() {
+        return glfwGetWindowAttrib(window, GLFW_ICONIFIED) == GLFW_TRUE;
+    }
+
+    public long getWindow() {
+        return this.window;
+    }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
+    public boolean isCursorCrosshair() {
+        return cursorCrosshair;
+    }
+
+    public void setCursorCrosshair(boolean cursorCrosshair) {
+        this.cursorCrosshair = cursorCrosshair;
+    }
+
     /**
      * Carga una imagen y la agrega como icono a nuestra ventana GLFW.
      */
@@ -222,72 +288,6 @@ public enum Window {
             // set current cursor
             glfwSetCursor(window, cursorID);
         }
-    }
-
-    public void toggleWindow() {
-        if (options.isFullscreen()) glfwSetWindowMonitor(window, glfwGetPrimaryMonitor(), 0, 0, width, height, GLFW_DONT_CARE);
-        else {
-            glfwSetWindowMonitor(window, NULL,
-                    0,
-                    0,
-                    width, height, GLFW_DONT_CARE);
-
-            // Get the thread stack and push a new frame
-            try (MemoryStack stack = stackPush()) {
-                IntBuffer pWidth = stack.mallocInt(1); // int*
-                IntBuffer pHeight = stack.mallocInt(1); // int*
-
-                // Get the window size passed to glfwCreateWindow
-                glfwGetWindowSize(window, pWidth, pHeight);
-
-                GLFWVidMode vidmode = glfwGetVideoMode(glfwGetPrimaryMonitor());
-
-                // Center the window
-                glfwSetWindowPos(
-                        window,
-                        (vidmode.width() - pWidth.get(0)) / 2,
-                        (vidmode.height() - pHeight.get(0)) / 2
-                );
-            } // the stack frame is popped automatically
-        }
-
-        if (options.isVsync()) glfwSwapInterval(1);
-        else glfwSwapInterval(0);
-
-    }
-
-    /**
-     *  Minimiza nuestra ventana
-     */
-    public void minimizar() {
-        glfwIconifyWindow(window);
-    }
-
-    /**
-     * @return True si la ventana esta minimizada, caso contrario falso.
-     */
-    public boolean isMinimized() {
-        return glfwGetWindowAttrib(window, GLFW_ICONIFIED) == GLFW_TRUE;
-    }
-
-    public long getWindow() {
-        return this.window;
-    }
-
-    public int getWidth() {
-        return width;
-    }
-
-    public int getHeight() {
-        return height;
-    }
-
-    public boolean isCursorCrosshair() {
-        return cursorCrosshair;
-    }
-
-    public void setCursorCrosshair(boolean cursorCrosshair) {
-        this.cursorCrosshair = cursorCrosshair;
     }
 
 }
