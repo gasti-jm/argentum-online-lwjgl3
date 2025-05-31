@@ -1,5 +1,6 @@
 package org.aoclient.scripts;
 
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -194,7 +195,7 @@ public class Compressor {
      * Extrae el nombre del archivo de una ruta completa.
      * <p>
      * Este metodo obtiene unicamente el nombre del archivo a partir de una ruta completa, independientemente del sistema
-     * operativo utilizado para crear la ruta. Funciona con separadores de ruta tanto de estilo Unix/Linux (/) como Windows (\).
+     * operativo utilizado para crear la ruta.
      * <p>
      * Se utiliza en lugar de acceder directamente a {@code entry.getName()} porque:
      * <ul>
@@ -211,13 +212,12 @@ public class Compressor {
      * getFileName("carpeta/subcarpeta/a.txt") // devuelve "a.txt"
      * }</pre>
      *
-     * @param path la ruta completa del archivo, que puede contener separadores / o \
+     * @param path ruta completa del archivo
      * @return el nombre del archivo sin la estructura de directorios
      */
     private static String getFileName(String path) {
-        /* Detecta el ultimo separador ya sea de Unix/Linux (/) o de Windows (\), y toma el indice mas alto de los dos, que
-         * correspondera al ultimo separador de cualquier tipo en la cadena. */
-        int lastSeparatorIndex = Math.max(path.lastIndexOf('/'), path.lastIndexOf('\\'));
+        // Obtiene el indice de la ultima ocurrencia del separador (del sistema operativo actual) de archivos en la ruta
+        int lastSeparatorIndex = path.lastIndexOf(File.separatorChar);
         /* Si encontro algun separador (lastSeparatorIndex >= 0), extrae la subcadena desde la posicion justo despues del ultimo
          * separador hasta el final. Si no se encontro ningun separador (lastSeparatorIndex == -1), devuelve la cadena original
          * completa, asumiendo que ya es solo un nombre de archivo. */

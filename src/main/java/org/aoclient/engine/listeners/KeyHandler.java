@@ -4,236 +4,229 @@ import imgui.ImGui;
 import imgui.ImGuiIO;
 import org.aoclient.engine.game.models.Key;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Arrays;
+import java.util.Set;
 
 import static org.lwjgl.glfw.GLFW.*;
 
 /**
  * Gestiona las entradas del teclado en una ventana GLFW y administra el estado de las teclas.
- * <p>
- * Esta clase unifica la funcionalidad de escucha de eventos de teclado (anteriormente en KeyListener) y la gestion de mapeo de
- * teclas (anteriormente en KeyManager).
- * <p>
- * Los arreglos KEY_JUST_PRESSED y KEY_JUST_RELEASED permiten distinguir entre "mantener presionada una tecla" y "presionar una
- * tecla una sola vez". Esto es esencial para acciones que deben ocurrir solo una vez al presionar una tecla (como abrir un menu)
- * versus acciones continuas mientras se mantiene presionada (como moverse). A diferencia del sistema anterior que usaba
- * isKeyReadyForAction() y modificaba el estado al consultarlo (lo que causaba comportamientos inconsistentes si varias partes del
- * codigo verificaban la misma tecla), este nuevo enfoque separa la consulta de la actualizacion, permitiendo verificar el estado
- * de una tecla multiples veces sin alterarlo. Ademas, al actualizar los estados de manera centralizada mediante el metodo
- * update(), el codigo se vuelve mas predecible y robusto, proporcionando informacion mas completa sobre si una tecla esta siendo
- * presionada continuamente, si acaba de ser presionada o si acaba de ser liberada.
- * <p>
- * Proporciona metodos para:
- * <ul>
- * <li>Detectar eventos de teclas (presionadas, soltadas, recien presionadas, recien soltadas)
- * <li>Administrar el estado de las teclas de movimiento, permitiendo multiples teclas simultaneas
- * <li>Integrar con ImGui para la interfaz grafica
- * </ul>
  */
 
 public enum KeyHandler {
 
     INSTANCE;
 
-    /** Lista de teclas de movimiento actualmente presionadas. */
-    private static final List<Integer> movementKeysPressed = new ArrayList<>();
-    /** Objeto para gestionar la integracion ImGui y GLFW. */
     private static final ImGuiIO imGuiIo = ImGui.getIO();
-    /** Array que almacena el estado de las teclas actualmente presionadas. */
-    private static final boolean[] keyPressed = new boolean[350]; // Sin keyPressed, el personaje solo se moveria un pixel por cada pulsacion de tecla en lugar de moverse suavemente
-    /** Array que almacena las teclas que fueron recien presionadas en el ultimo frame. */
-    private static final boolean[] keyJustPressed = new boolean[350]; // Sin keyJustPresse, las accion como ocultarse, se ejecutarian 60 veces por segundo mientras mantienes presionado la O
-    /** Array que almacena las teclas que fueron recien liberadas en el ultimo frame. */
+    /** Arreglo que almacena el estado de presionado (true) o no presionado (false) para cada tecla hasta el indice 350. */
+    private static final boolean[] keyPressed = new boolean[350];
+    /** Arreglo que indica cuando una tecla ha sido presionada por primera vez, evitando el efecto de repeticion de teclas. */
+    private static final boolean[] keyJustPressed = new boolean[350];
+    /** Arreglo que indica cuando una tecla ha sido liberada por primera vez, evitando el efecto de repeticion de teclas. */
     private static final boolean[] keyJustReleased = new boolean[350];
-    /** Almacena el codigo de la ultima tecla presionada. */
-    private static int lastKeyPressed;
-    /** Almacena el codigo de la ultima tecla de movimiento presionada. */
-    private static int lastMovementKeyPressed;
 
-    /**
-     * Gestiona los eventos del teclado capturados en la ventana GLFW y actualiza el estado de las teclas, incluyendo
-     * modificadores, teclas presionadas, liberadas y las teclas de movimiento.
-     *
-     * @param window   identificador de la ventana en la que ocurrio el evento
-     * @param key      codigo de la tecla que genero el evento
-     * @param scancode codigo escaneado hardware-specific de la tecla
-     * @param action   accion realizada sobre la tecla (ej. presionada o liberada)
-     * @param mods     combinacion de teclas modificadoras activas (como Shift, Ctrl, Alt)
-     */
+    /** Conjunto de teclas asociadas al movimiento del personaje (arriba, abajo, izquierda, derecha). */
+    private static final Set<Integer> MOVEMENT_KEYS = Set.of(Key.UP.getKeyCode(), Key.DOWN.getKeyCode(), Key.LEFT.getKeyCode(), Key.RIGHT.getKeyCode());
+
+    private static int baseMovementKey = -1;
+    private static int temporaryMovementKey = -1;
+    private static int lastKeyPressed = -1;
+    private static int lastMovementKeyPressed = -1;
+
     public static void keyCallback(long window, int key, int scancode, int action, int mods) {
-        // Ignora eventos que no son PRESS ni RELEASE
         if (action != GLFW_PRESS && action != GLFW_RELEASE) return;
-
         boolean isPressed = action == GLFW_PRESS;
-
-        // Actualiza flags de teclas recien presionadas/liberadas
-        if (isPressed) {
-            if (!keyPressed[key]) keyJustPressed[key] = true;
-            lastKeyPressed = key;
-            // Gestion de teclas de movimiento al presionar
-            if (isMovementKey(key)) {
-                lastMovementKeyPressed = key;
-                movementKeysPressed.add(key);
-            }
-        } else {
-            if (keyPressed[key]) keyJustReleased[key] = true;
-            // Gestion de teclas de movimiento al liberar
-            if (isMovementKey(key)) movementKeysPressed.remove(Integer.valueOf(key));
-        }
-
-        // Actualiza estado actual
-        keyPressed[key] = isPressed;
-        imGuiIo.setKeysDown(key, isPressed);
-
+        // Actualiza flags y rastrea ultima tecla
+        updateKeyStates(key, isPressed);
+        // Manejo optimizado de teclas de movimiento
+        if (MOVEMENT_KEYS.contains(key)) handleMovementKey(key, isPressed);
         updateModifierKeys();
-
     }
 
-    /**
-     * Actualiza el estado de las teclas al final de cada frame.
-     * <p>
-     * Este metodo debe ser llamado al final de cada frame para limpiar los estados temporales (justPressed/justReleased) y
-     * mantener actualizados los estados persistentes.
-     * <p>
-     * En terminos de rendimiento, el impacto de actualizar el estado de las teclas es practicamente imperceptible en cualquier
-     * hardware moderno. Si realizamos un analisis cuantitativo, asumiendo conservadoramente que cada asignacion booleana consume
-     * aproximadamente 1 nanosegundo en una CPU estandar (aunque probablemente sea menos en procesadores actuales), y considerando
-     * que el metodo update() realiza 350 × 2 asignaciones para reiniciar los arreglos KEY_JUST_PRESSED y KEY_JUST_RELEASED,
-     * estariamos hablando de un costo total de apenas 700 nanosegundos por cada frame del juego. Para contextualizar esta cifra,
-     * en un juego que se ejecuta a 60 fotogramas por segundo, cada frame dispone de aproximadamente 16.67 milisegundos para
-     * completar todas sus operaciones, lo que significa que esta actualizacion de estados consume solamente el 0.004% del tiempo
-     * disponible por frame.
-     */
-    public static void update() {
-        for (int i = 0; i < keyJustPressed.length; i++) {
-            keyJustPressed[i] = false;
-            keyJustReleased[i] = false;
-        }
-    }
-
-    /**
-     * Verifica si la tecla especificada esta siendo presionada actualmente.
-     *
-     * @param keyCode codigo de la tecla que se desea verificar
-     * @return {@code true} si la tecla esta presionada, en caso contrario {@code false}
-     */
-    public static boolean isKeyPressed(int keyCode) {
-        return keyPressed[keyCode];
-    }
-
-    /**
-     * Verifica si la tecla especificada acaba de ser presionada en este frame.
-     *
-     * @param keyCode codigo de la tecla que se desea verificar
-     * @return {@code true} si la tecla acaba de ser presionada, en caso contrario {@code false}
-     */
-    public static boolean isKeyJustPressed(int keyCode) {
-        return keyJustPressed[keyCode];
-    }
-
-    /**
-     * Verifica si la tecla especificada acaba de ser liberada en este frame.
-     *
-     * @param keyCode codigo de la tecla que se desea verificar
-     * @return {@code true} si la tecla acaba de ser liberada, en caso contrario {@code false}
-     */
-    public static boolean isKeyJustReleased(int keyCode) {
-        return keyJustReleased[keyCode];
-    }
-
-    /**
-     * Verifica si la tecla de una accion especifica esta siendo presionada.
-     *
-     * @param key la tecla de accion que se desea verificar
-     * @return {@code true} si la tecla esta presionada, en caso contrario {@code false}
-     */
-    public static boolean isActionKeyPressed(Key key) {
-        return isKeyPressed(key.getKeyCode());
-    }
-
-    /**
-     * Verifica si la tecla de una accion especifica acaba de ser presionada en este frame.
-     *
-     * @param key la tecla de accion que se desea verificar
-     * @return {@code true} si la tecla acaba de ser presionada, en caso contrario {@code false}
-     */
-    public static boolean isActionKeyJustPressed(Key key) {
-        return isKeyJustPressed(key.getKeyCode());
-    }
-
-    /**
-     * Verifica si la tecla de una accion especifica acaba de ser liberada en este frame.
-     *
-     * @param key la tecla de accion que se desea verificar
-     * @return {@code true} si la tecla acaba de ser liberada, en caso contrario {@code false}
-     */
-    public static boolean isActionKeyJustReleased(Key key) {
-        return isKeyJustReleased(key.getKeyCode());
-    }
-
-    /**
-     * Obtiene la ultima tecla presionada por el usuario.
-     */
     public static int getLastKeyPressed() {
         return lastKeyPressed;
     }
 
-    /**
-     * Establece manualmente la ultima tecla presionada.
-     */
-    public static void setLastKeyPressed(int keyCode) {
-        lastKeyPressed = keyCode;
-    }
-
-    /**
-     * Obtiene la ultima tecla de movimiento presionada por el usuario.
-     */
     public static int getLastMovementKeyPressed() {
         return lastMovementKeyPressed;
     }
 
     /**
-     * Obtiene una copia de la lista de codigos de teclas de movimiento presionadas.
-     * <p>
-     * Se devuelve una copia de la lista original para mantener la integridad de los datos y evitar que se modifique la lista
-     * desde codigo externo, ya que la lista {@code movementKeysPressed} es un estado interno critico del sistema de manejo de
-     * teclas. Por lo tanto, al crear una copia, se mantiene el control total sobre el estado interno de la clase, permitiendo que
-     * solo los metodos internos de {@code KeyHandler} modifiquen la lista original.
+     * Retorna la tecla de movimiento efectiva basada en el estado actual del movimiento. Si el movimiento temporal esta activo,
+     * retorna la tecla temporal; de lo contrario, retorna la tecla base de movimiento.
      *
-     * @return una copia de la lista de codigos de teclas de movimiento presionadas
+     * @return El codigo de la tecla de movimiento efectiva. Puede ser la tecla base o la temporal, dependiendo de si el
+     * movimiento temporal esta activo.
      */
-    public static List<Integer> getMovementKeysPressed() {
-        return new ArrayList<>(movementKeysPressed);
+    public static int getEffectiveMovementKey() {
+        return isTemporaryMovementActive() ? temporaryMovementKey : baseMovementKey;
+    }
+
+    public static boolean isKeyPressed(int keyCode) {
+        return keyPressed[keyCode];
+    }
+
+    public static boolean isKeyJustPressed(int keyCode) {
+        return keyJustPressed[keyCode];
+    }
+
+    public static boolean isKeyJustReleased(int keyCode) {
+        return keyJustReleased[keyCode];
+    }
+
+    public static boolean isActionKeyPressed(Key key) {
+        return keyPressed[key.getKeyCode()];
+    }
+
+    public static boolean isActionKeyJustPressed(Key key) {
+        return keyJustPressed[key.getKeyCode()];
+    }
+
+    public static boolean isActionKeyJustReleased(Key key) {
+        return keyJustReleased[key.getKeyCode()];
     }
 
     /**
-     * Verifica si hay alguna tecla de movimiento presionada.
-     *
-     * @return {@code true} si hay alguna tecla de movimiento presionada
+     * Actualiza los estados de las teclas en el sistema, marcando como no activas las banderas relacionadas con eventos de "tecla
+     * recien presionada" y "tecla recien liberada". Adicionalmente, se asegura de validar y sincronizar las teclas de movimiento
+     * activas.
      */
-    public static boolean isAnyMovementKeyPressed() {
-        return !movementKeysPressed.isEmpty();
+    public static void update() {
+        Arrays.fill(keyJustPressed, false);
+        Arrays.fill(keyJustReleased, false);
+        validateMovementKeys();
     }
 
     /**
-     * Actualiza el estado de las teclas modificadoras para ImGui.
+     * Actualiza el estado de una tecla especifica, marcando si ha sido presionada o liberada, y gestionando las banderas
+     * relacionadas con eventos como "tecla recien presionada" o "tecla recien liberada". Tambien sincroniza el estado de la tecla
+     * con ImGui.
+     *
+     * @param key       codigo de la tecla cuya informacion debe ser actualizada
+     * @param isPressed indica si la tecla esta presionada (true) o no (false).
      */
+    private static void updateKeyStates(int key, boolean isPressed) {
+        if (isPressed && !keyPressed[key]) {
+            keyJustPressed[key] = true;
+            lastKeyPressed = key;
+        } else if (!isPressed && keyPressed[key]) keyJustReleased[key] = true;
+        keyPressed[key] = isPressed;
+        imGuiIo.setKeysDown(key, isPressed);
+    }
+
+    /**
+     * Gestiona la presion o liberacion de una tecla de movimiento. Actualiza las variables internas que reflejan las teclas de
+     * movimiento activas, diferenciando entre los estados de presion y liberacion. Si la tecla es presionada, se considera como
+     * ultima tecla de movimiento registrada y se procesa su activacion; si se libera, se realiza el manejo correspondiente para
+     * actualizar el estado.
+     *
+     * @param key       codigo de la tecla que se esta gestionando
+     * @param isPressed indica si la tecla esta siendo presionada (true) o liberada (false)
+     */
+    private static void handleMovementKey(int key, boolean isPressed) {
+        if (isPressed) {
+            lastMovementKeyPressed = key;
+            handleMovementPress(key);
+        } else handleMovementRelease(key);
+    }
+
+    /**
+     * Gestiona la accion de presionar una tecla de movimiento. Actualiza las variables internas para reflejar el estado de las
+     * teclas base y temporal de movimiento, asegurando la coherencia en casos donde las teclas oprimidas entran en conflicto (por
+     * ejemplo, direcciones opuestas).
+     *
+     * @param key codigo de la tecla que se ha presionado
+     */
+    private static void handleMovementPress(int key) {
+        if (baseMovementKey == -1) baseMovementKey = key;
+        else if (baseMovementKey != key) {
+            if (isOpposite(baseMovementKey, key)) temporaryMovementKey = key;
+            else {
+                baseMovementKey = key;
+                temporaryMovementKey = -1;
+            }
+        }
+    }
+
+    /**
+     * Gestiona la liberacion de una tecla de movimiento y actualiza las variables internas de las teclas base y temporal. Si la
+     * tecla liberada coincide con {@code temporaryMovementKey}, se restablece su valor a {@code -1}. Si la tecla liberada
+     * coincide con {@code baseMovementKey}, se reasigna la tecla base utilizando {@code temporaryMovementKey} si este es valido,
+     * o invocando {@link #findNewBaseKey()} como alternativa.
+     *
+     * @param key codigo de la tecla que ha sido liberada
+     */
+    private static void handleMovementRelease(int key) {
+        if (key == temporaryMovementKey) temporaryMovementKey = -1;
+        else if (key == baseMovementKey) {
+            baseMovementKey = (temporaryMovementKey != -1) ? temporaryMovementKey : findNewBaseKey();
+            temporaryMovementKey = -1;
+        }
+    }
+
+    /**
+     * Valida y actualiza las teclas de movimiento actualmente activas, asegurando consistencia entre el estado de las teclas y
+     * las variables correspondientes.
+     * <ul>
+     * <li>Si la tecla de movimiento base ({@code baseMovementKey}) ya no esta activa o no esta presionada, se asigna una nueva
+     * tecla base utilizando el metodo {@link #findNewBaseKey()}.
+     * <li>Si la tecla de movimiento temporal ({@code temporaryMovementKey}) deja de estar presionada, se restablece su valor a
+     * -1, indicando la ausencia de una tecla temporal activa.
+     * </ul>
+     * Esta validacion es esencial para gestionar correctamente la persistencia de las teclas de movimiento en un contexto que
+     * permite multiples entradas.
+     */
+    private static void validateMovementKeys() {
+        if (baseMovementKey != -1 && !keyPressed[baseMovementKey]) baseMovementKey = findNewBaseKey();
+        if (temporaryMovementKey != -1 && !keyPressed[temporaryMovementKey]) temporaryMovementKey = -1;
+    }
+
+    /**
+     * Busca y retorna el codigo de la primera tecla de movimiento activa, evaluando las teclas definidas en
+     * {@code MOVEMENT_KEYS}. Una tecla se considera activa si su estado actual en el arreglo {@code keyPressed} es {@code true}.
+     *
+     * @return el codigo de la primera tecla de movimiento activa, o {@code -1} si ninguna tecla de movimiento esta activa
+     */
+    private static int findNewBaseKey() {
+        return MOVEMENT_KEYS.stream()
+                .filter(keyCode -> keyPressed[keyCode])
+                .findFirst()
+                .orElse(-1);
+    }
+
+    /**
+     * Determina si el movimiento temporal esta activo evaluando el estado de las teclas asociadas al movimiento base y movimiento
+     * temporal. Esta activo cuando ambas teclas, la de movimiento temporal y la de movimiento base, estan presionadas, y ademas
+     * la tecla de movimiento temporal no tiene un valor predeterminado (-1).
+     *
+     * @return {@code true} si el movimiento temporal esta activo; {@code false} en caso contrario
+     */
+    private static boolean isTemporaryMovementActive() {
+        return temporaryMovementKey != -1 && keyPressed[temporaryMovementKey] && keyPressed[baseMovementKey];
+    }
+
+    /**
+     * Determina si dos teclas representan direcciones opuestas.
+     *
+     * @param key1 codigo de la primera tecla
+     * @param key2 codigo de la segunda tecla
+     * @return {@code true} si las teclas representan direcciones opuestas; {@code false} en caso contrario
+     */
+    private static boolean isOpposite(int key1, int key2) {
+        int up = Key.UP.getKeyCode(), down = Key.DOWN.getKeyCode();
+        int left = Key.LEFT.getKeyCode(), right = Key.RIGHT.getKeyCode();
+        return (key1 == up && key2 == down) || (key1 == down && key2 == up) || (key1 == left && key2 == right) || (key1 == right && key2 == left);
+    }
+
     private static void updateModifierKeys() {
-        imGuiIo.setKeyCtrl(imGuiIo.getKeysDown(GLFW_KEY_LEFT_CONTROL) || imGuiIo.getKeysDown(GLFW_KEY_RIGHT_CONTROL));
-        imGuiIo.setKeyShift(imGuiIo.getKeysDown(GLFW_KEY_LEFT_SHIFT) || imGuiIo.getKeysDown(GLFW_KEY_RIGHT_SHIFT));
-        imGuiIo.setKeyAlt(imGuiIo.getKeysDown(GLFW_KEY_LEFT_ALT) || imGuiIo.getKeysDown(GLFW_KEY_RIGHT_ALT));
-        imGuiIo.setKeySuper(imGuiIo.getKeysDown(GLFW_KEY_LEFT_SUPER) || imGuiIo.getKeysDown(GLFW_KEY_RIGHT_SUPER));
+        imGuiIo.setKeyCtrl(isModifierPressed(GLFW_KEY_LEFT_CONTROL, GLFW_KEY_RIGHT_CONTROL));
+        imGuiIo.setKeyShift(isModifierPressed(GLFW_KEY_LEFT_SHIFT, GLFW_KEY_RIGHT_SHIFT));
+        imGuiIo.setKeyAlt(isModifierPressed(GLFW_KEY_LEFT_ALT, GLFW_KEY_RIGHT_ALT));
+        imGuiIo.setKeySuper(isModifierPressed(GLFW_KEY_LEFT_SUPER, GLFW_KEY_RIGHT_SUPER));
     }
 
-    /**
-     * Verifica si la tecla especificada es una tecla de movimiento.
-     *
-     * @param keyCode codigo de la tecla a verificar
-     * @return {@code true} si es una tecla de movimiento
-     */
-    private static boolean isMovementKey(int keyCode) {
-        return keyCode == Key.UP.getKeyCode() || keyCode == Key.DOWN.getKeyCode() || keyCode == Key.LEFT.getKeyCode() || keyCode == Key.RIGHT.getKeyCode();
+    private static boolean isModifierPressed(int leftKey, int rightKey) {
+        return imGuiIo.getKeysDown(leftKey) || imGuiIo.getKeysDown(rightKey);
     }
 
 }

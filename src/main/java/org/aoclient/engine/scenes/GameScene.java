@@ -265,8 +265,8 @@ public final class GameScene extends Scene {
     private void checkWalkKeys() {
         if (!user.isUserMoving()) {
             if (!autoMove) {
-                if (KeyHandler.isAnyMovementKeyPressed()) {
-                    int keyCode = KeyHandler.getLastMovementKeyPressed();
+                if (KeyHandler.getEffectiveMovementKey() != -1) {
+                    int keyCode = KeyHandler.getEffectiveMovementKey();
                     if (keyCode == Key.UP.getKeyCode()) user.moveTo(Direction.UP);
                     else if (keyCode == Key.DOWN.getKeyCode()) user.moveTo(Direction.DOWN);
                     else if (keyCode == Key.LEFT.getKeyCode()) user.moveTo(Direction.LEFT);
@@ -277,13 +277,7 @@ public final class GameScene extends Scene {
     }
 
     /**
-     * Metodo encargado de gestionar el movimiento automatico del usuario en una direccion dependiendo de la ultima tecla de
-     * direccion presionada. Verifica si la tecla presionada corresponde a una tecla bindeada para movimientos y ejecuta el
-     * desplazamiento del usuario en la direccion correspondiente.
-     * <p>
-     * Este metodo utiliza {@code KeyHandler.getLastMovementKeyPressed()} para obtener el codigo de la ultima tecla de direccion
-     * presionada y {@code bindKeys.getBindedKey()} para comparar dicho codigo con las teclas asociadas a cada direccion posible.
-     * Al determinar la direccion, invoca el metodo {@code moveTo()} del usuario para ejecutar el movimiento.
+     * Gestiona el movimiento automatico del usuario en una direccion dependiendo de la ultima tecla de direccion presionada.
      */
     private void autoWalk() {
         int keyCode = KeyHandler.getLastMovementKeyPressed();
