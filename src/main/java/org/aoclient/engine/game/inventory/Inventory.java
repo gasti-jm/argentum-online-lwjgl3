@@ -60,7 +60,7 @@ public abstract class Inventory {
     }
 
     /**
-     * @desc: Chekeamos que el mouse este dentro del inventario.
+     *  Chekeamos que el mouse este dentro del inventario.
      */
     public boolean inInventoryArea() {
         if (MouseListener.getX() < posX || MouseListener.getX() > posX + sWidth) return false;
@@ -69,7 +69,7 @@ public abstract class Inventory {
     }
 
     /**
-     * @desc: Chekeamos que el mouse este dentro del inventario.
+     *  Chekeamos que el mouse este dentro del inventario.
      */
     public boolean inInventoryArea(float mouseX, float mouseY) {
         if (mouseX < posX || mouseX > posX + sWidth) return false;
@@ -78,7 +78,7 @@ public abstract class Inventory {
     }
 
     /**
-     * @desc: Agregamos un item al slot del inventario.
+     *  Agregamos un item al slot del inventario.
      */
     public void setItem(int slot, short objIndex, int amount, boolean equipped, short grhIndex, int objType,
                         short maxHit, short minHit, short maxDef, short minDef, float value, String name) {
@@ -102,12 +102,12 @@ public abstract class Inventory {
     }
 
     /**
-     * @desc: Dibujamos el inventario.
+     *  Dibujamos el inventario.
      */
     public abstract void drawInventory();
 
     /**
-     * @desc Selecciona un slot al hacer un solo click dentro del inventario.
+     *  Selecciona un slot al hacer un solo click dentro del inventario.
      */
     public void clickInventory() {
         final int x = (int) ((MouseListener.getX() - posX) / TILE_PIXEL_SIZE);
@@ -117,7 +117,7 @@ public abstract class Inventory {
     }
 
     /**
-     * @desc Selecciona un slot al hacer un solo click dentro del inventario (Sirve para los frms de ImGUI).
+     *  Selecciona un slot al hacer un solo click dentro del inventario (Sirve para los frms de ImGUI).
      */
     public void clickInventory(float mouseX, float mouseY) {
         final int x = (int) ((mouseX - posX) / TILE_PIXEL_SIZE);
@@ -134,7 +134,7 @@ public abstract class Inventory {
     }
 
     /**
-     * @desc Setter del atributo slotSelected
+     *  Setter del atributo slotSelected
      */
     private void setSelectedSlot(int slot) {
         slotSelected = slot;

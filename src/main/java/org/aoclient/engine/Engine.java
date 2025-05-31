@@ -1,7 +1,7 @@
 package org.aoclient.engine;
 
-import org.aoclient.engine.game.BindKeys;
 import org.aoclient.engine.gui.ImGUISystem;
+import org.aoclient.engine.listeners.KeyHandler;
 import org.aoclient.engine.listeners.MouseListener;
 import org.aoclient.engine.renderer.Surface;
 import org.aoclient.engine.scenes.*;
@@ -13,42 +13,39 @@ import org.tinylog.Logger;
 
 import static org.aoclient.engine.Sound.playMusic;
 import static org.aoclient.engine.scenes.SceneType.INTRO_SCENE;
-import static org.aoclient.engine.utils.GameData.*;
+import static org.aoclient.engine.utils.GameData.options;
 import static org.aoclient.engine.utils.Time.deltaTime;
 import static org.lwjgl.glfw.GLFW.glfwPollEvents;
 import static org.lwjgl.glfw.GLFW.glfwSwapBuffers;
 import static org.lwjgl.opengl.GL11.*;
 
 /**
+ * Clase principal que representa el motor grafico del proyecto.
  * <p>
- * Clase principal del motor grafico que se encarga  de inicializar, ejecutar y finalizar todas las funcionalidades principales
- * del cliente.
+ * Esta clase gestiona la inicializacion, ejecucion y finalizacion de los componentes esenciales del motor. Es responsable de
+ * coordinar el renderizado, la logica principal, el manejo de eventos y la comunicacion con el servidor.
  * <p>
- * {@code Engine} gestiona el ciclo principal del juego, inicializando componentes criticos como la ventana, el sistema de sonido
- * {@code OpenAL}, el motor de renderizado {@code OpenGL} y el sistema de interfaz grafica mediante {@code ImGUI}.
- * <p>
- * El motor se encarga de administrar las diferentes escenas del juego, permitiendo transiciones entre
- * {@link org.aoclient.engine.scenes.IntroScene}, {@link org.aoclient.engine.scenes.MainScene}, y {@link GameScene}. Tambien
- * coordina la renderizacion de los elementos visuales y el procesamiento de eventos del teclado y raton en cada fotograma.
- * <p>
- * Ademas, se encarga de la gestion de recursos del sistema, asegurando la correcta inicializacion y liberacion de memoria al
- * iniciar o cerrar la aplicacion.
+ * El ciclo de vida del motor incluye tres etapas principales: inicializacion de recursos mediante el metodo {@code init()},
+ * ejecucion del bucle principal con {@code loop()} y cierre de recursos junto con la terminacion del programa a traves del metodo
+ * {@code close()}.
  */
 
 public final class Engine {
 
+    /** Flag que indica si el programa esta corriendo. */
     private static boolean prgRun = true;
-    private Window window;
-    private ImGUISystem guiSystem;
+    /** Ventana principal del motor grafico. */
+    private final Window window = Window.INSTANCE;
+    /** Sistema de interfaz grafica de usuario. */
+    private final ImGUISystem guiSystem = ImGUISystem.INSTANCE;
+    /** Escena actual que esta siendo renderizada y actualizada en el motor. */
     private Scene currentScene;
 
-    public Engine() {
-
-    }
-
     /**
-     * Funcion publica y estatica que permite ser utilizada en cualquier parte del programa, basicamente desactiva nuestro
-     * booleano del MainLoop para que se cierre el juego.
+     * Finaliza el cliente del motor grafico cerrando los recursos necesarios y deteniendo su ejecucion.
+     * <p>
+     * Este metodo garantiza que las opciones actuales sean almacenadas invocando el metodo {@code options.save()}.
+     * Adicionalmente, ajusta el estado del programa a inactivo configurando {@code prgRun} a {@code false}.
      */
     public static void closeClient() {
         options.save();
@@ -56,18 +53,69 @@ public final class Engine {
     }
 
     /**
-     * Cierra nuestro motor grafico, para eso se llama al close de nuestra ventana, ya que tiene todo el contexto del motor.
+     * Inicializa los componentes esenciales del motor grafico.
+     */
+    public void init() {
+        Logger.info("Starting LWJGL {}!", Version.getVersion());
+        Logger.info("Running on {} / v{} [{}]", System.getProperty("os.name"), System.getProperty("os.version"), System.getProperty("os.arch"));
+        Logger.info("Java version: {}", System.getProperty("java.version"));
+
+        GameData.init();
+        window.init();
+        guiSystem.init();
+        Surface.INSTANCE.init();
+
+        changeScene(INTRO_SCENE);
+        playMusic("intro.ogg");
+    }
+
+    /**
+     * Metodo principal para iniciar el motor grafico.
+     * <p>
+     * Este metodo coordina el flujo principal de ejecucion del motor. Primero, inicializa los elementos necesarios como la
+     * ventana, gestor de texturas, escenas, y otros componentes fundamentales llamando al metodo {@code init()}. A continuacion,
+     * se ejecuta el bucle principal del juego mediante el metodo {@code loop()}, que gestiona los eventos, la logica, el
+     * renderizado y la comunicacion con el servidor. Finalmente, se limpian y cierran los recursos utilizados llamando al metodo
+     * {@code close()}.
+     */
+    public void start() {
+        init();
+        loop();
+        close();
+    }
+
+    /**
+     * Cierra los recursos y finaliza el funcionamiento del motor grafico.
      */
     private void close() {
         Sound.clearSounds();
         Sound.clearMusics();
-
         guiSystem.destroy();
         window.close();
     }
 
     /**
-     * Main loop del juego, se empieza a correr ni bien se inicia nuestro motor grafico.
+     * Metodo principal del ciclo de ejecucion del motor grafico.
+     * <p>
+     * Este metodo es el encargado de gestionar el flujo principal del renderizado y la logica del programa mientras este se
+     * encuentra en ejecucion. Realiza las siguientes tareas:
+     * <ul>
+     * <li>Inicializa el tiempo al inicio del bucle llamando a {@code Time.initTime()}.
+     * <li>Itera mientras el programa esta activo, verificando continuamente eventos de la ventana con {@code glfwPollEvents()}.
+     * <li>Si la ventana no esta minimizada:
+     * <ul>
+     *  <li>Establece el color de fondo del renderizado basandose en los valores RGB de la escena actual.
+     *  <li>Renderiza la escena actual si {@code deltaTime >= 0}.
+     *  <li>Muestra el contenido renderizado actualizando los buffers con {@code glfwSwapBuffers}.
+     *  <li>Actualiza los timers llamando a {@code Time.updateTime()}.
+     * </ul>
+     * <li>Resetea el estado de botones del raton con {@code MouseListener.resetReleasedButtons()}.
+     * <li>Gestiona la comunicacion con el servidor enviando y recibiendo bytes utilizando
+     * {@code SocketConnection.INSTANCE.write()} y {@code SocketConnection.INSTANCE.read()} respectivamente.
+     * </ul>
+     * <p>
+     * Este bucle mantiene el motor grafico activo hasta que el estado de ejecucion del programa {@code prgRun} cambie a
+     * {@code false}.
      */
     private void loop() {
         Time.initTime();
@@ -88,7 +136,7 @@ public final class Engine {
 
             MouseListener.resetReleasedButtons();
 
-            // Si hay algo para enviar, lo envia (escribe lo que envia el cliente al servidor, como comandos, acciones, etc.)
+            // Si hay algo para enviar, lo envia (escribe lo que envia el cliente al servidor)
             SocketConnection.INSTANCE.write();
             // Si hay algo para recibir, lo recibe (lee lo que recibe el cliente del servidor)
             SocketConnection.INSTANCE.read();
@@ -97,48 +145,17 @@ public final class Engine {
     }
 
     /**
-     * Inicia nuestro motor grafico con su ventana, gestor de texturas (surface), inits (gamedata) y escenas.
-     */
-    public void init() {
-        Logger.info("Starting LWJGL {} !", Version.getVersion());
-        Logger.info("Running on {} / v{} [{}]",
-                System.getProperty("os.name"), System.getProperty("os.version"), System.getProperty("os.arch"));
-
-        Logger.info("Java version: {}", System.getProperty("java.version"));
-
-        GameData.initialize();
-
-        window = Window.INSTANCE;
-        window.initialize();
-
-        guiSystem = ImGUISystem.INSTANCE;
-        guiSystem.init();
-
-        Surface.INSTANCE.initialize();
-        BindKeys bindKeys = BindKeys.INSTANCE;
-
-        changeScene(INTRO_SCENE);
-        playMusic("intro.ogg");
-    }
-
-    /**
-     * Funcion que permite cambiar nuestro atributo de escena y cambiar de una a otra.
+     * Cambia la escena actual del juego a una nueva basada en el tipo de escena proporcionado.
+     * <p>
+     * Inicializa la nueva escena una vez que se ha creado.
      *
-     * @param scene: SceneType es un enumerador definido en el package de scenes, bascicamente recibe un tipo de este enumerador y
-     *               segun el elegido realiza el cambio de escena.
-     *
+     * @param scene tipo de escena
      */
     private void changeScene(SceneType scene) {
         switch (scene) {
-            case INTRO_SCENE:
-                currentScene = new IntroScene();
-                break;
-            case GAME_SCENE:
-                currentScene = new GameScene();
-                break;
-            case MAIN_SCENE:
-                currentScene = new MainScene();
-                break;
+            case INTRO_SCENE -> currentScene = new IntroScene();
+            case GAME_SCENE -> currentScene = new GameScene();
+            case MAIN_SCENE -> currentScene = new MainScene();
         }
         currentScene.init();
     }
@@ -154,22 +171,13 @@ public final class Engine {
      * Por ultimo, dibuja la escena en la que estemos y renderiza nuestra GUI del framework "Dear ImGUI".
      */
     private void render() {
-        // Check change screen
         if (!currentScene.isVisible()) changeScene(currentScene.getChangeScene());
         currentScene.mouseEvents();
         currentScene.keyEvents();
         currentScene.render();
         guiSystem.renderGUI();
         Sound.renderMusic();
-    }
-
-    /**
-     * Inicia nuestro motor grafico.
-     */
-    public void start() {
-        init();
-        loop();
-        close();
+        KeyHandler.update();
     }
 
 }

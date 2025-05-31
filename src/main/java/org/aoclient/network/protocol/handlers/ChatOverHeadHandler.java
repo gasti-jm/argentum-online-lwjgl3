@@ -8,8 +8,8 @@ import static org.aoclient.engine.game.Dialogs.charDialogSet;
 import static org.aoclient.engine.utils.GameData.charList;
 
 /**
- * En este handler y en algunos otros se utiliza un buffer temporal ({@code tempBuffer}) como "espacio seguro" para leer los bytes
- * antes de actualizar el buffer del servidor, funcionando como una "transaccion" que se confirma al finalizar.
+ * En este handler y en algunos otros, se utiliza un buffer temporal ({@code tempBuffer}) como "espacio seguro" para leer los
+ * bytes antes de actualizar el buffer del servidor, funcionando como una "transaccion" que se confirma al finalizar.
  * <p>
  * Por lo tanto, se evita leer directamente del buffer del servidor para prevenir estados inconsistentes (paquetes concatenados o
  * recibidos parcialmente) durante errores. Es un patron comun en protocolos de red para garantizar integridad de datos y el

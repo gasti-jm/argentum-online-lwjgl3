@@ -1,21 +1,24 @@
 package org.aoclient.engine.scenes;
 
 import org.aoclient.engine.Window;
-import org.aoclient.engine.game.*;
+import org.aoclient.engine.game.Dialogs;
+import org.aoclient.engine.game.IntervalTimer;
+import org.aoclient.engine.game.Rain;
+import org.aoclient.engine.game.User;
 import org.aoclient.engine.game.models.Direction;
 import org.aoclient.engine.game.models.Key;
 import org.aoclient.engine.game.models.Skill;
 import org.aoclient.engine.gui.ImGUISystem;
 import org.aoclient.engine.gui.forms.FCantidad;
 import org.aoclient.engine.gui.forms.FMain;
-import org.aoclient.engine.listeners.KeyListener;
+import org.aoclient.engine.listeners.KeyHandler;
 import org.aoclient.engine.listeners.MouseListener;
 import org.aoclient.engine.renderer.RGBColor;
 import org.aoclient.network.protocol.ProtocolCmdParse;
 
 import static org.aoclient.engine.game.IntervalTimer.INT_SENTRPU;
 import static org.aoclient.engine.game.models.Character.drawCharacter;
-import static org.aoclient.engine.game.models.Key.*;
+import static org.aoclient.engine.game.models.Key.TALK;
 import static org.aoclient.engine.renderer.Drawn.drawTexture;
 import static org.aoclient.engine.scenes.Camera.*;
 import static org.aoclient.engine.utils.GameData.*;
@@ -57,10 +60,8 @@ import static org.lwjgl.glfw.GLFW.*;
 public final class GameScene extends Scene {
 
     private final IntervalTimer intervalToUpdatePos = new IntervalTimer(INT_SENTRPU);
-    RGBColor ambientColor; // color de ambiente.
-    private final BindKeys bindKeys = BindKeys.INSTANCE;
     private final User user = User.INSTANCE;
-
+    RGBColor ambientColor; // color de ambiente.
     private float offSetCounterX = 0;
     private float offSetCounterY = 0;
     private float alphaCeiling = 1.0f;
@@ -117,11 +118,11 @@ public final class GameScene extends Scene {
     }
 
     /**
-     * @desc: Escucha los eventos del mouse.
+     * Escucha los eventos del mouse.
      */
     @Override
     public void mouseEvents() {
-        if(user.isUserComerciando()) return;
+        if (user.isUserComerciando()) return;
 
         // Estamos haciendo click en el render?
         if (inGameArea()) {
@@ -129,7 +130,7 @@ public final class GameScene extends Scene {
                 if (user.getUsingSkill() == 0) {
 
                     // Estamos manteniendo Shift derecho?
-                    if(KeyListener.isKeyPressed(GLFW_KEY_RIGHT_SHIFT) &&
+                    if (KeyHandler.isKeyPressed(GLFW_KEY_RIGHT_SHIFT) &&
                             charList[user.getUserCharIndex()].getPriv() != 0) {
 
                         writeWarpChar("YO",
@@ -160,34 +161,34 @@ public final class GameScene extends Scene {
             }
         }
 
-            // si no agrego esto, pierde el foco al npc selecionado.
-            // por ende al comerciar no va a permitir comprar o vender.
+        // si no agrego esto, pierde el foco al npc selecionado.
+        // por ende al comerciar no va a permitir comprar o vender.
 
 
-            // estamos haciendo click en el inventario?
-            if (user.getUserInventory().inInventoryArea()) {
-                if (MouseListener.mouseButtonClick(GLFW_MOUSE_BUTTON_LEFT)) {
-                    // cheakeamos tambien del inventario
-                    user.getUserInventory().clickInventory();
-                }
+        // estamos haciendo click en el inventario?
+        if (user.getUserInventory().inInventoryArea()) {
+            if (MouseListener.mouseButtonClick(GLFW_MOUSE_BUTTON_LEFT)) {
+                // cheakeamos tambien del inventario
+                user.getUserInventory().clickInventory();
             }
+        }
 
-            // estamos haciendo doble click?
-            if (MouseListener.mouseButtonDoubleClick(GLFW_MOUSE_BUTTON_LEFT)) {
-                user.getUserInventory().dobleClickInventory();
-            } else if (MouseListener.mouseButtonDoubleClick(GLFW_MOUSE_BUTTON_RIGHT)) {
-                writeDoubleClick(getTileMouseX((int) MouseListener.getX() - POS_SCREEN_X), getTileMouseY((int) MouseListener.getY() - POS_SCREEN_Y));
-            }
+        // estamos haciendo doble click?
+        if (MouseListener.mouseButtonDoubleClick(GLFW_MOUSE_BUTTON_LEFT)) {
+            user.getUserInventory().dobleClickInventory();
+        } else if (MouseListener.mouseButtonDoubleClick(GLFW_MOUSE_BUTTON_RIGHT)) {
+            writeDoubleClick(getTileMouseX((int) MouseListener.getX() - POS_SCREEN_X), getTileMouseY((int) MouseListener.getY() - POS_SCREEN_Y));
+        }
 
 
     }
 
     /**
-     * @desc: Escucha los eventos del teclado.
+     * Escucha los eventos del teclado.
      */
     @Override
     public void keyEvents() {
-        if (KeyListener.isKeyPressed(bindKeys.getBindedKey(Key.EXIT_GAME))) writeQuit();
+        if (KeyHandler.isKeyPressed(Key.EXIT_GAME.getKeyCode())) writeQuit();
         this.checkBindedKeys();
     }
 
@@ -196,27 +197,28 @@ public final class GameScene extends Scene {
      */
     @Override
     public void close() {
-        this.visible = false;
+        visible = false;
     }
 
     /**
      * Chequea y ejecuta la tecla que fue bindeada.
      */
     private void checkBindedKeys() {
-        if(user.isUserComerciando()) return;
+        if (user.isUserComerciando()) return;
 
-        final Key keyPressed = bindKeys.getKeyPressed(KeyListener.getLastKeyPressed());
+        // Usando el metodo estatico de Key para obtener la tecla desde el codigo
+        final Key key = Key.getKey(KeyHandler.getLastKeyPressed());
 
-        this.checkWalkKeys();
+        checkWalkKeys();
 
-        if (keyPressed == null) return; // ni me gasto si la tecla presionada no existe en nuestro bind.
+        if (key == null) return; // ni me gasto si la tecla presionada no existe en nuestro bind.
 
-        if (KeyListener.isKeyReadyForAction(bindKeys.getBindedKey(keyPressed))) {
+        if (KeyHandler.isActionKeyJustPressed(key)) {
 
             // Para que al hablar no ejecute teclas bindeadas y solo permita cerrar nuevamente el sendText
-            if (user.isTalking() && keyPressed != TALK) return;
+            if (user.isTalking() && key != TALK) return;
 
-            switch (keyPressed) {
+            switch (key) {
                 case USE_OBJECT:
                     user.getUserInventory().useItem();
                     break;
@@ -230,7 +232,6 @@ public final class GameScene extends Scene {
                     user.getUserInventory().equipItem();
                     break;
                 case AUTO_MOVE:
-                    KeyListener.setLastKeyMovedPressed(0);
                     autoMove = !autoMove;
                     break;
                 case DROP_OBJECT:
@@ -262,47 +263,32 @@ public final class GameScene extends Scene {
     }
 
     private void checkWalkKeys() {
-        // Caminata!
         if (!user.isUserMoving()) {
             if (!autoMove) {
-                if (!KeyListener.LAST_KEYS_MOVED_PRESSED.isEmpty()) {
-                    if (KeyListener.LAST_KEYS_MOVED_PRESSED.get(KeyListener.LAST_KEYS_MOVED_PRESSED.size() - 1) == bindKeys.getBindedKey(Key.UP))
-                        user.moveTo(Direction.UP);
-                    else if (KeyListener.LAST_KEYS_MOVED_PRESSED.get(KeyListener.LAST_KEYS_MOVED_PRESSED.size() - 1) == bindKeys.getBindedKey(Key.DOWN))
-                        user.moveTo(Direction.DOWN);
-                    else if (KeyListener.LAST_KEYS_MOVED_PRESSED.get(KeyListener.LAST_KEYS_MOVED_PRESSED.size() - 1) == bindKeys.getBindedKey(Key.LEFT))
-                        user.moveTo(Direction.LEFT);
-                    else if (KeyListener.LAST_KEYS_MOVED_PRESSED.get(KeyListener.LAST_KEYS_MOVED_PRESSED.size() - 1) == bindKeys.getBindedKey(Key.RIGHT))
-                        user.moveTo(Direction.RIGHT);
+                if (KeyHandler.getEffectiveMovementKey() != -1) {
+                    int keyCode = KeyHandler.getEffectiveMovementKey();
+                    if (keyCode == Key.UP.getKeyCode()) user.moveTo(Direction.UP);
+                    else if (keyCode == Key.DOWN.getKeyCode()) user.moveTo(Direction.DOWN);
+                    else if (keyCode == Key.LEFT.getKeyCode()) user.moveTo(Direction.LEFT);
+                    else if (keyCode == Key.RIGHT.getKeyCode()) user.moveTo(Direction.RIGHT);
                 }
             } else autoWalk();
         }
     }
 
     /**
-     * Permite que si caminar automaticamente si el usuario activa la opcion de "autoMove"
+     * Gestiona el movimiento automatico del usuario en una direccion dependiendo de la ultima tecla de direccion presionada.
      */
     private void autoWalk() {
-        Key keyPressed = bindKeys.getKeyPressed(KeyListener.getLastKeyMovedPressed());
-        if (keyPressed == null) return;
-        switch (keyPressed) {
-            case UP:
-                user.moveTo(Direction.UP);
-                break;
-            case DOWN:
-                user.moveTo(Direction.DOWN);
-                break;
-            case LEFT:
-                user.moveTo(Direction.LEFT);
-                break;
-            case RIGHT:
-                user.moveTo(Direction.RIGHT);
-                break;
-        }
+        int keyCode = KeyHandler.getLastMovementKeyPressed();
+        if (keyCode == Key.UP.getKeyCode()) user.moveTo(Direction.UP);
+        else if (keyCode == Key.DOWN.getKeyCode()) user.moveTo(Direction.DOWN);
+        else if (keyCode == Key.LEFT.getKeyCode()) user.moveTo(Direction.LEFT);
+        else if (keyCode == Key.RIGHT.getKeyCode()) user.moveTo(Direction.RIGHT);
     }
 
     /**
-     * @desc: Dibuja cada capa y objeto del mapa, el personaje, la interfaz y demas.
+     * Dibuja cada capa y objeto del mapa, el personaje, la interfaz y demas.
      */
     private void renderScreen(int tileX, int tileY, int pixelOffsetX, int pixelOffsetY) {
         camera.update(tileX, tileY);
@@ -434,7 +420,7 @@ public final class GameScene extends Scene {
 
 
     /**
-     * @desc: Detecta si el usuario esta debajo del techo. Si es asi, se desvanecera y en caso contrario re aparece.
+     * Detecta si el usuario esta debajo del techo. Si es asi, se desvanecera y en caso contrario re aparece.
      */
     private void checkEffectCeiling() {
         if (user.isUnderCeiling()) {
@@ -445,7 +431,7 @@ public final class GameScene extends Scene {
     }
 
     /**
-     * @desc: Detecta si tenemos el mouse adentro del "render MainViewPic".
+     * Detecta si tenemos el mouse adentro del "render MainViewPic".
      */
     private boolean inGameArea() {
         if (MouseListener.getX() < POS_SCREEN_X || MouseListener.getX() > POS_SCREEN_X + SCREEN_SIZE_X) return false;
@@ -455,8 +441,8 @@ public final class GameScene extends Scene {
 
     /**
      * @param mouseX: Posicion X del mouse en la pantalla
-     * @return: Devuelve la posicion en tile del eje X del mouse.
-     * @desc: Se utiliza al hacer click izquierdo por el mapa, para interactuar con NPCs, etc.
+     * @return: Devuelve la posicion en tile del eje X del mouse. Se utiliza al hacer click izquierdo por el mapa, para
+     * interactuar con NPCs, etc.
      */
     private byte getTileMouseX(int mouseX) {
         return (byte) (user.getUserPos().getX() + mouseX / TILE_PIXEL_SIZE - HALF_WINDOW_TILE_WIDTH);
@@ -464,8 +450,8 @@ public final class GameScene extends Scene {
 
     /**
      * @param mouseY: Posicion X del mouse en la pantalla
-     * @return: Devuelve la posicion en tile del eje Y del mouse.
-     * @desc: Se utiliza al hacer click izquierdo por el mapa, para interactuar con NPCs, etc.
+     * @return: Devuelve la posicion en tile del eje Y del mouse. Se utiliza al hacer click izquierdo por el mapa, para
+     * interactuar con NPCs, etc.
      */
     private byte getTileMouseY(int mouseY) {
         return (byte) (user.getUserPos().getY() + mouseY / TILE_PIXEL_SIZE - HALF_WINDOW_TILE_HEIGHT);

@@ -29,7 +29,7 @@ public final class BodyData {
     }
 
     /**
-     * @desc: Sirve para asignar a un personaje su body ya inicializado.
+     *  Sirve para asignar a un personaje su body ya inicializado.
      */
     public BodyData(BodyData other) {
         walk[1] = new GrhInfo(other.walk[1]);

@@ -63,7 +63,7 @@ public final class UserInventory extends Inventory implements Cloneable {
     }
 
     /**
-     * @desc: Actualiza y dibuja el inventario.
+     *  Actualiza y dibuja el inventario.
      */
     @Override
     public void drawInventory() {
@@ -123,7 +123,7 @@ public final class UserInventory extends Inventory implements Cloneable {
     }
 
     /**
-     * @desc Realiza una accion al hacer doble click dentro del inventario.
+     *  Realiza una accion al hacer doble click dentro del inventario.
      */
     public void dobleClickInventory() {
         if (!visible) return;

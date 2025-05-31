@@ -47,14 +47,14 @@ public final class IntervalTimer {
     }
 
     /**
-     * @desc Actualiza el intervalo.
+     *  Actualiza el intervalo.
      */
     public void update() {
         if (this.currentTime < interval) this.currentTime += deltaTime;
     }
 
     /**
-     * @desc Esta es la funcion en la que vamos a preguntar si nuestro intervalo ya paso y podemos accionar.
+     *  Esta es la funcion en la que vamos a preguntar si nuestro intervalo ya paso y podemos accionar.
      */
     public boolean check() {
         if (this.currentTime >= interval) {

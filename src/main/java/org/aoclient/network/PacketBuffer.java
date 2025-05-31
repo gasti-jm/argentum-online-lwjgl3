@@ -42,7 +42,7 @@ public class PacketBuffer {
     /** Tamaño en bytes del tipo Long en VB6 utilizado para mantener compatibilidad con el protocolo original de AO. */
     private static final int VB6_LONG_BYTES = 4;
     /** Tamaño predeterminado del buffer en bytes. */
-    private static final int DEFAULT_BUFFER_SIZE = 10240; // 10 KB Serial tamaño ideal?
+    private static final int DEFAULT_BUFFER_SIZE = 2048; // 2 KB para una latencia baja
     /**
      * Array de bytes que actua como un almacen temporal para los bytes que entran y salen del flujo de comunicacion.
      * <p>
@@ -50,15 +50,11 @@ public class PacketBuffer {
      * de bytes. Y cuando se dice "el buffer local", "en el buffer local", etc., se hace referencia al buffer local que se crea en
      * los metodos *read y *peek para almacenar los bytes de este buffer.
      */
-    private byte[] buffer;
+    private byte[] buffer = new byte[DEFAULT_BUFFER_SIZE];
     /** Capacidad del buffer. */
     private int bufferCapacity = DEFAULT_BUFFER_SIZE;
     /** Longitud del buffer. */
     private int bufferLength;
-
-    public PacketBuffer() {
-        buffer = new byte[DEFAULT_BUFFER_SIZE];
-    }
 
     /**
      * Copia los bytes del buffer de origen al buffer.
@@ -72,8 +68,7 @@ public class PacketBuffer {
             remove(bufferLength);
             return;
         }
-
-        // Crea un buffer local con la capacidad del buffer de origen (mejorando el rendimiento)
+        // Crea un buffer local con la capacidad del buffer de origen
         byte[] buffer = new byte[srcBuffer.getLength()];
         // Lee los bytes del buffer de origen y los copia al buffer local
         srcBuffer.peekBlock(buffer, srcBuffer.getLength());
@@ -81,71 +76,6 @@ public class PacketBuffer {
         bufferLength = 0;
         // Escribe los bytes del buffer local en el buffer
         writeBlock(buffer);
-    }
-
-    /**
-     * Escribe una cantidad especifica de bytes desde el buffer de origen al buffer.
-     *
-     * @param srcBuffer buffer de origen que contiene los bytes a escribir en el buffer
-     * @throws RuntimeException si no hay suficiente espacio disponible en el buffer
-     */
-    private void write(byte[] srcBuffer) {
-        int bytesToWrite = srcBuffer.length;
-        int availableSpace = bufferCapacity - bufferLength;
-        if (availableSpace < bytesToWrite) throw new RuntimeException("Not enough space in the buffer!");
-        // Lee los bytes del buffer de origen y los copia al buffer
-        System.arraycopy(srcBuffer, 0, buffer, bufferLength, bytesToWrite); // Los bytes del buffer local creado en copyByffer() se copian al buffer!
-        bufferLength += bytesToWrite;
-    }
-
-    /**
-     * Lee una cantidad especifica de bytes desde el buffer al buffer de destino.
-     *
-     * @param destBuffer buffer de destino en el que se copiaran los bytes leidos desde el buffer
-     * @return la cantidad de bytes leidos
-     * @throws IllegalArgumentException si la cantidad de bytes a leer es mayor a la longitud del buffer
-     */
-    private int read(byte[] destBuffer) {
-        int bytesToRead = destBuffer.length;
-        if (bytesToRead > bufferLength)
-            throw new IllegalArgumentException("Not enough bytes available. Requested: " + bytesToRead + ", Available: " + bufferLength);
-        // Lee los bytes del buffer y los copia al buffer de destino para su procesamiento antes de ser "eliminados"
-        System.arraycopy(buffer, 0, destBuffer, 0, bytesToRead);
-        return bytesToRead;
-    }
-
-    /**
-     * "Elimina" una cantidad especificada de bytes del buffer y reorganiza los bytes restantes.
-     *
-     * @param bytesToRemove cantidad de bytes a eliminar
-     * @return la cantidad de bytes eliminados
-     */
-    private int remove(int bytesToRemove) {
-        // Limita la cantidad de bytes a eliminar a la longitud del buffer
-        int actualBytesRemoved = Math.min(bytesToRemove, bufferLength);
-        // Si la cantidad de bytes a eliminar es menor a la longitud del buffer
-        if (actualBytesRemoved < bufferLength) reorganizeBuffer(actualBytesRemoved);
-        // Actualiza la longitud del buffer
-        bufferLength -= actualBytesRemoved;
-        return actualBytesRemoved;
-    }
-
-    /**
-     * Mueve los bytes restantes al inicio del buffer.
-     * <p>
-     * En lugar de una eliminacion fisica (que seria imposible en un array de Java), lo que ocurre es una reorganizacion donde los
-     * bytes que deben permanecer en el buffer sobreescriben aquellos que deben ser "eliminados".
-     * <p>
-     * Esta implementacion es eficiente porque evita crear nuevos arrays cada vez que se eliminan bytes del buffer, aprovechando
-     * el espacio existente.
-     *
-     * @param startPosition posicion desde donde se empieza a mover los bytes
-     */
-    private void reorganizeBuffer(int startPosition) {
-        // Calcula la cantidad de bytes restantes
-        int remainingBytes = bufferLength - startPosition;
-        // Sobreescribe los bytes "eliminados" por los bytes restantes
-        System.arraycopy(buffer, startPosition, buffer, 0, remainingBytes);
     }
 
     /**
@@ -238,11 +168,13 @@ public class PacketBuffer {
      */
     public void writeCp1252String(String string) {
         byte[] stringBytes = string.getBytes(Charset.forName("Cp1252"));
-        byte[] buffer = new byte[STRING_LENGTH_BYTES + string.length()];
+        byte[] buffer = new byte[STRING_LENGTH_BYTES + stringBytes.length];
         /* Como se esta escribiendo una cadena codificada en Cp1252, entonces los caracteres ocupan solo 1 byte, por lo tanto es
-         * valido obtener la longitud de la cadena con string.length(). */
-        ByteBuffer.wrap(buffer).put(0, (byte) string.length());
-        System.arraycopy(stringBytes, 0, buffer, STRING_LENGTH_BYTES, string.length());
+         * valido obtener la longitud de la cadena con string.length(), aunque por simplicidad se usa la variable ya creada
+         * stringBytes. */
+        ByteBuffer.wrap(buffer).order(ByteOrder.LITTLE_ENDIAN).putShort((short) stringBytes.length); // Almacena la longitud como un short (2 bytes) en formato little-endian
+        // Copia los bytes de la cadena al buffer despues de la longitud
+        System.arraycopy(stringBytes, 0, buffer, STRING_LENGTH_BYTES, stringBytes.length);
         write(buffer);
     }
 
@@ -406,37 +338,6 @@ public class PacketBuffer {
         return readString(stringLength, Charset.forName("Cp1252"));
     }
 
-    /**
-     * Lee la longitud de una cadena desde un array de bytes.
-     * <p>
-     * El metodo asume que los bytes correspondientes a la longitud se encuentran al principio del buffer y se almacenan en
-     * formato LITTLE_ENDIAN.
-     *
-     * @return La longitud de la cadena representada como un valor de tipo short
-     */
-    private short readStringLength() {
-        byte[] buffer = new byte[STRING_LENGTH_BYTES];
-        read(buffer);
-        short length = ByteBuffer.wrap(buffer).order(ByteOrder.LITTLE_ENDIAN).getShort();
-        // Elimina los bytes de la longitud de la cadena que ya fueron leidos
-        remove(STRING_LENGTH_BYTES);
-        return length;
-    }
-
-    /**
-     * Lee una cadena de texto desde el buffer utilizando la longitud especificada y el conjunto de caracteres proporcionado.
-     *
-     * @param stringLength longitud de la cadena en bytes
-     * @param charset      charset utilizado para decodificar los bytes
-     * @return la cadena decodificada
-     */
-    private String readString(short stringLength, Charset charset) {
-        byte[] bytes = new byte[stringLength];
-        read(bytes);
-        remove(stringLength);
-        return new String(bytes, charset);
-    }
-
     public String readUnicodeString() {
         byte[] buffer = new byte[2];
         int length;
@@ -568,10 +469,6 @@ public class PacketBuffer {
         throw new RuntimeException("Not enough bytes!");
     }
 
-    private void peekBlock(byte[] block, int dataLength) {
-        if (dataLength > 0) read(block);
-    }
-
     public int getLength() {
         return bufferLength;
     }
@@ -604,6 +501,106 @@ public class PacketBuffer {
             return true;
         }
         return false;
+    }
+
+    /**
+     * Escribe una cantidad especifica de bytes desde el buffer de origen al buffer.
+     *
+     * @param srcBuffer buffer de origen que contiene los bytes a escribir en el buffer
+     * @throws RuntimeException si no hay suficiente espacio disponible en el buffer
+     */
+    private void write(byte[] srcBuffer) {
+        int bytesToWrite = srcBuffer.length;
+        int availableSpace = bufferCapacity - bufferLength;
+        if (availableSpace < bytesToWrite) throw new RuntimeException("Not enough space in the buffer!");
+        // Lee los bytes del buffer de origen y los copia al buffer
+        System.arraycopy(srcBuffer, 0, buffer, bufferLength, bytesToWrite); // Los bytes del buffer local creado en copyByffer() se copian al buffer!
+        bufferLength += bytesToWrite;
+    }
+
+    /**
+     * Lee una cantidad especifica de bytes desde el buffer al buffer de destino.
+     *
+     * @param destBuffer buffer de destino en el que se copiaran los bytes leidos desde el buffer
+     * @return la cantidad de bytes leidos
+     * @throws IllegalArgumentException si la cantidad de bytes a leer es mayor a la longitud del buffer
+     */
+    private int read(byte[] destBuffer) {
+        int bytesToRead = destBuffer.length;
+        if (bytesToRead > bufferLength)
+            throw new IllegalArgumentException("Not enough bytes available. Requested: " + bytesToRead + ", Available: " + bufferLength);
+        // Lee los bytes del buffer y los copia al buffer de destino para su procesamiento antes de ser "eliminados"
+        System.arraycopy(buffer, 0, destBuffer, 0, bytesToRead);
+        return bytesToRead;
+    }
+
+    /**
+     * "Elimina" una cantidad especificada de bytes del buffer y reorganiza los bytes restantes.
+     *
+     * @param bytesToRemove cantidad de bytes a eliminar
+     * @return la cantidad de bytes eliminados
+     */
+    private int remove(int bytesToRemove) {
+        // Limita la cantidad de bytes a eliminar a la longitud del buffer
+        int bytesRemoved = Math.min(bytesToRemove, bufferLength);
+        // Si la cantidad de bytes a eliminar es menor a la longitud del buffer
+        if (bytesRemoved < bufferLength) reorganizeBuffer(bytesRemoved);
+        // Actualiza la longitud del buffer
+        bufferLength -= bytesRemoved;
+        return bytesRemoved;
+    }
+
+    /**
+     * Mueve los bytes restantes al inicio del buffer.
+     * <p>
+     * En lugar de una eliminacion fisica (que seria imposible en un array de Java), lo que ocurre es una reorganizacion donde los
+     * bytes que deben permanecer en el buffer sobreescriben aquellos que deben ser "eliminados".
+     * <p>
+     * Esta implementacion es eficiente porque evita crear nuevos arrays cada vez que se eliminan bytes del buffer, aprovechando
+     * el espacio existente.
+     *
+     * @param startPosition posicion desde donde se empieza a mover los bytes
+     */
+    private void reorganizeBuffer(int startPosition) {
+        // Calcula la cantidad de bytes restantes
+        int remainingBytes = bufferLength - startPosition;
+        // Sobreescribe los bytes "eliminados" por los bytes restantes
+        System.arraycopy(buffer, startPosition, buffer, 0, remainingBytes);
+    }
+
+    /**
+     * Lee la longitud de una cadena desde un array de bytes.
+     * <p>
+     * El metodo asume que los bytes correspondientes a la longitud se encuentran al principio del buffer y se almacenan en
+     * formato LITTLE_ENDIAN.
+     *
+     * @return La longitud de la cadena representada como un valor de tipo short
+     */
+    private short readStringLength() {
+        byte[] buffer = new byte[STRING_LENGTH_BYTES];
+        read(buffer);
+        short length = ByteBuffer.wrap(buffer).order(ByteOrder.LITTLE_ENDIAN).getShort();
+        // Elimina los bytes de la longitud de la cadena que ya fueron leidos
+        remove(STRING_LENGTH_BYTES);
+        return length;
+    }
+
+    /**
+     * Lee una cadena de texto desde el buffer utilizando la longitud especificada y el conjunto de caracteres proporcionado.
+     *
+     * @param stringLength longitud de la cadena en bytes
+     * @param charset      charset utilizado para decodificar los bytes
+     * @return la cadena decodificada
+     */
+    private String readString(short stringLength, Charset charset) {
+        byte[] bytes = new byte[stringLength];
+        read(bytes);
+        remove(stringLength);
+        return new String(bytes, charset);
+    }
+
+    private void peekBlock(byte[] block, int dataLength) {
+        if (dataLength > 0) read(block);
     }
 
     private void disconnect() {

@@ -118,7 +118,7 @@ public enum User {
 
     /**
      * @param nDirection direccion pasada por parametro
-     * @desc Mueve la camara hacia una direccion.
+     *  Mueve la camara hacia una direccion.
      */
     public void moveScreen(Direction nDirection) {
         int x = 0, y = 0;
@@ -159,7 +159,7 @@ public enum User {
     }
 
     /**
-     * @desc: Checkea si estamos bajo techo segun el trigger en donde esta parado el usuario.
+     *  Checkea si estamos bajo techo segun el trigger en donde esta parado el usuario.
      */
     public boolean checkUnderCeiling() {
         return mapData[userPos.getX()][userPos.getY()].getTrigger() == 1 ||
@@ -170,7 +170,7 @@ public enum User {
     /**
      * @param charIndex Numero de identificador de personaje
      * @param nDirection  Direccion del personaje
-     * @desc Mueve el personaje segun la direccion establecida en "nHeading".
+     *  Mueve el personaje segun la direccion establecida en "nHeading".
      */
     public void moveCharbyHead(short charIndex, Direction nDirection) {
         int addX = 0, addY = 0;
@@ -217,7 +217,7 @@ public enum User {
     }
 
     /**
-     * @desc: Actualiza las areas de vision de objetos y personajes.
+     *  Actualiza las areas de vision de objetos y personajes.
      */
     public void areaChange(int x, int y) {
         minLimiteX = (x / 9 - 1) * 9;
@@ -308,7 +308,7 @@ public enum User {
      * @param charIndex Numero de identificador de personaje.
      * @param fx        Numero de efecto FX.
      * @param loops     Tiempo del efecto FX.
-     * @desc Establece un efecto FX en un personaje.
+     *  Establece un efecto FX en un personaje.
      */
     public void setCharacterFx(int charIndex, int fx, int loops) {
         charList[charIndex].setFxIndex(fx);
@@ -322,7 +322,7 @@ public enum User {
      * @param charIndex Numero de identificador de personaje
      * @param nX        Posicion X a actualizar
      * @param nY        Posicion Y a actualizar
-     * @desc Mueve el personaje segun la direccion establecida en "nX" y "nY".
+     *  Mueve el personaje segun la direccion establecida en "nX" y "nY".
      */
     public void moveCharbyPos(short charIndex, int nX, int nY) {
         final int x = charList[charIndex].getPos().getX();
@@ -367,7 +367,7 @@ public enum User {
 
     /**
      * @param direction
-     * @desc Mueve nuestro personaje a una cierta direccion si es posible.
+     *  Mueve nuestro personaje a una cierta direccion si es posible.
      */
     public void moveTo(Direction direction) {
         boolean legalOk = switch (direction) {
@@ -386,7 +386,7 @@ public enum User {
 
     /**
      * @param charIndex Numero de identificador de personaje
-     * @desc Realiza sonidos de caminata segun el estado del personaje
+     *  Realiza sonidos de caminata segun el estado del personaje
      * <p>
      * EN PROGRESO....
      */
