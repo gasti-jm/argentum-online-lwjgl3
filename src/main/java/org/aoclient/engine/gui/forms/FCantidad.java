@@ -48,6 +48,7 @@ public final class FCantidad extends Form {
 
     public FCantidad(boolean dropOro) {
         this.dropOro = dropOro;
+
         try {
             this.backgroundImage = loadTexture("VentanaTirarOro");
         } catch (IOException e) {
@@ -57,9 +58,14 @@ public final class FCantidad extends Form {
 
     @Override
     public void render() {
+        ImGui.setNextWindowFocus(); // dale foco solo a este FRM
+
         ImGui.setNextWindowSize(225, 100, ImGuiCond.Always);
         ImGui.begin(this.getClass().getSimpleName(), ImGuiWindowFlags.NoTitleBar | ImGuiWindowFlags.NoResize | ImGuiWindowFlags.NoDecoration |
-                ImGuiWindowFlags.NoBackground);
+                ImGuiWindowFlags.NoBackground | ImGuiWindowFlags.NoMove);
+
+        // para poder mover el frm.
+        this.checkMoveFrm();
 
         ImGui.setCursorPos(5, 0);
         ImGui.image(backgroundImage, 216, 100);

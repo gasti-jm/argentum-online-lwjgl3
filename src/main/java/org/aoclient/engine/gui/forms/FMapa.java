@@ -40,10 +40,13 @@ public final class FMapa extends Form {
 
     @Override
     public void render() {
+        ImGui.setNextWindowFocus();
         ImGui.setNextWindowSize(573, 528, ImGuiCond.Always);
         ImGui.begin(this.getClass().getSimpleName(),
                 ImGuiWindowFlags.NoTitleBar | ImGuiWindowFlags.NoResize
-                        | ImGuiWindowFlags.NoDecoration | ImGuiWindowFlags.NoBackground);
+                        | ImGuiWindowFlags.NoDecoration | ImGuiWindowFlags.NoBackground | ImGuiWindowFlags.NoMove);
+
+        this.checkMoveFrm();
 
         ImGui.setCursorPos(5, 0);
         ImGui.image(backgroundImage, 573, 528);

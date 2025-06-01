@@ -36,9 +36,13 @@ public final class FBank extends Form{
 
     @Override
     public void render() {
+        ImGui.setNextWindowFocus(); // dale foco solo a este FRM
+
         ImGui.setNextWindowSize(461, 530, ImGuiCond.Always);
         ImGui.begin(this.getClass().getSimpleName(), ImGuiWindowFlags.NoTitleBar | ImGuiWindowFlags.NoResize | ImGuiWindowFlags.NoDecoration |
                 ImGuiWindowFlags.NoBackground | ImGuiWindowFlags.NoMove);
+
+        this.checkMoveFrm();
 
         ImGui.setCursorPos(5, 0);
         ImGui.image(backgroundImage, 461, 530);

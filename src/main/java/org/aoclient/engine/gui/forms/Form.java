@@ -1,5 +1,7 @@
 package org.aoclient.engine.gui.forms;
 
+import imgui.ImGui;
+import imgui.ImVec2;
 import org.aoclient.engine.game.User;
 import org.aoclient.engine.gui.ImGUISystem;
 import org.lwjgl.BufferUtils;
@@ -36,7 +38,6 @@ import static org.lwjgl.opengl.GL12.GL_CLAMP_TO_EDGE;
 public abstract class Form {
 
     protected int backgroundImage;
-
     protected static final User USER = User.INSTANCE;
     protected static final ImGUISystem IM_GUI_SYSTEM = ImGUISystem.INSTANCE;
 
@@ -45,6 +46,40 @@ public abstract class Form {
     public void close() {
         glDeleteTextures(backgroundImage);
         IM_GUI_SYSTEM.deleteFrmArray(this);
+    }
+
+    /**
+     * Permite que podamos mover nuestro frm si tenemos el mouse en la parte superior del frm
+     * simulando una barra de titulo como funciona en windows. <br> <br>
+     *
+     * Para evitar errores antes de crear la ventana necesitamos establecer las siguentes condiciones: <br>
+     *
+     * - Antes de crear la ventana en la funcion definida de {@code render()} debemos establecerle foco
+     * con {@code ImGui.setNextWindowFocus();}. Esto es opcional, pero si la ventana se crea por encima
+     * del frmMain debemos hacerlo si o si. <br>
+     * - En las flags de ImGui al momento de crear una ventana debemos establecer {@code ImGuiWindowFlags.NoMove}. <br>
+     * - Por ultimo, luego de crear la ventana debemos llamar a esta misma funcion. <br> <br>
+     *
+     * <b>Pueden observar como ejemplo en el FComerce, FBank, etc.</b>
+     */
+    protected void checkMoveFrm() {
+
+        float barHeight = 10.0f; // Altura de la "barra de título"
+        ImVec2 windowPos = ImGui.getWindowPos();
+        ImVec2 mousePos = ImGui.getMousePos();
+
+        boolean isHovered = ImGui.isWindowHovered();
+        boolean isClicked = ImGui.isMouseDown(0);
+
+        // Simluando una barra para que nos permita mover la ventana ( - 32 por si hay algun boton de cerrar en el frm).
+        ImGui.invisibleButton("title_bar", ImGui.getWindowSizeX() - 32, barHeight);
+        boolean isTitleBarActive = ImGui.isItemActive();
+
+        // Guardar posición del mouse al empezar a arrastrar
+        if (isTitleBarActive) {
+            ImVec2 delta = ImGui.getIO().getMouseDelta();
+            ImGui.setWindowPos(windowPos.x + delta.x, windowPos.y + delta.y);
+        }
     }
 
     protected int loadTexture(final String file) throws IOException {

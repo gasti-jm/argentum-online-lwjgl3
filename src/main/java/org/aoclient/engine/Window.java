@@ -91,7 +91,8 @@ public enum Window {
                 options.isFullscreen() ? glfwGetPrimaryMonitor() : NULL,
                 NULL);
 
-        if (window == NULL) throw new IllegalStateException("Failed to create the GLFW window.");
+        if (window == NULL)
+            throw new IllegalStateException("Failed to create the GLFW window.");
 
         glfwSetCursorPosCallback(window, MouseListener::mousePosCallback);
         glfwSetMouseButtonCallback(window, MouseListener::mouseButtonCallback);

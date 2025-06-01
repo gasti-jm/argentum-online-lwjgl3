@@ -68,10 +68,14 @@ public final class FTutorial extends Form {
 
     @Override
     public void render() {
+        ImGui.setNextWindowFocus();
         ImGui.setNextWindowSize(583, 509, ImGuiCond.Always);
         ImGui.begin(this.getClass().getSimpleName(),
                 ImGuiWindowFlags.NoTitleBar | ImGuiWindowFlags.NoResize
-                        | ImGuiWindowFlags.NoDecoration | ImGuiWindowFlags.NoBackground);
+                        | ImGuiWindowFlags.NoDecoration | ImGuiWindowFlags.NoBackground | ImGuiWindowFlags.NoMove);
+
+        this.checkMoveFrm();
+
 
         ImGui.setCursorPos(5, 0);
         ImGui.image(backgroundImage, 583, 509);
