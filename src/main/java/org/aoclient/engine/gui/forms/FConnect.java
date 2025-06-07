@@ -190,9 +190,9 @@ public final class FConnect extends Form {
         if (btnRecovery.render()) {
             // Acción para recuperar contraseña (a implementar)
         }
-        if (btnManual.render()) this.abrirURL("http://wiki.argentumonline.org/");
-        if (btnRules.render()) this.abrirURL("http://wiki.argentumonline.org/reglamento.html");
-        if (btnSourceCode.render()) this.abrirURL("https://github.com/gasti-jm/argentum-online-lwjgl3");
+        if (btnManual.render()) this.openURL("http://wiki.argentumonline.org/");
+        if (btnRules.render()) this.openURL("http://wiki.argentumonline.org/reglamento.html");
+        if (btnSourceCode.render()) this.openURL("https://github.com/gasti-jm/argentum-online-lwjgl3");
         if (btnDeleteCharacter.render()) {
             // Acción para borrar personaje (a implementar)
         }

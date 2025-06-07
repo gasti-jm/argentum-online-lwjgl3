@@ -55,9 +55,13 @@ public final class FComerce extends Form {
 
     @Override
     public void render() {
+        ImGui.setNextWindowFocus(); // le damos foco.
         ImGui.setNextWindowSize(462, 486, ImGuiCond.Always);
         ImGui.begin(this.getClass().getSimpleName(), ImGuiWindowFlags.NoTitleBar | ImGuiWindowFlags.NoResize | ImGuiWindowFlags.NoDecoration |
                 ImGuiWindowFlags.NoBackground | ImGuiWindowFlags.NoMove);
+
+        // para poder mover el frm.
+        this.checkMoveFrm();
 
         ImGui.setCursorPos(5, 0);
         ImGui.image(backgroundImage, 462, 486);

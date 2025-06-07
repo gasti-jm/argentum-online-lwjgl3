@@ -33,7 +33,7 @@ public enum Console {
     /**
      * Constructor privado por singleton.
      */
-    private Console() {
+    Console() {
         this.autoScroll = true;
         this.scrollToBottom = false;
         this.data = new ArrayList<>();

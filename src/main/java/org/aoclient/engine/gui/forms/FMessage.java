@@ -33,7 +33,7 @@ public final class FMessage extends Form {
 
     @Override
     public void render() {
-
+        ImGui.setNextWindowFocus(); // dale foco solo a este FRM
         ImGui.setNextWindowSize(250, 230, ImGuiCond.Always);
 
         // Start Custom window
