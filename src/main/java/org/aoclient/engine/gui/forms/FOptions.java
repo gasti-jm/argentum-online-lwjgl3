@@ -68,7 +68,10 @@ public final class FOptions extends Form {
 
     private void drawButtons() {
         ImGui.setCursorPos(6, 344);
-        if (ImGui.button("Configurar Teclas", 170, 20)) playSound(SND_CLICK);
+        if (ImGui.button("Configurar Teclas", 170, 20)) {
+            playSound(SND_CLICK);
+            IM_GUI_SYSTEM.show(new FBindKeys());
+        }
 
         ImGui.setCursorPos(6, 368);
         if (ImGui.button("Mapa", 170, 20)) {

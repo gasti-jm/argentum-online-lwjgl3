@@ -51,15 +51,15 @@ public abstract class Form {
     /**
      * Permite que podamos mover nuestro frm si tenemos el mouse en la parte superior del frm
      * simulando una barra de titulo como funciona en windows. <br> <br>
-     *
+     * 
      * Para evitar errores antes de crear la ventana necesitamos establecer las siguentes condiciones: <br>
-     *
-     * - Antes de crear la ventana en la funcion definida de {@code render()} debemos establecerle foco
+     * 
+     * - Antes de crear la ventana en la funcion definida de {@code render()} debemos establecerle foco 
      * con {@code ImGui.setNextWindowFocus();}. Esto es opcional, pero si la ventana se crea por encima
      * del frmMain debemos hacerlo si o si. <br>
      * - En las flags de ImGui al momento de crear una ventana debemos establecer {@code ImGuiWindowFlags.NoMove}. <br>
      * - Por ultimo, luego de crear la ventana debemos llamar a esta misma funcion. <br> <br>
-     *
+     * 
      * <b>Pueden observar como ejemplo en el FComerce, FBank, etc.</b>
      */
     protected void checkMoveFrm() {
@@ -122,7 +122,7 @@ public abstract class Form {
         return textureID;
     }
 
-    protected void abrirURL(String url) {
+    protected void openURL(String url) {
         // Verifica si Desktop es compatible con la plataforma actual
         if (Desktop.isDesktopSupported()) {
             Desktop desktop = Desktop.getDesktop();

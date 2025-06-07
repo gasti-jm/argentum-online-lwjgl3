@@ -104,6 +104,7 @@ public final class FNewPassword extends Form {
             } else
                 // Si está correcto enviamos paquete para cambiar la contraseña.
                 writeChangePassword(this.txtPassword.get(), this.txtNewPassword.get());
+                close();
         }
 
     }
