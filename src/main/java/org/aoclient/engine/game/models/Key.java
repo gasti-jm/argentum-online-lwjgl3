@@ -3,35 +3,38 @@ package org.aoclient.engine.game.models;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
+import java.util.logging.Logger;
 
 import static org.lwjgl.glfw.GLFW.*;
 
 /**
- * Representa una enumeracion de teclas asociadas a diferentes acciones dentro del juego. Cada entrada de la enumeracion describe
- * una accion y su tecla por defecto. Las teclas pueden ser personalizadas por el usuario, y los cambios se registran y guardan en
- * el archivo de configuracion en formato Properties {@code keys.properties}.
- * <p>
- * La clase permite cargar teclas desde un archivo, guardar configuraciones personalizadas, y restablecer valores predeterminados.
- * Adicionalmente, valida la asignacion de teclas asegurando que no haya conflictos entre diferentes acciones.
+ * Represents keys associated with game actions with customizable configuration. Keys can be loaded from file, saved and reset to
+ * default values.
  */
 
 public enum Key {
 
+    // Movimiento
     UP(GLFW_KEY_W),
     DOWN(GLFW_KEY_S),
     LEFT(GLFW_KEY_A),
     RIGHT(GLFW_KEY_D),
+    // Audio
     TOGGLE_MUSIC(GLFW_KEY_M),
-    TOGGLE_SOUND(GLFW_KEY_S),
+    TOGGLE_SOUND(GLFW_KEY_F1),
     TOGGLE_FXS(GLFW_KEY_F),
+    // Acciones del juego
     REQUEST_REFRESH(GLFW_KEY_L),
     TOGGLE_NAMES(GLFW_KEY_N),
     GET_OBJECT(GLFW_KEY_Q),
     EQUIP_OBJECT(GLFW_KEY_E),
-    TAME_ANIMAL(GLFW_KEY_D),
+    TAME_ANIMAL(GLFW_KEY_Y),
     STEAL(GLFW_KEY_R),
     TOGGLE_SAFE_MODE(GLFW_KEY_KP_MULTIPLY),
     TOGGLE_RESUSCITATION_SAFE(GLFW_KEY_END),
@@ -41,6 +44,7 @@ public enum Key {
     ATTACK(GLFW_KEY_LEFT_CONTROL),
     TALK(GLFW_KEY_ENTER),
     TALK_WITH_GUILD(GLFW_KEY_DELETE),
+    // Sistemas
     TAKE_SCREENSHOT(GLFW_KEY_F2),
     SHOW_OPTIONS(GLFW_KEY_F5),
     MEDITATE(GLFW_KEY_F6),
@@ -49,145 +53,162 @@ public enum Key {
     AUTO_MOVE(GLFW_KEY_TAB),
     EXIT_GAME(GLFW_KEY_ESCAPE);
 
-    /** Nombre del archivo que almacena la configuracion de las teclas en formato Properties. */
     private static final String KEYS_CONFIG_FILE = "resources/keys.properties";
-    /** Mapa que relaciona cada codigo de tecla con su correspondiente instancia de Key. */
-    private static final Map<Integer, Key> keys = new HashMap<>();
+    private static final Logger LOGGER = Logger.getLogger(Key.class.getName());
+
+    /** Mapa que almacena la correspondencia entre las teclas del enum y sus codigos asociados. */
+    private static final Map<Key, Integer> keyCodeMap = new EnumMap<>(Key.class);
+    /** Mapa que almacena la correspondencia entre codigos de tecla y sus acciones asociadas. */
+    private static final Map<Integer, Key> codeToKeyMap = new HashMap<>();
 
     static {
+        // Inicializa los valores predeterminados despues de que se crean las constantes de enum
+        for (Key key : values())
+            keyCodeMap.put(key, key.defaultKeyCode);
         loadKeys();
     }
 
+    /** Valor de keyCode predeterminado para esta asignacion de tecla. */
     private final int defaultKeyCode;
-    private int keyCode;
 
-    Key(int keyCode) {
-        this.defaultKeyCode = keyCode;
-        this.keyCode = keyCode;
+    Key(int defaultKeyCode) {
+        this.defaultKeyCode = defaultKeyCode;
     }
 
-    /**
-     * Obtiene la tecla asociada a un codigo especifico.
-     *
-     * @param keyCode codigo de la tecla
-     * @return la tecla asociada, o null si no hay ninguna
-     */
     public static Key getKey(int keyCode) {
-        return keys.get(keyCode);
+        return codeToKeyMap.get(keyCode);
     }
 
-    /**
-     * Verifica si existe una tecla asociada al codigo proporcionado.
-     *
-     * @param keyCode el codigo de la tecla que se desea comprobar
-     * @return {@code true} si el codigo de tecla existe en el mapeo, {@code false} de lo contrario
-     */
     public static boolean containsKey(int keyCode) {
-        return keys.containsKey(keyCode);
+        return codeToKeyMap.containsKey(keyCode);
     }
 
     /**
-     * Carga las teclas por defecto segun lo definido en el enum Key.
-     */
-    public static void loadDefaultKeys() {
-        for (Key key : Key.values())
-            key.resetToDefault();
-        updateKeyMap();
-        saveKeys();
-    }
-
-    /**
-     * Carga las teclas guardadas desde un archivo Properties.
+     * Carga la configuracion de teclas desde un archivo de propiedades.
+     * <p>
+     * Este metodo verifica si el archivo de configuracion definido por {@code KEYS_CONFIG_FILE} existe. Si no existe, se cargan
+     * los valores predeterminados llamando a {@code loadDefaultKeys()} y se registra un mensaje informativo.
+     * <p>
+     * Si el archivo existe, intenta leerlo utilizando un {@code FileInputStream}, cargando las propiedades definidas en el mismo.
+     * Recorre cada tecla definida en el enum y busca su codigo asociado en las propiedades cargadas.
+     * <ul>
+     * <li>Si encuentra un valor valido para una tecla, lo asigna al mapa de codigos {@code keyCodeMap}.
+     * <li>Si el valor es invalido (por ejemplo, formato incorrecto o codigo no permitido), asigna el codigo predeterminado
+     * de la tecla y registra una advertencia.
+     * </ul>
+     * Si ocurre un error durante el proceso de lectura del archivo, se registra el error y se cargan las teclas predeterminadas
+     * como resguardo.
+     * <p>
+     * Al finalizar, actualiza los mapas relacionados llamando al metodo {@code updateMaps()}.
      */
     public static void loadKeys() {
-        Properties properties = new Properties();
+        if (!Files.exists(Paths.get(KEYS_CONFIG_FILE))) {
+            LOGGER.info("Configuration file not found, using default values");
+            loadDefaultKeys();
+            return;
+        }
 
+        Properties properties = new Properties();
         try (FileInputStream fis = new FileInputStream(KEYS_CONFIG_FILE)) {
             properties.load(fis);
-
-            for (Key key : Key.values()) {
-                String keyName = key.name();
-                String keyCodeStr = properties.getProperty(keyName);
-
+            for (Key key : values()) {
+                String keyCodeStr = properties.getProperty(key.name());
                 if (keyCodeStr != null) {
                     try {
                         int keyCode = Integer.parseInt(keyCodeStr);
-                        // Verifica que el codigo de la tecla leido este en un rango razonable para teclas GLFW
-                        if (keyCode >= 0 && keyCode <= 1000) key.keyCode = keyCode;
-                        else key.resetToDefault();
+                        if (isValidKeyCode(keyCode)) keyCodeMap.put(key, keyCode);
+                        else {
+                            LOGGER.warning("Invalid key code for " + key.name() + ": " + keyCode);
+                            keyCodeMap.put(key, key.defaultKeyCode);
+                        }
                     } catch (NumberFormatException e) {
-                        System.err.println("Error al convertir el codigo de tecla para " + keyName + ": " + e.getMessage());
-                        key.resetToDefault();
+                        LOGGER.warning("Error parsing key code for " + key.name() + ": " + keyCodeStr);
+                        keyCodeMap.put(key, key.defaultKeyCode);
                     }
-                }
+                } else keyCodeMap.put(key, key.defaultKeyCode);
             }
-            updateKeyMap();
+            updateMaps();
         } catch (IOException e) {
-            System.err.println("No se pudo cargar la configuracion de teclas: " + e.getMessage());
+            LOGGER.severe("Error loading key configuration: " + e.getMessage());
             loadDefaultKeys();
         }
     }
 
     /**
-     * Guarda la configuracion actual de teclas en un archivo Properties.
+     * Guarda la configuracion actual de las teclas en un archivo de propiedades.
+     * <p>
+     * Este metodo toma las teclas y sus codigos asociados definidos actualmente en {@code keyCodeMap}, los convierte en pares
+     * clave-valor y los almacena en un archivo de propiedades definido por la constante {@code KEYS_CONFIG_FILE}.
+     * <p>
+     * Si ocurre un error durante el proceso de guardado, se registra un mensaje en el logger para notificar al usuario.
      */
     public static void saveKeys() {
         Properties properties = new Properties();
-        for (Key key : Key.values())
-            properties.setProperty(key.name(), Integer.toString(key.getKeyCode()));
+        keyCodeMap.forEach((key, code) ->
+                properties.setProperty(key.name(), String.valueOf(code)));
         try (FileOutputStream fos = new FileOutputStream(KEYS_CONFIG_FILE)) {
             properties.store(fos, "Key Configuration for Argentum Online LWJGL3\nMapping actions to GLFW keycodes");
         } catch (IOException e) {
-            System.err.println("Could not save key configuration: " + e.getMessage());
+            LOGGER.severe("Error saving key configuration: " + e.getMessage());
         }
     }
 
     /**
-     * Actualiza el mapeo de teclas.
+     * Carga las teclas predeterminadas y actualiza los mapas de mapeo.
      * <p>
-     * Reinicia el mapa de teclas actual eliminando todas las asociaciones previas y posteriormente lo rellena con las teclas
-     * actuales basadas en los valores definidos en el enumerado {@code Key}. Se utiliza para sincronizar los codigos de tecla con
-     * sus respectivas acciones en el sistema.
-     * <p>
-     * Es una operacion clave cuando se realizan cambios en la configuracion de teclas o se requiere restablecer los mapeos a
-     * partir de los valores definidos en el enumerado.
+     * Este metodo asigna a cada tecla definida en el enum su codigo de tecla predeterminado, colocando estas asociaciones en el
+     * mapa {@code keyCodeMap}. Posteriormente, actualiza el resto de los mapas relacionados llamando al metodo
+     * {@code updateMaps()} y almacena la configuracion actual utilizando {@code saveKeys()}.
      */
-    private static void updateKeyMap() {
-        keys.clear();
-        for (Key key : Key.values())
-            keys.put(key.getKeyCode(), key);
+    private static void loadDefaultKeys() {
+        for (Key key : values())
+            keyCodeMap.put(key, key.defaultKeyCode);
+        updateMaps();
+        saveKeys();
+    }
+
+    /**
+     * Actualiza los mapas de mapeo de teclas.
+     * <p>
+     * Este metodo borra completamente el contenido del mapa {@code codeToKeyMap} y lo reconstruye utilizando los valores actuales
+     * del mapa {@code keyCodeMap}. Itera sobre las entradas de {@code keyCodeMap}, invirtiendo las claves y valores para
+     * almacenarlos en {@code codeToKeyMap}.
+     */
+    private static void updateMaps() {
+        codeToKeyMap.clear();
+        keyCodeMap.forEach((key, code) -> codeToKeyMap.put(code, key));
+    }
+
+    /**
+     * Valida si un keyCode es valido para GLFW.
+     */
+    private static boolean isValidKeyCode(int keyCode) {
+        return keyCode >= GLFW_KEY_SPACE && keyCode <= GLFW_KEY_LAST;
     }
 
     public int getKeyCode() {
-        return keyCode;
+        return keyCodeMap.get(this);
     }
 
-    /**
-     * Cambia la tecla asignada a esta accion.
-     *
-     * @param newKeyCode codigo de la nueva tecla
-     * @return true si la asignacion fue exitosa, false si la tecla ya esta asignada a otra accion
-     */
     public boolean setKeyCode(int newKeyCode) {
-        // Verifica si la tecla ya esta asignada a otra accion
-        Key existingKey = keys.get(newKeyCode);
-        if (existingKey != null && existingKey != this) return false; // La tecla ya esta asignada a otra accion
-        // Actualiza la tecla en el mapa y en el enum
-        this.keyCode = newKeyCode;
-        updateKeyMap();
+        if (!isValidKeyCode(newKeyCode)) return false;
+
+        // Verifica conflictos
+        Key existingKey = codeToKeyMap.get(newKeyCode);
+        if (existingKey != null && existingKey != this) return false;
+
+        keyCodeMap.put(this, newKeyCode);
+        updateMaps();
         return true;
     }
 
-    /**
-     * Restaura el valor de la tecla asociada a su configuracion predeterminada.
-     * <p>
-     * Este metodo asigna el codigo de tecla por defecto {@code defaultKeyCode} al atributo {@code keyCode} para que la accion
-     * vuelva a usar el mapeo original definido al iniciar el juego. Es util para restablecer configuraciones en caso de que el
-     * jugador desee revertir cambios personalizados.
-     */
     public void resetToDefault() {
-        keyCode = defaultKeyCode;
+        keyCodeMap.put(this, defaultKeyCode);
+        updateMaps();
+    }
+
+    public int getDefaultKeyCode() {
+        return defaultKeyCode;
     }
 
 }
-
