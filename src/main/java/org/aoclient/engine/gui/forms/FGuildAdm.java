@@ -2,7 +2,9 @@ package org.aoclient.engine.gui.forms;
 
 import imgui.ImGui;
 import imgui.flag.ImGuiCond;
+import imgui.flag.ImGuiInputTextFlags;
 import imgui.flag.ImGuiWindowFlags;
+import imgui.type.ImString;
 import org.aoclient.engine.gui.widgets.ImageButton3State;
 
 import java.io.IOException;
@@ -11,8 +13,11 @@ import static org.aoclient.engine.Sound.SND_CLICK;
 import static org.aoclient.engine.Sound.playSound;
 
 public class FGuildAdm extends Form {
+
     private String[] guildsList = new String[0];
     private int selectedGuildIndex = -1;
+
+    private ImString filterText = new ImString(100);
     
     // Botones gráficos de 3 estados
     private ImageButton3State btnClose;
@@ -55,24 +60,6 @@ public class FGuildAdm extends Form {
 
         ImGui.setCursorPos(5, 0);
         ImGui.image(backgroundImage, 271, 370);
-        
-        // Guild List
-        ImGui.setCursorPos(33, 38);
-        ImGui.beginChild("guildList", 205, 236, true);
-        for (int i = 0; i < guildsList.length; i++) {
-            String guild = guildsList[i];
-            if (guild != null && !guild.trim().isEmpty()) {
-                boolean isSelected = (i == selectedGuildIndex);
-                if (ImGui.selectable(guild, isSelected)) {
-                    selectedGuildIndex = i;
-                }
-                // Resaltar el elemento seleccionado
-                if (isSelected) {
-                    ImGui.setItemDefaultFocus();
-                }
-            }
-        }
-        ImGui.endChild();
 
         drawButtons();
 
@@ -81,6 +68,36 @@ public class FGuildAdm extends Form {
     }
 
     private void drawButtons() {
+
+        // Campo de texto para filtrar
+        ImGui.setCursorPos(33, 312);
+        ImGui.setNextItemWidth(205);
+        ImGui.inputText("##filter", filterText, ImGuiInputTextFlags.None);
+
+        // Guild List (filtrada)
+        ImGui.setCursorPos(33, 38);
+        ImGui.beginChild("guildList", 205, 236, true);
+
+        String filter = filterText.get().toLowerCase();
+
+        for (int i = 0; i < guildsList.length; i++) {
+            String guild = guildsList[i];
+            if (guild != null && !guild.trim().isEmpty()) {
+                if (!filter.isEmpty() && !guild.toLowerCase().contains(filter)) {
+                    continue;
+                }
+
+                boolean isSelected = (i == selectedGuildIndex);
+                if (ImGui.selectable(guild, isSelected)) {
+                    selectedGuildIndex = i;
+                }
+                if (isSelected) {
+                    ImGui.setItemDefaultFocus();
+                }
+            }
+        }
+        ImGui.endChild();
+
         if (btnClose.render()) {
             playSound(SND_CLICK);
             this.close();
