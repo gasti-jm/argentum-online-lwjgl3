@@ -14,34 +14,34 @@ public class MapInfoCommand implements CommandHandler {
     @Override
     public void handle(CommandContext context) throws CommandException {
         if (context.getArgumentCount() > 1) {
-            switch (context.getArgument(0).toUpperCase()) {
-                case "PK":
+            switch (context.getArgument(0)) {
+                case "pk":
                     writeChangeMapInfoPK(context.getArgument(1).equals("1"));
                     break;
-                case "BACKUP":
+                case "backup":
                     writeChangeMapInfoBackup(context.getArgument(1).equals("1"));
                     break;
-                case "RESTRINGIR":
+                case "restringir":
                     writeChangeMapInfoRestricted(context.getArgument(1));
                     break;
-                case "MAGIASINEFECTO":
+                case "magiasinefecto":
                     writeChangeMapInfoNoMagic(Boolean.parseBoolean(context.getArgument(1)));
                     break;
-                case "INVISINEFECTO":
+                case "invisinefecto":
                     writeChangeMapInfoNoInvi(Boolean.parseBoolean(context.getArgument(1)));
                     break;
-                case "RESUSINEFECTO":
+                case "resusinefecto":
                     writeChangeMapInfoNoResu(Boolean.parseBoolean(context.getArgument(1)));
                     break;
-                case "TERRENO":
+                case "terreno":
                     writeChangeMapInfoLand(context.getArgument(1));
                     break;
-                case "ZONA":
+                case "zona":
                     writeChangeMapInfoZone(context.getArgument(1));
                     break;
             }
         } else
-            console.addMsgToConsole(new String("Missing parameters. Options: PK, BACKUP, RESTRINGIR, MAGIASINEFECTO, INVISINEFECTO, RESUSINEFECTO, TERRENO, ZONA".getBytes(), StandardCharsets.UTF_8), false, true, new RGBColor());
+            console.addMsgToConsole(new String("Missing arguments. Arguments: <pk>, <backup>, <restringir>, <magiasinefecto>, <invisinefecto>, <resusinefecto>, <terreno>, <zona>".getBytes(), StandardCharsets.UTF_8), false, true, new RGBColor());
     }
 
 }

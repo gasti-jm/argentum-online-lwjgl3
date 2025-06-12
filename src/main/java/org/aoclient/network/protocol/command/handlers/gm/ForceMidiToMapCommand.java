@@ -19,16 +19,16 @@ public class ForceMidiToMapCommand implements CommandHandler {
                 if (validator.isValidNumber(context.getArgument(0), NumericType.BYTE))
                     writeForceMIDIToMap(Integer.parseInt(context.getArgument(1)), (short) 0);
                 else
-                    console.addMsgToConsole(new String("Incorrect MIDI. Use \"/FORCEMIDIMAP midi map\", where map is optional.".getBytes(), StandardCharsets.UTF_8), false, true, new RGBColor());
+                    console.addMsgToConsole(new String("Incorrect MIDI. Usage: /forcemidimap <midi> [map]".getBytes(), StandardCharsets.UTF_8), false, true, new RGBColor());
             } else if (context.getArgumentCount() == 2) {
                 if (validator.isValidNumber(context.getArgument(0), NumericType.BYTE) && validator.isValidNumber(context.getArgument(1), NumericType.INTEGER))
                     writeForceMIDIToMap(Integer.parseInt(context.getArgument(0)), Short.parseShort(context.getArgument(1)));
                 else
-                    console.addMsgToConsole(new String("Incorrect value. Use \"/FORCEMIDIMAP midi map\", where map is optional.".getBytes(), StandardCharsets.UTF_8), false, true, new RGBColor());
+                    console.addMsgToConsole(new String("Incorrect arguments. Usage: /forcemidimap <midi> [map]".getBytes(), StandardCharsets.UTF_8), false, true, new RGBColor());
             } else
-                console.addMsgToConsole(new String("Use \"/FORCEMIDIMAP midi map\", where map is optional.".getBytes(), StandardCharsets.UTF_8), false, true, new RGBColor());
+                console.addMsgToConsole(new String("Usage: /forcemidimap <midi> [map]".getBytes(), StandardCharsets.UTF_8), false, true, new RGBColor());
         } else
-            console.addMsgToConsole(new String("Use \"/FORCEMIDIMAP midi map\", where map is optional.".getBytes(), StandardCharsets.UTF_8), false, true, new RGBColor());
+            console.addMsgToConsole(new String("Usage: /forcemidimap <midi> [map]".getBytes(), StandardCharsets.UTF_8), false, true, new RGBColor());
     }
 
 }

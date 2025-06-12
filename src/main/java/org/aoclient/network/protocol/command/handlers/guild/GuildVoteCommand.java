@@ -15,7 +15,7 @@ public class GuildVoteCommand implements CommandHandler {
     public void handle(CommandContext context) throws CommandException {
         if (context.hasArguments()) writeGuildVote(context.getArgumentsRaw());
         else
-            console.addMsgToConsole(new String("Missing parameters. Use /VOTO NICKNAME.".getBytes(), StandardCharsets.UTF_8), false, true, new RGBColor());
+            console.addMsgToConsole(new String("Missing arguments, use /VOTO <nick>.".getBytes(), StandardCharsets.UTF_8), false, true, new RGBColor());
     }
 
 }

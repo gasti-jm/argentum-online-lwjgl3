@@ -15,7 +15,7 @@ public class MakeDumbCommand implements CommandHandler {
     public void handle(CommandContext context) throws CommandException {
         if (context.hasArguments()) writeMakeDumb(context.getArgumentsRaw());
         else
-            console.addMsgToConsole(new String("Missing parameters. Use \"/ESTUPIDO nickname\".".getBytes(), StandardCharsets.UTF_8), false, true, new RGBColor());
+            console.addMsgToConsole(new String("Missing arguments. Usage: /estupido <nick>".getBytes(), StandardCharsets.UTF_8), false, true, new RGBColor());
     }
 
 }

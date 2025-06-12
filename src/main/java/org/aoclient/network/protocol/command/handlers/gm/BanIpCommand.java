@@ -15,11 +15,11 @@ public class BanIpCommand implements CommandHandler {
     public void handle(CommandContext context) throws CommandException {
         if (context.getArgumentCount() >= 2) {
             if (validator.isValidIPv4(context.getArgument(0)))
-                writeBanIP(true, validator.str2ipv4l(context.getArgument(0)), "", context.getArgumentsRaw().substring(context.getArgument(0).length() + 1));
+                writeBanIP(true, validator.parseIPv4ToArray(context.getArgument(0)), "", context.getArgumentsRaw().substring(context.getArgument(0).length() + 1));
             else
-                writeBanIP(false, validator.str2ipv4l("0.0.0.0"), context.getArgument(0), context.getArgumentsRaw().substring(context.getArgument(0).length() + 1));
+                writeBanIP(false, validator.parseIPv4ToArray("0.0.0.0"), context.getArgument(0), context.getArgumentsRaw().substring(context.getArgument(0).length() + 1));
         } else
-            console.addMsgToConsole(new String("Missing parameters. Use \"/BANIP ip reason\" or \"/BANIP nick reason\".".getBytes(), StandardCharsets.UTF_8), false, true, new RGBColor());
+            console.addMsgToConsole(new String("Missing arguments. Usage: /banip <ip|nick> <reason>".getBytes(), StandardCharsets.UTF_8), false, true, new RGBColor());
     }
 
 }

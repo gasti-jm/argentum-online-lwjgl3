@@ -18,9 +18,9 @@ public class ImperialArmourCommand implements CommandHandler {
             if (validator.isValidNumber(context.getArgument(0), NumericType.BYTE) && validator.isValidNumber(context.getArgument(1), NumericType.INTEGER))
                 writeImperialArmour(Integer.parseInt(context.getArgument(0)), Short.parseShort(context.getArgument(1)));
             else
-                console.addMsgToConsole(new String("Incorrect value. \"Use /AI armor object\".".getBytes(), StandardCharsets.UTF_8), false, true, new RGBColor());
+                console.addMsgToConsole(new String("Incorrect parameters.".getBytes(), StandardCharsets.UTF_8), false, true, new RGBColor());
         } else
-            console.addMsgToConsole(new String("Missing parameters. \"Use /AI armor object\".".getBytes(), StandardCharsets.UTF_8), false, true, new RGBColor());
+            console.addMsgToConsole(new String("Missing arguments. Usage: /ai <armor> <object>".getBytes(), StandardCharsets.UTF_8), false, true, new RGBColor());
     }
 
 }

@@ -14,8 +14,8 @@ public class LastIpCommand implements CommandHandler {
     @Override
     public void handle(CommandContext context) throws CommandException {
         if (context.hasArguments()) writeLastIP(context.getArgumentsRaw());
-         else
-            console.addMsgToConsole(new String("Missing parameters. Use \"/LASTIP nickname\".".getBytes(), StandardCharsets.UTF_8), false, true, new RGBColor());
+        else
+            console.addMsgToConsole(new String("Missing arguments. Usage: /lastip <nick>".getBytes(), StandardCharsets.UTF_8), false, true, new RGBColor());
     }
 
 }

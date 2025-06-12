@@ -15,7 +15,7 @@ public class CouncilKickCommand implements CommandHandler {
     public void handle(CommandContext context) throws CommandException {
         if (context.hasArguments()) writeCouncilKick(context.getArgumentsRaw());
         else
-            console.addMsgToConsole(new String("Missing parameters. Use \"/KICKCONSE nickname\".".getBytes(), StandardCharsets.UTF_8), false, true, new RGBColor());
+            console.addMsgToConsole(new String("Missing arguments. Usage: /kickconse <nick>".getBytes(), StandardCharsets.UTF_8), false, true, new RGBColor());
     }
 
 }

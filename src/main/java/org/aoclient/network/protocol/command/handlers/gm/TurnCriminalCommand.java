@@ -15,7 +15,7 @@ public class TurnCriminalCommand implements CommandHandler {
     public void handle(CommandContext context) throws CommandException {
         if (context.hasArguments()) writeTurnCriminal(context.getArgumentsRaw());
         else
-            console.addMsgToConsole(new String("Missing parameters. Use \"/CONDEN nickname\".".getBytes(), StandardCharsets.UTF_8), false, true, new RGBColor());
+            console.addMsgToConsole(new String("Missing arguments. Usage: /conden <nick>".getBytes(), StandardCharsets.UTF_8), false, true, new RGBColor());
     }
 
 }

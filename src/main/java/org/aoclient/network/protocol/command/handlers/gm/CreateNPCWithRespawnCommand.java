@@ -17,9 +17,9 @@ public class CreateNPCWithRespawnCommand implements CommandHandler {
         if (context.hasArguments()) {
             if (validator.isValidNumber(context.getArgument(0), NumericType.INTEGER)) writeCreateNPCWithRespawn(Short.parseShort(context.getArgument(0)));
             else
-                console.addMsgToConsole(new String("Incorrect npc. Use \"/RACC npc\".".getBytes(), StandardCharsets.UTF_8), false, true, new RGBColor());
+                console.addMsgToConsole(new String("Incorrect NPC.".getBytes(), StandardCharsets.UTF_8), false, true, new RGBColor());
         } else
-            console.addMsgToConsole(new String("Missing parameters. Use \"/RACC npc\".".getBytes(), StandardCharsets.UTF_8), false, true, new RGBColor());
+            console.addMsgToConsole(new String("Missing arguments. Usage: /racc <npc>".getBytes(), StandardCharsets.UTF_8), false, true, new RGBColor());
     }
 
 }

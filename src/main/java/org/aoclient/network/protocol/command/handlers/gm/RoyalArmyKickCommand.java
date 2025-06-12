@@ -15,7 +15,7 @@ public class RoyalArmyKickCommand implements CommandHandler {
     public void handle(CommandContext context) throws CommandException {
         if (context.hasArguments()) writeRoyalArmyKick(context.getArgumentsRaw());
         else
-            console.addMsgToConsole(new String("Missing parameters. Use \"/NOREAL nickname\".".getBytes(), StandardCharsets.UTF_8), false, true, new RGBColor());
+            console.addMsgToConsole(new String("Missing arguments. Usage: /noreal <nick>".getBytes(), StandardCharsets.UTF_8), false, true, new RGBColor());
     }
 
 }

@@ -15,7 +15,7 @@ public class ReviveCharCommand implements CommandHandler {
     public void handle(CommandContext context) throws CommandException {
         if (context.hasArguments()) writeReviveChar(context.getArgumentsRaw());
         else
-            console.addMsgToConsole(new String("Missing parameters. Use \"/REVIVIR nickname\".".getBytes(), StandardCharsets.UTF_8), false, true, new RGBColor());
+            console.addMsgToConsole(new String("Missing arguments. Usage: /revivir <nick>".getBytes(), StandardCharsets.UTF_8), false, true, new RGBColor());
 
     }
 

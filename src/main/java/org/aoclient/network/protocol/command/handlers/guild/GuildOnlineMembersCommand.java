@@ -15,7 +15,7 @@ public class GuildOnlineMembersCommand implements CommandHandler {
     public void handle(CommandContext context) throws CommandException {
         if (context.hasArguments()) writeGuildOnlineMembers(context.getArgumentsRaw());
         else
-            console.addMsgToConsole(new String("Missing parameters. Use \"/ONCLAN clanname\".".getBytes(), StandardCharsets.UTF_8), false, true, new RGBColor());
+            console.addMsgToConsole(new String("Missing arguments. Usage: /ONCLAN <name>".getBytes(), StandardCharsets.UTF_8), false, true, new RGBColor());
     }
 
 }

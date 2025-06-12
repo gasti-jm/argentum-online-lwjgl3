@@ -20,7 +20,7 @@ public class WarpCharCommand implements CommandHandler {
                     validator.isValidNumber(context.getArgument(3), NumericType.BYTE)) {
                 writeWarpChar(context.getArgument(0), Short.parseShort(context.getArgument(1)), Integer.parseInt(context.getArgument(2)), Integer.parseInt(context.getArgument(3)));
             } else
-                console.addMsgToConsole(new String("Incorrect value. Use \"/TELEP nickname map x y\".".getBytes(), StandardCharsets.UTF_8), false, true, new RGBColor());
+                console.addMsgToConsole(new String("Incorrect value. Usage: /telep <nick> <map> <x> <y>".getBytes(), StandardCharsets.UTF_8), false, true, new RGBColor());
         } else if (context.getArgumentCount() == 3) {
             if (validator.isValidNumber(context.getArgument(0), NumericType.INTEGER) &&
                     validator.isValidNumber(context.getArgument(1), NumericType.BYTE) &&
@@ -33,7 +33,7 @@ public class WarpCharCommand implements CommandHandler {
                 writeWarpChar(context.getArgument(0), user.getUserMap(), Integer.parseInt(context.getArgument(1)), Integer.parseInt(context.getArgument(2)));
             } else
                 // No uso ningun formato por defecto
-                console.addMsgToConsole(new String("Incorrect value. Use \"/TELEP nickname map x y\".".getBytes(), StandardCharsets.UTF_8), false, true, new RGBColor());
+                console.addMsgToConsole(new String("Incorrect value. Usage: /telep <nick> <map> <x> <y>".getBytes(), StandardCharsets.UTF_8), false, true, new RGBColor());
         } else if (context.getArgumentCount() == 2) {
             if (validator.isValidNumber(context.getArgument(0), NumericType.BYTE) &&
                     validator.isValidNumber(context.getArgument(1), NumericType.BYTE)) {
@@ -41,10 +41,10 @@ public class WarpCharCommand implements CommandHandler {
                 writeWarpChar("YO", user.getUserMap(), Integer.parseInt(context.getArgument(0)), Integer.parseInt(context.getArgument(1)));
             } else
                 // No uso ningun formato por defecto
-                console.addMsgToConsole(new String("Incorrect value. Use \"/TELEP nickname map x y\".".getBytes(), StandardCharsets.UTF_8), false, true, new RGBColor());
+                console.addMsgToConsole(new String("Incorrect value. Usage: /telep <nick> <map> <x> <y>".getBytes(), StandardCharsets.UTF_8), false, true, new RGBColor());
         } else
             // Avisa que falta el parametro
-            console.addMsgToConsole(new String("Missing parameters. Use \"/TELEP nickname map x y\".".getBytes(), StandardCharsets.UTF_8), false, true, new RGBColor());
+            console.addMsgToConsole(new String("Missing arguments. Usage: /telep <nick> <map> <x> <y>".getBytes(), StandardCharsets.UTF_8), false, true, new RGBColor());
     }
 
 }

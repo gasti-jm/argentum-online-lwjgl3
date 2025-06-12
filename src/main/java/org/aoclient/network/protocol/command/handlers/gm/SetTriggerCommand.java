@@ -16,9 +16,10 @@ public class SetTriggerCommand implements CommandHandler {
     @Override
     public void handle(CommandContext context) throws CommandException {
         if (context.hasArguments()) {
-            if (validator.isValidNumber(context.getArgumentsRaw(), NumericType.INTEGER))writeSetTrigger(Integer.parseInt(context.getArgumentsRaw()));
+            if (validator.isValidNumber(context.getArgumentsRaw(), NumericType.INTEGER))
+                writeSetTrigger(Integer.parseInt(context.getArgumentsRaw()));
             else
-                console.addMsgToConsole(new String("Incorrect number. Use /TRIGGER number.".getBytes(), StandardCharsets.UTF_8), false, true, new RGBColor());
+                console.addMsgToConsole(new String("Missing arguments. Usage: /trigger <number>".getBytes(), StandardCharsets.UTF_8), false, true, new RGBColor());
         } else writeAskTrigger(); // Version sin parametro
     }
 

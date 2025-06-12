@@ -21,8 +21,7 @@ public class BankExtractGoldCommand implements CommandHandler {
                 if (validator.isValidNumber(context.getArgumentsRaw(), NumericType.LONG))
                     writeBankExtractGold(Integer.parseInt(context.getArgumentsRaw()));
                 else
-                    console.addMsgToConsole(new String("Incorrect quantity. Use \"/RETIRAR quantity\".".getBytes(), StandardCharsets.UTF_8),
-                            false, true, new RGBColor());
+                    console.addMsgToConsole(new String("Incorrect quantity. Usage: /retirar <quantity>".getBytes(), StandardCharsets.UTF_8), false, true, new RGBColor());
             }
         }
     }

@@ -15,7 +15,7 @@ public class GuildBanCommand implements CommandHandler {
     public void handle(CommandContext context) throws CommandException {
         if (context.hasArguments()) writeGuildBan(context.getArgumentsRaw());
         else
-            console.addMsgToConsole(new String("Missing parameters. Use \"/BANCLAN guildname\".".getBytes(), StandardCharsets.UTF_8), false, true, new RGBColor());
+            console.addMsgToConsole(new String("Missing arguments. Usage: /banclan <name>".getBytes(), StandardCharsets.UTF_8), false, true, new RGBColor());
     }
 
 }

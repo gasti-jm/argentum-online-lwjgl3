@@ -15,7 +15,7 @@ public class RequestCharSkillsCommand implements CommandHandler {
     public void handle(CommandContext context) throws CommandException {
         if (context.hasArguments()) writeRequestCharSkills(context.getArgumentsRaw());
         else
-            console.addMsgToConsole(new String("Missing parameters. Use \"/SKILLS nickname\".".getBytes(), StandardCharsets.UTF_8), false, true, new RGBColor());
+            console.addMsgToConsole(new String("Missing arguments. Usage: /skills <nick>".getBytes(), StandardCharsets.UTF_8), false, true, new RGBColor());
 
     }
 

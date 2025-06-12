@@ -15,7 +15,7 @@ public class GuildMemberListCommand implements CommandHandler {
     public void handle(CommandContext context) throws CommandException {
         if (context.hasArguments()) writeGuildMemberList(context.getArgumentsRaw());
         else
-            console.addMsgToConsole(new String("Missing parameters. Use \"/MIEMBROSCLAN guildname\".".getBytes(), StandardCharsets.UTF_8), false, true, new RGBColor());
+            console.addMsgToConsole(new String("Missing arguments. Usage: /miembrosclan <name>".getBytes(), StandardCharsets.UTF_8), false, true, new RGBColor());
     }
 
 }

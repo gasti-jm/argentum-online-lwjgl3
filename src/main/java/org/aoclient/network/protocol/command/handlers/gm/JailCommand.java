@@ -15,16 +15,16 @@ public class JailCommand implements CommandHandler {
     @Override
     public void handle(CommandContext context) throws CommandException {
         if (context.hasArguments()) {
-            String[] tmpArr = context.getArgumentsRaw().split("@");
+            String[] tmpArr = context.getArgumentsRaw().split(" ");
             if (tmpArr.length == 3) {
                 if (validator.isValidNumber(tmpArr[2], NumericType.BYTE))
                     writeJail(tmpArr[0], tmpArr[1], Integer.parseInt(tmpArr[2]));
                 else
-                    console.addMsgToConsole(new String("Incorrect time. Use \"/CARCEL nickname@reason@time\".".getBytes(), StandardCharsets.UTF_8), false, true, new RGBColor());
+                    console.addMsgToConsole(new String("Incorrect time. Usage: /carcel <nick> <reason> <minutes>".getBytes(), StandardCharsets.UTF_8), false, true, new RGBColor());
             } else
-                console.addMsgToConsole(new String("Incorrect format. Use \"/CARCEL nickname@reason@time\".".getBytes(), StandardCharsets.UTF_8), false, true, new RGBColor());
+                console.addMsgToConsole(new String("Incorrect format. Usage: /carcel <nick> <reason> <minutes>".getBytes(), StandardCharsets.UTF_8), false, true, new RGBColor());
         } else
-            console.addMsgToConsole(new String("Missing parameters. Use \"/CARCEL nickname@reason@time\".".getBytes(), StandardCharsets.UTF_8), false, true, new RGBColor());
+            console.addMsgToConsole(new String("Missing arguments. Usage: /carcel <nick> <reason> <minutes>".getBytes(), StandardCharsets.UTF_8), false, true, new RGBColor());
     }
 
 }

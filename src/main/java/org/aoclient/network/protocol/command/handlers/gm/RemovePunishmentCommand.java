@@ -14,12 +14,12 @@ public class RemovePunishmentCommand implements CommandHandler {
     @Override
     public void handle(CommandContext context) throws CommandException {
         if (context.hasArguments()) {
-            String[] tmpArr = context.getArgumentsRaw().split("@", 3);
+            String[] tmpArr = context.getArgumentsRaw().split(" ", 3);
             if (tmpArr.length == 3) writeRemovePunishment(tmpArr[0], Integer.parseInt(tmpArr[1]), tmpArr[2]);
             else
-                console.addMsgToConsole(new String("Incorrect format. Use \"/BORRARPENA nick@punishment@newPunishment\".".getBytes(), StandardCharsets.UTF_8), false, true, new RGBColor());
+                console.addMsgToConsole(new String("Missing arguments. Usage: /borrarpena <nick> <minutes> <newPunishment>".getBytes(), StandardCharsets.UTF_8), false, true, new RGBColor());
         } else
-            console.addMsgToConsole(new String("Missing parameters. Use \"/BORRARPENA nick@punishment@newPunishment\".".getBytes(), StandardCharsets.UTF_8), false, true, new RGBColor());
+            console.addMsgToConsole(new String("Missing arguments. Usage: /borrarpena <nick> <minutes> <newPunishment>".getBytes(), StandardCharsets.UTF_8), false, true, new RGBColor());
     }
 
 }

@@ -18,7 +18,7 @@ public class CreaturesInMapCommand implements CommandHandler {
             if (validator.isValidNumber(context.getArgumentsRaw(), NumericType.INTEGER))
                 writeCreaturesInMap(Short.parseShort(context.getArgumentsRaw()));
             else // No es numerico
-                console.addMsgToConsole(new String("Wrong map. Use \"/NENE map\".".getBytes(), StandardCharsets.UTF_8), false, true, new RGBColor());
+                console.addMsgToConsole(new String("Wrong map. Usage: /nene <map>".getBytes(), StandardCharsets.UTF_8), false, true, new RGBColor());
         } else writeCreaturesInMap(user.getUserMap()); // Por defecto toma el mapa en el que esta
     }
 

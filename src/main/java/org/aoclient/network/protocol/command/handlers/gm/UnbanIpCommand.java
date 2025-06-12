@@ -14,11 +14,11 @@ public class UnbanIpCommand implements CommandHandler {
     @Override
     public void handle(CommandContext context) throws CommandException {
         if (context.hasArguments()) {
-            if (validator.isValidIPv4(context.getArgumentsRaw())) writeUnbanIP(validator.str2ipv4l(context.getArgumentsRaw()));
+            if (validator.isValidIPv4(context.getArgumentsRaw())) writeUnbanIP(validator.parseIPv4ToArray(context.getArgumentsRaw()));
             else
-                console.addMsgToConsole(new String("Incorrect IP. Use \"/UNBAN ip\".".getBytes(), StandardCharsets.UTF_8), false, true, new RGBColor());
+                console.addMsgToConsole(new String("Incorrect IP.".getBytes(), StandardCharsets.UTF_8), false, true, new RGBColor());
         } else
-            console.addMsgToConsole(new String("Missing parameters. Use \"/UNBAN ip\".".getBytes(), StandardCharsets.UTF_8), false, true, new RGBColor());
+            console.addMsgToConsole(new String("Missing arguments. Usage: /unbanip <ip>".getBytes(), StandardCharsets.UTF_8), false, true, new RGBColor());
     }
 
 }

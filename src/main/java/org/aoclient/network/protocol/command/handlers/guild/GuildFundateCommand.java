@@ -15,8 +15,7 @@ public class GuildFundateCommand implements CommandHandler {
     public void handle(CommandContext context) throws CommandException {
         if (user.getUserLvl() >= 25) writeGuildFundate();
         else
-            console.addMsgToConsole(new String("To found a clan you must be level 25 and have 90 leadership skills.".getBytes(), StandardCharsets.UTF_8),
-                    false, true, new RGBColor());
+            console.addMsgToConsole(new String("To found a clan you must be level 25 and have 90 leadership skills.".getBytes(), StandardCharsets.UTF_8), false, true, new RGBColor());
     }
 
 }

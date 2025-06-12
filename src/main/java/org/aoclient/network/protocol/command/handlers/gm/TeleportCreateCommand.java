@@ -24,12 +24,12 @@ public class TeleportCreateCommand implements CommandHandler {
                     if (validator.isValidNumber(context.getArgument(3), NumericType.BYTE))
                         writeTeleportCreate(Short.parseShort(context.getArgument(0)), Integer.parseInt(context.getArgument(1)), Integer.parseInt(context.getArgument(2)), Integer.parseInt(context.getArgument(3)));
                     else
-                        console.addMsgToConsole(new String("Invalid value. Use \"/CT map x y radius(optional)\".".getBytes(), StandardCharsets.UTF_8), false, true, new RGBColor());
+                        console.addMsgToConsole(new String("Invalid arguments. Usage: /ct <map> <x> <y> [radius]".getBytes(), StandardCharsets.UTF_8), false, true, new RGBColor());
                 }
             } else
-                console.addMsgToConsole(new String("Invalid value. Use \"/CT map x y radius(optional)\".".getBytes(), StandardCharsets.UTF_8), false, true, new RGBColor());
+                console.addMsgToConsole(new String("Invalid arguments. Usage: /ct <map> <x> <y> [radius]".getBytes(), StandardCharsets.UTF_8), false, true, new RGBColor());
         } else
-            console.addMsgToConsole(new String("Missing parameters. Use Use \"/CT map x y radius(optional)\".".getBytes(), StandardCharsets.UTF_8), false, true, new RGBColor());
+            console.addMsgToConsole(new String("Missing arguments. Usage: /ct <map> <x> <y> [radius]".getBytes(), StandardCharsets.UTF_8), false, true, new RGBColor());
     }
 
 }

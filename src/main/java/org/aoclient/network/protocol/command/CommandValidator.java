@@ -3,6 +3,12 @@ package org.aoclient.network.protocol.command;
 import org.aoclient.engine.game.User;
 import org.aoclient.network.protocol.types.NumericType;
 
+/**
+ * Esta clase proporciona metodos para validar comandos, argumentos y diversos tipos de datos. Incluye validaciones relacionadas
+ * con estados del usuario, formatos numericos y direcciones IP. Los metodos de esta clase son utilizados para garantizar que las
+ * entradas cumplan con los criterios especificados antes de ejecutar las operaciones asociadas.
+ */
+
 public class CommandValidator {
 
     public void requireAlive() throws CommandException {
@@ -23,16 +29,19 @@ public class CommandValidator {
         }
     }
 
-    public boolean isValidNumber(String numero, NumericType tipo) {
-        if (!numero.matches("-?\\d+(\\.\\d+)?")) return false;
+    /**
+     * Valida si la cadena representativa de un numero pertenece al rango definido por el tipo numerico especificado.
+     *
+     * @param number      cadena que representa un numero a validar
+     * @param numericType tipo numerico (por ejemplo, BYTE, INTEGER, LONG) que define el rango permitido
+     * @return {@code true} si el numero esta dentro del rango especificado por el tipo numerico; {@code false} en caso contrario,
+     * o si la cadena no es un numero valido
+     */
+    public boolean isValidNumber(String number, NumericType numericType) {
         try {
-            long valor = Long.parseLong(numero);
-            return switch (tipo) {
-                case BYTE -> valor >= 0 && valor <= 255;
-                case INTEGER -> valor >= -32768 && valor <= 32767;
-                case LONG -> valor >= -2147483648L && valor <= 2147483647L;
-                case TRIGGER -> valor >= 0 && valor <= 6;
-            };
+            /* Se usa long como un "tipo intermedio" que puede contener cualquier valor de los tipos mas pequeños, permitiendo una
+             * validacion uniforme antes de convertir al tipo especifico requerido. */
+            return numericType.isInRange(Long.parseLong(number));
         } catch (NumberFormatException e) {
             return false;
         }
@@ -50,16 +59,48 @@ public class CommandValidator {
         return tmpArr;
     }
 
+    /**
+     * Verifica si una direccion IP proporcionada es una direccion IPv4 valida.
+     * <p>
+     * Una direccion IPv4 valida debe cumplir con los siguientes criterios:
+     * <ul>
+     *  <li>Estar compuesta de exactamente cuatro segmentos separados por puntos (".").</li>
+     *  <li>Cada segmento debe ser un numero entero entre 0 y 255.</li>
+     *  <li>No debe contener ceros a la izquierda en ninguno de los segmentos, excepto cuando el segmento sea "0".</li>
+     * </ul>
+     *
+     * @param ip direccion IP que se desea validar como cadena de texto
+     * @return {@code true} si la direccion IP es una IPv4 valida; {@code false} en caso contrario, o si la cadena es {@code null}
+     */
     public boolean isValidIPv4(String ip) {
-        String[] parts = ip.split("\\.");
+        if (ip == null) return false;
+        String[] parts = ip.split("\\.", -1);
         if (parts.length != 4) return false;
-        for (String part : parts)
-            if (!isValidNumber(part, NumericType.BYTE)) return false;
+        for (String part : parts) {
+            try {
+                int num = Integer.parseInt(part);
+                if (num < 0 || num > 255) return false;
+                // Evita leading zeros
+                if (!part.equals(String.valueOf(num))) return false;
+            } catch (NumberFormatException e) {
+                return false;
+            }
+        }
         return true;
     }
 
-    // TODO Se podria cambiar de nombre
-    public int[] str2ipv4l(String ip) {
+    /**
+     * Convierte una direccion IPv4 en formato de texto a un arreglo de enteros.
+     * <p>
+     * La direccion IP debe estar compuesta por cuatro segmentos separados por puntos ("."), donde cada segmento debe ser un
+     * numero entero entre 0 y 255. Si alguno de los criterios no se cumple o si el formato no es valido, el metodo devolvera
+     * {@code null}.
+     *
+     * @param ip direccion IPv4 en formato de cadena que se desea convertir
+     * @return un arreglo de cuatro enteros que representan cada segmento de la direccion IP, o {@code null} si la direccion no es
+     * valida
+     */
+    public int[] parseIPv4ToArray(String ip) {
         String[] parts = ip.split("\\.");
         if (parts.length != 4) return null;
         int[] ipArray = new int[4];

@@ -21,11 +21,9 @@ public class GambleCommand implements CommandHandler {
                 if (validator.isValidNumber(context.getArgumentsRaw(), NumericType.INTEGER))
                     writeGamble(Short.parseShort(context.getArgumentsRaw()));
                 else
-                    console.addMsgToConsole(new String("Missing parameters. Use \"/APOSTAR cantidad\".".getBytes(), StandardCharsets.UTF_8),
-                            false, true, new RGBColor());
+                    console.addMsgToConsole(new String("Missing arguments. Usage: /apostar <amount>".getBytes(), StandardCharsets.UTF_8), false, true, new RGBColor());
             } else
-                console.addMsgToConsole(new String("Missing parameters. Use \"/APOSTAR cantidad\".".getBytes(), StandardCharsets.UTF_8),
-                        false, true, new RGBColor());
+                console.addMsgToConsole(new String("Missing arguments. Usage: /apostar <amount>".getBytes(), StandardCharsets.UTF_8), false, true, new RGBColor());
         }
     }
 

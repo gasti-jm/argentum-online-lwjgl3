@@ -21,8 +21,7 @@ public class BankDepositGoldCommand implements CommandHandler {
                 if (validator.isValidNumber(context.getArgumentsRaw(), NumericType.LONG))
                     writeBankDepositGold(Integer.parseInt(context.getArgumentsRaw()));
                 else
-                    console.addMsgToConsole(new String("Incorrect amount. Please use \"/DEPOSITAR amount\".".getBytes(), StandardCharsets.UTF_8),
-                            false, true, new RGBColor());
+                    console.addMsgToConsole(new String("Incorrect amount. Usage /depositar <amount>".getBytes(), StandardCharsets.UTF_8), false, true, new RGBColor());
             }
         }
     }

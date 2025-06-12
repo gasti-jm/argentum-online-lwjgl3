@@ -15,7 +15,7 @@ public class RequestCharInventoryCommand implements CommandHandler {
     public void handle(CommandContext context) throws CommandException {
         if (context.hasArguments()) writeRequestCharInventory(context.getArgumentsRaw());
         else
-            console.addMsgToConsole(new String("Missing parameters. Use \"/INV nickname\".".getBytes(), StandardCharsets.UTF_8), false, true, new RGBColor());
+            console.addMsgToConsole(new String("Missing arguments. Usage: /inv <nick>".getBytes(), StandardCharsets.UTF_8), false, true, new RGBColor());
 
     }
 

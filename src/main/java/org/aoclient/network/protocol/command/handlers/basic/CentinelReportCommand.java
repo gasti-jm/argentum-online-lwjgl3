@@ -15,14 +15,12 @@ public class CentinelReportCommand implements CommandHandler {
     @Override
     public void handle(CommandContext context) throws CommandException {
         if (context.getArgumentCount() != 1)
-            console.addMsgToConsole(new String("The /CENTINELA command requires an argument. Please enter the verification code.".getBytes(), StandardCharsets.UTF_8),
-                    false, true, new RGBColor());
+            console.addMsgToConsole(new String("The /centinela command requires an argument. Please enter the verification code.".getBytes(), StandardCharsets.UTF_8), false, true, new RGBColor());
         else {
             if (validator.isValidNumber(context.getArgumentsRaw(), NumericType.INTEGER))
                 writeCentinelReport(Integer.parseInt(context.getArgumentsRaw()));
             else
-                console.addMsgToConsole(new String("The verification code must be numeric. Use /CENTINELA X, where X is the verification code.".getBytes(), StandardCharsets.UTF_8),
-                        false, true, new RGBColor());
+                console.addMsgToConsole(new String("The verification code must be numeric. Usage: /centinela <code>".getBytes(), StandardCharsets.UTF_8), false, true, new RGBColor());
         }
     }
 

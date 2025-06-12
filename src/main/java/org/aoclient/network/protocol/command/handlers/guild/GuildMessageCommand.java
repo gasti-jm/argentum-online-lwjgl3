@@ -14,7 +14,8 @@ public class GuildMessageCommand implements CommandHandler {
     @Override
     public void handle(CommandContext context) throws CommandException {
         if (context.getArgumentCount() == 0) writeGuildMessage(context.getArgumentsRaw());
-        else console.addMsgToConsole(new String("Write a message.".getBytes(), StandardCharsets.UTF_8), false, true, new RGBColor());
+        else
+            console.addMsgToConsole(new String("Write a message.".getBytes(), StandardCharsets.UTF_8), false, true, new RGBColor());
     }
 
 }

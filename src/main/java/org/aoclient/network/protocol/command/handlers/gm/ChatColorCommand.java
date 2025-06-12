@@ -20,10 +20,10 @@ public class ChatColorCommand implements CommandHandler {
                     validator.isValidNumber(context.getArgument(2), NumericType.BYTE)) {
                 writeChatColor(Integer.parseInt(context.getArgument(0)), Integer.parseInt(context.getArgument(1)), Integer.parseInt(context.getArgument(2)));
             } else
-                console.addMsgToConsole(new String("Incorrect value. Use \"/CHATCOLOR r g b\".".getBytes(), StandardCharsets.UTF_8), false, true, new RGBColor());
+                console.addMsgToConsole(new String("Incorrect value. Usage: /chatcolor <r> <g> <b>".getBytes(), StandardCharsets.UTF_8), false, true, new RGBColor());
         } else if (!context.hasArguments()) writeChatColor(0, 255, 0);
         else
-            console.addMsgToConsole(new String("Missing parameters. Use \"/CHATCOLOR r g b\".".getBytes(), StandardCharsets.UTF_8), false, true, new RGBColor());
+            console.addMsgToConsole(new String("Missing arguments. Usage: /chatcolor <r> <g> <b>".getBytes(), StandardCharsets.UTF_8), false, true, new RGBColor());
     }
 
 }

@@ -17,9 +17,9 @@ public class ForceWavAllCommand implements CommandHandler {
         if (context.hasArguments()) {
             if (validator.isValidNumber(context.getArgument(0), NumericType.BYTE)) writeForceWAVEAll(Integer.parseInt(context.getArgument(0)));
             else
-                console.addMsgToConsole(new String("Incorrect WAV. Use \"/FORCEWAV wav\".".getBytes(), StandardCharsets.UTF_8), false, true, new RGBColor());
+                console.addMsgToConsole(new String("Incorrect WAV.".getBytes(), StandardCharsets.UTF_8), false, true, new RGBColor());
         } else
-            console.addMsgToConsole(new String("Missing parameters. Use \"/FORCEWAV wav\".".getBytes(), StandardCharsets.UTF_8), false, true, new RGBColor());
+            console.addMsgToConsole(new String("Missing arguments. Usage: /forcewav <wav>".getBytes(), StandardCharsets.UTF_8), false, true, new RGBColor());
     }
 
 }

@@ -16,10 +16,10 @@ public class AlterMailCommand implements CommandHandler {
         if (context.hasArguments()) {
             String[] tmpArr = validator.AEMAILSplit(context.getArgumentsRaw());
             if (tmpArr[0].isEmpty())
-                console.addMsgToConsole(new String("Incorrect format. Use \"/AEMAIL nickname-newmail\".".getBytes(), StandardCharsets.UTF_8), false, true, new RGBColor());
+                console.addMsgToConsole(new String("Incorrect format. Usage: /aemail <nick>-<newmail>".getBytes(), StandardCharsets.UTF_8), false, true, new RGBColor());
             else writeAlterMail(tmpArr[0], tmpArr[1]);
         } else
-            console.addMsgToConsole(new String("Missing parameters. Use \"/AEMAIL nickname-newmail\".".getBytes(), StandardCharsets.UTF_8), false, true, new RGBColor());
+            console.addMsgToConsole(new String("Missing arguments. Usage: /aemail <nick>-<newmail>".getBytes(), StandardCharsets.UTF_8), false, true, new RGBColor());
     }
 
 }

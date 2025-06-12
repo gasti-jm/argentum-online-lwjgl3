@@ -18,7 +18,7 @@ public class OnlineMapCommand implements CommandHandler {
             if (validator.isValidNumber(context.getArgument(0), NumericType.INTEGER))
                 writeOnlineMap(Short.parseShort(context.getArgument(0)));
             else
-                console.addMsgToConsole(new String("Mapa incorrecto.".getBytes(), StandardCharsets.UTF_8), false, true, new RGBColor());
+                console.addMsgToConsole(new String("Incorrect map.".getBytes(), StandardCharsets.UTF_8), false, true, new RGBColor());
         } else writeOnlineMap(user.getUserMap());
     }
 

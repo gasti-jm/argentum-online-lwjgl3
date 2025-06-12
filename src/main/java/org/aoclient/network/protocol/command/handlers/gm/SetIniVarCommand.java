@@ -18,7 +18,7 @@ public class SetIniVarCommand implements CommandHandler {
             // argumentosAll[2] = context.getArgument(2).replace("+", " ");
             writeSetIniVar(context.getArgument(0), context.getArgument(1), context.getArgument(2));
         } else
-            console.addMsgToConsole(new String("Incorrect parameters. Use \"/SETINIVAR llave clave valor\".".getBytes(), StandardCharsets.UTF_8), false, true, new RGBColor());
+            console.addMsgToConsole(new String("Incorrect parameters. Usage: /setinivar <llave> <clave> <valor>".getBytes(), StandardCharsets.UTF_8), false, true, new RGBColor());
     }
 
 }

@@ -17,9 +17,9 @@ public class CreateNpcCommand implements CommandHandler {
         if (context.hasArguments()) {
             if (validator.isValidNumber(context.getArgument(0), NumericType.INTEGER)) writeCreateNPC(Short.parseShort(context.getArgument(0)));
             else
-                console.addMsgToConsole(new String("Incorrect npc. Use \"/ACC npc\".".getBytes(), StandardCharsets.UTF_8), false, true, new RGBColor());
+                console.addMsgToConsole(new String("Incorrect NPC.".getBytes(), StandardCharsets.UTF_8), false, true, new RGBColor());
         } else
-            console.addMsgToConsole(new String("Missing parameters. Use \"/ACC npc\".".getBytes(), StandardCharsets.UTF_8), false, true, new RGBColor());
+            console.addMsgToConsole(new String("Missing arguments. Usage: /acc <npc>".getBytes(), StandardCharsets.UTF_8), false, true, new RGBColor());
     }
 
 }

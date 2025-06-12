@@ -929,7 +929,6 @@ public class Protocol {
     public static void writeSetCharDescription(String desc) {
         outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
         outputBuffer.writeByte(GMCommand.SET_CHAR_DESCRIPTION.getId());
-
         outputBuffer.writeCp1252String(desc);
     }
 
@@ -1212,7 +1211,6 @@ public class Protocol {
     public static void writeChaosArmour(int armourIndex, short objectIndex) {
         outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
         outputBuffer.writeByte(GMCommand.CHAOS_ARMOUR.getId());
-
         outputBuffer.writeByte(armourIndex);
         outputBuffer.writeInteger(objectIndex);
     }

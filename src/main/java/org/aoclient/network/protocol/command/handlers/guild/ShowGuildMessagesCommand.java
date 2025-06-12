@@ -15,7 +15,7 @@ public class ShowGuildMessagesCommand implements CommandHandler {
     public void handle(CommandContext context) throws CommandException {
         if (context.hasArguments()) writeShowGuildMessages(context.getArgumentsRaw());
         else
-            console.addMsgToConsole(new String("Missing parameters. \"Use /SHOWCMSG guildname\".".getBytes(), StandardCharsets.UTF_8), false, true, new RGBColor());
+            console.addMsgToConsole(new String("Missing arguments. Usage: /showcmsg <name>".getBytes(), StandardCharsets.UTF_8), false, true, new RGBColor());
     }
 
 }

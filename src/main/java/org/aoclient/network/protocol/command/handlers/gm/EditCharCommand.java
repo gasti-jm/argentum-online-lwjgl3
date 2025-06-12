@@ -11,7 +11,7 @@ import java.nio.charset.StandardCharsets;
 import static org.aoclient.network.protocol.Protocol.writeEditChar;
 
 /**
- * /MOD nickname oro x
+ * por ejemplo: /mod <nick> <oro> <amount>
  */
 
 public class EditCharCommand implements CommandHandler {
@@ -19,23 +19,23 @@ public class EditCharCommand implements CommandHandler {
     @Override
     public void handle(CommandContext context) throws CommandException {
         if (context.hasArguments() && context.getArgumentCount() >= 3) {
-            String arg = context.getArgument(1).toUpperCase();
+            String arg = context.getArgument(1);
             int tmpInt = switch (arg) {
-                case "BODY" -> CharacterEditType.BODY.getValue();
-                case "HEAD" -> CharacterEditType.HEAD.getValue();
-                case "ORO" -> CharacterEditType.GOLD.getValue();
-                case "LEVEL" -> CharacterEditType.LEVEL.getValue();
-                case "SKILLS" -> CharacterEditType.SKILLS.getValue();
-                case "SKILLSLIBRES" -> CharacterEditType.SKILL_POINTS_LEFT.getValue();
-                case "CLASE" -> CharacterEditType.CLASS.getValue();
-                case "EXP" -> CharacterEditType.EXPERIENCE.getValue();
-                case "CRI" -> CharacterEditType.CRIMINALS_KILLED.getValue();
-                case "CIU" -> CharacterEditType.CITIZENS_KILLED.getValue();
-                case "NOB" -> CharacterEditType.NOBILITY.getValue();
-                case "ASE" -> CharacterEditType.ASSASSIN.getValue();
-                case "SEX" -> CharacterEditType.SEX.getValue();
-                case "RAZA" -> CharacterEditType.RACE.getValue();
-                case "AGREGAR" -> CharacterEditType.ADD_GOLD.getValue();
+                case "body" -> CharacterEditType.BODY.getValue();
+                case "head" -> CharacterEditType.HEAD.getValue();
+                case "oro" -> CharacterEditType.GOLD.getValue();
+                case "level" -> CharacterEditType.LEVEL.getValue();
+                case "skills" -> CharacterEditType.SKILLS.getValue();
+                case "skillslibres" -> CharacterEditType.SKILL_POINTS_LEFT.getValue();
+                case "clase" -> CharacterEditType.CLASS.getValue();
+                case "exp" -> CharacterEditType.EXPERIENCE.getValue();
+                case "cri" -> CharacterEditType.CRIMINALS_KILLED.getValue();
+                case "ciu" -> CharacterEditType.CITIZENS_KILLED.getValue();
+                case "nob" -> CharacterEditType.NOBILITY.getValue();
+                case "ase" -> CharacterEditType.ASSASSIN.getValue();
+                case "sex" -> CharacterEditType.SEX.getValue();
+                case "raza" -> CharacterEditType.RACE.getValue();
+                case "agregar" -> CharacterEditType.ADD_GOLD.getValue();
                 default -> -1;
             };
             if (tmpInt > 0) {
@@ -44,7 +44,7 @@ public class EditCharCommand implements CommandHandler {
             } else
                 console.addMsgToConsole(new String("Incorrect command.".getBytes(), StandardCharsets.UTF_8), false, true, new RGBColor());
         } else
-            console.addMsgToConsole(new String("Missing parameters.".getBytes(), StandardCharsets.UTF_8), false, true, new RGBColor());
+            console.addMsgToConsole(new String("Missing arguments.".getBytes(), StandardCharsets.UTF_8), false, true, new RGBColor());
     }
 
 }

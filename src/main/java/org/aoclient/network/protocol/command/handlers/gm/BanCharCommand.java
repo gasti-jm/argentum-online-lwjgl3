@@ -14,12 +14,12 @@ public class BanCharCommand implements CommandHandler {
     @Override
     public void handle(CommandContext context) throws CommandException {
         if (context.hasArguments()) {
-            String[] tmpArr = context.getArgumentsRaw().split("@", 2);
+            String[] tmpArr = context.getArgumentsRaw().split(" ", 2);
             if (tmpArr.length == 2) writeBanChar(tmpArr[0], tmpArr[1]);
             else
-                console.addMsgToConsole(new String("Incorrect format. Use \"/BAN nickname@reason\".".getBytes(), StandardCharsets.UTF_8), false, true, new RGBColor());
+                console.addMsgToConsole(new String("Incorrect format. Usage: /ban <nick> <reason>".getBytes(), StandardCharsets.UTF_8), false, true, new RGBColor());
         } else
-            console.addMsgToConsole(new String("Missing parameters. Use \"/BAN nickname@reason\".".getBytes(), StandardCharsets.UTF_8), false, true, new RGBColor());
+            console.addMsgToConsole(new String("Missing arguments. Usage: /ban <nick> <reason>".getBytes(), StandardCharsets.UTF_8), false, true, new RGBColor());
     }
 
 }
