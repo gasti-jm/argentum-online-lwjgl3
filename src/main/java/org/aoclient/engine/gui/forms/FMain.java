@@ -7,6 +7,7 @@ import imgui.type.ImString;
 import org.aoclient.engine.Engine;
 import org.aoclient.engine.Window;
 import org.aoclient.engine.game.Console;
+import org.aoclient.network.protocol.Protocol;
 
 import java.io.IOException;
 
@@ -252,11 +253,11 @@ public final class FMain extends Form {
             IM_GUI_SYSTEM.show(new FStats());
         }
 
-        // btnMapa
-        ImGui.setCursorPos(681, 445);
-        if (ImGui.invisibleButton("viewMap", 95, 22)) {
+        // btnClanes
+        ImGui.setCursorPos(681, 530);
+        if (ImGui.invisibleButton("viewGuild", 95, 22)) {
             playSound(SND_CLICK);
-            IM_GUI_SYSTEM.show(new FMapa());
+            Protocol.writeRequestGuildLeaderInfo();
         }
 
         // btnClose
