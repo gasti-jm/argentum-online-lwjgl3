@@ -45,8 +45,8 @@ public enum Window {
 
     INSTANCE;
 
-    private static final int SCREEN_WIDTH = 800;
-    private static final int SCREEN_HEIGHT = 600;
+    public static final int SCREEN_WIDTH = 800;
+    public static final int SCREEN_HEIGHT = 600;
 
     private final String title;
     private final int width, height;
@@ -150,7 +150,7 @@ public enum Window {
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
         glViewport(0, 0, width, height);
-        glOrtho(0, 800, 600, 0, 1, -1);
+        glOrtho(0, SCREEN_WIDTH, SCREEN_HEIGHT, 0, 1, -1);
 
         glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
         glEnable(GL_ALPHA);

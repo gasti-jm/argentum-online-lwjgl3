@@ -10,12 +10,11 @@ import java.io.IOException;
 import static org.aoclient.engine.Sound.SND_CLICK;
 import static org.aoclient.engine.Sound.playSound;
 
-public class FBindKeys extends Form{
+public class FBindKeys extends Form {
     // apa las papas.
 
     private ImageButton3State btnSave;
     private ImageButton3State btnDefaultKeys;
-
 
     public FBindKeys() {
         try {
@@ -40,7 +39,6 @@ public class FBindKeys extends Form{
             throw new RuntimeException(e);
         }
     }
-
 
     @Override
     public void render() {
