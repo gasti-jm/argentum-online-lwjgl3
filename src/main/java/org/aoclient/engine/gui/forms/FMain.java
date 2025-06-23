@@ -91,20 +91,37 @@ public final class FMain extends Form {
         ImGui.end();
     }
 
-    // Sección de estadísticas (vida, mana, energía, hambre, sed)
-    private void renderStats() {
-        drawStat(591, 453, USER.getUserMinSTA() + "/" + USER.getUserMaxSTA());
-        drawStat(591, 477, USER.getUserMinMAN() + "/" + USER.getUserMaxMAN());
-        drawStat(591, 498, USER.getUserMinHP() + "/" + USER.getUserMaxHP());
-        drawStat(591, 521, USER.getUserMinHAM() + "/" + USER.getUserMaxHAM());
-        ImGui.setCursorPos(591, 542);
+    /**
+     * Dibuja un stat o valor de equipo con colores personalizados.
+     */
+    private void drawColoredStat(int x, int y, String text, float r, float g, float b, float a, int width, int height) {
+        ImGui.setCursorPos(x, y);
         ImGui.pushStyleVar(ImGuiStyleVar.SelectableTextAlign, 0.5f, 0.5f);
-        ImGui.pushStyleColor(ImGuiCol.HeaderHovered, ImGui.getColorU32(0f, 0f, 0f, 0f));
-        ImGui.pushStyleColor(ImGuiCol.HeaderActive, ImGui.getColorU32(0f, 0f, 0f, 0f));
-        ImGui.selectable(USER.getUserMinAGU() + "/" + USER.getUserMaxAGU(), false, ImGuiSelectableFlags.None, 69, 10);
+        ImGui.pushStyleColor(ImGuiCol.HeaderHovered, TRANSPARENT_COLOR);
+        ImGui.pushStyleColor(ImGuiCol.HeaderActive, TRANSPARENT_COLOR);
+        ImGui.pushStyleColor(ImGuiCol.Text, ImGui.getColorU32(r, g, b, a));
+        ImGui.selectable(text, false, ImGuiSelectableFlags.None, width, height);
+        ImGui.popStyleColor();
         ImGui.popStyleColor();
         ImGui.popStyleColor();
         ImGui.popStyleVar();
+    }
+
+    /**
+     * Dibuja un botón invisible en la posición y tamaño indicados. Devuelve true si fue presionado.
+     */
+    private boolean drawButton(int x, int y, int w, int h, String label) {
+        ImGui.setCursorPos(x, y);
+        return ImGui.invisibleButton(label, w, h);
+    }
+
+    // Sección de estadísticas (vida, mana, energía, hambre, sed)
+    private void renderStats() {
+        drawColoredStat(591, 453, USER.getUserMinSTA() + "/" + USER.getUserMaxSTA(), 1, 1, 1, 1, 69, 10);
+        drawColoredStat(591, 477, USER.getUserMinMAN() + "/" + USER.getUserMaxMAN(), 1, 1, 1, 1, 69, 10);
+        drawColoredStat(591, 498, USER.getUserMinHP() + "/" + USER.getUserMaxHP(), 1, 1, 1, 1, 69, 10);
+        drawColoredStat(591, 521, USER.getUserMinHAM() + "/" + USER.getUserMaxHAM(), 1, 1, 1, 1, 69, 10);
+        drawColoredStat(591, 542, USER.getUserMinAGU() + "/" + USER.getUserMaxAGU(), 1, 1, 1, 1, 69, 10);
     }
 
     // Información de nivel, experiencia y nombre
@@ -124,67 +141,14 @@ public final class FMain extends Form {
 
     // Información de equipo y stats secundarios
     private void renderEquipmentInfo() {
-        ImGui.setCursorPos(730, 419);
-        ImGui.textColored(1, 1, 0.0f, 1, String.valueOf(USER.getUserGLD()));
-        ImGui.setCursorPos(613, 413);
-        ImGui.textColored(1, 0.5f, 0.0f, 1, String.valueOf(USER.getUserDext()));
-        ImGui.setCursorPos(650, 413);
-        ImGui.textColored(0.1f, 0.6f, 0.1f, 1, String.valueOf(USER.getUserStrg()));
-        // Armor
-        ImGui.setCursorPos(88, 579);
-        ImGui.pushStyleVar(ImGuiStyleVar.SelectableTextAlign, 0.5f, 0.5f);
-        ImGui.pushStyleColor(ImGuiCol.HeaderHovered, ImGui.getColorU32(0f, 0f, 0f, 0f));
-        ImGui.pushStyleColor(ImGuiCol.HeaderActive, ImGui.getColorU32(0f, 0f, 0f, 0f));
-        ImGui.pushStyleColor(ImGuiCol.Text, ImGui.getColorU32(1f, 0f, 0f, 1f));
-        ImGui.selectable(USER.getUserArmourEqpDef(), false, ImGuiSelectableFlags.None, 45, 10);
-        ImGui.popStyleColor();
-        ImGui.popStyleColor();
-        ImGui.popStyleColor();
-        ImGui.popStyleVar();
-        // Shield
-        ImGui.setCursorPos(354, 579);
-        ImGui.pushStyleVar(ImGuiStyleVar.SelectableTextAlign, 0.5f, 0.5f);
-        ImGui.pushStyleColor(ImGuiCol.HeaderHovered, ImGui.getColorU32(0f, 0f, 0f, 0f));
-        ImGui.pushStyleColor(ImGuiCol.HeaderActive, ImGui.getColorU32(0f, 0f, 0f, 0f));
-        ImGui.pushStyleColor(ImGuiCol.Text, ImGui.getColorU32(1f, 0f, 0f, 1f));
-        ImGui.selectable(USER.getUserShieldEqpDef(), false, ImGuiSelectableFlags.None, 45, 10);
-        ImGui.popStyleColor();
-        ImGui.popStyleColor();
-        ImGui.popStyleColor();
-        ImGui.popStyleVar();
-        // Helm
-        ImGui.setCursorPos(206, 579);
-        ImGui.pushStyleVar(ImGuiStyleVar.SelectableTextAlign, 0.5f, 0.5f);
-        ImGui.pushStyleColor(ImGuiCol.HeaderHovered, ImGui.getColorU32(0f, 0f, 0f, 0f));
-        ImGui.pushStyleColor(ImGuiCol.HeaderActive, ImGui.getColorU32(0f, 0f, 0f, 0f));
-        ImGui.pushStyleColor(ImGuiCol.Text, ImGui.getColorU32(1f, 0f, 0f, 1f));
-        ImGui.selectable(USER.getUserHelmEqpDef(), false, ImGuiSelectableFlags.None, 45, 10);
-        ImGui.popStyleColor();
-        ImGui.popStyleColor();
-        ImGui.popStyleColor();
-        ImGui.popStyleVar();
-        // Weapon
-        ImGui.setCursorPos(472, 579);
-        ImGui.pushStyleVar(ImGuiStyleVar.SelectableTextAlign, 0.5f, 0.5f);
-        ImGui.pushStyleColor(ImGuiCol.HeaderHovered, ImGui.getColorU32(0f, 0f, 0f, 0f));
-        ImGui.pushStyleColor(ImGuiCol.HeaderActive, ImGui.getColorU32(0f, 0f, 0f, 0f));
-        ImGui.pushStyleColor(ImGuiCol.Text, ImGui.getColorU32(1f, 0f, 0f, 1f));
-        ImGui.selectable(USER.getUserWeaponEqpHit(), false, ImGuiSelectableFlags.None, 45, 10);
-        ImGui.popStyleColor();
-        ImGui.popStyleColor();
-        ImGui.popStyleColor();
-        ImGui.popStyleVar();
-        // Coords
-        ImGui.setCursorPos(590, 574);
-        ImGui.pushStyleVar(ImGuiStyleVar.SelectableTextAlign, 0.5f, 0.5f);
-        ImGui.pushStyleColor(ImGuiCol.HeaderHovered, ImGui.getColorU32(0f, 0f, 0f, 0f));
-        ImGui.pushStyleColor(ImGuiCol.HeaderActive, ImGui.getColorU32(0f, 0f, 0f, 0f));
-        ImGui.pushStyleColor(ImGuiCol.Text, ImGui.getColorU32(1f, 1f, 0f, 1f));
-        ImGui.selectable(USER.getUserMap() + " X:" + USER.getUserPos().getX() + " Y:" + USER.getUserPos().getY(), false, ImGuiSelectableFlags.None, 90, 12);
-        ImGui.popStyleColor();
-        ImGui.popStyleColor();
-        ImGui.popStyleColor();
-        ImGui.popStyleVar();
+        drawColoredStat(730, 419, String.valueOf(USER.getUserGLD()), 1, 1, 0.0f, 1, 45, 10);
+        drawColoredStat(613, 413, String.valueOf(USER.getUserDext()), 1, 0.5f, 0.0f, 1, 45, 10);
+        drawColoredStat(650, 413, String.valueOf(USER.getUserStrg()), 0.1f, 0.6f, 0.1f, 1, 45, 10);
+        drawColoredStat(88, 579, USER.getUserArmourEqpDef(), 1f, 0f, 0f, 1f, 45, 10);
+        drawColoredStat(354, 579, USER.getUserShieldEqpDef(), 1f, 0f, 0f, 1f, 45, 10);
+        drawColoredStat(206, 579, USER.getUserHelmEqpDef(), 1f, 0f, 0f, 1f, 45, 10);
+        drawColoredStat(472, 579, USER.getUserWeaponEqpHit(), 1f, 0f, 0f, 1f, 45, 10);
+        drawColoredStat(590, 574, USER.getUserMap() + " X:" + USER.getUserPos().getX() + " Y:" + USER.getUserPos().getY(), 1f, 1f, 0f, 1f, 90, 12);
     }
 
     // FPS
@@ -192,8 +156,8 @@ public final class FMain extends Form {
         final String txtFPS = String.valueOf(FPS);
         ImGui.setCursorPos(448, 4);
         ImGui.pushStyleVar(ImGuiStyleVar.SelectableTextAlign, 0.5f, 0.5f);
-        ImGui.pushStyleColor(ImGuiCol.HeaderHovered, ImGui.getColorU32(0f, 0f, 0f, 0f));
-        ImGui.pushStyleColor(ImGuiCol.HeaderActive, ImGui.getColorU32(0f, 0f, 0f, 0f));
+        ImGui.pushStyleColor(ImGuiCol.HeaderHovered, TRANSPARENT_COLOR);
+        ImGui.pushStyleColor(ImGuiCol.HeaderActive, TRANSPARENT_COLOR);
         ImGui.selectable(txtFPS, false, ImGuiSelectableFlags.None, 28, 10);
         ImGui.popStyleColor();
         ImGui.popStyleColor();
@@ -202,59 +166,41 @@ public final class FMain extends Form {
 
     // Botones principales
     private void drawButtons() {
-        // Skills Button
-        ImGui.setCursorPos(670, 45);
-        if (ImGui.invisibleButton("viewSkills", 30, 30)) {
+        if (drawButton(670, 45, 30, 30, "viewSkills")) {
             playSound(SND_CLICK);
             IM_GUI_SYSTEM.show(new FSkills());
         }
-        // Options
-        ImGui.setCursorPos(681, 485);
-        if (ImGui.invisibleButton("viewOptions", 95, 22)) {
+        if (drawButton(681, 485, 95, 22, "viewOptions")) {
             playSound(SND_CLICK);
             IM_GUI_SYSTEM.show(new FOptions());
         }
-        // Stats
-        ImGui.setCursorPos(681, 510);
-        if (ImGui.invisibleButton("viewStats", 95, 22)) {
+        if (drawButton(681, 510, 95, 22, "viewStats")) {
             playSound(SND_CLICK);
             IM_GUI_SYSTEM.show(new FStats());
         }
-        // Guild
-        ImGui.setCursorPos(681, 530);
-        if (ImGui.invisibleButton("viewGuild", 95, 22)) {
+        if (drawButton(681, 530, 95, 22, "viewGuild")) {
             playSound(SND_CLICK);
             Protocol.writeRequestGuildLeaderInfo();
         }
-        // Close
-        ImGui.setCursorPos(775, 3);
-        if (ImGui.invisibleButton("close", 17, 17)) {
+        if (drawButton(775, 3, 17, 17, "close")) {
             playSound(SND_CLICK);
             Engine.closeClient();
         }
-        // Minimize
-        ImGui.setCursorPos(755, 3);
-        if (ImGui.invisibleButton("minimizar", 17, 17)) {
+        if (drawButton(755, 3, 17, 17, "minimizar")) {
             playSound(SND_CLICK);
             Window.INSTANCE.minimizar();
         }
-        // Gold Button
-        ImGui.setCursorPos(710, 417);
-        ImGui.invisibleButton("Tirar Oro", 17, 17);
-        // Inventory/Spells toggle
-        ImGui.setCursorPos(592, 128);
-        if (ImGui.invisibleButton("ViewInvetory", 93, 30)) {
+        drawButton(710, 417, 17, 17, "Tirar Oro");
+        if (drawButton(592, 128, 93, 30, "ViewInvetory")) {
             playSound(SND_CLICK);
             USER.getUserInventory().setVisible(true);
             this.viewInventory = true;
         }
-        ImGui.setCursorPos(688, 128);
-        if (ImGui.invisibleButton("ViewInvetorySpells", 75, 30)) {
+        if (drawButton(688, 128, 75, 30, "ViewInvetorySpells")) {
             playSound(SND_CLICK);
             USER.getUserInventory().setVisible(false);
             this.viewInventory = false;
         }
-        // Text input for chat
         if (USER.isTalking()) {
             ImGui.setCursorPos(15, 123);
             ImGui.pushItemWidth(546);
@@ -266,7 +212,6 @@ public final class FMain extends Form {
             ImGui.popStyleColor();
             ImGui.popItemWidth();
         }
-        // Context menu for gold
         if (ImGui.beginPopupContextItem("Tirar Oro")) {
             playSound(SND_CLICK);
             IM_GUI_SYSTEM.show(new FCantidad(true));
