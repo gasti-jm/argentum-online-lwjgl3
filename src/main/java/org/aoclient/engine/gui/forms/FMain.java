@@ -42,6 +42,11 @@ public final class FMain extends Form {
     private final int backgroundInventorySpells;
     private boolean viewInventory;
 
+    private static final int STAT_WIDTH = 69;
+    private static final int STAT_HEIGHT = 10;
+    private static final float[] STAT_ALIGN = {0.5f, 0.5f};
+    private static final int TRANSPARENT_COLOR = ImGui.getColorU32(0f, 0f, 0f, 0f);
+
     public FMain() {
         this.viewInventory = true;
         USER.getUserInventory().setVisible(true);
@@ -95,44 +100,16 @@ public final class FMain extends Form {
         ImGui.popStyleVar();
 
         // lblEnergia
-        ImGui.setCursorPos(591, 453);
-        ImGui.pushStyleVar(ImGuiStyleVar.SelectableTextAlign, 0.5f, 0.5f);
-        ImGui.pushStyleColor(ImGuiCol.HeaderHovered, ImGui.getColorU32(0f, 0f, 0f, 0f));
-        ImGui.pushStyleColor(ImGuiCol.HeaderActive, ImGui.getColorU32(0f, 0f, 0f, 0f));
-        ImGui.selectable(USER.getUserMinSTA() + "/" + USER.getUserMaxSTA(), false, ImGuiSelectableFlags.None, 69, 10);
-        ImGui.popStyleColor();
-        ImGui.popStyleColor();
-        ImGui.popStyleVar();
+        drawStat(591, 453, USER.getUserMinSTA() + "/" + USER.getUserMaxSTA());
 
         // lblMana
-        ImGui.setCursorPos(591, 477);
-        ImGui.pushStyleVar(ImGuiStyleVar.SelectableTextAlign, 0.5f, 0.5f);
-        ImGui.pushStyleColor(ImGuiCol.HeaderHovered, ImGui.getColorU32(0f, 0f, 0f, 0f));
-        ImGui.pushStyleColor(ImGuiCol.HeaderActive, ImGui.getColorU32(0f, 0f, 0f, 0f));
-        ImGui.selectable(USER.getUserMinMAN() + "/" + USER.getUserMaxMAN(), false, ImGuiSelectableFlags.None, 69, 10);
-        ImGui.popStyleColor();
-        ImGui.popStyleColor();
-        ImGui.popStyleVar();
+        drawStat(591, 477, USER.getUserMinMAN() + "/" + USER.getUserMaxMAN());
 
         // lblHP
-        ImGui.setCursorPos(591, 498);
-        ImGui.pushStyleVar(ImGuiStyleVar.SelectableTextAlign, 0.5f, 0.5f);
-        ImGui.pushStyleColor(ImGuiCol.HeaderHovered, ImGui.getColorU32(0f, 0f, 0f, 0f));
-        ImGui.pushStyleColor(ImGuiCol.HeaderActive, ImGui.getColorU32(0f, 0f, 0f, 0f));
-        ImGui.selectable(USER.getUserMinHP() + "/" + USER.getUserMaxHP(), false, ImGuiSelectableFlags.None, 69, 10);
-        ImGui.popStyleColor();
-        ImGui.popStyleColor();
-        ImGui.popStyleVar();
+        drawStat(591, 498, USER.getUserMinHP() + "/" + USER.getUserMaxHP());
 
         // lblHambre
-        ImGui.setCursorPos(591, 521);
-        ImGui.pushStyleVar(ImGuiStyleVar.SelectableTextAlign, 0.5f, 0.5f);
-        ImGui.pushStyleColor(ImGuiCol.HeaderHovered, ImGui.getColorU32(0f, 0f, 0f, 0f));
-        ImGui.pushStyleColor(ImGuiCol.HeaderActive, ImGui.getColorU32(0f, 0f, 0f, 0f));
-        ImGui.selectable(USER.getUserMinHAM() + "/" + USER.getUserMaxHAM(), false, ImGuiSelectableFlags.None, 69, 10);
-        ImGui.popStyleColor();
-        ImGui.popStyleColor();
-        ImGui.popStyleVar();
+        drawStat(591, 521, USER.getUserMinHAM() + "/" + USER.getUserMaxHAM());
 
         // lblSed
         ImGui.setCursorPos(591, 542);
@@ -329,6 +306,17 @@ public final class FMain extends Form {
         Console.INSTANCE.drawConsole();
 
         ImGui.end();
+    }
+
+    private void drawStat(int x, int y, String text) {
+        ImGui.setCursorPos(x, y);
+        ImGui.pushStyleVar(ImGuiStyleVar.SelectableTextAlign, STAT_ALIGN[0], STAT_ALIGN[1]);
+        ImGui.pushStyleColor(ImGuiCol.HeaderHovered, TRANSPARENT_COLOR);
+        ImGui.pushStyleColor(ImGuiCol.HeaderActive, TRANSPARENT_COLOR);
+        ImGui.selectable(text, false, ImGuiSelectableFlags.None, STAT_WIDTH, STAT_HEIGHT);
+        ImGui.popStyleColor();
+        ImGui.popStyleColor();
+        ImGui.popStyleVar();
     }
 
     private void drawShapes() {
