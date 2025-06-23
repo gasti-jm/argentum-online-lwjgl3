@@ -18,22 +18,24 @@ import static org.aoclient.engine.utils.Time.FPS;
 /**
  * Formulario principal que proporciona la interfaz de usuario durante la partida activa.
  * <p>
- * La clase {@code FMain} representa la pantalla principal que se muestra una vez que el usuario ha iniciado sesion correctamente
- * y esta jugando activamente. Esta clase extiende {@link Form} y actua como el nucleo de la interfaz grafica durante el
- * gameplay.
+ * La clase {@code FMain} representa la pantalla principal que se muestra una vez que el usuario ha iniciado sesión correctamente
+ * y está jugando activamente. Esta clase extiende {@link Form} y actúa como el núcleo de la interfaz gráfica durante el gameplay.
  * <p>
- * Esta interfaz principal contiene todos los elementos esenciales para que el jugador interactue con el mundo , incluyendo:
+ * Funcionalidades principales:
  * <ul>
- * <li>Estadisticas del personaje (vida, mana, energia, hambre, sed, etc.)
- * <li>Gestion del inventario y hechizos
- * <li>Visualizacion de oro y experiencia
- * <li>Consola de mensajes del sistema
- * <li>Chat para comunicacion con otros jugadores
- * <li>Acceso a configuraciones y otras funcionalidades
+ *   <li>Muestra estadísticas del personaje (vida, maná, energía, hambre, sed, etc.).</li>
+ *   <li>Permite la gestión del inventario y hechizos, alternando entre ambas vistas.</li>
+ *   <li>Visualiza oro, experiencia y nivel del personaje.</li>
+ *   <li>Integra una consola de mensajes del sistema y un chat para comunicación con otros jugadores.</li>
+ *   <li>Incluye botones para acceder a habilidades, estadísticas, clanes, opciones y manejo de oro.</li>
+ *   <li>Permite el cierre y minimizado de la ventana principal del cliente.</li>
+ *   <li>Gestiona la entrada de texto para comandos y chat, y procesa las interacciones del usuario.</li>
+ *   <li>Comunica acciones relevantes con el servidor mediante el sistema de protocolos de red.</li>
  * </ul>
  * <p>
- * Ademas de mostrar informacion, esta clase maneja la entrada de texto para comandos y chat, procesando las interacciones del
- * usuario y comunicandose con el servidor cuando es necesario a traves del sistema de protocolos de red.
+ * La clase está organizada en métodos privados que separan la lógica de renderizado en secciones específicas para mejorar la legibilidad y el mantenimiento.
+ * <p>
+ * <b>Nota:</b> Todos los elementos gráficos se dibujan usando ImGui y se posicionan manualmente según el layout de la interfaz.
  */
 
 public final class FMain extends Form {
@@ -66,7 +68,6 @@ public final class FMain extends Form {
         ImGui.setNextWindowSize(Window.INSTANCE.getWidth() + 10, Window.INSTANCE.getHeight() + 5, ImGuiCond.Once);
         ImGui.setNextWindowPos(-5, -1, ImGuiCond.Once);
 
-        // Start Custom window
         ImGui.begin(this.getClass().getSimpleName(), ImGuiWindowFlags.NoTitleBar |
                 ImGuiWindowFlags.NoMove |
                 ImGuiWindowFlags.NoFocusOnAppearing |
@@ -76,42 +77,26 @@ public final class FMain extends Form {
                 ImGuiWindowFlags.NoSavedSettings |
                 ImGuiWindowFlags.NoBringToFrontOnFocus);
 
-
         ImGui.getWindowDrawList().addImage(backgroundImage, 0, 0, Window.INSTANCE.getWidth(), Window.INSTANCE.getHeight());
 
         this.drawShapes();
+        this.renderStats();
+        this.renderLevelInfo();
+        this.renderEquipmentInfo();
+        this.renderFPS();
+        this.drawButtons();
+        this.renderInventorySection();
+        USER.getUserInventory().updateTimers();
+        Console.INSTANCE.drawConsole();
+        ImGui.end();
+    }
 
-        // SKILLS BUTTON
-        ImGui.setCursorPos(670, 45);
-        if (ImGui.invisibleButton("viewSkills", 30, 30)) {
-            playSound(SND_CLICK);
-            IM_GUI_SYSTEM.show(new FSkills());
-        }
-
-        // LBL FPS
-        final String txtFPS = String.valueOf(FPS);
-        ImGui.setCursorPos(448, 4);
-        ImGui.pushStyleVar(ImGuiStyleVar.SelectableTextAlign, 0.5f, 0.5f);
-        ImGui.pushStyleColor(ImGuiCol.HeaderHovered, ImGui.getColorU32(0f, 0f, 0f, 0f));
-        ImGui.pushStyleColor(ImGuiCol.HeaderActive, ImGui.getColorU32(0f, 0f, 0f, 0f));
-        ImGui.selectable(txtFPS, false, ImGuiSelectableFlags.None, 28, 10);
-        ImGui.popStyleColor();
-        ImGui.popStyleColor();
-        ImGui.popStyleVar();
-
-        // lblEnergia
+    // Sección de estadísticas (vida, mana, energía, hambre, sed)
+    private void renderStats() {
         drawStat(591, 453, USER.getUserMinSTA() + "/" + USER.getUserMaxSTA());
-
-        // lblMana
         drawStat(591, 477, USER.getUserMinMAN() + "/" + USER.getUserMaxMAN());
-
-        // lblHP
         drawStat(591, 498, USER.getUserMinHP() + "/" + USER.getUserMaxHP());
-
-        // lblHambre
         drawStat(591, 521, USER.getUserMinHAM() + "/" + USER.getUserMaxHAM());
-
-        // lblSed
         ImGui.setCursorPos(591, 542);
         ImGui.pushStyleVar(ImGuiStyleVar.SelectableTextAlign, 0.5f, 0.5f);
         ImGui.pushStyleColor(ImGuiCol.HeaderHovered, ImGui.getColorU32(0f, 0f, 0f, 0f));
@@ -120,36 +105,32 @@ public final class FMain extends Form {
         ImGui.popStyleColor();
         ImGui.popStyleColor();
         ImGui.popStyleVar();
+    }
 
-        // lblLvl
+    // Información de nivel, experiencia y nombre
+    private void renderLevelInfo() {
         ImGui.setCursorPos(625, 78);
         ImGui.text("Nivel: " + USER.getUserLvl());
-
-        //lblPorcLvl
         ImGui.setCursorPos(624, 90);
         if (USER.getUserPasarNivel() > 0) {
             ImGui.textColored(0.5f, 1, 1, 1,
                     "[" + Math.round((float) (USER.getUserExp() * 100) / USER.getUserPasarNivel()) + "%]");
         } else ImGui.textColored(0.5f, 1, 1, 1, "[N/A]");
-
-
-        //lblExp
         ImGui.setCursorPos(625, 102);
         ImGui.text("Exp: " + USER.getUserExp() + "/" + USER.getUserPasarNivel());
+        ImGui.setCursorPos(584, 24);
+        ImGui.textColored(1, 0.0f, 0.0f, 1, USER.getUserName());
+    }
 
-        // gldLbl (color)
+    // Información de equipo y stats secundarios
+    private void renderEquipmentInfo() {
         ImGui.setCursorPos(730, 419);
         ImGui.textColored(1, 1, 0.0f, 1, String.valueOf(USER.getUserGLD()));
-
-        // lblDext (color)
         ImGui.setCursorPos(613, 413);
         ImGui.textColored(1, 0.5f, 0.0f, 1, String.valueOf(USER.getUserDext()));
-
-        // lblStrg (color)
         ImGui.setCursorPos(650, 413);
         ImGui.textColored(0.1f, 0.6f, 0.1f, 1, String.valueOf(USER.getUserStrg()));
-
-        // lblArmor (color)
+        // Armor
         ImGui.setCursorPos(88, 579);
         ImGui.pushStyleVar(ImGuiStyleVar.SelectableTextAlign, 0.5f, 0.5f);
         ImGui.pushStyleColor(ImGuiCol.HeaderHovered, ImGui.getColorU32(0f, 0f, 0f, 0f));
@@ -160,8 +141,7 @@ public final class FMain extends Form {
         ImGui.popStyleColor();
         ImGui.popStyleColor();
         ImGui.popStyleVar();
-
-        // lblShielder (color)
+        // Shield
         ImGui.setCursorPos(354, 579);
         ImGui.pushStyleVar(ImGuiStyleVar.SelectableTextAlign, 0.5f, 0.5f);
         ImGui.pushStyleColor(ImGuiCol.HeaderHovered, ImGui.getColorU32(0f, 0f, 0f, 0f));
@@ -172,8 +152,7 @@ public final class FMain extends Form {
         ImGui.popStyleColor();
         ImGui.popStyleColor();
         ImGui.popStyleVar();
-
-        // lblHelm (color)
+        // Helm
         ImGui.setCursorPos(206, 579);
         ImGui.pushStyleVar(ImGuiStyleVar.SelectableTextAlign, 0.5f, 0.5f);
         ImGui.pushStyleColor(ImGuiCol.HeaderHovered, ImGui.getColorU32(0f, 0f, 0f, 0f));
@@ -184,8 +163,7 @@ public final class FMain extends Form {
         ImGui.popStyleColor();
         ImGui.popStyleColor();
         ImGui.popStyleVar();
-
-        // lblWeapon (color)
+        // Weapon
         ImGui.setCursorPos(472, 579);
         ImGui.pushStyleVar(ImGuiStyleVar.SelectableTextAlign, 0.5f, 0.5f);
         ImGui.pushStyleColor(ImGuiCol.HeaderHovered, ImGui.getColorU32(0f, 0f, 0f, 0f));
@@ -196,116 +174,114 @@ public final class FMain extends Form {
         ImGui.popStyleColor();
         ImGui.popStyleColor();
         ImGui.popStyleVar();
-
-        // lblCoords (color)
+        // Coords
         ImGui.setCursorPos(590, 574);
         ImGui.pushStyleVar(ImGuiStyleVar.SelectableTextAlign, 0.5f, 0.5f);
         ImGui.pushStyleColor(ImGuiCol.HeaderHovered, ImGui.getColorU32(0f, 0f, 0f, 0f));
         ImGui.pushStyleColor(ImGuiCol.HeaderActive, ImGui.getColorU32(0f, 0f, 0f, 0f));
         ImGui.pushStyleColor(ImGuiCol.Text, ImGui.getColorU32(1f, 1f, 0f, 1f));
-
-        ImGui.selectable(USER.getUserMap() + " X:" + USER.getUserPos().getX() + " Y:" + USER.getUserPos().getY(),
-                false, ImGuiSelectableFlags.None, 90, 12);
-
+        ImGui.selectable(USER.getUserMap() + " X:" + USER.getUserPos().getX() + " Y:" + USER.getUserPos().getY(), false, ImGuiSelectableFlags.None, 90, 12);
         ImGui.popStyleColor();
         ImGui.popStyleColor();
         ImGui.popStyleColor();
         ImGui.popStyleVar();
+    }
 
-        // lblName
-        ImGui.setCursorPos(584, 24);
-        ImGui.textColored(1, 0.0f, 0.0f, 1, USER.getUserName());
+    // FPS
+    private void renderFPS() {
+        final String txtFPS = String.valueOf(FPS);
+        ImGui.setCursorPos(448, 4);
+        ImGui.pushStyleVar(ImGuiStyleVar.SelectableTextAlign, 0.5f, 0.5f);
+        ImGui.pushStyleColor(ImGuiCol.HeaderHovered, ImGui.getColorU32(0f, 0f, 0f, 0f));
+        ImGui.pushStyleColor(ImGuiCol.HeaderActive, ImGui.getColorU32(0f, 0f, 0f, 0f));
+        ImGui.selectable(txtFPS, false, ImGuiSelectableFlags.None, 28, 10);
+        ImGui.popStyleColor();
+        ImGui.popStyleColor();
+        ImGui.popStyleVar();
+    }
 
-        // btnOptions
+    // Botones principales
+    private void drawButtons() {
+        // Skills Button
+        ImGui.setCursorPos(670, 45);
+        if (ImGui.invisibleButton("viewSkills", 30, 30)) {
+            playSound(SND_CLICK);
+            IM_GUI_SYSTEM.show(new FSkills());
+        }
+        // Options
         ImGui.setCursorPos(681, 485);
         if (ImGui.invisibleButton("viewOptions", 95, 22)) {
             playSound(SND_CLICK);
             IM_GUI_SYSTEM.show(new FOptions());
         }
-
-        // STATS BUTTON
+        // Stats
         ImGui.setCursorPos(681, 510);
         if (ImGui.invisibleButton("viewStats", 95, 22)) {
             playSound(SND_CLICK);
             IM_GUI_SYSTEM.show(new FStats());
         }
-
-        // btnClanes
+        // Guild
         ImGui.setCursorPos(681, 530);
         if (ImGui.invisibleButton("viewGuild", 95, 22)) {
             playSound(SND_CLICK);
             Protocol.writeRequestGuildLeaderInfo();
         }
-
-        // btnClose
+        // Close
         ImGui.setCursorPos(775, 3);
         if (ImGui.invisibleButton("close", 17, 17)) {
             playSound(SND_CLICK);
             Engine.closeClient();
         }
-
-        // btnMinimizar
+        // Minimize
         ImGui.setCursorPos(755, 3);
         if (ImGui.invisibleButton("minimizar", 17, 17)) {
             playSound(SND_CLICK);
             Window.INSTANCE.minimizar();
         }
-
-        // btnGLD
+        // Gold Button
         ImGui.setCursorPos(710, 417);
         ImGui.invisibleButton("Tirar Oro", 17, 17);
-
-        // txtSend
-        if (USER.isTalking()) {
-            ImGui.setCursorPos(15, 123);
-
-            ImGui.pushItemWidth(546);
-            ImGui.pushStyleColor(ImGuiCol.FrameBg, 0f, 0f, 0f, 1);
-
-            ImGui.setKeyboardFocusHere();
-            ImGui.pushID("sendText");
-            ImGui.inputText("", sendText, ImGuiInputTextFlags.CallbackResize);
-            ImGui.popID();
-
-            ImGui.popStyleColor();
-            ImGui.popItemWidth();
-        }
-
-        // para hacer click derecho y abrir el frm
-        if (ImGui.beginPopupContextItem("Tirar Oro")) {
-            playSound(SND_CLICK);
-            IM_GUI_SYSTEM.show(new FCantidad(true));
-            ImGui.endPopup();
-        }
-
+        // Inventory/Spells toggle
         ImGui.setCursorPos(592, 128);
         if (ImGui.invisibleButton("ViewInvetory", 93, 30)) {
             playSound(SND_CLICK);
             USER.getUserInventory().setVisible(true);
             this.viewInventory = true;
         }
-
         ImGui.setCursorPos(688, 128);
         if (ImGui.invisibleButton("ViewInvetorySpells", 75, 30)) {
             playSound(SND_CLICK);
             USER.getUserInventory().setVisible(false);
             this.viewInventory = false;
         }
+        // Text input for chat
+        if (USER.isTalking()) {
+            ImGui.setCursorPos(15, 123);
+            ImGui.pushItemWidth(546);
+            ImGui.pushStyleColor(ImGuiCol.FrameBg, 0f, 0f, 0f, 1);
+            ImGui.setKeyboardFocusHere();
+            ImGui.pushID("sendText");
+            ImGui.inputText("", sendText, ImGuiInputTextFlags.CallbackResize);
+            ImGui.popID();
+            ImGui.popStyleColor();
+            ImGui.popItemWidth();
+        }
+        // Context menu for gold
+        if (ImGui.beginPopupContextItem("Tirar Oro")) {
+            playSound(SND_CLICK);
+            IM_GUI_SYSTEM.show(new FCantidad(true));
+            ImGui.endPopup();
+        }
+    }
 
-        /////// Inventory
+    // Inventario y hechizos
+    private void renderInventorySection() {
         if (viewInventory) USER.getUserInventory().drawInventory();
         else {
             ImGui.setCursorPos(586, 126);
             ImGui.image(backgroundInventorySpells, 198, 282);
             USER.getInventorySpells().draw();
         }
-
-        USER.getUserInventory().updateTimers();
-
-        /////// Console
-        Console.INSTANCE.drawConsole();
-
-        ImGui.end();
     }
 
     private void drawStat(int x, int y, String text) {
