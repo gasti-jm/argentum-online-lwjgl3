@@ -1,25 +1,19 @@
 package org.aoclient.network.protocol.command.handlers.gm;
 
-import org.aoclient.engine.renderer.RGBColor;
+import org.aoclient.network.protocol.command.BaseCommandHandler;
 import org.aoclient.network.protocol.command.CommandContext;
 import org.aoclient.network.protocol.command.CommandException;
-import org.aoclient.network.protocol.command.CommandHandler;
-import org.aoclient.network.protocol.types.NumericType;
-
-import java.nio.charset.StandardCharsets;
 
 import static org.aoclient.network.protocol.Protocol.writeForceMIDIAll;
 
-public class ForceMidiAllCommand implements CommandHandler {
+public class ForceMidiAllCommand extends BaseCommandHandler {
 
     @Override
     public void handle(CommandContext context) throws CommandException {
-        if (context.hasArguments()) {
-            if (validator.isValidNumber(context.getArgument(0), NumericType.BYTE)) writeForceMIDIAll(Integer.parseInt(context.getArgument(0)));
-             else
-                console.addMsgToConsole(new String("Incorrect MIDI.".getBytes(), StandardCharsets.UTF_8), false, true, new RGBColor());
-        } else
-            console.addMsgToConsole(new String("Missing arguments. Usage: /forcemidi <midi>".getBytes(), StandardCharsets.UTF_8), false, true, new RGBColor());
+        requireArguments(context, 1, "/forcemidi <midi>");
+        requireInteger(context, 0, "midi");
+        int midi = Integer.parseInt(context.getArgument(0));
+        writeForceMIDIAll(midi);
     }
 
 }

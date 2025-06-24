@@ -20,10 +20,11 @@ public final class FBank extends Form{
     private final ImString cantGOLD = new ImString("1");
     public static NPCInventory invNPC = new NPCInventory(true);
     public static UserInventory invUser = USER.getUserInventory().clone();
-    private int goldDeposited;
+
+    public static int goldDeposited;
 
     public FBank(int goldDeposited) {
-        this.goldDeposited = goldDeposited;
+        FBank.goldDeposited = goldDeposited;
 
         try {
             this.backgroundImage = loadTexture("Boveda");

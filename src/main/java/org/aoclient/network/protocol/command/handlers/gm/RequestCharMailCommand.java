@@ -1,21 +1,18 @@
 package org.aoclient.network.protocol.command.handlers.gm;
 
-import org.aoclient.engine.renderer.RGBColor;
+import org.aoclient.network.protocol.command.BaseCommandHandler;
 import org.aoclient.network.protocol.command.CommandContext;
 import org.aoclient.network.protocol.command.CommandException;
-import org.aoclient.network.protocol.command.CommandHandler;
-
-import java.nio.charset.StandardCharsets;
 
 import static org.aoclient.network.protocol.Protocol.writeRequestCharMail;
 
-public class RequestCharMailCommand implements CommandHandler {
+public class RequestCharMailCommand extends BaseCommandHandler {
 
     @Override
     public void handle(CommandContext context) throws CommandException {
-        if (context.hasArguments()) writeRequestCharMail(context.getArgumentsRaw());
-        else
-            console.addMsgToConsole(new String("Missing arguments. Usage: /lastemail <nick>".getBytes(), StandardCharsets.UTF_8), false, true, new RGBColor());
+        requireArguments(context, 1, "/lastemail <nick>");
+        String nick = context.getArgument(0);
+        writeRequestCharMail(nick);
     }
 
 }

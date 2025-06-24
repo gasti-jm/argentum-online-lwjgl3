@@ -1,25 +1,20 @@
 package org.aoclient.network.protocol.command.handlers.gm;
 
-import org.aoclient.engine.renderer.RGBColor;
+import org.aoclient.network.protocol.command.BaseCommandHandler;
 import org.aoclient.network.protocol.command.CommandContext;
 import org.aoclient.network.protocol.command.CommandException;
-import org.aoclient.network.protocol.command.CommandHandler;
-import org.aoclient.network.protocol.types.NumericType;
-
-import java.nio.charset.StandardCharsets;
 
 import static org.aoclient.network.protocol.Protocol.writeOnlineMap;
 
-public class OnlineMapCommand implements CommandHandler {
+public class OnlineMapCommand extends BaseCommandHandler {
 
     @Override
     public void handle(CommandContext context) throws CommandException {
         if (context.hasArguments()) {
-            if (validator.isValidNumber(context.getArgument(0), NumericType.INTEGER))
-                writeOnlineMap(Short.parseShort(context.getArgument(0)));
-            else
-                console.addMsgToConsole(new String("Incorrect map.".getBytes(), StandardCharsets.UTF_8), false, true, new RGBColor());
-        } else writeOnlineMap(user.getUserMap());
+            requireInteger(context, 0, "map");
+            short mapNumber = Short.parseShort(context.getArgument(0));
+            writeOnlineMap(mapNumber);
+        } else writeOnlineMap(user.getUserMap()); // Si no se proporciona argumento, usar el mapa actual del usuario
     }
 
 }

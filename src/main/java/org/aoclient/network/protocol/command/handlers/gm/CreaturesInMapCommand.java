@@ -1,25 +1,19 @@
 package org.aoclient.network.protocol.command.handlers.gm;
 
-import org.aoclient.engine.renderer.RGBColor;
+import org.aoclient.network.protocol.command.BaseCommandHandler;
 import org.aoclient.network.protocol.command.CommandContext;
 import org.aoclient.network.protocol.command.CommandException;
-import org.aoclient.network.protocol.command.CommandHandler;
-import org.aoclient.network.protocol.types.NumericType;
-
-import java.nio.charset.StandardCharsets;
 
 import static org.aoclient.network.protocol.Protocol.writeCreaturesInMap;
 
-public class CreaturesInMapCommand implements CommandHandler {
+public class CreaturesInMapCommand extends BaseCommandHandler {
 
     @Override
     public void handle(CommandContext context) throws CommandException {
-        if (context.hasArguments()) {
-            if (validator.isValidNumber(context.getArgumentsRaw(), NumericType.INTEGER))
-                writeCreaturesInMap(Short.parseShort(context.getArgumentsRaw()));
-            else // No es numerico
-                console.addMsgToConsole(new String("Wrong map. Usage: /nene <map>".getBytes(), StandardCharsets.UTF_8), false, true, new RGBColor());
-        } else writeCreaturesInMap(user.getUserMap()); // Por defecto toma el mapa en el que esta
+        requireArguments(context, 1, "/nene <map>");
+        requireInteger(context, 0, "map");
+        short map = Short.parseShort(context.getArgument(0));
+        writeCreaturesInMap(map);
     }
 
 }

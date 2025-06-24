@@ -475,9 +475,9 @@ public class Protocol {
         outputBuffer.writeByte(ClientPacket.INQUIRY.getId());
     }
 
-    public static void writeInquiryVote(int opt) {
+    public static void writeInquiryVote(int op) {
         outputBuffer.writeByte(ClientPacket.INQUIRY_VOTE.getId());
-        outputBuffer.writeByte(opt);
+        outputBuffer.writeByte(op);
     }
 
     public static void writeGuildMessage(String message) {
@@ -644,10 +644,10 @@ public class Protocol {
         outputBuffer.writeInteger(Map);
     }
 
-    public static void writeCreateItem(int itemIndex) {
+    public static void writeCreateObject(int objId) {
         outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
-        outputBuffer.writeByte(GMCommand.CREATE_ITEM.getId());
-        outputBuffer.writeInteger((short) itemIndex);
+        outputBuffer.writeByte(GMCommand.CREATE_OBJECT.getId());
+        outputBuffer.writeInteger((short) objId);
     }
 
     public static void writeWarpMeToTarget() {

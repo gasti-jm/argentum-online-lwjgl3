@@ -1,26 +1,22 @@
 package org.aoclient.network.protocol.command.handlers.gm;
 
-import org.aoclient.engine.renderer.RGBColor;
+import org.aoclient.network.protocol.command.BaseCommandHandler;
 import org.aoclient.network.protocol.command.CommandContext;
 import org.aoclient.network.protocol.command.CommandException;
-import org.aoclient.network.protocol.command.CommandHandler;
-import org.aoclient.network.protocol.types.NumericType;
-
-import java.nio.charset.StandardCharsets;
 
 import static org.aoclient.network.protocol.Protocol.writeAskTrigger;
 import static org.aoclient.network.protocol.Protocol.writeSetTrigger;
 
-public class SetTriggerCommand implements CommandHandler {
+public class SetTriggerCommand extends BaseCommandHandler {
 
     @Override
     public void handle(CommandContext context) throws CommandException {
         if (context.hasArguments()) {
-            if (validator.isValidNumber(context.getArgumentsRaw(), NumericType.INTEGER))
-                writeSetTrigger(Integer.parseInt(context.getArgumentsRaw()));
-            else
-                console.addMsgToConsole(new String("Missing arguments. Usage: /trigger <number>".getBytes(), StandardCharsets.UTF_8), false, true, new RGBColor());
-        } else writeAskTrigger(); // Version sin parametro
+            // Modo: establecer trigger con numero especifico
+            requireInteger(context, 0, "trigger number");
+            int triggerNumber = Integer.parseInt(context.getArgument(0));
+            writeSetTrigger(triggerNumber);
+        } else writeAskTrigger(); // Modo: solicitar informacion sobre trigger actual
     }
 
 }

@@ -1,29 +1,33 @@
 package org.aoclient.network.protocol.command.handlers.basic;
 
-import org.aoclient.engine.renderer.RGBColor;
+import org.aoclient.engine.gui.forms.FBank;
+import org.aoclient.network.protocol.command.BaseCommandHandler;
 import org.aoclient.network.protocol.command.CommandContext;
 import org.aoclient.network.protocol.command.CommandException;
-import org.aoclient.network.protocol.command.CommandHandler;
-import org.aoclient.network.protocol.types.NumericType;
-
-import java.nio.charset.StandardCharsets;
 
 import static org.aoclient.network.protocol.Protocol.writeBankExtractGold;
 
-public class BankExtractGoldCommand implements CommandHandler {
+public class BankExtractGoldCommand extends BaseCommandHandler {
 
     @Override
     public void handle(CommandContext context) throws CommandException {
-        if (user.isDead())
-            console.addMsgToConsole(new String("You are dead!".getBytes(), StandardCharsets.UTF_8), false, true, new RGBColor());
-        else {
-            if (context.hasArguments()) {
-                if (validator.isValidNumber(context.getArgumentsRaw(), NumericType.LONG))
-                    writeBankExtractGold(Integer.parseInt(context.getArgumentsRaw()));
-                else
-                    console.addMsgToConsole(new String("Incorrect quantity. Usage: /retirar <quantity>".getBytes(), StandardCharsets.UTF_8), false, true, new RGBColor());
-            }
+        if (user.isDead()) {
+            showError("You are dead!");
+            return;
         }
+        requireArguments(context, 1, "/retirar <quantity>");
+        requireInteger(context, 0, "quantity");
+
+        int quantity = Integer.parseInt(context.getArgument(0));
+
+        /* Esta condicion se va a cumplir aunque la cantidad especificada sea menor al oro depositado, ya que si no se creo la
+         * ventana del banco FBank primero, entonces el valor de goldDeposited es 0. */
+        if (quantity > FBank.goldDeposited) {
+            showError("You don't have enough gold!");
+            return;
+        }
+
+        writeBankExtractGold(Integer.parseInt(context.getArgumentsRaw()));
     }
 
 }

@@ -1,29 +1,31 @@
 package org.aoclient.network.protocol.command.handlers.basic;
 
-import org.aoclient.engine.renderer.RGBColor;
+import org.aoclient.network.protocol.command.BaseCommandHandler;
 import org.aoclient.network.protocol.command.CommandContext;
 import org.aoclient.network.protocol.command.CommandException;
-import org.aoclient.network.protocol.command.CommandHandler;
-import org.aoclient.network.protocol.types.NumericType;
-
-import java.nio.charset.StandardCharsets;
 
 import static org.aoclient.network.protocol.Protocol.writeBankDepositGold;
 
-public class BankDepositGoldCommand implements CommandHandler {
+// TODO Bug cuando deposito 05 con 0 al inicio
+public class BankDepositGoldCommand extends BaseCommandHandler {
 
     @Override
     public void handle(CommandContext context) throws CommandException {
-        if (user.isDead())
-            console.addMsgToConsole(new String("You are dead!".getBytes(), StandardCharsets.UTF_8), false, true, new RGBColor());
-        else {
-            if (context.hasArguments()) {
-                if (validator.isValidNumber(context.getArgumentsRaw(), NumericType.LONG))
-                    writeBankDepositGold(Integer.parseInt(context.getArgumentsRaw()));
-                else
-                    console.addMsgToConsole(new String("Incorrect amount. Usage /depositar <amount>".getBytes(), StandardCharsets.UTF_8), false, true, new RGBColor());
-            }
+        if (user.isDead()) {
+            showError("You are dead!");
+            return;
         }
+        requireArguments(context, 1, "/depositar <quantity>");
+        requireInteger(context, 0, "quantity");
+
+        int quantity = Integer.parseInt(context.getArgument(0));
+
+        if (quantity > user.getUserGLD()) {
+            showError("You don't have enough gold!");
+            return;
+        }
+
+        writeBankDepositGold(quantity);
     }
 
 }

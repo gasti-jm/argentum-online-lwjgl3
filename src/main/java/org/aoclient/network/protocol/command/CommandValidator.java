@@ -1,51 +1,15 @@
 package org.aoclient.network.protocol.command;
 
-import org.aoclient.engine.game.User;
-import org.aoclient.network.protocol.types.NumericType;
-
-/**
- * Esta clase proporciona metodos para validar comandos, argumentos y diversos tipos de datos. Incluye validaciones relacionadas
- * con estados del usuario, formatos numericos y direcciones IP. Los metodos de esta clase son utilizados para garantizar que las
- * entradas cumplan con los criterios especificados antes de ejecutar las operaciones asociadas.
+/*
+ * Enumeracion {@code CommandValidator} utilizada para realizar validaciones relacionadas con comandos y direcciones IP.
+ * <p>
+ * Contiene metodos utilitarios para validar direcciones IPv4 y manipular cadenas de texto asociadas a comandos, proporcionando
+ * herramientas para manejar entradas de comandos en un sistema de red.
  */
 
-public class CommandValidator {
+public enum CommandValidator {
 
-    public void requireAlive() throws CommandException {
-        if (User.INSTANCE.isDead())
-            throw new CommandException("¡Estás muerto!");
-    }
-
-    public void requireArguments(CommandContext context, int count) throws CommandException {
-        if (context.getArgumentCount() < count)
-            throw new CommandException("Faltan parámetros para el comando " + context.getCommand());
-    }
-
-    public void requireNumeric(String value, String paramName) throws CommandException {
-        try {
-            Integer.parseInt(value);
-        } catch (NumberFormatException e) {
-            throw new CommandException(paramName + " debe ser un número válido");
-        }
-    }
-
-    /**
-     * Valida si la cadena representativa de un numero pertenece al rango definido por el tipo numerico especificado.
-     *
-     * @param number      cadena que representa un numero a validar
-     * @param numericType tipo numerico (por ejemplo, BYTE, INTEGER, LONG) que define el rango permitido
-     * @return {@code true} si el numero esta dentro del rango especificado por el tipo numerico; {@code false} en caso contrario,
-     * o si la cadena no es un numero valido
-     */
-    public boolean isValidNumber(String number, NumericType numericType) {
-        try {
-            /* Se usa long como un "tipo intermedio" que puede contener cualquier valor de los tipos mas pequeños, permitiendo una
-             * validacion uniforme antes de convertir al tipo especifico requerido. */
-            return numericType.isInRange(Long.parseLong(number));
-        } catch (NumberFormatException e) {
-            return false;
-        }
-    }
+    INSTANCE;
 
     // FIXME Esta cortando mal la cadena ejemplo: "jua.chr" falta la n
     public String[] AEMAILSplit(String text) {

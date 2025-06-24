@@ -98,7 +98,7 @@ public enum GMCommand {
     GUILD_BAN(73),                  // '/BANCLAN
     BAN_IP(74),                     // '/BANIP
     UNBAN_IP(75),                   // '/UNBANIP
-    CREATE_ITEM(76),                // '/CI
+    CREATE_OBJECT(76),                // '/CI
     DESTROY_ITEMS(77),              // '/DEST
     CHAOS_LEGION_KICK(78),          // '/NOCAOS
     ROYAL_ARMY_KICK(79),            // '/NOREAL

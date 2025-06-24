@@ -1,25 +1,28 @@
 package org.aoclient.network.protocol.command.handlers.gm;
 
-import org.aoclient.engine.renderer.RGBColor;
+import org.aoclient.network.protocol.command.BaseCommandHandler;
 import org.aoclient.network.protocol.command.CommandContext;
 import org.aoclient.network.protocol.command.CommandException;
-import org.aoclient.network.protocol.command.CommandHandler;
-
-import java.nio.charset.StandardCharsets;
+import org.aoclient.network.protocol.command.CommandValidator;
 
 import static org.aoclient.network.protocol.Protocol.writeBanIP;
 
-public class BanIpCommand implements CommandHandler {
+public class BanIpCommand extends BaseCommandHandler {
 
     @Override
     public void handle(CommandContext context) throws CommandException {
-        if (context.getArgumentCount() >= 2) {
-            if (validator.isValidIPv4(context.getArgument(0)))
-                writeBanIP(true, validator.parseIPv4ToArray(context.getArgument(0)), "", context.getArgumentsRaw().substring(context.getArgument(0).length() + 1));
-            else
-                writeBanIP(false, validator.parseIPv4ToArray("0.0.0.0"), context.getArgument(0), context.getArgumentsRaw().substring(context.getArgument(0).length() + 1));
-        } else
-            console.addMsgToConsole(new String("Missing arguments. Usage: /banip <ip|nick> <reason>".getBytes(), StandardCharsets.UTF_8), false, true, new RGBColor());
+        requireArguments(context, 2, "/banip <ip|nick> <reason>");
+        requireString(context, 0, "ip|nick");
+        requireString(context, 1, "reason");
+
+        String ipOrNick = context.getArgument(0);
+        String reason = context.getArgument(1);
+
+        if (CommandValidator.INSTANCE.isValidIPv4(ipOrNick))
+            writeBanIP(true, CommandValidator.INSTANCE.parseIPv4ToArray(ipOrNick), "", reason); // Banea por IP
+        else
+            writeBanIP(false, CommandValidator.INSTANCE.parseIPv4ToArray("0.0.0.0"), ipOrNick, reason); // Banea por nick (buscar IP del jugador)
+
     }
 
 }

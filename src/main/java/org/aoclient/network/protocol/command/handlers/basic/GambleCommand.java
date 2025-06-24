@@ -1,30 +1,25 @@
 package org.aoclient.network.protocol.command.handlers.basic;
 
-import org.aoclient.engine.renderer.RGBColor;
+import org.aoclient.network.protocol.command.BaseCommandHandler;
 import org.aoclient.network.protocol.command.CommandContext;
 import org.aoclient.network.protocol.command.CommandException;
-import org.aoclient.network.protocol.command.CommandHandler;
-import org.aoclient.network.protocol.types.NumericType;
-
-import java.nio.charset.StandardCharsets;
 
 import static org.aoclient.network.protocol.Protocol.writeGamble;
 
-public class GambleCommand implements CommandHandler {
+public class GambleCommand extends BaseCommandHandler {
 
     @Override
     public void handle(CommandContext context) throws CommandException {
-        if (user.isDead())
-            console.addMsgToConsole(new String("You are dead!".getBytes(), StandardCharsets.UTF_8), false, true, new RGBColor());
-        else {
-            if (context.hasArguments()) {
-                if (validator.isValidNumber(context.getArgumentsRaw(), NumericType.INTEGER))
-                    writeGamble(Short.parseShort(context.getArgumentsRaw()));
-                else
-                    console.addMsgToConsole(new String("Missing arguments. Usage: /apostar <amount>".getBytes(), StandardCharsets.UTF_8), false, true, new RGBColor());
-            } else
-                console.addMsgToConsole(new String("Missing arguments. Usage: /apostar <amount>".getBytes(), StandardCharsets.UTF_8), false, true, new RGBColor());
+        if (user.isDead()) {
+            showError("You are dead!");
+            return;
         }
+        requireArguments(context, 1, "/apostar <amount>");
+        requireShort(context, 0, "amount");
+
+        short amount = Short.parseShort(context.getArgument(0));
+
+        writeGamble(amount);
     }
 
 }

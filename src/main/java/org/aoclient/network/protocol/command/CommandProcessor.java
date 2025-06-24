@@ -31,13 +31,14 @@ import static org.aoclient.network.protocol.Protocol.*;
  * otros contextos), el testing (cada comando se puede testear aisladamente), la mantenibilidad y reutilizacion.
  * <p>
  * TODO Autocompletado de comandos
+ * TODO Se podria renombrar a TextProcessor, ya que pueden venir desde la consola mensajes simple o comandos, no solo comandos y esta clase procesa tambien texto comun
  */
 
 public enum CommandProcessor {
 
     INSTANCE;
 
-    public final CommandValidator validator = new CommandValidator();
+    // public final CommandValidator validator = new CommandValidator();
     private final Map<String, CommandHandler> commands = new HashMap<>();
 
     CommandProcessor() {
@@ -45,7 +46,7 @@ public enum CommandProcessor {
     }
 
     public void process(String rawCommand) {
-        if (rawCommand == null || rawCommand.trim().isEmpty()) return;
+        if (rawCommand == null || rawCommand.trim().isEmpty()) return; // TODO Es necesario hacer trim()?
 
         CommandContext context = new CommandContext(rawCommand);
 
@@ -86,7 +87,7 @@ public enum CommandProcessor {
         commands.put("/desc", new ChangeDescriptionCommand());
         commands.put("/contraseña", cmd -> ImGUISystem.INSTANCE.show(new FNewPassword()));
         commands.put("/apostar", new GambleCommand());
-        commands.put("/retirarfaccion", new LeaveFactionCommand());
+        commands.put("/retirarfaccion", cmd -> writeLeaveFaction());
         commands.put("/retirar", new BankExtractGoldCommand());
         commands.put("/depositar", new BankDepositGoldCommand());
         commands.put("/denunciar", new DenounceCommand());
@@ -162,12 +163,12 @@ public enum CommandProcessor {
         commands.put("/banclan", new GuildBanCommand());
         commands.put("/banip", new BanIpCommand());
         commands.put("/unbanip", new UnbanIpCommand());
-        commands.put("/ci", new CreateItemCommand());
+        commands.put("/ci", new CreateObjectCommand());
         commands.put("/dest", cmd -> writeDestroyItems());
         commands.put("/nocaos", new ChaosLegionKickCommand());
         commands.put("/noreal", new RoyalArmyKickCommand());
         commands.put("/forcemidi", new ForceMidiAllCommand());
-        commands.put("/forcewav", new ForceWavAllCommand());
+        commands.put("/", new ForceWavAllCommand());
         commands.put("/borrarpena", new RemovePunishmentCommand());
         commands.put("/bloq", cmd -> writeTileBlockedToggle());
         commands.put("/mata", cmd -> writeKillNPCNoRespawn());
@@ -194,7 +195,7 @@ public enum CommandProcessor {
         commands.put("/guardamapa", cmd -> writeSaveMap());
         commands.put("/modmapinfo", new MapInfoCommand());
         commands.put("/grabar", cmd -> writeSaveChars());
-        commands.put("/borrar", new CleanSOSCommand());
+        commands.put("/borrar", cmd -> writeCleanSOS());
         commands.put("/noche", cmd -> writeNight());
         commands.put("/echartodospjs", cmd -> writeKickAllChars());
         commands.put("/reloadnpcs", cmd -> writeReloadNPCs());
@@ -242,9 +243,10 @@ public enum CommandProcessor {
             try {
                 handler.handle(context);
             } catch (CommandException e) {
-                Console.INSTANCE.addMsgToConsole(e.getMessage(), false, true, new RGBColor());
+                System.err.println(e.getMessage());
             }
-        } else Console.INSTANCE.addMsgToConsole("Unknown command: " + context.getCommand(), false, true, new RGBColor());
+        } else
+            Console.INSTANCE.addMsgToConsole("Unknown command: " + context.getCommand(), false, true, new RGBColor());
     }
 
 }

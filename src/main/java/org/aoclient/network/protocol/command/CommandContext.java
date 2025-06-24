@@ -1,24 +1,26 @@
 package org.aoclient.network.protocol.command;
 
 /**
- * Representa el contexto de un comando proporcionado, incluyendo su forma en crudo, la parte principal del comando, los
- * argumentos asociados y su forma en texto completo.
+ * Esta clase representa el contexto de un comando proporcionado como entrada en formato de texto. Su finalidad es analizar y
+ * estructurar la entrada, permitiendo acceder al comando, argumentos asociados y otras propiedades relevantes.
  * <p>
- * Esta clase ofrece funcionalidades para analizar comandos en formato texto y extraer su información principal, como el nombre
- * del comando, los argumentos, entre otros datos. Adicionalmente, incluye verificaciones que permiten identificar si el texto
- * representa un comando o un mensaje especial.
+ * Un comando es tipicamente identificado por un prefijo especifico, como "/". Este contexto permite reconocer tales prefijos, asi
+ * como los argumentos que siguen al comando principal.
  */
 
 public class CommandContext {
 
     private final String rawCommand;
     private final String command;
-    private final String[] arguments;
-    private final String argumentsRaw;
+    private String[] arguments = new String[0];
+    /** Cadena de argumentos de comando en crudo que preserva espacios y formateo. */
+    private String argumentsRaw = "";
 
     /**
-     * Analiza el comando en crudo (rawCommand) en formato de texto separandolo en su parte principal (command) y sus argumentos
-     * (arguments).
+     * Constructor que inicializa un contexto de comando a partir de un comando en formato de texto.
+     *
+     * @param rawCommand Comando en formato de texto completo que incluye tanto el comando como sus argumentos. Por ejemplo, en la
+     *                   entrada "/TELEP nickname map x y", el comando seria "/TELEP" y los argumentos serian "nickname map x y".
      */
     public CommandContext(String rawCommand) {
         this.rawCommand = rawCommand;
@@ -29,13 +31,15 @@ public class CommandContext {
         String[] parts = rawCommand.split(" ", 2);
         command = parts[0];
 
+        // Si hay argumentos
         if (parts.length > 1) {
+            // Almacena los argumentos en crudo en argumentsRaw
             argumentsRaw = parts[1];
-            arguments = parts[1].split(" ");
-        } else {
-            argumentsRaw = "";
-            arguments = new String[0];
+            /* Elimina los posibles espacios al principio y final de los argumentos, y divide los argumentos separados por un
+             * espacio. Si parts[1].trim() esta vacio, split(" ") produce un array con un elemento vacio, no un array vacio. */
+            arguments = parts[1].trim().split(" ");
         }
+
     }
 
     public boolean isCommand() {

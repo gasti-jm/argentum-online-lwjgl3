@@ -1,50 +1,90 @@
 package org.aoclient.network.protocol.command.handlers.gm;
 
-import org.aoclient.engine.renderer.RGBColor;
+import org.aoclient.network.protocol.command.BaseCommandHandler;
 import org.aoclient.network.protocol.command.CommandContext;
 import org.aoclient.network.protocol.command.CommandException;
-import org.aoclient.network.protocol.command.CommandHandler;
 import org.aoclient.network.protocol.types.CharacterEditType;
-
-import java.nio.charset.StandardCharsets;
 
 import static org.aoclient.network.protocol.Protocol.writeEditChar;
 
 /**
- * por ejemplo: /mod <nick> <oro> <amount>
+ * Comando para editar propiedades de personajes.
+ * <p>
+ * Uso: {@code /mod <nick> <property> <value> [extra_param]}
+ * <p>
+ * Propiedades disponibles:
+ * <ul>
+ *  <li>body: Cambiar cuerpo del personaje
+ *  <li>head: Cambiar cabeza del personaje
+ *  <li>oro: Establecer cantidad de oro
+ *  <li>level: Cambiar nivel del personaje
+ *  <li>skills: Modificar habilidades
+ *  <li>skillslibres: Puntos de habilidad disponibles
+ *  <li>clase: Cambiar clase del personaje
+ *  <li>exp: Modificar experiencia
+ *  <li>cri: Criminales asesinados
+ *  <li>ciu: Ciudadanos asesinados
+ *  <li>nob: Puntos de nobleza
+ *  <li>ase: Puntos de asesino
+ *  <li>sex: Cambiar sexo del personaje
+ *  <li>raza: Cambiar raza del personaje
+ *  <li>vagregar: Agregar oro (no establecer)
+ * </ul>
+ * Ejemplos:
+ * <br>
+ * {@code /mod juan_777 oro 5000}
+ * <br>
+ * {@code /mod admin level 50}
+ * <br>
+ * {@code /mod player1 agregar 1000}
  */
 
-public class EditCharCommand implements CommandHandler {
+public class EditCharCommand extends BaseCommandHandler {
 
     @Override
     public void handle(CommandContext context) throws CommandException {
-        if (context.hasArguments() && context.getArgumentCount() >= 3) {
-            String arg = context.getArgument(1);
-            int tmpInt = switch (arg) {
-                case "body" -> CharacterEditType.BODY.getValue();
-                case "head" -> CharacterEditType.HEAD.getValue();
-                case "oro" -> CharacterEditType.GOLD.getValue();
-                case "level" -> CharacterEditType.LEVEL.getValue();
-                case "skills" -> CharacterEditType.SKILLS.getValue();
-                case "skillslibres" -> CharacterEditType.SKILL_POINTS_LEFT.getValue();
-                case "clase" -> CharacterEditType.CLASS.getValue();
-                case "exp" -> CharacterEditType.EXPERIENCE.getValue();
-                case "cri" -> CharacterEditType.CRIMINALS_KILLED.getValue();
-                case "ciu" -> CharacterEditType.CITIZENS_KILLED.getValue();
-                case "nob" -> CharacterEditType.NOBILITY.getValue();
-                case "ase" -> CharacterEditType.ASSASSIN.getValue();
-                case "sex" -> CharacterEditType.SEX.getValue();
-                case "raza" -> CharacterEditType.RACE.getValue();
-                case "agregar" -> CharacterEditType.ADD_GOLD.getValue();
-                default -> -1;
-            };
-            if (tmpInt > 0) {
-                if (context.getArgumentCount() == 3) writeEditChar(context.getArgument(0), tmpInt, context.getArgument(2), "");
-                else writeEditChar(context.getArgument(0), tmpInt, context.getArgument(2), context.getArgument(3));
-            } else
-                console.addMsgToConsole(new String("Incorrect command.".getBytes(), StandardCharsets.UTF_8), false, true, new RGBColor());
-        } else
-            console.addMsgToConsole(new String("Missing arguments.".getBytes(), StandardCharsets.UTF_8), false, true, new RGBColor());
+        requireArguments(context, 3, "/mod <nick> <property> <value> [extra_param]");
+        requireString(context, 0, "nick");
+        requireString(context, 1, "property");
+        requireString(context, 2, "value");
+
+        String nick = context.getArgument(0);
+        String property = context.getArgument(1);
+        String value = context.getArgument(2);
+        String extraParam = context.getArgumentCount() >= 4 ? context.getArgument(3) : ""; // Evita un NPE
+
+        CharacterEditType editType = getEditTypeFromProperty(property);
+        if (editType == null) showError("Unknown property: " + property + ". See command documentation for valid properties.");
+
+        writeEditChar(nick, editType.getValue(), value, extraParam);
+    }
+
+    /**
+     * Convierte la propiedad string a CharacterEditType.
+     *
+     * @param property propiedad como string
+     * @return CharacterEditType correspondiente o null si no existe
+     */
+    private CharacterEditType getEditTypeFromProperty(String property) {
+        return switch (property.toLowerCase()) {
+            case "body" -> CharacterEditType.BODY;
+            case "head" -> CharacterEditType.HEAD;
+            case "oro" -> CharacterEditType.GOLD;
+            case "level" -> CharacterEditType.LEVEL;
+            case "skills" -> CharacterEditType.SKILLS;
+            case "skillslibres" -> CharacterEditType.SKILL_POINTS_LEFT;
+            case "clase" -> CharacterEditType.CLASS;
+            case "exp" -> CharacterEditType.EXPERIENCE;
+            case "cri" -> CharacterEditType.CRIMINALS_KILLED;
+            case "ciu" -> CharacterEditType.CITIZENS_KILLED;
+            case "nob" -> CharacterEditType.NOBILITY;
+            case "ase" -> CharacterEditType.ASSASSIN;
+            case "sex" -> CharacterEditType.SEX;
+            case "raza" -> CharacterEditType.RACE;
+            case "agregar" -> CharacterEditType.ADD_GOLD;
+            default -> null;
+        };
     }
 
 }
+
