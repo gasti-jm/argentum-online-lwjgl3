@@ -18,22 +18,24 @@ import static org.aoclient.engine.utils.Time.FPS;
 /**
  * Formulario principal que proporciona la interfaz de usuario durante la partida activa.
  * <p>
- * La clase {@code FMain} representa la pantalla principal que se muestra una vez que el usuario ha iniciado sesion correctamente
- * y esta jugando activamente. Esta clase extiende {@link Form} y actua como el nucleo de la interfaz grafica durante el
- * gameplay.
+ * La clase {@code FMain} representa la pantalla principal que se muestra una vez que el usuario ha iniciado sesión correctamente
+ * y está jugando activamente. Esta clase extiende {@link Form} y actúa como el núcleo de la interfaz gráfica durante el gameplay.
  * <p>
- * Esta interfaz principal contiene todos los elementos esenciales para que el jugador interactue con el mundo , incluyendo:
+ * Funcionalidades principales:
  * <ul>
- * <li>Estadisticas del personaje (vida, mana, energia, hambre, sed, etc.)
- * <li>Gestion del inventario y hechizos
- * <li>Visualizacion de oro y experiencia
- * <li>Consola de mensajes del sistema
- * <li>Chat para comunicacion con otros jugadores
- * <li>Acceso a configuraciones y otras funcionalidades
+ *   <li>Muestra estadísticas del personaje (vida, maná, energía, hambre, sed, etc.).</li>
+ *   <li>Permite la gestión del inventario y hechizos, alternando entre ambas vistas.</li>
+ *   <li>Visualiza oro, experiencia y nivel del personaje.</li>
+ *   <li>Integra una consola de mensajes del sistema y un chat para comunicación con otros jugadores.</li>
+ *   <li>Incluye botones para acceder a habilidades, estadísticas, clanes, opciones y manejo de oro.</li>
+ *   <li>Permite el cierre y minimizado de la ventana principal del cliente.</li>
+ *   <li>Gestiona la entrada de texto para comandos y chat, y procesa las interacciones del usuario.</li>
+ *   <li>Comunica acciones relevantes con el servidor mediante el sistema de protocolos de red.</li>
  * </ul>
  * <p>
- * Ademas de mostrar informacion, esta clase maneja la entrada de texto para comandos y chat, procesando las interacciones del
- * usuario y comunicandose con el servidor cuando es necesario a traves del sistema de protocolos de red.
+ * La clase está organizada en métodos privados que separan la lógica de renderizado en secciones específicas para mejorar la legibilidad y el mantenimiento.
+ * <p>
+ * <b>Nota:</b> Todos los elementos gráficos se dibujan usando ImGui y se posicionan manualmente según el layout de la interfaz.
  */
 
 public final class FMain extends Form {
@@ -41,6 +43,11 @@ public final class FMain extends Form {
     private final ImString sendText = new ImString();
     private final int backgroundInventorySpells;
     private boolean viewInventory;
+
+    private static final int STAT_WIDTH = 69;
+    private static final int STAT_HEIGHT = 10;
+    private static final float[] STAT_ALIGN = {0.5f, 0.5f};
+    private static final int TRANSPARENT_COLOR = ImGui.getColorU32(0f, 0f, 0f, 0f);
 
     public FMain() {
         this.viewInventory = true;
@@ -61,7 +68,6 @@ public final class FMain extends Form {
         ImGui.setNextWindowSize(Window.INSTANCE.getWidth() + 10, Window.INSTANCE.getHeight() + 5, ImGuiCond.Once);
         ImGui.setNextWindowPos(-5, -1, ImGuiCond.Once);
 
-        // Start Custom window
         ImGui.begin(this.getClass().getSimpleName(), ImGuiWindowFlags.NoTitleBar |
                 ImGuiWindowFlags.NoMove |
                 ImGuiWindowFlags.NoFocusOnAppearing |
@@ -71,264 +77,167 @@ public final class FMain extends Form {
                 ImGuiWindowFlags.NoSavedSettings |
                 ImGuiWindowFlags.NoBringToFrontOnFocus);
 
-
         ImGui.getWindowDrawList().addImage(backgroundImage, 0, 0, Window.INSTANCE.getWidth(), Window.INSTANCE.getHeight());
 
         this.drawShapes();
+        this.renderStats();
+        this.renderLevelInfo();
+        this.renderEquipmentInfo();
+        this.renderFPS();
+        this.drawButtons();
+        this.renderInventorySection();
+        USER.getUserInventory().updateTimers();
+        Console.INSTANCE.drawConsole();
+        ImGui.end();
+    }
 
-        // SKILLS BUTTON
-        ImGui.setCursorPos(670, 45);
-        if (ImGui.invisibleButton("viewSkills", 30, 30)) {
-            playSound(SND_CLICK);
-            IM_GUI_SYSTEM.show(new FSkills());
-        }
-
-        // LBL FPS
-        final String txtFPS = String.valueOf(FPS);
-        ImGui.setCursorPos(448, 4);
+    /**
+     * Dibuja un stat o valor de equipo con colores personalizados.
+     */
+    private void drawColoredStat(int x, int y, String text, float r, float g, float b, float a, int width, int height) {
+        ImGui.setCursorPos(x, y);
         ImGui.pushStyleVar(ImGuiStyleVar.SelectableTextAlign, 0.5f, 0.5f);
-        ImGui.pushStyleColor(ImGuiCol.HeaderHovered, ImGui.getColorU32(0f, 0f, 0f, 0f));
-        ImGui.pushStyleColor(ImGuiCol.HeaderActive, ImGui.getColorU32(0f, 0f, 0f, 0f));
-        ImGui.selectable(txtFPS, false, ImGuiSelectableFlags.None, 28, 10);
+        ImGui.pushStyleColor(ImGuiCol.HeaderHovered, TRANSPARENT_COLOR);
+        ImGui.pushStyleColor(ImGuiCol.HeaderActive, TRANSPARENT_COLOR);
+        ImGui.pushStyleColor(ImGuiCol.Text, ImGui.getColorU32(r, g, b, a));
+        ImGui.selectable(text, false, ImGuiSelectableFlags.None, width, height);
+        ImGui.popStyleColor();
         ImGui.popStyleColor();
         ImGui.popStyleColor();
         ImGui.popStyleVar();
+    }
 
-        // lblEnergia
-        ImGui.setCursorPos(591, 453);
-        ImGui.pushStyleVar(ImGuiStyleVar.SelectableTextAlign, 0.5f, 0.5f);
-        ImGui.pushStyleColor(ImGuiCol.HeaderHovered, ImGui.getColorU32(0f, 0f, 0f, 0f));
-        ImGui.pushStyleColor(ImGuiCol.HeaderActive, ImGui.getColorU32(0f, 0f, 0f, 0f));
-        ImGui.selectable(USER.getUserMinSTA() + "/" + USER.getUserMaxSTA(), false, ImGuiSelectableFlags.None, 69, 10);
-        ImGui.popStyleColor();
-        ImGui.popStyleColor();
-        ImGui.popStyleVar();
+    /**
+     * Dibuja un botón invisible en la posición y tamaño indicados. Devuelve true si fue presionado.
+     */
+    private boolean drawButton(int x, int y, int w, int h, String label) {
+        ImGui.setCursorPos(x, y);
+        return ImGui.invisibleButton(label, w, h);
+    }
 
-        // lblMana
-        ImGui.setCursorPos(591, 477);
-        ImGui.pushStyleVar(ImGuiStyleVar.SelectableTextAlign, 0.5f, 0.5f);
-        ImGui.pushStyleColor(ImGuiCol.HeaderHovered, ImGui.getColorU32(0f, 0f, 0f, 0f));
-        ImGui.pushStyleColor(ImGuiCol.HeaderActive, ImGui.getColorU32(0f, 0f, 0f, 0f));
-        ImGui.selectable(USER.getUserMinMAN() + "/" + USER.getUserMaxMAN(), false, ImGuiSelectableFlags.None, 69, 10);
-        ImGui.popStyleColor();
-        ImGui.popStyleColor();
-        ImGui.popStyleVar();
+    // Sección de estadísticas (vida, mana, energía, hambre, sed)
+    private void renderStats() {
+        drawColoredStat(591, 453, USER.getUserMinSTA() + "/" + USER.getUserMaxSTA(), 1, 1, 1, 1, 69, 10);
+        drawColoredStat(591, 477, USER.getUserMinMAN() + "/" + USER.getUserMaxMAN(), 1, 1, 1, 1, 69, 10);
+        drawColoredStat(591, 498, USER.getUserMinHP() + "/" + USER.getUserMaxHP(), 1, 1, 1, 1, 69, 10);
+        drawColoredStat(591, 521, USER.getUserMinHAM() + "/" + USER.getUserMaxHAM(), 1, 1, 1, 1, 69, 10);
+        drawColoredStat(591, 542, USER.getUserMinAGU() + "/" + USER.getUserMaxAGU(), 1, 1, 1, 1, 69, 10);
+    }
 
-        // lblHP
-        ImGui.setCursorPos(591, 498);
-        ImGui.pushStyleVar(ImGuiStyleVar.SelectableTextAlign, 0.5f, 0.5f);
-        ImGui.pushStyleColor(ImGuiCol.HeaderHovered, ImGui.getColorU32(0f, 0f, 0f, 0f));
-        ImGui.pushStyleColor(ImGuiCol.HeaderActive, ImGui.getColorU32(0f, 0f, 0f, 0f));
-        ImGui.selectable(USER.getUserMinHP() + "/" + USER.getUserMaxHP(), false, ImGuiSelectableFlags.None, 69, 10);
-        ImGui.popStyleColor();
-        ImGui.popStyleColor();
-        ImGui.popStyleVar();
-
-        // lblHambre
-        ImGui.setCursorPos(591, 521);
-        ImGui.pushStyleVar(ImGuiStyleVar.SelectableTextAlign, 0.5f, 0.5f);
-        ImGui.pushStyleColor(ImGuiCol.HeaderHovered, ImGui.getColorU32(0f, 0f, 0f, 0f));
-        ImGui.pushStyleColor(ImGuiCol.HeaderActive, ImGui.getColorU32(0f, 0f, 0f, 0f));
-        ImGui.selectable(USER.getUserMinHAM() + "/" + USER.getUserMaxHAM(), false, ImGuiSelectableFlags.None, 69, 10);
-        ImGui.popStyleColor();
-        ImGui.popStyleColor();
-        ImGui.popStyleVar();
-
-        // lblSed
-        ImGui.setCursorPos(591, 542);
-        ImGui.pushStyleVar(ImGuiStyleVar.SelectableTextAlign, 0.5f, 0.5f);
-        ImGui.pushStyleColor(ImGuiCol.HeaderHovered, ImGui.getColorU32(0f, 0f, 0f, 0f));
-        ImGui.pushStyleColor(ImGuiCol.HeaderActive, ImGui.getColorU32(0f, 0f, 0f, 0f));
-        ImGui.selectable(USER.getUserMinAGU() + "/" + USER.getUserMaxAGU(), false, ImGuiSelectableFlags.None, 69, 10);
-        ImGui.popStyleColor();
-        ImGui.popStyleColor();
-        ImGui.popStyleVar();
-
-        // lblLvl
+    // Información de nivel, experiencia y nombre
+    private void renderLevelInfo() {
         ImGui.setCursorPos(625, 78);
         ImGui.text("Nivel: " + USER.getUserLvl());
-
-        //lblPorcLvl
         ImGui.setCursorPos(624, 90);
         if (USER.getUserPasarNivel() > 0) {
             ImGui.textColored(0.5f, 1, 1, 1,
                     "[" + Math.round((float) (USER.getUserExp() * 100) / USER.getUserPasarNivel()) + "%]");
         } else ImGui.textColored(0.5f, 1, 1, 1, "[N/A]");
-
-
-        //lblExp
         ImGui.setCursorPos(625, 102);
         ImGui.text("Exp: " + USER.getUserExp() + "/" + USER.getUserPasarNivel());
-
-        // gldLbl (color)
-        ImGui.setCursorPos(730, 419);
-        ImGui.textColored(1, 1, 0.0f, 1, String.valueOf(USER.getUserGLD()));
-
-        // lblDext (color)
-        ImGui.setCursorPos(613, 413);
-        ImGui.textColored(1, 0.5f, 0.0f, 1, String.valueOf(USER.getUserDext()));
-
-        // lblStrg (color)
-        ImGui.setCursorPos(650, 413);
-        ImGui.textColored(0.1f, 0.6f, 0.1f, 1, String.valueOf(USER.getUserStrg()));
-
-        // lblArmor (color)
-        ImGui.setCursorPos(88, 579);
-        ImGui.pushStyleVar(ImGuiStyleVar.SelectableTextAlign, 0.5f, 0.5f);
-        ImGui.pushStyleColor(ImGuiCol.HeaderHovered, ImGui.getColorU32(0f, 0f, 0f, 0f));
-        ImGui.pushStyleColor(ImGuiCol.HeaderActive, ImGui.getColorU32(0f, 0f, 0f, 0f));
-        ImGui.pushStyleColor(ImGuiCol.Text, ImGui.getColorU32(1f, 0f, 0f, 1f));
-        ImGui.selectable(USER.getUserArmourEqpDef(), false, ImGuiSelectableFlags.None, 45, 10);
-        ImGui.popStyleColor();
-        ImGui.popStyleColor();
-        ImGui.popStyleColor();
-        ImGui.popStyleVar();
-
-        // lblShielder (color)
-        ImGui.setCursorPos(354, 579);
-        ImGui.pushStyleVar(ImGuiStyleVar.SelectableTextAlign, 0.5f, 0.5f);
-        ImGui.pushStyleColor(ImGuiCol.HeaderHovered, ImGui.getColorU32(0f, 0f, 0f, 0f));
-        ImGui.pushStyleColor(ImGuiCol.HeaderActive, ImGui.getColorU32(0f, 0f, 0f, 0f));
-        ImGui.pushStyleColor(ImGuiCol.Text, ImGui.getColorU32(1f, 0f, 0f, 1f));
-        ImGui.selectable(USER.getUserShieldEqpDef(), false, ImGuiSelectableFlags.None, 45, 10);
-        ImGui.popStyleColor();
-        ImGui.popStyleColor();
-        ImGui.popStyleColor();
-        ImGui.popStyleVar();
-
-        // lblHelm (color)
-        ImGui.setCursorPos(206, 579);
-        ImGui.pushStyleVar(ImGuiStyleVar.SelectableTextAlign, 0.5f, 0.5f);
-        ImGui.pushStyleColor(ImGuiCol.HeaderHovered, ImGui.getColorU32(0f, 0f, 0f, 0f));
-        ImGui.pushStyleColor(ImGuiCol.HeaderActive, ImGui.getColorU32(0f, 0f, 0f, 0f));
-        ImGui.pushStyleColor(ImGuiCol.Text, ImGui.getColorU32(1f, 0f, 0f, 1f));
-        ImGui.selectable(USER.getUserHelmEqpDef(), false, ImGuiSelectableFlags.None, 45, 10);
-        ImGui.popStyleColor();
-        ImGui.popStyleColor();
-        ImGui.popStyleColor();
-        ImGui.popStyleVar();
-
-        // lblWeapon (color)
-        ImGui.setCursorPos(472, 579);
-        ImGui.pushStyleVar(ImGuiStyleVar.SelectableTextAlign, 0.5f, 0.5f);
-        ImGui.pushStyleColor(ImGuiCol.HeaderHovered, ImGui.getColorU32(0f, 0f, 0f, 0f));
-        ImGui.pushStyleColor(ImGuiCol.HeaderActive, ImGui.getColorU32(0f, 0f, 0f, 0f));
-        ImGui.pushStyleColor(ImGuiCol.Text, ImGui.getColorU32(1f, 0f, 0f, 1f));
-        ImGui.selectable(USER.getUserWeaponEqpHit(), false, ImGuiSelectableFlags.None, 45, 10);
-        ImGui.popStyleColor();
-        ImGui.popStyleColor();
-        ImGui.popStyleColor();
-        ImGui.popStyleVar();
-
-        // lblCoords (color)
-        ImGui.setCursorPos(590, 574);
-        ImGui.pushStyleVar(ImGuiStyleVar.SelectableTextAlign, 0.5f, 0.5f);
-        ImGui.pushStyleColor(ImGuiCol.HeaderHovered, ImGui.getColorU32(0f, 0f, 0f, 0f));
-        ImGui.pushStyleColor(ImGuiCol.HeaderActive, ImGui.getColorU32(0f, 0f, 0f, 0f));
-        ImGui.pushStyleColor(ImGuiCol.Text, ImGui.getColorU32(1f, 1f, 0f, 1f));
-
-        ImGui.selectable(USER.getUserMap() + " X:" + USER.getUserPos().getX() + " Y:" + USER.getUserPos().getY(),
-                false, ImGuiSelectableFlags.None, 90, 12);
-
-        ImGui.popStyleColor();
-        ImGui.popStyleColor();
-        ImGui.popStyleColor();
-        ImGui.popStyleVar();
-
-        // lblName
         ImGui.setCursorPos(584, 24);
         ImGui.textColored(1, 0.0f, 0.0f, 1, USER.getUserName());
+    }
 
-        // btnOptions
-        ImGui.setCursorPos(681, 485);
-        if (ImGui.invisibleButton("viewOptions", 95, 22)) {
+    // Información de equipo y stats secundarios
+    private void renderEquipmentInfo() {
+        drawColoredStat(730, 419, String.valueOf(USER.getUserGLD()), 1, 1, 0.0f, 1, 45, 10);
+        drawColoredStat(613, 413, String.valueOf(USER.getUserDext()), 1, 0.5f, 0.0f, 1, 45, 10);
+        drawColoredStat(650, 413, String.valueOf(USER.getUserStrg()), 0.1f, 0.6f, 0.1f, 1, 45, 10);
+        drawColoredStat(88, 579, USER.getUserArmourEqpDef(), 1f, 0f, 0f, 1f, 45, 10);
+        drawColoredStat(354, 579, USER.getUserShieldEqpDef(), 1f, 0f, 0f, 1f, 45, 10);
+        drawColoredStat(206, 579, USER.getUserHelmEqpDef(), 1f, 0f, 0f, 1f, 45, 10);
+        drawColoredStat(472, 579, USER.getUserWeaponEqpHit(), 1f, 0f, 0f, 1f, 45, 10);
+        drawColoredStat(590, 574, USER.getUserMap() + " X:" + USER.getUserPos().getX() + " Y:" + USER.getUserPos().getY(), 1f, 1f, 0f, 1f, 90, 12);
+    }
+
+    // FPS
+    private void renderFPS() {
+        final String txtFPS = String.valueOf(FPS);
+        ImGui.setCursorPos(448, 4);
+        ImGui.pushStyleVar(ImGuiStyleVar.SelectableTextAlign, 0.5f, 0.5f);
+        ImGui.pushStyleColor(ImGuiCol.HeaderHovered, TRANSPARENT_COLOR);
+        ImGui.pushStyleColor(ImGuiCol.HeaderActive, TRANSPARENT_COLOR);
+        ImGui.selectable(txtFPS, false, ImGuiSelectableFlags.None, 28, 10);
+        ImGui.popStyleColor();
+        ImGui.popStyleColor();
+        ImGui.popStyleVar();
+    }
+
+    // Botones principales
+    private void drawButtons() {
+        if (drawButton(670, 45, 30, 30, "viewSkills")) {
+            playSound(SND_CLICK);
+            IM_GUI_SYSTEM.show(new FSkills());
+        }
+        if (drawButton(681, 485, 95, 22, "viewOptions")) {
             playSound(SND_CLICK);
             IM_GUI_SYSTEM.show(new FOptions());
         }
-
-        // STATS BUTTON
-        ImGui.setCursorPos(681, 510);
-        if (ImGui.invisibleButton("viewStats", 95, 22)) {
+        if (drawButton(681, 510, 95, 22, "viewStats")) {
             playSound(SND_CLICK);
             IM_GUI_SYSTEM.show(new FStats());
         }
-
-        // btnClanes
-        ImGui.setCursorPos(681, 530);
-        if (ImGui.invisibleButton("viewGuild", 95, 22)) {
+        if (drawButton(681, 530, 95, 22, "viewGuild")) {
             playSound(SND_CLICK);
             Protocol.writeRequestGuildLeaderInfo();
         }
-
-        // btnClose
-        ImGui.setCursorPos(775, 3);
-        if (ImGui.invisibleButton("close", 17, 17)) {
+        if (drawButton(775, 3, 17, 17, "close")) {
             playSound(SND_CLICK);
             Engine.closeClient();
         }
-
-        // btnMinimizar
-        ImGui.setCursorPos(755, 3);
-        if (ImGui.invisibleButton("minimizar", 17, 17)) {
+        if (drawButton(755, 3, 17, 17, "minimizar")) {
             playSound(SND_CLICK);
             Window.INSTANCE.minimizar();
         }
-
-        // btnGLD
-        ImGui.setCursorPos(710, 417);
-        ImGui.invisibleButton("Tirar Oro", 17, 17);
-
-        // txtSend
+        drawButton(710, 417, 17, 17, "Tirar Oro");
+        if (drawButton(592, 128, 93, 30, "ViewInvetory")) {
+            playSound(SND_CLICK);
+            USER.getUserInventory().setVisible(true);
+            this.viewInventory = true;
+        }
+        if (drawButton(688, 128, 75, 30, "ViewInvetorySpells")) {
+            playSound(SND_CLICK);
+            USER.getUserInventory().setVisible(false);
+            this.viewInventory = false;
+        }
         if (USER.isTalking()) {
             ImGui.setCursorPos(15, 123);
-
             ImGui.pushItemWidth(546);
             ImGui.pushStyleColor(ImGuiCol.FrameBg, 0f, 0f, 0f, 1);
-
             ImGui.setKeyboardFocusHere();
             ImGui.pushID("sendText");
             ImGui.inputText("", sendText, ImGuiInputTextFlags.CallbackResize);
             ImGui.popID();
-
             ImGui.popStyleColor();
             ImGui.popItemWidth();
         }
-
-        // para hacer click derecho y abrir el frm
         if (ImGui.beginPopupContextItem("Tirar Oro")) {
             playSound(SND_CLICK);
             IM_GUI_SYSTEM.show(new FCantidad(true));
             ImGui.endPopup();
         }
+    }
 
-        ImGui.setCursorPos(592, 128);
-        if (ImGui.invisibleButton("ViewInvetory", 93, 30)) {
-            playSound(SND_CLICK);
-            USER.getUserInventory().setVisible(true);
-            this.viewInventory = true;
-        }
-
-        ImGui.setCursorPos(688, 128);
-        if (ImGui.invisibleButton("ViewInvetorySpells", 75, 30)) {
-            playSound(SND_CLICK);
-            USER.getUserInventory().setVisible(false);
-            this.viewInventory = false;
-        }
-
-        /////// Inventory
+    // Inventario y hechizos
+    private void renderInventorySection() {
         if (viewInventory) USER.getUserInventory().drawInventory();
         else {
             ImGui.setCursorPos(586, 126);
             ImGui.image(backgroundInventorySpells, 198, 282);
             USER.getInventorySpells().draw();
         }
+    }
 
-        USER.getUserInventory().updateTimers();
-
-        /////// Console
-        Console.INSTANCE.drawConsole();
-
-        ImGui.end();
+    private void drawStat(int x, int y, String text) {
+        ImGui.setCursorPos(x, y);
+        ImGui.pushStyleVar(ImGuiStyleVar.SelectableTextAlign, STAT_ALIGN[0], STAT_ALIGN[1]);
+        ImGui.pushStyleColor(ImGuiCol.HeaderHovered, TRANSPARENT_COLOR);
+        ImGui.pushStyleColor(ImGuiCol.HeaderActive, TRANSPARENT_COLOR);
+        ImGui.selectable(text, false, ImGuiSelectableFlags.None, STAT_WIDTH, STAT_HEIGHT);
+        ImGui.popStyleColor();
+        ImGui.popStyleColor();
+        ImGui.popStyleVar();
     }
 
     private void drawShapes() {
