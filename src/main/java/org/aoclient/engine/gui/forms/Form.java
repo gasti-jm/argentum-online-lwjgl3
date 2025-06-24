@@ -15,6 +15,8 @@ import java.io.InputStream;
 import java.net.URI;
 import java.nio.ByteBuffer;
 
+import static org.aoclient.engine.Window.SCREEN_HEIGHT;
+import static org.aoclient.engine.Window.SCREEN_WIDTH;
 import static org.aoclient.scripts.Compressor.readResource;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL12.GL_CLAMP_TO_EDGE;
@@ -78,7 +80,17 @@ public abstract class Form {
         // Guardar posición del mouse al empezar a arrastrar
         if (isTitleBarActive) {
             ImVec2 delta = ImGui.getIO().getMouseDelta();
-            ImGui.setWindowPos(windowPos.x + delta.x, windowPos.y + delta.y);
+
+            final float newPosX = windowPos.x + delta.x;
+            final float newPosY = windowPos.y + delta.y;
+
+            if (
+                    (newPosX > 0 && newPosX < SCREEN_WIDTH) && (newPosY > 0 && newPosY < SCREEN_HEIGHT)
+            ) {
+                ImGui.setWindowPos(newPosX, newPosY);
+            }
+
+
         }
     }
 
