@@ -78,8 +78,8 @@ public enum Window {
         // Sacamos esto por ahora, sino no va a ser compatible con linux. Habria que testiar en MacOS
         //glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
         //glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GLFW_TRUE);
-//        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-//        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
+        //glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+        //glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
 
         glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
         glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
@@ -87,12 +87,9 @@ public enum Window {
         glfwWindowHint(GLFW_DECORATED, GLFW_FALSE);
 
         // Create the window
-        window = glfwCreateWindow(this.width, this.height, this.title,
-                options.isFullscreen() ? glfwGetPrimaryMonitor() : NULL,
-                NULL);
+        window = glfwCreateWindow(this.width, this.height, this.title, options.isFullscreen() ? glfwGetPrimaryMonitor() : NULL, NULL);
 
-        if (window == NULL)
-            throw new IllegalStateException("Failed to create the GLFW window.");
+        if (window == NULL) throw new IllegalStateException("Failed to create the GLFW window.");
 
         glfwSetCursorPosCallback(window, MouseListener::mousePosCallback);
         glfwSetMouseButtonCallback(window, MouseListener::mouseButtonCallback);
@@ -118,7 +115,62 @@ public enum Window {
             );
         } // the stack frame is popped automatically
 
-        this.loadIcon();
+        loadIcon();
+
+        // ========================================================================
+        // Inicializacion de audio (OpenAL)
+        // ========================================================================
+
+        String defaultDeviceName = alcGetString(0, ALC_DEFAULT_DEVICE_SPECIFIER);
+        audioDevice = alcOpenDevice(defaultDeviceName);
+
+        // Verifica si el dispositivo se abrio correctamente
+        if (audioDevice == NULL) {
+            System.out.println("Could not open default audio device: " + defaultDeviceName);
+
+            // Intenta con el primer dispositivo disponible
+            String deviceList = alcGetString(0, ALC_DEVICE_SPECIFIER);
+            if (deviceList != null && !deviceList.isEmpty()) {
+                System.out.println("Trying with the first available device: " + deviceList);
+                audioDevice = alcOpenDevice(deviceList);
+            }
+
+            // Si aun falla, intenta sin especificar dispositivo
+            if (audioDevice == NULL) {
+                System.out.println("Trying to open unspecified audio device...");
+                audioDevice = alcOpenDevice((String) null);
+            }
+
+        }
+
+        // Solo crea el contexto si tenemos un dispositivo valido
+        if (audioDevice != NULL) {
+            int[] attributes = {0};
+            audioContext = alcCreateContext(audioDevice, attributes);
+
+            if (audioContext == NULL) {
+                System.out.println("The audio context could not be created");
+                alcCloseDevice(audioDevice);
+                audioDevice = NULL;
+            } else {
+                alcMakeContextCurrent(audioContext);
+
+                ALCCapabilities alcCapabilities = ALC.createCapabilities(audioDevice);
+                ALCapabilities alCapabilities = AL.createCapabilities(alcCapabilities);
+
+                if (!alCapabilities.OpenAL10) {
+                    System.out.println("OpenAL 1.0 is not supported");
+                    alcDestroyContext(audioContext);
+                    alcCloseDevice(audioDevice);
+                    audioDevice = NULL;
+                    audioContext = NULL;
+                }
+            }
+        } else System.out.println("Client running without audio!");
+
+        // ========================================================================
+        // Inicializacion de OpenGL
+        // ========================================================================
 
         // Make the OpenGL context current
         glfwMakeContextCurrent(window);
@@ -131,26 +183,14 @@ public enum Window {
 
         //this.loadCursor();
 
-        // Initialize the audio device
-        String defaultDeviceName = alcGetString(0, ALC_DEFAULT_DEVICE_SPECIFIER);
-        audioDevice = alcOpenDevice(defaultDeviceName);
-
-        int[] attributes = {0};
-        audioContext = alcCreateContext(audioDevice, attributes);
-        alcMakeContextCurrent(audioContext);
-
-        ALCCapabilities alcCapabilities = ALC.createCapabilities(audioDevice);
-        ALCapabilities alCapabilities = AL.createCapabilities(alcCapabilities);
-
-        if (!alCapabilities.OpenAL10) throw new IllegalStateException("Audio library not supported.");
-
+        // Inicializa OpenGL
         GL.createCapabilities();
 
         glEnable(GL_TEXTURE_2D);
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
         glViewport(0, 0, width, height);
-        glOrtho(0, SCREEN_WIDTH, SCREEN_HEIGHT, 0, 1, -1);
+        glOrtho(0, 800, 600, 0, 1, -1);
 
         glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
         glEnable(GL_ALPHA);
@@ -164,9 +204,9 @@ public enum Window {
      * Destruye el contexto de LWJGL3 para el cierre del programa.
      */
     public void close() {
-        // Destroy the audio context
-        alcDestroyContext(audioContext);
-        alcCloseDevice(audioDevice);
+        // Destroy the audio context solo si se inicializó
+        if (audioContext != NULL) alcDestroyContext(audioContext);
+        if (audioDevice != NULL) alcCloseDevice(audioDevice);
 
         // Free the window callbacks and destroy the window
         glfwFreeCallbacks(window);
@@ -241,6 +281,15 @@ public enum Window {
 
     public void setCursorCrosshair(boolean cursorCrosshair) {
         this.cursorCrosshair = cursorCrosshair;
+    }
+
+    /**
+     * Verifica si el audio esta disponible en el contexto actual.
+     *
+     * @return true si el dispositivo de audio y el contexto de audio no son nulos, false en caso contrario
+     */
+    public boolean isAudioAvailable() {
+        return audioDevice != NULL && audioContext != NULL;
     }
 
     /**

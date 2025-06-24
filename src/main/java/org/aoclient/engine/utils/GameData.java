@@ -1,14 +1,11 @@
 package org.aoclient.engine.utils;
 
-import org.aoclient.engine.Sound;
 import org.aoclient.engine.game.Options;
 import org.aoclient.engine.game.models.Character;
 import org.aoclient.engine.renderer.Surface;
 import org.aoclient.engine.utils.inits.*;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 
 import static org.aoclient.engine.Messages.loadMessages;
 import static org.aoclient.engine.game.models.Character.eraseAllChars;
@@ -48,8 +45,6 @@ public final class GameData {
     public static MapData[][] mapData;
     public static boolean[] bLluvia;
     public static Character[] charList = new Character[10000 + 1]; // se agrega aca porque hay mapas que tienen NPCs.
-    public static Map<String, Sound> sounds = new HashMap<>();
-    public static Map<String, Sound> musics = new HashMap<>();
     public static Options options = Options.INSTANCE;
     private static BinaryDataReader reader;
 
