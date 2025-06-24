@@ -1,21 +1,20 @@
 package org.aoclient.network.protocol.command.handlers.basic;
 
-import org.aoclient.engine.renderer.RGBColor;
+import org.aoclient.network.protocol.command.BaseCommandHandler;
 import org.aoclient.network.protocol.command.CommandContext;
 import org.aoclient.network.protocol.command.CommandException;
-import org.aoclient.network.protocol.command.CommandHandler;
-
-import java.nio.charset.StandardCharsets;
 
 import static org.aoclient.network.protocol.Protocol.writeChangeDescription;
 
-public class ChangeDescriptionCommand implements CommandHandler {
+public class ChangeDescriptionCommand extends BaseCommandHandler {
 
     @Override
     public void handle(CommandContext context) throws CommandException {
-        if (user.isDead())
-            console.addMsgToConsole(new String("You are dead!".getBytes(), StandardCharsets.UTF_8), false, true, new RGBColor());
-        else writeChangeDescription(context.getArgumentsRaw());
+        requireArguments(context, -1, "/desc <description>"); // TODO Podria verificarse en el proceso de comandos ya que la mayoria de comandos tiene argumentos
+        /* Me parece que si en la descripcion usa espacios al principio o al final, el servidor los elimina, por que desde aca, el
+         * argumento en crudo (getArgumentsRaw()) permite los espacios. Ademas, el servidor tambien valida si la descripcion tiene
+         * caracteres invalidos, lo cual este diseño es bastente inconsistente. */
+        writeChangeDescription(context.getArgumentsRaw());
     }
 
 }

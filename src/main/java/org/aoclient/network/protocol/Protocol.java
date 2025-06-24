@@ -475,9 +475,9 @@ public class Protocol {
         outputBuffer.writeByte(ClientPacket.INQUIRY.getId());
     }
 
-    public static void writeInquiryVote(int opt) {
+    public static void writeInquiryVote(int op) {
         outputBuffer.writeByte(ClientPacket.INQUIRY_VOTE.getId());
-        outputBuffer.writeByte(opt);
+        outputBuffer.writeByte(op);
     }
 
     public static void writeGuildMessage(String message) {
@@ -644,10 +644,10 @@ public class Protocol {
         outputBuffer.writeInteger(Map);
     }
 
-    public static void writeCreateItem(int itemIndex) {
+    public static void writeCreateObject(int objId) {
         outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
-        outputBuffer.writeByte(GMCommand.CREATE_ITEM.getId());
-        outputBuffer.writeInteger((short) itemIndex);
+        outputBuffer.writeByte(GMCommand.CREATE_OBJECT.getId());
+        outputBuffer.writeInteger((short) objId);
     }
 
     public static void writeWarpMeToTarget() {
@@ -929,7 +929,6 @@ public class Protocol {
     public static void writeSetCharDescription(String desc) {
         outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
         outputBuffer.writeByte(GMCommand.SET_CHAR_DESCRIPTION.getId());
-
         outputBuffer.writeCp1252String(desc);
     }
 
@@ -1212,7 +1211,6 @@ public class Protocol {
     public static void writeChaosArmour(int armourIndex, short objectIndex) {
         outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
         outputBuffer.writeByte(GMCommand.CHAOS_ARMOUR.getId());
-
         outputBuffer.writeByte(armourIndex);
         outputBuffer.writeInteger(objectIndex);
     }

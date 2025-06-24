@@ -1,24 +1,32 @@
 package org.aoclient.network.protocol.command.handlers.gm;
 
-import org.aoclient.engine.renderer.RGBColor;
+import org.aoclient.network.protocol.command.BaseCommandHandler;
 import org.aoclient.network.protocol.command.CommandContext;
 import org.aoclient.network.protocol.command.CommandException;
-import org.aoclient.network.protocol.command.CommandHandler;
-
-import java.nio.charset.StandardCharsets;
 
 import static org.aoclient.network.protocol.Protocol.writeSetIniVar;
 
-public class SetIniVarCommand implements CommandHandler {
+public class SetIniVarCommand extends BaseCommandHandler {
+
+    private static final String USAGE = "/setinivar <llave> <clave> <valor>";
 
     @Override
     public void handle(CommandContext context) throws CommandException {
-        if (context.getArgumentCount() == 3) {
-            context.setArgument(2, context.getArgument(2).replace("+", " ")); // ?
-            // argumentosAll[2] = context.getArgument(2).replace("+", " ");
-            writeSetIniVar(context.getArgument(0), context.getArgument(1), context.getArgument(2));
-        } else
-            console.addMsgToConsole(new String("Incorrect parameters. Use \"/SETINIVAR llave clave valor\".".getBytes(), StandardCharsets.UTF_8), false, true, new RGBColor());
+        requireArguments(context, 3, USAGE);
+
+        String llave = context.getArgument(0);
+        requireString(context, 0, "llave");
+
+        String clave = context.getArgument(1);
+        requireString(context, 1, "clave");
+
+        String valor = context.getArgument(2);
+        requireString(context, 2, "valor");
+
+        // Reemplaza "+" por espacios en el valor (funcionalidad original)
+        valor = valor.replace("+", " ");
+
+        writeSetIniVar(llave, clave, valor);
     }
 
 }

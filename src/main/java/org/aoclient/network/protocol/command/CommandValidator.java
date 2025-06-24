@@ -1,42 +1,15 @@
 package org.aoclient.network.protocol.command;
 
-import org.aoclient.engine.game.User;
-import org.aoclient.network.protocol.types.NumericType;
+/*
+ * Enumeracion {@code CommandValidator} utilizada para realizar validaciones relacionadas con comandos y direcciones IP.
+ * <p>
+ * Contiene metodos utilitarios para validar direcciones IPv4 y manipular cadenas de texto asociadas a comandos, proporcionando
+ * herramientas para manejar entradas de comandos en un sistema de red.
+ */
 
-public class CommandValidator {
+public enum CommandValidator {
 
-    public void requireAlive() throws CommandException {
-        if (User.INSTANCE.isDead())
-            throw new CommandException("¡Estás muerto!");
-    }
-
-    public void requireArguments(CommandContext context, int count) throws CommandException {
-        if (context.getArgumentCount() < count)
-            throw new CommandException("Faltan parámetros para el comando " + context.getCommand());
-    }
-
-    public void requireNumeric(String value, String paramName) throws CommandException {
-        try {
-            Integer.parseInt(value);
-        } catch (NumberFormatException e) {
-            throw new CommandException(paramName + " debe ser un número válido");
-        }
-    }
-
-    public boolean isValidNumber(String numero, NumericType tipo) {
-        if (!numero.matches("-?\\d+(\\.\\d+)?")) return false;
-        try {
-            long valor = Long.parseLong(numero);
-            return switch (tipo) {
-                case BYTE -> valor >= 0 && valor <= 255;
-                case INTEGER -> valor >= -32768 && valor <= 32767;
-                case LONG -> valor >= -2147483648L && valor <= 2147483647L;
-                case TRIGGER -> valor >= 0 && valor <= 6;
-            };
-        } catch (NumberFormatException e) {
-            return false;
-        }
-    }
+    INSTANCE;
 
     // FIXME Esta cortando mal la cadena ejemplo: "jua.chr" falta la n
     public String[] AEMAILSplit(String text) {
@@ -50,16 +23,48 @@ public class CommandValidator {
         return tmpArr;
     }
 
+    /**
+     * Verifica si una direccion IP proporcionada es una direccion IPv4 valida.
+     * <p>
+     * Una direccion IPv4 valida debe cumplir con los siguientes criterios:
+     * <ul>
+     *  <li>Estar compuesta de exactamente cuatro segmentos separados por puntos (".").</li>
+     *  <li>Cada segmento debe ser un numero entero entre 0 y 255.</li>
+     *  <li>No debe contener ceros a la izquierda en ninguno de los segmentos, excepto cuando el segmento sea "0".</li>
+     * </ul>
+     *
+     * @param ip direccion IP que se desea validar como cadena de texto
+     * @return {@code true} si la direccion IP es una IPv4 valida; {@code false} en caso contrario, o si la cadena es {@code null}
+     */
     public boolean isValidIPv4(String ip) {
-        String[] parts = ip.split("\\.");
+        if (ip == null) return false;
+        String[] parts = ip.split("\\.", -1);
         if (parts.length != 4) return false;
-        for (String part : parts)
-            if (!isValidNumber(part, NumericType.BYTE)) return false;
+        for (String part : parts) {
+            try {
+                int num = Integer.parseInt(part);
+                if (num < 0 || num > 255) return false;
+                // Evita leading zeros
+                if (!part.equals(String.valueOf(num))) return false;
+            } catch (NumberFormatException e) {
+                return false;
+            }
+        }
         return true;
     }
 
-    // TODO Se podria cambiar de nombre
-    public int[] str2ipv4l(String ip) {
+    /**
+     * Convierte una direccion IPv4 en formato de texto a un arreglo de enteros.
+     * <p>
+     * La direccion IP debe estar compuesta por cuatro segmentos separados por puntos ("."), donde cada segmento debe ser un
+     * numero entero entre 0 y 255. Si alguno de los criterios no se cumple o si el formato no es valido, el metodo devolvera
+     * {@code null}.
+     *
+     * @param ip direccion IPv4 en formato de cadena que se desea convertir
+     * @return un arreglo de cuatro enteros que representan cada segmento de la direccion IP, o {@code null} si la direccion no es
+     * valida
+     */
+    public int[] parseIPv4ToArray(String ip) {
         String[] parts = ip.split("\\.");
         if (parts.length != 4) return null;
         int[] ipArray = new int[4];

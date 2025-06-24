@@ -1,21 +1,19 @@
 package org.aoclient.network.protocol.command.handlers.basic;
 
-import org.aoclient.engine.renderer.RGBColor;
+import org.aoclient.network.protocol.command.BaseCommandHandler;
 import org.aoclient.network.protocol.command.CommandContext;
 import org.aoclient.network.protocol.command.CommandException;
-import org.aoclient.network.protocol.command.CommandHandler;
-
-import java.nio.charset.StandardCharsets;
 
 import static org.aoclient.network.protocol.Protocol.writeRoleMasterRequest;
 
-public class RoleMasterRequestCommand implements CommandHandler {
+public class RoleMasterRequestCommand extends BaseCommandHandler {
 
     @Override
     public void handle(CommandContext context) throws CommandException {
-        if (context.hasArguments()) writeRoleMasterRequest(context.getArgumentsRaw());
-        else
-            console.addMsgToConsole(new String("Write a message.".getBytes(), StandardCharsets.UTF_8), false, true, new RGBColor());
+        requireArguments(context, -1, "/rol <message>");
+        requireValidString(context, "message", REGEX);
+        String message = context.getArgumentsRaw().trim();
+        writeRoleMasterRequest(message);
     }
 
 }

@@ -1,21 +1,20 @@
 package org.aoclient.network.protocol.command.handlers.gm;
 
-import org.aoclient.engine.renderer.RGBColor;
+import org.aoclient.network.protocol.command.BaseCommandHandler;
 import org.aoclient.network.protocol.command.CommandContext;
 import org.aoclient.network.protocol.command.CommandException;
-import org.aoclient.network.protocol.command.CommandHandler;
-
-import java.nio.charset.StandardCharsets;
 
 import static org.aoclient.network.protocol.Protocol.writeServerMessage;
 
-public class ServerMessageCommand implements CommandHandler {
+// TODO Raro que no se pase nada por parametro al metodo write()
+
+public class ServerMessageCommand extends BaseCommandHandler {
 
     @Override
     public void handle(CommandContext context) throws CommandException {
-        if (context.hasArguments()) writeServerMessage();
-        else
-            console.addMsgToConsole(new String("Write a mesagge.".getBytes(), StandardCharsets.UTF_8), false, true, new RGBColor());
+        requireArguments(context, -1, "/rmsg <message>");
+        requireValidString(context, "message", REGEX);
+        writeServerMessage();
     }
 
 }

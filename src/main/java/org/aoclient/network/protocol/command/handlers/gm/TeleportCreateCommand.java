@@ -1,35 +1,39 @@
 package org.aoclient.network.protocol.command.handlers.gm;
 
-import org.aoclient.engine.renderer.RGBColor;
+import org.aoclient.network.protocol.command.BaseCommandHandler;
 import org.aoclient.network.protocol.command.CommandContext;
 import org.aoclient.network.protocol.command.CommandException;
-import org.aoclient.network.protocol.command.CommandHandler;
-import org.aoclient.network.protocol.types.NumericType;
-
-import java.nio.charset.StandardCharsets;
 
 import static org.aoclient.network.protocol.Protocol.writeTeleportCreate;
 
-public class TeleportCreateCommand implements CommandHandler {
+public class TeleportCreateCommand extends BaseCommandHandler {
+
+    private static final String USAGE = "/ct <map> <x> <y> [radius]";
 
     @Override
     public void handle(CommandContext context) throws CommandException {
-        if (context.hasArguments() && context.getArgumentCount() >= 3) {
-            if (validator.isValidNumber(context.getArgument(0), NumericType.INTEGER) &&
-                    validator.isValidNumber(context.getArgument(1), NumericType.BYTE) &&
-                    validator.isValidNumber(context.getArgument(2), NumericType.BYTE)) {
-                if (context.getArgumentCount() == 3)
-                    writeTeleportCreate(Short.parseShort(context.getArgument(0)), Integer.parseInt(context.getArgument(1)), Integer.parseInt(context.getArgument(2)), 0);
-                else {
-                    if (validator.isValidNumber(context.getArgument(3), NumericType.BYTE))
-                        writeTeleportCreate(Short.parseShort(context.getArgument(0)), Integer.parseInt(context.getArgument(1)), Integer.parseInt(context.getArgument(2)), Integer.parseInt(context.getArgument(3)));
-                    else
-                        console.addMsgToConsole(new String("Invalid value. Use \"/CT map x y radius(optional)\".".getBytes(), StandardCharsets.UTF_8), false, true, new RGBColor());
-                }
-            } else
-                console.addMsgToConsole(new String("Invalid value. Use \"/CT map x y radius(optional)\".".getBytes(), StandardCharsets.UTF_8), false, true, new RGBColor());
-        } else
-            console.addMsgToConsole(new String("Missing parameters. Use Use \"/CT map x y radius(optional)\".".getBytes(), StandardCharsets.UTF_8), false, true, new RGBColor());
+        requireArguments(context, 3, USAGE);
+
+        // Valida que tenga 3 o 4 argumentos
+        if (context.getArgumentCount() < 3 || context.getArgumentCount() > 4) showError("Missing arguments. Usage: " + USAGE);
+
+        requireInteger(context, 0, "map");
+        short map = Short.parseShort(context.getArgument(0));
+
+        requireInteger(context, 1, "x");
+        int x = Integer.parseInt(context.getArgument(1));
+
+        requireInteger(context, 2, "y");
+        int y = Integer.parseInt(context.getArgument(2));
+
+        // Maneja argumento opcional radius
+        int radius = 0; // valor por defecto
+        if (context.getArgumentCount() == 4) {
+            requireInteger(context, 3, "radius");
+            radius = Integer.parseInt(context.getArgument(3));
+        }
+
+        writeTeleportCreate(map, x, y, radius);
     }
 
 }
