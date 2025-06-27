@@ -18,7 +18,7 @@ public class UnbanIpCommand extends BaseCommandHandler {
         String ip = context.getArgument(0);
         requireValidIP(ip);
 
-        writeUnbanIP(CommandValidator.INSTANCE.parseIPv4ToArray(ip));
+        writeUnbanIP(CommandValidator.parseIPv4ToArray(ip));
     }
 
     /**
@@ -28,7 +28,7 @@ public class UnbanIpCommand extends BaseCommandHandler {
      * @throws CommandException si la IP no es válida
      */
     private void requireValidIP(String ip) throws CommandException {
-        if (!CommandValidator.INSTANCE.isValidIPv4(ip))
+        if (!CommandValidator.isValidIPv4(ip))
             showError("Invalid IP address, must be a valid IPv4 address (e.g., 192.168.1.1).");
     }
 

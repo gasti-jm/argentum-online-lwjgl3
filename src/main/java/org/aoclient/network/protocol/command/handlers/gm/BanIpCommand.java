@@ -18,10 +18,10 @@ public class BanIpCommand extends BaseCommandHandler {
         String ipOrNick = context.getArgument(0);
         String reason = context.getArgument(1);
 
-        if (CommandValidator.INSTANCE.isValidIPv4(ipOrNick))
-            writeBanIP(true, CommandValidator.INSTANCE.parseIPv4ToArray(ipOrNick), "", reason); // Banea por IP
+        if (CommandValidator.isValidIPv4(ipOrNick))
+            writeBanIP(true, CommandValidator.parseIPv4ToArray(ipOrNick), "", reason); // Banea por IP
         else
-            writeBanIP(false, CommandValidator.INSTANCE.parseIPv4ToArray("0.0.0.0"), ipOrNick, reason); // Banea por nick (buscar IP del jugador)
+            writeBanIP(false, CommandValidator.parseIPv4ToArray("0.0.0.0"), ipOrNick, reason); // Banea por nick (buscar IP del jugador)
 
     }
 
