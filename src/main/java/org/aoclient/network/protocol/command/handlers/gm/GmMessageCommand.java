@@ -10,9 +10,9 @@ public class GmMessageCommand extends BaseCommandHandler {
 
     @Override
     public void handle(CommandContext context) throws CommandException {
-        requireArguments(context, 1, "/gmsg <message>");
+        requireArguments(context, -1, "/gmsg <message>");
         requireValidString(context, "message", REGEX);
-        String message = context.getArgument(0);
+        String message = context.getArgumentsRaw().trim();
         writeGMMessage(message);
     }
 
