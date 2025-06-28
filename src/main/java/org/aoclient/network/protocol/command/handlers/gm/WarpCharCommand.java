@@ -2,6 +2,7 @@ package org.aoclient.network.protocol.command.handlers.gm;
 
 import org.aoclient.engine.game.Options;
 import org.aoclient.network.protocol.command.BaseCommandHandler;
+import org.aoclient.network.protocol.command.Command;
 import org.aoclient.network.protocol.command.CommandContext;
 import org.aoclient.network.protocol.command.CommandException;
 
@@ -13,9 +14,9 @@ import static org.aoclient.network.protocol.Protocol.writeWarpChar;
  * Formatos aceptados:
  * <ul>
  *  <li>{@code /telep <x> <y>}               - Teletransporta al usuario actual en el mismo mapa
- *  <li>{@code /telep <nick> <x> <y>}        - Teletransporta al nick al mismo mapa donde esta el usuario
+ *  <li>{@code /telep <nick> <x> <y>}        - Teletransporta a otro jugador al mapa actual
  *  <li>{@code /telep <map> <x> <y>}         - Teletransporta al usuario actual al mapa especificado
- *  <li>{@code /telep <nick> <map> <x> <y>}  - Teletransporta al nick al mapa y coordenadas especificados
+ *  <li>{@code /telep <nick> <map> <x> <y>}  - Teletransporta a otro jugador al mapa especificado
  * </ul>
  * <p>
  * NOTA: Para distinguir entre nick y map en el formato de 3 argumentos:
@@ -28,6 +29,8 @@ import static org.aoclient.network.protocol.Protocol.writeWarpChar;
  * el servidor y nunca se cual es el zona sin mapear.
  */
 
+@Command("/telep")
+@SuppressWarnings("unused")
 public class WarpCharCommand extends BaseCommandHandler {
 
     private static final int MAX_COORDINATE = 100;

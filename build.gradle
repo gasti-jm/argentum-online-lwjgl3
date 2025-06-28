@@ -49,6 +49,8 @@ dependencies {
     implementation "org.tinylog:tinylog-api:$loggerVersion"
     implementation "org.tinylog:tinylog-impl:$loggerVersion"
 
+    implementation 'org.reflections:reflections:0.10.2'
+
     // ImGUI dependencies
     implementation "io.github.spair:imgui-java-app:$imguiVersion"
     implementation "io.github.spair:imgui-java-binding:$imguiVersion"

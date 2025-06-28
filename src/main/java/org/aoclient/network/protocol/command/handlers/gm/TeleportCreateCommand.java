@@ -1,11 +1,14 @@
 package org.aoclient.network.protocol.command.handlers.gm;
 
 import org.aoclient.network.protocol.command.BaseCommandHandler;
+import org.aoclient.network.protocol.command.Command;
 import org.aoclient.network.protocol.command.CommandContext;
 import org.aoclient.network.protocol.command.CommandException;
 
 import static org.aoclient.network.protocol.Protocol.writeTeleportCreate;
 
+@Command("/ct")
+@SuppressWarnings("unused")
 public class TeleportCreateCommand extends BaseCommandHandler {
 
     private static final String USAGE = "/ct <map> <x> <y> [radius]";

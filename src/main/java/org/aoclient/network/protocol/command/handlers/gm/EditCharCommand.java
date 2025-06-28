@@ -1,6 +1,7 @@
 package org.aoclient.network.protocol.command.handlers.gm;
 
 import org.aoclient.network.protocol.command.BaseCommandHandler;
+import org.aoclient.network.protocol.command.Command;
 import org.aoclient.network.protocol.command.CommandContext;
 import org.aoclient.network.protocol.command.CommandException;
 import org.aoclient.network.protocol.types.CharacterEditType;
@@ -39,6 +40,8 @@ import static org.aoclient.network.protocol.Protocol.writeEditChar;
  * {@code /mod player1 agregar 1000}
  */
 
+@Command("/mod")
+@SuppressWarnings("unused")
 public class EditCharCommand extends BaseCommandHandler {
 
     @Override

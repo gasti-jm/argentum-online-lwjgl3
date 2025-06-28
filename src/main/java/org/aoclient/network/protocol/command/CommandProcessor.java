@@ -1,22 +1,13 @@
 package org.aoclient.network.protocol.command;
 
 import org.aoclient.engine.game.Console;
-import org.aoclient.engine.gui.ImGUISystem;
-import org.aoclient.engine.gui.forms.FNewPassword;
 import org.aoclient.engine.renderer.RGBColor;
 import org.aoclient.network.protocol.Protocol;
-import org.aoclient.network.protocol.command.handlers.basic.*;
-import org.aoclient.network.protocol.command.handlers.gm.*;
-import org.aoclient.network.protocol.command.handlers.guild.*;
-import org.aoclient.network.protocol.command.handlers.party.PartyAcceptMemberCommand;
-import org.aoclient.network.protocol.command.handlers.party.PartyKickCommand;
-import org.aoclient.network.protocol.command.handlers.party.PartyMessageCommand;
-import org.aoclient.network.protocol.command.handlers.party.PartySetLeaderCommand;
+import org.reflections.Reflections;
 
 import java.util.HashMap;
 import java.util.Map;
-
-import static org.aoclient.network.protocol.Protocol.*;
+import java.util.Set;
 
 /**
  * Procesador de comandos del protocolo que procesa entradas de texto del usuario y las convierte en llamadas al protocolo de
@@ -38,7 +29,7 @@ public enum CommandProcessor {
 
     INSTANCE;
 
-    // public final CommandValidator validator = new CommandValidator();
+    /** Mapa para almacenar los comandos y sus handlers, usando comandos como clave y sus handlers como valor. */
     private final Map<String, CommandHandler> commands = new HashMap<>();
 
     CommandProcessor() {
@@ -47,192 +38,166 @@ public enum CommandProcessor {
 
     public void process(String rawCommand) {
         if (rawCommand == null || rawCommand.trim().isEmpty()) return; // TODO Es necesario hacer trim()?
-
         CommandContext context = new CommandContext(rawCommand);
-
         if (context.isCommand()) execute(context);
         else if (context.isYell()) Protocol.writeYell(context.getMessage());
         else Protocol.writeTalk(context.getMessage());
-
     }
 
     private void registerCommands() {
-        // Comandos basicos
-        commands.put("/online", cmd -> writeOnline());
-        commands.put("/salir", cmd -> writeQuit());
-        commands.put("/balance", cmd -> writeRequestAccountState());
-        commands.put("/entrenar", cmd -> writeTrainList());
-        commands.put("/descansar", cmd -> writeRest());
-        commands.put("/meditar", cmd -> writeMeditate());
-        commands.put("/consulta", cmd -> writeConsultation());
-        commands.put("/resucitar", cmd -> writeResucitate());
-        commands.put("/curar", cmd -> writeHeal());
-        commands.put("/est", cmd -> writeRequestStats());
-        commands.put("/ayuda", cmd -> writeHelp());
-        commands.put("/comerciar", cmd -> writeCommerceStart());
-        commands.put("/boveda", cmd -> writeBankStart());
-        commands.put("/enlistar", cmd -> writeEnlist());
-        commands.put("/informacion", cmd -> writeInformation());
-        commands.put("/recompensa", cmd -> writeReward());
-        commands.put("/motd", cmd -> writeRequestMOTD());
-        commands.put("/uptime", cmd -> writeUpTime());
-        commands.put("/compartirnpc", cmd -> writeShareNpc());
-        commands.put("/nocompartirnpc", cmd -> writeStopSharingNpc());
-        commands.put("/encuesta", new InquiryCommand());
-        commands.put("/centinela", new CentinelReportCommand());
-        commands.put("/bmsg", new CouncilMessageCommand());
-        commands.put("/rol", new RoleMasterRequestCommand());
-        commands.put("/gm", cmd -> writeGMRequest());
-        commands.put("/bug", new BugReportCommand());
-        commands.put("/desc", new ChangeDescriptionCommand());
-        commands.put("/contraseña", cmd -> ImGUISystem.INSTANCE.show(new FNewPassword()));
-        commands.put("/apostar", new GambleCommand());
-        commands.put("/retirarfaccion", cmd -> writeLeaveFaction());
-        commands.put("/retirar", new BankExtractGoldCommand());
-        commands.put("/depositar", new BankDepositGoldCommand());
-        commands.put("/denunciar", new DenounceCommand());
+        // Auto registro de comandos complejos con anotaciones y reflexion
+        autoRegisterAnnotatedCommands();
+        // Registro directo de comandos simples con builder pattern
+        registerSimpleCommands();
+    }
 
-        // Comandos de GM
-        commands.put("/gmsg", new GmMessageCommand());
-        commands.put("/showname", cmd -> writeShowName());
-        commands.put("/onlinereal", cmd -> writeOnlineRoyalArmy());
-        commands.put("/onlinecaos", cmd -> writeOnlineChaosLegion());
-        commands.put("/ircerca", new GoNearbyCommand());
-        commands.put("/rem", new CommentCommand());
-        commands.put("/hora", cmd -> writeServerTime());
-        commands.put("/donde", new WhereCommand());
-        commands.put("/nene", new CreaturesInMapCommand());
-        commands.put("/teleploc", cmd -> writeWarpMeToTarget());
-        commands.put("/telep", new WarpCharCommand());
-        commands.put("/silenciar", new SilenceCommand());
-        commands.put("/show", new ShowCommand());
-        commands.put("/ira", new GoToCharCommand());
-        commands.put("/invisible", cmd -> writeInvisible());
-        commands.put("/panelgm", cmd -> writeGMPanel());
-        commands.put("/trabajando", cmd -> writeWorking());
-        commands.put("/ocultando", cmd -> writeHiding());
-        commands.put("/carcel", new JailCommand());
-        commands.put("/rmata", cmd -> writeKillNPC());
-        commands.put("/advertencia", new WarnUserCommand());
-        commands.put("/mod", new EditCharCommand());
-        commands.put("/info", new RequestCharInfoCommand());
-        commands.put("/stat", new RequestCharStatsCommand());
-        commands.put("/bal", new RequestCharGoldCommand());
-        commands.put("/inv", new RequestCharInventoryCommand());
-        commands.put("/bov", new RequestCharBankCommand());
-        commands.put("/skills", new RequestCharSkillsCommand());
-        commands.put("/revivir", new ReviveCharCommand());
-        commands.put("/onlinegm", cmd -> writeOnlineGM());
-        commands.put("/onlinemap", new OnlineMapCommand());
-        commands.put("/perdon", new ForgiveCommand());
-        commands.put("/echar", new KickCommand());
-        commands.put("/ejecutar", new ExecuteCommand());
-        commands.put("/ban", new BanCharCommand());
-        commands.put("/unban", new UnbanCharCommand());
-        commands.put("/seguir", cmd -> writeNPCFollow());
-        commands.put("/sum", new SummonCharCommand());
-        commands.put("/cc", cmd -> writeSpawnListRequest());
-        commands.put("/resetinv", cmd -> writeResetNPCInventory());
-        commands.put("/limpiar", cmd -> writeCleanWorld());
-        commands.put("/rmsg", new ServerMessageCommand());
-        commands.put("/nick2ip", new NickToIpCommand());
-        commands.put("/ip2nick", new IpToNickCommand());
-        commands.put("/ct", new TeleportCreateCommand());
-        commands.put("/dt", cmd -> writeTeleportDestroy());
-        commands.put("/lluvia", cmd -> writeRainToggle());
-        commands.put("/setdesc", new SetCharDescriptionCommand());
-        commands.put("/playmusic", new PlayMusicCommand());
-        commands.put("/realmsg", new RoyaleArmyMessageCommand());
-        commands.put("/caosmsg", new ChaosLegionMessageCommand());
-        commands.put("/ciumsg", new CitizenMessageCommand());
-        commands.put("/crimsg", new CriminalMessageCommand());
-        commands.put("/talkas", new TalkAsNpcCommand());
-        commands.put("/masdest", cmd -> writeDestroyAllItemsInArea());
-        commands.put("/aceptconse", new AcceptRoyalCouncilMemberCommand());
-        commands.put("/aceptconsecaos", new AcceptChaosCouncilMemberCommand());
-        commands.put("/piso", cmd -> writeItemsInTheFloor());
-        commands.put("/estupido", new MakeDumbCommand());
-        commands.put("/noestupido", new MakeDumbNoMoreCommand());
-        commands.put("/dumpsecurity", cmd -> writeDumpIPTables());
-        commands.put("/kickconse", new CouncilKickCommand());
-        commands.put("/trigger", new SetTriggerCommand());
-        commands.put("/baniplist", cmd -> writeBannedIPList());
-        commands.put("/banipreload", cmd -> writeBannedIPReload());
-        commands.put("/miembrosclan", new GuildMemberListCommand());
-        commands.put("/banclan", new GuildBanCommand());
-        commands.put("/banip", new BanIpCommand());
-        commands.put("/unbanip", new UnbanIpCommand());
-        commands.put("/co", new CreateObjectCommand());
-        commands.put("/dest", cmd -> writeDestroyItems());
-        commands.put("/nocaos", new ChaosLegionKickCommand());
-        commands.put("/noreal", new RoyalArmyKickCommand());
-        commands.put("/playsound", new PlaySoundCommand());
-        commands.put("/borrarpena", new RemovePunishmentCommand());
-        commands.put("/bloq", cmd -> writeTileBlockedToggle());
-        commands.put("/mata", cmd -> writeKillNPCNoRespawn());
-        commands.put("/masskill", cmd -> writeKillAllNearbyNPCs());
-        commands.put("/lastip", new LastIpCommand());
-        commands.put("/motdcambia", cmd -> writeChangeMOTD());
-        commands.put("/smsg", new SystemMessageCommand());
-        commands.put("/acc", new CreateNpcCommand());
-        commands.put("/racc", new CreateNPCWithRespawnCommand());
-        commands.put("/ai", new ImperialArmourCommand());
-        commands.put("/ac", new ChaosArmourCommand());
-        commands.put("/nave", cmd -> writeNavigateToggle());
-        commands.put("/habilitar", cmd -> writeServerOpenToUsersToggle());
-        commands.put("/apagar", cmd -> writeTurnOffServer());
-        commands.put("/conden", new TurnCriminalCommand());
-        commands.put("/rajar", new ResetFactionsCommand());
-        commands.put("/lastemail", new RequestCharMailCommand());
-        commands.put("/apass", new AlterPasswordCommand());
-        commands.put("/aemail", new AlterMailCommand());
-        commands.put("/aname", new AlterNameCommand());
-        commands.put("/slot", new CheckSlotCommand());
-        commands.put("/centinelaactivado", cmd -> writeToggleCentinelActivated());
-        commands.put("/dobackup", cmd -> writeDoBackup());
-        commands.put("/guardamapa", cmd -> writeSaveMap());
-        commands.put("/modmapinfo", new MapInfoCommand());
-        commands.put("/grabar", cmd -> writeSaveChars());
-        commands.put("/borrar", cmd -> writeCleanSOS());
-        commands.put("/noche", cmd -> writeNight());
-        commands.put("/echartodospjs", cmd -> writeKickAllChars());
-        commands.put("/reloadnpcs", cmd -> writeReloadNPCs());
-        commands.put("/reloadsini", cmd -> writeReloadServerIni());
-        commands.put("/reloadhechizos", cmd -> writeReloadSpells());
-        commands.put("/reloadobj", cmd -> writeReloadObjects());
-        commands.put("/reiniciar", cmd -> writeRestart());
-        commands.put("/autoupdate", cmd -> writeResetAutoUpdate());
-        commands.put("/chatcolor", new ChatColorCommand());
-        commands.put("/ignorado", cmd -> writeIgnored());
-        commands.put("/ping", cmd -> writePing());
-        commands.put("/setinivar", new SetIniVarCommand());
-        commands.put("/hogar", cmd -> writeHome());
+    /**
+     * Registra una serie de comandos simples en el sistema que corresponden a diversas funcionalidades para los diferentes tipos
+     * de usuarios, incluyendo jugadores regulares, gamemasters (GM), y otras funcionalidades especiales como manejo de mascotas,
+     * clanes, y sistemas de party.
+     * <p>
+     * El metodo utiliza un builder de {@code SimpleCommand} para definir las acciones asociadas a distintos comandos,
+     * especificando su funcionalidad mediante llamadas a metodos que invocan las acciones correspondientes en la clase
+     * {@code Protocol}.
+     * <p>
+     * El metodo registra todos los comandos definidos invocando el metodo {@code registerTo}, que integra dichas definiciones en
+     * el mapa {@code commands} utilizado por el sistema para procesar comandos.
+     */
+    private void registerSimpleCommands() {
+        SimpleCommand.builder()
+                // Comandos basicos
+                .command("/online").action(Protocol::writeOnline)
+                .command("/salir").action(Protocol::writeQuit)
+                .command("/balance").action(Protocol::writeRequestAccountState)
+                .command("/entrenar").action(Protocol::writeTrainList)
+                .command("/descansar").action(Protocol::writeRest)
+                .command("/meditar").action(Protocol::writeMeditate)
+                .command("/consulta").action(Protocol::writeConsultation)
+                .command("/resucitar").action(Protocol::writeResucitate)
+                .command("/curar").action(Protocol::writeHeal)
+                .command("/est").action(Protocol::writeRequestStats)
+                .command("/ayuda").action(Protocol::writeHelp)
+                .command("/comerciar").action(Protocol::writeCommerceStart)
+                .command("/boveda").action(Protocol::writeBankStart)
+                .command("/enlistar").action(Protocol::writeEnlist)
+                .command("/informacion").action(Protocol::writeInformation)
+                .command("/recompensa").action(Protocol::writeReward)
+                .command("/motd").action(Protocol::writeRequestMOTD)
+                .command("/uptime").action(Protocol::writeUpTime)
+                .command("/compartirnpc").action(Protocol::writeShareNpc)
+                .command("/nocompartirnpc").action(Protocol::writeStopSharingNpc)
+                .command("/gm").action(Protocol::writeGMRequest)
+                .command("/retirarfaccion").action(Protocol::writeLeaveFaction)
 
-        // Comandos de party
-        commands.put("/salirparty", cmd -> writePartyLeave());
-        commands.put("/crearparty", cmd -> writePartyCreate());
-        commands.put("/party", cmd -> writePartyJoin());
-        commands.put("/pmsg", new PartyMessageCommand());
-        commands.put("/onlineparty", cmd -> writePartyOnline());
-        commands.put("/echarparty", new PartyKickCommand());
-        commands.put("/partylider", new PartySetLeaderCommand());
-        commands.put("/acceptparty", new PartyAcceptMemberCommand());
+                // Comandos de GM
+                .command("/showname").action(Protocol::writeShowName)
+                .command("/onlinereal").action(Protocol::writeOnlineRoyalArmy)
+                .command("/onlinecaos").action(Protocol::writeOnlineChaosLegion)
+                .command("/hora").action(Protocol::writeServerTime)
+                .command("/teleploc").action(Protocol::writeWarpMeToTarget)
+                .command("/invisible").action(Protocol::writeInvisible)
+                .command("/panelgm").action(Protocol::writeGMPanel)
+                .command("/trabajando").action(Protocol::writeWorking)
+                .command("/ocultando").action(Protocol::writeHiding)
+                .command("/rmata").action(Protocol::writeKillNPC)
+                .command("/onlinegm").action(Protocol::writeOnlineGM)
+                .command("/seguir").action(Protocol::writeNPCFollow)
+                .command("/cc").action(Protocol::writeSpawnListRequest)
+                .command("/resetinv").action(Protocol::writeResetNPCInventory)
+                .command("/limpiar").action(Protocol::writeCleanWorld)
+                .command("/dt").action(Protocol::writeTeleportDestroy)
+                .command("/lluvia").action(Protocol::writeRainToggle)
+                .command("/masdest").action(Protocol::writeDestroyAllItemsInArea)
+                .command("/piso").action(Protocol::writeItemsInTheFloor)
+                .command("/dumpsecurity").action(Protocol::writeDumpIPTables)
+                .command("/baniplist").action(Protocol::writeBannedIPList)
+                .command("/banipreload").action(Protocol::writeBannedIPReload)
+                .command("/dest").action(Protocol::writeDestroyItems)
+                .command("/bloq").action(Protocol::writeTileBlockedToggle)
+                .command("/mata").action(Protocol::writeKillNPCNoRespawn)
+                .command("/masskill").action(Protocol::writeKillAllNearbyNPCs)
+                .command("/motdcambia").action(Protocol::writeChangeMOTD)
+                .command("/nave").action(Protocol::writeNavigateToggle)
+                .command("/habilitar").action(Protocol::writeServerOpenToUsersToggle)
+                .command("/apagar").action(Protocol::writeTurnOffServer)
+                .command("/centinelaactivado").action(Protocol::writeToggleCentinelActivated)
+                .command("/dobackup").action(Protocol::writeDoBackup)
+                .command("/guardamapa").action(Protocol::writeSaveMap)
+                .command("/grabar").action(Protocol::writeSaveChars)
+                .command("/borrar").action(Protocol::writeCleanSOS)
+                .command("/noche").action(Protocol::writeNight)
+                .command("/echartodospjs").action(Protocol::writeKickAllChars)
+                .command("/reloadnpcs").action(Protocol::writeReloadNPCs)
+                .command("/reloadsini").action(Protocol::writeReloadServerIni)
+                .command("/reloadhechizos").action(Protocol::writeReloadSpells)
+                .command("/reloadobj").action(Protocol::writeReloadObjects)
+                .command("/reiniciar").action(Protocol::writeRestart)
+                .command("/autoupdate").action(Protocol::writeResetAutoUpdate)
+                .command("/ignorado").action(Protocol::writeIgnored)
+                .command("/ping").action(Protocol::writePing)
+                .command("/hogar").action(Protocol::writeHome)
 
-        // Comandos de clan
-        commands.put("/salirclan", cmd -> writeGuildLeave());
-        commands.put("/cmsg", new GuildMessageCommand());
-        commands.put("/onlineclan", cmd -> writeGuildOnline());
-        commands.put("/fundarclan", new GuildFundateCommand());
-        commands.put("/voto", new GuildVoteCommand());
-        commands.put("/onclan", new GuildOnlineMembersCommand());
-        commands.put("/rajarclan", new RemoveCharFromGuildCommand());
-        commands.put("/showcmsg", new ShowGuildMessagesCommand());
+                // Comandos de party
+                .command("/salirparty").action(Protocol::writePartyLeave)
+                .command("/crearparty").action(Protocol::writePartyCreate)
+                .command("/party").action(Protocol::writePartyJoin)
+                .command("/onlineparty").action(Protocol::writePartyOnline)
 
-        // Comandos de mascota
-        commands.put("/quieto", cmd -> writePetStand());
-        commands.put("/acompañar", cmd -> writePetFollow());
-        commands.put("/liberar", cmd -> writeReleasePet());
+                // Comandos de clan
+                .command("/salirclan").action(Protocol::writeGuildLeave)
+                .command("/onlineclan").action(Protocol::writeGuildOnline)
 
+                // Comandos de mascota
+                .command("/quieto").action(Protocol::writePetStand)
+                .command("/acompañar").action(Protocol::writePetFollow)
+                .command("/liberar").action(Protocol::writeReleasePet)
+
+                .registerTo(commands);
+    }
+
+    /**
+     * Registra automaticamente las clases que implementan comandos en el sistema. Este proceso se basa en la deteccion de clases
+     * anotadas con {@link Command} en un paquete especifico, las cuales son dinamicamente instanciadas y registradas en un mapa
+     * para su posterior utilizacion.
+     * <p>
+     * El metodo realiza las siguientes acciones:
+     * <ol>
+     *  <li>Utiliza la biblioteca Reflections para analizar el paquete
+     *      {@code org.aoclient.network.protocol.command.handlers}, identificando las clases anotadas con {@link Command}.
+     *  <li>Verifica que dichas clases implementen la interfaz {@link CommandHandler} antes de proceder con su registro.
+     *  <li>Extrae el valor de la anotacion {@code Command} de cada clase, el cual se utiliza como clave unica para mapear la
+     *      instancia del handler de comandos correspondiente.
+     *  <li>Las instancias de los handlers de comandos se crean mediante refleccion, llamando al constructor por defecto de
+     *      cada clase detectada.
+     * </ol>
+     * <p>
+     * <b>Nota:</b> Este metodo es esencial para garantizar una forma flexible y dinamica de registrar nuevos comandos sin la
+     * necesidad de modificar directamente el codigo fuente. Las clases de comandos simplemente necesitan declararse en el paquete
+     * especificado y ser anotadas con {@code @Command} para ser automaticamente consideradas por el sistema.
+     */
+    private void autoRegisterAnnotatedCommands() {
+        try {
+            /* Crea una instancia de Reflections que escaneara el paquete org.aoclient.network.protocol.command.handlers
+             * permitiendo hacer introspeccion del codigo en tiempo de ejecucion. */
+            Reflections reflections = new Reflections("org.aoclient.network.protocol.command.handlers");
+            /* Busca todas las clases dentro del paquete que tengan la anotacion @Command a travez del metodo
+             * getTypesAnnotatedWith() que retorna un conjunto de clases que cumplen con ese criterio. Esto SOLO funciona porque
+             * @Command tiene @Retention(RUNTIME). */
+            Set<Class<?>> commandClasses = reflections.getTypesAnnotatedWith(Command.class);
+            // Itera todas las clases del conjuto
+            for (Class<?> clazz : commandClasses) {
+                // Si la clase no implementa la interfaz CommandHandler
+                if (!CommandHandler.class.isAssignableFrom(clazz)) continue;
+                // Obtiene la anotacion @Command de la clase, esto SOLO funciona porque @Command tiene @Target(TYPE)
+                Command annotation = clazz.getAnnotation(Command.class);
+                // Crea una instancia del handler usando reflexion
+                CommandHandler handler = (CommandHandler) clazz.getDeclaredConstructor().newInstance();
+                // Registra el comando en el mapa usando el valor de la anotacion como clave
+                commands.put(annotation.value(), handler);
+            }
+        } catch (Exception e) {
+            System.err.println("Error auto-registering commands: " + e.getMessage());
+        }
     }
 
     private void execute(CommandContext context) {
@@ -243,8 +208,7 @@ public enum CommandProcessor {
             } catch (CommandException e) {
                 System.err.println(e.getMessage());
             }
-        } else
-            Console.INSTANCE.addMsgToConsole("Unknown command: " + context.getCommand(), false, true, new RGBColor());
+        } else Console.INSTANCE.addMsgToConsole("Unknown command: " + context.getCommand(), false, true, new RGBColor());
     }
 
 }

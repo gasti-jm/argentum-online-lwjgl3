@@ -1,6 +1,7 @@
 package org.aoclient.network.protocol.command.handlers.gm;
 
 import org.aoclient.network.protocol.command.BaseCommandHandler;
+import org.aoclient.network.protocol.command.Command;
 import org.aoclient.network.protocol.command.CommandContext;
 import org.aoclient.network.protocol.command.CommandException;
 
@@ -11,6 +12,8 @@ import static org.aoclient.network.protocol.Protocol.writePlaySoundAtTheSpecifie
  * FIXME Si especifico la posicion [x] [y] del sonido, este se reproduce en todo el mapa y no en la posicion especificada
  */
 
+@Command("/playsound")
+@SuppressWarnings("unused")
 public class PlaySoundCommand extends BaseCommandHandler {
 
     @Override

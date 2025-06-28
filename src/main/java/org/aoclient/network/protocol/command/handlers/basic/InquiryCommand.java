@@ -1,6 +1,7 @@
 package org.aoclient.network.protocol.command.handlers.basic;
 
 import org.aoclient.network.protocol.command.BaseCommandHandler;
+import org.aoclient.network.protocol.command.Command;
 import org.aoclient.network.protocol.command.CommandContext;
 import org.aoclient.network.protocol.command.CommandException;
 
@@ -11,6 +12,8 @@ import static org.aoclient.network.protocol.Protocol.writeInquiryVote;
  * TODO Otro caso de inconsistencia en donde las opciones invalidas se manejan desde el servidor
  */
 
+@Command("/encuesta")
+@SuppressWarnings("unused")
 public class InquiryCommand extends BaseCommandHandler {
 
     @Override
