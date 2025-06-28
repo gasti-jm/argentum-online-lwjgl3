@@ -141,8 +141,7 @@ public enum CommandProcessor {
         commands.put("/dt", cmd -> writeTeleportDestroy());
         commands.put("/lluvia", cmd -> writeRainToggle());
         commands.put("/setdesc", new SetCharDescriptionCommand());
-        commands.put("/forcemidimap", new ForceMidiToMapCommand());
-        commands.put("/forcewavmap", new ForceWaveToMapCommand());
+        commands.put("/playmusic", new PlayMusicCommand());
         commands.put("/realmsg", new RoyaleArmyMessageCommand());
         commands.put("/caosmsg", new ChaosLegionMessageCommand());
         commands.put("/ciumsg", new CitizenMessageCommand());
@@ -163,12 +162,11 @@ public enum CommandProcessor {
         commands.put("/banclan", new GuildBanCommand());
         commands.put("/banip", new BanIpCommand());
         commands.put("/unbanip", new UnbanIpCommand());
-        commands.put("/ci", new CreateObjectCommand());
+        commands.put("/co", new CreateObjectCommand());
         commands.put("/dest", cmd -> writeDestroyItems());
         commands.put("/nocaos", new ChaosLegionKickCommand());
         commands.put("/noreal", new RoyalArmyKickCommand());
-        commands.put("/forcemidi", new ForceMidiAllCommand());
-        commands.put("/", new ForceWavAllCommand());
+        commands.put("/playsound", new PlaySoundCommand());
         commands.put("/borrarpena", new RemovePunishmentCommand());
         commands.put("/bloq", cmd -> writeTileBlockedToggle());
         commands.put("/mata", cmd -> writeKillNPCNoRespawn());

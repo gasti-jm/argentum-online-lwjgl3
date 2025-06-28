@@ -13,6 +13,8 @@ import org.aoclient.engine.game.User;
  * <p>
  * La clase tambien incluye miembros de consola y usuario para facilitar el acceso a estos recursos en la implementacion de
  * comandos concretos.
+ * <p>
+ * Los argumentos que se indican entre "<>" son obligatorios y entre "[]" son opcionales.
  */
 
 public abstract class BaseCommandHandler implements CommandHandler {

@@ -23,120 +23,112 @@ import static org.aoclient.network.protocol.Protocol.writeWarpChar;
  *  <li>Si el primer argumento es numerico, se considera un mapa
  *  <li>Si no es numerico, se considera un nick
  * </ul>
+ * <p>
+ * En zonas oscuras (sin tildes, sin mapear) no se puede teletransportar. Esto no se informa al cliente, ya que se maneja desde
+ * el servidor y nunca se cual es el zona sin mapear.
  */
 
 public class WarpCharCommand extends BaseCommandHandler {
 
-    private static final String USAGE = "/telep <nick> <map> <x> <y>";
-    private static final int MAX_COORDINATE = 100; // Maxima coordenada valida
-    private static final int MAX_MAP_ID = 1000; // Maximo ID de mapa valido (ajustar segun tu servidor)
+    private static final int MAX_COORDINATE = 100;
+    private static final int MIN_COORDINATE = 1;
+    private static final int MAX_MAP_ID = 1000;
+    private static final int MIN_MAP_ID = 1;
 
     @Override
     public void handle(CommandContext context) throws CommandException {
-        requireArguments(context, 4, USAGE);
-
         switch (context.getArgumentCount()) {
             case 2 -> handleTwoArguments(context);
             case 3 -> handleThreeArguments(context);
             case 4 -> handleFourArguments(context);
-            default -> showError("Missing arguments. Usage: " + USAGE);
+            default -> {
+                String USAGE = """
+                        Usage:
+                        /telep <x> <y>
+                        /telep <nick> <x> <y>
+                        /telep <map> <x> <y>
+                        /telep <nick> <map> <x> <y>""";
+                if (context.getArgumentCount() < 2) showError("Missing arguments. " + USAGE);
+                if (context.getArgumentCount() > 4) showError("Too many arguments. " + USAGE);
+            }
         }
     }
 
     /**
      * Maneja el formato: {@code /telep <x> <y>}.
-     * <p>
-     * Teletransporta al usuario actual en el mismo mapa.
      */
     private void handleTwoArguments(CommandContext context) throws CommandException {
-        requireInteger(context, 0, "x");
-        requireInteger(context, 1, "y");
-
-        int x = Integer.parseInt(context.getArgument(0));
-        int y = Integer.parseInt(context.getArgument(1));
-
-        validateCoordinate(x);
-        validateCoordinate(y);
-
-        writeWarpChar(Options.INSTANCE.getNickName(), user.getUserMap(), x, y);
+        WarpData warpData = parseCoordinates(context, 0, 1);
+        writeWarpChar(Options.INSTANCE.getNickName(), user.getUserMap(), warpData.x, warpData.y);
     }
 
     /**
      * Maneja el formato: {@code /telep <nick> <x> <y>} o {@code /telep <map> <x> <y>}.
-     * <p>
-     * Intenta determinar si el primer argumento es un nick o un mapa usando heurísticas.
      */
     private void handleThreeArguments(CommandContext context) throws CommandException {
-        requireInteger(context, 1, "x or map");
-        requireInteger(context, 2, "y or x");
-
         String firstArg = context.getArgument(0);
-
-        // Intenta determinar si es un nick o un mapa
-        if (isNumeric(firstArg)) handleMapXY(context); // Es numerico, probablemente un mapa: /telep <map> <x> <y>
-        else handleNickXY(context); // No es numerico, probablemente un nick: /telep <nick> <x> <y>
+        if (isNumeric(firstArg)) handleMap(context);
+        else handleNick(context);
     }
 
     /**
      * Maneja el formato: {@code /telep <map> <x> <y>}.
      */
-    private void handleMapXY(CommandContext context) throws CommandException {
-        requireInteger(context, 0, "map");
-
-        short map = Short.parseShort(context.getArgument(0));
-        int x = Integer.parseInt(context.getArgument(1));
-        int y = Integer.parseInt(context.getArgument(2));
-
-        validateMapId(map);
-        validateCoordinate(x);
-        validateCoordinate(y);
-
-        writeWarpChar(Options.INSTANCE.getNickName(), map, x, y);
+    private void handleMap(CommandContext context) throws CommandException {
+        short map = parseMap(context, 0);
+        WarpData warpData = parseCoordinates(context, 1, 2);
+        writeWarpChar(Options.INSTANCE.getNickName(), map, warpData.x, warpData.y);
     }
 
     /**
-     * Maneja el formato: {@code /telep <nick> <x> <y>}
+     * Maneja el formato: {@code /telep <nick> <x> <y>}.
      */
-    private void handleNickXY(CommandContext context) throws CommandException {
+    private void handleNick(CommandContext context) throws CommandException {
         requireString(context, 0, "nick");
-
         String nick = context.getArgument(0);
-        int x = Integer.parseInt(context.getArgument(1));
-        int y = Integer.parseInt(context.getArgument(2));
-
-        validateCoordinate(x);
-        validateCoordinate(y);
-
-        writeWarpChar(nick, user.getUserMap(), x, y);
+        WarpData warpData = parseCoordinates(context, 1, 2);
+        writeWarpChar(nick, user.getUserMap(), warpData.x, warpData.y);
     }
 
     /**
      * Maneja el formato: {@code /telep <nick> <map> <x> <y>}.
-     * <p>
-     * Formato completo con todos los parametros.
      */
     private void handleFourArguments(CommandContext context) throws CommandException {
         requireString(context, 0, "nick");
-        requireInteger(context, 1, "map");
-        requireInteger(context, 2, "x");
-        requireInteger(context, 3, "y");
-
         String nick = context.getArgument(0);
-        short map = Short.parseShort(context.getArgument(1));
-        int x = Integer.parseInt(context.getArgument(2));
-        int y = Integer.parseInt(context.getArgument(3));
+        short map = parseMap(context, 1);
+        WarpData warpData = parseCoordinates(context, 2, 3);
+        writeWarpChar(nick, map, warpData.x, warpData.y);
+    }
 
-        validateMapId(map);
-        validateCoordinate(x);
-        validateCoordinate(y);
+    /**
+     * Parsea y valida las coordenadas X e Y.
+     */
+    private WarpData parseCoordinates(CommandContext context, int xIndex, int yIndex) throws CommandException {
+        requireInteger(context, xIndex, "x");
+        requireInteger(context, yIndex, "y");
+        int x = Integer.parseInt(context.getArgument(xIndex));
+        int y = Integer.parseInt(context.getArgument(yIndex));
+        validateCoordinate(x, 'x');
+        validateCoordinate(y, 'y');
+        return new WarpData(x, y);
+    }
 
-        writeWarpChar(nick, map, x, y);
+    /**
+     * Parsea y valida un ID de mapa.
+     */
+    private short parseMap(CommandContext context, int index) throws CommandException {
+        requireInteger(context, index, "map");
+        short map = Short.parseShort(context.getArgument(index));
+        validateMap(map);
+        return map;
     }
 
     /**
      * Verifica si un string es numerico.
      */
     private boolean isNumeric(String str) {
+        if (str == null || str.trim().isEmpty()) return false;
         try {
             Integer.parseInt(str);
             return true;
@@ -146,19 +138,25 @@ public class WarpCharCommand extends BaseCommandHandler {
     }
 
     /**
-     * Valida que una coordenada este en el rango valido.
+     * Valida que la coordenada este en el rango valido del mapa.
      */
-    private void validateCoordinate(int coordinate) throws CommandException {
-        // TODO o menor a 0?
-        if (coordinate < 1 || coordinate > MAX_COORDINATE)
-            showError("Invalid " + coordinate + " coordinate, must be between 1 and " + MAX_COORDINATE);
+    private void validateCoordinate(int coordinate, char coordinateChar) throws CommandException {
+        if (coordinate < MIN_COORDINATE || coordinate > MAX_COORDINATE)
+            showError("The coordinate [" + coordinateChar + "] must be between " + MIN_COORDINATE + " and " + MAX_COORDINATE + ".");
     }
 
     /**
-     * Valida que un ID de mapa este en el rango valido.
+     * Valida que el ID del mapa este en el rango valido de mapas.
      */
-    private void validateMapId(short mapId) throws CommandException {
-        if (mapId < 1 || mapId > MAX_MAP_ID) showError("Invalid map ID, must be between 1 and " + MAX_MAP_ID);
+    private void validateMap(short mapId) throws CommandException {
+        if (mapId < MIN_MAP_ID || mapId > MAX_MAP_ID)
+            showError("Invalid map ID, must be between " + MIN_MAP_ID + " and " + MAX_MAP_ID);
+    }
+
+    /**
+     * Record para encapsular datos de teletransporte.
+     */
+    private record WarpData(int x, int y) {
     }
 
 }

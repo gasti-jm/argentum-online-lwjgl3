@@ -6,7 +6,6 @@ import org.aoclient.network.protocol.command.CommandException;
 
 import static org.aoclient.network.protocol.Protocol.writeBankDepositGold;
 
-// TODO Bug cuando deposito 05 con 0 al inicio
 public class BankDepositGoldCommand extends BaseCommandHandler {
 
     @Override

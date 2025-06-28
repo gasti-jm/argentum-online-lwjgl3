@@ -12,22 +12,19 @@ public class TeleportCreateCommand extends BaseCommandHandler {
 
     @Override
     public void handle(CommandContext context) throws CommandException {
-        requireArguments(context, 3, USAGE);
-
-        // Valida que tenga 3 o 4 argumentos
+        // Si tiene menos de 3 argumentos o mas de 4
         if (context.getArgumentCount() < 3 || context.getArgumentCount() > 4) showError("Missing arguments. Usage: " + USAGE);
 
         requireInteger(context, 0, "map");
-        short map = Short.parseShort(context.getArgument(0));
-
         requireInteger(context, 1, "x");
-        int x = Integer.parseInt(context.getArgument(1));
-
         requireInteger(context, 2, "y");
+
+        short map = Short.parseShort(context.getArgument(0));
+        int x = Integer.parseInt(context.getArgument(1));
         int y = Integer.parseInt(context.getArgument(2));
 
-        // Maneja argumento opcional radius
-        int radius = 0; // valor por defecto
+        // Argumento opcional
+        int radius = 0;
         if (context.getArgumentCount() == 4) {
             requireInteger(context, 3, "radius");
             radius = Integer.parseInt(context.getArgument(3));

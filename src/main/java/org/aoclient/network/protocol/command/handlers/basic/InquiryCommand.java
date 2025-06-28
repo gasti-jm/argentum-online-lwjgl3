@@ -15,11 +15,12 @@ public class InquiryCommand extends BaseCommandHandler {
 
     @Override
     public void handle(CommandContext context) throws CommandException {
-        if (context.getArgumentCount() == 0) writeInquiry();
+        if (!context.hasArguments()) writeInquiry();
         else {
             requireArguments(context, 1, "/encuesta <option>");
             requireInteger(context, 0, "option");
-            writeInquiryVote(Integer.parseInt(context.getArgumentsRaw()));
+            int option = Integer.parseInt(context.getArgument(0));
+            writeInquiryVote(option);
         }
     }
 

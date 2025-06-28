@@ -6,14 +6,12 @@ import org.aoclient.network.protocol.command.CommandException;
 
 import static org.aoclient.network.protocol.Protocol.writeSummonChar;
 
-// TODO Raro que no se pase nada
-
 public class SummonCharCommand extends BaseCommandHandler {
 
     @Override
     public void handle(CommandContext context) throws CommandException {
         requireArguments(context, 1, "/sum <nick>");
-        writeSummonChar();
+        writeSummonChar(); // TODO Raro que no se pase nada
     }
 
 }

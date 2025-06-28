@@ -20,12 +20,11 @@ public class ChatColorCommand extends BaseCommandHandler {
         requireInteger(context, 1, "g");
         requireInteger(context, 2, "b");
 
-        int red = Integer.parseInt(context.getArgument(0));
-        int green = Integer.parseInt(context.getArgument(1));
-        int blue = Integer.parseInt(context.getArgument(2));
+        int r = Integer.parseInt(context.getArgument(0));
+        int g = Integer.parseInt(context.getArgument(1));
+        int b = Integer.parseInt(context.getArgument(2));
 
-        writeChatColor(red, green, blue);
-
+        writeChatColor(r, g, b);
     }
 
 }

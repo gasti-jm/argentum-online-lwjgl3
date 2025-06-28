@@ -18,7 +18,6 @@ public class BanCharCommand extends BaseCommandHandler {
         String reason = context.getArgument(1);
 
         writeBanChar(nick, reason);
-
     }
 
 }

@@ -802,7 +802,6 @@ public class Protocol {
     public static void writeOnlineMap(short map) {
         outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
         outputBuffer.writeByte(GMCommand.ONLINE_MAP.getId());
-
         outputBuffer.writeInteger(map);
     }
 
@@ -909,7 +908,6 @@ public class Protocol {
     public static void writeTeleportCreate(short map, int x, int y, int radio) {
         outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
         outputBuffer.writeByte(GMCommand.TELEPORT_CREATE.getId());
-
         outputBuffer.writeInteger(map);
         outputBuffer.writeByte(x);
         outputBuffer.writeByte(y);
@@ -932,22 +930,30 @@ public class Protocol {
         outputBuffer.writeCp1252String(desc);
     }
 
-    public static void writeForceMIDIToMap(int midiID, short map) {
+    public static void writePlayMusic(int musicId) {
+        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
+        outputBuffer.writeByte(GMCommand.FORCE_MIDI_ALL.getId());
+        outputBuffer.writeByte(musicId);
+    }
+
+    public static void writePlayMusicOnMap(int musicId, short map) {
         outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
         outputBuffer.writeByte(GMCommand.FORCE_MIDI_TO_MAP.getId());
-
-        outputBuffer.writeByte(midiID);
+        outputBuffer.writeByte(musicId);
         outputBuffer.writeInteger(map);
     }
 
-    public static void writeForceWAVEToMap(int waveID, short map, int x, int y) {
+    public static void writePlaySound(int idSound) {
+        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
+        outputBuffer.writeByte(GMCommand.FORCE_WAVE_ALL.getId());
+        outputBuffer.writeByte(idSound);
+    }
+
+    public static void writePlaySoundAtTheSpecifiedLocation(int soundId, short map, int x, int y) {
         outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
         outputBuffer.writeByte(GMCommand.FORCE_WAVE_TO_MAP.getId());
-
-        outputBuffer.writeByte(waveID);
-
+        outputBuffer.writeByte(soundId);
         outputBuffer.writeInteger(map);
-
         outputBuffer.writeByte(x);
         outputBuffer.writeByte(y);
     }
@@ -1127,20 +1133,6 @@ public class Protocol {
         outputBuffer.writeByte(GMCommand.ROYAL_ARMY_KICK.getId());
 
         outputBuffer.writeCp1252String(userName);
-    }
-
-    public static void writeForceMIDIAll(int midiID) {
-        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
-        outputBuffer.writeByte(GMCommand.FORCE_MIDI_ALL.getId());
-
-        outputBuffer.writeByte(midiID);
-    }
-
-    public static void writeForceWAVEAll(int waveID) {
-        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
-        outputBuffer.writeByte(GMCommand.FORCE_WAVE_ALL.getId());
-
-        outputBuffer.writeByte(waveID);
     }
 
     public static void writeRemovePunishment(String userName, int punishment, String newText) {
