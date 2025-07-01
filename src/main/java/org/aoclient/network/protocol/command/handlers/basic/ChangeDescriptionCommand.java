@@ -17,7 +17,7 @@ public class ChangeDescriptionCommand extends BaseCommandHandler {
         /* Me parece que si en la descripcion hay espacios al principio o al final, el servidor los elimina, por que desde aca, el
          * argumento en crudo (getArgumentsRaw()) permite los espacios. Ademas, el servidor tambien valida si la descripcion tiene
          * caracteres invalidos, lo cual este diseño es bastente inconsistente. */
-        writeChangeDescription(context.getArgumentsRaw());
+        writeChangeDescription(context.argumentsRaw());
     }
 
 }

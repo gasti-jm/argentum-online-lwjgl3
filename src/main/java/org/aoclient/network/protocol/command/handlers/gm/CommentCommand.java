@@ -15,7 +15,7 @@ public class CommentCommand extends BaseCommandHandler {
     public void handle(CommandContext context) throws CommandException {
         requireArguments(context, -1, "/rem <comment>");
         requireValidString(context, "comment", REGEX);
-        String comment = context.getArgumentsRaw().trim();
+        String comment = context.argumentsRaw().trim();
         writeComment(comment);
     }
 

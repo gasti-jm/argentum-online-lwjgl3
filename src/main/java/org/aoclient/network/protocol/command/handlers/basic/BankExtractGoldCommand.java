@@ -30,7 +30,7 @@ public class BankExtractGoldCommand extends BaseCommandHandler {
             return;
         }
 
-        writeBankExtractGold(Integer.parseInt(context.getArgumentsRaw()));
+        writeBankExtractGold(Integer.parseInt(context.argumentsRaw()));
     }
 
 }

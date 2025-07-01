@@ -15,7 +15,7 @@ public class PartyMessageCommand extends BaseCommandHandler {
     public void handle(CommandContext context) throws CommandException {
         requireArguments(context, -1, "/pmsg <message>");
         requireValidString(context, "message", REGEX);
-        String message = context.getArgumentsRaw().trim();
+        String message = context.argumentsRaw().trim();
         writePartyMessage(message);
     }
 

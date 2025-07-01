@@ -15,7 +15,7 @@ public class SetCharDescriptionCommand extends BaseCommandHandler {
     public void handle(CommandContext context) throws CommandException {
         requireArguments(context, -1, "/setdesc <description>");
         requireValidString(context, "description", REGEX);
-        String description = context.getArgumentsRaw().trim();
+        String description = context.argumentsRaw().trim();
         writeSetCharDescription(description);
     }
 

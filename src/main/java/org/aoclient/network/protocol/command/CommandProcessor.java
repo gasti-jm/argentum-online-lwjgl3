@@ -34,12 +34,11 @@ public enum CommandProcessor {
         registerCommands();
     }
 
-    public void process(String rawCommand) {
-        if (rawCommand == null || rawCommand.trim().isEmpty()) return; // TODO Es necesario hacer trim()?
-        CommandContext context = new CommandContext(rawCommand);
+    public void process(String text) {
+        CommandContext context = CommandContext.parse(text);
         if (context.isCommand()) execute(context);
-        else if (context.isYell()) Protocol.writeYell(context.getMessage());
-        else Protocol.writeTalk(context.getMessage());
+        else if (context.isYell()) Protocol.writeYell(context.getText());
+        else Protocol.writeTalk(context.getText());
     }
 
     private void registerCommands() {
@@ -183,14 +182,14 @@ public enum CommandProcessor {
     }
 
     private void execute(CommandContext context) {
-        CommandHandler handler = commands.get(context.getCommand());
+        CommandHandler handler = commands.get(context.command());
         if (handler != null) {
             try {
                 handler.handle(context);
             } catch (CommandException e) {
                 System.err.println(e.getMessage());
             }
-        } else Console.INSTANCE.addMsgToConsole("Unknown command: " + context.getCommand(), false, true, new RGBColor());
+        } else Console.INSTANCE.addMsgToConsole("Unknown command: " + context.command(), false, true, new RGBColor());
     }
 
 }

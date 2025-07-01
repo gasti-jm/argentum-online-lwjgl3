@@ -15,7 +15,7 @@ public class BugReportCommand extends BaseCommandHandler {
     public void handle(CommandContext context) throws CommandException {
         requireArguments(context, -1, "/bug <description>");
         requireValidString(context, "description", REGEX);
-        String description = context.getArgumentsRaw().trim();
+        String description = context.argumentsRaw().trim();
         writeBugReport(description);
     }
 

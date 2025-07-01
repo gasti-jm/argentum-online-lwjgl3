@@ -17,7 +17,7 @@ public class AlterMailCommand extends BaseCommandHandler {
         requireArguments(context, 1, "/aemail <nick>-<newmail>");
 
         // El comando usa un formato especial: nick-email en un solo argumento
-        String[] parts = CommandValidator.AEMAILSplit(context.getArgumentsRaw());
+        String[] parts = CommandValidator.AEMAILSplit(context.argumentsRaw());
         // Se podria reemplazar AEMAILSplit() por String[] parts = context.getArgumentsRaw().split("-", 2);
 
         if (parts[0].isEmpty()) showError("Incorrect format. Usage: /aemail <nick>-<newmail>");

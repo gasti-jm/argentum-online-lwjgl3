@@ -1,45 +1,42 @@
 package org.aoclient.network.protocol.command;
 
+import java.util.List;
+
 /**
- * Esta clase representa el contexto de un comando proporcionado como entrada en formato de texto. Su finalidad es analizar y
- * estructurar la entrada, permitiendo acceder al comando, argumentos asociados y otras propiedades relevantes.
- * <p>
- * Un comando es tipicamente identificado por un prefijo especifico, como "/". Este contexto permite reconocer tales prefijos, asi
- * como los argumentos que siguen al comando principal.
+ * Contexto de comando inmutable que representa un comando parseado. Versión simplificada que mantiene compatibilidad con código
+ * existente.
+ *
+ * TODO TextContext?
  */
 
-public class CommandContext {
+public record CommandContext(
+        String text,
+        String command,
+        List<String> arguments, // Para comandos que necesitan argumentos individuales
+        String argumentsRaw // Para comandos que necesitan el texto completo
+) {
 
-    private final String rawCommand;
-    private final String command;
-    private String[] arguments = new String[0];
-    /** Cadena de argumentos de comando en crudo que preserva espacios y formateo. */
-    private String argumentsRaw = "";
+    /** Limite para controlar la cantidad de veces que se divide un comando en sus partes (comando y argumentos). */
+    private static final int COMMAND_SPLIT_LIMIT = 2;
+
+    public CommandContext {
+        arguments = List.copyOf(arguments); // Inmutable defensivo
+    }
 
     /**
-     * Constructor que inicializa un contexto de comando a partir de un comando en formato de texto.
-     *
-     * @param rawCommand Comando en formato de texto completo que incluye tanto el comando como sus argumentos. Por ejemplo, en la
-     *                   entrada "/TELEP nickname map x y", el comando seria "/TELEP" y los argumentos serian "nickname map x y".
+     * Parsea la entrada de texto plano.
+     * <p>
+     * Ejemplo: "/telep juan 1 50 50" -> command="/telep", arguments=["juan", "1", "50", "50"]
      */
-    public CommandContext(String rawCommand) {
-        this.rawCommand = rawCommand;
+    public static CommandContext parse(String text) {
+        String trimmedText = text.trim();
+        String[] commandParts = splitCommandFromArguments(trimmedText);
 
-        /* El 2 es el limite que controla la cantidad de veces que se aplica el patron (la division del comando en crudo) y, por
-         * lo tanto, afecta la longitud de la matriz resultante. Por lo que, para el comando principal, parts[0] contiene el
-         * comando ("/TELEP", por ejemplo) y parts[1] los argumentos ("nickname map x y", por ejemplo). */
-        String[] parts = rawCommand.split(" ", 2);
-        command = parts[0];
+        String command = commandParts[0];
+        String argumentsRaw = extractArgumentsRaw(commandParts);
+        List<String> arguments = parseArgumentsList(argumentsRaw);
 
-        // Si hay argumentos
-        if (parts.length > 1) {
-            // Almacena los argumentos en crudo en argumentsRaw
-            argumentsRaw = parts[1];
-            /* Elimina los posibles espacios al principio y final de los argumentos, y divide los argumentos separados por un
-             * espacio. Si parts[1].trim() esta vacio, split(" ") produce un array con un elemento vacio, no un array vacio. */
-            arguments = parts[1].trim().split(" ");
-        }
-
+        return new CommandContext(trimmedText, command, arguments, argumentsRaw);
     }
 
     public boolean isCommand() {
@@ -50,42 +47,32 @@ public class CommandContext {
         return command.startsWith("-");
     }
 
-    public String getCommand() {
-        return command;
-    }
-
-    public String[] getArguments() {
-        return arguments;
-    }
-
-    public String getArgumentsRaw() {
-        return argumentsRaw;
-    }
-
-    public String getMessage() {
-        return isYell() ? rawCommand.substring(1) : rawCommand;
+    public boolean hasArguments() {
+        return !arguments.isEmpty();
     }
 
     public int getArgumentCount() {
-        return arguments.length;
-    }
-
-    /**
-     * Verifica si hay argumentos presentes en el comando.
-     *
-     * @return {@code true} si el comando tiene al menos un argumento y la cadena de texto que los representa no esta vacia o solo
-     * contiene espacios en blanco, de lo contrario, {@code false}.
-     */
-    public boolean hasArguments() {
-        return arguments.length > 0 && !argumentsRaw.trim().isEmpty();
+        return arguments.size();
     }
 
     public String getArgument(int index) {
-        return index < arguments.length ? arguments[index] : "";
+        return index >= 0 && index < arguments.size() ? arguments.get(index) : "";
     }
 
-    public void setArgument(int index, String str) {
-        arguments[index] = str;
+    public String getText() {
+        return isYell() ? text.substring(1) : text;
+    }
+
+    private static String[] splitCommandFromArguments(String text) {
+        return text.split("\\s+", COMMAND_SPLIT_LIMIT);
+    }
+
+    private static String extractArgumentsRaw(String[] commandParts) {
+        return commandParts.length > 1 ? commandParts[1] : "";
+    }
+
+    private static List<String> parseArgumentsList(String argumentsRaw) {
+        return argumentsRaw.isEmpty() ? List.of() : List.of(argumentsRaw.split("\\s+"));
     }
 
 }

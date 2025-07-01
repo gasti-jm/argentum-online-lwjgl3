@@ -43,7 +43,7 @@ public abstract class BaseCommandHandler implements CommandHandler {
 
     protected void requireValidString(CommandContext context, String argument, String pattern) throws CommandException {
         int maxLength = 100;
-        String string = context.getArgumentsRaw().trim();
+        String string = context.argumentsRaw().trim();
         if (!string.matches(pattern))
             showError("The " + argument + " contains invalid characters. Valid characters: " + pattern.substring(0, pattern.length() - 1));
         if (string.length() > maxLength) showError("The " + argument + " cannot exceed " + maxLength + " characters.");

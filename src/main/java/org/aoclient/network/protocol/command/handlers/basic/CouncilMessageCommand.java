@@ -15,7 +15,7 @@ public class CouncilMessageCommand extends BaseCommandHandler {
     public void handle(CommandContext context) throws CommandException {
         requireArguments(context, -1, "/bmsg <message>");
         requireValidString(context, "message", REGEX);
-        String message = context.getArgumentsRaw().trim();
+        String message = context.argumentsRaw().trim();
         writeCouncilMessage(message);
     }
 
