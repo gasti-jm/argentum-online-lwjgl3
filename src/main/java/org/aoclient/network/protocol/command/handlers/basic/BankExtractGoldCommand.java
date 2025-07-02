@@ -3,7 +3,7 @@ package org.aoclient.network.protocol.command.handlers.basic;
 import org.aoclient.engine.gui.forms.FBank;
 import org.aoclient.network.protocol.command.BaseCommandHandler;
 import org.aoclient.network.protocol.command.Command;
-import org.aoclient.network.protocol.command.CommandContext;
+import org.aoclient.network.protocol.command.TextContext;
 import org.aoclient.network.protocol.command.CommandException;
 
 import static org.aoclient.network.protocol.Protocol.writeBankExtractGold;
@@ -13,15 +13,15 @@ import static org.aoclient.network.protocol.Protocol.writeBankExtractGold;
 public class BankExtractGoldCommand extends BaseCommandHandler {
 
     @Override
-    public void handle(CommandContext context) throws CommandException {
+    public void handle(TextContext textContext) throws CommandException {
         if (user.isDead()) {
             showError("You are dead!");
             return;
         }
-        requireArguments(context, 1, "/retirar <quantity>");
-        requireInteger(context, 0, "quantity");
+        requireArguments(textContext, 1, "/retirar <quantity>");
+        requireInteger(textContext, 0, "quantity");
 
-        int quantity = Integer.parseInt(context.getArgument(0));
+        int quantity = Integer.parseInt(textContext.getArgument(0));
 
         /* Esta condicion se va a cumplir aunque la cantidad especificada sea menor al oro depositado, ya que si no se creo la
          * ventana del banco FBank primero, entonces el valor de goldDeposited es 0. */
@@ -30,7 +30,7 @@ public class BankExtractGoldCommand extends BaseCommandHandler {
             return;
         }
 
-        writeBankExtractGold(Integer.parseInt(context.argumentsRaw()));
+        writeBankExtractGold(Integer.parseInt(textContext.argumentsRaw()));
     }
 
 }

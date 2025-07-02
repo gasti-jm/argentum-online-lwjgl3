@@ -2,14 +2,7 @@ package org.aoclient.network.protocol.command;
 
 import java.util.List;
 
-/**
- * Contexto de comando inmutable que representa un comando parseado. Versión simplificada que mantiene compatibilidad con código
- * existente.
- *
- * TODO TextContext?
- */
-
-public record CommandContext(
+public record TextContext(
         String text,
         String command,
         List<String> arguments, // Para comandos que necesitan argumentos individuales
@@ -19,24 +12,24 @@ public record CommandContext(
     /** Limite para controlar la cantidad de veces que se divide un comando en sus partes (comando y argumentos). */
     private static final int COMMAND_SPLIT_LIMIT = 2;
 
-    public CommandContext {
+    public TextContext {
         arguments = List.copyOf(arguments); // Inmutable defensivo
     }
 
     /**
-     * Parsea la entrada de texto plano.
+     * Parsea la entrada de texto.
      * <p>
      * Ejemplo: "/telep juan 1 50 50" -> command="/telep", arguments=["juan", "1", "50", "50"]
      */
-    public static CommandContext parse(String text) {
+    public static TextContext parse(String text) {
         String trimmedText = text.trim();
-        String[] commandParts = splitCommandFromArguments(trimmedText);
+        String[] textParts = splitText(trimmedText);
 
-        String command = commandParts[0];
-        String argumentsRaw = extractArgumentsRaw(commandParts);
+        String command = textParts[0];
+        String argumentsRaw = extractArgumentsRaw(textParts);
         List<String> arguments = parseArgumentsList(argumentsRaw);
 
-        return new CommandContext(trimmedText, command, arguments, argumentsRaw);
+        return new TextContext(trimmedText, command, arguments, argumentsRaw);
     }
 
     public boolean isCommand() {
@@ -63,12 +56,12 @@ public record CommandContext(
         return isYell() ? text.substring(1) : text;
     }
 
-    private static String[] splitCommandFromArguments(String text) {
+    private static String[] splitText(String text) {
         return text.split("\\s+", COMMAND_SPLIT_LIMIT);
     }
 
-    private static String extractArgumentsRaw(String[] commandParts) {
-        return commandParts.length > 1 ? commandParts[1] : "";
+    private static String extractArgumentsRaw(String[] textParts) {
+        return textParts.length > 1 ? textParts[1] : "";
     }
 
     private static List<String> parseArgumentsList(String argumentsRaw) {

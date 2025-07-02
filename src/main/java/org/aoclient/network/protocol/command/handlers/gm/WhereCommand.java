@@ -2,7 +2,7 @@ package org.aoclient.network.protocol.command.handlers.gm;
 
 import org.aoclient.network.protocol.command.BaseCommandHandler;
 import org.aoclient.network.protocol.command.Command;
-import org.aoclient.network.protocol.command.CommandContext;
+import org.aoclient.network.protocol.command.TextContext;
 import org.aoclient.network.protocol.command.CommandException;
 
 import static org.aoclient.network.protocol.Protocol.writeWhere;
@@ -12,9 +12,9 @@ import static org.aoclient.network.protocol.Protocol.writeWhere;
 public class WhereCommand extends BaseCommandHandler {
 
     @Override
-    public void handle(CommandContext context) throws CommandException {
-        requireArguments(context, 1, "/donde <nick>");
-        String nick = context.getArgument(0);
+    public void handle(TextContext textContext) throws CommandException {
+        requireArguments(textContext, 1, "/donde <nick>");
+        String nick = textContext.getArgument(0);
         writeWhere(nick);
     }
 

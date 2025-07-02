@@ -2,7 +2,7 @@ package org.aoclient.network.protocol.command.handlers.gm;
 
 import org.aoclient.network.protocol.command.BaseCommandHandler;
 import org.aoclient.network.protocol.command.Command;
-import org.aoclient.network.protocol.command.CommandContext;
+import org.aoclient.network.protocol.command.TextContext;
 import org.aoclient.network.protocol.command.CommandException;
 
 import static org.aoclient.network.protocol.Protocol.writeRemovePunishment;
@@ -12,14 +12,14 @@ import static org.aoclient.network.protocol.Protocol.writeRemovePunishment;
 public class RemovePunishmentCommand extends BaseCommandHandler {
 
     @Override
-    public void handle(CommandContext context) throws CommandException {
-        requireArguments(context, 3, "/borrarpena <nick> <minutes> <newPunishment>");
-        requireString(context, 0, "nick");
-        requireInteger(context, 1, "minutes");
-        requireString(context, 2, "newPunishment");
-        String nick = context.getArgument(0);
-        int minutes = Integer.parseInt(context.getArgument(1));
-        String newPunishment = context.getArgument(2);
+    public void handle(TextContext textContext) throws CommandException {
+        requireArguments(textContext, 3, "/borrarpena <nick> <minutes> <newPunishment>");
+        requireString(textContext, 0, "nick");
+        requireInteger(textContext, 1, "minutes");
+        requireString(textContext, 2, "newPunishment");
+        String nick = textContext.getArgument(0);
+        int minutes = Integer.parseInt(textContext.getArgument(1));
+        String newPunishment = textContext.getArgument(2);
         writeRemovePunishment(nick, minutes, newPunishment);
     }
 

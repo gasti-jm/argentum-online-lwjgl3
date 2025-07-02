@@ -3,7 +3,7 @@ package org.aoclient.network.protocol.command.handlers.gm;
 import org.aoclient.engine.game.Options;
 import org.aoclient.network.protocol.command.BaseCommandHandler;
 import org.aoclient.network.protocol.command.Command;
-import org.aoclient.network.protocol.command.CommandContext;
+import org.aoclient.network.protocol.command.TextContext;
 import org.aoclient.network.protocol.command.CommandException;
 
 import static org.aoclient.network.protocol.Protocol.writeWarpChar;
@@ -39,11 +39,11 @@ public class WarpCharCommand extends BaseCommandHandler {
     private static final int MIN_MAP_ID = 1;
 
     @Override
-    public void handle(CommandContext context) throws CommandException {
-        switch (context.getArgumentCount()) {
-            case 2 -> handleTwoArguments(context);
-            case 3 -> handleThreeArguments(context);
-            case 4 -> handleFourArguments(context);
+    public void handle(TextContext textContext) throws CommandException {
+        switch (textContext.getArgumentCount()) {
+            case 2 -> handleTwoArguments(textContext);
+            case 3 -> handleThreeArguments(textContext);
+            case 4 -> handleFourArguments(textContext);
             default -> {
                 String USAGE = """
                         Usage:
@@ -51,8 +51,8 @@ public class WarpCharCommand extends BaseCommandHandler {
                         /telep <nick> <x> <y>
                         /telep <map> <x> <y>
                         /telep <nick> <map> <x> <y>""";
-                if (context.getArgumentCount() < 2) showError("Missing arguments. " + USAGE);
-                if (context.getArgumentCount() > 4) showError("Too many arguments. " + USAGE);
+                if (textContext.getArgumentCount() < 2) showError("Missing arguments. " + USAGE);
+                if (textContext.getArgumentCount() > 4) showError("Too many arguments. " + USAGE);
             }
         }
     }
@@ -60,7 +60,7 @@ public class WarpCharCommand extends BaseCommandHandler {
     /**
      * Maneja el formato: {@code /telep <x> <y>}.
      */
-    private void handleTwoArguments(CommandContext context) throws CommandException {
+    private void handleTwoArguments(TextContext context) throws CommandException {
         WarpData warpData = parseCoordinates(context, 0, 1);
         writeWarpChar(Options.INSTANCE.getNickName(), user.getUserMap(), warpData.x, warpData.y);
     }
@@ -68,7 +68,7 @@ public class WarpCharCommand extends BaseCommandHandler {
     /**
      * Maneja el formato: {@code /telep <nick> <x> <y>} o {@code /telep <map> <x> <y>}.
      */
-    private void handleThreeArguments(CommandContext context) throws CommandException {
+    private void handleThreeArguments(TextContext context) throws CommandException {
         String firstArg = context.getArgument(0);
         if (isNumeric(firstArg)) handleMap(context);
         else handleNick(context);
@@ -77,7 +77,7 @@ public class WarpCharCommand extends BaseCommandHandler {
     /**
      * Maneja el formato: {@code /telep <map> <x> <y>}.
      */
-    private void handleMap(CommandContext context) throws CommandException {
+    private void handleMap(TextContext context) throws CommandException {
         short map = parseMap(context, 0);
         WarpData warpData = parseCoordinates(context, 1, 2);
         writeWarpChar(Options.INSTANCE.getNickName(), map, warpData.x, warpData.y);
@@ -86,7 +86,7 @@ public class WarpCharCommand extends BaseCommandHandler {
     /**
      * Maneja el formato: {@code /telep <nick> <x> <y>}.
      */
-    private void handleNick(CommandContext context) throws CommandException {
+    private void handleNick(TextContext context) throws CommandException {
         requireString(context, 0, "nick");
         String nick = context.getArgument(0);
         WarpData warpData = parseCoordinates(context, 1, 2);
@@ -96,7 +96,7 @@ public class WarpCharCommand extends BaseCommandHandler {
     /**
      * Maneja el formato: {@code /telep <nick> <map> <x> <y>}.
      */
-    private void handleFourArguments(CommandContext context) throws CommandException {
+    private void handleFourArguments(TextContext context) throws CommandException {
         requireString(context, 0, "nick");
         String nick = context.getArgument(0);
         short map = parseMap(context, 1);
@@ -107,7 +107,7 @@ public class WarpCharCommand extends BaseCommandHandler {
     /**
      * Parsea y valida las coordenadas X e Y.
      */
-    private WarpData parseCoordinates(CommandContext context, int xIndex, int yIndex) throws CommandException {
+    private WarpData parseCoordinates(TextContext context, int xIndex, int yIndex) throws CommandException {
         requireInteger(context, xIndex, "x");
         requireInteger(context, yIndex, "y");
         int x = Integer.parseInt(context.getArgument(xIndex));
@@ -120,7 +120,7 @@ public class WarpCharCommand extends BaseCommandHandler {
     /**
      * Parsea y valida un ID de mapa.
      */
-    private short parseMap(CommandContext context, int index) throws CommandException {
+    private short parseMap(TextContext context, int index) throws CommandException {
         requireInteger(context, index, "map");
         short map = Short.parseShort(context.getArgument(index));
         validateMap(map);

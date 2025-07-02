@@ -2,7 +2,7 @@ package org.aoclient.network.protocol.command.handlers.gm;
 
 import org.aoclient.network.protocol.command.BaseCommandHandler;
 import org.aoclient.network.protocol.command.Command;
-import org.aoclient.network.protocol.command.CommandContext;
+import org.aoclient.network.protocol.command.TextContext;
 import org.aoclient.network.protocol.command.CommandException;
 
 import static org.aoclient.network.protocol.Protocol.writePlaySound;
@@ -17,19 +17,19 @@ import static org.aoclient.network.protocol.Protocol.writePlaySoundAtTheSpecifie
 public class PlaySoundCommand extends BaseCommandHandler {
 
     @Override
-    public void handle(CommandContext context) throws CommandException {
-        if (context.getArgumentCount() == 1) playSound(context);
-        else if (context.getArgumentCount() == 4) playSoundAtTheSpecifiedLocation(context);
+    public void handle(TextContext textContext) throws CommandException {
+        if (textContext.getArgumentCount() == 1) playSound(textContext);
+        else if (textContext.getArgumentCount() == 4) playSoundAtTheSpecifiedLocation(textContext);
         else showError("Missing arguments. Usage: /playsound <sound_id> [map] [x] [y]");
     }
 
-    private void playSound(CommandContext context) throws CommandException {
+    private void playSound(TextContext context) throws CommandException {
         requireInteger(context, 0, "sound_id");
         int soundId = Integer.parseInt(context.getArgument(0));
         writePlaySound(soundId);
     }
 
-    private void playSoundAtTheSpecifiedLocation(CommandContext context) throws CommandException {
+    private void playSoundAtTheSpecifiedLocation(TextContext context) throws CommandException {
         requireInteger(context, 0, "sound_id");
         requireInteger(context, 1, "map");
         requireInteger(context, 2, "x");

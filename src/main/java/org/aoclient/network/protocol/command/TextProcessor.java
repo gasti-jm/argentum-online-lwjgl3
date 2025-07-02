@@ -21,24 +21,23 @@ import java.util.Map;
  * otros contextos), el testing (cada comando se puede testear aisladamente), la mantenibilidad y reutilizacion.
  * <p>
  * TODO Autocompletado de comandos
- * TODO Se podria renombrar a TextProcessor, ya que pueden venir desde la consola mensajes simple o comandos, no solo comandos y esta clase procesa tambien texto comun
  */
 
-public enum CommandProcessor {
+public enum TextProcessor {
 
     INSTANCE;
 
     private final Map<String, CommandHandler> commands = new HashMap<>();
 
-    CommandProcessor() {
+    TextProcessor() {
         registerCommands();
     }
 
     public void process(String text) {
-        CommandContext context = CommandContext.parse(text);
-        if (context.isCommand()) execute(context);
-        else if (context.isYell()) Protocol.writeYell(context.getText());
-        else Protocol.writeTalk(context.getText());
+        TextContext textContext = TextContext.parse(text);
+        if (textContext.isCommand()) execute(textContext);
+        else if (textContext.isYell()) Protocol.writeYell(textContext.getText());
+        else Protocol.writeTalk(textContext.getText());
     }
 
     private void registerCommands() {
@@ -181,15 +180,15 @@ public enum CommandProcessor {
                 .registerTo(commands);
     }
 
-    private void execute(CommandContext context) {
-        CommandHandler handler = commands.get(context.command());
+    private void execute(TextContext textContext) {
+        CommandHandler handler = commands.get(textContext.command());
         if (handler != null) {
             try {
-                handler.handle(context);
+                handler.handle(textContext);
             } catch (CommandException e) {
                 System.err.println(e.getMessage());
             }
-        } else Console.INSTANCE.addMsgToConsole("Unknown command: " + context.command(), false, true, new RGBColor());
+        } else Console.INSTANCE.addMsgToConsole("Unknown command: " + textContext.command(), false, true, new RGBColor());
     }
 
 }

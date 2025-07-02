@@ -2,7 +2,7 @@ package org.aoclient.network.protocol.command.handlers.basic;
 
 import org.aoclient.network.protocol.command.BaseCommandHandler;
 import org.aoclient.network.protocol.command.Command;
-import org.aoclient.network.protocol.command.CommandContext;
+import org.aoclient.network.protocol.command.TextContext;
 import org.aoclient.network.protocol.command.CommandException;
 
 import static org.aoclient.network.protocol.Protocol.writeBankDepositGold;
@@ -32,15 +32,15 @@ import static org.aoclient.network.protocol.Protocol.writeBankDepositGold;
 public class BankDepositGoldCommand extends BaseCommandHandler {
 
     @Override
-    public void handle(CommandContext context) throws CommandException {
+    public void handle(TextContext textContext) throws CommandException {
         if (user.isDead()) {
             showError("You are dead!");
             return;
         }
-        requireArguments(context, 1, "/depositar <quantity>");
-        requireInteger(context, 0, "quantity");
+        requireArguments(textContext, 1, "/depositar <quantity>");
+        requireInteger(textContext, 0, "quantity");
 
-        int quantity = Integer.parseInt(context.getArgument(0));
+        int quantity = Integer.parseInt(textContext.getArgument(0));
 
         if (quantity > user.getUserGLD()) {
             showError("You don't have enough gold!");
