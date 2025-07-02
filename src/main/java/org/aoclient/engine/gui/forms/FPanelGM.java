@@ -30,15 +30,15 @@ public final class FPanelGM extends Form {
             if (ImGui.beginTabItem("Message")) {
                 ImGui.inputText("Argumentos", myText);
                 ImGui.separator();
-                if (ImGui.button("/HORA", 170, 20)) commandProcessor.process("/HORA");
-                if (ImGui.button("/MOTDCAMBIA", 170, 20)) commandProcessor.process("/MOTDCAMBIA");
-                if (ImGui.button("/TALKAS", 170, 20)) commandProcessor.process("/TALKAS");
-                if (ImGui.button("/GMSG", 170, 20)) commandProcessor.process("/GMSG " + myText.get());
-                if (ImGui.button("/RMSG", 170, 20)) commandProcessor.process("/RMSG " + myText.get());
-                if (ImGui.button("/SMSG", 170, 20)) commandProcessor.process("/SMSG " + myText.get());
-                if (ImGui.button("/REALMSG", 170, 20)) commandProcessor.process("/REALMSG " + myText.get());
-                if (ImGui.button("/CAOSMSG", 170, 20)) commandProcessor.process("/CAOSMSG " + myText.get());
-                if (ImGui.button("/CIUMSG", 170, 20)) commandProcessor.process("/CIUMSG " + myText.get());
+                if (ImGui.button("/hora", 170, 20)) commandProcessor.process("/hora");
+                if (ImGui.button("/motdcambia", 170, 20)) commandProcessor.process("/motdcambia");
+                if (ImGui.button("/talkas", 170, 20)) commandProcessor.process("/talkas");
+                if (ImGui.button("/gmsg", 170, 20)) commandProcessor.process("/gmsg " + myText.get());
+                if (ImGui.button("/rmsg", 170, 20)) commandProcessor.process("/rmsg " + myText.get());
+                if (ImGui.button("/smsg", 170, 20)) commandProcessor.process("/smsg " + myText.get());
+                if (ImGui.button("/realmsg", 170, 20)) commandProcessor.process("/realmsg " + myText.get());
+                if (ImGui.button("/caosmsg", 170, 20)) commandProcessor.process("/caosmsg " + myText.get());
+                if (ImGui.button("/ciumsg", 170, 20)) commandProcessor.process("/ciumsg " + myText.get());
 
                 ImGui.endTabItem();
             }
@@ -46,15 +46,15 @@ public final class FPanelGM extends Form {
             if (ImGui.beginTabItem("Info")) {
                 ImGui.inputText("Argumentos", myText);
                 ImGui.separator();
-                if (ImGui.button("/SHOW SOS", 170, 20)) commandProcessor.process("/SHOW SOS");
-                if (ImGui.button("/BORRAR SOS", 170, 20)) commandProcessor.process("/BORRAR SOS");
-                if (ImGui.button("/TRABAJANDO", 170, 20)) commandProcessor.process("/TRABAJANDO");
-                if (ImGui.button("/OCULTANDO", 170, 20)) commandProcessor.process("/OCULTANDO");
-                if (ImGui.button("/NENE", 170, 20)) commandProcessor.process("/NENE " + myText.get());
-                if (ImGui.button("/ONLINEMAP", 170, 20)) commandProcessor.process("/ONLINEMAP");
-                if (ImGui.button("/ONLINEREAL", 170, 20)) commandProcessor.process("/ONLINEREAL");
-                if (ImGui.button("/ONLINECAOS", 170, 20)) commandProcessor.process("/ONLINECAOS");
-                if (ImGui.button("/ONLINEGM", 170, 20)) commandProcessor.process("/ONLINEGM");
+                if (ImGui.button("/show sos", 170, 20)) commandProcessor.process("/show sos");
+                if (ImGui.button("/borrar sos", 170, 20)) commandProcessor.process("/borrar sos");
+                if (ImGui.button("/trabajando", 170, 20)) commandProcessor.process("/trabajando");
+                if (ImGui.button("/ocultando", 170, 20)) commandProcessor.process("/ocultando");
+                if (ImGui.button("/nene", 170, 20)) commandProcessor.process("/nene " + myText.get());
+                if (ImGui.button("/onlinemap", 170, 20)) commandProcessor.process("/onlinemap");
+                if (ImGui.button("/onlinereal", 170, 20)) commandProcessor.process("/onlinereal");
+                if (ImGui.button("/onlinecaos", 170, 20)) commandProcessor.process("/onlinecaos");
+                if (ImGui.button("/onlinegm", 170, 20)) commandProcessor.process("/onlinegm");
 
                 ImGui.endTabItem();
             }
@@ -67,13 +67,13 @@ public final class FPanelGM extends Form {
             if (ImGui.beginTabItem("Me")) {
                 ImGui.inputText("Argumentos", myText);
                 ImGui.separator();
-                if (ImGui.button("/INVISIBLE", 170, 20)) commandProcessor.process("/INVISIBLE");
-                if (ImGui.button("/IGNORADO", 170, 20)) commandProcessor.process("/IGNORADO");
-                if (ImGui.button("/NAVE", 170, 20)) commandProcessor.process("/NAVE");
-                if (ImGui.button("/SHOWNAME", 170, 20)) commandProcessor.process("/SHOWNAME");
-                if (ImGui.button("/CHATCOLOR", 170, 20)) commandProcessor.process("/CHATCOLOR");
-                if (ImGui.button("/SETDESC", 170, 20)) commandProcessor.process("/SETDESC " + myText.get());
-                if (ImGui.button("/REM", 170, 20)) commandProcessor.process("/REM " + myText.get());
+                if (ImGui.button("/invisible", 170, 20)) commandProcessor.process("/invisible");
+                if (ImGui.button("/ignorado", 170, 20)) commandProcessor.process("/ignorado");
+                if (ImGui.button("/nave", 170, 20)) commandProcessor.process("/nave");
+                if (ImGui.button("/showname", 170, 20)) commandProcessor.process("/showname");
+                if (ImGui.button("/chatcolor", 170, 20)) commandProcessor.process("/chatcolor");
+                if (ImGui.button("/setdesc", 170, 20)) commandProcessor.process("/setdesc " + myText.get());
+                if (ImGui.button("/rem", 170, 20)) commandProcessor.process("/rem " + myText.get());
 
                 ImGui.endTabItem();
             }
@@ -81,15 +81,15 @@ public final class FPanelGM extends Form {
             if (ImGui.beginTabItem("World")) {
                 ImGui.inputText("Argumentos", myText);
                 ImGui.separator();
-                if (ImGui.button("/LLUVIA", 170, 20)) commandProcessor.process("/LLUVIA");
-                if (ImGui.button("/LIMPIAR", 170, 20)) commandProcessor.process("/LIMPIAR");
-                if (ImGui.button("/CC", 170, 20)) commandProcessor.process("/CC");
-                if (ImGui.button("/CT", 170, 20)) commandProcessor.process("/CT " + myText.get());
-                if (ImGui.button("/DT", 170, 20)) commandProcessor.process("/DT");
-                if (ImGui.button("/CI", 170, 20)) commandProcessor.process("/CI " + myText.get());
-                if (ImGui.button("/DEST", 170, 20)) commandProcessor.process("/DEST");
-                if (ImGui.button("/PISO", 170, 20)) commandProcessor.process("/PISO");
-                if (ImGui.button("/MASSDEST", 170, 20)) commandProcessor.process("/MASSDEST");
+                if (ImGui.button("/lluvia", 170, 20)) commandProcessor.process("/lluvia");
+                if (ImGui.button("/limpiar", 170, 20)) commandProcessor.process("/limpiar");
+                if (ImGui.button("/cc", 170, 20)) commandProcessor.process("/cc");
+                if (ImGui.button("/ct", 170, 20)) commandProcessor.process("/ct " + myText.get());
+                if (ImGui.button("/dt", 170, 20)) commandProcessor.process("/dt");
+                if (ImGui.button("/co", 170, 20)) commandProcessor.process("/co " + myText.get());
+                if (ImGui.button("/dest", 170, 20)) commandProcessor.process("/dest");
+                if (ImGui.button("/piso", 170, 20)) commandProcessor.process("/piso");
+                if (ImGui.button("/massdest", 170, 20)) commandProcessor.process("/massdest");
 
                 ImGui.endTabItem();
             }
@@ -97,14 +97,14 @@ public final class FPanelGM extends Form {
             if (ImGui.beginTabItem("Admin")) {
                 ImGui.inputText("Argumentos", myText);
                 ImGui.separator();
-                if (ImGui.button("/IP2NICK", 170, 20)) commandProcessor.process("/IP2NICK " + myText.get());
-                if (ImGui.button("/BANIP", 170, 20)) commandProcessor.process("/BANIP " + myText.get());
-                if (ImGui.button("/UNBANIP", 170, 20)) commandProcessor.process("/UNBANIP " + myText.get());
-                if (ImGui.button("/BANIPLIST", 170, 20)) commandProcessor.process("/BANIPLIST");
-                if (ImGui.button("/BANIPRELOAD", 170, 20)) commandProcessor.process("/BANIPRELOAD");
-                if (ImGui.button("/SHOWCMSG", 170, 20)) commandProcessor.process("/SHOWCMSG");
-                if (ImGui.button("/MIEMBROSCLAN", 170, 20)) commandProcessor.process("/MIEMBROSCLAN " + myText.get());
-                if (ImGui.button("/BANCLAN", 170, 20)) commandProcessor.process("/BANCLAN " + myText.get());
+                if (ImGui.button("/ip2nick", 170, 20)) commandProcessor.process("/ip2nick " + myText.get());
+                if (ImGui.button("/banip", 170, 20)) commandProcessor.process("/banip " + myText.get());
+                if (ImGui.button("/unbanip", 170, 20)) commandProcessor.process("/unbanip " + myText.get());
+                if (ImGui.button("/baniplist", 170, 20)) commandProcessor.process("/baniplist");
+                if (ImGui.button("/banipreload", 170, 20)) commandProcessor.process("/banipreload");
+                if (ImGui.button("/showcmsg", 170, 20)) commandProcessor.process("/showcmsg");
+                if (ImGui.button("/miembrosclan", 170, 20)) commandProcessor.process("/miembrosclan " + myText.get());
+                if (ImGui.button("/banclan", 170, 20)) commandProcessor.process("/banclan " + myText.get());
 
                 ImGui.endTabItem();
             }
