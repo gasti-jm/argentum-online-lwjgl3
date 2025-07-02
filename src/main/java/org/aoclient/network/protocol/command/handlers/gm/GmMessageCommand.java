@@ -2,7 +2,7 @@ package org.aoclient.network.protocol.command.handlers.gm;
 
 import org.aoclient.network.protocol.command.BaseCommandHandler;
 import org.aoclient.network.protocol.command.Command;
-import org.aoclient.network.protocol.command.TextContext;
+import org.aoclient.network.protocol.command.CommandContext;
 import org.aoclient.network.protocol.command.CommandException;
 
 import static org.aoclient.network.protocol.Protocol.writeGMMessage;
@@ -12,10 +12,10 @@ import static org.aoclient.network.protocol.Protocol.writeGMMessage;
 public class GmMessageCommand extends BaseCommandHandler {
 
     @Override
-    public void handle(TextContext textContext) throws CommandException {
-        requireArguments(textContext, -1, "/gmsg <message>");
-        requireValidString(textContext, "message", REGEX);
-        String message = textContext.argumentsRaw().trim();
+    public void handle(CommandContext commandContext) throws CommandException {
+        requireArguments(commandContext, -1, "/gmsg <message>");
+        requireValidString(commandContext, "message", REGEX);
+        String message = commandContext.argumentsRaw().trim();
         writeGMMessage(message);
     }
 

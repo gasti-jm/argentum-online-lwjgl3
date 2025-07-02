@@ -23,21 +23,25 @@ import java.util.Map;
  * TODO Autocompletado de comandos
  */
 
-public enum TextProcessor {
+public enum CommandProcessor {
 
     INSTANCE;
 
     private final Map<String, CommandHandler> commands = new HashMap<>();
 
-    TextProcessor() {
+    CommandProcessor() {
         registerCommands();
     }
 
-    public void process(String text) {
-        TextContext textContext = TextContext.parse(text);
-        if (textContext.isCommand()) execute(textContext);
-        else if (textContext.isYell()) Protocol.writeYell(textContext.getText());
-        else Protocol.writeTalk(textContext.getText());
+    /**
+     * Procesa un comando ingresado como cadena de texto, verificando si es un comando valido y ejecutandolo si corresponde.
+     *
+     * @param command Cadena de texto que representa el comando completo ingresado. Esta cadena debe incluir el nombre del comando
+     *                (por ejemplo, "/telep") y puede incluir argumentos adicionales.
+     */
+    public void process(String command) {
+        CommandContext commandContext = CommandContext.parse(command);
+        if (commandContext.isCommand()) execute(commandContext);
     }
 
     private void registerCommands() {
@@ -180,15 +184,25 @@ public enum TextProcessor {
                 .registerTo(commands);
     }
 
-    private void execute(TextContext textContext) {
-        CommandHandler handler = commands.get(textContext.command());
+    /**
+     * Ejecuta el handler asociado al comando especificado en el contexto.
+     * <p>
+     * Si el comando existe y tiene un handler registrado, se intenta ejecutar su logica a traves del metodo {@code handle}. En
+     * caso de que el handler arroje una excepcion, se captura y muestra un mensaje de error en la consola. Si el comando no es
+     * reconocido, se muestra un mensaje de comando desconocido.
+     *
+     * @param commandContext objeto que contiene informacion sobre el comando a ejecutar, incluyendo el nombre del comando y sus
+     *                       argumentos asociados
+     */
+    private void execute(CommandContext commandContext) {
+        CommandHandler handler = commands.get(commandContext.command());
         if (handler != null) {
             try {
-                handler.handle(textContext);
+                handler.handle(commandContext);
             } catch (CommandException e) {
                 System.err.println(e.getMessage());
             }
-        } else Console.INSTANCE.addMsgToConsole("Unknown command: " + textContext.command(), false, true, new RGBColor());
+        } else Console.INSTANCE.addMsgToConsole("Unknown command: " + commandContext.command(), false, true, new RGBColor());
     }
 
 }

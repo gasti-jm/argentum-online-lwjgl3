@@ -2,7 +2,7 @@ package org.aoclient.network.protocol.command.handlers.gm;
 
 import org.aoclient.network.protocol.command.BaseCommandHandler;
 import org.aoclient.network.protocol.command.Command;
-import org.aoclient.network.protocol.command.TextContext;
+import org.aoclient.network.protocol.command.CommandContext;
 import org.aoclient.network.protocol.command.CommandException;
 
 import static org.aoclient.network.protocol.Protocol.*;
@@ -15,11 +15,11 @@ public class MapInfoCommand extends BaseCommandHandler {
     private static final String USAGE = "/modmapinfo <option> <value>\nOptions: " + VALID_OPTIONS;
 
     @Override
-    public void handle(TextContext textContext) throws CommandException {
-        requireArguments(textContext, 2, USAGE);
+    public void handle(CommandContext commandContext) throws CommandException {
+        requireArguments(commandContext, 2, USAGE);
 
-        String option = textContext.getArgument(0);
-        String value = textContext.getArgument(1);
+        String option = commandContext.getArgument(0);
+        String value = commandContext.getArgument(1);
 
         switch (option.toLowerCase()) {
             case "pk" -> writeChangeMapInfoPK(value.equals("1"));

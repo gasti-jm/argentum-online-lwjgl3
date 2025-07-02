@@ -136,11 +136,6 @@ public class Protocol {
         outputBuffer.writeCp1252String(chat);
     }
 
-    public static void writeYell(String chat) {
-        outputBuffer.writeByte(ClientPacket.YELL.getId());
-        outputBuffer.writeCp1252String(chat);
-    }
-
     public static void writeWhisper(short charIndex, String chat) {
         outputBuffer.writeByte(ClientPacket.WHISPER.getId());
         outputBuffer.writeInteger(charIndex);

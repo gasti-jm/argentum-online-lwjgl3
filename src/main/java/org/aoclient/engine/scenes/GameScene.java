@@ -14,7 +14,8 @@ import org.aoclient.engine.gui.forms.FMain;
 import org.aoclient.engine.listeners.KeyHandler;
 import org.aoclient.engine.listeners.MouseListener;
 import org.aoclient.engine.renderer.RGBColor;
-import org.aoclient.network.protocol.command.TextProcessor;
+import org.aoclient.network.protocol.Protocol;
+import org.aoclient.network.protocol.command.CommandProcessor;
 
 import static org.aoclient.engine.game.IntervalTimer.INT_SENTRPU;
 import static org.aoclient.engine.game.models.Character.drawCharacter;
@@ -67,7 +68,6 @@ public final class GameScene extends Scene {
     private float alphaCeiling = 1.0f;
     private boolean autoMove = false;
     private FMain frmMain;
-    private final TextProcessor textProcessor = TextProcessor.INSTANCE;
 
     @Override
     public void init() {
@@ -240,7 +240,10 @@ public final class GameScene extends Scene {
                 case TALK:
                     if (!ImGUISystem.INSTANCE.isFormVisible(FCantidad.class.getSimpleName())) {
                         if (user.isTalking()) {
-                            if (!frmMain.getSendText().isBlank()) textProcessor.process(frmMain.getSendText());
+                            if (!frmMain.getSendText().isBlank()) {
+                                if (!frmMain.getSendText().startsWith("/")) Protocol.writeTalk(frmMain.getSendText());
+                                else CommandProcessor.INSTANCE.process(frmMain.getSendText());
+                            }
                             user.setTalking(false);
                         } else user.setTalking(true);
                         frmMain.clearSendTxt();

@@ -2,7 +2,7 @@ package org.aoclient.network.protocol.command.handlers.gm;
 
 import org.aoclient.network.protocol.command.BaseCommandHandler;
 import org.aoclient.network.protocol.command.Command;
-import org.aoclient.network.protocol.command.TextContext;
+import org.aoclient.network.protocol.command.CommandContext;
 import org.aoclient.network.protocol.command.CommandException;
 import org.aoclient.network.protocol.command.CommandValidator;
 
@@ -26,10 +26,10 @@ import static org.aoclient.network.protocol.Protocol.writeIPToNick;
 public class IpToNickCommand extends BaseCommandHandler {
 
     @Override
-    public void handle(TextContext textContext) throws CommandException {
-        requireArguments(textContext, 1, "/ip2nick <ip>");
+    public void handle(CommandContext commandContext) throws CommandException {
+        requireArguments(commandContext, 1, "/ip2nick <ip>");
 
-        String ip = textContext.argumentsRaw();
+        String ip = commandContext.argumentsRaw();
 
         if (!CommandValidator.isValidIPv4(ip)) showError("Invalid IP address, must be a valid IPv4 address (e.g., 192.168.1.1).");
 

@@ -2,7 +2,7 @@ package org.aoclient.network.protocol.command.handlers.gm;
 
 import org.aoclient.network.protocol.command.BaseCommandHandler;
 import org.aoclient.network.protocol.command.Command;
-import org.aoclient.network.protocol.command.TextContext;
+import org.aoclient.network.protocol.command.CommandContext;
 import org.aoclient.network.protocol.command.CommandException;
 import org.aoclient.network.protocol.types.CharacterEditType;
 
@@ -45,16 +45,16 @@ import static org.aoclient.network.protocol.Protocol.writeEditChar;
 public class EditCharCommand extends BaseCommandHandler {
 
     @Override
-    public void handle(TextContext textContext) throws CommandException {
-        requireArguments(textContext, 3, "/mod <nick> <property> <value> [extra_param]");
-        requireString(textContext, 0, "nick");
-        requireString(textContext, 1, "property");
-        requireString(textContext, 2, "value");
+    public void handle(CommandContext commandContext) throws CommandException {
+        requireArguments(commandContext, 3, "/mod <nick> <property> <value> [extra_param]");
+        requireString(commandContext, 0, "nick");
+        requireString(commandContext, 1, "property");
+        requireString(commandContext, 2, "value");
 
-        String nick = textContext.getArgument(0);
-        String property = textContext.getArgument(1);
-        String value = textContext.getArgument(2);
-        String extraParam = textContext.getArgumentCount() >= 4 ? textContext.getArgument(3) : ""; // Evita un NPE
+        String nick = commandContext.getArgument(0);
+        String property = commandContext.getArgument(1);
+        String value = commandContext.getArgument(2);
+        String extraParam = commandContext.getArgumentCount() >= 4 ? commandContext.getArgument(3) : ""; // Evita un NPE
 
         CharacterEditType editType = getEditTypeFromProperty(property);
         if (editType == null) showError("Unknown property: " + property + ". See command documentation for valid properties.");

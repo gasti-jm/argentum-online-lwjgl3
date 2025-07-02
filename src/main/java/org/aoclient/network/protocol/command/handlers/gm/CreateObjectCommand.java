@@ -2,7 +2,7 @@ package org.aoclient.network.protocol.command.handlers.gm;
 
 import org.aoclient.network.protocol.command.BaseCommandHandler;
 import org.aoclient.network.protocol.command.Command;
-import org.aoclient.network.protocol.command.TextContext;
+import org.aoclient.network.protocol.command.CommandContext;
 import org.aoclient.network.protocol.command.CommandException;
 
 import static org.aoclient.network.protocol.Protocol.writeCreateObject;
@@ -17,10 +17,10 @@ import static org.aoclient.network.protocol.Protocol.writeCreateObject;
 public class CreateObjectCommand extends BaseCommandHandler {
 
     @Override
-    public void handle(TextContext textContext) throws CommandException {
-        requireArguments(textContext, 1, "/co <object_id>");
-        requireInteger(textContext, 0, "object_id");
-        int objectId = Integer.parseInt(textContext.getArgument(0));
+    public void handle(CommandContext commandContext) throws CommandException {
+        requireArguments(commandContext, 1, "/co <object_id>");
+        requireInteger(commandContext, 0, "object_id");
+        int objectId = Integer.parseInt(commandContext.getArgument(0));
         writeCreateObject(objectId);
     }
 
