@@ -92,7 +92,7 @@ public final class CommandRegistry {
 
                 // Comandos basicos sin argumentos
                 CommandDefinition.simple("/acompañar", Protocol::writePetFollow, "Make your pet follow you"),
-                CommandDefinition.simple("/ayuda", Protocol::writeHelp, "Show available commands and help"),
+                CommandDefinition.simple("/ayuda", Protocol::writeHelp, "Show server help"),
                 CommandDefinition.simple("/balance", Protocol::writeRequestAccountState, "Check your account balance"),
                 CommandDefinition.simple("/boveda", Protocol::writeBankStart, "Open bank interface"),
                 CommandDefinition.simple("/comerciar", Protocol::writeCommerceStart, "Start trading with NPC"),
@@ -104,6 +104,7 @@ public final class CommandRegistry {
                 CommandDefinition.simple("/entrenar", Protocol::writeTrainList, "Show available creatures to train"),
                 CommandDefinition.simple("/est", Protocol::writeRequestStats, "Show your character statistics"),
                 CommandDefinition.simple("/gm", Protocol::writeGMRequest, "Request help from Game Master"),
+                CommandDefinition.basic("/help", HelpCommand::new, "Show available commands"),
                 CommandDefinition.simple("/informacion", Protocol::writeInformation, "Get server information"),
                 CommandDefinition.simple("/liberar", Protocol::writeReleasePet, "Release your pet"),
                 CommandDefinition.simple("/meditar", Protocol::writeMeditate, "Meditate to recover mana"),
