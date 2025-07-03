@@ -1,14 +1,11 @@
 package org.aoclient.network.protocol.command.handlers.guild;
 
 import org.aoclient.network.protocol.command.BaseCommandHandler;
-import org.aoclient.network.protocol.command.Command;
 import org.aoclient.network.protocol.command.CommandContext;
 import org.aoclient.network.protocol.command.CommandException;
 
 import static org.aoclient.network.protocol.Protocol.writeGuildOnlineMembers;
 
-@Command("/onclan")
-@SuppressWarnings("unused")
 public class GuildOnlineMembersCommand extends BaseCommandHandler {
 
     @Override

@@ -1,6 +1,5 @@
 package org.aoclient.network.protocol.command;
 
-import org.aoclient.engine.game.Console;
 import org.aoclient.engine.game.User;
 
 /**
@@ -26,7 +25,6 @@ public abstract class BaseCommandHandler implements CommandHandler {
      */
     protected static final String REGEX = "[a-zA-Z0-9 .,¿?]+";
     protected User user = User.INSTANCE;
-    protected Console console = Console.INSTANCE;
 
     protected void requireArguments(CommandContext commandContext, int count, String usage) throws CommandException {
         if (!commandContext.hasArguments()) showError("Missing arguments. Usage: " + usage);

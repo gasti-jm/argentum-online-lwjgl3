@@ -2,7 +2,6 @@ package org.aoclient.network.protocol.command.handlers.gm;
 
 import org.aoclient.engine.game.Options;
 import org.aoclient.network.protocol.command.BaseCommandHandler;
-import org.aoclient.network.protocol.command.Command;
 import org.aoclient.network.protocol.command.CommandContext;
 import org.aoclient.network.protocol.command.CommandException;
 
@@ -29,8 +28,6 @@ import static org.aoclient.network.protocol.Protocol.writeWarpChar;
  * el servidor y nunca se cual es el zona sin mapear.
  */
 
-@Command("/telep")
-@SuppressWarnings("unused")
 public class WarpCharCommand extends BaseCommandHandler {
 
     private static final int MAX_COORDINATE = 100;

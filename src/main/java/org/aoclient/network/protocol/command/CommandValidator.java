@@ -9,18 +9,6 @@ package org.aoclient.network.protocol.command;
 
 public class CommandValidator {
 
-    // FIXME Esta cortando mal la cadena ejemplo: "jua.chr" falta la n
-    public static String[] AEMAILSplit(String text) {
-        String[] tmpArr = new String[2];
-        byte Pos;
-        Pos = (byte) text.indexOf("-");
-        if (Pos != 0) {
-            tmpArr[0] = text.substring(0, Pos - 1);
-            tmpArr[1] = text.substring(Pos + 1);
-        } else tmpArr[0] = "";
-        return tmpArr;
-    }
-
     /**
      * Verifica si una direccion IP proporcionada es una direccion IPv4 valida.
      * <p>
