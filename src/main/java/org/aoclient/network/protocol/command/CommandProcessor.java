@@ -58,7 +58,7 @@ public enum CommandProcessor {
                 Console.INSTANCE.addMsgToConsole(e.getMessage(), false, true, new RGBColor());
             }
         } else
-            Console.INSTANCE.addMsgToConsole("'" + commandContext.command() + "' is not a game command. See '/help'.", false, true, new RGBColor());
+            Console.INSTANCE.addMsgToConsole("'" + commandContext.command() + "' is not a game command. See '/?'.", false, true, new RGBColor());
     }
 
 }

@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * Representa un handler para el comando {@code /help}. Su funcion principal es proporcionar informacion de ayuda general o
+ * Representa un handler para el comando {@code /?}. Su funcion principal es proporcionar informacion de ayuda general o
  * especifica segun los argumentos proporcionados por el usuario.
  * <p>
  * Funcionalidades principales:
@@ -29,6 +29,9 @@ public class HelpCommand extends BaseCommandHandler {
 
     @Override
     public void handle(CommandContext commandContext) throws CommandException {
+
+        // writeHelp(); // Obtiene informacion obsoleta del servidor de VB6
+
         // Muestra ayuda general
         if (!commandContext.hasArguments()) showGeneralHelp();
         else {
@@ -40,7 +43,7 @@ public class HelpCommand extends BaseCommandHandler {
 
     private void showGeneralHelp() {
         console.addMsgToConsole("[AVAILABLE COMMANDS]", false, false, new RGBColor(0f, 1f, 0f));
-        console.addMsgToConsole("", false, false, new RGBColor());
+        // console.addMsgToConsole("", false, false, new RGBColor());
 
         // Muestra comandos por categoria
         for (CommandCategory category : CommandCategory.values()) {
@@ -59,7 +62,7 @@ public class HelpCommand extends BaseCommandHandler {
 
         }
 
-        console.addMsgToConsole("Type '/help <command>' for specific help", false, false, new RGBColor(0f, 1f, 1f));
+        console.addMsgToConsole("Type '/? <command>' for specific help", false, false, new RGBColor(0f, 1f, 1f));
     }
 
     private void showCommandHelp(String commandName) {

@@ -21,6 +21,8 @@ package org.aoclient.network.protocol;
  * <b>IMPORTANTE</b>: Los IDs de los enums se asignan para que coincidan <b>exactamente</b> con la posicion del paquete
  * correspondiente en el {@code ClientPacketID} del servidor VB6 dentro de {@code Protocol.bas}. Esta coincidencia es fundamental
  * para la correcta comunicacion cliente-servidor.
+ * <p>
+ * FIXME Actualizar comentarios de comandos
  */
 
 public enum ClientPacket {

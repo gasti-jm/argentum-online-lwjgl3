@@ -25,6 +25,9 @@ import static org.lwjgl.glfw.GLFW.glfwGetTime;
  * <p>
  * Trabaja en conjunto con {@link SocketConnection} para la transmision real de los datos, y utiliza {@link PacketBuffer} para
  * almacenar temporalmente los bytes entrantes y salientes antes de su manejo.
+ * <p>
+ * TODO Eliminar el prejio "write" de cada metodo ya que son redundantes
+ * TODO Los nombres de los metodos tienen que coincidir con los nombres de los comandos
  */
 
 public class Protocol {
