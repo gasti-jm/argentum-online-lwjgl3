@@ -9,9 +9,9 @@ import static org.aoclient.network.protocol.Protocol.writeRoyaleArmyMessage;
 public class RoyaleArmyMessageCommand extends BaseCommandHandler {
 
     @Override
-    public void handle(CommandContext context) throws CommandException {
-        requireArguments(context, 1, "/realmsg <message>");
-        String nick = context.getArgument(0);
+    public void handle(CommandContext commandContext) throws CommandException {
+        requireArguments(commandContext, 1, "/realmsg <message>");
+        String nick = commandContext.getArgument(0);
         writeRoyaleArmyMessage(nick);
     }
 

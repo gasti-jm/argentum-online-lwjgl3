@@ -7,7 +7,7 @@ import org.aoclient.network.protocol.Protocol;
 
 import static org.lwjgl.glfw.GLFW.glfwGetTime;
 
-public class PongHandler implements PacketHandler {
+public class PingHandler implements PacketHandler {
 
     @Override
     public void handle(PacketBuffer buffer) {

@@ -9,23 +9,22 @@ import static org.aoclient.network.protocol.Protocol.writeChatColor;
 public class ChatColorCommand extends BaseCommandHandler {
 
     @Override
-    public void handle(CommandContext context) throws CommandException {
-        if (!context.hasArguments()) {
+    public void handle(CommandContext commandContext) throws CommandException {
+        if (!commandContext.hasArguments()) {
             writeChatColor(0, 255, 0);
             return;
         }
 
-        requireArguments(context, 3, "/chatcolor <r> <g> <b>");
-        requireInteger(context, 0, "r");
-        requireInteger(context, 1, "g");
-        requireInteger(context, 2, "b");
+        requireArguments(commandContext, 3, "/chatcolor <r> <g> <b>");
+        requireInteger(commandContext, 0, "r");
+        requireInteger(commandContext, 1, "g");
+        requireInteger(commandContext, 2, "b");
 
-        int red = Integer.parseInt(context.getArgument(0));
-        int green = Integer.parseInt(context.getArgument(1));
-        int blue = Integer.parseInt(context.getArgument(2));
+        int r = Integer.parseInt(commandContext.getArgument(0));
+        int g = Integer.parseInt(commandContext.getArgument(1));
+        int b = Integer.parseInt(commandContext.getArgument(2));
 
-        writeChatColor(red, green, blue);
-
+        writeChatColor(r, g, b);
     }
 
 }

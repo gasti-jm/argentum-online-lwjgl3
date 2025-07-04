@@ -11,9 +11,9 @@ import static org.aoclient.network.protocol.Protocol.writeServerMessage;
 public class ServerMessageCommand extends BaseCommandHandler {
 
     @Override
-    public void handle(CommandContext context) throws CommandException {
-        requireArguments(context, -1, "/rmsg <message>");
-        requireValidString(context, "message", REGEX);
+    public void handle(CommandContext commandContext) throws CommandException {
+        requireArguments(commandContext, -1, "/rmsg <message>");
+        requireValidString(commandContext, "message", REGEX);
         writeServerMessage();
     }
 

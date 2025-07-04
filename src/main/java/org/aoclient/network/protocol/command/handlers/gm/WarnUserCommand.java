@@ -9,10 +9,12 @@ import static org.aoclient.network.protocol.Protocol.writeWarnUser;
 public class WarnUserCommand extends BaseCommandHandler {
 
     @Override
-    public void handle(CommandContext context) throws CommandException {
-        requireArguments(context, 2, "/advertencia <nick> <reason>");
-        String nick = context.getArgument(0);
-        String reason = context.getArgument(1);
+    public void handle(CommandContext commandContext) throws CommandException {
+        requireArguments(commandContext, 2, "/advertencia <nick> <reason>");
+        requireString(commandContext, 0, "nick");
+        requireString(commandContext, 1, "reason");
+        String nick = commandContext.getArgument(0);
+        String reason = commandContext.getArgument(1);
         writeWarnUser(nick, reason);
     }
 

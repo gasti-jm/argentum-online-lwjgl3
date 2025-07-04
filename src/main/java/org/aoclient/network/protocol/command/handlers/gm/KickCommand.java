@@ -9,9 +9,9 @@ import static org.aoclient.network.protocol.Protocol.writeKick;
 public class KickCommand extends BaseCommandHandler {
 
     @Override
-    public void handle(CommandContext context) throws CommandException {
-        requireArguments(context, 1, "/echar <nick>");
-        String nick = context.getArgument(0);
+    public void handle(CommandContext commandContext) throws CommandException {
+        requireArguments(commandContext, 1, "/echar <nick>");
+        String nick = commandContext.getArgument(0);
         writeKick(nick);
     }
 

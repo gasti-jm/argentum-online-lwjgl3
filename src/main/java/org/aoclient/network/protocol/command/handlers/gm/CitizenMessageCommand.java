@@ -9,10 +9,10 @@ import static org.aoclient.network.protocol.Protocol.writeCitizenMessage;
 public class CitizenMessageCommand extends BaseCommandHandler {
 
     @Override
-    public void handle(CommandContext context) throws CommandException {
-        requireArguments(context, -1, "/ciumsg <message>");
-        requireValidString(context, "message", REGEX);
-        String message = context.getArgumentsRaw().trim();
+    public void handle(CommandContext commandContext) throws CommandException {
+        requireArguments(commandContext, -1, "/ciumsg <message>");
+        requireValidString(commandContext, "message", REGEX);
+        String message = commandContext.argumentsRaw().trim();
         writeCitizenMessage(message);
     }
 

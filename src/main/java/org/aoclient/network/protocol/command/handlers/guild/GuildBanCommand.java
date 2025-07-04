@@ -9,9 +9,9 @@ import static org.aoclient.network.protocol.Protocol.writeGuildBan;
 public class GuildBanCommand extends BaseCommandHandler {
 
     @Override
-    public void handle(CommandContext context) throws CommandException {
-        requireArguments(context, 1, "/banclan <name>");
-        String name = context.getArgument(0);
+    public void handle(CommandContext commandContext) throws CommandException {
+        requireArguments(commandContext, 1, "/banclan <name>");
+        String name = commandContext.getArgument(0);
         writeGuildBan(name);
     }
 

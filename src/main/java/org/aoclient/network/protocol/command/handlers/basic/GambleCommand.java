@@ -9,15 +9,15 @@ import static org.aoclient.network.protocol.Protocol.writeGamble;
 public class GambleCommand extends BaseCommandHandler {
 
     @Override
-    public void handle(CommandContext context) throws CommandException {
+    public void handle(CommandContext commandContext) throws CommandException {
         if (user.isDead()) {
             showError("You are dead!");
             return;
         }
-        requireArguments(context, 1, "/apostar <amount>");
-        requireShort(context, 0, "amount");
+        requireArguments(commandContext, 1, "/apostar <amount>");
+        requireShort(commandContext, 0, "amount");
 
-        short amount = Short.parseShort(context.getArgument(0));
+        short amount = Short.parseShort(commandContext.getArgument(0));
 
         writeGamble(amount);
     }

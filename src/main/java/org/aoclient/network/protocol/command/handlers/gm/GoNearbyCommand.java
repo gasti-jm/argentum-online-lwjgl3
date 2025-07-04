@@ -9,9 +9,9 @@ import static org.aoclient.network.protocol.Protocol.writeGoNearby;
 public class GoNearbyCommand extends BaseCommandHandler {
 
     @Override
-    public void handle(CommandContext context) throws CommandException {
-        requireArguments(context, 1, "/ircerca <nick>");
-        String nick = context.getArgument(0);
+    public void handle(CommandContext commandContext) throws CommandException {
+        requireArguments(commandContext, 1, "/ircerca <nick>");
+        String nick = commandContext.getArgument(0);
         writeGoNearby(nick);
     }
 

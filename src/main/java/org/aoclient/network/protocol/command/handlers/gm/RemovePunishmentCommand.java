@@ -8,21 +8,15 @@ import static org.aoclient.network.protocol.Protocol.writeRemovePunishment;
 
 public class RemovePunishmentCommand extends BaseCommandHandler {
 
-    private static final String USAGE = "/borrarpena <nick> <minutes> <newPunishment>";
-
     @Override
-    public void handle(CommandContext context) throws CommandException {
-        requireArguments(context, 3, USAGE);
-
-        String nick = context.getArgument(0);
-        requireString(context, 0, "nick");
-
-        requireInteger(context, 1, "minutes");
-        int minutes = Integer.parseInt(context.getArgument(1));
-
-        String newPunishment = context.getArgument(2);
-        requireString(context, 2, "newPunishment");
-
+    public void handle(CommandContext commandContext) throws CommandException {
+        requireArguments(commandContext, 3, "/borrarpena <nick> <minutes> <newPunishment>");
+        requireString(commandContext, 0, "nick");
+        requireInteger(commandContext, 1, "minutes");
+        requireString(commandContext, 2, "newPunishment");
+        String nick = commandContext.getArgument(0);
+        int minutes = Integer.parseInt(commandContext.getArgument(1));
+        String newPunishment = commandContext.getArgument(2);
         writeRemovePunishment(nick, minutes, newPunishment);
     }
 

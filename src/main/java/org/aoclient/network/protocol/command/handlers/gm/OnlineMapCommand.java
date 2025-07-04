@@ -9,10 +9,10 @@ import static org.aoclient.network.protocol.Protocol.writeOnlineMap;
 public class OnlineMapCommand extends BaseCommandHandler {
 
     @Override
-    public void handle(CommandContext context) throws CommandException {
-        if (context.hasArguments()) {
-            requireInteger(context, 0, "map");
-            short mapNumber = Short.parseShort(context.getArgument(0));
+    public void handle(CommandContext commandContext) throws CommandException {
+        if (commandContext.hasArguments()) {
+            requireInteger(commandContext, 0, "map");
+            short mapNumber = Short.parseShort(commandContext.getArgument(0));
             writeOnlineMap(mapNumber);
         } else writeOnlineMap(user.getUserMap()); // Si no se proporciona argumento, usar el mapa actual del usuario
     }

@@ -9,11 +9,11 @@ import static org.aoclient.network.protocol.Protocol.writeSetCharDescription;
 public class SetCharDescriptionCommand extends BaseCommandHandler {
 
     @Override
-    public void handle(CommandContext context) throws CommandException {
-        requireArguments(context, -1, "/setdesc <desc>");
-        requireValidString(context, "desc", REGEX);
-        String desc = context.getArgumentsRaw();
-        writeSetCharDescription(desc);
+    public void handle(CommandContext commandContext) throws CommandException {
+        requireArguments(commandContext, -1, "/setdesc <description>");
+        requireValidString(commandContext, "description", REGEX);
+        String description = commandContext.argumentsRaw().trim();
+        writeSetCharDescription(description);
     }
 
 }

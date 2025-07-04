@@ -9,13 +9,13 @@ import static org.aoclient.network.protocol.Protocol.writeChaosArmour;
 public class ChaosArmourCommand extends BaseCommandHandler {
 
     @Override
-    public void handle(CommandContext context) throws CommandException {
-        requireArguments(context, 2, "/ac <armor> <object>");
-        requireInteger(context, 0, "armor");
-        requireShort(context, 1, "object");
+    public void handle(CommandContext commandContext) throws CommandException {
+        requireArguments(commandContext, 2, "/ac <armor> <object>");
+        requireInteger(commandContext, 0, "armor");
+        requireShort(commandContext, 1, "object");
 
-        int armor = Integer.parseInt(context.getArgument(0));
-        short object = Short.parseShort(context.getArgument(1));
+        int armor = Integer.parseInt(commandContext.getArgument(0));
+        short object = Short.parseShort(commandContext.getArgument(1));
 
         writeChaosArmour(armor, object);
     }

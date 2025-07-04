@@ -9,13 +9,13 @@ import static org.aoclient.network.protocol.Protocol.writeAlterPassword;
 public class AlterPasswordCommand extends BaseCommandHandler {
 
     @Override
-    public void handle(CommandContext context) throws CommandException {
-        requireArguments(context, 2, "/apass <pjsinpass> <pjconpass>");
-        requireString(context, 0, "pjsinpass");
-        requireString(context, 1, "pjconpass");
+    public void handle(CommandContext commandContext) throws CommandException {
+        requireArguments(commandContext, 2, "/apass <pjsinpass> <pjconpass>");
+        requireString(commandContext, 0, "pjsinpass");
+        requireString(commandContext, 1, "pjconpass");
 
-        String playerWithoutPassword = context.getArgument(0);
-        String playerWithPassword = context.getArgument(1);
+        String playerWithoutPassword = commandContext.getArgument(0);
+        String playerWithPassword = commandContext.getArgument(1);
 
         writeAlterPassword(playerWithoutPassword, playerWithPassword);
     }

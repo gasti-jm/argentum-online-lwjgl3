@@ -10,11 +10,11 @@ import static org.aoclient.network.protocol.Protocol.writeSetTrigger;
 public class SetTriggerCommand extends BaseCommandHandler {
 
     @Override
-    public void handle(CommandContext context) throws CommandException {
-        if (context.hasArguments()) {
+    public void handle(CommandContext commandContext) throws CommandException {
+        if (commandContext.hasArguments()) {
             // Modo: establecer trigger con numero especifico
-            requireInteger(context, 0, "trigger number");
-            int triggerNumber = Integer.parseInt(context.getArgument(0));
+            requireInteger(commandContext, 0, "trigger number");
+            int triggerNumber = Integer.parseInt(commandContext.getArgument(0));
             writeSetTrigger(triggerNumber);
         } else writeAskTrigger(); // Modo: solicitar informacion sobre trigger actual
     }

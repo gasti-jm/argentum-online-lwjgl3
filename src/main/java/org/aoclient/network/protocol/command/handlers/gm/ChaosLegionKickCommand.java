@@ -9,10 +9,10 @@ import static org.aoclient.network.protocol.Protocol.writeChaosLegionKick;
 public class ChaosLegionKickCommand extends BaseCommandHandler {
 
     @Override
-    public void handle(CommandContext context) throws CommandException {
-        requireArguments(context, 1, "/nocaos <nick>");
-        requireString(context, 0, "nick");
-        String nick = context.getArgument(0);
+    public void handle(CommandContext commandContext) throws CommandException {
+        requireArguments(commandContext, 1, "/nocaos <nick>");
+        requireString(commandContext, 0, "nick");
+        String nick = commandContext.getArgument(0);
         writeChaosLegionKick(nick);
     }
 

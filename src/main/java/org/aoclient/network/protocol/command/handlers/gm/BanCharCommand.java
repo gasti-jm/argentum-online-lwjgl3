@@ -9,16 +9,15 @@ import static org.aoclient.network.protocol.Protocol.writeBanChar;
 public class BanCharCommand extends BaseCommandHandler {
 
     @Override
-    public void handle(CommandContext context) throws CommandException {
-        requireArguments(context, 2, "/ban <nick> <reason>");
-        requireString(context, 0, "nick");
-        requireString(context, 1, "reason");
+    public void handle(CommandContext commandContext) throws CommandException {
+        requireArguments(commandContext, 2, "/ban <nick> <reason>");
+        requireString(commandContext, 0, "nick");
+        requireString(commandContext, 1, "reason");
 
-        String nick = context.getArgument(0);
-        String reason = context.getArgument(1);
+        String nick = commandContext.getArgument(0);
+        String reason = commandContext.getArgument(1);
 
         writeBanChar(nick, reason);
-
     }
 
 }

@@ -9,10 +9,10 @@ import static org.aoclient.network.protocol.Protocol.writeCreateNPCWithRespawn;
 public class CreateNPCWithRespawnCommand extends BaseCommandHandler {
 
     @Override
-    public void handle(CommandContext context) throws CommandException {
-        requireArguments(context, 1, "/racc <npc>");
-        requireInteger(context, 0, "npc");
-        short npc = Short.parseShort(context.getArgument(0));
+    public void handle(CommandContext commandContext) throws CommandException {
+        requireArguments(commandContext, 1, "/racc <npc>");
+        requireInteger(commandContext, 0, "npc");
+        short npc = Short.parseShort(commandContext.getArgument(0));
         writeCreateNPCWithRespawn(npc);
     }
 

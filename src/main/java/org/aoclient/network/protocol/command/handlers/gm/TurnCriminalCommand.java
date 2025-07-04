@@ -9,9 +9,9 @@ import static org.aoclient.network.protocol.Protocol.writeTurnCriminal;
 public class TurnCriminalCommand extends BaseCommandHandler {
 
     @Override
-    public void handle(CommandContext context) throws CommandException {
-        requireArguments(context, 1, "/conden <nick>");
-        String nick = context.getArgument(0);
+    public void handle(CommandContext commandContext) throws CommandException {
+        requireArguments(commandContext, 1, "/conden <nick>");
+        String nick = commandContext.getArgument(0);
         writeTurnCriminal(nick);
     }
 

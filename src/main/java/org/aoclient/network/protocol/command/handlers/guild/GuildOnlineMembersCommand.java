@@ -9,9 +9,9 @@ import static org.aoclient.network.protocol.Protocol.writeGuildOnlineMembers;
 public class GuildOnlineMembersCommand extends BaseCommandHandler {
 
     @Override
-    public void handle(CommandContext context) throws CommandException {
-        requireArguments(context, 1, "/onclan <name>");
-        String name = context.getArgument(0);
+    public void handle(CommandContext commandContext) throws CommandException {
+        requireArguments(commandContext, 1, "/onclan <name>");
+        String name = commandContext.getArgument(0);
         writeGuildOnlineMembers(name);
     }
 

@@ -9,9 +9,9 @@ import static org.aoclient.network.protocol.Protocol.writeRequestCharBank;
 public class RequestCharBankCommand extends BaseCommandHandler {
 
     @Override
-    public void handle(CommandContext context) throws CommandException {
-        requireArguments(context, 1, "/bov <nick>");
-        String nick = context.getArgument(0);
+    public void handle(CommandContext commandContext) throws CommandException {
+        requireArguments(commandContext, 1, "/bov <nick>");
+        String nick = commandContext.getArgument(0);
         writeRequestCharBank(nick);
     }
 

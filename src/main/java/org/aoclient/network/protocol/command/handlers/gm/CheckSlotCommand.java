@@ -9,13 +9,13 @@ import static org.aoclient.network.protocol.Protocol.writeCheckSlot;
 public class CheckSlotCommand extends BaseCommandHandler {
 
     @Override
-    public void handle(CommandContext context) throws CommandException {
-        requireArguments(context, 2, "/slot <nick> <slot>");
-        requireString(context, 0, "nick");
-        requireInteger(context, 1, "slot");
+    public void handle(CommandContext commandContext) throws CommandException {
+        requireArguments(commandContext, 2, "/slot <nick> <slot>");
+        requireString(commandContext, 0, "nick");
+        requireInteger(commandContext, 1, "slot");
 
-        String nick = context.getArgument(0);
-        int slot = Integer.parseInt(context.getArgument(1));
+        String nick = commandContext.getArgument(0);
+        int slot = Integer.parseInt(commandContext.getArgument(1));
 
         writeCheckSlot(nick, slot);
     }

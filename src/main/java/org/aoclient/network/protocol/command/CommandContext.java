@@ -1,91 +1,112 @@
 package org.aoclient.network.protocol.command;
 
+import java.util.List;
+
 /**
- * Esta clase representa el contexto de un comando proporcionado como entrada en formato de texto. Su finalidad es analizar y
- * estructurar la entrada, permitiendo acceder al comando, argumentos asociados y otras propiedades relevantes.
+ * Clase que representa el contexto de un comando. Contiene el comando principal, una lista de argumentos individuales, y los
+ * argumentos en su formato original ("en crudo").
  * <p>
- * Un comando es tipicamente identificado por un prefijo especifico, como "/". Este contexto permite reconocer tales prefijos, asi
- * como los argumentos que siguen al comando principal.
+ * Es utilizada para analizar y descomponer comandos en sus partes principales, permitiendo una manipulacion sencilla del comando
+ * y sus argumentos.
  */
 
-public class CommandContext {
+public record CommandContext(
+        String command,
+        List<String> arguments, // Para comandos que necesitan la lista de argumentos
+        String argumentsRaw // Para comandos que necesitan el texto completo ("los argumentos en crudo")
+) {
 
-    private final String rawCommand;
-    private final String command;
-    private String[] arguments = new String[0];
-    /** Cadena de argumentos de comando en crudo que preserva espacios y formateo. */
-    private String argumentsRaw = "";
+    /** Limite para controlar la cantidad de veces que se divide un comando en sus partes (comando y argumentos). */
+    private static final int COMMAND_SPLIT_LIMIT = 2;
+
+    public CommandContext {
+        arguments = List.copyOf(arguments); // Inmutable defensivo
+    }
 
     /**
-     * Constructor que inicializa un contexto de comando a partir de un comando en formato de texto.
+     * Parsea un comando en una estructura que contiene el comando principal, una lista de argumentos y los argumentos en su
+     * formato original.
      *
-     * @param rawCommand Comando en formato de texto completo que incluye tanto el comando como sus argumentos. Por ejemplo, en la
-     *                   entrada "/TELEP nickname map x y", el comando seria "/TELEP" y los argumentos serian "nickname map x y".
+     * @param commandInput cadena de texto que representa el comando completo ingresado, incluyendo el comando principal y los
+     *                     posibles argumentos
+     * @return un objeto {@code CommandContext} que contiene el comando principal, los argumentos como lista y los argumentos en
+     * formato "en crudo"
      */
-    public CommandContext(String rawCommand) {
-        this.rawCommand = rawCommand;
+    public static CommandContext parse(String commandInput) {
+        String trimmedCommand = commandInput.trim();
+        String[] commandParts = splitCommand(trimmedCommand);
 
-        /* El 2 es el limite que controla la cantidad de veces que se aplica el patron (la division del comando en crudo) y, por
-         * lo tanto, afecta la longitud de la matriz resultante. Por lo que, para el comando principal, parts[0] contiene el
-         * comando ("/TELEP", por ejemplo) y parts[1] los argumentos ("nickname map x y", por ejemplo). */
-        String[] parts = rawCommand.split(" ", 2);
-        command = parts[0];
+        String command = commandParts[0];
+        String argumentsRaw = extractArgumentsRaw(commandParts);
+        List<String> arguments = parseArgumentsList(argumentsRaw);
 
-        // Si hay argumentos
-        if (parts.length > 1) {
-            // Almacena los argumentos en crudo en argumentsRaw
-            argumentsRaw = parts[1];
-            /* Elimina los posibles espacios al principio y final de los argumentos, y divide los argumentos separados por un
-             * espacio. Si parts[1].trim() esta vacio, split(" ") produce un array con un elemento vacio, no un array vacio. */
-            arguments = parts[1].trim().split(" ");
-        }
-
+        return new CommandContext(command, arguments, argumentsRaw);
     }
 
     public boolean isCommand() {
         return command.startsWith("/");
     }
 
-    public boolean isYell() {
-        return command.startsWith("-");
-    }
-
-    public String getCommand() {
-        return command;
-    }
-
-    public String[] getArguments() {
-        return arguments;
-    }
-
-    public String getArgumentsRaw() {
-        return argumentsRaw;
-    }
-
-    public String getMessage() {
-        return isYell() ? rawCommand.substring(1) : rawCommand;
+    public boolean hasArguments() {
+        return !arguments.isEmpty();
     }
 
     public int getArgumentCount() {
-        return arguments.length;
+        return arguments.size();
     }
 
     /**
-     * Verifica si hay argumentos presentes en el comando.
+     * Obtiene el argumento en la posicion especificada dentro de la lista de argumentos.
      *
-     * @return {@code true} si el comando tiene al menos un argumento y la cadena de texto que los representa no esta vacia o solo
-     * contiene espacios en blanco, de lo contrario, {@code false}.
+     * @param index indice del argumento
+     * @return el argumento correspondiente al indice proporcionado como una cadena, o una cadena vacia si el indice no es valido
      */
-    public boolean hasArguments() {
-        return arguments.length > 0 && !argumentsRaw.trim().isEmpty();
-    }
-
     public String getArgument(int index) {
-        return index < arguments.length ? arguments[index] : "";
+        return index >= 0 && index < arguments.size() ? arguments.get(index) : "";
     }
 
-    public void setArgument(int index, String str) {
-        arguments[index] = str;
+    /**
+     * Divide un comando en dos partes: el comando principal y un posible conjunto de argumentos.
+     * <p>
+     * La division se realiza basandose en espacios y se limita a dos partes como maximo.
+     *
+     * @param trimmedCommand Cadena del comando ya recortada (sin espacios en blanco al inicio ni al final). Esta cadena
+     *                       representa el comando completo que se desea dividir.
+     * @return un arreglo de cadenas donde la primera posicion contiene el comando principal y la segunda, si existe, contiene el
+     * resto de los argumentos como un texto completo
+     */
+    private static String[] splitCommand(String trimmedCommand) {
+        return trimmedCommand.split("\\s+", COMMAND_SPLIT_LIMIT);
+    }
+
+
+    /**
+     * Extrae la parte de los argumentos "en crudo" desde un comando ya dividido en sus partes. Si el comando contiene al menos
+     * dos partes, devuelve la segunda parte que corresponde a los argumentos como una cadena de texto completa. Si no hay una
+     * segunda parte, devuelve una cadena vacia.
+     *
+     * @param commandParts Arreglo de cadenas donde cada elemento representa una parte del comando que ya ha sido dividido. Se
+     *                     espera que la primera parte sea el comando principal y, si existe, la segunda contenga los argumentos
+     *                     en crudo.
+     * @return una cadena que representa los argumentos en crudo si existen; de lo contrario, devuelve una cadena vacia
+     */
+    private static String extractArgumentsRaw(String[] commandParts) {
+        return commandParts.length > 1 ? commandParts[1] : "";
+    }
+
+    /**
+     * Convierte una cadena de texto que contiene argumentos en una lista de argumentos individuales.
+     * <p>
+     * La cadena de entrada se divide utilizando espacios como separadores. Si la cadena no contiene ningun argumento (es vacia),
+     * se devuelve una lista vacia.
+     *
+     * @param argumentsRaw Cadena de texto que representa los argumentos en formato "en crudo". Esta cadena puede estar vacia o
+     *                     contener multiples argumentos separados por espacios.
+     * @return Una lista que contiene cada argumento como un elemento separado. Si la cadena ingresada esta vacia, se devuelve una
+     * lista vacia.
+     */
+    private static List<String> parseArgumentsList(String argumentsRaw) {
+        return argumentsRaw.isEmpty() ? List.of() : List.of(argumentsRaw.split("\\s+"));
     }
 
 }

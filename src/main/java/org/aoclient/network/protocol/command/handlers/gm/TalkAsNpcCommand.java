@@ -9,10 +9,10 @@ import static org.aoclient.network.protocol.Protocol.writeTalkAsNPC;
 public class TalkAsNpcCommand extends BaseCommandHandler {
 
     @Override
-    public void handle(CommandContext context) throws CommandException {
-        requireArguments(context, -1, "/talkas <message>");
-        requireValidString(context, "message", REGEX);
-        String message = context.getArgumentsRaw().trim();
+    public void handle(CommandContext commandContext) throws CommandException {
+        requireArguments(commandContext, -1, "/talkas <message>");
+        requireValidString(commandContext, "message", REGEX);
+        String message = commandContext.argumentsRaw().trim();
         writeTalkAsNPC(message);
     }
 

@@ -10,18 +10,18 @@ import static org.aoclient.network.protocol.Protocol.writeBanIP;
 public class BanIpCommand extends BaseCommandHandler {
 
     @Override
-    public void handle(CommandContext context) throws CommandException {
-        requireArguments(context, 2, "/banip <ip|nick> <reason>");
-        requireString(context, 0, "ip|nick");
-        requireString(context, 1, "reason");
+    public void handle(CommandContext commandContext) throws CommandException {
+        requireArguments(commandContext, 2, "/banip <ip|nick> <reason>");
+        requireString(commandContext, 0, "ip|nick");
+        requireString(commandContext, 1, "reason");
 
-        String ipOrNick = context.getArgument(0);
-        String reason = context.getArgument(1);
+        String ipOrNick = commandContext.getArgument(0);
+        String reason = commandContext.getArgument(1);
 
-        if (CommandValidator.INSTANCE.isValidIPv4(ipOrNick))
-            writeBanIP(true, CommandValidator.INSTANCE.parseIPv4ToArray(ipOrNick), "", reason); // Banea por IP
+        if (CommandValidator.isValidIPv4(ipOrNick))
+            writeBanIP(true, CommandValidator.parseIPv4ToArray(ipOrNick), "", reason); // Banea por IP
         else
-            writeBanIP(false, CommandValidator.INSTANCE.parseIPv4ToArray("0.0.0.0"), ipOrNick, reason); // Banea por nick (buscar IP del jugador)
+            writeBanIP(false, CommandValidator.parseIPv4ToArray("0.0.0.0"), ipOrNick, reason); // Banea por nick (buscar IP del jugador)
 
     }
 

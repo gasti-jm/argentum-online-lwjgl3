@@ -9,10 +9,10 @@ import static org.aoclient.network.protocol.Protocol.writeBugReport;
 public class BugReportCommand extends BaseCommandHandler {
 
     @Override
-    public void handle(CommandContext context) throws CommandException {
-        requireArguments(context, -1, "/bug <description>");
-        requireValidString(context, "description", REGEX);
-        String description = context.getArgumentsRaw().trim();
+    public void handle(CommandContext commandContext) throws CommandException {
+        requireArguments(commandContext, -1, "/bug <description>");
+        requireValidString(commandContext, "description", REGEX);
+        String description = commandContext.argumentsRaw().trim();
         writeBugReport(description);
     }
 

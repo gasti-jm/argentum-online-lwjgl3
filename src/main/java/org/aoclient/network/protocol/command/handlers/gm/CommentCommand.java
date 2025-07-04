@@ -9,10 +9,10 @@ import static org.aoclient.network.protocol.Protocol.writeComment;
 public class CommentCommand extends BaseCommandHandler {
 
     @Override
-    public void handle(CommandContext context) throws CommandException {
-        requireArguments(context, -1, "/rem <comment>");
-        requireValidString(context, "comment", REGEX);
-        String comment = context.getArgumentsRaw().trim();
+    public void handle(CommandContext commandContext) throws CommandException {
+        requireArguments(commandContext, -1, "/rem <comment>");
+        requireValidString(commandContext, "comment", REGEX);
+        String comment = commandContext.argumentsRaw().trim();
         writeComment(comment);
     }
 

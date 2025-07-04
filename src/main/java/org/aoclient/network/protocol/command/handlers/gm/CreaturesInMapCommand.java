@@ -9,10 +9,10 @@ import static org.aoclient.network.protocol.Protocol.writeCreaturesInMap;
 public class CreaturesInMapCommand extends BaseCommandHandler {
 
     @Override
-    public void handle(CommandContext context) throws CommandException {
-        requireArguments(context, 1, "/nene <map>");
-        requireInteger(context, 0, "map");
-        short map = Short.parseShort(context.getArgument(0));
+    public void handle(CommandContext commandContext) throws CommandException {
+        requireArguments(commandContext, 1, "/nene <map>");
+        requireInteger(commandContext, 0, "map");
+        short map = Short.parseShort(commandContext.getArgument(0));
         writeCreaturesInMap(map);
     }
 

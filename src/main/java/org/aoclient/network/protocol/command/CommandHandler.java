@@ -1,8 +1,5 @@
 package org.aoclient.network.protocol.command;
 
-import org.aoclient.engine.game.Console;
-import org.aoclient.engine.renderer.RGBColor;
-
 /**
  * Interface que define una estructura basica para el manejo de comandos en el sistema. Los comandos son procesados a traves del
  * metodo {@link #handle(CommandContext)}, donde se implementa la logica especifica de cada comando.
@@ -13,10 +10,9 @@ import org.aoclient.engine.renderer.RGBColor;
 
 public interface CommandHandler {
 
-    void handle(CommandContext context) throws CommandException;
+    void handle(CommandContext commandContext) throws CommandException;
 
     default void showError(String message) throws CommandException {
-        Console.INSTANCE.addMsgToConsole(message, false, true, new RGBColor());
         throw new CommandException(message);
     }
 
