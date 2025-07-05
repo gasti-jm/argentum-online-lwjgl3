@@ -45,20 +45,19 @@ public class HelpCommand extends BaseCommandHandler {
 
     private void showGeneralHelp() {
         console.addMsgToConsole("[AVAILABLE COMMANDS]", false, false, new RGBColor(0f, 1f, 0f));
-        // console.addMsgToConsole("", false, false, new RGBColor());
 
         // Muestra comandos por categoria
         for (CommandCategory category : CommandCategory.values()) {
-            List<CommandDefinition> commands = CommandRegistry.getCommandsByCategory(category);
+            List<Command> commands = CommandRegistry.getCommandsByCategory(category);
 
             console.addMsgToConsole("- " + category.getDescription() + " -", false, false, new RGBColor(1f, 1f, 0f));
 
-            commands.stream()
-                    .limit(5) // Muestra solo los primeros 5 para no saturar
+            commands
+                    // .limit(5) // En caso de que querer mostrar solo los primeros 5 comandos para no saturar la consola
                     .forEach(cmd -> console.addMsgToConsole(cmd.name() + " - " + cmd.description(), false, false, new RGBColor(0.8f, 0.8f, 0.8f)));
 
-            if (commands.size() > 5)
-                console.addMsgToConsole("...and " + (commands.size() - 5) + " more", false, false, new RGBColor(0.6f, 0.6f, 0.6f));
+            // Muestra los comandos faltantes en caso de limitar la cantidad a mostrar en consola
+            /* if (commands.size() > 5) console.addMsgToConsole("...and " + (commands.size() - 5) + " more", false, false, new RGBColor(0.6f, 0.6f, 0.6f)); */
 
             console.addMsgToConsole("", false, false, new RGBColor());
 
@@ -68,13 +67,13 @@ public class HelpCommand extends BaseCommandHandler {
     }
 
     private void showCommandHelp(String commandName) {
-        // Agregar / si no lo tiene
+        // Agrega / si no lo tiene
         if (!commandName.startsWith("/")) commandName = "/" + commandName;
 
-        Optional<CommandDefinition> commandInfo = CommandRegistry.getCommandInfo(commandName);
+        Optional<Command> commandInfo = CommandRegistry.getCommandInfo(commandName);
 
         if (commandInfo.isPresent()) {
-            CommandDefinition cmd = commandInfo.get();
+            Command cmd = commandInfo.get();
 
             console.addMsgToConsole("[COMMAND HELP]", false, false, new RGBColor(0f, 1f, 0f));
             console.addMsgToConsole("Command: " + cmd.name(), false, false, new RGBColor(1f, 1f, 0f));
@@ -91,7 +90,7 @@ public class HelpCommand extends BaseCommandHandler {
         }
     }
 
-    private void addCategorySpecificHelp(CommandDefinition cmd) {
+    private void addCategorySpecificHelp(Command cmd) {
         switch (cmd.category()) {
             case GM -> console.addMsgToConsole("Requires GM privileges", false, false, new RGBColor(1f, 0.5f, 0f));
             case GUILD -> console.addMsgToConsole("Guild members only", false, false, new RGBColor(0.5f, 0f, 1f));
@@ -107,8 +106,7 @@ public class HelpCommand extends BaseCommandHandler {
 
         if (!suggestions.isEmpty()) {
             console.addMsgToConsole("Did you mean:", false, false, new RGBColor(0.8f, 0.8f, 0f));
-            suggestions.forEach(suggestion ->
-                    console.addMsgToConsole("  " + suggestion, false, false, new RGBColor(0.6f, 0.6f, 0.6f))
+            suggestions.forEach(suggestion -> console.addMsgToConsole("  " + suggestion, false, false, new RGBColor(0.6f, 0.6f, 0.6f))
             );
         }
     }
