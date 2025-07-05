@@ -1,11 +1,11 @@
 package org.aoclient.network.protocol.command.handlers.gm;
 
-import org.aoclient.network.protocol.command.BaseCommandHandler;
-import org.aoclient.network.protocol.command.CommandContext;
-import org.aoclient.network.protocol.command.CommandException;
+import org.aoclient.network.protocol.command.handlers.BaseCommandHandler;
+import org.aoclient.network.protocol.command.core.CommandContext;
+import org.aoclient.network.protocol.command.core.CommandException;
 
 import static org.aoclient.network.protocol.Protocol.writeCreateObject;
-import static org.aoclient.network.protocol.command.GameCommand.CREATE_OBJ;
+import static org.aoclient.network.protocol.command.metadata.GameCommand.CREATE_OBJ;
 
 /**
  * Al crear el hacha (objeto #3 del obj.dat del servidor VB6), se indica GrhIndex=505 pero el grafico real es el 16037 en

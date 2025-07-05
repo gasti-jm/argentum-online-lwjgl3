@@ -1,13 +1,13 @@
 package org.aoclient.network.protocol.command.handlers.gm;
 
-import org.aoclient.network.protocol.command.BaseCommandHandler;
-import org.aoclient.network.protocol.command.CommandContext;
-import org.aoclient.network.protocol.command.CommandException;
+import org.aoclient.network.protocol.command.handlers.BaseCommandHandler;
+import org.aoclient.network.protocol.command.core.CommandContext;
+import org.aoclient.network.protocol.command.core.CommandException;
 
 import static org.aoclient.network.protocol.Protocol.writeRoyaleArmyMessage;
-import static org.aoclient.network.protocol.command.GameCommand.REALMSG;
+import static org.aoclient.network.protocol.command.metadata.GameCommand.REALMSG;
 
-public class RoyaleArmyMessageCommand extends BaseCommandHandler {
+public class RoyaArmyMessageCommand extends BaseCommandHandler {
 
     @Override
     public void handle(CommandContext commandContext) throws CommandException {

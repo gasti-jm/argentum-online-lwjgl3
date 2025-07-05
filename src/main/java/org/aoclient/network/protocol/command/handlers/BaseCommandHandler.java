@@ -1,6 +1,9 @@
-package org.aoclient.network.protocol.command;
+package org.aoclient.network.protocol.command.handlers;
 
 import org.aoclient.engine.game.User;
+import org.aoclient.network.protocol.command.core.CommandContext;
+import org.aoclient.network.protocol.command.core.CommandException;
+import org.aoclient.network.protocol.command.core.CommandHandler;
 
 /**
  * Clase abstracta que proporciona una implementacion base para manejar comandos, estableciendo validaciones comunes y utilidades
@@ -23,13 +26,16 @@ public abstract class BaseCommandHandler implements CommandHandler {
      * interrogacion. El <b>+</b> significa "uno o mas" caracteres que coincidan con la clase de caracteres, permitiendo cadenas
      * de cualquier longitud.
      */
-    protected static final String REGEX = "[a-zA-Z0-9 .,¿?]+";
+    protected final String REGEX = "[a-zA-Z0-9 .,¿?]+";
+
+    /** Indica un numero ilimitado de argumentos cuando se pasa como parametro a los metodos de validacion de argumentos. */
+    protected final int UNLIMITED_ARGUMENTS = -1;
     protected User user = User.INSTANCE;
 
     protected void requireArguments(CommandContext commandContext, int count, String usage) throws CommandException {
         if (!commandContext.hasArguments()) showError("Missing arguments. Usage: " + usage);
         // Evita que se verifique la cantidad de argumentos de mas de un argumento como la descripcion del bug por ejemplo
-        if (count == -1) return;
+        if (count == UNLIMITED_ARGUMENTS) return;
         if (commandContext.getArgumentCount() != count)
             showError("The command requires " + count + " argument" + (count > 1 ? "s" : "") + ". Usage: " + usage);
     }

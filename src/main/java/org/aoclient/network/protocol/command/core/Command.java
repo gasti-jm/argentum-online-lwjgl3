@@ -1,4 +1,6 @@
-package org.aoclient.network.protocol.command;
+package org.aoclient.network.protocol.command.core;
+
+import org.aoclient.network.protocol.command.metadata.CommandCategory;
 
 import java.util.function.Supplier;
 
@@ -51,7 +53,6 @@ public record Command(
         return new Command(name, () -> ctx -> action.run(), CommandCategory.GM, description);
     }
 
-
     public static Command guild(String name, Supplier<CommandHandler> factory, String description) {
         return new Command(name, factory, CommandCategory.GUILD, description);
     }
@@ -59,7 +60,6 @@ public record Command(
     public static Command guild(String name, Runnable action, String description) {
         return new Command(name, () -> ctx -> action.run(), CommandCategory.GUILD, description);
     }
-
 
     public static Command party(String name, Supplier<CommandHandler> factory, String description) {
         return new Command(name, factory, CommandCategory.PARTY, description);

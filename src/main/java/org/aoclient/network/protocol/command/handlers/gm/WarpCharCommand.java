@@ -1,9 +1,9 @@
 package org.aoclient.network.protocol.command.handlers.gm;
 
 import org.aoclient.engine.game.Options;
-import org.aoclient.network.protocol.command.BaseCommandHandler;
-import org.aoclient.network.protocol.command.CommandContext;
-import org.aoclient.network.protocol.command.CommandException;
+import org.aoclient.network.protocol.command.handlers.BaseCommandHandler;
+import org.aoclient.network.protocol.command.core.CommandContext;
+import org.aoclient.network.protocol.command.core.CommandException;
 
 import static org.aoclient.network.protocol.Protocol.writeWarpChar;
 

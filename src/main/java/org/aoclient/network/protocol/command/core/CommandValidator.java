@@ -1,4 +1,4 @@
-package org.aoclient.network.protocol.command;
+package org.aoclient.network.protocol.command.core;
 
 /*
  * Clase utilizada para realizar validaciones relacionadas con comandos y direcciones IP.

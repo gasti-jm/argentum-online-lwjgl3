@@ -1,11 +1,11 @@
 package org.aoclient.network.protocol.command.handlers.gm;
 
-import org.aoclient.network.protocol.command.BaseCommandHandler;
-import org.aoclient.network.protocol.command.CommandContext;
-import org.aoclient.network.protocol.command.CommandException;
+import org.aoclient.network.protocol.command.handlers.BaseCommandHandler;
+import org.aoclient.network.protocol.command.core.CommandContext;
+import org.aoclient.network.protocol.command.core.CommandException;
 
 import static org.aoclient.network.protocol.Protocol.writeGoNearby;
-import static org.aoclient.network.protocol.command.GameCommand.TELEPORT_NEAR_TO_PLAYER;
+import static org.aoclient.network.protocol.command.metadata.GameCommand.TELEPORT_NEAR_TO_PLAYER;
 
 public class GoNearbyCommand extends BaseCommandHandler {
 

@@ -1,4 +1,4 @@
-package org.aoclient.network.protocol.command;
+package org.aoclient.network.protocol.command.core;
 
 import java.util.List;
 

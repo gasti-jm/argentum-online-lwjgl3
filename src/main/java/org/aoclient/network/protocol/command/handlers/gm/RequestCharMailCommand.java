@@ -1,11 +1,11 @@
 package org.aoclient.network.protocol.command.handlers.gm;
 
-import org.aoclient.network.protocol.command.BaseCommandHandler;
-import org.aoclient.network.protocol.command.CommandContext;
-import org.aoclient.network.protocol.command.CommandException;
+import org.aoclient.network.protocol.command.handlers.BaseCommandHandler;
+import org.aoclient.network.protocol.command.core.CommandContext;
+import org.aoclient.network.protocol.command.core.CommandException;
 
 import static org.aoclient.network.protocol.Protocol.writeRequestCharMail;
-import static org.aoclient.network.protocol.command.GameCommand.LAST_EMAIL;
+import static org.aoclient.network.protocol.command.metadata.GameCommand.LAST_EMAIL;
 
 public class RequestCharMailCommand extends BaseCommandHandler {
 

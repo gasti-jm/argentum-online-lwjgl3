@@ -1,11 +1,11 @@
 package org.aoclient.network.protocol.command.handlers.guild;
 
-import org.aoclient.network.protocol.command.BaseCommandHandler;
-import org.aoclient.network.protocol.command.CommandContext;
-import org.aoclient.network.protocol.command.CommandException;
+import org.aoclient.network.protocol.command.handlers.BaseCommandHandler;
+import org.aoclient.network.protocol.command.core.CommandContext;
+import org.aoclient.network.protocol.command.core.CommandException;
 
 import static org.aoclient.network.protocol.Protocol.writeGuildOnlineMembers;
-import static org.aoclient.network.protocol.command.GameCommand.GUILD_ONLINE_SPECIFIC;
+import static org.aoclient.network.protocol.command.metadata.GameCommand.GUILD_ONLINE_SPECIFIC;
 
 public class GuildOnlineMembersCommand extends BaseCommandHandler {
 

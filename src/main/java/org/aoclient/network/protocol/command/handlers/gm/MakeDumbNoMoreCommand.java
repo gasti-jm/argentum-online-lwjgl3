@@ -1,11 +1,11 @@
 package org.aoclient.network.protocol.command.handlers.gm;
 
-import org.aoclient.network.protocol.command.BaseCommandHandler;
-import org.aoclient.network.protocol.command.CommandContext;
-import org.aoclient.network.protocol.command.CommandException;
+import org.aoclient.network.protocol.command.handlers.BaseCommandHandler;
+import org.aoclient.network.protocol.command.core.CommandContext;
+import org.aoclient.network.protocol.command.core.CommandException;
 
 import static org.aoclient.network.protocol.Protocol.writeMakeDumbNoMore;
-import static org.aoclient.network.protocol.command.GameCommand.NO_STUPID;
+import static org.aoclient.network.protocol.command.metadata.GameCommand.NO_STUPID;
 
 public class MakeDumbNoMoreCommand extends BaseCommandHandler {
 

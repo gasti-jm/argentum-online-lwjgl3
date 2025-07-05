@@ -1,6 +1,9 @@
-package org.aoclient.network.protocol.command;
+package org.aoclient.network.protocol.command.execution;
 
 import org.aoclient.network.protocol.Protocol;
+import org.aoclient.network.protocol.command.metadata.CommandCategory;
+import org.aoclient.network.protocol.command.core.Command;
+import org.aoclient.network.protocol.command.core.CommandHandler;
 import org.aoclient.network.protocol.command.handlers.basic.*;
 import org.aoclient.network.protocol.command.handlers.gm.*;
 import org.aoclient.network.protocol.command.handlers.guild.*;
@@ -14,7 +17,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import static org.aoclient.network.protocol.command.GameCommand.*;
+import static org.aoclient.network.protocol.command.metadata.GameCommand.*;
 
 /**
  * Gestiona el registro y acceso a los comandos disponibles dentro del sistema. Ofrece metodos para definir, organizar y recuperar
@@ -252,7 +255,7 @@ public final class CommandRegistry {
                 Command.gm(PLAY_SOUND.getCommand(), PlaySoundCommand::new, PLAY_SOUND.getDescription()),
                 Command.gm(RACC.getCommand(), CreateNPCWithRespawnCommand::new, RACC.getDescription()),
                 Command.gm(RAJAR.getCommand(), ResetFactionsCommand::new, RAJAR.getDescription()),
-                Command.gm(REALMSG.getCommand(), RoyaleArmyMessageCommand::new, REALMSG.getDescription()),
+                Command.gm(REALMSG.getCommand(), RoyaArmyMessageCommand::new, REALMSG.getDescription()),
                 Command.gm(REM.getCommand(), CommentCommand::new, REM.getDescription()),
                 Command.gm(REVIVIR.getCommand(), ReviveCharCommand::new, REVIVIR.getDescription()),
                 Command.gm(RMSG.getCommand(), ServerMessageCommand::new, RMSG.getDescription()),

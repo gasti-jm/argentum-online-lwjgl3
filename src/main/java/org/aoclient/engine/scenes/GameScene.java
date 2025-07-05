@@ -15,7 +15,7 @@ import org.aoclient.engine.listeners.KeyHandler;
 import org.aoclient.engine.listeners.MouseListener;
 import org.aoclient.engine.renderer.RGBColor;
 import org.aoclient.network.protocol.Protocol;
-import org.aoclient.network.protocol.command.CommandProcessor;
+import org.aoclient.network.protocol.command.execution.CommandExecutor;
 
 import static org.aoclient.engine.game.IntervalTimer.INT_SENTRPU;
 import static org.aoclient.engine.game.models.Character.drawCharacter;
@@ -242,7 +242,7 @@ public final class GameScene extends Scene {
                         if (user.isTalking()) {
                             if (!frmMain.getSendText().isBlank()) {
                                 if (!frmMain.getSendText().startsWith("/")) Protocol.writeTalk(frmMain.getSendText());
-                                else CommandProcessor.INSTANCE.process(frmMain.getSendText());
+                                else CommandExecutor.INSTANCE.execute(frmMain.getSendText());
                             }
                             user.setTalking(false);
                         } else user.setTalking(true);

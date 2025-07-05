@@ -1,12 +1,12 @@
 package org.aoclient.network.protocol.command.handlers.gm;
 
-import org.aoclient.network.protocol.command.BaseCommandHandler;
-import org.aoclient.network.protocol.command.CommandContext;
-import org.aoclient.network.protocol.command.CommandException;
+import org.aoclient.network.protocol.command.handlers.BaseCommandHandler;
+import org.aoclient.network.protocol.command.core.CommandContext;
+import org.aoclient.network.protocol.command.core.CommandException;
 
 import static org.aoclient.network.protocol.Protocol.writePlayMusic;
 import static org.aoclient.network.protocol.Protocol.writePlayMusicOnMap;
-import static org.aoclient.network.protocol.command.GameCommand.PLAY_MUSIC;
+import static org.aoclient.network.protocol.command.metadata.GameCommand.PLAY_MUSIC;
 
 public class PlayMusicCommand extends BaseCommandHandler {
 

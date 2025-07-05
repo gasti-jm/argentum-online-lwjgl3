@@ -1,12 +1,12 @@
 package org.aoclient.network.protocol.command.handlers.gm;
 
-import org.aoclient.network.protocol.command.BaseCommandHandler;
-import org.aoclient.network.protocol.command.CommandContext;
-import org.aoclient.network.protocol.command.CommandException;
-import org.aoclient.network.protocol.command.CommandValidator;
+import org.aoclient.network.protocol.command.handlers.BaseCommandHandler;
+import org.aoclient.network.protocol.command.core.CommandContext;
+import org.aoclient.network.protocol.command.core.CommandException;
+import org.aoclient.network.protocol.command.core.CommandValidator;
 
 import static org.aoclient.network.protocol.Protocol.writeBanIP;
-import static org.aoclient.network.protocol.command.GameCommand.BAN_IP;
+import static org.aoclient.network.protocol.command.metadata.GameCommand.BAN_IP;
 
 public class BanIpCommand extends BaseCommandHandler {
 

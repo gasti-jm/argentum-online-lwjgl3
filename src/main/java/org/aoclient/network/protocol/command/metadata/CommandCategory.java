@@ -1,4 +1,4 @@
-package org.aoclient.network.protocol.command;
+package org.aoclient.network.protocol.command.metadata;
 
 /**
  * Enumeracion que representa diferentes categorias de comandos en el sistema. Cada categoria esta asociada con una descripcion

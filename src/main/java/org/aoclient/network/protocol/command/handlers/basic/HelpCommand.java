@@ -2,12 +2,17 @@ package org.aoclient.network.protocol.command.handlers.basic;
 
 import org.aoclient.engine.game.Console;
 import org.aoclient.engine.renderer.RGBColor;
-import org.aoclient.network.protocol.command.*;
+import org.aoclient.network.protocol.command.core.Command;
+import org.aoclient.network.protocol.command.core.CommandContext;
+import org.aoclient.network.protocol.command.core.CommandException;
+import org.aoclient.network.protocol.command.execution.CommandRegistry;
+import org.aoclient.network.protocol.command.handlers.BaseCommandHandler;
+import org.aoclient.network.protocol.command.metadata.CommandCategory;
 
 import java.util.List;
 import java.util.Optional;
 
-import static org.aoclient.network.protocol.command.GameCommand.HELP;
+import static org.aoclient.network.protocol.command.metadata.GameCommand.HELP;
 
 /**
  * Representa un handler para el comando {@code /?}. Su funcion principal es proporcionar informacion de ayuda general o

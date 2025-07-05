@@ -1,12 +1,12 @@
 package org.aoclient.network.protocol.command.handlers.gm;
 
-import org.aoclient.network.protocol.command.BaseCommandHandler;
-import org.aoclient.network.protocol.command.CommandContext;
-import org.aoclient.network.protocol.command.CommandException;
+import org.aoclient.network.protocol.command.handlers.BaseCommandHandler;
+import org.aoclient.network.protocol.command.core.CommandContext;
+import org.aoclient.network.protocol.command.core.CommandException;
 import org.aoclient.network.protocol.types.CharacterEditType;
 
 import static org.aoclient.network.protocol.Protocol.writeEditChar;
-import static org.aoclient.network.protocol.command.GameCommand.MOD_PLAYER;
+import static org.aoclient.network.protocol.command.metadata.GameCommand.MOD_PLAYER;
 
 /**
  * Comando para editar propiedades de personajes.

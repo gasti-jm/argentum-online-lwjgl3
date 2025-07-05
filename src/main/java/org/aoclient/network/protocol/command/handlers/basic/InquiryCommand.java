@@ -1,12 +1,12 @@
 package org.aoclient.network.protocol.command.handlers.basic;
 
-import org.aoclient.network.protocol.command.BaseCommandHandler;
-import org.aoclient.network.protocol.command.CommandContext;
-import org.aoclient.network.protocol.command.CommandException;
+import org.aoclient.network.protocol.command.handlers.BaseCommandHandler;
+import org.aoclient.network.protocol.command.core.CommandContext;
+import org.aoclient.network.protocol.command.core.CommandException;
 
 import static org.aoclient.network.protocol.Protocol.writeInquiry;
 import static org.aoclient.network.protocol.Protocol.writeInquiryVote;
-import static org.aoclient.network.protocol.command.GameCommand.POLL;
+import static org.aoclient.network.protocol.command.metadata.GameCommand.POLL;
 
 /**
  * TODO Otro caso de inconsistencia en donde las opciones invalidas se manejan desde el servidor

@@ -1,4 +1,4 @@
-package org.aoclient.network.protocol.command;
+package org.aoclient.network.protocol.command.metadata;
 
 /**
  * Comandos disponibles del juego junto con sus descripciones. Esta clase centraliza la definicion de los comandos, eliminando

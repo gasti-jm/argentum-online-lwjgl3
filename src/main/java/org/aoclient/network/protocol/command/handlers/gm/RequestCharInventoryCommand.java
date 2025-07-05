@@ -1,11 +1,11 @@
 package org.aoclient.network.protocol.command.handlers.gm;
 
-import org.aoclient.network.protocol.command.BaseCommandHandler;
-import org.aoclient.network.protocol.command.CommandContext;
-import org.aoclient.network.protocol.command.CommandException;
+import org.aoclient.network.protocol.command.handlers.BaseCommandHandler;
+import org.aoclient.network.protocol.command.core.CommandContext;
+import org.aoclient.network.protocol.command.core.CommandException;
 
 import static org.aoclient.network.protocol.Protocol.writeRequestCharInventory;
-import static org.aoclient.network.protocol.command.GameCommand.PLAYER_INV;
+import static org.aoclient.network.protocol.command.metadata.GameCommand.PLAYER_INV;
 
 public class RequestCharInventoryCommand extends BaseCommandHandler {
 

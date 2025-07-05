@@ -1,4 +1,4 @@
-package org.aoclient.network.protocol.command;
+package org.aoclient.network.protocol.command.core;
 
 /**
  * Interface que define una estructura basica para el manejo de comandos en el sistema. Los comandos son procesados a traves del
