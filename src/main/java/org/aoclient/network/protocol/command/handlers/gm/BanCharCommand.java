@@ -5,12 +5,13 @@ import org.aoclient.network.protocol.command.CommandContext;
 import org.aoclient.network.protocol.command.CommandException;
 
 import static org.aoclient.network.protocol.Protocol.writeBanChar;
+import static org.aoclient.network.protocol.command.GameCommand.BAN;
 
 public class BanCharCommand extends BaseCommandHandler {
 
     @Override
     public void handle(CommandContext commandContext) throws CommandException {
-        requireArguments(commandContext, 2, "/ban <nick> <reason>");
+        requireArguments(commandContext, 2, BAN.getCommand() + " <nick> <reason>");
         requireString(commandContext, 0, "nick");
         requireString(commandContext, 1, "reason");
 

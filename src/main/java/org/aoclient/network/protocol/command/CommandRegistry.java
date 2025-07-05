@@ -4,10 +4,7 @@ import org.aoclient.network.protocol.Protocol;
 import org.aoclient.network.protocol.command.handlers.basic.*;
 import org.aoclient.network.protocol.command.handlers.gm.*;
 import org.aoclient.network.protocol.command.handlers.guild.*;
-import org.aoclient.network.protocol.command.handlers.party.PartyAcceptMemberCommand;
-import org.aoclient.network.protocol.command.handlers.party.PartyKickCommand;
-import org.aoclient.network.protocol.command.handlers.party.PartyMessageCommand;
-import org.aoclient.network.protocol.command.handlers.party.PartySetLeaderCommand;
+import org.aoclient.network.protocol.command.handlers.party.*;
 
 import java.util.List;
 import java.util.Map;

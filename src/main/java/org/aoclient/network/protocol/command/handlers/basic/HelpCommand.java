@@ -7,6 +7,8 @@ import org.aoclient.network.protocol.command.*;
 import java.util.List;
 import java.util.Optional;
 
+import static org.aoclient.network.protocol.command.GameCommand.HELP;
+
 /**
  * Representa un handler para el comando {@code /?}. Su funcion principal es proporcionar informacion de ayuda general o
  * especifica segun los argumentos proporcionados por el usuario.
@@ -62,7 +64,7 @@ public class HelpCommand extends BaseCommandHandler {
 
         }
 
-        console.addMsgToConsole("Type '/? <command>' for specific help", false, false, new RGBColor(0f, 1f, 1f));
+        console.addMsgToConsole("Type '" + HELP.getCommand() + " <command>' for specific help", false, false, new RGBColor(0f, 1f, 1f));
     }
 
     private void showCommandHelp(String commandName) {

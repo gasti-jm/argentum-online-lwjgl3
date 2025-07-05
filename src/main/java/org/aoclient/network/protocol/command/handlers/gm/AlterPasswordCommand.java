@@ -5,12 +5,13 @@ import org.aoclient.network.protocol.command.CommandContext;
 import org.aoclient.network.protocol.command.CommandException;
 
 import static org.aoclient.network.protocol.Protocol.writeAlterPassword;
+import static org.aoclient.network.protocol.command.GameCommand.APASS;
 
 public class AlterPasswordCommand extends BaseCommandHandler {
 
     @Override
     public void handle(CommandContext commandContext) throws CommandException {
-        requireArguments(commandContext, 2, "/apass <pjsinpass> <pjconpass>");
+        requireArguments(commandContext, 2, APASS.getCommand() + " <pjsinpass> <pjconpass>");
         requireString(commandContext, 0, "pjsinpass");
         requireString(commandContext, 1, "pjconpass");
 

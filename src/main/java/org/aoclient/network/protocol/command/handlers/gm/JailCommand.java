@@ -5,12 +5,13 @@ import org.aoclient.network.protocol.command.CommandContext;
 import org.aoclient.network.protocol.command.CommandException;
 
 import static org.aoclient.network.protocol.Protocol.writeJail;
+import static org.aoclient.network.protocol.command.GameCommand.JAIL;
 
 public class JailCommand extends BaseCommandHandler {
 
     @Override
     public void handle(CommandContext commandContext) throws CommandException {
-        requireArguments(commandContext, 3, "/carcel <nick> <reason> <minutes>");
+        requireArguments(commandContext, 3, JAIL.getCommand() + " <nick> <reason> <minutes>");
         requireString(commandContext, 0, "nick");
         requireString(commandContext, 1, "reason");
         requireInteger(commandContext, 2, "minutes");

@@ -5,6 +5,7 @@ import org.aoclient.network.protocol.command.CommandContext;
 import org.aoclient.network.protocol.command.CommandException;
 
 import static org.aoclient.network.protocol.Protocol.writeChatColor;
+import static org.aoclient.network.protocol.command.GameCommand.CHAT_COLOR;
 
 public class ChatColorCommand extends BaseCommandHandler {
 
@@ -15,7 +16,7 @@ public class ChatColorCommand extends BaseCommandHandler {
             return;
         }
 
-        requireArguments(commandContext, 3, "/chatcolor <r> <g> <b>");
+        requireArguments(commandContext, 3, CHAT_COLOR.getCommand() + " <r> <g> <b>");
         requireInteger(commandContext, 0, "r");
         requireInteger(commandContext, 1, "g");
         requireInteger(commandContext, 2, "b");

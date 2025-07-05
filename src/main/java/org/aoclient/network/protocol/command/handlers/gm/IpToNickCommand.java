@@ -6,6 +6,7 @@ import org.aoclient.network.protocol.command.CommandException;
 import org.aoclient.network.protocol.command.CommandValidator;
 
 import static org.aoclient.network.protocol.Protocol.writeIPToNick;
+import static org.aoclient.network.protocol.command.GameCommand.IP2NICK;
 
 /**
  * Comando para obtener el nickname asociado a una dirección IP.
@@ -24,7 +25,7 @@ public class IpToNickCommand extends BaseCommandHandler {
 
     @Override
     public void handle(CommandContext commandContext) throws CommandException {
-        requireArguments(commandContext, 1, "/ip2nick <ip>");
+        requireArguments(commandContext, 1, IP2NICK.getCommand() + " <ip>");
 
         String ip = commandContext.argumentsRaw();
 

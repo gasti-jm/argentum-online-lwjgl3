@@ -5,12 +5,13 @@ import org.aoclient.network.protocol.command.CommandContext;
 import org.aoclient.network.protocol.command.CommandException;
 
 import static org.aoclient.network.protocol.Protocol.writeImperialArmour;
+import static org.aoclient.network.protocol.command.GameCommand.AI;
 
 public class ImperialArmourCommand extends BaseCommandHandler {
 
     @Override
     public void handle(CommandContext commandContext) throws CommandException {
-        requireArguments(commandContext, 2, "/ai <armor_id> <object_id>");
+        requireArguments(commandContext, 2, AI.getCommand() + " <armor_id> <object_id>");
         requireInteger(commandContext, 0, "armor_id");
         requireInteger(commandContext, 1, "object_id");
 

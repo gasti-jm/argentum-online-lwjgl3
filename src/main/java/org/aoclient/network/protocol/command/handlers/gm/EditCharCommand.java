@@ -6,6 +6,7 @@ import org.aoclient.network.protocol.command.CommandException;
 import org.aoclient.network.protocol.types.CharacterEditType;
 
 import static org.aoclient.network.protocol.Protocol.writeEditChar;
+import static org.aoclient.network.protocol.command.GameCommand.MOD_PLAYER;
 
 /**
  * Comando para editar propiedades de personajes.
@@ -43,7 +44,7 @@ public class EditCharCommand extends BaseCommandHandler {
 
     @Override
     public void handle(CommandContext commandContext) throws CommandException {
-        requireArguments(commandContext, 3, "/mod <nick> <property> <value> [extra_param]");
+        requireArguments(commandContext, 3, MOD_PLAYER.getCommand() + " <nick> <property> <value> [extra_param]");
         requireString(commandContext, 0, "nick");
         requireString(commandContext, 1, "property");
         requireString(commandContext, 2, "value");

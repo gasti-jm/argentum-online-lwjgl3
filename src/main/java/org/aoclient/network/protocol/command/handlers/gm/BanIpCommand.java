@@ -6,12 +6,13 @@ import org.aoclient.network.protocol.command.CommandException;
 import org.aoclient.network.protocol.command.CommandValidator;
 
 import static org.aoclient.network.protocol.Protocol.writeBanIP;
+import static org.aoclient.network.protocol.command.GameCommand.BAN_IP;
 
 public class BanIpCommand extends BaseCommandHandler {
 
     @Override
     public void handle(CommandContext commandContext) throws CommandException {
-        requireArguments(commandContext, 2, "/banip <ip|nick> <reason>");
+        requireArguments(commandContext, 2, BAN_IP.getCommand() + " <ip|nick> <reason>");
         requireString(commandContext, 0, "ip|nick");
         requireString(commandContext, 1, "reason");
 

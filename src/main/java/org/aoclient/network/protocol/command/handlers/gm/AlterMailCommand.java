@@ -5,18 +5,19 @@ import org.aoclient.network.protocol.command.CommandContext;
 import org.aoclient.network.protocol.command.CommandException;
 
 import static org.aoclient.network.protocol.Protocol.writeAlterMail;
+import static org.aoclient.network.protocol.command.GameCommand.AEMAIL;
 
 public class AlterMailCommand extends BaseCommandHandler {
 
     @Override
     public void handle(CommandContext commandContext) throws CommandException {
-        requireArguments(commandContext, 1, "/aemail <nick>-<newmail>");
+        requireArguments(commandContext, 1, AEMAIL.getCommand() + " <nick>-<newmail>");
 
         // El comando usa un formato especial: nick-email en un solo argumento
         String[] parts = AEMAILSplit(commandContext.argumentsRaw());
         // Se podria reemplazar AEMAILSplit() por String[] parts = context.getArgumentsRaw().split("-", 2);
 
-        if (parts[0].isEmpty()) showError("Incorrect format. Usage: /aemail <nick>-<newmail>");
+        if (parts[0].isEmpty()) showError("Incorrect format. Usage: " + AEMAIL.getCommand() + " <nick>-<newmail>");
 
         // Valida que el nick no este vacio
         String nick = parts[0].trim();

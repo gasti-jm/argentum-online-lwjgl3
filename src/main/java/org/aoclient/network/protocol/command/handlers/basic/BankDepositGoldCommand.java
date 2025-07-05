@@ -5,6 +5,7 @@ import org.aoclient.network.protocol.command.CommandContext;
 import org.aoclient.network.protocol.command.CommandException;
 
 import static org.aoclient.network.protocol.Protocol.writeBankDepositGold;
+import static org.aoclient.network.protocol.command.GameCommand.DEPOSIT;
 
 public class BankDepositGoldCommand extends BaseCommandHandler {
 
@@ -14,7 +15,7 @@ public class BankDepositGoldCommand extends BaseCommandHandler {
             showError("You are dead!");
             return;
         }
-        requireArguments(commandContext, 1, "/depositar <quantity>");
+        requireArguments(commandContext, 1, DEPOSIT.getCommand() + " <quantity>");
         requireInteger(commandContext, 0, "quantity");
 
         int quantity = Integer.parseInt(commandContext.getArgument(0));

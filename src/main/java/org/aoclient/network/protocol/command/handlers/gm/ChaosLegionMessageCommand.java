@@ -5,12 +5,13 @@ import org.aoclient.network.protocol.command.CommandContext;
 import org.aoclient.network.protocol.command.CommandException;
 
 import static org.aoclient.network.protocol.Protocol.writeChaosLegionMessage;
+import static org.aoclient.network.protocol.command.GameCommand.CAOSMSG;
 
 public class ChaosLegionMessageCommand extends BaseCommandHandler {
 
     @Override
     public void handle(CommandContext commandContext) throws CommandException {
-        requireArguments(commandContext, -1, "/caosmsg <message>");
+        requireArguments(commandContext, -1, CAOSMSG.getCommand() + " <message>");
         requireValidString(commandContext, "message", REGEX);
         String message = commandContext.argumentsRaw().trim();
         writeChaosLegionMessage(message);

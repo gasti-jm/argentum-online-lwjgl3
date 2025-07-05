@@ -5,12 +5,13 @@ import org.aoclient.network.protocol.command.CommandContext;
 import org.aoclient.network.protocol.command.CommandException;
 
 import static org.aoclient.network.protocol.Protocol.writeKick;
+import static org.aoclient.network.protocol.command.GameCommand.KICK;
 
 public class KickCommand extends BaseCommandHandler {
 
     @Override
     public void handle(CommandContext commandContext) throws CommandException {
-        requireArguments(commandContext, 1, "/echar <nick>");
+        requireArguments(commandContext, 1, KICK.getCommand() + " <nick>");
         String nick = commandContext.getArgument(0);
         writeKick(nick);
     }

@@ -6,6 +6,7 @@ import org.aoclient.network.protocol.command.CommandException;
 
 import static org.aoclient.network.protocol.Protocol.writePlayMusic;
 import static org.aoclient.network.protocol.Protocol.writePlayMusicOnMap;
+import static org.aoclient.network.protocol.command.GameCommand.PLAY_MUSIC;
 
 public class PlayMusicCommand extends BaseCommandHandler {
 
@@ -13,7 +14,7 @@ public class PlayMusicCommand extends BaseCommandHandler {
     public void handle(CommandContext commandContext) throws CommandException {
         if (commandContext.getArgumentCount() == 1) playMusic(commandContext, false);
         else if (commandContext.getArgumentCount() == 2) playMusic(commandContext, true);
-        else showError("Missing arguments. Usage: /playmusic <sound_id> [map]");
+        else showError("Missing arguments. Usage: " + PLAY_MUSIC.getCommand() + " <sound_id> [map]");
     }
 
     private void playMusic(CommandContext context, boolean onMap) throws CommandException {

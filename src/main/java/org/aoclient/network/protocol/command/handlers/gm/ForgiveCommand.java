@@ -5,12 +5,13 @@ import org.aoclient.network.protocol.command.CommandContext;
 import org.aoclient.network.protocol.command.CommandException;
 
 import static org.aoclient.network.protocol.Protocol.writeForgive;
+import static org.aoclient.network.protocol.command.GameCommand.FORGIVE;
 
 public class ForgiveCommand extends BaseCommandHandler {
 
     @Override
     public void handle(CommandContext commandContext) throws CommandException {
-        requireArguments(commandContext, 1, "/perdon <nick>");
+        requireArguments(commandContext, 1, FORGIVE.getCommand() + " <nick>");
         String nick = commandContext.getArgument(0);
         writeForgive(nick);
     }

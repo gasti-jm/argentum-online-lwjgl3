@@ -5,12 +5,13 @@ import org.aoclient.network.protocol.command.CommandContext;
 import org.aoclient.network.protocol.command.CommandException;
 
 import static org.aoclient.network.protocol.Protocol.writeChaosArmour;
+import static org.aoclient.network.protocol.command.GameCommand.AC;
 
 public class ChaosArmourCommand extends BaseCommandHandler {
 
     @Override
     public void handle(CommandContext commandContext) throws CommandException {
-        requireArguments(commandContext, 2, "/ac <armor> <object>");
+        requireArguments(commandContext, 2, AC.getCommand() + " <armor> <object>");
         requireInteger(commandContext, 0, "armor");
         requireShort(commandContext, 1, "object");
 

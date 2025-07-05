@@ -5,12 +5,13 @@ import org.aoclient.network.protocol.command.CommandContext;
 import org.aoclient.network.protocol.command.CommandException;
 
 import static org.aoclient.network.protocol.Protocol.writeUnbanChar;
+import static org.aoclient.network.protocol.command.GameCommand.UNBAN;
 
 public class UnbanCharCommand extends BaseCommandHandler {
 
     @Override
     public void handle(CommandContext commandContext) throws CommandException {
-        requireArguments(commandContext, 1, "/unban <nick>");
+        requireArguments(commandContext, 1, UNBAN.getCommand() + " <nick>");
         String nick = commandContext.getArgument(0);
         writeUnbanChar(nick);
     }

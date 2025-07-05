@@ -6,6 +6,7 @@ import org.aoclient.network.protocol.command.CommandException;
 
 import static org.aoclient.network.protocol.Protocol.writeInquiry;
 import static org.aoclient.network.protocol.Protocol.writeInquiryVote;
+import static org.aoclient.network.protocol.command.GameCommand.POLL;
 
 /**
  * TODO Otro caso de inconsistencia en donde las opciones invalidas se manejan desde el servidor
@@ -17,7 +18,7 @@ public class InquiryCommand extends BaseCommandHandler {
     public void handle(CommandContext commandContext) throws CommandException {
         if (!commandContext.hasArguments()) writeInquiry();
         else {
-            requireArguments(commandContext, 1, "/encuesta <option>");
+            requireArguments(commandContext, 1, POLL.getCommand() + " <option>");
             requireInteger(commandContext, 0, "option");
             int option = Integer.parseInt(commandContext.getArgument(0));
             writeInquiryVote(option);

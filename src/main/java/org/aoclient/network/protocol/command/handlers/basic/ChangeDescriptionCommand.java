@@ -5,12 +5,13 @@ import org.aoclient.network.protocol.command.CommandContext;
 import org.aoclient.network.protocol.command.CommandException;
 
 import static org.aoclient.network.protocol.Protocol.writeChangeDescription;
+import static org.aoclient.network.protocol.command.GameCommand.DESC;
 
 public class ChangeDescriptionCommand extends BaseCommandHandler {
 
     @Override
     public void handle(CommandContext commandContext) throws CommandException {
-        requireArguments(commandContext, -1, "/desc <description>"); // TODO Podria verificarse en el proceso de comandos ya que la mayoria de comandos tiene argumentos
+        requireArguments(commandContext, -1, DESC.getCommand() + " <description>"); // TODO Podria verificarse en el proceso de comandos ya que la mayoria de comandos tiene argumentos
         /* Me parece que si en la descripcion hay espacios al principio o al final, el servidor los elimina, por que desde aca, el
          * argumento en crudo (getArgumentsRaw()) permite los espacios. Ademas, el servidor tambien valida si la descripcion tiene
          * caracteres invalidos, lo cual este diseño es bastente inconsistente. */

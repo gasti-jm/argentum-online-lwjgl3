@@ -6,6 +6,7 @@ import org.aoclient.network.protocol.command.CommandException;
 
 import static org.aoclient.network.protocol.Protocol.writePlaySound;
 import static org.aoclient.network.protocol.Protocol.writePlaySoundAtTheSpecifiedLocation;
+import static org.aoclient.network.protocol.command.GameCommand.PLAY_SOUND;
 
 /**
  * FIXME Si especifico la posicion [x] [y] del sonido, este se reproduce en todo el mapa y no en la posicion especificada
@@ -17,7 +18,7 @@ public class PlaySoundCommand extends BaseCommandHandler {
     public void handle(CommandContext commandContext) throws CommandException {
         if (commandContext.getArgumentCount() == 1) playSound(commandContext);
         else if (commandContext.getArgumentCount() == 4) playSoundAtTheSpecifiedLocation(commandContext);
-        else showError("Missing arguments. Usage: /playsound <sound_id> [map] [x] [y]");
+        else showError("Missing arguments. Usage: " + PLAY_SOUND.getCommand() + " <sound_id> [map] [x] [y]");
     }
 
     private void playSound(CommandContext context) throws CommandException {

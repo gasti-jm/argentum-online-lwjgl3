@@ -5,10 +5,11 @@ import org.aoclient.network.protocol.command.CommandContext;
 import org.aoclient.network.protocol.command.CommandException;
 
 import static org.aoclient.network.protocol.Protocol.writeTeleportCreate;
+import static org.aoclient.network.protocol.command.GameCommand.CREATE_TELEPORT;
 
 public class TeleportCreateCommand extends BaseCommandHandler {
 
-    private static final String USAGE = "/ct <map> <x> <y> [radius]";
+    private static final String USAGE = CREATE_TELEPORT.getCommand() + " <map> <x> <y> [radius]";
 
     @Override
     public void handle(CommandContext commandContext) throws CommandException {

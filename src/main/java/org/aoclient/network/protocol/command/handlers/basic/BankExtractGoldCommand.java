@@ -6,6 +6,7 @@ import org.aoclient.network.protocol.command.CommandContext;
 import org.aoclient.network.protocol.command.CommandException;
 
 import static org.aoclient.network.protocol.Protocol.writeBankExtractGold;
+import static org.aoclient.network.protocol.command.GameCommand.EXTRACT_GOLD;
 
 public class BankExtractGoldCommand extends BaseCommandHandler {
 
@@ -15,7 +16,7 @@ public class BankExtractGoldCommand extends BaseCommandHandler {
             showError("You are dead!");
             return;
         }
-        requireArguments(commandContext, 1, "/retirar <quantity>");
+        requireArguments(commandContext, 1, EXTRACT_GOLD.getCommand() + " <quantity>");
         requireInteger(commandContext, 0, "quantity");
 
         int quantity = Integer.parseInt(commandContext.getArgument(0));

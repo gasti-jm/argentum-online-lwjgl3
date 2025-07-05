@@ -5,12 +5,13 @@ import org.aoclient.network.protocol.command.CommandContext;
 import org.aoclient.network.protocol.command.CommandException;
 
 import static org.aoclient.network.protocol.Protocol.writeSetIniVar;
+import static org.aoclient.network.protocol.command.GameCommand.SETINIVAR;
 
 public class SetIniVarCommand extends BaseCommandHandler {
 
     @Override
     public void handle(CommandContext commandContext) throws CommandException {
-        requireArguments(commandContext, 3, "/setinivar <llave> <clave> <valor>");
+        requireArguments(commandContext, 3, SETINIVAR.getCommand() + " <llave> <clave> <valor>");
         requireString(commandContext, 0, "llave");
         requireString(commandContext, 1, "clave");
         requireString(commandContext, 2, "valor");
