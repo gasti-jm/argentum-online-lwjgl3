@@ -3,10 +3,9 @@ package org.aoclient.engine.game.inventory;
 import imgui.ImGui;
 import org.aoclient.engine.game.IntervalTimer;
 import org.aoclient.engine.listeners.MouseListener;
+import org.aoclient.network.protocol.Protocol;
 
 import static org.aoclient.engine.scenes.Camera.TILE_PIXEL_SIZE;
-import static org.aoclient.network.protocol.Protocol.writeEquipItem;
-import static org.aoclient.network.protocol.Protocol.writeUseItem;
 
 /**
  * <p>
@@ -145,13 +144,13 @@ public final class UserInventory extends Inventory implements Cloneable {
     }
 
     public void useItem() {
-        if (slots[slotSelected].grhIndex > 0 && intervalUseItem.check()) writeUseItem(this.slotSelected + 1);
+        if (slots[slotSelected].grhIndex > 0 && intervalUseItem.check()) Protocol.useItem(this.slotSelected + 1);
     }
 
     public void equipItem() {
         // no vamos a mandar un paquete al pedo.
         if (slots[slotSelected].grhIndex > 0 && slots[slotSelected].objType.isEquippable() && intervalEquipItem.check())
-            writeEquipItem(this.slotSelected + 1);
+            Protocol.equipItem(this.slotSelected + 1);
 
     }
 

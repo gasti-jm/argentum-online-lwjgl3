@@ -1,27 +1,13 @@
-package org.aoclient.network.protocol.command;
+package org.aoclient.network.protocol.command.core;
 
 /*
- * Enumeracion {@code CommandValidator} utilizada para realizar validaciones relacionadas con comandos y direcciones IP.
+ * Clase utilizada para realizar validaciones relacionadas con comandos y direcciones IP.
  * <p>
  * Contiene metodos utilitarios para validar direcciones IPv4 y manipular cadenas de texto asociadas a comandos, proporcionando
  * herramientas para manejar entradas de comandos en un sistema de red.
  */
 
-public enum CommandValidator {
-
-    INSTANCE;
-
-    // FIXME Esta cortando mal la cadena ejemplo: "jua.chr" falta la n
-    public String[] AEMAILSplit(String text) {
-        String[] tmpArr = new String[2];
-        byte Pos;
-        Pos = (byte) text.indexOf("-");
-        if (Pos != 0) {
-            tmpArr[0] = text.substring(0, Pos - 1);
-            tmpArr[1] = text.substring(Pos + 1);
-        } else tmpArr[0] = "";
-        return tmpArr;
-    }
+public class CommandValidator {
 
     /**
      * Verifica si una direccion IP proporcionada es una direccion IPv4 valida.
@@ -36,7 +22,7 @@ public enum CommandValidator {
      * @param ip direccion IP que se desea validar como cadena de texto
      * @return {@code true} si la direccion IP es una IPv4 valida; {@code false} en caso contrario, o si la cadena es {@code null}
      */
-    public boolean isValidIPv4(String ip) {
+    public static boolean isValidIPv4(String ip) {
         if (ip == null) return false;
         String[] parts = ip.split("\\.", -1);
         if (parts.length != 4) return false;
@@ -64,7 +50,7 @@ public enum CommandValidator {
      * @return un arreglo de cuatro enteros que representan cada segmento de la direccion IP, o {@code null} si la direccion no es
      * valida
      */
-    public int[] parseIPv4ToArray(String ip) {
+    public static int[] parseIPv4ToArray(String ip) {
         String[] parts = ip.split("\\.");
         if (parts.length != 4) return null;
         int[] ipArray = new int[4];

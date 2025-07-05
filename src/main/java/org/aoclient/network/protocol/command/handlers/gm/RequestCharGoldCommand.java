@@ -1,18 +1,19 @@
 package org.aoclient.network.protocol.command.handlers.gm;
 
-import org.aoclient.network.protocol.command.BaseCommandHandler;
-import org.aoclient.network.protocol.command.CommandContext;
-import org.aoclient.network.protocol.command.CommandException;
+import org.aoclient.network.protocol.command.handlers.BaseCommandHandler;
+import org.aoclient.network.protocol.command.core.CommandContext;
+import org.aoclient.network.protocol.command.core.CommandException;
 
-import static org.aoclient.network.protocol.Protocol.writeRequestCharGold;
+import static org.aoclient.network.protocol.Protocol.requestCharGold;
+import static org.aoclient.network.protocol.command.metadata.GameCommand.REQUEST_CHAR_GOLD;
 
 public class RequestCharGoldCommand extends BaseCommandHandler {
 
     @Override
-    public void handle(CommandContext context) throws CommandException {
-        requireArguments(context, 1, "/bal <nick>");
-        String nick = context.getArgument(0);
-        writeRequestCharGold(nick);
+    public void handle(CommandContext commandContext) throws CommandException {
+        requireArguments(commandContext, 1, REQUEST_CHAR_GOLD.getCommand() + " <nick>");
+        String nick = commandContext.getArgument(0);
+        requestCharGold(nick);
     }
 
 }

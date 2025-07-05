@@ -9,8 +9,8 @@ import static org.aoclient.engine.game.models.Character.*;
 import static org.aoclient.engine.game.models.Direction.*;
 import static org.aoclient.engine.scenes.Camera.*;
 import static org.aoclient.engine.utils.GameData.*;
-import static org.aoclient.network.protocol.Protocol.writeChangeHeading;
-import static org.aoclient.network.protocol.Protocol.writeWalk;
+import static org.aoclient.network.protocol.Protocol.changeHeading;
+import static org.aoclient.network.protocol.Protocol.walk;
 
 /**
  * <p>
@@ -377,10 +377,10 @@ public enum User {
             case LEFT -> moveToLegalPos(userPos.getX() - 1, userPos.getY());
         };
         if (legalOk && !charList[userCharIndex].isParalizado()) {
-            writeWalk(direction);
+            walk(direction);
             moveScreen(direction);
             moveCharbyHead(userCharIndex, direction);
-        } else if (charList[userCharIndex].getHeading() != direction) writeChangeHeading(direction);
+        } else if (charList[userCharIndex].getHeading() != direction) changeHeading(direction);
 
     }
 

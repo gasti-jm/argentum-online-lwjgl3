@@ -1,19 +1,20 @@
 package org.aoclient.network.protocol.command.handlers.gm;
 
-import org.aoclient.network.protocol.command.BaseCommandHandler;
-import org.aoclient.network.protocol.command.CommandContext;
-import org.aoclient.network.protocol.command.CommandException;
+import org.aoclient.network.protocol.command.handlers.BaseCommandHandler;
+import org.aoclient.network.protocol.command.core.CommandContext;
+import org.aoclient.network.protocol.command.core.CommandException;
 
-import static org.aoclient.network.protocol.Protocol.writeCriminalMessage;
+import static org.aoclient.network.protocol.Protocol.criminalMessage;
+import static org.aoclient.network.protocol.command.metadata.GameCommand.CRIMSG;
 
 public class CriminalMessageCommand extends BaseCommandHandler {
 
     @Override
-    public void handle(CommandContext context) throws CommandException {
-        requireArguments(context, -1, "/crimsg <message>");
-        requireValidString(context, "message", REGEX);
-        String message = context.getArgumentsRaw().trim();
-        writeCriminalMessage(message);
+    public void handle(CommandContext commandContext) throws CommandException {
+        requireArguments(commandContext, UNLIMITED_ARGUMENTS, CRIMSG.getCommand() + " <message>");
+        requireValidString(commandContext, "message", REGEX);
+        String message = commandContext.argumentsRaw().trim();
+        criminalMessage(message);
     }
 
 }

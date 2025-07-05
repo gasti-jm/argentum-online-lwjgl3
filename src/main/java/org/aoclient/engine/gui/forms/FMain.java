@@ -180,7 +180,7 @@ public final class FMain extends Form {
         }
         if (drawButton(681, 530, 95, 22, "viewGuild")) {
             playSound(SND_CLICK);
-            Protocol.writeRequestGuildLeaderInfo();
+            Protocol.requestGuildLeaderInfo();
         }
         if (drawButton(775, 3, 17, 17, "close")) {
             playSound(SND_CLICK);

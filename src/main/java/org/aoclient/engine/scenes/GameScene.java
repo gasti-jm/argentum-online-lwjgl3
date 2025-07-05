@@ -14,7 +14,8 @@ import org.aoclient.engine.gui.forms.FMain;
 import org.aoclient.engine.listeners.KeyHandler;
 import org.aoclient.engine.listeners.MouseListener;
 import org.aoclient.engine.renderer.RGBColor;
-import org.aoclient.network.protocol.command.CommandProcessor;
+import org.aoclient.network.protocol.Protocol;
+import org.aoclient.network.protocol.command.execution.CommandExecutor;
 
 import static org.aoclient.engine.game.IntervalTimer.INT_SENTRPU;
 import static org.aoclient.engine.game.models.Character.drawCharacter;
@@ -67,7 +68,6 @@ public final class GameScene extends Scene {
     private float alphaCeiling = 1.0f;
     private boolean autoMove = false;
     private FMain frmMain;
-    private final CommandProcessor commandProcessor = CommandProcessor.INSTANCE;
 
     @Override
     public void init() {
@@ -133,14 +133,14 @@ public final class GameScene extends Scene {
                     if (KeyHandler.isKeyPressed(GLFW_KEY_RIGHT_SHIFT) &&
                             charList[user.getUserCharIndex()].getPriv() != 0) {
 
-                        writeWarpChar("YO",
+                        warpChar("YO",
                                 user.getUserMap(),
                                 getTileMouseX((int) MouseListener.getX() - POS_SCREEN_X),
                                 getTileMouseY((int) MouseListener.getY() - POS_SCREEN_Y));
 
                     } else {
 
-                        writeLeftClick(
+                        leftClick(
                                 getTileMouseX((int) MouseListener.getX() - POS_SCREEN_X),
                                 getTileMouseY((int) MouseListener.getY() - POS_SCREEN_Y));
 
@@ -151,7 +151,7 @@ public final class GameScene extends Scene {
 
             if (MouseListener.mouseButtonReleased(GLFW_MOUSE_BUTTON_LEFT)) {
                 if (user.getUsingSkill() != 0) {
-                    writeWorkLeftClick(getTileMouseX((int) MouseListener.getX() - POS_SCREEN_X),
+                    workLeftClick(getTileMouseX((int) MouseListener.getX() - POS_SCREEN_X),
                             getTileMouseY((int) MouseListener.getY() - POS_SCREEN_Y),
                             user.getUsingSkill());
 
@@ -177,7 +177,7 @@ public final class GameScene extends Scene {
         if (MouseListener.mouseButtonDoubleClick(GLFW_MOUSE_BUTTON_LEFT)) {
             user.getUserInventory().dobleClickInventory();
         } else if (MouseListener.mouseButtonDoubleClick(GLFW_MOUSE_BUTTON_RIGHT)) {
-            writeDoubleClick(getTileMouseX((int) MouseListener.getX() - POS_SCREEN_X), getTileMouseY((int) MouseListener.getY() - POS_SCREEN_Y));
+            doubleClick(getTileMouseX((int) MouseListener.getX() - POS_SCREEN_X), getTileMouseY((int) MouseListener.getY() - POS_SCREEN_Y));
         }
 
 
@@ -188,7 +188,7 @@ public final class GameScene extends Scene {
      */
     @Override
     public void keyEvents() {
-        if (KeyHandler.isKeyPressed(Key.EXIT_GAME.getKeyCode())) writeQuit();
+        if (KeyHandler.isKeyPressed(Key.EXIT_GAME.getKeyCode())) quit();
         this.checkBindedKeys();
     }
 
@@ -223,10 +223,10 @@ public final class GameScene extends Scene {
                     user.getUserInventory().useItem();
                     break;
                 case GET_OBJECT:
-                    writePickUp();
+                    pickUp();
                     break;
                 case ATTACK:
-                    writeAttack();
+                    attack();
                     break;
                 case EQUIP_OBJECT:
                     user.getUserInventory().equipItem();
@@ -240,20 +240,23 @@ public final class GameScene extends Scene {
                 case TALK:
                     if (!ImGUISystem.INSTANCE.isFormVisible(FCantidad.class.getSimpleName())) {
                         if (user.isTalking()) {
-                            if (!frmMain.getSendText().isBlank()) commandProcessor.process(frmMain.getSendText());
+                            if (!frmMain.getSendText().isBlank()) {
+                                if (!frmMain.getSendText().startsWith("/")) Protocol.talk(frmMain.getSendText());
+                                else CommandExecutor.INSTANCE.execute(frmMain.getSendText());
+                            }
                             user.setTalking(false);
                         } else user.setTalking(true);
                         frmMain.clearSendTxt();
                     }
                     break;
                 case HIDE:
-                    writeWork(Skill.CONCEALMENT.getId());
+                    work(Skill.CONCEALMENT.getId());
                     break;
                 case STEAL:
-                    writeWork(Skill.THEFT.getId());
+                    work(Skill.THEFT.getId());
                     break;
                 case REQUEST_REFRESH:
-                    if (intervalToUpdatePos.check()) writeRequestPositionUpdate();
+                    if (intervalToUpdatePos.check()) requestPositionUpdate();
                     break;
             }
         }

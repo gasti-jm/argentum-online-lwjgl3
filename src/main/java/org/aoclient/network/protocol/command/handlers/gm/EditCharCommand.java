@@ -1,11 +1,12 @@
 package org.aoclient.network.protocol.command.handlers.gm;
 
-import org.aoclient.network.protocol.command.BaseCommandHandler;
-import org.aoclient.network.protocol.command.CommandContext;
-import org.aoclient.network.protocol.command.CommandException;
+import org.aoclient.network.protocol.command.handlers.BaseCommandHandler;
+import org.aoclient.network.protocol.command.core.CommandContext;
+import org.aoclient.network.protocol.command.core.CommandException;
 import org.aoclient.network.protocol.types.CharacterEditType;
 
-import static org.aoclient.network.protocol.Protocol.writeEditChar;
+import static org.aoclient.network.protocol.Protocol.editChar;
+import static org.aoclient.network.protocol.command.metadata.GameCommand.MOD_PLAYER;
 
 /**
  * Comando para editar propiedades de personajes.
@@ -42,21 +43,21 @@ import static org.aoclient.network.protocol.Protocol.writeEditChar;
 public class EditCharCommand extends BaseCommandHandler {
 
     @Override
-    public void handle(CommandContext context) throws CommandException {
-        requireArguments(context, 3, "/mod <nick> <property> <value> [extra_param]");
-        requireString(context, 0, "nick");
-        requireString(context, 1, "property");
-        requireString(context, 2, "value");
+    public void handle(CommandContext commandContext) throws CommandException {
+        requireArguments(commandContext, 3, MOD_PLAYER.getCommand() + " <nick> <property> <value> [extra_param]");
+        requireString(commandContext, 0, "nick");
+        requireString(commandContext, 1, "property");
+        requireString(commandContext, 2, "value");
 
-        String nick = context.getArgument(0);
-        String property = context.getArgument(1);
-        String value = context.getArgument(2);
-        String extraParam = context.getArgumentCount() >= 4 ? context.getArgument(3) : ""; // Evita un NPE
+        String nick = commandContext.getArgument(0);
+        String property = commandContext.getArgument(1);
+        String value = commandContext.getArgument(2);
+        String extraParam = commandContext.getArgumentCount() >= 4 ? commandContext.getArgument(3) : ""; // Evita un NPE
 
         CharacterEditType editType = getEditTypeFromProperty(property);
         if (editType == null) showError("Unknown property: " + property + ". See command documentation for valid properties.");
 
-        writeEditChar(nick, editType.getValue(), value, extraParam);
+        editChar(nick, editType.getValue(), value, extraParam);
     }
 
     /**

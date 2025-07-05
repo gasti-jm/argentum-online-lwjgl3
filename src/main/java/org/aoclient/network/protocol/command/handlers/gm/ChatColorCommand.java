@@ -1,31 +1,31 @@
 package org.aoclient.network.protocol.command.handlers.gm;
 
-import org.aoclient.network.protocol.command.BaseCommandHandler;
-import org.aoclient.network.protocol.command.CommandContext;
-import org.aoclient.network.protocol.command.CommandException;
+import org.aoclient.network.protocol.command.handlers.BaseCommandHandler;
+import org.aoclient.network.protocol.command.core.CommandContext;
+import org.aoclient.network.protocol.command.core.CommandException;
 
-import static org.aoclient.network.protocol.Protocol.writeChatColor;
+import static org.aoclient.network.protocol.Protocol.chatColor;
+import static org.aoclient.network.protocol.command.metadata.GameCommand.CHAT_COLOR;
 
 public class ChatColorCommand extends BaseCommandHandler {
 
     @Override
-    public void handle(CommandContext context) throws CommandException {
-        if (!context.hasArguments()) {
-            writeChatColor(0, 255, 0);
+    public void handle(CommandContext commandContext) throws CommandException {
+        if (!commandContext.hasArguments()) {
+            chatColor(0, 255, 0);
             return;
         }
 
-        requireArguments(context, 3, "/chatcolor <r> <g> <b>");
-        requireInteger(context, 0, "r");
-        requireInteger(context, 1, "g");
-        requireInteger(context, 2, "b");
+        requireArguments(commandContext, 3, CHAT_COLOR.getCommand() + " <r> <g> <b>");
+        requireInteger(commandContext, 0, "r");
+        requireInteger(commandContext, 1, "g");
+        requireInteger(commandContext, 2, "b");
 
-        int red = Integer.parseInt(context.getArgument(0));
-        int green = Integer.parseInt(context.getArgument(1));
-        int blue = Integer.parseInt(context.getArgument(2));
+        int r = Integer.parseInt(commandContext.getArgument(0));
+        int g = Integer.parseInt(commandContext.getArgument(1));
+        int b = Integer.parseInt(commandContext.getArgument(2));
 
-        writeChatColor(red, green, blue);
-
+        chatColor(r, g, b);
     }
 
 }

@@ -1,22 +1,22 @@
 package org.aoclient.network.protocol.command.handlers.gm;
 
-import org.aoclient.network.protocol.command.BaseCommandHandler;
-import org.aoclient.network.protocol.command.CommandContext;
-import org.aoclient.network.protocol.command.CommandException;
+import org.aoclient.network.protocol.command.handlers.BaseCommandHandler;
+import org.aoclient.network.protocol.command.core.CommandContext;
+import org.aoclient.network.protocol.command.core.CommandException;
 
-import static org.aoclient.network.protocol.Protocol.writeAskTrigger;
-import static org.aoclient.network.protocol.Protocol.writeSetTrigger;
+import static org.aoclient.network.protocol.Protocol.askTrigger;
+import static org.aoclient.network.protocol.Protocol.setTrigger;
 
 public class SetTriggerCommand extends BaseCommandHandler {
 
     @Override
-    public void handle(CommandContext context) throws CommandException {
-        if (context.hasArguments()) {
+    public void handle(CommandContext commandContext) throws CommandException {
+        if (commandContext.hasArguments()) {
             // Modo: establecer trigger con numero especifico
-            requireInteger(context, 0, "trigger number");
-            int triggerNumber = Integer.parseInt(context.getArgument(0));
-            writeSetTrigger(triggerNumber);
-        } else writeAskTrigger(); // Modo: solicitar informacion sobre trigger actual
+            requireInteger(commandContext, 0, "trigger number");
+            int triggerNumber = Integer.parseInt(commandContext.getArgument(0));
+            setTrigger(triggerNumber);
+        } else askTrigger(); // Modo: solicitar informacion sobre trigger actual
     }
 
 }

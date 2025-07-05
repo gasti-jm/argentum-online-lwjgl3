@@ -1,18 +1,19 @@
 package org.aoclient.network.protocol.command.handlers.gm;
 
-import org.aoclient.network.protocol.command.BaseCommandHandler;
-import org.aoclient.network.protocol.command.CommandContext;
-import org.aoclient.network.protocol.command.CommandException;
+import org.aoclient.network.protocol.command.handlers.BaseCommandHandler;
+import org.aoclient.network.protocol.command.core.CommandContext;
+import org.aoclient.network.protocol.command.core.CommandException;
 
-import static org.aoclient.network.protocol.Protocol.writeAcceptChaosCouncilMember;
+import static org.aoclient.network.protocol.Protocol.acceptChaosCouncilMember;
+import static org.aoclient.network.protocol.command.metadata.GameCommand.ACEPT_CONSE_CHAOS;
 
 public class AcceptChaosCouncilMemberCommand extends BaseCommandHandler {
 
     @Override
-    public void handle(CommandContext context) throws CommandException {
-        requireArguments(context, 1, "/aceptconsecaos <nick>");
-        String nick = context.getArgument(0);
-        writeAcceptChaosCouncilMember(nick);
+    public void handle(CommandContext commandContext) throws CommandException {
+        requireArguments(commandContext, 1, ACEPT_CONSE_CHAOS.getCommand() + " <nick>");
+        String nick = commandContext.getArgument(0);
+        acceptChaosCouncilMember(nick);
     }
 
 }

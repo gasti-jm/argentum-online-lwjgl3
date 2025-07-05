@@ -54,7 +54,7 @@ public final class FSpawnList extends Form {
         }
         
         if (ImGui.button("Invocar", ImGui.getWindowWidth() - 16, 20) || ImGui.isKeyPressed(GLFW_KEY_ENTER)) {
-            Protocol.writeSpawnCreature((short) (selectedIndex.get() + 1));
+            Protocol.spawnCreature((short) (selectedIndex.get() + 1));
         }
         if (ImGui.button("Salir", ImGui.getWindowWidth() - 16, 20) || ImGui.isKeyPressed(GLFW_KEY_ENTER)) close();
 

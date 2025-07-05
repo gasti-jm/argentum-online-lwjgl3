@@ -1,18 +1,19 @@
 package org.aoclient.network.protocol.command.handlers.gm;
 
-import org.aoclient.network.protocol.command.BaseCommandHandler;
-import org.aoclient.network.protocol.command.CommandContext;
-import org.aoclient.network.protocol.command.CommandException;
+import org.aoclient.network.protocol.command.handlers.BaseCommandHandler;
+import org.aoclient.network.protocol.command.core.CommandContext;
+import org.aoclient.network.protocol.command.core.CommandException;
 
-import static org.aoclient.network.protocol.Protocol.writeAcceptRoyalCouncilMember;
+import static org.aoclient.network.protocol.Protocol.acceptRoyalCouncilMember;
+import static org.aoclient.network.protocol.command.metadata.GameCommand.ACEPT_CONSE;
 
 public class AcceptRoyalCouncilMemberCommand extends BaseCommandHandler {
 
     @Override
-    public void handle(CommandContext context) throws CommandException {
-        requireArguments(context, 1, "/aceptconse <nick>");
-        String nick = context.getArgument(0);
-        writeAcceptRoyalCouncilMember(nick);
+    public void handle(CommandContext commandContext) throws CommandException {
+        requireArguments(commandContext, 1, ACEPT_CONSE.getCommand() + " <nick>");
+        String nick = commandContext.getArgument(0);
+        acceptRoyalCouncilMember(nick);
     }
 
 }

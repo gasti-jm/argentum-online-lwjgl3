@@ -114,7 +114,7 @@ public class PacketReceiver {
         handlers.put(ServerPacket.BANK_OK, new BankOKHandler());
         handlers.put(ServerPacket.CHANGE_USER_TRADE_SLOT, new ChangeUserTradeSlotHandler());
         handlers.put(ServerPacket.SEND_NIGHT, new SendNightHandler());
-        handlers.put(ServerPacket.PONG, new PongHandler());
+        handlers.put(ServerPacket.PONG, new PingHandler());
         handlers.put(ServerPacket.UPDATE_TAG_AND_STATUS, new UpdateTagAndStatusHandler());
         handlers.put(ServerPacket.GUILD_MEMBER_INFO, new GuildMemberInfoHandler());
         handlers.put(ServerPacket.SPAWN_LIST, new SpawnListHandler());

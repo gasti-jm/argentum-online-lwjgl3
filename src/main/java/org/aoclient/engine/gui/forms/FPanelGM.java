@@ -4,19 +4,21 @@ import imgui.ImGui;
 import imgui.flag.ImGuiCond;
 import imgui.flag.ImGuiWindowFlags;
 import imgui.type.ImString;
-import org.aoclient.network.protocol.command.CommandProcessor;
+import org.aoclient.network.protocol.command.execution.CommandExecutor;
+
+import static org.aoclient.network.protocol.command.metadata.GameCommand.*;
 
 public final class FPanelGM extends Form {
 
     private final ImString myText = new ImString(64);
-    private final CommandProcessor commandProcessor = CommandProcessor.INSTANCE;
+    private final CommandExecutor commandExecutor = CommandExecutor.INSTANCE;
 
     @Override
     public void render() {
         ImGui.setNextWindowSize(355, 380, ImGuiCond.Always);
         ImGui.begin(this.getClass().getSimpleName(), ImGuiWindowFlags.NoTitleBar | ImGuiWindowFlags.NoResize);
 
-        ImGui.text("Panel GM:");
+        ImGui.text("GM Panel:");
         ImGui.separator();
 
         this.drawButtons();
@@ -28,33 +30,33 @@ public final class FPanelGM extends Form {
 
         if (ImGui.beginTabBar("GMTabBar")) {
             if (ImGui.beginTabItem("Message")) {
-                ImGui.inputText("Argumentos", myText);
+                ImGui.inputText("Arguments", myText);
                 ImGui.separator();
-                if (ImGui.button("/HORA", 170, 20)) commandProcessor.process("/HORA");
-                if (ImGui.button("/MOTDCAMBIA", 170, 20)) commandProcessor.process("/MOTDCAMBIA");
-                if (ImGui.button("/TALKAS", 170, 20)) commandProcessor.process("/TALKAS");
-                if (ImGui.button("/GMSG", 170, 20)) commandProcessor.process("/GMSG " + myText.get());
-                if (ImGui.button("/RMSG", 170, 20)) commandProcessor.process("/RMSG " + myText.get());
-                if (ImGui.button("/SMSG", 170, 20)) commandProcessor.process("/SMSG " + myText.get());
-                if (ImGui.button("/REALMSG", 170, 20)) commandProcessor.process("/REALMSG " + myText.get());
-                if (ImGui.button("/CAOSMSG", 170, 20)) commandProcessor.process("/CAOSMSG " + myText.get());
-                if (ImGui.button("/CIUMSG", 170, 20)) commandProcessor.process("/CIUMSG " + myText.get());
+                if (ImGui.button(TIME.getCommand(), 170, 20)) commandExecutor.execute(TIME.getCommand());
+                if (ImGui.button(MOTD_CHANGE.getCommand(), 170, 20)) commandExecutor.execute(MOTD_CHANGE.getCommand());
+                if (ImGui.button(TALKAS.getCommand(), 170, 20)) commandExecutor.execute(TALKAS.getCommand());
+                if (ImGui.button(GMSG.getCommand(), 170, 20)) commandExecutor.execute(GMSG.getCommand() + " " + myText.get());
+                if (ImGui.button(RMSG.getCommand(), 170, 20)) commandExecutor.execute(RMSG.getCommand() + " " + myText.get());
+                if (ImGui.button(SMSG.getCommand(), 170, 20)) commandExecutor.execute(SMSG.getCommand() + " " + myText.get());
+                if (ImGui.button(REALMSG.getCommand(), 170, 20)) commandExecutor.execute(REALMSG.getCommand() + " " + myText.get());
+                if (ImGui.button(CAOSMSG.getCommand(), 170, 20)) commandExecutor.execute(CAOSMSG.getCommand() + " " + myText.get());
+                if (ImGui.button(CIUMSG.getCommand(), 170, 20)) commandExecutor.execute(CIUMSG.getCommand() + " " + myText.get());
 
                 ImGui.endTabItem();
             }
 
             if (ImGui.beginTabItem("Info")) {
-                ImGui.inputText("Argumentos", myText);
+                ImGui.inputText("Arguments", myText);
                 ImGui.separator();
-                if (ImGui.button("/SHOW SOS", 170, 20)) commandProcessor.process("/SHOW SOS");
-                if (ImGui.button("/BORRAR SOS", 170, 20)) commandProcessor.process("/BORRAR SOS");
-                if (ImGui.button("/TRABAJANDO", 170, 20)) commandProcessor.process("/TRABAJANDO");
-                if (ImGui.button("/OCULTANDO", 170, 20)) commandProcessor.process("/OCULTANDO");
-                if (ImGui.button("/NENE", 170, 20)) commandProcessor.process("/NENE " + myText.get());
-                if (ImGui.button("/ONLINEMAP", 170, 20)) commandProcessor.process("/ONLINEMAP");
-                if (ImGui.button("/ONLINEREAL", 170, 20)) commandProcessor.process("/ONLINEREAL");
-                if (ImGui.button("/ONLINECAOS", 170, 20)) commandProcessor.process("/ONLINECAOS");
-                if (ImGui.button("/ONLINEGM", 170, 20)) commandProcessor.process("/ONLINEGM");
+                if (ImGui.button(SHOW.getCommand() + " sos", 170, 20)) commandExecutor.execute(SHOW.getCommand() + " sos");
+                if (ImGui.button(CLEAR.getCommand() + " sos", 170, 20)) commandExecutor.execute(CLEAR.getCommand() + " sos");
+                if (ImGui.button(SEE_WORKERS.getCommand(), 170, 20)) commandExecutor.execute(SEE_WORKERS.getCommand());
+                if (ImGui.button(SHOW_HIDDEN_PLAYERS.getCommand(), 170, 20)) commandExecutor.execute(SHOW_HIDDEN_PLAYERS.getCommand());
+                if (ImGui.button(SHOW_MOBS.getCommand(), 170, 20)) commandExecutor.execute(SHOW_MOBS.getCommand() + " " + myText.get());
+                if (ImGui.button(ONLINE_MAP.getCommand(), 170, 20)) commandExecutor.execute(ONLINE_MAP.getCommand());
+                if (ImGui.button(ONLINE_ROYAL.getCommand(), 170, 20)) commandExecutor.execute(ONLINE_ROYAL.getCommand());
+                if (ImGui.button(ONLINE_CHAOS.getCommand(), 170, 20)) commandExecutor.execute(ONLINE_CHAOS.getCommand());
+                if (ImGui.button(ONLINE_GM.getCommand(), 170, 20)) commandExecutor.execute(ONLINE_GM.getCommand());
 
                 ImGui.endTabItem();
             }
@@ -65,52 +67,52 @@ public final class FPanelGM extends Form {
             }
 
             if (ImGui.beginTabItem("Me")) {
-                ImGui.inputText("Argumentos", myText);
+                ImGui.inputText("Arguments", myText);
                 ImGui.separator();
-                if (ImGui.button("/INVISIBLE", 170, 20)) commandProcessor.process("/INVISIBLE");
-                if (ImGui.button("/IGNORADO", 170, 20)) commandProcessor.process("/IGNORADO");
-                if (ImGui.button("/NAVE", 170, 20)) commandProcessor.process("/NAVE");
-                if (ImGui.button("/SHOWNAME", 170, 20)) commandProcessor.process("/SHOWNAME");
-                if (ImGui.button("/CHATCOLOR", 170, 20)) commandProcessor.process("/CHATCOLOR");
-                if (ImGui.button("/SETDESC", 170, 20)) commandProcessor.process("/SETDESC " + myText.get());
-                if (ImGui.button("/REM", 170, 20)) commandProcessor.process("/REM " + myText.get());
+                if (ImGui.button(INVISIBILITY.getCommand(), 170, 20)) commandExecutor.execute(INVISIBILITY.getCommand());
+                if (ImGui.button(SHOWIGNORED.getCommand(), 170, 20)) commandExecutor.execute(SHOWIGNORED.getCommand());
+                if (ImGui.button(NAVE.getCommand(), 170, 20)) commandExecutor.execute(NAVE.getCommand());
+                if (ImGui.button(SHOW_NAME.getCommand(), 170, 20)) commandExecutor.execute(SHOW_NAME.getCommand());
+                if (ImGui.button(CHAT_COLOR.getCommand(), 170, 20)) commandExecutor.execute(CHAT_COLOR.getCommand());
+                if (ImGui.button(SETDESC.getCommand(), 170, 20)) commandExecutor.execute(SETDESC.getCommand() + " " + myText.get());
+                if (ImGui.button(REM.getCommand(), 170, 20)) commandExecutor.execute(REM.getCommand() + " " + myText.get());
 
                 ImGui.endTabItem();
             }
 
             if (ImGui.beginTabItem("World")) {
-                ImGui.inputText("Argumentos", myText);
+                ImGui.inputText("Arguments", myText);
                 ImGui.separator();
-                if (ImGui.button("/LLUVIA", 170, 20)) commandProcessor.process("/LLUVIA");
-                if (ImGui.button("/LIMPIAR", 170, 20)) commandProcessor.process("/LIMPIAR");
-                if (ImGui.button("/CC", 170, 20)) commandProcessor.process("/CC");
-                if (ImGui.button("/CT", 170, 20)) commandProcessor.process("/CT " + myText.get());
-                if (ImGui.button("/DT", 170, 20)) commandProcessor.process("/DT");
-                if (ImGui.button("/CI", 170, 20)) commandProcessor.process("/CI " + myText.get());
-                if (ImGui.button("/DEST", 170, 20)) commandProcessor.process("/DEST");
-                if (ImGui.button("/PISO", 170, 20)) commandProcessor.process("/PISO");
-                if (ImGui.button("/MASSDEST", 170, 20)) commandProcessor.process("/MASSDEST");
+                if (ImGui.button(RAIN.getCommand(), 170, 20)) commandExecutor.execute(RAIN.getCommand());
+                if (ImGui.button(CLEAN.getCommand(), 170, 20)) commandExecutor.execute(CLEAN.getCommand());
+                if (ImGui.button(CC.getCommand(), 170, 20)) commandExecutor.execute(CC.getCommand());
+                if (ImGui.button(CREATE_TELEPORT.getCommand(), 170, 20)) commandExecutor.execute(CREATE_TELEPORT.getCommand() + " " + myText.get());
+                if (ImGui.button(DESTROYTELEPORT.getCommand(), 170, 20)) commandExecutor.execute(DESTROYTELEPORT.getCommand());
+                if (ImGui.button(CREATE_OBJ.getCommand(), 170, 20)) commandExecutor.execute(CREATE_OBJ.getCommand() + " " + myText.get());
+                if (ImGui.button(DESTROYITEMS.getCommand(), 170, 20)) commandExecutor.execute(DESTROYITEMS.getCommand());
+                if (ImGui.button(SHOW_OBJ_MAP.getCommand(), 170, 20)) commandExecutor.execute(SHOW_OBJ_MAP.getCommand());
+                if (ImGui.button(REMOVE_ITEM_AREA.getCommand(), 170, 20)) commandExecutor.execute(REMOVE_ITEM_AREA.getCommand());
 
                 ImGui.endTabItem();
             }
 
             if (ImGui.beginTabItem("Admin")) {
-                ImGui.inputText("Argumentos", myText);
+                ImGui.inputText("Arguments", myText);
                 ImGui.separator();
-                if (ImGui.button("/IP2NICK", 170, 20)) commandProcessor.process("/IP2NICK " + myText.get());
-                if (ImGui.button("/BANIP", 170, 20)) commandProcessor.process("/BANIP " + myText.get());
-                if (ImGui.button("/UNBANIP", 170, 20)) commandProcessor.process("/UNBANIP " + myText.get());
-                if (ImGui.button("/BANIPLIST", 170, 20)) commandProcessor.process("/BANIPLIST");
-                if (ImGui.button("/BANIPRELOAD", 170, 20)) commandProcessor.process("/BANIPRELOAD");
-                if (ImGui.button("/SHOWCMSG", 170, 20)) commandProcessor.process("/SHOWCMSG");
-                if (ImGui.button("/MIEMBROSCLAN", 170, 20)) commandProcessor.process("/MIEMBROSCLAN " + myText.get());
-                if (ImGui.button("/BANCLAN", 170, 20)) commandProcessor.process("/BANCLAN " + myText.get());
+                if (ImGui.button(IP2NICK.getCommand(), 170, 20)) commandExecutor.execute(IP2NICK.getCommand() + " " + myText.get());
+                if (ImGui.button(BAN_IP.getCommand(), 170, 20)) commandExecutor.execute(BAN_IP.getCommand() + " " + myText.get());
+                if (ImGui.button(UNBANIP.getCommand(), 170, 20)) commandExecutor.execute(UNBANIP.getCommand() + " " + myText.get());
+                if (ImGui.button(BANIPLIST.getCommand(), 170, 20)) commandExecutor.execute(BANIPLIST.getCommand());
+                if (ImGui.button(BANIPRELOAD.getCommand(), 170, 20)) commandExecutor.execute(BANIPRELOAD.getCommand());
+                if (ImGui.button(GUILD_MSG_HISTORY.getCommand(), 170, 20)) commandExecutor.execute(GUILD_MSG_HISTORY.getCommand());
+                if (ImGui.button(GUILD_MEMBER_LIST.getCommand(), 170, 20)) commandExecutor.execute(GUILD_MEMBER_LIST.getCommand() + " " + myText.get());
+                if (ImGui.button(GUILD_BAN.getCommand(), 170, 20)) commandExecutor.execute(GUILD_BAN.getCommand() + " " + myText.get());
 
                 ImGui.endTabItem();
             }
 
             ImGui.setCursorPos(1, 349);
-            if (ImGui.button("Cerrar", 350, 20)) this.close();
+            if (ImGui.button("Close", 350, 20)) this.close();
             ImGui.endTabBar();
         }
 

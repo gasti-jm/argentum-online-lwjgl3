@@ -1,18 +1,19 @@
 package org.aoclient.network.protocol.command.handlers.party;
 
-import org.aoclient.network.protocol.command.BaseCommandHandler;
-import org.aoclient.network.protocol.command.CommandContext;
-import org.aoclient.network.protocol.command.CommandException;
+import org.aoclient.network.protocol.command.handlers.BaseCommandHandler;
+import org.aoclient.network.protocol.command.core.CommandContext;
+import org.aoclient.network.protocol.command.core.CommandException;
 
-import static org.aoclient.network.protocol.Protocol.writePartyAcceptMember;
+import static org.aoclient.network.protocol.Protocol.partyAcceptMember;
+import static org.aoclient.network.protocol.command.metadata.GameCommand.PARTY_ACCEPT;
 
 public class PartyAcceptMemberCommand extends BaseCommandHandler {
 
     @Override
-    public void handle(CommandContext context) throws CommandException {
-        requireArguments(context, 1, "/acceptparty <nick>");
-        String nick = context.getArgument(0);
-        writePartyAcceptMember(nick);
+    public void handle(CommandContext commandContext) throws CommandException {
+        requireArguments(commandContext, 1, PARTY_ACCEPT.getCommand() + " <nick>");
+        String nick = commandContext.getArgument(0);
+        partyAcceptMember(nick);
     }
 
 }
