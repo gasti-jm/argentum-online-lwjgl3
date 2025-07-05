@@ -4,8 +4,8 @@ import org.aoclient.network.protocol.command.handlers.BaseCommandHandler;
 import org.aoclient.network.protocol.command.core.CommandContext;
 import org.aoclient.network.protocol.command.core.CommandException;
 
-import static org.aoclient.network.protocol.Protocol.writeSOSShowList;
-import static org.aoclient.network.protocol.Protocol.writeShowServerForm;
+import static org.aoclient.network.protocol.Protocol.SOSShowList;
+import static org.aoclient.network.protocol.Protocol.showServerForm;
 import static org.aoclient.network.protocol.command.metadata.GameCommand.SHOW;
 
 public class ShowCommand extends BaseCommandHandler {
@@ -16,8 +16,8 @@ public class ShowCommand extends BaseCommandHandler {
         requireString(commandContext, 0, "option");
         String option = commandContext.getArgument(0);
         switch (option.toUpperCase()) {
-            case "SOS" -> writeSOSShowList();
-            case "INT" -> writeShowServerForm();
+            case "SOS" -> SOSShowList();
+            case "INT" -> showServerForm();
             default -> showError("Valid options: SOS, INT");
         }
     }

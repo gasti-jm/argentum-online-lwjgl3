@@ -4,8 +4,8 @@ import org.aoclient.network.protocol.command.handlers.BaseCommandHandler;
 import org.aoclient.network.protocol.command.core.CommandContext;
 import org.aoclient.network.protocol.command.core.CommandException;
 
-import static org.aoclient.network.protocol.Protocol.writeAskTrigger;
-import static org.aoclient.network.protocol.Protocol.writeSetTrigger;
+import static org.aoclient.network.protocol.Protocol.askTrigger;
+import static org.aoclient.network.protocol.Protocol.setTrigger;
 
 public class SetTriggerCommand extends BaseCommandHandler {
 
@@ -15,8 +15,8 @@ public class SetTriggerCommand extends BaseCommandHandler {
             // Modo: establecer trigger con numero especifico
             requireInteger(commandContext, 0, "trigger number");
             int triggerNumber = Integer.parseInt(commandContext.getArgument(0));
-            writeSetTrigger(triggerNumber);
-        } else writeAskTrigger(); // Modo: solicitar informacion sobre trigger actual
+            setTrigger(triggerNumber);
+        } else askTrigger(); // Modo: solicitar informacion sobre trigger actual
     }
 
 }

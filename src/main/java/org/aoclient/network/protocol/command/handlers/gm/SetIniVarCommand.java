@@ -4,7 +4,7 @@ import org.aoclient.network.protocol.command.handlers.BaseCommandHandler;
 import org.aoclient.network.protocol.command.core.CommandContext;
 import org.aoclient.network.protocol.command.core.CommandException;
 
-import static org.aoclient.network.protocol.Protocol.writeSetIniVar;
+import static org.aoclient.network.protocol.Protocol.setIniVar;
 import static org.aoclient.network.protocol.command.metadata.GameCommand.SETINIVAR;
 
 public class SetIniVarCommand extends BaseCommandHandler {
@@ -20,7 +20,7 @@ public class SetIniVarCommand extends BaseCommandHandler {
         String valor = commandContext.getArgument(2);
         // Reemplaza "+" por espacios en el valor (funcionalidad original)
         valor = valor.replace("+", " ");
-        writeSetIniVar(llave, clave, valor);
+        setIniVar(llave, clave, valor);
     }
 
 }

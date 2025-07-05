@@ -4,7 +4,7 @@ import org.aoclient.network.protocol.command.handlers.BaseCommandHandler;
 import org.aoclient.network.protocol.command.core.CommandContext;
 import org.aoclient.network.protocol.command.core.CommandException;
 
-import static org.aoclient.network.protocol.Protocol.writeRequestCharInfo;
+import static org.aoclient.network.protocol.Protocol.requestCharInfo;
 import static org.aoclient.network.protocol.command.metadata.GameCommand.PLAYER_INFO;
 
 public class RequestCharInfoCommand extends BaseCommandHandler {
@@ -13,7 +13,7 @@ public class RequestCharInfoCommand extends BaseCommandHandler {
     public void handle(CommandContext commandContext) throws CommandException {
         requireArguments(commandContext, 1, PLAYER_INFO.getCommand() + " <nick>");
         String nick = commandContext.getArgument(0);
-        writeRequestCharInfo(nick);
+        requestCharInfo(nick);
     }
 
 }

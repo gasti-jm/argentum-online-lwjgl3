@@ -4,7 +4,7 @@ import org.aoclient.network.protocol.command.handlers.BaseCommandHandler;
 import org.aoclient.network.protocol.command.core.CommandContext;
 import org.aoclient.network.protocol.command.core.CommandException;
 
-import static org.aoclient.network.protocol.Protocol.writeJail;
+import static org.aoclient.network.protocol.Protocol.jail;
 import static org.aoclient.network.protocol.command.metadata.GameCommand.JAIL;
 
 public class JailCommand extends BaseCommandHandler {
@@ -20,7 +20,7 @@ public class JailCommand extends BaseCommandHandler {
         String reason = commandContext.getArgument(1);
         int minutes = Integer.parseInt(commandContext.getArgument(2));
 
-        writeJail(nick, reason, minutes);
+        jail(nick, reason, minutes);
 
     }
 

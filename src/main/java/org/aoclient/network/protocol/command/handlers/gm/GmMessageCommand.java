@@ -4,7 +4,7 @@ import org.aoclient.network.protocol.command.handlers.BaseCommandHandler;
 import org.aoclient.network.protocol.command.core.CommandContext;
 import org.aoclient.network.protocol.command.core.CommandException;
 
-import static org.aoclient.network.protocol.Protocol.writeGMMessage;
+import static org.aoclient.network.protocol.Protocol.GMMessage;
 import static org.aoclient.network.protocol.command.metadata.GameCommand.GMSG;
 
 public class GmMessageCommand extends BaseCommandHandler {
@@ -14,7 +14,7 @@ public class GmMessageCommand extends BaseCommandHandler {
         requireArguments(commandContext, UNLIMITED_ARGUMENTS, GMSG.getCommand() + " <message>");
         requireValidString(commandContext, "message", REGEX);
         String message = commandContext.argumentsRaw().trim();
-        writeGMMessage(message);
+        GMMessage(message);
     }
 
 }

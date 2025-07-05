@@ -20,14 +20,14 @@ public class MapInfoCommand extends BaseCommandHandler {
         String value = commandContext.getArgument(1);
 
         switch (option.toLowerCase()) {
-            case "pk" -> writeChangeMapInfoPK(value.equals("1"));
-            case "backup" -> writeChangeMapInfoBackup(value.equals("1"));
-            case "restringir" -> writeChangeMapInfoRestricted(value);
-            case "magiasinefecto" -> writeChangeMapInfoNoMagic(Boolean.parseBoolean(value));
-            case "invisinefecto" -> writeChangeMapInfoNoInvi(Boolean.parseBoolean(value));
-            case "resusinefecto" -> writeChangeMapInfoNoResu(Boolean.parseBoolean(value));
-            case "terreno" -> writeChangeMapInfoLand(value);
-            case "zona" -> writeChangeMapInfoZone(value);
+            case "pk" -> changeMapInfoPK(value.equals("1"));
+            case "backup" -> changeMapInfoBackup(value.equals("1"));
+            case "restringir" -> changeMapInfoRestricted(value);
+            case "magiasinefecto" -> changeMapInfoNoMagic(Boolean.parseBoolean(value));
+            case "invisinefecto" -> changeMapInfoNoInvi(Boolean.parseBoolean(value));
+            case "resusinefecto" -> changeMapInfoNoResu(Boolean.parseBoolean(value));
+            case "terreno" -> changeMapInfoLand(value);
+            case "zona" -> changeMapInfoZone(value);
             default -> showError("Incorrect option, must be one of: " + VALID_OPTIONS);
         }
 

@@ -4,8 +4,8 @@ import org.aoclient.network.protocol.command.handlers.BaseCommandHandler;
 import org.aoclient.network.protocol.command.core.CommandContext;
 import org.aoclient.network.protocol.command.core.CommandException;
 
-import static org.aoclient.network.protocol.Protocol.writeInquiry;
-import static org.aoclient.network.protocol.Protocol.writeInquiryVote;
+import static org.aoclient.network.protocol.Protocol.inquiry;
+import static org.aoclient.network.protocol.Protocol.inquiryVote;
 import static org.aoclient.network.protocol.command.metadata.GameCommand.POLL;
 
 /**
@@ -16,12 +16,12 @@ public class InquiryCommand extends BaseCommandHandler {
 
     @Override
     public void handle(CommandContext commandContext) throws CommandException {
-        if (!commandContext.hasArguments()) writeInquiry();
+        if (!commandContext.hasArguments()) inquiry();
         else {
             requireArguments(commandContext, 1, POLL.getCommand() + " <option>");
             requireInteger(commandContext, 0, "option");
             int option = Integer.parseInt(commandContext.getArgument(0));
-            writeInquiryVote(option);
+            inquiryVote(option);
         }
     }
 

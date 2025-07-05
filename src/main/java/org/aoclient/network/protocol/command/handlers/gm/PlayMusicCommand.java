@@ -1,11 +1,11 @@
 package org.aoclient.network.protocol.command.handlers.gm;
 
+import org.aoclient.network.protocol.Protocol;
 import org.aoclient.network.protocol.command.handlers.BaseCommandHandler;
 import org.aoclient.network.protocol.command.core.CommandContext;
 import org.aoclient.network.protocol.command.core.CommandException;
 
-import static org.aoclient.network.protocol.Protocol.writePlayMusic;
-import static org.aoclient.network.protocol.Protocol.writePlayMusicOnMap;
+import static org.aoclient.network.protocol.Protocol.playMusicOnMap;
 import static org.aoclient.network.protocol.command.metadata.GameCommand.PLAY_MUSIC;
 
 public class PlayMusicCommand extends BaseCommandHandler {
@@ -21,12 +21,12 @@ public class PlayMusicCommand extends BaseCommandHandler {
         requireInteger(context, 0, "music_id");
         int musicId = Integer.parseInt(context.getArgument(0));
         if (!onMap) {
-            writePlayMusic(musicId);
+            Protocol.playMusic(musicId);
             return;
         }
         requireInteger(context, 1, "map");
         short map = Short.parseShort(context.getArgument(1));
-        writePlayMusicOnMap(musicId, map); // FIXME No funciona al especificar el mapa
+        playMusicOnMap(musicId, map); // FIXME No funciona al especificar el mapa
     }
 
 }

@@ -4,7 +4,7 @@ import org.aoclient.network.protocol.command.handlers.BaseCommandHandler;
 import org.aoclient.network.protocol.command.core.CommandContext;
 import org.aoclient.network.protocol.command.core.CommandException;
 
-import static org.aoclient.network.protocol.Protocol.writeSetCharDescription;
+import static org.aoclient.network.protocol.Protocol.setCharDescription;
 import static org.aoclient.network.protocol.command.metadata.GameCommand.SETDESC;
 
 public class SetCharDescriptionCommand extends BaseCommandHandler {
@@ -14,7 +14,7 @@ public class SetCharDescriptionCommand extends BaseCommandHandler {
         requireArguments(commandContext, UNLIMITED_ARGUMENTS, SETDESC.getCommand() + " <description>");
         requireValidString(commandContext, "description", REGEX);
         String description = commandContext.argumentsRaw().trim();
-        writeSetCharDescription(description);
+        setCharDescription(description);
     }
 
 }

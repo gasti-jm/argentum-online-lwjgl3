@@ -4,7 +4,7 @@ import org.aoclient.network.protocol.command.handlers.BaseCommandHandler;
 import org.aoclient.network.protocol.command.core.CommandContext;
 import org.aoclient.network.protocol.command.core.CommandException;
 
-import static org.aoclient.network.protocol.Protocol.writeOnlineMap;
+import static org.aoclient.network.protocol.Protocol.onlineMap;
 
 public class OnlineMapCommand extends BaseCommandHandler {
 
@@ -13,8 +13,8 @@ public class OnlineMapCommand extends BaseCommandHandler {
         if (commandContext.hasArguments()) {
             requireInteger(commandContext, 0, "map");
             short mapNumber = Short.parseShort(commandContext.getArgument(0));
-            writeOnlineMap(mapNumber);
-        } else writeOnlineMap(user.getUserMap()); // Si no se proporciona argumento, usar el mapa actual del usuario
+            onlineMap(mapNumber);
+        } else onlineMap(user.getUserMap()); // Si no se proporciona argumento, usar el mapa actual del usuario
     }
 
 }

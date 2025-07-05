@@ -4,7 +4,7 @@ import org.aoclient.network.protocol.command.handlers.BaseCommandHandler;
 import org.aoclient.network.protocol.command.core.CommandContext;
 import org.aoclient.network.protocol.command.core.CommandException;
 
-import static org.aoclient.network.protocol.Protocol.writeBankDepositGold;
+import static org.aoclient.network.protocol.Protocol.bankDepositGold;
 import static org.aoclient.network.protocol.command.metadata.GameCommand.DEPOSIT;
 
 public class BankDepositGoldCommand extends BaseCommandHandler {
@@ -25,7 +25,7 @@ public class BankDepositGoldCommand extends BaseCommandHandler {
             return;
         }
 
-        writeBankDepositGold(quantity);
+        bankDepositGold(quantity);
     }
 
 }

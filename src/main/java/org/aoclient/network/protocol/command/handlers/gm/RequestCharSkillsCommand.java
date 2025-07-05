@@ -4,7 +4,7 @@ import org.aoclient.network.protocol.command.handlers.BaseCommandHandler;
 import org.aoclient.network.protocol.command.core.CommandContext;
 import org.aoclient.network.protocol.command.core.CommandException;
 
-import static org.aoclient.network.protocol.Protocol.writeRequestCharSkills;
+import static org.aoclient.network.protocol.Protocol.requestCharSkills;
 import static org.aoclient.network.protocol.command.metadata.GameCommand.SHOW_PLAYER_SKILLS;
 
 public class RequestCharSkillsCommand extends BaseCommandHandler {
@@ -13,7 +13,7 @@ public class RequestCharSkillsCommand extends BaseCommandHandler {
     public void handle(CommandContext commandContext) throws CommandException {
         requireArguments(commandContext, 1, SHOW_PLAYER_SKILLS.getCommand() + " <nick>");
         String nick = commandContext.getArgument(0);
-        writeRequestCharSkills(nick);
+        requestCharSkills(nick);
     }
 
 }

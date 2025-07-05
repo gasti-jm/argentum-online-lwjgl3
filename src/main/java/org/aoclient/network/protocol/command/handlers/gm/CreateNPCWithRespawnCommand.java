@@ -4,7 +4,7 @@ import org.aoclient.network.protocol.command.handlers.BaseCommandHandler;
 import org.aoclient.network.protocol.command.core.CommandContext;
 import org.aoclient.network.protocol.command.core.CommandException;
 
-import static org.aoclient.network.protocol.Protocol.writeCreateNPCWithRespawn;
+import static org.aoclient.network.protocol.Protocol.createNPCWithRespawn;
 import static org.aoclient.network.protocol.command.metadata.GameCommand.RACC;
 
 public class CreateNPCWithRespawnCommand extends BaseCommandHandler {
@@ -14,7 +14,7 @@ public class CreateNPCWithRespawnCommand extends BaseCommandHandler {
         requireArguments(commandContext, 1, RACC.getCommand() + " <npc>");
         requireInteger(commandContext, 0, "npc");
         short npc = Short.parseShort(commandContext.getArgument(0));
-        writeCreateNPCWithRespawn(npc);
+        createNPCWithRespawn(npc);
     }
 
 }

@@ -4,7 +4,7 @@ import org.aoclient.network.protocol.command.handlers.BaseCommandHandler;
 import org.aoclient.network.protocol.command.core.CommandContext;
 import org.aoclient.network.protocol.command.core.CommandException;
 
-import static org.aoclient.network.protocol.Protocol.writeWarnUser;
+import static org.aoclient.network.protocol.Protocol.warnUser;
 import static org.aoclient.network.protocol.command.metadata.GameCommand.WARNING;
 
 public class WarnUserCommand extends BaseCommandHandler {
@@ -16,7 +16,7 @@ public class WarnUserCommand extends BaseCommandHandler {
         requireString(commandContext, 1, "reason");
         String nick = commandContext.getArgument(0);
         String reason = commandContext.getArgument(1);
-        writeWarnUser(nick, reason);
+        warnUser(nick, reason);
     }
 
 }

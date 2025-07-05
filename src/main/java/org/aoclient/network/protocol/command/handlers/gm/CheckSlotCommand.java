@@ -4,7 +4,7 @@ import org.aoclient.network.protocol.command.handlers.BaseCommandHandler;
 import org.aoclient.network.protocol.command.core.CommandContext;
 import org.aoclient.network.protocol.command.core.CommandException;
 
-import static org.aoclient.network.protocol.Protocol.writeCheckSlot;
+import static org.aoclient.network.protocol.Protocol.checkSlot;
 import static org.aoclient.network.protocol.command.metadata.GameCommand.SHOW_PLAYER_SLOT;
 
 public class CheckSlotCommand extends BaseCommandHandler {
@@ -18,7 +18,7 @@ public class CheckSlotCommand extends BaseCommandHandler {
         String nick = commandContext.getArgument(0);
         int slot = Integer.parseInt(commandContext.getArgument(1));
 
-        writeCheckSlot(nick, slot);
+        checkSlot(nick, slot);
     }
 
 }

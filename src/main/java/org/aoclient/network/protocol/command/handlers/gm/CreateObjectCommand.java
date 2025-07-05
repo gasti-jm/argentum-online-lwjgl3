@@ -4,7 +4,7 @@ import org.aoclient.network.protocol.command.handlers.BaseCommandHandler;
 import org.aoclient.network.protocol.command.core.CommandContext;
 import org.aoclient.network.protocol.command.core.CommandException;
 
-import static org.aoclient.network.protocol.Protocol.writeCreateObject;
+import static org.aoclient.network.protocol.Protocol.createObject;
 import static org.aoclient.network.protocol.command.metadata.GameCommand.CREATE_OBJ;
 
 /**
@@ -19,7 +19,7 @@ public class CreateObjectCommand extends BaseCommandHandler {
         requireArguments(commandContext, 1, CREATE_OBJ.getCommand() + " <object_id>");
         requireInteger(commandContext, 0, "object_id");
         int objectId = Integer.parseInt(commandContext.getArgument(0));
-        writeCreateObject(objectId);
+        createObject(objectId);
     }
 
 }

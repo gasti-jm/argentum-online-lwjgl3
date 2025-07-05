@@ -18,10 +18,10 @@ public final class FStats extends Form {
     public FStats() {
         try {
             backgroundImage = loadTexture("VentanaEstadisticas");
-            writeRequestAttributes();
-            writeRequestFame();
-            writeRequestSkills();
-            writeRequestMiniStats();
+            requestAttributes();
+            requestFame();
+            requestSkills();
+            requestMiniStats();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

@@ -58,13 +58,13 @@ public class InventorySpells {
 
     public void buttonThrowSpell() {
         if (!spells[currentItemSpell.get()].equals("(None)")) {
-            writeCastSpell(currentItemSpell.get() + 1);
-            writeWork(Skill.MAGIC.getId());
+            castSpell(currentItemSpell.get() + 1);
+            work(Skill.MAGIC.getId());
         }
     }
 
     public void buttonInfoSpell() {
-        writeSpellInfo(currentItemSpell.get() + 1);
+        spellInfo(currentItemSpell.get() + 1);
     }
 
 }

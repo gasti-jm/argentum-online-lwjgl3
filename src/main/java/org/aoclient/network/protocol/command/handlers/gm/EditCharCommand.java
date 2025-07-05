@@ -5,7 +5,7 @@ import org.aoclient.network.protocol.command.core.CommandContext;
 import org.aoclient.network.protocol.command.core.CommandException;
 import org.aoclient.network.protocol.types.CharacterEditType;
 
-import static org.aoclient.network.protocol.Protocol.writeEditChar;
+import static org.aoclient.network.protocol.Protocol.editChar;
 import static org.aoclient.network.protocol.command.metadata.GameCommand.MOD_PLAYER;
 
 /**
@@ -57,7 +57,7 @@ public class EditCharCommand extends BaseCommandHandler {
         CharacterEditType editType = getEditTypeFromProperty(property);
         if (editType == null) showError("Unknown property: " + property + ". See command documentation for valid properties.");
 
-        writeEditChar(nick, editType.getValue(), value, extraParam);
+        editChar(nick, editType.getValue(), value, extraParam);
     }
 
     /**

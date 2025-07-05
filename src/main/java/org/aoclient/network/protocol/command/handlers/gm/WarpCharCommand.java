@@ -5,7 +5,7 @@ import org.aoclient.network.protocol.command.handlers.BaseCommandHandler;
 import org.aoclient.network.protocol.command.core.CommandContext;
 import org.aoclient.network.protocol.command.core.CommandException;
 
-import static org.aoclient.network.protocol.Protocol.writeWarpChar;
+import static org.aoclient.network.protocol.Protocol.warpChar;
 
 /**
  * Comando para teletransportar personajes.
@@ -59,7 +59,7 @@ public class WarpCharCommand extends BaseCommandHandler {
      */
     private void handleTwoArguments(CommandContext context) throws CommandException {
         WarpData warpData = parseCoordinates(context, 0, 1);
-        writeWarpChar(Options.INSTANCE.getNickName(), user.getUserMap(), warpData.x, warpData.y);
+        warpChar(Options.INSTANCE.getNickName(), user.getUserMap(), warpData.x, warpData.y);
     }
 
     /**
@@ -77,7 +77,7 @@ public class WarpCharCommand extends BaseCommandHandler {
     private void handleMap(CommandContext context) throws CommandException {
         short map = parseMap(context, 0);
         WarpData warpData = parseCoordinates(context, 1, 2);
-        writeWarpChar(Options.INSTANCE.getNickName(), map, warpData.x, warpData.y);
+        warpChar(Options.INSTANCE.getNickName(), map, warpData.x, warpData.y);
     }
 
     /**
@@ -87,7 +87,7 @@ public class WarpCharCommand extends BaseCommandHandler {
         requireString(context, 0, "nick");
         String nick = context.getArgument(0);
         WarpData warpData = parseCoordinates(context, 1, 2);
-        writeWarpChar(nick, user.getUserMap(), warpData.x, warpData.y);
+        warpChar(nick, user.getUserMap(), warpData.x, warpData.y);
     }
 
     /**
@@ -98,7 +98,7 @@ public class WarpCharCommand extends BaseCommandHandler {
         String nick = context.getArgument(0);
         short map = parseMap(context, 1);
         WarpData warpData = parseCoordinates(context, 2, 3);
-        writeWarpChar(nick, map, warpData.x, warpData.y);
+        warpChar(nick, map, warpData.x, warpData.y);
     }
 
     /**

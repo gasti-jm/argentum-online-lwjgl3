@@ -5,7 +5,7 @@ import org.aoclient.network.protocol.command.handlers.BaseCommandHandler;
 import org.aoclient.network.protocol.command.core.CommandContext;
 import org.aoclient.network.protocol.command.core.CommandException;
 
-import static org.aoclient.network.protocol.Protocol.writeBankExtractGold;
+import static org.aoclient.network.protocol.Protocol.bankExtractGold;
 import static org.aoclient.network.protocol.command.metadata.GameCommand.EXTRACT_GOLD;
 
 public class BankExtractGoldCommand extends BaseCommandHandler {
@@ -28,7 +28,7 @@ public class BankExtractGoldCommand extends BaseCommandHandler {
             return;
         }
 
-        writeBankExtractGold(Integer.parseInt(commandContext.argumentsRaw()));
+        bankExtractGold(Integer.parseInt(commandContext.argumentsRaw()));
     }
 
 }

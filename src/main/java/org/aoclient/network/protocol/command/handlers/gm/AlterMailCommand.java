@@ -4,7 +4,7 @@ import org.aoclient.network.protocol.command.handlers.BaseCommandHandler;
 import org.aoclient.network.protocol.command.core.CommandContext;
 import org.aoclient.network.protocol.command.core.CommandException;
 
-import static org.aoclient.network.protocol.Protocol.writeAlterMail;
+import static org.aoclient.network.protocol.Protocol.alterMail;
 import static org.aoclient.network.protocol.command.metadata.GameCommand.AEMAIL;
 
 public class AlterMailCommand extends BaseCommandHandler {
@@ -26,7 +26,7 @@ public class AlterMailCommand extends BaseCommandHandler {
         if (nick.isEmpty()) showError("Incorrect nick, must be a non-empty username.");
         if (email.isEmpty()) showError("Incorrect email, must be a non-empty username.");
 
-        writeAlterMail(nick, email);
+        alterMail(nick, email);
 
     }
 

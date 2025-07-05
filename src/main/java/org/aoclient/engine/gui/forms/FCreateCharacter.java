@@ -28,8 +28,8 @@ import static org.aoclient.engine.Sound.playMusic;
 import static org.aoclient.engine.game.models.Character.*;
 import static org.aoclient.engine.renderer.Drawn.*;
 import static org.aoclient.engine.utils.GameData.*;
-import static org.aoclient.network.protocol.Protocol.writeLoginNewChar;
-import static org.aoclient.network.protocol.Protocol.writeThrowDices;
+import static org.aoclient.network.protocol.Protocol.loginNewChar;
+import static org.aoclient.network.protocol.Protocol.throwDices;
 
 /**
  * Formulario para la creacion de nuevos personajes.
@@ -491,14 +491,14 @@ public final class FCreateCharacter extends Form {
         if (!checkData()) return;
         new Thread(() -> {
             if (SocketConnection.INSTANCE.connect())
-                writeLoginNewChar(txtNombre.get(), txtPassword.get(), userRaza, userSexo, userClase, userHead, txtMail.get(), userHogar);
+                loginNewChar(txtNombre.get(), txtPassword.get(), userRaza, userSexo, userClase, userHead, txtMail.get(), userHogar);
         }).start();
         USER.setUserName(txtNombre.get());
     }
 
     private void buttonThrowDices() {
         new Thread(() -> {
-            if (SocketConnection.INSTANCE.connect()) writeThrowDices();
+            if (SocketConnection.INSTANCE.connect()) throwDices();
         }).start();
     }
 

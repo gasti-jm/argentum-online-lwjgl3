@@ -5,7 +5,7 @@ import org.aoclient.network.protocol.command.core.CommandContext;
 import org.aoclient.network.protocol.command.core.CommandException;
 import org.aoclient.network.protocol.command.core.CommandValidator;
 
-import static org.aoclient.network.protocol.Protocol.writeIPToNick;
+import static org.aoclient.network.protocol.Protocol.IPToNick;
 import static org.aoclient.network.protocol.command.metadata.GameCommand.IP2NICK;
 
 /**
@@ -34,7 +34,7 @@ public class IpToNickCommand extends BaseCommandHandler {
         int[] ipArray = CommandValidator.parseIPv4ToArray(ip);
         if (ipArray == null) showError("Error parsing IP address.");
 
-        writeIPToNick(ipArray);
+        IPToNick(ipArray);
     }
 
 }

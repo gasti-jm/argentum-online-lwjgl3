@@ -4,7 +4,7 @@ import org.aoclient.network.protocol.command.handlers.BaseCommandHandler;
 import org.aoclient.network.protocol.command.core.CommandContext;
 import org.aoclient.network.protocol.command.core.CommandException;
 
-import static org.aoclient.network.protocol.Protocol.writeTeleportCreate;
+import static org.aoclient.network.protocol.Protocol.teleportCreate;
 import static org.aoclient.network.protocol.command.metadata.GameCommand.CREATE_TELEPORT;
 
 public class TeleportCreateCommand extends BaseCommandHandler {
@@ -31,7 +31,7 @@ public class TeleportCreateCommand extends BaseCommandHandler {
             radius = Integer.parseInt(commandContext.getArgument(3));
         }
 
-        writeTeleportCreate(map, x, y, radius);
+        teleportCreate(map, x, y, radius);
     }
 
 }

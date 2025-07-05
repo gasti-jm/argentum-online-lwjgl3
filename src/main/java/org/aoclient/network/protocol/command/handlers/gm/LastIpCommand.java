@@ -4,7 +4,7 @@ import org.aoclient.network.protocol.command.handlers.BaseCommandHandler;
 import org.aoclient.network.protocol.command.core.CommandContext;
 import org.aoclient.network.protocol.command.core.CommandException;
 
-import static org.aoclient.network.protocol.Protocol.writeLastIP;
+import static org.aoclient.network.protocol.Protocol.lastIP;
 import static org.aoclient.network.protocol.command.metadata.GameCommand.LAST_IP;
 
 public class LastIpCommand extends BaseCommandHandler {
@@ -13,7 +13,7 @@ public class LastIpCommand extends BaseCommandHandler {
     public void handle(CommandContext commandContext) throws CommandException {
         requireArguments(commandContext, 1, LAST_IP.getCommand() + " <nick>");
         String nick = commandContext.getArgument(0);
-        writeLastIP(nick);
+        lastIP(nick);
     }
 
 }

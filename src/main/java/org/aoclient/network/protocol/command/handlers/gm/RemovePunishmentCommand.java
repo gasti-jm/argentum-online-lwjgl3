@@ -4,7 +4,7 @@ import org.aoclient.network.protocol.command.handlers.BaseCommandHandler;
 import org.aoclient.network.protocol.command.core.CommandContext;
 import org.aoclient.network.protocol.command.core.CommandException;
 
-import static org.aoclient.network.protocol.Protocol.writeRemovePunishment;
+import static org.aoclient.network.protocol.Protocol.removePunishment;
 import static org.aoclient.network.protocol.command.metadata.GameCommand.REMOVE_PUNISHMENT;
 
 public class RemovePunishmentCommand extends BaseCommandHandler {
@@ -18,7 +18,7 @@ public class RemovePunishmentCommand extends BaseCommandHandler {
         String nick = commandContext.getArgument(0);
         int minutes = Integer.parseInt(commandContext.getArgument(1));
         String newPunishment = commandContext.getArgument(2);
-        writeRemovePunishment(nick, minutes, newPunishment);
+        removePunishment(nick, minutes, newPunishment);
     }
 
 }

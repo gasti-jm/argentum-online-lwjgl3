@@ -4,7 +4,7 @@ import org.aoclient.network.protocol.command.handlers.BaseCommandHandler;
 import org.aoclient.network.protocol.command.core.CommandContext;
 import org.aoclient.network.protocol.command.core.CommandException;
 
-import static org.aoclient.network.protocol.Protocol.writeImperialArmour;
+import static org.aoclient.network.protocol.Protocol.imperialArmour;
 import static org.aoclient.network.protocol.command.metadata.GameCommand.AI;
 
 public class ImperialArmourCommand extends BaseCommandHandler {
@@ -18,7 +18,7 @@ public class ImperialArmourCommand extends BaseCommandHandler {
         int armorId = Integer.parseInt(commandContext.getArgument(0));
         short objectId = Short.parseShort(commandContext.getArgument(1));
 
-        writeImperialArmour(armorId, objectId);
+        imperialArmour(armorId, objectId);
     }
 
 }

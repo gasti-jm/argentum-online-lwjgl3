@@ -4,7 +4,7 @@ import org.aoclient.network.protocol.command.handlers.BaseCommandHandler;
 import org.aoclient.network.protocol.command.core.CommandContext;
 import org.aoclient.network.protocol.command.core.CommandException;
 
-import static org.aoclient.network.protocol.Protocol.writeGamble;
+import static org.aoclient.network.protocol.Protocol.gamble;
 import static org.aoclient.network.protocol.command.metadata.GameCommand.BET;
 
 public class GambleCommand extends BaseCommandHandler {
@@ -20,7 +20,7 @@ public class GambleCommand extends BaseCommandHandler {
 
         short amount = Short.parseShort(commandContext.getArgument(0));
 
-        writeGamble(amount);
+        gamble(amount);
     }
 
 }

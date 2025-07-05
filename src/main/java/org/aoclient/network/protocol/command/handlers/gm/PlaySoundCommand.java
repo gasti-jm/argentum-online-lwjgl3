@@ -1,11 +1,10 @@
 package org.aoclient.network.protocol.command.handlers.gm;
 
+import org.aoclient.network.protocol.Protocol;
 import org.aoclient.network.protocol.command.handlers.BaseCommandHandler;
 import org.aoclient.network.protocol.command.core.CommandContext;
 import org.aoclient.network.protocol.command.core.CommandException;
 
-import static org.aoclient.network.protocol.Protocol.writePlaySound;
-import static org.aoclient.network.protocol.Protocol.writePlaySoundAtTheSpecifiedLocation;
 import static org.aoclient.network.protocol.command.metadata.GameCommand.PLAY_SOUND;
 
 /**
@@ -24,7 +23,7 @@ public class PlaySoundCommand extends BaseCommandHandler {
     private void playSound(CommandContext context) throws CommandException {
         requireInteger(context, 0, "sound_id");
         int soundId = Integer.parseInt(context.getArgument(0));
-        writePlaySound(soundId);
+        Protocol.playSound(soundId);
     }
 
     private void playSoundAtTheSpecifiedLocation(CommandContext context) throws CommandException {
@@ -36,7 +35,7 @@ public class PlaySoundCommand extends BaseCommandHandler {
         short map = Short.parseShort(context.getArgument(1));
         int x = Integer.parseInt(context.getArgument(2));
         int y = Integer.parseInt(context.getArgument(3));
-        writePlaySoundAtTheSpecifiedLocation(soundId, map, x, y);
+        Protocol.playSoundAtTheSpecifiedLocation(soundId, map, x, y);
     }
 
 }

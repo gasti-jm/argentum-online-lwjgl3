@@ -16,7 +16,7 @@ import java.io.IOException;
 
 import static org.aoclient.engine.Sound.playMusic;
 import static org.aoclient.engine.utils.GameData.options;
-import static org.aoclient.network.protocol.Protocol.writeLoginExistingChar;
+import static org.aoclient.network.protocol.Protocol.loginExistingChar;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_ENTER;
 
 /**
@@ -206,7 +206,7 @@ public final class FConnect extends Form {
         options.setPortServer(portStr.get());
         if (!nickStr.get().isEmpty() && !passStr.get().isEmpty()) {
             new Thread(() -> {
-                if (SocketConnection.INSTANCE.connect()) writeLoginExistingChar(nickStr.get(), passStr.get());
+                if (SocketConnection.INSTANCE.connect()) loginExistingChar(nickStr.get(), passStr.get());
             }).start();
             options.setNickName(nickStr.get());
             USER.setUserName(nickStr.get());

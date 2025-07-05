@@ -4,7 +4,7 @@ import org.aoclient.network.protocol.command.handlers.BaseCommandHandler;
 import org.aoclient.network.protocol.command.core.CommandContext;
 import org.aoclient.network.protocol.command.core.CommandException;
 
-import static org.aoclient.network.protocol.Protocol.writeDenounce;
+import static org.aoclient.network.protocol.Protocol.denounce;
 import static org.aoclient.network.protocol.command.metadata.GameCommand.REPORT;
 
 public class DenounceCommand extends BaseCommandHandler {
@@ -14,7 +14,7 @@ public class DenounceCommand extends BaseCommandHandler {
         requireArguments(commandContext, UNLIMITED_ARGUMENTS, REPORT.getCommand() + " <message>");
         requireValidString(commandContext, "message", REGEX);
         String message = commandContext.argumentsRaw().trim();
-        writeDenounce(message);
+        denounce(message);
     }
 
 }

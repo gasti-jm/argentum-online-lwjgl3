@@ -9,7 +9,7 @@ import imgui.type.ImString;
 import java.io.IOException;
 
 import static org.aoclient.engine.game.inventory.UserInventory.FLAGORO;
-import static org.aoclient.network.protocol.Protocol.writeDrop;
+import static org.aoclient.network.protocol.Protocol.drop;
 
 /**
  * Formulario para especificar cantidades al tirar objetos o oro al suelo.
@@ -83,8 +83,8 @@ public final class FCantidad extends Form {
             if (!cant.get().isEmpty()) {
                 final int cantToDrop = Integer.parseInt(cant.get());
                 if (cantToDrop > 0 && cantToDrop <= 10000) {
-                    if (dropOro) writeDrop(FLAGORO, cantToDrop);
-                    else writeDrop(USER.getUserInventory().getSlotSelected() + 1, cantToDrop);
+                    if (dropOro) drop(FLAGORO, cantToDrop);
+                    else drop(USER.getUserInventory().getSlotSelected() + 1, cantToDrop);
                 }
             }
             this.close();
@@ -95,9 +95,9 @@ public final class FCantidad extends Form {
             if (!cant.get().isEmpty()) {
                 final int cantToDrop = Integer.parseInt(cant.get());
                 if (cantToDrop > 0 && cantToDrop <= 10000) {
-                    if (dropOro) writeDrop(FLAGORO, Math.min(USER.getUserGLD(), 10000));
+                    if (dropOro) drop(FLAGORO, Math.min(USER.getUserGLD(), 10000));
                     else
-                        writeDrop(USER.getUserInventory().getSlotSelected() + 1, USER.getUserInventory().getAmountSlotSelected());
+                        drop(USER.getUserInventory().getSlotSelected() + 1, USER.getUserInventory().getAmountSlotSelected());
                 }
             }
             this.close();

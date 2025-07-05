@@ -4,7 +4,7 @@ import org.aoclient.network.protocol.command.handlers.BaseCommandHandler;
 import org.aoclient.network.protocol.command.core.CommandContext;
 import org.aoclient.network.protocol.command.core.CommandException;
 
-import static org.aoclient.network.protocol.Protocol.writeChatColor;
+import static org.aoclient.network.protocol.Protocol.chatColor;
 import static org.aoclient.network.protocol.command.metadata.GameCommand.CHAT_COLOR;
 
 public class ChatColorCommand extends BaseCommandHandler {
@@ -12,7 +12,7 @@ public class ChatColorCommand extends BaseCommandHandler {
     @Override
     public void handle(CommandContext commandContext) throws CommandException {
         if (!commandContext.hasArguments()) {
-            writeChatColor(0, 255, 0);
+            chatColor(0, 255, 0);
             return;
         }
 
@@ -25,7 +25,7 @@ public class ChatColorCommand extends BaseCommandHandler {
         int g = Integer.parseInt(commandContext.getArgument(1));
         int b = Integer.parseInt(commandContext.getArgument(2));
 
-        writeChatColor(r, g, b);
+        chatColor(r, g, b);
     }
 
 }

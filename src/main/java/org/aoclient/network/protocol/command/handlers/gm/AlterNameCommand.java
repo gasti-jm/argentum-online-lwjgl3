@@ -4,7 +4,7 @@ import org.aoclient.network.protocol.command.handlers.BaseCommandHandler;
 import org.aoclient.network.protocol.command.core.CommandContext;
 import org.aoclient.network.protocol.command.core.CommandException;
 
-import static org.aoclient.network.protocol.Protocol.writeAlterName;
+import static org.aoclient.network.protocol.Protocol.alterName;
 import static org.aoclient.network.protocol.command.metadata.GameCommand.ANAME;
 
 public class AlterNameCommand extends BaseCommandHandler {
@@ -18,7 +18,7 @@ public class AlterNameCommand extends BaseCommandHandler {
         String origin = commandContext.getArgument(0);
         String dest = commandContext.getArgument(1);
 
-        writeAlterName(origin, dest);
+        alterName(origin, dest);
 
     }
 

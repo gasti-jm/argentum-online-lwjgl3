@@ -4,7 +4,7 @@ import org.aoclient.network.protocol.command.handlers.BaseCommandHandler;
 import org.aoclient.network.protocol.command.core.CommandContext;
 import org.aoclient.network.protocol.command.core.CommandException;
 
-import static org.aoclient.network.protocol.Protocol.writeComment;
+import static org.aoclient.network.protocol.Protocol.comment;
 import static org.aoclient.network.protocol.command.metadata.GameCommand.REM;
 
 public class CommentCommand extends BaseCommandHandler {
@@ -14,7 +14,7 @@ public class CommentCommand extends BaseCommandHandler {
         requireArguments(commandContext, UNLIMITED_ARGUMENTS, REM.getCommand() + " <comment>");
         requireValidString(commandContext, "comment", REGEX);
         String comment = commandContext.argumentsRaw().trim();
-        writeComment(comment);
+        comment(comment);
     }
 
 }

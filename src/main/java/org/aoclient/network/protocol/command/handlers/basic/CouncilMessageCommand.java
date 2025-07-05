@@ -4,7 +4,7 @@ import org.aoclient.network.protocol.command.handlers.BaseCommandHandler;
 import org.aoclient.network.protocol.command.core.CommandContext;
 import org.aoclient.network.protocol.command.core.CommandException;
 
-import static org.aoclient.network.protocol.Protocol.writeCouncilMessage;
+import static org.aoclient.network.protocol.Protocol.councilMessage;
 import static org.aoclient.network.protocol.command.metadata.GameCommand.BMSG;
 
 public class CouncilMessageCommand extends BaseCommandHandler {
@@ -14,7 +14,7 @@ public class CouncilMessageCommand extends BaseCommandHandler {
         requireArguments(commandContext, UNLIMITED_ARGUMENTS, BMSG.getCommand() + " <message>");
         requireValidString(commandContext, "message", REGEX);
         String message = commandContext.argumentsRaw().trim();
-        writeCouncilMessage(message);
+        councilMessage(message);
     }
 
 }
