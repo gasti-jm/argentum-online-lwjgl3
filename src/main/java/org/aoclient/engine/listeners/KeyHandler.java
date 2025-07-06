@@ -119,7 +119,7 @@ public enum KeyHandler {
                     keyToBind.setPreparedToBind(false); // no hace falta seguir bindeando.
 
                     // reseteamos por si se modifico las teclas de movimiento.
-                    defaultMovementKeys();
+                    updateMovementKeys();
                 }
             }
 
@@ -128,7 +128,11 @@ public enum KeyHandler {
         imGuiIo.setKeysDown(key, isPressed);
     }
 
-    public static void defaultMovementKeys() {
+    /**
+     * Actualizamos nuestro set con las teclas de movimiento. <br>
+     * Esto por si se bindea una tecla nueva.
+     */
+    public static void updateMovementKeys() {
         MOVEMENT_KEYS = Set.of(Key.UP.getKeyCode(), Key.DOWN.getKeyCode(), Key.LEFT.getKeyCode(), Key.RIGHT.getKeyCode());
     }
 
