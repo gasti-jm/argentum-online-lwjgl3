@@ -142,8 +142,8 @@ public final class FMain extends Form {
     // Información de equipo y stats secundarios
     private void renderEquipmentInfo() {
         drawColoredStat(730, 419, String.valueOf(USER.getUserGLD()), 1, 1, 0.0f, 1, 45, 10);
-        drawColoredStat(613, 413, String.valueOf(USER.getUserDext()), 1, 0.5f, 0.0f, 1, 45, 10);
-        drawColoredStat(650, 413, String.valueOf(USER.getUserStrg()), 0.1f, 0.6f, 0.1f, 1, 45, 10);
+        drawColoredStat(598, 413, String.valueOf(USER.getUserDext()), 1, 0.5f, 0.0f, 1, 45, 10);
+        drawColoredStat(635, 413, String.valueOf(USER.getUserStrg()), 0.1f, 0.6f, 0.1f, 1, 45, 10);
         drawColoredStat(88, 579, USER.getUserArmourEqpDef(), 1f, 0f, 0f, 1f, 45, 10);
         drawColoredStat(354, 579, USER.getUserShieldEqpDef(), 1f, 0f, 0f, 1f, 45, 10);
         drawColoredStat(206, 579, USER.getUserHelmEqpDef(), 1f, 0f, 0f, 1f, 45, 10);
