@@ -70,9 +70,11 @@ public enum Key {
 
     /** Valor de keyCode predeterminado para esta asignacion de tecla. */
     private final int defaultKeyCode;
+    private boolean preparedToBind;
 
     Key(int defaultKeyCode) {
         this.defaultKeyCode = defaultKeyCode;
+        this.preparedToBind = false;
     }
 
     public static Key getKey(int keyCode) {
@@ -135,6 +137,29 @@ public enum Key {
     }
 
     /**
+     * Checkea si ya hay alguna tecla en proceso de bindeado.
+     * Esto es para que no creemos varios procesos de bindeado en varias teclas a la vez.
+     */
+    public static boolean checkIsBinding() {
+        for(Key key: values()) {
+            if(key.getPreparedToBind()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public static Key getKeyBinding() {
+        for(Key key: values()) {
+            if(key.getPreparedToBind()) {
+                return key;
+            }
+        }
+        return null;
+    }
+
+    /**
      * Guarda la configuracion actual de las teclas en un archivo de propiedades.
      * <p>
      * Este metodo toma las teclas y sus codigos asociados definidos actualmente en {@code keyCodeMap}, los convierte en pares
@@ -160,7 +185,7 @@ public enum Key {
      * mapa {@code keyCodeMap}. Posteriormente, actualiza el resto de los mapas relacionados llamando al metodo
      * {@code updateMaps()} y almacena la configuracion actual utilizando {@code saveKeys()}.
      */
-    private static void loadDefaultKeys() {
+    public static void loadDefaultKeys() {
         for (Key key : values())
             keyCodeMap.put(key, key.defaultKeyCode);
         updateMaps();
@@ -209,6 +234,14 @@ public enum Key {
 
     public int getDefaultKeyCode() {
         return defaultKeyCode;
+    }
+
+    public boolean getPreparedToBind() {
+        return preparedToBind;
+    }
+
+    public void setPreparedToBind(boolean value) {
+        this.preparedToBind = value;
     }
 
 }
