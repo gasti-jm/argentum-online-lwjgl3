@@ -5,6 +5,7 @@ import imgui.flag.ImGuiCond;
 import imgui.flag.ImGuiWindowFlags;
 import org.aoclient.engine.game.models.Key;
 import org.aoclient.engine.gui.widgets.ImageButton3State;
+import org.aoclient.engine.listeners.KeyHandler;
 
 import java.io.IOException;
 
@@ -175,12 +176,21 @@ public class FBindKeys extends Form {
         String actual = getKeyName(key.getKeyCode()).toUpperCase();
 
         // chekeamos que si esta en cambio de tecla se le asigna "Presione una tecla."
-        // actual = "Presione una tecla";
+        if (key.getPreparedToBind()) {
+            actual = "PRES.UNA TECLA";
+        }
 
         ImGui.setCursorPos(x, y);
         // Lo dibujamos con la tecla que tiene asignada
         if(ImGui.button(actual, 108, 15)) {
             // si hacemos click estamos preparados para cambiar de tecla
+            if(key.getPreparedToBind()) {
+                key.setPreparedToBind(false); // cancelamos el proceso de bindeado.
+            } else {
+                if(!Key.checkIsBinding()) { // para que no nos permita hacer lo mismo en varios botones
+                    key.setPreparedToBind(true);
+                }
+            }
 
         }
     }
@@ -188,8 +198,8 @@ public class FBindKeys extends Form {
     private void buttonDefault() {
         playSound(SND_CLICK);
 
-        // set Default keys...
-        // saveOptions();
+        Key.loadDefaultKeys();
+        KeyHandler.defaultMovementKeys();
 
         btnDefaultKeys.delete();
         btnSave.delete();
@@ -199,9 +209,7 @@ public class FBindKeys extends Form {
     private void buttonSave() {
         playSound(SND_CLICK);
 
-        // creamos una funcion que permita guardar las teclas segun lo configurado.
-        // saveOptions();
-
+        Key.saveKeys();
 
         btnDefaultKeys.delete();
         btnSave.delete();
