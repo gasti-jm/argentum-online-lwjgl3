@@ -16,10 +16,14 @@ import static org.aoclient.engine.Sound.playSound;
 import static org.aoclient.network.protocol.Protocol.*;
 
 public final class FBank extends Form{
-    private final ImString cant = new ImString("1");
-    private final ImString cantGOLD = new ImString("1");
-    public static NPCInventory invNPC = new NPCInventory(true);
-    public static UserInventory invUser = USER.getUserInventory().clone();
+    private final ImString cant          = new ImString("1");
+    private final ImString cantGOLD      = new ImString("1");
+    public static NPCInventory invNPC    = new NPCInventory(true);
+    public static UserInventory invUser  = USER.getUserInventory().clone();
+
+    private String lblName    = "";
+    private String lblMin     = "";
+    private String lblMax     = "";
 
     public static int goldDeposited;
 
@@ -108,11 +112,20 @@ public final class FBank extends Form{
             }
         }
 
+        ImGui.setCursorPos(155,432);
+        ImGui.text(lblName);
+
+        ImGui.setCursorPos(155,466 - 5);
+        ImGui.text(lblMax);
+
+        ImGui.setCursorPos(155,483 - 5);
+        ImGui.text(lblMin);
+
+
         this.checkInventoryEvents();
 
         invNPC.drawInventory();
         invUser.drawInventory();
-
 
         ImGui.end();
     }
@@ -128,13 +141,79 @@ public final class FBank extends Form{
         if (invNPC.inInventoryArea(localPos.x, localPos.y)) {
             if (ImGui.isMouseClicked(0)) { // click izq
                 invNPC.clickInventory(localPos.x, localPos.y);
+                updateLabels(false);
+
             }
         }
 
         if (invUser.inInventoryArea(localPos.x, localPos.y)) {
             if (ImGui.isMouseClicked(0)) { // click izq
                 invUser.clickInventory(localPos.x, localPos.y);
+                updateLabels(true);
             }
+        }
+    }
+
+    private void updateLabels(boolean userInv) {
+        if(userInv) {
+            if (invUser.getObjType(invUser.getSlotSelected()) == null) {
+                lblName = "";
+                lblMin = "";
+                lblMax = "";
+                return;
+            }
+
+            lblName = invUser.getItemName(invUser.getSlotSelected());
+
+            switch (invUser.getObjType(invUser.getSlotSelected())) {
+                case WEAPON:
+                case ARROW:
+                    lblMax = "Máx Golpe: " + invUser.getMaxHit(invUser.getSlotSelected());
+                    lblMin = "Min Golpe: " + invUser.getMinHit(invUser.getSlotSelected());
+                    break;
+
+                case ARMOR:
+                case SHIELD:
+                case HELMET:
+                    lblMax = "Máx Defensa: " + invUser.getMaxDef(invUser.getSlotSelected());
+                    lblMin = "Min Defensa: " + invUser.getMinDef(invUser.getSlotSelected());
+                    break;
+
+                default:
+                    lblMin = "";
+                    lblMax = "";
+            }
+
+        } else { // npc inv
+            if (invNPC.getObjType(invNPC.getSlotSelected()) == null) {
+                lblName = "";
+                lblMin = "";
+                lblMax = "";
+                return;
+            }
+
+
+            lblName = invNPC.getItemName(invNPC.getSlotSelected());
+
+            switch (invNPC.getObjType(invNPC.getSlotSelected())) {
+                case WEAPON:
+                case ARROW:
+                    lblMax = "Máx Golpe:" + invNPC.getMaxHit(invNPC.getSlotSelected());
+                    lblMin = "Min Golpe:" + invNPC.getMinHit(invNPC.getSlotSelected());
+                    break;
+
+                case ARMOR:
+                case SHIELD:
+                case HELMET:
+                    lblMax = "Máx Defensa:" + invNPC.getMaxDef(invNPC.getSlotSelected());
+                    lblMin = "Min Defensa:" + invNPC.getMinDef(invNPC.getSlotSelected());
+                    break;
+
+                default:
+                    lblMin = "";
+                    lblMax = "";
+            }
+
         }
     }
 }

@@ -1,7 +1,9 @@
 package org.aoclient.engine.gui.forms;
 
 import imgui.ImGui;
+import imgui.flag.ImGuiCol;
 import imgui.flag.ImGuiCond;
+import imgui.flag.ImGuiStyleVar;
 import imgui.flag.ImGuiWindowFlags;
 import org.aoclient.engine.game.models.Key;
 import org.aoclient.engine.gui.widgets.ImageButton3State;
@@ -44,10 +46,10 @@ public class FBindKeys extends Form {
 
 
     /**
-     * Checkeo de teclas que no se pueden asignar en nuestro guardado.
-     * por ejemplo: No se puede bindear la tecla de windows.
+     * Checkeo de teclas que no se pueden asignar en nuestro guardado. <br>
+     * por ejemplo: No se puede bindear la tecla de windows. <br> <br>
      *
-     * True = Tecla permitida
+     * True = Tecla permitida <br>
      * False = Tecla no asignable
      */
     private boolean checkKeysPermited(int key) {
@@ -181,6 +183,13 @@ public class FBindKeys extends Form {
         }
 
         ImGui.setCursorPos(x, y);
+
+        // imgui styles
+        ImGui.pushStyleVar(ImGuiStyleVar.FramePadding, 0f, 0f);
+        ImGui.pushStyleColor(ImGuiCol.Button, 0f, 0f, 0f, 1f);
+        ImGui.pushStyleColor(ImGuiCol.ButtonActive, 0f, 0f, 0f, 1f);
+        ImGui.pushStyleColor(ImGuiCol.ButtonHovered, 0f, 0f, 0f, 1f);
+
         // Lo dibujamos con la tecla que tiene asignada
         if(ImGui.button(actual, 108, 15)) {
             // si hacemos click estamos preparados para cambiar de tecla
@@ -193,13 +202,18 @@ public class FBindKeys extends Form {
             }
 
         }
+
+        ImGui.popStyleColor();
+        ImGui.popStyleColor();
+        ImGui.popStyleColor();
+        ImGui.popStyleVar();
     }
 
     private void buttonDefault() {
         playSound(SND_CLICK);
 
         Key.loadDefaultKeys();
-        KeyHandler.defaultMovementKeys();
+        KeyHandler.updateMovementKeys();
 
         btnDefaultKeys.delete();
         btnSave.delete();

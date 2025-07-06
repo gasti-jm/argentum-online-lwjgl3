@@ -165,4 +165,28 @@ public abstract class Inventory {
         return slots[slot].value;
     }
 
+    public String getItemName(int slot) {
+        return slots[slot].name;
+    }
+
+    public short getMaxHit(int slot) {
+        return slots[slot].maxHit;
+    }
+
+    public short getMinHit(int slot) {
+        return slots[slot].maxHit;
+    }
+
+    public short getMaxDef(int slot) {
+        return slots[slot].maxDef;
+    }
+
+    public short getMinDef(int slot) {
+        return slots[slot].minDef;
+    }
+
+    public ObjectType getObjType(int slot) {
+        return slots[slot].objType;
+    }
+
 }
