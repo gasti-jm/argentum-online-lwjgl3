@@ -26,7 +26,7 @@ public enum KeyHandler {
     private static final boolean[] keyJustReleased = new boolean[350];
 
     /** Conjunto de teclas asociadas al movimiento del personaje (arriba, abajo, izquierda, derecha). */
-    private static final Set<Integer> MOVEMENT_KEYS = Set.of(Key.UP.getKeyCode(), Key.DOWN.getKeyCode(), Key.LEFT.getKeyCode(), Key.RIGHT.getKeyCode());
+    private static Set<Integer> MOVEMENT_KEYS = Set.of(Key.UP.getKeyCode(), Key.DOWN.getKeyCode(), Key.LEFT.getKeyCode(), Key.RIGHT.getKeyCode());
 
     private static int baseMovementKey = -1;
     private static int temporaryMovementKey = -1;
@@ -109,9 +109,31 @@ public enum KeyHandler {
         if (isPressed && !keyPressed[key]) {
             keyJustPressed[key] = true;
             lastKeyPressed = key;
+
+            // hay una tecla para bindear?
+            if(Key.checkIsBinding()) {
+                Key keyToBind = Key.getKeyBinding(); // dame la key a bindear
+
+                if(keyToBind != null) {
+                    keyToBind.setKeyCode(key); // bindeala!
+                    keyToBind.setPreparedToBind(false); // no hace falta seguir bindeando.
+
+                    // reseteamos por si se modifico las teclas de movimiento.
+                    updateMovementKeys();
+                }
+            }
+
         } else if (!isPressed && keyPressed[key]) keyJustReleased[key] = true;
         keyPressed[key] = isPressed;
         imGuiIo.setKeysDown(key, isPressed);
+    }
+
+    /**
+     * Actualizamos nuestro set con las teclas de movimiento. <br>
+     * Esto por si se bindea una tecla nueva.
+     */
+    public static void updateMovementKeys() {
+        MOVEMENT_KEYS = Set.of(Key.UP.getKeyCode(), Key.DOWN.getKeyCode(), Key.LEFT.getKeyCode(), Key.RIGHT.getKeyCode());
     }
 
     /**
@@ -228,5 +250,6 @@ public enum KeyHandler {
     private static boolean isModifierPressed(int leftKey, int rightKey) {
         return imGuiIo.getKeysDown(leftKey) || imGuiIo.getKeysDown(rightKey);
     }
+
 
 }
