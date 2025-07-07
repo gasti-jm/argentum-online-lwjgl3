@@ -1,19 +1,20 @@
 package org.aoclient.network.protocol.command.handlers.gm;
 
-import org.aoclient.network.protocol.command.BaseCommandHandler;
-import org.aoclient.network.protocol.command.CommandContext;
-import org.aoclient.network.protocol.command.CommandException;
+import org.aoclient.network.protocol.command.handlers.BaseCommandHandler;
+import org.aoclient.network.protocol.command.core.CommandContext;
+import org.aoclient.network.protocol.command.core.CommandException;
 
-import static org.aoclient.network.protocol.Protocol.writeGMMessage;
+import static org.aoclient.network.protocol.Protocol.GMMessage;
+import static org.aoclient.network.protocol.command.metadata.GameCommand.GMSG;
 
 public class GmMessageCommand extends BaseCommandHandler {
 
     @Override
-    public void handle(CommandContext context) throws CommandException {
-        requireArguments(context, 1, "/gmsg <message>");
-        requireValidString(context, "message", REGEX);
-        String message = context.getArgument(0);
-        writeGMMessage(message);
+    public void handle(CommandContext commandContext) throws CommandException {
+        requireArguments(commandContext, UNLIMITED_ARGUMENTS, GMSG.getCommand() + " <message>");
+        requireValidString(commandContext, "message", REGEX);
+        String message = commandContext.argumentsRaw().trim();
+        GMMessage(message);
     }
 
 }

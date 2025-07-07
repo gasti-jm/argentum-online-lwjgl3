@@ -1,18 +1,19 @@
 package org.aoclient.network.protocol.command.handlers.gm;
 
-import org.aoclient.network.protocol.command.BaseCommandHandler;
-import org.aoclient.network.protocol.command.CommandContext;
-import org.aoclient.network.protocol.command.CommandException;
+import org.aoclient.network.protocol.command.handlers.BaseCommandHandler;
+import org.aoclient.network.protocol.command.core.CommandContext;
+import org.aoclient.network.protocol.command.core.CommandException;
 
-import static org.aoclient.network.protocol.Protocol.writeRequestCharBank;
+import static org.aoclient.network.protocol.Protocol.requestCharBank;
+import static org.aoclient.network.protocol.command.metadata.GameCommand.REQUEST_CHAR_BANK;
 
 public class RequestCharBankCommand extends BaseCommandHandler {
 
     @Override
-    public void handle(CommandContext context) throws CommandException {
-        requireArguments(context, 1, "/bov <nick>");
-        String nick = context.getArgument(0);
-        writeRequestCharBank(nick);
+    public void handle(CommandContext commandContext) throws CommandException {
+        requireArguments(commandContext, 1, REQUEST_CHAR_BANK.getCommand() + " <nick>");
+        String nick = commandContext.getArgument(0);
+        requestCharBank(nick);
     }
 
 }

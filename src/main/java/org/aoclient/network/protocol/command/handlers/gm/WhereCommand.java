@@ -1,18 +1,19 @@
 package org.aoclient.network.protocol.command.handlers.gm;
 
-import org.aoclient.network.protocol.command.BaseCommandHandler;
-import org.aoclient.network.protocol.command.CommandContext;
-import org.aoclient.network.protocol.command.CommandException;
+import org.aoclient.network.protocol.command.handlers.BaseCommandHandler;
+import org.aoclient.network.protocol.command.core.CommandContext;
+import org.aoclient.network.protocol.command.core.CommandException;
 
-import static org.aoclient.network.protocol.Protocol.writeWhere;
+import static org.aoclient.network.protocol.Protocol.where;
+import static org.aoclient.network.protocol.command.metadata.GameCommand.SHOW_LOCATION;
 
 public class WhereCommand extends BaseCommandHandler {
 
     @Override
-    public void handle(CommandContext context) throws CommandException {
-        requireArguments(context, 1, "/donde <nick>");
-        String nick = context.getArgument(0);
-        writeWhere(nick);
+    public void handle(CommandContext commandContext) throws CommandException {
+        requireArguments(commandContext, 1, SHOW_LOCATION.getCommand() + " <nick>");
+        String nick = commandContext.getArgument(0);
+        where(nick);
     }
 
 }

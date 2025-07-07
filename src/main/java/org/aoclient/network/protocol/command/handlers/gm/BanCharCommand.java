@@ -1,24 +1,24 @@
 package org.aoclient.network.protocol.command.handlers.gm;
 
-import org.aoclient.network.protocol.command.BaseCommandHandler;
-import org.aoclient.network.protocol.command.CommandContext;
-import org.aoclient.network.protocol.command.CommandException;
+import org.aoclient.network.protocol.command.handlers.BaseCommandHandler;
+import org.aoclient.network.protocol.command.core.CommandContext;
+import org.aoclient.network.protocol.command.core.CommandException;
 
-import static org.aoclient.network.protocol.Protocol.writeBanChar;
+import static org.aoclient.network.protocol.Protocol.banChar;
+import static org.aoclient.network.protocol.command.metadata.GameCommand.BAN;
 
 public class BanCharCommand extends BaseCommandHandler {
 
     @Override
-    public void handle(CommandContext context) throws CommandException {
-        requireArguments(context, 2, "/ban <nick> <reason>");
-        requireString(context, 0, "nick");
-        requireString(context, 1, "reason");
+    public void handle(CommandContext commandContext) throws CommandException {
+        requireArguments(commandContext, 2, BAN.getCommand() + " <nick> <reason>");
+        requireString(commandContext, 0, "nick");
+        requireString(commandContext, 1, "reason");
 
-        String nick = context.getArgument(0);
-        String reason = context.getArgument(1);
+        String nick = commandContext.getArgument(0);
+        String reason = commandContext.getArgument(1);
 
-        writeBanChar(nick, reason);
-
+        banChar(nick, reason);
     }
 
 }

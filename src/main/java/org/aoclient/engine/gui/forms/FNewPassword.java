@@ -11,7 +11,7 @@ import java.nio.charset.StandardCharsets;
 
 import static org.aoclient.engine.Sound.SND_CLICK;
 import static org.aoclient.engine.Sound.playSound;
-import static org.aoclient.network.protocol.Protocol.writeChangePassword;
+import static org.aoclient.network.protocol.Protocol.changePassword;
 
 /**
  * <p>
@@ -103,7 +103,7 @@ public final class FNewPassword extends Form {
                 IM_GUI_SYSTEM.show(new FMessage("Las contraseñas no coinciden."));
             } else
                 // Si está correcto enviamos paquete para cambiar la contraseña.
-                writeChangePassword(this.txtPassword.get(), this.txtNewPassword.get());
+                changePassword(this.txtPassword.get(), this.txtNewPassword.get());
                 close();
         }
 

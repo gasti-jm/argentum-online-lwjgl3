@@ -68,7 +68,7 @@ public final class FComerce extends Form {
 
         ImGui.setCursorPos(405, 24);
         if (ImGui.invisibleButton("Close", 30, 30)) {
-            writeCommerceEnd();
+            commerceEnd();
             this.close();
         }
 
@@ -78,7 +78,7 @@ public final class FComerce extends Form {
 
             if (USER.getUserGLD() >= invNPC.getValue(invNPC.getSlotSelected())) {
                 if (!cant.isEmpty()) {
-                    writeCommerceBuy(invNPC.getSlotSelected() + 1, Integer.parseInt(cant.get()));
+                    commerceBuy(invNPC.getSlotSelected() + 1, Integer.parseInt(cant.get()));
                 }
             } else {
                 Console.INSTANCE.addMsgToConsole("No tienes oro suficiente.", true, false, new RGBColor(1f, 0.1f, 0.1f));
@@ -90,7 +90,7 @@ public final class FComerce extends Form {
         if (ImGui.button("Vender", 172, 31)) {
             playSound(SND_CLICK);
             if (!cant.isEmpty()) {
-                writeCommerceSell(invUser.getSlotSelected() + 1, Integer.parseInt(cant.get()));
+                commerceSell(invUser.getSlotSelected() + 1, Integer.parseInt(cant.get()));
             }
         }
 

@@ -1,32 +1,26 @@
 package org.aoclient.network.protocol.command.handlers.gm;
 
-import org.aoclient.network.protocol.command.BaseCommandHandler;
-import org.aoclient.network.protocol.command.CommandContext;
-import org.aoclient.network.protocol.command.CommandException;
+import org.aoclient.network.protocol.command.handlers.BaseCommandHandler;
+import org.aoclient.network.protocol.command.core.CommandContext;
+import org.aoclient.network.protocol.command.core.CommandException;
 
-import static org.aoclient.network.protocol.Protocol.writeSetIniVar;
+import static org.aoclient.network.protocol.Protocol.setIniVar;
+import static org.aoclient.network.protocol.command.metadata.GameCommand.SETINIVAR;
 
 public class SetIniVarCommand extends BaseCommandHandler {
 
-    private static final String USAGE = "/setinivar <llave> <clave> <valor>";
-
     @Override
-    public void handle(CommandContext context) throws CommandException {
-        requireArguments(context, 3, USAGE);
-
-        String llave = context.getArgument(0);
-        requireString(context, 0, "llave");
-
-        String clave = context.getArgument(1);
-        requireString(context, 1, "clave");
-
-        String valor = context.getArgument(2);
-        requireString(context, 2, "valor");
-
+    public void handle(CommandContext commandContext) throws CommandException {
+        requireArguments(commandContext, 3, SETINIVAR.getCommand() + " <llave> <clave> <valor>");
+        requireString(commandContext, 0, "llave");
+        requireString(commandContext, 1, "clave");
+        requireString(commandContext, 2, "valor");
+        String llave = commandContext.getArgument(0);
+        String clave = commandContext.getArgument(1);
+        String valor = commandContext.getArgument(2);
         // Reemplaza "+" por espacios en el valor (funcionalidad original)
         valor = valor.replace("+", " ");
-
-        writeSetIniVar(llave, clave, valor);
+        setIniVar(llave, clave, valor);
     }
 
 }

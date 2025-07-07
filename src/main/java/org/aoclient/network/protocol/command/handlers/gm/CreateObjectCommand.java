@@ -1,26 +1,25 @@
 package org.aoclient.network.protocol.command.handlers.gm;
 
-import org.aoclient.network.protocol.command.BaseCommandHandler;
-import org.aoclient.network.protocol.command.CommandContext;
-import org.aoclient.network.protocol.command.CommandException;
+import org.aoclient.network.protocol.command.handlers.BaseCommandHandler;
+import org.aoclient.network.protocol.command.core.CommandContext;
+import org.aoclient.network.protocol.command.core.CommandException;
 
-import static org.aoclient.network.protocol.Protocol.writeCreateObject;
+import static org.aoclient.network.protocol.Protocol.createObject;
+import static org.aoclient.network.protocol.command.metadata.GameCommand.CREATE_OBJ;
 
 /**
- * Comando para crear objetos/items en el juego.
- * <p>
- * NOTA TECNICA: Al crear el hacha (objeto #3 del obj.dat del servidor VB6), se indica GrhIndex=505 pero el grafico real es el
- * 16037 en graphics-descompressed del cliente Java.
+ * Al crear el hacha (objeto #3 del obj.dat del servidor VB6), se indica GrhIndex=505 pero el grafico real es el 16037 en
+ * graphics-descompressed del cliente Java.
  */
 
 public class CreateObjectCommand extends BaseCommandHandler {
 
     @Override
-    public void handle(CommandContext context) throws CommandException {
-        requireArguments(context, 1, "/ci <object_id>");
-        requireInteger(context, 0, "object_id");
-        int objectId = Integer.parseInt(context.getArgument(0));
-        writeCreateObject(objectId);
+    public void handle(CommandContext commandContext) throws CommandException {
+        requireArguments(commandContext, 1, CREATE_OBJ.getCommand() + " <object_id>");
+        requireInteger(commandContext, 0, "object_id");
+        int objectId = Integer.parseInt(commandContext.getArgument(0));
+        createObject(objectId);
     }
 
 }

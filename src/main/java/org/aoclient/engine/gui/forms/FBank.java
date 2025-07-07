@@ -72,7 +72,7 @@ public final class FBank extends Form{
         // BOTONES
         ImGui.setCursorPos(415, 28);
         if (ImGui.invisibleButton("Close", 30, 30)) {
-            writeBankEnd();
+            bankEnd();
             this.close();
         }
 
@@ -80,7 +80,7 @@ public final class FBank extends Form{
         if (ImGui.invisibleButton("Depositar", 17, 17)) {
             playSound(SND_CLICK);
             if(!cant.isEmpty()) {
-                writeBankDeposit(invUser.getSlotSelected() + 1, Integer.parseInt(cant.get()));
+                bankDeposit(invUser.getSlotSelected() + 1, Integer.parseInt(cant.get()));
             }
 
         }
@@ -90,7 +90,7 @@ public final class FBank extends Form{
             playSound(SND_CLICK);
 
             if(!cant.isEmpty()) {
-                writeBankExtractItem(invNPC.getSlotSelected() + 1, Integer.parseInt(cant.get()));
+                bankExtractItem(invNPC.getSlotSelected() + 1, Integer.parseInt(cant.get()));
             }
         }
 
@@ -99,7 +99,7 @@ public final class FBank extends Form{
             playSound(SND_CLICK);
 
             if(!cantGOLD.isEmpty()) {
-                writeBankDepositGold(Integer.parseInt(cantGOLD.get()));
+                bankDepositGold(Integer.parseInt(cantGOLD.get()));
             }
         }
 
@@ -108,7 +108,7 @@ public final class FBank extends Form{
             playSound(SND_CLICK);
 
             if(!cantGOLD.isEmpty()) {
-                writeBankExtractGold(Integer.parseInt(cantGOLD.get()));
+                bankExtractGold(Integer.parseInt(cantGOLD.get()));
             }
         }
 
