@@ -847,9 +847,10 @@ public class Protocol {
         outputBuffer.writeByte(GMCommand.NPC_FOLLOW.getId());
     }
 
-    public static void writeSummonChar() {
+    public static void writeSummonChar(String userName) {
         outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
         outputBuffer.writeByte(GMCommand.SUMMON_CHAR.getId());
+        outputBuffer.writeCp1252String(userName);
     }
 
     public static void writeSpawnListRequest() {
