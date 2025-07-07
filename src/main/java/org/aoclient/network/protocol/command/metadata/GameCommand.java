@@ -12,14 +12,14 @@ package org.aoclient.network.protocol.command.metadata;
 
 public enum GameCommand {
 
-    // ==================== BASIC COMMANDS ====================
+    // ==================== USER COMMANDS ====================
     BALANCE("/balance", "Check your account balance"), // /balance
-    BET("/bet", "Gamble gold with gambler NPC"), // /apostar
     BMSG("/bmsg", "Send message to council members"), // /bmsg
+    BET("/bet", "Gamble gold with gambler NPC"), // /apostar
     BUG("/bug", "Report a bug to administrators"), // /bug
     CENTINEL_CODE("/centinelcode", "Submit centinel verification code"), // /centinela
-    CONSULTATION("/consultation", "Make a consultation request"), // /consulta
     CLAIM_REWARD("/reward", "Claim daily reward"), // /recompensa
+    CONSULTATION("/consultation", "Make a consultation request"), // /consulta
     DEPOSIT("/deposit", "Deposit gold in the bank"), // /depositar
     DESC("/desc", "Change your character description"), // /desc
     ENLIST("/enlist", "Enlist in faction army"), // /enlistar
@@ -27,6 +27,11 @@ public enum GameCommand {
     EXIT("/exit", "Exit the game safely"), // /salir
     EXTRACT_GOLD("/extractgold", "Withdraw gold from the bank"), // /retirar
     GM("/gm", "Request help from Game Master"), // /gm
+    GUILD_FOUND("/guildfound", "Found a new guild"), // /fundarclan
+    GUILD_LEAVE("/guildleave", "Leave the guild"), // /salirclan
+    GUILD_MSG("/guildmsg", "Send message to guild members"), // /cmsg
+    GUILD_ONLINE("/guildonline", "Show online guild members"), // /onlineclan
+    GUILD_VOTE("/guildvote", "Vote in guild elections"), // /voto
     HEAL("/heal", "Heal other players"), // /curar
     HELP("/?", "Show available commands"), // NUEVO COMANDO
     INFORMATION("/information", "Get server information"), // /informacion
@@ -35,6 +40,14 @@ public enum GameCommand {
     MOTD("/motd", "Show message of the day"), // /motd
     ONLINE("/online", "Show online players count"), // /online
     OPEN_VAULT("/openvault", "Open bank interface"), // /boveda
+    PARTY_ACCEPT("/partyaccept", "Accept player into party"), // /acceptparty
+    PARTY_CREATE("/partycreate", "Create a party"), // /crearparty
+    PARTY_JOIN("/partyjoin", "Join or request to join a party"), // /party
+    PARTY_KICK("/partykick", "Kick member from party"), // /echarparty
+    PARTY_LEAVE("/partyleave", "Leave the party"), // /salirparty
+    PARTY_MSG("/partymsg", "Send message to party members"), // /pmsg
+    PARTY_ONLINE("/partyonline", "Show online party members"), // /onlineparty
+    PARTY_SET_LEADER("/partysetleader", "Transfer party leadership"), // /partylider
     PET_FOLLOW("/petfollow", "Make your pet follow you"), // /acompañar
     PET_RELEASE("/release", "Release your pet"), // /liberar
     PET_STAY("/quieto", "Make your pet stay in place"), // /quieto
@@ -48,28 +61,6 @@ public enum GameCommand {
     TRADE("/trade", "Start trading with NPC"), // //comerciar
     TRAIN("/train", "Show available creatures to train"), // /entrenar
     UPTIME("/uptime", "Show server uptime"), // /uptime
-
-    // ==================== GUILD COMMANDS ====================
-    GUILD_BAN("/guildban", "Ban a guild"), // /banclan
-    GUILD_FOUND("/guildfound", "Found a new guild"), // /fundarclan
-    GUILD_KICK("/guildkick", "Kick member from guild"), // /rajarclan
-    GUILD_LEAVE("/guildleave", "Leave the guild"), // /salirclan
-    GUILD_MEMBER_LIST("/guildmemberlist", "Show guild member list"), // /miembrosclan
-    GUILD_MSG("/guildmsg", "Send message to guild members"), // /cmsg
-    GUILD_MSG_HISTORY("/guildmsghistory", "Show guild message history"), // /showcmsg
-    GUILD_ONLINE("/guildonline", "Show online guild members"), // /onlineclan
-    GUILD_ONLINE_SPECIFIC("/guildonlinespecific", "Show online members of specific guild"), // /onclan
-    GUILD_VOTE("/guildvote", "Vote in guild elections"), // /voto
-
-    // ==================== PARTY COMMANDS ====================
-    PARTY_ACCEPT("/partyaccept", "Accept player into party"), // /acceptparty
-    PARTY_CREATE("/partycreate", "Create a party"), // /crearparty
-    PARTY_JOIN("/partyjoin", "Join or request to join a party"), // /party
-    PARTY_KICK("/partykick", "Kick member from party"), // /echarparty
-    PARTY_LEAVE("/partyleave", "Leave the party"), // /salirparty
-    PARTY_MSG("/partymsg", "Send message to party members"), // /pmsg
-    PARTY_ONLINE("/partyonline", "Show online party members"), // /onlineparty
-    PARTY_SET_LEADER("/partysetleader", "Transfer party leadership"), // /partylider
 
     // ==================== GM COMMANDS ====================
     AC("/ac", "Give chaos faction armor"), // /ac
@@ -102,11 +93,16 @@ public enum GameCommand {
     DESTROYITEMS("/destroyitems", "Destroy items"), // /dest
     DESTROYTELEPORT("/destroyteleport", "Destroy teleport at current location"), // /dt
     DOBACKUP("/dobackup", "Create server backup"), // /dobackup
-    DUMPSECURITY("/dumpsecurity", "Dump security IP tables"), // /dumpsecurity
+    DUMPSECURITY("/dumpsecurity", "Dump security IP tables"), // /dumpsecurity 
     ESTUPID("/estupid", "Make player unable to speak"), // /estupido
     EXECUTE("/execute", "Execute a player"), // /ejecutar
     FORGIVE("/forgive", "Forgive player's crimes"), // /perdon
     GMSG("/gmsg", "Send global GM message"), // /gmsg
+    GUILD_BAN("/guildban", "Ban a guild"), // /banclan
+    GUILD_KICK("/guildkick", "Kick member from guild"), // /rajarclan
+    GUILD_MEMBER_LIST("/guildmemberlist", "Show guild member list"), // /miembrosclan
+    GUILD_MSG_HISTORY("/guildmsghistory", "Show guild message history"), // /showcmsg
+    GUILD_ONLINE_SPECIFIC("/guildonlinespecific", "Show online members of specific guild"), // /onclan
     HIDING("/hiding", "Show hidden players"), // /hiding
     HOME("/home", "Return to home city"), // /hogar
     INVISIBILITY("/invisible", "Toggle invisibility"), // /invisible
@@ -163,13 +159,13 @@ public enum GameCommand {
     SETINIVAR("/setinivar", "Set server configuration variable"), // /setinivar
     SHOW("/show", "Show server information panels"), // /show
     SHOW_HIDDEN_PLAYERS("/showhiddenplayers", "Show hidden players"), // /ocultando
-    SHOWIGNORED("/showignored", "Show ignored players list"), // /ignorado
     SHOW_LOCATION("/showlocation", "Show player's location"), // /donde
     SHOW_MOBS("/showmobs", "Show mobs in specific map"), // /nene
     SHOW_NAME("/showname", "Toggle name display above characters"), // /showname
     SHOW_OBJ_MAP("/showobjmap", "Show objets in map"), // /piso
     SHOW_PLAYER_SKILLS("/showplayerskills", "Show player's skills"), // /skills
     SHOW_PLAYER_SLOT("/showplayerslot", "Check player's inventory slot"), // /slot
+    SHOWIGNORED("/showignored", "Show ignored players list"), // /ignorado
     SHUTDOWN("/shutdown", "Shutdown the server"), // /apagar
     SILENT("/silent", "Silence a player"), // /silenciar
     SMSG("/smsg", "Send system message"), // /smsg

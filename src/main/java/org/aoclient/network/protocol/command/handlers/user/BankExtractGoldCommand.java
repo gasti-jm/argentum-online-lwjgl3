@@ -1,4 +1,4 @@
-package org.aoclient.network.protocol.command.handlers.basic;
+package org.aoclient.network.protocol.command.handlers.user;
 
 import org.aoclient.engine.gui.forms.FBank;
 import org.aoclient.network.protocol.command.handlers.BaseCommandHandler;
