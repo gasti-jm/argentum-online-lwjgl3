@@ -186,9 +186,9 @@ public class FBindKeys extends Form {
 
         // imgui styles
         ImGui.pushStyleVar(ImGuiStyleVar.FramePadding, 0f, 0f);
-        ImGui.pushStyleColor(ImGuiCol.Button, 0f, 0f, 0f, 1f);
-        ImGui.pushStyleColor(ImGuiCol.ButtonActive, 0f, 0f, 0f, 1f);
-        ImGui.pushStyleColor(ImGuiCol.ButtonHovered, 0f, 0f, 0f, 1f);
+        ImGui.pushStyleColor(ImGuiCol.Button, 0f, 0f, 0f, 0.6f);
+        ImGui.pushStyleColor(ImGuiCol.ButtonActive, 0f, 0f, 0f, 0.0f);
+        ImGui.pushStyleColor(ImGuiCol.ButtonHovered, 0f, 0f, 0f, 0.4f);
 
         // Lo dibujamos con la tecla que tiene asignada
         if(ImGui.button(actual, 108, 15)) {
