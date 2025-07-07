@@ -60,6 +60,12 @@ public final class FOptions extends Form {
 
         if (ImGui.checkbox("Audio", options.isSound())) options.setSound(!options.isSound());
 
+        ImGui.separator();
+
+        if (ImGui.checkbox("Cursores graficos", options.isCursorGraphic())) {
+            options.setCursorGraphic(!options.isCursorGraphic());
+        }
+
 
         this.drawButtons();
 

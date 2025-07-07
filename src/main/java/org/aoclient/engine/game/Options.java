@@ -19,6 +19,7 @@ public enum Options {
     private boolean showName = true;
     private boolean fullscreen = true;
     private boolean vsync = true;
+    private boolean cursorGraphic = true;
     private String nickName = "";
     private String ipServer = "127.0.0.1";
     private String portServer = "7666";
@@ -60,6 +61,7 @@ public enum Options {
             write(writer, "PORT", portServer);
             write(writer, "Fullscreen", fullscreen);
             write(writer, "VSYNC", vsync);
+            write(writer, "CursorGraphic", cursorGraphic);
         } catch (IOException e) {
             Logger.error("Could not write to options.ini file!");
         }
@@ -129,6 +131,14 @@ public enum Options {
         this.vsync = vsync;
     }
 
+    public boolean isCursorGraphic() {
+        return cursorGraphic;
+    }
+
+    public void setCursorGraphic(boolean cursorGraphic) {
+        this.cursorGraphic = cursorGraphic;
+    }
+
     /**
      * Escribe una opcion con su valor asociado en un objeto {@code BufferedWriter}.
      *
@@ -157,6 +167,7 @@ public enum Options {
             case "PORT" -> portServer = value;
             case "Fullscreen" -> fullscreen = Boolean.parseBoolean(value);
             case "VSYNC" -> vsync = Boolean.parseBoolean(value);
+            case "CursorGraphic" -> cursorGraphic = Boolean.parseBoolean(value);
             default -> Logger.warn("Unknown option ignored: {}", option);
         }
     }

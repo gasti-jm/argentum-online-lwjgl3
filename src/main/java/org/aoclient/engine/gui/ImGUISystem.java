@@ -17,6 +17,7 @@ import org.aoclient.engine.gui.forms.Form;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.aoclient.engine.utils.GameData.options;
 import static org.aoclient.engine.utils.Time.deltaTime;
 import static org.lwjgl.glfw.GLFW.*;
 
@@ -216,10 +217,18 @@ public enum ImGUISystem {
 
         // ACA HAY QUE LABURAR CON LOS CURSORES.
         if (window.isCursorCrosshair())
-            glfwSetCursor(window.getWindow(), glfwCreateStandardCursor(GLFW_CROSSHAIR_CURSOR));
+            if(options.isCursorGraphic()) {
+                Window.INSTANCE.setCursorGraphic(true);
+            } else {
+                glfwSetCursor(window.getWindow(), glfwCreateStandardCursor(GLFW_CROSSHAIR_CURSOR));
+            }
         else {
-            glfwSetCursor(window.getWindow(), mouseCursors[ImGui.getMouseCursor()]);
-            glfwSetInputMode(window.getWindow(), GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+            if(options.isCursorGraphic()) {
+                Window.INSTANCE.setCursorGraphic(false);
+            } else {
+                glfwSetCursor(window.getWindow(), mouseCursors[ImGui.getMouseCursor()]);
+                glfwSetInputMode(window.getWindow(), GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+            }
         }
 
         // IMPORTANT!!
