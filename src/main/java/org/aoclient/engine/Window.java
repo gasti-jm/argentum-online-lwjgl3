@@ -55,6 +55,9 @@ public enum Window {
     private long audioDevice;
     private boolean cursorCrosshair;
 
+    private long cursorMainID;
+    private long cursorCrosshairID;
+
     Window() {
         this.title = "Argentum Online Java";
         this.width = SCREEN_WIDTH;
@@ -91,6 +94,8 @@ public enum Window {
 
         if (window == NULL) throw new IllegalStateException("Failed to create the GLFW window.");
 
+        loadIcon();
+
         glfwSetCursorPosCallback(window, MouseListener::mousePosCallback);
         glfwSetMouseButtonCallback(window, MouseListener::mouseButtonCallback);
         glfwSetScrollCallback(window, MouseListener::mouseScrollCallback);
@@ -115,7 +120,7 @@ public enum Window {
             );
         } // the stack frame is popped automatically
 
-        loadIcon();
+
 
         // ========================================================================
         // Inicializacion de audio (OpenAL)
@@ -181,7 +186,14 @@ public enum Window {
         // Make the window visible
         glfwShowWindow(window);
 
-        //this.loadCursor();
+        // cargamos los cursores graficos!
+        cursorMainID        = loadCursor("MAIN");
+        cursorCrosshairID   = loadCursor("CAST");
+
+        // set current cursor
+        if(options.isCursorGraphic()) {
+            glfwSetCursor(window, cursorMainID);
+        }
 
         // Inicializa OpenGL
         GL.createCapabilities();
@@ -198,6 +210,14 @@ public enum Window {
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         glEnable(GL_BLEND);
         glDisable(GL_DEPTH_TEST);
+    }
+
+    public void setCursorGraphic(boolean cast) {
+        if(!cast) {
+            glfwSetCursor(window, cursorMainID);
+        } else {
+            glfwSetCursor(window, cursorCrosshairID);
+        }
     }
 
     /**
@@ -314,12 +334,12 @@ public enum Window {
     /**
      * Carga un cursor grafico, por ahora no lo vamos a usar.
      */
-    private void loadCursor() {
+    private long loadCursor(final String fileName) {
         try (MemoryStack stack = MemoryStack.stackPush()) {
             final IntBuffer ch = stack.mallocInt(1), w = stack.mallocInt(1), h = stack.mallocInt(1);
-            final ByteBuffer imgBuff = STBImage.stbi_load("./resources/MAIN.png", w, h, ch, 4);
+            final ByteBuffer imgBuff = STBImage.stbi_load("./resources/" + fileName + ".png", w, h, ch, 4);
 
-            if (imgBuff == null) return;
+            if (imgBuff == null) return 0;
 
             GLFWImage image = GLFWImage.malloc();
             GLFWImage.Buffer imageBf = GLFWImage.malloc(1);
@@ -333,10 +353,7 @@ public enum Window {
             final int hotspotY = 6;
 
             // create custom cursor and store its ID
-            long cursorID = glfwCreateCursor(image, hotspotX, hotspotY);
-
-            // set current cursor
-            glfwSetCursor(window, cursorID);
+            return glfwCreateCursor(image, hotspotX, hotspotY);
         }
     }
 
