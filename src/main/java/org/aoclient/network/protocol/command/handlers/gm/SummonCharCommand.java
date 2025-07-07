@@ -12,7 +12,7 @@ public class SummonCharCommand extends BaseCommandHandler {
     @Override
     public void handle(CommandContext commandContext) throws CommandException {
         requireArguments(commandContext, 1, SUM.getCommand() + " <nick>");
-        String nick = context.getArgument(0);
+        String nick = commandContext.getArgument(0);
         summonChar(nick); // TODO Raro que no se pase nada
     }
 
