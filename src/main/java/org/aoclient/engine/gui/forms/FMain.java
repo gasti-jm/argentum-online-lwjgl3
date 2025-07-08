@@ -7,6 +7,7 @@ import imgui.type.ImString;
 import org.aoclient.engine.Engine;
 import org.aoclient.engine.Window;
 import org.aoclient.engine.game.Console;
+import org.aoclient.engine.gui.widgets.ImageButton3State;
 import org.aoclient.network.protocol.Protocol;
 
 import java.io.IOException;
@@ -49,6 +50,12 @@ public final class FMain extends Form {
     private static final float[] STAT_ALIGN = {0.5f, 0.5f};
     private static final int TRANSPARENT_COLOR = ImGui.getColorU32(0f, 0f, 0f, 0f);
 
+    private ImageButton3State btnMap;
+    private ImageButton3State btnParty;
+    private ImageButton3State btnOptions;
+    private ImageButton3State btnStats;
+    private ImageButton3State btnGuild;
+
     public FMain() {
         this.viewInventory = true;
         USER.getUserInventory().setVisible(true);
@@ -58,6 +65,39 @@ public final class FMain extends Form {
         try {
             this.backgroundImage = loadTexture("VentanaPrincipal");
             this.backgroundInventorySpells = loadTexture("CentroHechizos");
+
+            // Instanciación de botones con 3 estados:
+            btnMap = new ImageButton3State(
+                    loadTexture("BotonMapaNormal"),
+                    loadTexture("BotonMapaRollover"),
+                    loadTexture("BotonMapaClick"),
+                    682, 445, 93, 20
+            );
+            btnParty = new ImageButton3State(
+                    loadTexture("BotonGrupoNormal"),
+                    loadTexture("BotonGrupoRollover"),
+                    loadTexture("BotonGrupoClick"),
+                    681, 466, 94, 21
+            );
+            btnOptions = new ImageButton3State(
+                    loadTexture("BotonOpcionesNormal"),
+                    loadTexture("BotonOpcionesRollover"),
+                    loadTexture("BotonOpcionesClick"),
+                    681, 485, 95, 22
+            );
+            btnStats = new ImageButton3State(
+                    loadTexture("BotonEstadisticasNormal"),
+                    loadTexture("BotonEstadisticasRollover"),
+                    loadTexture("BotonEstadisticasClick"),
+                    681, 507, 95, 24
+            );
+            btnGuild = new ImageButton3State(
+                    loadTexture("BotonClanesNormal"),
+                    loadTexture("BotonClanesRollover"),
+                    loadTexture("BotonClanesClick"),
+                    683, 532, 92, 26
+            );
+
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -187,23 +227,23 @@ public final class FMain extends Form {
         /*-=--=--=--=--=--=--=--=--=--=--=--=--=--=--=--=--=--=--=--=-
                                 MENU BUTTONS
         -=--=--=--=--=--=--=--=--=--=--=--=--=--=--=--=--=--=--=--=-*/
-        if (drawButton(682, 445, 93, 20, "viewMap")) {
+        if (btnMap.render()){
             playSound(SND_CLICK);
             IM_GUI_SYSTEM.show(new FMapa());
         }
-        if (drawButton(681, 466, 94, 21, "viewParty")) {
+        if (btnParty.render()) {
             playSound(SND_CLICK);
             //TODO: FParty
         }
-        if (drawButton(681, 485, 95, 22, "viewOptions")) {
+        if (btnOptions.render()) {
             playSound(SND_CLICK);
             IM_GUI_SYSTEM.show(new FOptions());
         }
-        if (drawButton(681, 507, 95, 24, "viewStats")) {
+        if(btnStats.render()) {
             playSound(SND_CLICK);
             IM_GUI_SYSTEM.show(new FStats());
         }
-        if (drawButton(683, 532, 92, 26, "viewGuild")) {
+        if(btnGuild.render()){
             playSound(SND_CLICK);
             Protocol.requestGuildLeaderInfo();
         }
