@@ -17,6 +17,8 @@ import org.aoclient.network.protocol.command.core.CommandHandler;
  * comandos concretos.
  * <p>
  * Los argumentos que se indican entre "<>" son obligatorios y entre "[]" son opcionales.
+ * <p>
+ * TODO Agregar comando para limpiar consola '/clear'
  */
 
 public abstract class BaseCommandHandler implements CommandHandler {

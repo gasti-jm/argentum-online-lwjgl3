@@ -1,6 +1,7 @@
 package org.aoclient.network.protocol.command.handlers.user;
 
 import org.aoclient.engine.game.Console;
+import org.aoclient.engine.game.User;
 import org.aoclient.engine.renderer.RGBColor;
 import org.aoclient.network.protocol.command.core.Command;
 import org.aoclient.network.protocol.command.core.CommandContext;
@@ -29,12 +30,13 @@ import static org.aoclient.network.protocol.command.metadata.GameCommand.HELP;
  * Este comando es util para los usuarios que necesitan informacion sobre como usar otros comandos dentro del sistema,
  * especialmente en contextos con muchos comandos disponibles.
  * <p>
- * TODO Solo mostrar los comandos de GM a los GM
+ * IMPORTANTE: Solo los GMs podran ver los comandos de GM.
  */
 
 public class HelpCommand extends BaseCommandHandler {
 
     private final Console console = Console.INSTANCE;
+    private final User user = User.INSTANCE;
 
     @Override
     public void handle(CommandContext commandContext) throws CommandException {
@@ -55,10 +57,17 @@ public class HelpCommand extends BaseCommandHandler {
 
         // Muestra comandos por categoria
         for (CommandCategory category : CommandCategory.values()) {
+
+            // Filtra comandos de GM si el usuario no es GM
+            if (category == CommandCategory.GM && !isGM()) continue;
+
             List<Command> commands = CommandRegistry.getCommandsByCategory(category);
-            console.addMsgToConsole("- " + category.name() + " -", false, false, new RGBColor(1f, 1f, 0f));
-            commands.forEach(cmd -> console.addMsgToConsole(cmd.name(), false, false, new RGBColor(0.8f, 0.8f, 0.8f)));
-            console.addMsgToConsole("", false, false, new RGBColor());
+            if (!commands.isEmpty()) {
+                console.addMsgToConsole("- " + category.name() + " -", false, false, new RGBColor(1f, 1f, 0f));
+                commands.forEach(cmd -> console.addMsgToConsole(cmd.name(), false, false, new RGBColor(0.8f, 0.8f, 0.8f)));
+                console.addMsgToConsole("", false, false, new RGBColor());
+            }
+
         }
 
         console.addMsgToConsole("Type '" + HELP.getCommand() + " <command>' for specific help.", false, false, new RGBColor(0f, 1f, 1f));
@@ -72,6 +81,13 @@ public class HelpCommand extends BaseCommandHandler {
 
         if (commandInfo.isPresent()) {
             Command cmd = commandInfo.get();
+
+            // Verifica si el comando es GM y el usuario no es GM
+            if (cmd.category() == CommandCategory.GM && !isGM()) {
+                console.addMsgToConsole("Command '" + commandName + "' not found!", false, false, new RGBColor(1f, 0f, 0f));
+                suggestSimilarCommands(commandName);
+                return;
+            }
 
             console.addMsgToConsole("[COMMAND HELP]", false, false, new RGBColor(0f, 1f, 0f));
             console.addMsgToConsole("Command: " + cmd.name(), false, false, new RGBColor(1f, 1f, 0f));
@@ -87,7 +103,13 @@ public class HelpCommand extends BaseCommandHandler {
 
     private void suggestSimilarCommands(String commandName) {
         List<String> suggestions = CommandRegistry.getAllCommandNames().stream()
-                .filter(cmd -> cmd.toLowerCase().contains(commandName.toLowerCase().replace("/", "")))
+                .filter(cmd -> {
+                    // Filtrar comandos GM si el usuario no es GM
+                    Optional<Command> commandInfo = CommandRegistry.getCommandInfo(cmd);
+                    if (commandInfo.isPresent() && commandInfo.get().category() == CommandCategory.GM && !isGM())
+                        return false;
+                    return cmd.toLowerCase().contains(commandName.toLowerCase().replace("/", ""));
+                })
                 .limit(5)
                 .toList();
 
@@ -95,6 +117,10 @@ public class HelpCommand extends BaseCommandHandler {
             console.addMsgToConsole("Did you mean:", false, false, new RGBColor(0.8f, 0.8f, 0f));
             suggestions.forEach(suggestion -> console.addMsgToConsole("  " + suggestion, false, false, new RGBColor(0.6f, 0.6f, 0.6f)));
         }
+    }
+
+    private boolean isGM() {
+        return user.isGM();
     }
 
 }
