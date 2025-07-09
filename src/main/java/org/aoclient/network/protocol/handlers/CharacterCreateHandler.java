@@ -44,7 +44,7 @@ public class CharacterCreateHandler implements PacketHandler {
         charList[charIndex].setAttackable((nickColor & NickColorType.ATACABLE.getId()) != 0);
 
         // Log
-        System.err.println("User privileges: " + privileges);
+        // System.err.println("User privileges: " + privileges);
 
         /* Si el nombre del usuario es igual al nombre del usuario leido desde el servidor, entonces establece el privilegio (que
          * se definio en el servidor dependiendo del nombre) al usuario. */
