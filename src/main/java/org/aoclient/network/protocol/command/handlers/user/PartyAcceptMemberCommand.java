@@ -1,4 +1,4 @@
-package org.aoclient.network.protocol.command.handlers.party;
+package org.aoclient.network.protocol.command.handlers.user;
 
 import org.aoclient.network.protocol.command.handlers.BaseCommandHandler;
 import org.aoclient.network.protocol.command.core.CommandContext;

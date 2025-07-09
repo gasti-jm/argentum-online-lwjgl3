@@ -1,10 +1,12 @@
 package org.aoclient.network.protocol.command.execution;
 
 import org.aoclient.engine.game.Console;
+import org.aoclient.engine.game.User;
 import org.aoclient.engine.renderer.RGBColor;
 import org.aoclient.network.protocol.command.core.CommandContext;
 import org.aoclient.network.protocol.command.core.CommandException;
 import org.aoclient.network.protocol.command.core.CommandHandler;
+import org.aoclient.network.protocol.command.metadata.CommandCategory;
 
 import java.util.Map;
 
@@ -37,6 +39,12 @@ public enum CommandExecutor {
         if (commandContext.isCommand()) {
             CommandHandler handler = commands.get(commandContext.command());
             if (handler != null) {
+
+                if (isGMCommandWithoutPrivileges(commandContext.command())) {
+                    Console.INSTANCE.addMsgToConsole("'" + commandContext.command() + "' is not a game command. See '/?'.", false, true, new RGBColor());
+                    return;
+                }
+
                 try {
                     handler.handle(commandContext);
                 } catch (CommandException e) {
@@ -45,6 +53,20 @@ public enum CommandExecutor {
             } else
                 Console.INSTANCE.addMsgToConsole("'" + commandContext.command() + "' is not a game command. See '/?'.", false, true, new RGBColor());
         }
+    }
+
+    /**
+     * Verifica si un comando pertenece a la categoria "GM" y si el usuario actual no tiene los privilegios necesarios para
+     * ejecutarlo.
+     *
+     * @param commandName nombre del comando que se desea verificar
+     * @return true si el comando es de la categoria "GM" y el usuario no tiene privilegios de GM; false en caso contrario
+     */
+    private boolean isGMCommandWithoutPrivileges(String commandName) {
+        return CommandRegistry.getCommandInfo(commandName)
+                .filter(cmd -> cmd.category() == CommandCategory.GM)
+                .map(cmd -> !User.INSTANCE.isGM())
+                .orElse(false);
     }
 
 }

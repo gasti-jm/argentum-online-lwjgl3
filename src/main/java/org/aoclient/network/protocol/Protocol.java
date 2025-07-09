@@ -899,7 +899,6 @@ public class Protocol {
     public static void guildOnlineMembers(String guild) {
         outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
         outputBuffer.writeByte(GMCommand.GUILD_ONLINE_MEMBERS.getId());
-
         outputBuffer.writeCp1252String(guild);
     }
 
@@ -1066,14 +1065,12 @@ public class Protocol {
     public static void guildMemberList(String guild) {
         outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
         outputBuffer.writeByte(GMCommand.GUILD_MEMBER_LIST.getId());
-
         outputBuffer.writeCp1252String(guild);
     }
 
     public static void guildBan(String guild) {
         outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
         outputBuffer.writeByte(GMCommand.GUILD_BAN.getId());
-
         outputBuffer.writeCp1252String(guild);
     }
 
@@ -1230,14 +1227,12 @@ public class Protocol {
     public static void resetFactions(String userName) {
         outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
         outputBuffer.writeByte(GMCommand.RESET_FACTIONS.getId());
-
         outputBuffer.writeCp1252String(userName);
     }
 
     public static void removeCharFromGuild(String userName) {
         outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
         outputBuffer.writeByte(GMCommand.REMOVE_CHAR_FROM_GUILD.getId());
-
         outputBuffer.writeCp1252String(userName);
     }
 
@@ -1293,7 +1288,6 @@ public class Protocol {
     public static void showGuildMessages(String guild) {
         outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
         outputBuffer.writeByte(GMCommand.SHOW_GUILD_MESSAGES.getId());
-
         outputBuffer.writeCp1252String(guild);
     }
 

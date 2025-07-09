@@ -1,20 +1,20 @@
-package org.aoclient.network.protocol.command.handlers.guild;
+package org.aoclient.network.protocol.command.handlers.user;
 
 import org.aoclient.network.protocol.command.handlers.BaseCommandHandler;
 import org.aoclient.network.protocol.command.core.CommandContext;
 import org.aoclient.network.protocol.command.core.CommandException;
 
-import static org.aoclient.network.protocol.Protocol.guildMessage;
-import static org.aoclient.network.protocol.command.metadata.GameCommand.GUILD_MSG;
+import static org.aoclient.network.protocol.Protocol.denounce;
+import static org.aoclient.network.protocol.command.metadata.GameCommand.REPORT;
 
-public class GuildMessageCommand extends BaseCommandHandler {
+public class DenounceCommand extends BaseCommandHandler {
 
     @Override
     public void handle(CommandContext commandContext) throws CommandException {
-        requireArguments(commandContext, UNLIMITED_ARGUMENTS, GUILD_MSG.getCommand() + " <message>");
+        requireArguments(commandContext, UNLIMITED_ARGUMENTS, REPORT.getCommand() + " <message>");
         requireValidString(commandContext, "message", REGEX);
         String message = commandContext.argumentsRaw().trim();
-        guildMessage(message);
+        denounce(message);
     }
 
 }
