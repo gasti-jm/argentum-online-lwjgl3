@@ -49,7 +49,7 @@ public final class FPanelGM extends Form {
                 ImGui.inputText("Arguments", myText);
                 ImGui.separator();
                 if (ImGui.button(SHOW.getCommand() + " sos", 170, 20)) commandExecutor.execute(SHOW.getCommand() + " sos");
-                if (ImGui.button(CLEAR.getCommand() + " sos", 170, 20)) commandExecutor.execute(CLEAR.getCommand() + " sos");
+                if (ImGui.button(CLEAN_SOS.getCommand() + " sos", 170, 20)) commandExecutor.execute(CLEAN_SOS.getCommand() + " sos");
                 if (ImGui.button(SEE_WORKERS.getCommand(), 170, 20)) commandExecutor.execute(SEE_WORKERS.getCommand());
                 if (ImGui.button(SHOW_HIDDEN_PLAYERS.getCommand(), 170, 20)) commandExecutor.execute(SHOW_HIDDEN_PLAYERS.getCommand());
                 if (ImGui.button(SHOW_MOBS.getCommand(), 170, 20)) commandExecutor.execute(SHOW_MOBS.getCommand() + " " + myText.get());

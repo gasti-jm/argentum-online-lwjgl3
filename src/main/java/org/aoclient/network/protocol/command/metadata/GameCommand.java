@@ -19,6 +19,7 @@ public enum GameCommand {
     BUG("/bug", "Report a bug to administrators"), // /bug
     CENTINEL_CODE("/centinelcode", "Submit centinel verification code"), // /centinela
     CLAIM_REWARD("/reward", "Claim daily reward"), // /recompensa
+    CLEAR("/clear", "Clean the console"), // NUEVO COMANDO
     CONSULTATION("/consultation", "Make a consultation request"), // /consulta
     DEPOSIT("/deposit", "Deposit gold in the bank"), // /depositar
     DESC("/desc", "Change your character description"), // /desc
@@ -84,7 +85,7 @@ public enum GameCommand {
     CIUMSG("/ciumsg", "Send message to all citizens"), // /ciumsg
     CLEAN("/clean", "Clean world objects"), // /limpiar
     CLEAN_NPC_INV("/cleannpcinv", "Clean NPC inventory"), // /resetinv
-    CLEAR("/clear", "Clear SOS message list"), // /borrar
+    CLEAN_SOS("/cleansos", "Clear SOS message list"), // /borrar
     CONDEN("/conden", "Turn player into criminal"), // /conden
     CREATE_NPC("/createnpc", "Create NPC at current location"), // /acc
     CREATE_OBJ("/createobject", "Create object at current location"), // /co

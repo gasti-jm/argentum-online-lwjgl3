@@ -31,6 +31,9 @@ import static org.aoclient.network.protocol.command.metadata.GameCommand.HELP;
  * especialmente en contextos con muchos comandos disponibles.
  * <p>
  * IMPORTANTE: Solo los GMs podran ver los comandos de GM.
+ * <p>
+ * TODO Mostrar los argumentos necesarios cuando se hace un /? teleport por ejemplo
+ * TODO La lista de comandos no estan ordenados alfabeticamente
  */
 
 public class HelpCommand extends BaseCommandHandler {
