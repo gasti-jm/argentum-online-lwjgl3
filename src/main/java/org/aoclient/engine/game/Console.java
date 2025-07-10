@@ -44,10 +44,13 @@ public enum Console {
      */
     public void addMsgToConsole(String text, boolean bold, boolean italic, RGBColor color) {
         data.add(new ConsoleData(text, color));
+        // Activa el scroll hacia abajo cuando se agrega un mensaje
+        scrollToBottom = true;
     }
 
     public void clearConsole() {
-        this.data.clear();
+        data.clear();
+        scrollToBottom = true;
     }
 
     /**
@@ -71,6 +74,7 @@ public enum Console {
             ImGui.popStyleColor();
         }
 
+        // Hace scroll hacia abajo si se solicita o si el autoScroll esta activado y ya esta cerca del final
         if (scrollToBottom || (autoScroll && ImGui.getScrollY() >= ImGui.getScrollMaxY())) ImGui.setScrollHereY(1.0f);
 
         scrollToBottom = false;
