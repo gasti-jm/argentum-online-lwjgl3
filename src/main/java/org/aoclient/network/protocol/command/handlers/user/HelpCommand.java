@@ -2,6 +2,7 @@ package org.aoclient.network.protocol.command.handlers.user;
 
 import org.aoclient.engine.game.Console;
 import org.aoclient.engine.game.User;
+import org.aoclient.engine.renderer.FontRenderer;
 import org.aoclient.engine.renderer.RGBColor;
 import org.aoclient.network.protocol.command.core.Command;
 import org.aoclient.network.protocol.command.core.CommandContext;
@@ -56,25 +57,58 @@ public class HelpCommand extends BaseCommandHandler {
     }
 
     private void showGeneralHelp() {
-        console.addMsgToConsole("[AVAILABLE COMMANDS]", false, false, new RGBColor(0f, 1f, 0f));
+        console.addMsgToConsole("Commands...", false, false, new RGBColor(0f, 1f, 0f));
 
-        // Muestra comandos por categoria
-        for (CommandCategory category : CommandCategory.values()) {
+        // Determina los comandos para GM o USER
+        List<String> commands;
+        if (isGM()) commands = CommandRegistry.getAllCommandNames();
+        else
+            commands = CommandRegistry.getCommandsByCategory(CommandCategory.USER).stream()
+                    .map(Command::name)
+                    .sorted()
+                    .toList();
 
-            // Filtra comandos de GM si el usuario no es GM
-            if (category == CommandCategory.GM && !isGM()) continue;
+        // Formatea comandos con saltos de linea automaticos
+        formatCommandsWithLineBreaks(commands);
 
-            List<Command> commands = CommandRegistry.getCommandsByCategory(category);
-            if (!commands.isEmpty()) {
-                console.addMsgToConsole("- " + category.name() + " -", false, false, new RGBColor(1f, 1f, 0f));
-                commands.forEach(cmd -> console.addMsgToConsole(cmd.name(), false, false, new RGBColor(0.8f, 0.8f, 0.8f)));
-                console.addMsgToConsole("", false, false, new RGBColor());
-            }
-
-        }
-
+        console.addMsgToConsole("", false, false, new RGBColor());
         console.addMsgToConsole("Type '" + HELP.getCommand() + " <command>' for specific help.", false, false, new RGBColor(0f, 1f, 1f));
     }
+
+
+    private void formatCommandsWithLineBreaks(List<String> commands) {
+        if (commands.isEmpty()) return;
+
+        StringBuilder currentLine = new StringBuilder();
+
+        // Ancho de consola con 10 pixeles de margen
+        int consoleWidth = Console.CONSOLE_WIDTH - 10;
+
+        for (String command : commands) {
+
+            // Construye el texto del comando actual, agregandolo a la linea actual si existe
+            String text = currentLine.isEmpty() ? command : currentLine + " " + command;
+
+            // Calcula el ancho del texto
+            int textWidth = FontRenderer.getTextWidth(text, false);
+
+            // Si excede el ancho de la consola, imprime la linea actual y empieza una nueva
+            if (textWidth > consoleWidth && !currentLine.isEmpty()) {
+                console.addMsgToConsole(currentLine.toString(), false, false, new RGBColor(0.8f, 0.8f, 0.8f));
+                currentLine = new StringBuilder(command);
+            } else {
+                // Si la linea actual no esta vacia, entonces agrega un espacio
+                if (!currentLine.isEmpty()) currentLine.append(" ");
+                // Agrega el comando a la linea actual
+                currentLine.append(command);
+            }
+        }
+
+        // Imprime la ultima linea si no esta vacia
+        if (!currentLine.isEmpty()) console.addMsgToConsole(currentLine.toString(), false, false, new RGBColor(0.8f, 0.8f, 0.8f));
+
+    }
+
 
     private void showCommandHelp(String commandName) {
         // Agrega / si no lo tiene
@@ -92,10 +126,8 @@ public class HelpCommand extends BaseCommandHandler {
                 return;
             }
 
-            console.addMsgToConsole("[COMMAND HELP]", false, false, new RGBColor(0f, 1f, 0f));
             console.addMsgToConsole("Command: " + cmd.name(), false, false, new RGBColor(1f, 1f, 0f));
             console.addMsgToConsole("Description: " + cmd.description(), false, false, new RGBColor(1f, 1f, 1f));
-            console.addMsgToConsole("Category: " + cmd.category().name(), false, false, new RGBColor(0.8f, 0.8f, 1f));
 
         } else {
             console.addMsgToConsole("Command '" + commandName + "' not found!", false, false, new RGBColor(1f, 0f, 0f));

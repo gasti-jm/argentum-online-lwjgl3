@@ -18,7 +18,6 @@ import org.aoclient.network.protocol.command.core.CommandHandler;
  * <p>
  * Los argumentos que se indican entre "<>" son obligatorios y entre "[]" son opcionales.
  * <p>
- * TODO Agregar comando para limpiar consola '/clear'
  * TODO Mostrar mensaje para los comandos que no necesitan argumentos
  */
 

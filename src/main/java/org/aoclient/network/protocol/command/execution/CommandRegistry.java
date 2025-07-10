@@ -27,7 +27,7 @@ import static org.aoclient.network.protocol.command.metadata.GameCommand.*;
 public final class CommandRegistry {
 
     /** Lista de comandos registrados en el sistema con pre-carga en tiempo de compilacion. */
-    private static final List<Command> COMMANDS = loadCommands();
+    private static final List<Command> commands = loadCommands();
 
     /**
      * Construye un mapa que asocia nombres de comandos con sus respectivos handlers ({@link CommandHandler}). Este mapa permite
@@ -41,7 +41,7 @@ public final class CommandRegistry {
      * @throws IllegalStateException si se encuentran comandos con nombres duplicados
      */
     public static Map<String, CommandHandler> buildCommandMap() {
-        return COMMANDS.stream()
+        return commands.stream()
                 .collect(Collectors.toMap(
                         Command::name,
                         def -> def.factory().get(),
@@ -55,7 +55,7 @@ public final class CommandRegistry {
      * Obtiene todos los comandos disponibles (util para auto-completado).
      */
     public static List<String> getAllCommandNames() {
-        return COMMANDS.stream()
+        return commands.stream()
                 .map(Command::name)
                 .sorted()
                 .toList();
@@ -65,7 +65,7 @@ public final class CommandRegistry {
      * Obtiene comandos por categoria.
      */
     public static List<Command> getCommandsByCategory(CommandCategory category) {
-        return COMMANDS.stream()
+        return commands.stream()
                 .filter(cmd -> cmd.category() == category)
                 .toList();
     }
@@ -74,7 +74,7 @@ public final class CommandRegistry {
      * Obtiene informacion de un comando especifico.
      */
     public static Optional<Command> getCommandInfo(String command) {
-        return COMMANDS.stream()
+        return commands.stream()
                 .filter(cmd -> cmd.name().equals(command))
                 .findFirst();
     }
