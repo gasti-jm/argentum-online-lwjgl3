@@ -6,7 +6,6 @@ import imgui.flag.ImGuiCond;
 import imgui.flag.ImGuiWindowFlags;
 import org.aoclient.engine.renderer.RGBColor;
 
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,13 +26,12 @@ public enum Console {
 
     INSTANCE;
 
+    public static final int CONSOLE_WIDTH = 555;
+    public static final int CONSOLE_HEIGHT = 98;
     private static final int MAX_SIZE_DATA = 500;
     private final boolean autoScroll;
     private final List<ConsoleData> data;
     private boolean scrollToBottom;
-
-    public static final int CONSOLE_WIDTH = 555;
-    public static final int CONSOLE_HEIGHT = 98;
 
     Console() {
         autoScroll = true;
@@ -45,7 +43,7 @@ public enum Console {
      * Agrega un nuevo mensaje en la consola.
      */
     public void addMsgToConsole(String text, boolean bold, boolean italic, RGBColor color) {
-        data.add(new ConsoleData().addData(text, color));
+        data.add(new ConsoleData(text, color));
     }
 
     public void clearConsole() {
@@ -81,17 +79,12 @@ public enum Console {
         ImGui.end();
     }
 
-    private static class ConsoleData {
-
-        String consoleText = new String("".getBytes(), StandardCharsets.UTF_8);
-        RGBColor color = new RGBColor(1f, 1f, 1f);
-
-        ConsoleData addData(String text, RGBColor color) {
-            this.consoleText += text;
-            this.color = color;
-            return this;
+    private record ConsoleData(String consoleText, RGBColor color) {
+        public ConsoleData {
+            // Validaciones si son necesarias
+            if (consoleText == null) consoleText = "";
+            if (color == null) color = new RGBColor(1f, 1f, 1f);
         }
-
     }
 
 }
