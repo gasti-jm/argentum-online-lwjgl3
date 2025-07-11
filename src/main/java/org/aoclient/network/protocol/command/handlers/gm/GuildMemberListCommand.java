@@ -11,7 +11,7 @@ public class GuildMemberListCommand extends BaseCommandHandler {
 
     @Override
     public void handle(CommandContext commandContext) throws CommandException {
-        requireArguments(commandContext, 1, GUILD_MEMBER_LIST.getCommand() + " <name>");
+        requireArguments(commandContext, 1, GUILD_MEMBER_LIST.getCommand() + " <guild>");
         String name = commandContext.getArgument(0);
         guildMemberList(name);
     }

@@ -14,7 +14,7 @@ public class DenounceCommand extends BaseCommandHandler {
         requireArguments(commandContext, UNLIMITED_ARGUMENTS, REPORT.getCommand() + " <message>");
         requireValidString(commandContext, "message", REGEX);
         String message = commandContext.argumentsRaw().trim();
-        denounce(message);
+        denounce(message); // TODO No faltaria el nick del player a reportar?
     }
 
 }
