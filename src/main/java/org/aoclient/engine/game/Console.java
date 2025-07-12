@@ -29,6 +29,7 @@ public enum Console {
     public static final int CONSOLE_WIDTH = 555;
     public static final int CONSOLE_HEIGHT = 98;
     private static final int MAX_SIZE_DATA = 500;
+    private static final int MAX_CHARACTERS_LENGTH = 75; // Maxima cantidad de caracteres en horizontal.
     private final boolean autoScroll;
     private final List<ConsoleData> data;
     private boolean scrollToBottom;
@@ -43,7 +44,43 @@ public enum Console {
      * Agrega un nuevo mensaje en la consola.
      */
     public void addMsgToConsole(String text, boolean bold, boolean italic, RGBColor color) {
-        data.add(new ConsoleData(text, color));
+        StringBuilder resultado = new StringBuilder();
+
+        for (String linea : text.split("\n")) {
+            String[] palabras = linea.split(" ");
+            StringBuilder lineaActual = new StringBuilder();
+
+            for (String palabra : palabras) {
+                if (lineaActual.length() + palabra.length() + 1 > MAX_CHARACTERS_LENGTH) {
+                    // Si la palabra sola es muy larga, la cortamos igual
+                    if (palabra.length() > MAX_CHARACTERS_LENGTH) {
+                        if (lineaActual.length() > 0) {
+                            resultado.append(lineaActual.toString().stripTrailing()).append("\n");
+                            lineaActual.setLength(0);
+                        }
+                        int inicio = 0;
+                        while (inicio < palabra.length()) {
+                            int fin = Math.min(inicio + MAX_CHARACTERS_LENGTH, palabra.length());
+                            resultado.append(palabra.substring(inicio, fin)).append("\n");
+                            inicio = fin;
+                        }
+                    } else {
+                        resultado.append(lineaActual.toString().stripTrailing()).append("\n");
+                        lineaActual = new StringBuilder(palabra + " ");
+                    }
+                } else {
+                    lineaActual.append(palabra).append(" ");
+                }
+            }
+
+            // Agregar lo que quedó en la línea
+            if (lineaActual.length() > 0) {
+                resultado.append(lineaActual.toString().stripTrailing()).append("\n");
+            }
+        }
+
+        data.add(new ConsoleData(resultado.toString(), color));
+
         // Activa el scroll hacia abajo cuando se agrega un mensaje
         scrollToBottom = true;
     }
