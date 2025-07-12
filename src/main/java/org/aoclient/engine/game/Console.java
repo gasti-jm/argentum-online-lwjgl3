@@ -6,7 +6,6 @@ import imgui.flag.ImGuiCond;
 import imgui.flag.ImGuiWindowFlags;
 import org.aoclient.engine.renderer.RGBColor;
 
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,65 +18,63 @@ import java.util.List;
  * <p>
  * Esta consola es fundamental para la comunicacion unidireccional del sistema hacia el jugador, mostrando eventos importantes,
  * resultados de acciones, mensajes del servidor y otros datos relevantes durante la experiencia de juego.
+ * <p>
+ * TODO Agregar italic y bold
  */
 
 public enum Console {
 
     INSTANCE;
 
+    public static final int CONSOLE_WIDTH = 555;
+    public static final int CONSOLE_HEIGHT = 98;
     private static final int MAX_SIZE_DATA = 500;
-    private boolean autoScroll;
+    private final boolean autoScroll;
+    private final List<ConsoleData> data;
     private boolean scrollToBottom;
-    private List<ConsoleData> data;
 
-    /**
-     * Constructor privado por singleton.
-     */
     Console() {
-        this.autoScroll = true;
-        this.scrollToBottom = false;
-        this.data = new ArrayList<>();
+        autoScroll = true;
+        scrollToBottom = false;
+        data = new ArrayList<>();
     }
 
     /**
      * Agrega un nuevo mensaje en la consola.
      */
     public void addMsgToConsole(String text, boolean bold, boolean italic, RGBColor color) {
-        this.data.add(new ConsoleData().addData(text, color));
+        data.add(new ConsoleData(text, color));
+        // Activa el scroll hacia abajo cuando se agrega un mensaje
+        scrollToBottom = true;
     }
 
     public void clearConsole() {
-        this.data.clear();
+        data.clear();
+        scrollToBottom = true;
     }
 
     /**
-     * Dibujamos la consola (esta es una porcion de GUI del frmMain).
+     * Dibuja la consola (esta es una porcion de GUI del frmMain).
      */
     public void drawConsole() {
 
-        // si tenemos 500 mensajes, vaciamos la consola.
-        if (data.size() > MAX_SIZE_DATA)
-            clearConsole();
-
+        // Limpia la consola despues de 500 mensajes
+        if (data.size() > MAX_SIZE_DATA) clearConsole();
 
         ImGui.setNextWindowPos(10, 24);
-        ImGui.setNextWindowSize(555, 98, ImGuiCond.Once);
-        ImGui.begin("console", ImGuiWindowFlags.NoTitleBar
-                | ImGuiWindowFlags.NoBackground
-                | ImGuiWindowFlags.NoResize
-                | ImGuiWindowFlags.NoSavedSettings);
-
+        ImGui.setNextWindowSize(CONSOLE_WIDTH, CONSOLE_HEIGHT, ImGuiCond.Once);
+        ImGui.begin("console", ImGuiWindowFlags.NoTitleBar | ImGuiWindowFlags.NoBackground | ImGuiWindowFlags.NoResize | ImGuiWindowFlags.NoSavedSettings);
         ImGui.setCursorPos(5, 0);
         ImGui.beginChild("ScrollingRegion", 0, 0, false, ImGuiWindowFlags.HorizontalScrollbar);
 
-        // recorremos cada item y le asignamos un color y lo dibujamos.
+        // Itera cada item y le asignamos un color y lo dibujamos.
         for (ConsoleData item : data) {
             ImGui.pushStyleColor(ImGuiCol.Text, ImGui.getColorU32(item.color.getRed(), item.color.getGreen(), item.color.getBlue(), 1f));
             ImGui.textUnformatted(item.consoleText);
             ImGui.popStyleColor();
         }
 
-
+        // Hace scroll hacia abajo si se solicita o si el autoScroll esta activado y ya esta cerca del final
         if (scrollToBottom || (autoScroll && ImGui.getScrollY() >= ImGui.getScrollMaxY())) ImGui.setScrollHereY(1.0f);
 
         scrollToBottom = false;
@@ -86,17 +83,12 @@ public enum Console {
         ImGui.end();
     }
 
-    static class ConsoleData {
-
-        String consoleText = new String("".getBytes(), StandardCharsets.UTF_8);
-        RGBColor color = new RGBColor(1f, 1f, 1f);
-
-        ConsoleData addData(String text, RGBColor color) {
-            this.consoleText += text;
-            this.color = color;
-            return this;
+    private record ConsoleData(String consoleText, RGBColor color) {
+        public ConsoleData {
+            // Validaciones si son necesarias
+            if (consoleText == null) consoleText = "";
+            if (color == null) color = new RGBColor(1f, 1f, 1f);
         }
-
     }
 
 }

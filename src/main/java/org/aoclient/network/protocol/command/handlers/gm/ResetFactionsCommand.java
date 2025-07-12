@@ -11,7 +11,7 @@ public class ResetFactionsCommand extends BaseCommandHandler {
 
     @Override
     public void handle(CommandContext commandContext) throws CommandException {
-        requireArguments(commandContext, 1, RAJAR.getCommand() + " <nick>");
+        requireArguments(commandContext, 1, getCommandUsage(RAJAR));
         String nick = commandContext.getArgument(0);
         resetFactions(nick);
     }

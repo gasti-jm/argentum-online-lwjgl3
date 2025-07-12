@@ -11,7 +11,7 @@ public class RequestCharInfoCommand extends BaseCommandHandler {
 
     @Override
     public void handle(CommandContext commandContext) throws CommandException {
-        requireArguments(commandContext, 1, PLAYER_INFO.getCommand() + " <nick>");
+        requireArguments(commandContext, 1, getCommandUsage(PLAYER_INFO));
         String nick = commandContext.getArgument(0);
         requestCharInfo(nick);
     }

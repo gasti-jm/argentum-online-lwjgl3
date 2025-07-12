@@ -11,7 +11,7 @@ public class CriminalMessageCommand extends BaseCommandHandler {
 
     @Override
     public void handle(CommandContext commandContext) throws CommandException {
-        requireArguments(commandContext, UNLIMITED_ARGUMENTS, CRIMSG.getCommand() + " <message>");
+        requireArguments(commandContext, UNLIMITED_ARGUMENTS, getCommandUsage(CRIMSG));
         requireValidString(commandContext, "message", REGEX);
         String message = commandContext.argumentsRaw().trim();
         criminalMessage(message);

@@ -11,7 +11,7 @@ public class LastIpCommand extends BaseCommandHandler {
 
     @Override
     public void handle(CommandContext commandContext) throws CommandException {
-        requireArguments(commandContext, 1, LAST_IP.getCommand() + " <nick>");
+        requireArguments(commandContext, 1, getCommandUsage(LAST_IP));
         String nick = commandContext.getArgument(0);
         lastIP(nick);
     }

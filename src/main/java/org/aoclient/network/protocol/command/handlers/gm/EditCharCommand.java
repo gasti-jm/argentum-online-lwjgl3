@@ -44,7 +44,7 @@ public class EditCharCommand extends BaseCommandHandler {
 
     @Override
     public void handle(CommandContext commandContext) throws CommandException {
-        requireArguments(commandContext, 3, MOD_PLAYER.getCommand() + " <nick> <property> <value> [extra_param]");
+        requireArguments(commandContext, 3, getCommandUsage(MOD_PLAYER));
         requireString(commandContext, 0, "nick");
         requireString(commandContext, 1, "property");
         requireString(commandContext, 2, "value");

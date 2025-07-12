@@ -11,7 +11,7 @@ public class GuildBanCommand extends BaseCommandHandler {
 
     @Override
     public void handle(CommandContext commandContext) throws CommandException {
-        requireArguments(commandContext, 1, GUILD_BAN.getCommand() + " <name>");
+        requireArguments(commandContext, 1, getCommandUsage(GUILD_BAN));
         String name = commandContext.getArgument(0);
         guildBan(name);
     }

@@ -11,7 +11,7 @@ public class RemovePunishmentCommand extends BaseCommandHandler {
 
     @Override
     public void handle(CommandContext commandContext) throws CommandException {
-        requireArguments(commandContext, 3, REMOVE_PUNISHMENT.getCommand() + " <nick> <minutes> <newPunishment>");
+        requireArguments(commandContext, 3, getCommandUsage(REMOVE_PUNISHMENT));
         requireString(commandContext, 0, "nick");
         requireInteger(commandContext, 1, "minutes");
         requireString(commandContext, 2, "newPunishment");

@@ -11,10 +11,10 @@ public class DenounceCommand extends BaseCommandHandler {
 
     @Override
     public void handle(CommandContext commandContext) throws CommandException {
-        requireArguments(commandContext, UNLIMITED_ARGUMENTS, REPORT.getCommand() + " <message>");
+        requireArguments(commandContext, UNLIMITED_ARGUMENTS, getCommandUsage(REPORT));
         requireValidString(commandContext, "message", REGEX);
         String message = commandContext.argumentsRaw().trim();
-        denounce(message);
+        denounce(message); // TODO No faltaria el nick del player a reportar?
     }
 
 }

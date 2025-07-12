@@ -16,7 +16,7 @@ public class CreateObjectCommand extends BaseCommandHandler {
 
     @Override
     public void handle(CommandContext commandContext) throws CommandException {
-        requireArguments(commandContext, 1, CREATE_OBJ.getCommand() + " <object_id>");
+        requireArguments(commandContext, 1, getCommandUsage(CREATE_OBJ));
         requireInteger(commandContext, 0, "object_id");
         int objectId = Integer.parseInt(commandContext.getArgument(0));
         createObject(objectId);

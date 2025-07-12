@@ -11,7 +11,7 @@ public class PartyKickCommand extends BaseCommandHandler {
 
     @Override
     public void handle(CommandContext commandContext) throws CommandException {
-        requireArguments(commandContext, 1, PARTY_KICK.getCommand() + " <nick>");
+        requireArguments(commandContext, 1, getCommandUsage(PARTY_KICK));
         String nick = commandContext.getArgument(0);
         partyKick(nick);
     }

@@ -11,7 +11,7 @@ public class RoleMasterRequestCommand extends BaseCommandHandler {
 
     @Override
     public void handle(CommandContext commandContext) throws CommandException {
-        requireArguments(commandContext, UNLIMITED_ARGUMENTS, ROL.getCommand() + " <message>");
+        requireArguments(commandContext, UNLIMITED_ARGUMENTS,getCommandUsage(ROL));
         requireValidString(commandContext, "message", REGEX);
         String message = commandContext.argumentsRaw().trim();
         roleMasterRequest(message);

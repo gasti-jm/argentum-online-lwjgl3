@@ -16,7 +16,7 @@ public class ChatColorCommand extends BaseCommandHandler {
             return;
         }
 
-        requireArguments(commandContext, 3, CHAT_COLOR.getCommand() + " <r> <g> <b>");
+        requireArguments(commandContext, 3, getCommandUsage(CHAT_COLOR));
         requireInteger(commandContext, 0, "r");
         requireInteger(commandContext, 1, "g");
         requireInteger(commandContext, 2, "b");

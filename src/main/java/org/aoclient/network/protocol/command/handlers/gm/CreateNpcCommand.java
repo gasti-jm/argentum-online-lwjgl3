@@ -11,7 +11,7 @@ public class CreateNpcCommand extends BaseCommandHandler {
 
     @Override
     public void handle(CommandContext commandContext) throws CommandException {
-        requireArguments(commandContext, 1, CREATE_NPC.getCommand() + " <npc>");
+        requireArguments(commandContext, 1, getCommandUsage(CREATE_NPC));
         requireInteger(commandContext, 0, "npc");
         short npc = Short.parseShort(commandContext.getArgument(0));
         createNPC(npc);

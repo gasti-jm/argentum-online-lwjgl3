@@ -11,7 +11,7 @@ public class UnbanCharCommand extends BaseCommandHandler {
 
     @Override
     public void handle(CommandContext commandContext) throws CommandException {
-        requireArguments(commandContext, 1, UNBAN.getCommand() + " <nick>");
+        requireArguments(commandContext, 1, getCommandUsage(UNBAN));
         String nick = commandContext.getArgument(0);
         unbanChar(nick);
     }

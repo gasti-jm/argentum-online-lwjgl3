@@ -14,7 +14,7 @@ public class PlayMusicCommand extends BaseCommandHandler {
     public void handle(CommandContext commandContext) throws CommandException {
         if (commandContext.getArgumentCount() == 1) playMusic(commandContext, false);
         else if (commandContext.getArgumentCount() == 2) playMusic(commandContext, true);
-        else showError("Missing arguments. Usage: " + PLAY_MUSIC.getCommand() + " <sound_id> [map]");
+        else showError("Missing arguments. Usage: " + getCommandUsage(PLAY_MUSIC));
     }
 
     private void playMusic(CommandContext context, boolean onMap) throws CommandException {

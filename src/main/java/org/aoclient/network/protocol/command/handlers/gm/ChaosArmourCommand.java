@@ -11,7 +11,7 @@ public class ChaosArmourCommand extends BaseCommandHandler {
 
     @Override
     public void handle(CommandContext commandContext) throws CommandException {
-        requireArguments(commandContext, 2, AC.getCommand() + " <armor> <object>");
+        requireArguments(commandContext, 2, getCommandUsage(AC));
         requireInteger(commandContext, 0, "armor");
         requireShort(commandContext, 1, "object");
 

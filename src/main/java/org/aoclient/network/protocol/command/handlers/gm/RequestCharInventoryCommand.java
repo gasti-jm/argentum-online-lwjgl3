@@ -11,7 +11,7 @@ public class RequestCharInventoryCommand extends BaseCommandHandler {
 
     @Override
     public void handle(CommandContext commandContext) throws CommandException {
-        requireArguments(commandContext, 1, PLAYER_INV.getCommand() + " <nick>");
+        requireArguments(commandContext, 1, getCommandUsage(PLAYER_INV));
         String nick = commandContext.getArgument(0);
         requestCharInventory(nick);
     }
