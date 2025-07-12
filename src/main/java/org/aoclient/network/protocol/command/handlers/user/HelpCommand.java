@@ -58,7 +58,7 @@ public class HelpCommand extends BaseCommandHandler {
         // Determina los comandos para GM o USER
         List<String> commands = isGM() ? CommandRegistry.getAllCommandNames() : CommandRegistry.getCommandsByCategory(CommandCategory.USER)
                 .stream()
-                .map(Command::name)
+                .map(Command::command)
                 .sorted()
                 .toList();
 
@@ -83,7 +83,7 @@ public class HelpCommand extends BaseCommandHandler {
                 return;
             }
 
-            console.addMsgToConsole("Help for the " + command.name() + " command...", false, false, new RGBColor(0f, 1f, 0f));
+            console.addMsgToConsole("Help for the " + command.command() + " command...", false, false, new RGBColor(0f, 1f, 0f));
 
             // Muestra ayuda linea por linea
             command.getHelp()

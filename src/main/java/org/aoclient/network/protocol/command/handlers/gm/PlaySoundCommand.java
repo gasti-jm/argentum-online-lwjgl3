@@ -17,7 +17,7 @@ public class PlaySoundCommand extends BaseCommandHandler {
     public void handle(CommandContext commandContext) throws CommandException {
         if (commandContext.getArgumentCount() == 1) playSound(commandContext);
         else if (commandContext.getArgumentCount() == 4) playSoundAtTheSpecifiedLocation(commandContext);
-        else showError("Missing arguments. Usage: " + PLAY_SOUND.getCommand() + " <sound_id> [map] [x] [y]");
+        else showError("Missing arguments. Usage: " + getCommandUsage(PLAY_SOUND));
     }
 
     private void playSound(CommandContext context) throws CommandException {

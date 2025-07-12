@@ -11,7 +11,7 @@ public class BanCharCommand extends BaseCommandHandler {
 
     @Override
     public void handle(CommandContext commandContext) throws CommandException {
-        requireArguments(commandContext, 2, BAN.getCommand() + " <nick> <reason>");
+        requireArguments(commandContext, 2, getCommandUsage(BAN));
         requireString(commandContext, 0, "nick");
         requireString(commandContext, 1, "reason");
 

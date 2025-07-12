@@ -11,7 +11,7 @@ public class ImperialArmourCommand extends BaseCommandHandler {
 
     @Override
     public void handle(CommandContext commandContext) throws CommandException {
-        requireArguments(commandContext, 2, AI.getCommand() + " <armor_id> <object_id>");
+        requireArguments(commandContext, 2, getCommandUsage(AI));
         requireInteger(commandContext, 0, "armor_id");
         requireInteger(commandContext, 1, "object_id");
 

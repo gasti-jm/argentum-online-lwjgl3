@@ -11,7 +11,7 @@ public class WarnUserCommand extends BaseCommandHandler {
 
     @Override
     public void handle(CommandContext commandContext) throws CommandException {
-        requireArguments(commandContext, 2, WARNING.getCommand() + " <nick> <reason>");
+        requireArguments(commandContext, 2, getCommandUsage(WARNING));
         requireString(commandContext, 0, "nick");
         requireString(commandContext, 1, "reason");
         String nick = commandContext.getArgument(0);

@@ -11,7 +11,7 @@ public class AlterNameCommand extends BaseCommandHandler {
 
     @Override
     public void handle(CommandContext commandContext) throws CommandException {
-        requireArguments(commandContext, 2, ANAME.getCommand() + " <origin> <dest>");
+        requireArguments(commandContext, 2, getCommandUsage(ANAME));
         requireString(commandContext, 0, "origin");
         requireString(commandContext, 1, "dest");
 

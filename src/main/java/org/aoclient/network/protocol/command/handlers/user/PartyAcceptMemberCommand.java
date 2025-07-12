@@ -11,7 +11,7 @@ public class PartyAcceptMemberCommand extends BaseCommandHandler {
 
     @Override
     public void handle(CommandContext commandContext) throws CommandException {
-        requireArguments(commandContext, 1, PARTY_ACCEPT.getCommand() + " <nick>");
+        requireArguments(commandContext, 1, getCommandUsage(PARTY_ACCEPT));
         String nick = commandContext.getArgument(0);
         partyAcceptMember(nick);
     }

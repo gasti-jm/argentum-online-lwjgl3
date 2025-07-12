@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.function.Supplier;
 
 /**
- * Clase que representa un comando en el sistema. Un comando incluye nombre, descripcion, argumentos, categoria y fabrica para
+ * Clase que representa un comando en el sistema. Un comando incluye nombre, argumentos, descripcion, categoria y fabrica para
  * crear un handler que ejecuta su logica.
  * <p>
  * Los comandos se clasifican en dos categorias segun su proposito: {@code USER} y {@code GM}. Cada comando puede ejecutar una
@@ -16,9 +16,9 @@ import java.util.function.Supplier;
  */
 
 public record Command(
-        String name,
-        String description,
+        String command,
         List<String> arguments,
+        String description,
         CommandCategory category,
         Supplier<CommandHandler> factory
 ) {
@@ -31,7 +31,7 @@ public record Command(
      * @return una instancia de {@link Command} que representa el comando configurado
      */
     public static Command user(GameCommand cmd, Runnable action) {
-        return new Command(cmd.getCommand(), cmd.getDescription(), cmd.getArguments(), CommandCategory.USER, () -> ctx -> action.run());
+        return new Command(cmd.getCommand(), cmd.getArguments(), cmd.getDescription(), CommandCategory.USER, () -> ctx -> action.run());
     }
 
     /**
@@ -42,19 +42,23 @@ public record Command(
      * @return una instancia de {@link Command} que representa el comando configurado
      */
     public static Command user(GameCommand cmd, Supplier<CommandHandler> factory) {
-        return new Command(cmd.getCommand(), cmd.getDescription(), cmd.getArguments(), CommandCategory.USER, factory);
+        return new Command(cmd.getCommand(), cmd.getArguments(), cmd.getDescription(), CommandCategory.USER, factory);
     }
 
     public static Command gm(GameCommand cmd, Runnable action) {
-        return new Command(cmd.getCommand(), cmd.getDescription(), cmd.getArguments(), CommandCategory.GM, () -> ctx -> action.run());
+        return new Command(cmd.getCommand(), cmd.getArguments(), cmd.getDescription(), CommandCategory.GM, () -> ctx -> action.run());
     }
 
     public static Command gm(GameCommand cmd, Supplier<CommandHandler> factory) {
-        return new Command(cmd.getCommand(), cmd.getDescription(), cmd.getArguments(), CommandCategory.GM, factory);
+        return new Command(cmd.getCommand(), cmd.getArguments(), cmd.getDescription(), CommandCategory.GM, factory);
+    }
+
+    public String getUsage() {
+        return "Usage: " + command + (arguments.isEmpty() ? "" : " " + String.join(" ", arguments));
     }
 
     public String getHelp() {
-        return description + "\nUsage: " + name + (arguments.isEmpty() ? "" : " " + String.join(" ", arguments));
+        return description + "\n" + getUsage();
     }
 
 }

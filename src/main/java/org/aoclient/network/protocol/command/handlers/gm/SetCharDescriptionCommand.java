@@ -11,7 +11,7 @@ public class SetCharDescriptionCommand extends BaseCommandHandler {
 
     @Override
     public void handle(CommandContext commandContext) throws CommandException {
-        requireArguments(commandContext, UNLIMITED_ARGUMENTS, SETDESC.getCommand() + " <description>");
+        requireArguments(commandContext, UNLIMITED_ARGUMENTS, getCommandUsage(SETDESC));
         requireValidString(commandContext, "description", REGEX);
         String description = commandContext.argumentsRaw().trim();
         // TODO No falta el nick del player?

@@ -42,19 +42,19 @@ public enum GameCommand {
     MOTD("/motd", "Show message of the day", List.of()), // /motd
     ONLINE("/online", "Show online players count", List.of()), // /online
     OPEN_VAULT("/openvault", "Open bank interface", List.of()), // /boveda
-    PARTY_ACCEPT("/partyaccept", "Accept player into party", List.of("<nick>")), // /acceptparty
+    PARTY_ACCEPT("/partyaccept", "Accept player into party", List.of("<player>")), // /acceptparty
     PARTY_CREATE("/partycreate", "Create a party", List.of()), // /crearparty
     PARTY_JOIN("/partyjoin", "Join or request to join a party", List.of()), // /party
-    PARTY_KICK("/partykick", "Kick member from party", List.of("<nick>")), // /echarparty
+    PARTY_KICK("/partykick", "Kick member from party", List.of("<player>")), // /echarparty
     PARTY_LEAVE("/partyleave", "Leave the party", List.of()), // /salirparty
     PARTY_MSG("/partymsg", "Send message to party members", List.of("<message>")), // /pmsg
     PARTY_ONLINE("/partyonline", "Show online party members", List.of()), // /onlineparty
-    PARTY_SET_LEADER("/partysetleader", "Transfer party leadership", List.of("<nick>")), // /partylider
+    PARTY_SET_LEADER("/partysetleader", "Transfer party leadership", List.of("<player>")), // /partylider
     PET_FOLLOW("/petfollow", "Make your pet follow you", List.of()), // /acompañar
     PET_RELEASE("/release", "Release your pet", List.of()), // /liberar
     PET_STAY("/quieto", "Make your pet stay in place", List.of()), // /quieto
     POLL("/poll", "Participate in server polls", List.of("<option>")), // /encuesta
-    REPORT("/report", "Report a player for misconduct", List.of("<nick>", "<reason>")), // /denunciar
+    REPORT("/report", "Report a player for misconduct", List.of("<player>", "<reason>")), // /denunciar
     REST("/rest", "Rest to recover stamina", List.of()), // /descansar
     RESURRECT("/resurrect", "Resurrect other players", List.of()), // /resucitar
     ROL("/rol", "Request role master assistance", List.of("<message>")), // /rol
@@ -66,15 +66,15 @@ public enum GameCommand {
 
     // ==================== GM COMMANDS ====================
     AC("/ac", "Give chaos faction armor", List.of("<armor>", "<object>")), // /ac
-    ACEPT_CONSE("/aceptconse", "Accept royal council member", List.of("<nick>")), // /aceptconse
-    ACEPT_CONSE_CHAOS("/aceptconsechaos", "Accept chaos council member", List.of("<nick>")), // /aceptconsecaos
+    ACEPT_CONSE("/aceptconse", "Accept royal council member", List.of("<player>")), // /aceptconse
+    ACEPT_CONSE_CHAOS("/aceptconsechaos", "Accept chaos council member", List.of("<player>")), // /aceptconsecaos
     ADMINSERVER("/adminserver", "Toggle server for administrators", List.of()), // /habilitar
-    AEMAIL("/aemail", "Change player's email address", List.of("<nick>", "<email>")), // /aemail
+    AEMAIL("/aemail", "Change player's email address", List.of("<player>", "<email>")), // /aemail
     AI("/ai", "Give imperial faction armor", List.of("<armor_id>", "<object_id>")), // /ai
     ANAME("/aname", "Change player's name", List.of("<origin>", "<dest>")), // /aname
     APASS("/apass", "Copy password between characters", List.of("<pjsinpass>", "<pjconpass>")), // /apass
     AUTOUPDATE("/autoupdate", "Reset auto-update system", List.of()), // /autoupdate
-    BAN("/ban", "Ban a player from server", List.of("<nick>", "<reason>")), // /ban
+    BAN("/ban", "Ban a player from server", List.of("<player>", "<reason>")), // /ban
     BANIPLIST("/baniplist", "Show list of banned IP addresses", List.of()), // /baniplist
     BANIPRELOAD("/banipreload", "Reload banned IP list", List.of()), // /banipreload
     BAN_IP("/banip", "Ban IP address or player", List.of("<ip|nick>", "<reason>")), // /banip
@@ -87,7 +87,7 @@ public enum GameCommand {
     CLEAN("/clean", "Clean world objects", List.of()), // /limpiar // TODO Cambiar nombre
     CLEAN_NPC_INV("/cleannpcinv", "Clean NPC inventory", List.of()), // /resetinv
     CLEAN_SOS("/cleansos", "Clear SOS message list", List.of()), // /borrar
-    CONDEN("/conden", "Turn player into criminal", List.of("<nick>")), // /conden
+    CONDEN("/conden", "Turn player into criminal", List.of("<player>")), // /conden
     CREATE_NPC("/createnpc", "Create NPC at current location", List.of("<npc_id>")), // /acc
     CREATE_OBJ("/createobject", "Create object at current location", List.of("<obj_id>")), // /co
     CREATE_TELEPORT("/createteleport", "Create teleport at location", List.of("<map>", "<x>", "<y>", "[radiu]")), // /ct
@@ -96,12 +96,12 @@ public enum GameCommand {
     DESTROYTELEPORT("/destroyteleport", "Destroy teleport at current location", List.of()), // /dt
     DOBACKUP("/dobackup", "Create server backup", List.of()), // /dobackup
     DUMPSECURITY("/dumpsecurity", "Dump security IP tables", List.of()), // /dumpsecurity 
-    ESTUPID("/estupid", "Make player unable to speak", List.of("<nick>")), // /estupido
-    EXECUTE("/execute", "Execute a player", List.of("<nick>")), // /ejecutar
-    FORGIVE("/forgive", "Forgive player's crimes", List.of("<nick>")), // /perdon
+    ESTUPID("/estupid", "Make player unable to speak", List.of("<player>")), // /estupido
+    EXECUTE("/execute", "Execute a player", List.of("<player>")), // /ejecutar
+    FORGIVE("/forgive", "Forgive player's crimes", List.of("<player>")), // /perdon
     GMSG("/gmsg", "Send global GM message", List.of("<message>")), // /gmsg
     GUILD_BAN("/guildban", "Ban a guild", List.of("<guild>")), // /banclan
-    GUILD_KICK("/guildkick", "Kick member from guild", List.of("<nick>")), // /rajarclan
+    GUILD_KICK("/guildkick", "Kick member from guild", List.of("<player>")), // /rajarclan
     GUILD_MEMBER_LIST("/guildmemberlist", "Show guild member list", List.of("<guild>")), // /miembrosclan
     GUILD_MSG_HISTORY("/guildmsghistory", "Show guild message history", List.of()), // /showcmsg
     GUILD_ONLINE_SPECIFIC("/guildonlinespecific", "Show online members of specific guild", List.of("<guild>")), // /onclan
@@ -109,20 +109,20 @@ public enum GameCommand {
     HOME("/home", "Return to home city", List.of()), // /hogar
     INVISIBILITY("/invisible", "Toggle invisibility", List.of()), // /invisible
     IP2NICK("/ip2nick", "Get nickname from IP address", List.of("<ip>")), // /ip2nick
-    JAIL("/jail", "Send player to jail", List.of("<nick>", "<reason>", "<minutes>")), // /carcel
-    KICK("/kick", "Kick player from server", List.of("<nick>")), // /echar
+    JAIL("/jail", "Send player to jail", List.of("<player>", "<reason>", "<minutes>")), // /carcel
+    KICK("/kick", "Kick player from server", List.of("<player>")), // /echar
     KICKALL("/kickall", "Kick all players from server", List.of()), // /echartodospjs
-    KICK_CONSE("/kickconse", "Remove player from council", List.of("<nick>")), // /kickconse
-    LAST_EMAIL("/lastemail", "Show player's last email", List.of("<nick>")), // /lastemail
-    LAST_IP("/lastip", "Show player's last IP address", List.of("<nick>")), // /lastip
+    KICK_CONSE("/kickconse", "Remove player from council", List.of("<player>")), // /kickconse
+    LAST_EMAIL("/lastemail", "Show player's last email", List.of("<player>")), // /lastemail
+    LAST_IP("/lastip", "Show player's last IP address", List.of("<player>")), // /lastip
     MOD_MAP("/modmap", "Modify map properties", List.of("<option>", "<value>")), // /modmapinfo
-    MOD_PLAYER("/modplayer", "Modify player's character properties", List.of("<nick>", "<property>", "<value>")), // /mod
+    MOD_PLAYER("/modplayer", "Modify player's character properties", List.of("<player>", "<property>", "<value>", "[extra_param]")), // /mod
     MOTD_CHANGE("/motdchange", "Change message of the day", List.of()), // /motdcambia
     NAVE("/nave", "Toggle navigation mode", List.of()), // /nave
     NICK2IP("/nick2ip", "Get IP address from nickname", List.of("<nick>")), // /nick2ip
     NIGHT("/night", "Change time to night", List.of()), // /noche
-    NO_REAL("/noreal", "Remove player from royal army", List.of("<nick>")), // /noreal
-    NO_STUPID("/noestupido", "Restore player's ability to speak", List.of("<nick>")), // /noestupido
+    NO_REAL("/noreal", "Remove player from royal army", List.of("<player>")), // /noreal
+    NO_STUPID("/noestupido", "Restore player's ability to speak", List.of("<player>")), // /noestupido
     NPC_FOLLOW("/npcfollow", "Make NPC follow you", List.of()), // /seguir
     ONLINE_CHAOS("/onlinechaos", "Show online chaos legion members", List.of()), // /onlinecaos
     ONLINE_GM("/onlinegm", "Show online game masters", List.of()), // /onlinegm
@@ -132,11 +132,11 @@ public enum GameCommand {
     PING("/ping", "Check server connection latency", List.of()), // /ping
     PLAY_MUSIC("/playmusic", "Play music", List.of("<music_id>", "[map]")), // /playmusic
     PLAY_SOUND("/playsound", "Play sound", List.of("<sound_id>", "[map]", "[x]", "[y]")), // /playsound
-    PLAYER_INFO("/playerinfo", "Show detailed player information", List.of("<nick>")), // /info
-    PLAYER_INV("/playerinv", "Show player's inventory", List.of("<nick>")), // /inv
+    PLAYER_INFO("/playerinfo", "Show detailed player information", List.of("<player>")), // /info
+    PLAYER_INV("/playerinv", "Show player's inventory", List.of("<player>")), // /inv
     RACC("/racc", "Create respawning NPC", List.of("<npc_id>")), // /racc
     RAIN("/rain", "Toggle rain", List.of()), // /lluvia
-    RAJAR("/rajar", "Remove player from all factions", List.of("<nick>")), // /rajar
+    RAJAR("/rajar", "Remove player from all factions", List.of("<player>")), // /rajar
     REALMSG("/realmsg", "Send message to royal army", List.of("<message>")), // /realmsg
     RELOAD_NPCS("/reloadnpcs", "Reload NPCs", List.of()), // /reloadnpcs
     RELOAD_OBJ("/reloadobj", "Reload object", List.of()), // /reloadobj
@@ -147,42 +147,42 @@ public enum GameCommand {
     REMOVE_NPC("/removenpc", "Remove npc without respawn", List.of()), // /mata
     REMOVE_NPC_AREA("/removenpcarea", "Remove npcs in area", List.of()), // /masskill
     REMOVE_NPC_RESPAWN("/removenpcrespawn", "Remove NPC with respawn", List.of()), // /rmata
-    REMOVE_PLAYER_FROM_CHAOS("/nocaos", "Remove player from chaos legion", List.of("<nick>")), // /nocaos
-    REMOVE_PUNISHMENT("/borrarpena", "Remove player punishment", List.of("<nick>")), // /borrarpena
-    REQUEST_CHAR_BANK("/charbank", "Show player's bank contents", List.of("<nick>")), // /bov
-    REQUEST_CHAR_GOLD("/chargold", "Show player's gold amount", List.of("<nick>")), // /bal
+    REMOVE_PLAYER_FROM_CHAOS("/nocaos", "Remove player from chaos legion", List.of("<player>")), // /nocaos
+    REMOVE_PUNISHMENT("/borrarpena", "Remove player punishment", List.of("<player>")), // /borrarpena
+    REQUEST_CHAR_BANK("/charbank", "Show player's bank contents", List.of("<player>")), // /bov
+    REQUEST_CHAR_GOLD("/chargold", "Show player's gold amount", List.of("<player>")), // /bal
     RESTART("/restart", "Restart the server", List.of()), // /reiniciar
-    REVIVIR("/revivir", "Resurrect a player", List.of("<nick>")), // /revivir
+    REVIVIR("/revivir", "Resurrect a player", List.of("<player>")), // /revivir
     RMSG("/rmsg", "Send server-wide message", List.of("<message>")), // /rmsg
     SAVE("/save", "Save all character data", List.of()), // /grabar
     SAVEMAP("/savemap", "Save current map", List.of()), // /guardamapa
     SEE_WORKERS("/seeworkers", "Show working players", List.of()), // /trabajando
-    SETDESC("/setdesc", "Set player's description", List.of("<nick>", "<description>")), // /setdesc
+    SETDESC("/setdesc", "Set player's description", List.of("<player>", "<description>")), // /setdesc
     SETINIVAR("/setinivar", "Set server configuration variable", List.of("<llave>", "<clave>", "<valor>")), // /setinivar
     SHOW("/show", "Show server information panels", List.of("<SOS|INT>")), // /show
     SHOW_HIDDEN_PLAYERS("/showhiddenplayers", "Show hidden players", List.of()), // /ocultando
-    SHOW_LOCATION("/showlocation", "Show player's location", List.of("<nick>")), // /donde
+    SHOW_LOCATION("/showlocation", "Show player's location", List.of("<player>")), // /donde
     SHOW_MOBS("/showmobs", "Show mobs in specific map", List.of("<map>")), // /nene
     SHOW_NAME("/showname", "Toggle name display above characters", List.of()), // /showname
     SHOW_OBJ_MAP("/showobjmap", "Show objets in map", List.of()), // /piso
-    SHOW_PLAYER_SKILLS("/showplayerskills", "Show player's skills", List.of("<nick>")), // /skills
-    SHOW_PLAYER_SLOT("/showplayerslot", "Check player's inventory slot", List.of("<nick>", "<slot>")), // /slot
+    SHOW_PLAYER_SKILLS("/showplayerskills", "Show player's skills", List.of("<player>")), // /skills
+    SHOW_PLAYER_SLOT("/showplayerslot", "Check player's inventory slot", List.of("<player>", "<slot>")), // /slot
     SHOWIGNORED("/showignored", "Show ignored players list", List.of()), // /ignorado
     SHUTDOWN("/shutdown", "Shutdown the server", List.of()), // /apagar
-    SILENT("/silent", "Silence a player", List.of("<nick>")), // /silenciar
+    SILENT("/silent", "Silence a player", List.of("<player>")), // /silenciar
     SMSG("/smsg", "Send system message", List.of("<message>")), // /smsg
-    STAT("/stat", "Show player's statistics", List.of("<nick>")), // /stat
-    SUM("/sum", "Summon player to your location", List.of("<nick>")), // /sum
+    STAT("/stat", "Show player's statistics", List.of("<player>")), // /stat
+    SUM("/sum", "Summon player to your location", List.of("<player>")), // /sum
     TALKAS("/talkas", "Speak as NPC character", List.of("<message>")), // /talkas
     TELEPORT("/teleport", "Teleport player to location", List.of("[nick]", "[map]", "<x>", "<y>")), // /telep
-    TELEPORT_NEAR_TO_PLAYER("/teleportneartoplayer", "Teleport near specified player", List.of("<nick>")), // /ircerca
+    TELEPORT_NEAR_TO_PLAYER("/teleportneartoplayer", "Teleport near specified player", List.of("<player>")), // /ircerca
     TELEPORT_TARGET("/teleporttarget", "Teleport to target location", List.of()), // /teleploc
-    TELEPORT_TO_PLAYER("/teleporttoplayer", "Teleport to specific player", List.of("<nick>")), // /ira
+    TELEPORT_TO_PLAYER("/teleporttoplayer", "Teleport to specific player", List.of("<player>")), // /ira
     TIME("/time", "Show current server time", List.of()), // /hora
     TRIGGER("/trigger", "Set or check map trigger", List.of("<trigger>")), // /trigger
-    UNBAN("/unban", "Unban a player", List.of("<nick>")), // /unban
+    UNBAN("/unban", "Unban a player", List.of("<player>")), // /unban
     UNBANIP("/unbanip", "Unban an IP address", List.of("<ip>")), // /unbanip
-    WARNING("/warning", "Send warning to player", List.of("<nick>", "<reason>")); // /advertencia
+    WARNING("/warning", "Send warning to player", List.of("<player>", "<reason>")); // /advertencia
 
     private final String command;
     private final String description;

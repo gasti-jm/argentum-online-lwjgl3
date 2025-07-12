@@ -11,7 +11,7 @@ public class GuildVoteCommand extends BaseCommandHandler {
 
     @Override
     public void handle(CommandContext commandContext) throws CommandException {
-        requireArguments(commandContext, 1, GUILD_VOTE.getCommand() + " <nick>");
+        requireArguments(commandContext, 1, getCommandUsage(GUILD_VOTE));
         String nick = commandContext.getArgument(0);
         guildVote(nick);
     }

@@ -231,7 +231,7 @@ public final class CommandRegistry {
     public static Map<String, CommandHandler> buildCommandMap() {
         return commands.stream()
                 .collect(Collectors.toMap(
-                        Command::name,
+                        Command::command,
                         def -> def.factory().get(),
                         (existing, replacement) -> {
                             throw new IllegalStateException("Duplicate command: " + existing);
@@ -244,7 +244,7 @@ public final class CommandRegistry {
      */
     public static List<String> getAllCommandNames() {
         return commands.stream()
-                .map(Command::name)
+                .map(Command::command)
                 .sorted()
                 .toList();
     }
@@ -263,7 +263,7 @@ public final class CommandRegistry {
      */
     public static Optional<Command> getCommandInfo(String command) {
         return commands.stream()
-                .filter(cmd -> cmd.name().equals(command))
+                .filter(cmd -> cmd.command().equals(command))
                 .findFirst();
     }
 

@@ -11,7 +11,7 @@ public class RequestCharMailCommand extends BaseCommandHandler {
 
     @Override
     public void handle(CommandContext commandContext) throws CommandException {
-        requireArguments(commandContext, 1, LAST_EMAIL.getCommand() + " <nick>");
+        requireArguments(commandContext, 1, getCommandUsage(LAST_EMAIL));
         String nick = commandContext.getArgument(0);
         requestCharMail(nick);
     }

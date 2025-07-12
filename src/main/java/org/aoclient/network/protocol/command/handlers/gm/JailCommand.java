@@ -11,7 +11,7 @@ public class JailCommand extends BaseCommandHandler {
 
     @Override
     public void handle(CommandContext commandContext) throws CommandException {
-        requireArguments(commandContext, 3, JAIL.getCommand() + " <nick> <reason> <minutes>");
+        requireArguments(commandContext, 3, getCommandUsage(JAIL));
         requireString(commandContext, 0, "nick");
         requireString(commandContext, 1, "reason");
         requireInteger(commandContext, 2, "minutes");

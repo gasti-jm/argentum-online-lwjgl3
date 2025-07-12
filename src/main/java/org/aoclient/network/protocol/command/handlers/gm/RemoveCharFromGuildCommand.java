@@ -11,7 +11,7 @@ public class RemoveCharFromGuildCommand extends BaseCommandHandler {
 
     @Override
     public void handle(CommandContext commandContext) throws CommandException {
-        requireArguments(commandContext, 1, GUILD_KICK.getCommand() + " <nick>");
+        requireArguments(commandContext, 1, getCommandUsage(GUILD_KICK));
         String nick = commandContext.getArgument(0);
         removeCharFromGuild(nick);
     }

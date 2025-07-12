@@ -11,7 +11,7 @@ public class SilenceCommand extends BaseCommandHandler {
 
     @Override
     public void handle(CommandContext commandContext) throws CommandException {
-        requireArguments(commandContext, 1, SILENT.getCommand() + " <nick>");
+        requireArguments(commandContext, 1, getCommandUsage(SILENT));
         String nick = commandContext.getArgument(0);
         silence(nick);
     }

@@ -11,7 +11,7 @@ public class GoToCharCommand extends BaseCommandHandler {
 
     @Override
     public void handle(CommandContext commandContext) throws CommandException {
-        requireArguments(commandContext, 1, TELEPORT_TO_PLAYER.getCommand() + " <nick>");
+        requireArguments(commandContext, 1, getCommandUsage(TELEPORT_TO_PLAYER));
         String nick = commandContext.getArgument(0);
         goToChar(nick);
     }

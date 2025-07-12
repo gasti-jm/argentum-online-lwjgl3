@@ -1,9 +1,12 @@
 package org.aoclient.network.protocol.command.handlers;
 
 import org.aoclient.engine.game.User;
+import org.aoclient.network.protocol.command.core.Command;
 import org.aoclient.network.protocol.command.core.CommandContext;
 import org.aoclient.network.protocol.command.core.CommandException;
 import org.aoclient.network.protocol.command.core.CommandHandler;
+import org.aoclient.network.protocol.command.execution.CommandRegistry;
+import org.aoclient.network.protocol.command.metadata.GameCommand;
 
 /**
  * Clase abstracta que proporciona una implementacion base para manejar comandos, estableciendo validaciones comunes y utilidades
@@ -33,6 +36,15 @@ public abstract class BaseCommandHandler implements CommandHandler {
     /** Indica un numero ilimitado de argumentos cuando se pasa como parametro a los metodos de validacion de argumentos. */
     protected final int UNLIMITED_ARGUMENTS = -1;
     protected User user = User.INSTANCE;
+
+    /**
+     * Obtiene el uso/sintaxis del comando basado en el GameCommand.
+     */
+    protected static String getCommandUsage(GameCommand gameCommand) {
+        return CommandRegistry.getCommandInfo(gameCommand.getCommand())
+                .map(Command::getUsage)
+                .orElse(gameCommand.getCommand() + " <args>");
+    }
 
     protected void requireArguments(CommandContext commandContext, int count, String usage) throws CommandException {
         if (!commandContext.hasArguments()) showError("Missing arguments. Usage: " + usage);

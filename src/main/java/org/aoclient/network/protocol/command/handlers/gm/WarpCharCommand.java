@@ -6,6 +6,7 @@ import org.aoclient.network.protocol.command.core.CommandException;
 import org.aoclient.network.protocol.command.handlers.BaseCommandHandler;
 
 import static org.aoclient.network.protocol.Protocol.warpChar;
+import static org.aoclient.network.protocol.command.metadata.GameCommand.TELEPORT;
 
 /**
  * Comando para teletransportar personajes.
@@ -42,7 +43,7 @@ public class WarpCharCommand extends BaseCommandHandler {
             case 3 -> handleThreeArguments(commandContext);
             case 4 -> handleFourArguments(commandContext);
             default -> {
-                String usage = "Usage: /teleport [nick] [map] <x> <y>";
+                String usage = "Usage: " + getCommandUsage(TELEPORT);
                 if (commandContext.getArgumentCount() < 2) showError("Missing arguments. " + usage);
                 if (commandContext.getArgumentCount() > 4) showError("Too many arguments. " + usage);
             }

@@ -15,7 +15,7 @@ public class GambleCommand extends BaseCommandHandler {
             showError("You are dead!");
             return;
         }
-        requireArguments(commandContext, 1, BET.getCommand() + " <amount>");
+        requireArguments(commandContext, 1, getCommandUsage(BET));
         requireShort(commandContext, 0, "amount");
 
         short amount = Short.parseShort(commandContext.getArgument(0));
