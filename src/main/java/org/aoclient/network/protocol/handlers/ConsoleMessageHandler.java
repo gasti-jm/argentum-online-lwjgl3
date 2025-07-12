@@ -21,9 +21,6 @@ public class ConsoleMessageHandler implements PacketHandler {
         Console.INSTANCE.addMsgToConsole(chat, false, false, new RGBColor(fontType.r, fontType.g, fontType.b));
 
 
-        //        With FontTypes(FontIndex)
-        //            Call AddtoRichTextBox(//FrmMain.RecTxt, chat, .red, .green, .blue, .bold, .italic)
-        //        End With
         //
         //        ' Para no perder el foco cuando chatea por party
         //        If FontIndex = FontTypeNames.FONTTYPE_PARTY Then
