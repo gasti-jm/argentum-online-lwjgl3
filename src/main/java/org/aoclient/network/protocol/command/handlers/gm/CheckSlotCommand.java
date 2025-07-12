@@ -11,7 +11,7 @@ public class CheckSlotCommand extends BaseCommandHandler {
 
     @Override
     public void handle(CommandContext commandContext) throws CommandException {
-        requireArguments(commandContext, 2, SHOW_PLAYER_SLOT.getCommand() + " <nick> <slot>");
+        requireArguments(commandContext, 2, getCommandUsage(SHOW_PLAYER_SLOT));
         requireString(commandContext, 0, "nick");
         requireInteger(commandContext, 1, "slot");
 

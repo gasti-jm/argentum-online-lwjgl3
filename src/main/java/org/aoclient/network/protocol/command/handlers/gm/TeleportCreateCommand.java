@@ -1,20 +1,19 @@
 package org.aoclient.network.protocol.command.handlers.gm;
 
-import org.aoclient.network.protocol.command.handlers.BaseCommandHandler;
 import org.aoclient.network.protocol.command.core.CommandContext;
 import org.aoclient.network.protocol.command.core.CommandException;
+import org.aoclient.network.protocol.command.handlers.BaseCommandHandler;
 
 import static org.aoclient.network.protocol.Protocol.teleportCreate;
 import static org.aoclient.network.protocol.command.metadata.GameCommand.CREATE_TELEPORT;
 
 public class TeleportCreateCommand extends BaseCommandHandler {
 
-    private static final String USAGE = CREATE_TELEPORT.getCommand() + " <map> <x> <y> [radius]";
-
     @Override
     public void handle(CommandContext commandContext) throws CommandException {
         // Si tiene menos de 3 argumentos o mas de 4
-        if (commandContext.getArgumentCount() < 3 || commandContext.getArgumentCount() > 4) showError("Missing arguments. Usage: " + USAGE);
+        if (commandContext.getArgumentCount() < 3 || commandContext.getArgumentCount() > 4)
+            showError("Missing arguments. Usage: " + getCommandUsage(CREATE_TELEPORT));
 
         requireInteger(commandContext, 0, "map");
         requireInteger(commandContext, 1, "x");

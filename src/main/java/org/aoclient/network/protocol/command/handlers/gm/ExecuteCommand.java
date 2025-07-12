@@ -11,7 +11,7 @@ public class ExecuteCommand extends BaseCommandHandler {
 
     @Override
     public void handle(CommandContext commandContext) throws CommandException {
-        requireArguments(commandContext, 1, EXECUTE.getCommand() + " <nick>");
+        requireArguments(commandContext, 1, getCommandUsage(EXECUTE));
         String nick = commandContext.getArgument(0);
         execute(nick);
     }

@@ -11,7 +11,7 @@ public class MakeDumbNoMoreCommand extends BaseCommandHandler {
 
     @Override
     public void handle(CommandContext commandContext) throws CommandException {
-        requireArguments(commandContext, 1, NO_STUPID.getCommand() + " <nick>");
+        requireArguments(commandContext, 1, getCommandUsage(NO_STUPID));
         String nick = commandContext.getArgument(0);
         makeDumbNoMore(nick);
     }

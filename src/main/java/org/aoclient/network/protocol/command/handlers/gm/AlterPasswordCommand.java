@@ -11,7 +11,7 @@ public class AlterPasswordCommand extends BaseCommandHandler {
 
     @Override
     public void handle(CommandContext commandContext) throws CommandException {
-        requireArguments(commandContext, 2, APASS.getCommand() + " <pjsinpass> <pjconpass>");
+        requireArguments(commandContext, 2, getCommandUsage(APASS));
         requireString(commandContext, 0, "pjsinpass");
         requireString(commandContext, 1, "pjconpass");
 

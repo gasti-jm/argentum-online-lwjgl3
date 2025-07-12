@@ -11,7 +11,7 @@ public class RoyalArmyKickCommand extends BaseCommandHandler {
 
     @Override
     public void handle(CommandContext commandContext) throws CommandException {
-        requireArguments(commandContext, 1, NO_REAL.getCommand() + " <nick>");
+        requireArguments(commandContext, 1, getCommandUsage(NO_REAL));
         String nick = commandContext.getArgument(0);
         royalArmyKick(nick);
     }

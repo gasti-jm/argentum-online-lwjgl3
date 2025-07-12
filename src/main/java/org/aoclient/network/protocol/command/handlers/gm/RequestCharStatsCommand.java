@@ -11,7 +11,7 @@ public class RequestCharStatsCommand extends BaseCommandHandler {
 
     @Override
     public void handle(CommandContext commandContext) throws CommandException {
-        requireArguments(commandContext, 1, STAT.getCommand() + " <nick>");
+        requireArguments(commandContext, 1, getCommandUsage(STAT));
         String nick = commandContext.getArgument(0);
         requestCharStats(nick);
     }

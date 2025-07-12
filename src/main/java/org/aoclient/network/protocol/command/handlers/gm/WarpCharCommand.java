@@ -1,11 +1,12 @@
 package org.aoclient.network.protocol.command.handlers.gm;
 
 import org.aoclient.engine.game.Options;
-import org.aoclient.network.protocol.command.handlers.BaseCommandHandler;
 import org.aoclient.network.protocol.command.core.CommandContext;
 import org.aoclient.network.protocol.command.core.CommandException;
+import org.aoclient.network.protocol.command.handlers.BaseCommandHandler;
 
 import static org.aoclient.network.protocol.Protocol.warpChar;
+import static org.aoclient.network.protocol.command.metadata.GameCommand.TELEPORT;
 
 /**
  * Comando para teletransportar personajes.
@@ -13,9 +14,9 @@ import static org.aoclient.network.protocol.Protocol.warpChar;
  * Formatos aceptados:
  * <ul>
  *  <li>{@code /teleport <x> <y>}               - Teletransporta al usuario actual en el mismo mapa
- *  <li>{@code /teleport <nick> <x> <y>}        - Teletransporta a otro jugador al mapa actual
- *  <li>{@code /teleport <map> <x> <y>}         - Teletransporta al usuario actual al mapa especificado
- *  <li>{@code /teleport <nick> <map> <x> <y>}  - Teletransporta a otro jugador al mapa especificado
+ *  <li>{@code /teleport [nick] <x> <y>}        - Teletransporta a otro jugador al mapa actual
+ *  <li>{@code /teleport [map] <x> <y>}         - Teletransporta al usuario actual al mapa especificado
+ *  <li>{@code /teleport [nick] [map] <x> <y>}  - Teletransporta a otro jugador al mapa especificado
  * </ul>
  * <p>
  * NOTA: Para distinguir entre nick y map en el formato de 3 argumentos:
@@ -42,14 +43,9 @@ public class WarpCharCommand extends BaseCommandHandler {
             case 3 -> handleThreeArguments(commandContext);
             case 4 -> handleFourArguments(commandContext);
             default -> {
-                String USAGE = """
-                        Usage:
-                        /teleport <x> <y>
-                        /teleport <nick> <x> <y>
-                        /teleport <map> <x> <y>
-                        /teleport <nick> <map> <x> <y>""";
-                if (commandContext.getArgumentCount() < 2) showError("Missing arguments. " + USAGE);
-                if (commandContext.getArgumentCount() > 4) showError("Too many arguments. " + USAGE);
+                String usage = "Usage: " + getCommandUsage(TELEPORT);
+                if (commandContext.getArgumentCount() < 2) showError("Missing arguments. " + usage);
+                if (commandContext.getArgumentCount() > 4) showError("Too many arguments. " + usage);
             }
         }
     }
@@ -63,7 +59,7 @@ public class WarpCharCommand extends BaseCommandHandler {
     }
 
     /**
-     * Maneja el formato: {@code /teleport <nick> <x> <y>} o {@code /teleport <map> <x> <y>}.
+     * Maneja el formato: {@code /teleport [nick] <x> <y>} o {@code /teleport [map] <x> <y>}.
      */
     private void handleThreeArguments(CommandContext context) throws CommandException {
         String firstArg = context.getArgument(0);
@@ -72,7 +68,7 @@ public class WarpCharCommand extends BaseCommandHandler {
     }
 
     /**
-     * Maneja el formato: {@code /teleport <map> <x> <y>}.
+     * Maneja el formato: {@code /teleport [map] <x> <y>}.
      */
     private void handleMap(CommandContext context) throws CommandException {
         short map = parseMap(context, 0);
@@ -81,7 +77,7 @@ public class WarpCharCommand extends BaseCommandHandler {
     }
 
     /**
-     * Maneja el formato: {@code /teleport <nick> <x> <y>}.
+     * Maneja el formato: {@code /teleport [nick] <x> <y>}.
      */
     private void handleNick(CommandContext context) throws CommandException {
         requireString(context, 0, "nick");
@@ -91,7 +87,7 @@ public class WarpCharCommand extends BaseCommandHandler {
     }
 
     /**
-     * Maneja el formato: {@code /teleport <nick> <map> <x> <y>}.
+     * Maneja el formato: {@code /teleport [nick] [map] <x> <y>}.
      */
     private void handleFourArguments(CommandContext context) throws CommandException {
         requireString(context, 0, "nick");

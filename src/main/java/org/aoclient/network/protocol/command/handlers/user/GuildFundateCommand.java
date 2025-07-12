@@ -14,7 +14,7 @@ public class GuildFundateCommand extends BaseCommandHandler {
     public void handle(CommandContext commandContext) throws CommandException {
         if (user.getUserLvl() < MIN_LEVEL_REQUIRED)
             showError("To found a clan you must be level 25 and have 90 leadership skills.");
-        guildFundate();
+        guildFundate(); // TODO No falta el argumento del nombre del clan?
     }
 
 }

@@ -11,7 +11,7 @@ public class ShowGuildMessagesCommand extends BaseCommandHandler {
 
     @Override
     public void handle(CommandContext commandContext) throws CommandException {
-        requireArguments(commandContext, 1, GUILD_MSG_HISTORY.getCommand() + " <name>");
+        requireArguments(commandContext, 1, getCommandUsage(GUILD_MSG_HISTORY));
         String name = commandContext.getArgument(0);
         showGuildMessages(name);
     }

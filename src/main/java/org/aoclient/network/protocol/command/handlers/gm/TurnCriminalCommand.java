@@ -11,7 +11,7 @@ public class TurnCriminalCommand extends BaseCommandHandler {
 
     @Override
     public void handle(CommandContext commandContext) throws CommandException {
-        requireArguments(commandContext, 1, CONDEN.getCommand() + " <nick>");
+        requireArguments(commandContext, 1, getCommandUsage(CONDEN));
         String nick = commandContext.getArgument(0);
         turnCriminal(nick);
     }

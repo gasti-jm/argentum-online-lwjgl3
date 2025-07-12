@@ -1,10 +1,7 @@
 package org.aoclient.engine.scenes;
 
 import org.aoclient.engine.Window;
-import org.aoclient.engine.game.Dialogs;
-import org.aoclient.engine.game.IntervalTimer;
-import org.aoclient.engine.game.Rain;
-import org.aoclient.engine.game.User;
+import org.aoclient.engine.game.*;
 import org.aoclient.engine.game.models.Direction;
 import org.aoclient.engine.game.models.Key;
 import org.aoclient.engine.game.models.Skill;
@@ -238,14 +235,14 @@ public final class GameScene extends Scene {
                     ImGUISystem.INSTANCE.show(new FCantidad());
                     break;
                 case TALK:
-                    if (!ImGUISystem.INSTANCE.isFormVisible(FCantidad.class.getSimpleName())) {
-                        if (user.isTalking()) {
-                            if (!frmMain.getSendText().isBlank()) {
-                                if (!frmMain.getSendText().startsWith("/")) Protocol.talk(frmMain.getSendText());
-                                else CommandExecutor.INSTANCE.execute(frmMain.getSendText());
-                            }
-                            user.setTalking(false);
-                        } else user.setTalking(true);
+                    if (!ImGUISystem.INSTANCE.isFormVisible(FCantidad.class.getSimpleName())) { // ?
+                        if (!frmMain.getSendText().isBlank() && user.isTalking()) {
+                            if (!frmMain.getSendText().startsWith("/")) {
+                                Console.INSTANCE.addMsgToConsole("[" + User.INSTANCE.getUserName().toLowerCase() + "] " + frmMain.getSendText(), false, false, new RGBColor(1f, 1f, 1f));
+                                Protocol.talk(frmMain.getSendText());
+                            } else CommandExecutor.INSTANCE.execute(frmMain.getSendText());
+                        }
+                        user.setTalking(!user.isTalking());
                         frmMain.clearSendTxt();
                     }
                     break;

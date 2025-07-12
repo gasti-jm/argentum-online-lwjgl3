@@ -11,7 +11,7 @@ public class RequestCharGoldCommand extends BaseCommandHandler {
 
     @Override
     public void handle(CommandContext commandContext) throws CommandException {
-        requireArguments(commandContext, 1, REQUEST_CHAR_GOLD.getCommand() + " <nick>");
+        requireArguments(commandContext, 1, getCommandUsage(REQUEST_CHAR_GOLD));
         String nick = commandContext.getArgument(0);
         requestCharGold(nick);
     }

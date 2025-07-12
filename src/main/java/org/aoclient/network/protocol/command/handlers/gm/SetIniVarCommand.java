@@ -11,7 +11,7 @@ public class SetIniVarCommand extends BaseCommandHandler {
 
     @Override
     public void handle(CommandContext commandContext) throws CommandException {
-        requireArguments(commandContext, 3, SETINIVAR.getCommand() + " <llave> <clave> <valor>");
+        requireArguments(commandContext, 3, getCommandUsage(SETINIVAR));
         requireString(commandContext, 0, "llave");
         requireString(commandContext, 1, "clave");
         requireString(commandContext, 2, "valor");

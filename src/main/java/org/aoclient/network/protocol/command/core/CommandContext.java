@@ -79,7 +79,6 @@ public record CommandContext(
         return trimmedCommand.split("\\s+", COMMAND_SPLIT_LIMIT);
     }
 
-
     /**
      * Extrae la parte de los argumentos "en crudo" desde un comando ya dividido en sus partes. Si el comando contiene al menos
      * dos partes, devuelve la segunda parte que corresponde a los argumentos como una cadena de texto completa. Si no hay una

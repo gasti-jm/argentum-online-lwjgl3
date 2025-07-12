@@ -16,7 +16,7 @@ public class BankExtractGoldCommand extends BaseCommandHandler {
             showError("You are dead!");
             return;
         }
-        requireArguments(commandContext, 1, EXTRACT_GOLD.getCommand() + " <quantity>");
+        requireArguments(commandContext, 1, getCommandUsage(EXTRACT_GOLD));
         requireInteger(commandContext, 0, "quantity");
 
         int quantity = Integer.parseInt(commandContext.getArgument(0));

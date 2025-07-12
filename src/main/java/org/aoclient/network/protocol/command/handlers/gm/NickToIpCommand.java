@@ -11,7 +11,7 @@ public class NickToIpCommand extends BaseCommandHandler {
 
     @Override
     public void handle(CommandContext commandContext) throws CommandException {
-        requireArguments(commandContext, 1, NICK2IP.getCommand() + " <nick>");
+        requireArguments(commandContext, 1, getCommandUsage(NICK2IP));
         String nick = commandContext.getArgument(0);
         nickToIP(nick);
     }

@@ -25,7 +25,7 @@ public class IpToNickCommand extends BaseCommandHandler {
 
     @Override
     public void handle(CommandContext commandContext) throws CommandException {
-        requireArguments(commandContext, 1, IP2NICK.getCommand() + " <ip>");
+        requireArguments(commandContext, 1, getCommandUsage(IP2NICK));
 
         String ip = commandContext.argumentsRaw();
 

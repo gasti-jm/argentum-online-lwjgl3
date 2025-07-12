@@ -50,6 +50,7 @@ public enum CommandExecutor {
                 } catch (CommandException e) {
                     Console.INSTANCE.addMsgToConsole(e.getMessage(), false, true, new RGBColor());
                 }
+
             } else
                 Console.INSTANCE.addMsgToConsole("'" + commandContext.command() + "' is not a game command. See '/?'.", false, true, new RGBColor());
         }

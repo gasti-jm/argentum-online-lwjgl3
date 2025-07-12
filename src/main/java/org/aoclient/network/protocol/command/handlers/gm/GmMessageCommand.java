@@ -11,7 +11,7 @@ public class GmMessageCommand extends BaseCommandHandler {
 
     @Override
     public void handle(CommandContext commandContext) throws CommandException {
-        requireArguments(commandContext, UNLIMITED_ARGUMENTS, GMSG.getCommand() + " <message>");
+        requireArguments(commandContext, UNLIMITED_ARGUMENTS, getCommandUsage(GMSG));
         requireValidString(commandContext, "message", REGEX);
         String message = commandContext.argumentsRaw().trim();
         GMMessage(message);

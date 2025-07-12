@@ -11,7 +11,7 @@ public class KickCommand extends BaseCommandHandler {
 
     @Override
     public void handle(CommandContext commandContext) throws CommandException {
-        requireArguments(commandContext, 1, KICK.getCommand() + " <nick>");
+        requireArguments(commandContext, 1, getCommandUsage(KICK));
         String nick = commandContext.getArgument(0);
         kick(nick);
     }

@@ -11,7 +11,7 @@ public class PartyMessageCommand extends BaseCommandHandler {
 
     @Override
     public void handle(CommandContext commandContext) throws CommandException {
-        requireArguments(commandContext, UNLIMITED_ARGUMENTS, PARTY_MSG.getCommand() + " <message>");
+        requireArguments(commandContext, UNLIMITED_ARGUMENTS, getCommandUsage(PARTY_MSG));
         requireValidString(commandContext, "message", REGEX);
         String message = commandContext.argumentsRaw().trim();
         partyMessage(message);

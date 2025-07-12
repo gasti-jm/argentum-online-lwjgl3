@@ -11,7 +11,7 @@ public class RequestCharBankCommand extends BaseCommandHandler {
 
     @Override
     public void handle(CommandContext commandContext) throws CommandException {
-        requireArguments(commandContext, 1, REQUEST_CHAR_BANK.getCommand() + " <nick>");
+        requireArguments(commandContext, 1, getCommandUsage(REQUEST_CHAR_BANK));
         String nick = commandContext.getArgument(0);
         requestCharBank(nick);
     }

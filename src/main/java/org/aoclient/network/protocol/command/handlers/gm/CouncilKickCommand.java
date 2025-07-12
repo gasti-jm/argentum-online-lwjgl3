@@ -11,7 +11,7 @@ public class CouncilKickCommand extends BaseCommandHandler {
 
     @Override
     public void handle(CommandContext commandContext) throws CommandException {
-        requireArguments(commandContext, 1, KICK_CONSE.getCommand() + " <nick>");
+        requireArguments(commandContext, 1, getCommandUsage(KICK_CONSE));
         String nick = commandContext.getArgument(0);
         councilKick(nick);
     }

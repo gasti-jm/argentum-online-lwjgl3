@@ -11,7 +11,7 @@ public class PartySetLeaderCommand extends BaseCommandHandler {
 
     @Override
     public void handle(CommandContext commandContext) throws CommandException {
-        requireArguments(commandContext, 1, PARTY_SET_LEADER.getCommand() + " <nick>");
+        requireArguments(commandContext, 1, getCommandUsage(PARTY_SET_LEADER));
         String nick = commandContext.getArgument(0);
         partySetLeader(nick);
     }

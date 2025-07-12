@@ -1,9 +1,9 @@
 package org.aoclient.network.protocol.command.handlers.gm;
 
-import org.aoclient.network.protocol.command.handlers.BaseCommandHandler;
 import org.aoclient.network.protocol.command.core.CommandContext;
 import org.aoclient.network.protocol.command.core.CommandException;
 import org.aoclient.network.protocol.command.core.CommandValidator;
+import org.aoclient.network.protocol.command.handlers.BaseCommandHandler;
 
 import static org.aoclient.network.protocol.Protocol.banIP;
 import static org.aoclient.network.protocol.command.metadata.GameCommand.BAN_IP;
@@ -12,7 +12,7 @@ public class BanIpCommand extends BaseCommandHandler {
 
     @Override
     public void handle(CommandContext commandContext) throws CommandException {
-        requireArguments(commandContext, 2, BAN_IP.getCommand() + " <ip|nick> <reason>");
+        requireArguments(commandContext, 2, getCommandUsage(BAN_IP));
         requireString(commandContext, 0, "ip|nick");
         requireString(commandContext, 1, "reason");
 

@@ -11,7 +11,7 @@ public class SystemMessageCommand extends BaseCommandHandler {
 
     @Override
     public void handle(CommandContext commandContext) throws CommandException {
-        requireArguments(commandContext, UNLIMITED_ARGUMENTS, SMSG.getCommand() + " <message>");
+        requireArguments(commandContext, UNLIMITED_ARGUMENTS, getCommandUsage(SMSG));
         requireValidString(commandContext, "message", REGEX);
         String message = commandContext.argumentsRaw().trim();
         systemMessage(message);

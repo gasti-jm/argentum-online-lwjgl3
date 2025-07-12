@@ -11,7 +11,7 @@ public class ForgiveCommand extends BaseCommandHandler {
 
     @Override
     public void handle(CommandContext commandContext) throws CommandException {
-        requireArguments(commandContext, 1, FORGIVE.getCommand() + " <nick>");
+        requireArguments(commandContext, 1, getCommandUsage(FORGIVE));
         String nick = commandContext.getArgument(0);
         forgive(nick);
     }

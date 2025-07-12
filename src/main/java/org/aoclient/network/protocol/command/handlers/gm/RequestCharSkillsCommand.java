@@ -11,7 +11,7 @@ public class RequestCharSkillsCommand extends BaseCommandHandler {
 
     @Override
     public void handle(CommandContext commandContext) throws CommandException {
-        requireArguments(commandContext, 1, SHOW_PLAYER_SKILLS.getCommand() + " <nick>");
+        requireArguments(commandContext, 1, getCommandUsage(SHOW_PLAYER_SKILLS));
         String nick = commandContext.getArgument(0);
         requestCharSkills(nick);
     }

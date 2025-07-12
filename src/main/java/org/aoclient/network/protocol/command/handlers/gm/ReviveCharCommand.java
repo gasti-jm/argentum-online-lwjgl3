@@ -11,7 +11,7 @@ public class ReviveCharCommand extends BaseCommandHandler {
 
     @Override
     public void handle(CommandContext commandContext) throws CommandException {
-        requireArguments(commandContext, 1, REVIVIR.getCommand() + " <nick>");
+        requireArguments(commandContext, 1, getCommandUsage(REVIVIR));
         String nick = commandContext.getArgument(0);
         reviveChar(nick);
     }

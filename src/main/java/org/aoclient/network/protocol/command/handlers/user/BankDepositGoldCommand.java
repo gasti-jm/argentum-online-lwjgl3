@@ -15,7 +15,7 @@ public class BankDepositGoldCommand extends BaseCommandHandler {
             showError("You are dead!");
             return;
         }
-        requireArguments(commandContext, 1, DEPOSIT.getCommand() + " <quantity>");
+        requireArguments(commandContext, 1, getCommandUsage(DEPOSIT));
         requireInteger(commandContext, 0, "quantity");
 
         int quantity = Integer.parseInt(commandContext.getArgument(0));

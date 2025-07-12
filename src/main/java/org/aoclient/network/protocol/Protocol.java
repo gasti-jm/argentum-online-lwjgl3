@@ -31,6 +31,7 @@ import static org.lwjgl.glfw.GLFW.glfwGetTime;
 
 public class Protocol {
 
+
     private static final Console CONSOLE = Console.INSTANCE;
     private static final User USER = User.INSTANCE;
     private static final PacketReceiver PACKET_RECEIVER = new PacketReceiver();

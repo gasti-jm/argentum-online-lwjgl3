@@ -25,8 +25,6 @@ import static org.aoclient.scripts.Compressor.readResource;
  * <p>
  * Es fundamental para mostrar dialogos, mensajes del sistema, nombres de personajes y cualquier otro texto que aparece en el
  * juego.
- * <p>
- * FIXME Faltan algunos caracteres como '¡' en el archivo "fonts.bin"
  */
 
 public class FontRenderer {
@@ -147,48 +145,17 @@ public class FontRenderer {
     }
 
     /**
-     * Obtiene el indice grafico para un caracter especifico.
+     * Calcula el ancho total en pixeles que ocupa un texto al ser renderizado.
+     * <p>
+     * Este metodo procesa cada caracter del texto, considerando su representacion grafica y manejando los saltos de linea si se
+     * permite el texto multilinea. Para los caracteres que no tienen una representacion grafica especifica, se utiliza un ancho
+     * predeterminado. Adicionalmente, se consideran los espacios y saltos de linea explicitos o automaticos.
      *
-     * @param c         caracter a renderizar
-     * @param fontIndex indice de la fuente a utilizar
-     * @return indice grafico para el caracter, o null si no existe
-     */
-    private static Integer getCharGrhIndex(char c, int fontIndex) {
-        if (fontIndex >= fonts.length) fontIndex = NORMAL_FONT;
-        // Busca el caracter en el mapa
-        Integer grhIndex = fonts[fontIndex].characters.get(c);
-        // Si no se encuentra, intenta con el caracter de reemplazo
-        if (grhIndex == null) grhIndex = fonts[fontIndex].characters.get(REPLACEMENT_CHAR);
-        // Si aun no se encuentra, usa el primero disponible
-        if (grhIndex == null && !fonts[fontIndex].characters.isEmpty())
-            grhIndex = fonts[fontIndex].characters.values().iterator().next();
-        return grhIndex;
-    }
-
-    /**
-     * Obtiene el ancho en pixeles que ocupara un texto al ser renderizado en pantalla.
-     * <p>
-     * Este mtodo simula el comportamiento de renderizado de {@link #drawText} para determinar con precision el ancho que ocupara
-     * un texto, considerando:
-     * <ul>
-     *   <li>El ancho especifico de cada caracter segun su representacion grafica
-     *   <li>El manejo de espacios (4 pixeles cada uno)
-     *   <li>Los saltos de linea automaticos o explicitos en modo multilinea
-     *   <li>Un ancho predeterminado para caracteres sin representacion grafica
-     * </ul>
-     * <p>
-     * En modo multilinea, el mtodo calcula el ancho de la linea mas ancha, no la suma de todas las lineas. Esto es util para
-     * determinar el ancho total necesario para mostrar el texto completo.
-     * <p>
-     * Este mtodo es fundamental para el posicionamiento y alineacion de texto en la interfaz del juego, asegurando que elementos
-     * como botones, etiquetas y cuadros de dialogo tengan el tamaño adecuado para su contenido.
-     *
-     * @param text      texto cuyo ancho se desea calcular, si es {@code null} o vacio, el mtodo devuelve 0
-     * @param multiLine indica si el texto puede dividirse en multiples lineas. Si es {@code true}, el mtodo considerara saltos de
-     *                  linea automaticos cada 20 caracteres o por caracteres de nueva linea ('\n'). Si es {@code false}, todo el
-     *                  texto se considera como una sola linea continua.
-     * @return El ancho en pixeles que ocupara el texto al ser renderizado. Para textos multilinea, devuelve el ancho de la linea
-     * mas ancha.
+     * @param text      Texto cuyo ancho sera calculado. Si es nulo o vacio, el ancho devuelto sera 0.
+     * @param multiLine Indica si el texto puede dividirse en multiples lineas. Si es {@code true}, se aplican saltos de linea
+     *                  automaticos y se calcula el ancho maximo por linea. Si es {@code false}, todo el texto se tratara como una
+     *                  sola linea.
+     * @return El ancho total en pixeles que ocupa el texto. Si es vacio o nulo, se retorna 0.
      */
     public static int getTextWidth(String text, boolean multiLine) {
         int retVal = 0; // Almacena el ancho maximo de todas las lineas
@@ -229,33 +196,16 @@ public class FontRenderer {
     }
 
     /**
-     * Calcula la altura total en pixeles que ocupara un texto al ser renderizado en pantalla.
+     * Calcula la altura total en pixeles que ocupa un texto al ser renderizado, basandose en el numero de lineas de texto.
      * <p>
-     * Este metodo determina el espacio vertical necesario para mostrar un texto completo, considerando si debe tratarse como una
-     * sola linea o como texto con multiples lineas. La altura se calcula en base a:
-     * <ul>
-     *   <li>Altura fija de 14 pixeles por cada linea de texto
-     *   <li>Saltos de linea explicitos ('\n') en el texto
-     *   <li>Saltos de linea automaticos cada 20 caracteres (cuando se encuentra un espacio o retorno de carro)
-     * </ul>
-     * <p>
-     * Para texto de una sola linea, el metodo optimiza el calculo retornando inmediatamente el valor fijo de 14 pixeles sin
-     * procesar el contenido del texto.
-     * <p>
-     * Este metodo es complementario a {@link #getTextWidth} y resulta esencial para:
-     * <ul>
-     *   <li>Calcular el espacio vertical necesario para contenedores de texto
-     *   <li>Posicionar correctamente elementos debajo del texto
-     *   <li>Dimensionar adecuadamente elementos de interfaz como dialogos o tooltips
-     *   <li>Centrar verticalmente el texto en un area especifica
-     * </ul>
+     * Si el texto es de una sola linea, se utiliza una altura fija estandar. Si es multilinea, se calculan las lineas necesarias
+     * considerando los saltos de linea y un maximo de 20 caracteres por linea.
      *
-     * @param text      Texto cuya altura se desea calcular. Si es vacio, se considerara como una sola linea (14 pixeles).
-     * @param multiLine Indica si el texto puede dividirse en multiples lineas. Si es {@code false}, el metodo devuelve
-     *                  inmediatamente 14 pixeles sin analizar el texto. Si es {@code true}, se analizan los saltos de linea
-     *                  explicitos y automaticos.
-     * @return La altura total en pixeles que ocupara el texto al ser renderizado. Para textos de una sola linea siempre sera 14
-     * sera 14 pixeles. Para textos multilinea, sera el numero de lineas multiplicado por 14.
+     * @param text      El texto para el cual se calcula la altura. No debe ser nulo.
+     * @param multiLine Indica si el texto puede dividirse en multiples lineas. Si es {@code true}, se procesan los saltos de
+     *                  linea explicitos y automáticos. Si es {@code false}, el texto se considera de una sola linea.
+     * @return La altura total en pixeles del texto calculada en base al numero de lineas. Devuelve 14 si el texto es de una sola
+     * linea.
      */
     public static int getTextHeight(String text, boolean multiLine) {
         // Si el texto no es multilinea, siempre devuelve 14 pixeles, que es la altura estandar de una linea de texto
@@ -287,6 +237,25 @@ public class FontRenderer {
         for (Character c : fonts[HIT_FONT].characters.keySet())
             System.out.print(c + (++i % 10 == 0 ? "\n" : " "));
         System.out.println();
+    }
+
+    /**
+     * Obtiene el indice grafico para un caracter especifico.
+     *
+     * @param c         caracter a renderizar
+     * @param fontIndex indice de la fuente a utilizar
+     * @return indice grafico para el caracter, o null si no existe
+     */
+    private static Integer getCharGrhIndex(char c, int fontIndex) {
+        if (fontIndex >= fonts.length) fontIndex = NORMAL_FONT;
+        // Busca el caracter en el mapa
+        Integer grhIndex = fonts[fontIndex].characters.get(c);
+        // Si no se encuentra, intenta con el caracter de reemplazo
+        if (grhIndex == null) grhIndex = fonts[fontIndex].characters.get(REPLACEMENT_CHAR);
+        // Si aun no se encuentra, usa el primero disponible
+        if (grhIndex == null && !fonts[fontIndex].characters.isEmpty())
+            grhIndex = fonts[fontIndex].characters.values().iterator().next();
+        return grhIndex;
     }
 
     private static class Font {

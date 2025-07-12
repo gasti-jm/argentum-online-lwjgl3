@@ -11,7 +11,7 @@ public class ChaosLegionKickCommand extends BaseCommandHandler {
 
     @Override
     public void handle(CommandContext commandContext) throws CommandException {
-        requireArguments(commandContext, 1, REMOVE_PLAYER_FROM_CHAOS.getCommand() + " <nick>");
+        requireArguments(commandContext, 1, getCommandUsage(REMOVE_PLAYER_FROM_CHAOS));
         requireString(commandContext, 0, "nick");
         String nick = commandContext.getArgument(0);
         chaosLegionKick(nick);
