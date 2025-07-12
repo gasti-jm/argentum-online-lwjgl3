@@ -24,7 +24,7 @@ import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static org.aoclient.engine.Sound.playMusic;
+import static org.aoclient.engine.Sound.*;
 import static org.aoclient.engine.game.models.Character.*;
 import static org.aoclient.engine.renderer.Drawn.*;
 import static org.aoclient.engine.utils.GameData.*;
@@ -57,17 +57,6 @@ public final class FCreateCharacter extends Form {
 
     // Necesito hacer esto para dibujar despues el cuerpo y cabeza por encima de la interfaz
     private Texture background;
-
-    // Botones
-    // IDs de textura para los botones Volver (normal, rollover y click)
-    private int botonVolverTextureId;
-    private int botonVolverRolloverTextureId;
-    private int botonVolverClickTextureId;
-
-    // IDs de textura para el botón crear personaje (normal, rollover y click)
-    private int botonCrearTextureId;
-    private int botonCrearRolloverTextureId;
-    private int botonCrearClickTextureId;
 
     // Botones con 3 estados
     private ImageButton3State btnVolver;
@@ -135,27 +124,19 @@ public final class FCreateCharacter extends Form {
             this.giveBodyAndHead();
 
 
-            // botones
-            this.botonVolverTextureId = loadTexture("BotonVolverRollover");
-            this.botonVolverRolloverTextureId = loadTexture("BotonVolverRollover");
-            this.botonVolverClickTextureId = loadTexture("BotonVolverClick");
-
-            this.botonCrearTextureId = loadTexture("BotonCrearPersonajeRollover");
-            this.botonCrearRolloverTextureId = loadTexture("BotonCrearPersonajeRollover");
-            this.botonCrearClickTextureId = loadTexture("BotonCrearPersonajeClick");
-
-
-            // Instanciar botones reutilizando la clase utilitaria
             btnVolver = new ImageButton3State(
-                    botonVolverTextureId, botonVolverRolloverTextureId, botonVolverClickTextureId,
+                    loadTexture("BotonVolverRollover"),
+                    loadTexture("BotonVolverRollover"),
+                    loadTexture("BotonVolverClick"),
                     94, 546, 86, 30
             );
 
             btnCrearPj = new ImageButton3State(
-                    botonCrearTextureId, botonCrearRolloverTextureId, botonCrearClickTextureId,
+                    loadTexture("BotonCrearPersonajeRollover"),
+                    loadTexture("BotonCrearPersonajeRollover"),
+                    loadTexture("BotonCrearPersonajeRollover"),
                     611, 546, 174, 29
             );
-
 
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -204,11 +185,13 @@ public final class FCreateCharacter extends Form {
 
         // btnVolver
         if(btnVolver.render()) {
+            playSound(SND_CLICK);
             this.buttonGoBack();
         }
 
         // btnCreateCharacter
         if(btnCrearPj.render()) {
+            playSound(SND_CLICK);
             this.buttonCreateCharacter();
         }
 
