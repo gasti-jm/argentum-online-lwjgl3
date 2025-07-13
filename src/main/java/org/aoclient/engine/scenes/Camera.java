@@ -34,11 +34,13 @@ public final class Camera {
     // Tiles visibles segun la pantalla
     public static final int HALF_WINDOW_TILE_WIDTH = (SCREEN_SIZE_X / TILE_PIXEL_SIZE) / 2;
     public static final int HALF_WINDOW_TILE_HEIGHT = (SCREEN_SIZE_Y / TILE_PIXEL_SIZE) / 2;
+
     // limites del mapa
     public static final int minXBorder = XMinMapSize + ((SCREEN_SIZE_X / TILE_PIXEL_SIZE) / 2);
     public static final int maxXBorder = XMaxMapSize - ((SCREEN_SIZE_X / TILE_PIXEL_SIZE) / 2);
     public static final int minYBorder = YMinMapSize + ((SCREEN_SIZE_Y / TILE_PIXEL_SIZE) / 2);
     public static final int maxYBorder = YMaxMapSize - ((SCREEN_SIZE_Y / TILE_PIXEL_SIZE) / 2);
+
     private int screenminY, screenmaxY;
     private int screenminX, screenmaxX;
     private int minY, maxY;
@@ -69,7 +71,6 @@ public final class Camera {
         screenminX = tileX - HALF_WINDOW_TILE_WIDTH;
         screenmaxX = tileX + HALF_WINDOW_TILE_WIDTH;
 
-        // este es el rango minimo que se va a recorrer
         // este es el rango minimo que se va a recorrer
         minY = screenminY - TILE_BUFFER_SIZE;
         maxY = screenmaxY + TILE_BUFFER_SIZE;

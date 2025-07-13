@@ -54,9 +54,11 @@ public class FGuildAdm extends Form {
     @Override
     public void render() {
         ImGui.setNextWindowFocus(); // le damos foco.
-        ImGui.setNextWindowSize(271, 370, ImGuiCond.Always);
+        ImGui.setNextWindowSize(280, 370, ImGuiCond.Always);
         ImGui.begin(this.getClass().getSimpleName(), ImGuiWindowFlags.NoTitleBar | ImGuiWindowFlags.NoResize | ImGuiWindowFlags.NoDecoration |
                 ImGuiWindowFlags.NoBackground | ImGuiWindowFlags.NoMove);
+
+        this.checkMoveFrm();
 
         ImGui.setCursorPos(5, 0);
         ImGui.image(backgroundImage, 271, 370);
@@ -70,12 +72,12 @@ public class FGuildAdm extends Form {
     private void drawButtons() {
 
         // Campo de texto para filtrar
-        ImGui.setCursorPos(33, 312);
-        ImGui.setNextItemWidth(205);
+        ImGui.setCursorPos(38, 310);
+        ImGui.setNextItemWidth(207);
         ImGui.inputText("##filter", filterText, ImGuiInputTextFlags.None);
 
         // Guild List (filtrada)
-        ImGui.setCursorPos(33, 38);
+        ImGui.setCursorPos(38, 38);
         ImGui.beginChild("guildList", 205, 236, true);
 
         String filter = filterText.get().toLowerCase();

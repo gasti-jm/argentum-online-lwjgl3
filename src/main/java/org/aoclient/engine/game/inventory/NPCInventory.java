@@ -51,7 +51,7 @@ public class NPCInventory extends Inventory {
 
                 if (i == slotSelected) {
                     ImGui.getWindowDrawList().addLine(wposX + iX + 31, wposY + iY,
-                            wposX + iX + 31, wposY + iY + 31, selectedColor);
+                            wposX + iX + 31, wposY + iY + 32, selectedColor);
 
                     ImGui.getWindowDrawList().addLine(wposX + iX, wposY + iY + 31,
                             wposX+ iX + 31, wposY + iY + 31, selectedColor);

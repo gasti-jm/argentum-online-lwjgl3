@@ -41,7 +41,7 @@ public final class FMapa extends Form {
     @Override
     public void render() {
         ImGui.setNextWindowFocus();
-        ImGui.setNextWindowSize(573, 528, ImGuiCond.Always);
+        ImGui.setNextWindowSize(582, 528, ImGuiCond.Always);
         ImGui.begin(this.getClass().getSimpleName(),
                 ImGuiWindowFlags.NoTitleBar | ImGuiWindowFlags.NoResize
                         | ImGuiWindowFlags.NoDecoration | ImGuiWindowFlags.NoBackground | ImGuiWindowFlags.NoMove);

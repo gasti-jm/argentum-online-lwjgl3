@@ -33,6 +33,8 @@ public final class FStats extends Form {
         ImGui.begin(this.getClass().getSimpleName(), ImGuiWindowFlags.NoTitleBar
                 | ImGuiWindowFlags.NoResize | ImGuiWindowFlags.NoDecoration | ImGuiWindowFlags.NoMove);
 
+        this.checkMoveFrm();
+
         ImGui.setWindowFocus();
         ImGui.setCursorPos(0, 0);
         ImGui.image(backgroundImage, 466, 447);
