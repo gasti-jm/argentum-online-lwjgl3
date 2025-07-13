@@ -12,6 +12,7 @@ import java.nio.ByteBuffer;
 
 import static org.aoclient.scripts.Compressor.readResource;
 import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL12.GL_CLAMP_TO_EDGE;
 
 /**
  * La clase {@code Texture} representa una textura en OpenGL para el renderizado grafico.
@@ -90,10 +91,11 @@ public class Texture {
             // Repeat image in both directions
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
             // When stretching the image, pixelate
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
             // When shrinking an image, pixelate
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
         } catch (IOException ex) {
             ex.printStackTrace();

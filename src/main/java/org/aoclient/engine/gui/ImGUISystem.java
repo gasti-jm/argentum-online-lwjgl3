@@ -61,11 +61,6 @@ public enum ImGUISystem {
     
     private final Window window = Window.INSTANCE;
 
-    private ImGUISystem() {
-
-    }
-
-
     public void init() {
         ImGui.createContext();
 
@@ -234,7 +229,7 @@ public enum ImGUISystem {
         // IMPORTANT!!
         // Any Dear ImGui code SHOULD go between NewFrame()/Render() methods
         ImGui.newFrame();
-        this.renderFrms();
+        renderFrms();
         ImGui.render();
 
         // After ImGui#render call we provide draw data into LWJGL3 renderer.
@@ -243,8 +238,10 @@ public enum ImGUISystem {
     }
 
     private void renderFrms() {
+
         for (int i = 0; i < frms.size(); i++)
             frms.get(i).render();
+
         ImGui.showDemoWindow();
     }
 

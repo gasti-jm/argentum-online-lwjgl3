@@ -30,7 +30,7 @@ public abstract class Inventory {
     public static final int MAX_INVENTORY_SLOTS = 30;
     public static final int MAX_NPC_INVENTORY_SLOTS = 50;
 
-    protected static final int selectedColor = ImGui.getColorU32(0f, 1f, 0f, 1f);
+    protected static final int selectedColor = ImGui.getColorU32(1f, 0f, 0f, 1f);
 
     protected int posX, posY;
     protected int sWidth, sHeigth;

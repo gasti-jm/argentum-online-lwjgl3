@@ -21,8 +21,11 @@ public final class FSkills extends Form {
     private String hoverSkillDescription = "";
     private final int[] userSkills = USER.getSkills().clone();
     private final int userFreeSkillsPoints = USER.getFreeSkillPoints();
+    private boolean visibleButtonSave;
 
     public FSkills() {
+        this.visibleButtonSave = false;
+
         try {
             backgroundImage = loadTexture("VentanaSkills");
             requestSkills();
@@ -36,6 +39,8 @@ public final class FSkills extends Form {
         ImGui.setNextWindowSize(600, 450, ImGuiCond.Always);
         ImGui.begin(this.getClass().getSimpleName(), ImGuiWindowFlags.NoTitleBar
                 | ImGuiWindowFlags.NoResize | ImGuiWindowFlags.NoDecoration | ImGuiWindowFlags.NoMove);
+
+        this.checkMoveFrm();
 
         ImGui.setWindowFocus();
         ImGui.setCursorPos(0, 0);
@@ -61,11 +66,13 @@ public final class FSkills extends Form {
             this.close();
         }
 
-        ImGui.setCursorPos(460, 410);
-        if (ImGui.button("Aceptar", 97, 24)) {
-            this.saveChanges();
-            playSound(SND_CLICK);
-            this.close();
+        if (visibleButtonSave) {
+            ImGui.setCursorPos(460, 410);
+            if (ImGui.button("Guardar", 97, 24)) {
+                this.saveChanges();
+                playSound(SND_CLICK);
+                this.close();
+            }
         }
 
         ImGui.end();
@@ -123,6 +130,7 @@ public final class FSkills extends Form {
     private void plusSkill(int skill) {
         int freeSkillPts = USER.getFreeSkillPoints();
         if (freeSkillPts > 0 && USER.getSkill(skill) + 1 <= 100) {
+            this.visibleButtonSave = true;
             USER.setSkill(skill, USER.getSkill(skill) + 1);
             USER.setFreeSkillPoints(freeSkillPts - 1);
         }
@@ -131,6 +139,7 @@ public final class FSkills extends Form {
     private void minusSkill(int skill) {
         int result = (USER.getSkill(skill) - 1);
         if (result >= this.userSkills[skill - 1]) {
+            this.visibleButtonSave = true;
             USER.setSkill(skill, USER.getSkill(skill) - 1);
             USER.setFreeSkillPoints(USER.getFreeSkillPoints() + 1);
         }
