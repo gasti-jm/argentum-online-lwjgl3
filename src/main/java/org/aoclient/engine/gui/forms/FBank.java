@@ -15,17 +15,16 @@ import static org.aoclient.engine.Sound.SND_CLICK;
 import static org.aoclient.engine.Sound.playSound;
 import static org.aoclient.network.protocol.Protocol.*;
 
-public final class FBank extends Form{
-    private final ImString cant          = new ImString("1");
-    private final ImString cantGOLD      = new ImString("1");
-    public static NPCInventory invNPC    = new NPCInventory(true);
-    public static UserInventory invUser  = USER.getUserInventory().clone();
+public final class FBank extends Form {
 
-    private String lblName    = "";
-    private String lblMin     = "";
-    private String lblMax     = "";
-
+    public static NPCInventory invNPC = new NPCInventory(true);
+    public static UserInventory invUser = USER.getUserInventory().clone();
     public static int goldDeposited;
+    private final ImString cant = new ImString("1");
+    private final ImString cantGOLD = new ImString("1");
+    private String lblName = "";
+    private String lblMin = "";
+    private String lblMax = "";
 
     public FBank(int goldDeposited) {
         FBank.goldDeposited = goldDeposited;
@@ -79,7 +78,7 @@ public final class FBank extends Form{
         ImGui.setCursorPos(229, 232);
         if (ImGui.invisibleButton("Depositar", 17, 17)) {
             playSound(SND_CLICK);
-            if(!cant.isEmpty()) {
+            if (!cant.isEmpty()) {
                 bankDeposit(invUser.getSlotSelected() + 1, Integer.parseInt(cant.get()));
             }
 
@@ -89,7 +88,7 @@ public final class FBank extends Form{
         if (ImGui.invisibleButton("Retirar", 17, 17)) {
             playSound(SND_CLICK);
 
-            if(!cant.isEmpty()) {
+            if (!cant.isEmpty()) {
                 bankExtractItem(invNPC.getSlotSelected() + 1, Integer.parseInt(cant.get()));
             }
         }
@@ -98,8 +97,8 @@ public final class FBank extends Form{
         if (ImGui.invisibleButton("DepositarGOLD", 62, 70)) {
             playSound(SND_CLICK);
 
-            if(!cantGOLD.isEmpty()) {
-                bankDepositGold(Integer.parseInt(cantGOLD.get()));
+            if (!cantGOLD.isEmpty()) {
+                depositGold(Integer.parseInt(cantGOLD.get()));
             }
         }
 
@@ -107,18 +106,18 @@ public final class FBank extends Form{
         if (ImGui.invisibleButton("RetirarGOLD", 63, 51)) {
             playSound(SND_CLICK);
 
-            if(!cantGOLD.isEmpty()) {
-                bankExtractGold(Integer.parseInt(cantGOLD.get()));
+            if (!cantGOLD.isEmpty()) {
+                extractGold(Integer.parseInt(cantGOLD.get()));
             }
         }
 
-        ImGui.setCursorPos(155,432);
+        ImGui.setCursorPos(155, 432);
         ImGui.text(lblName);
 
-        ImGui.setCursorPos(155,466 - 5);
+        ImGui.setCursorPos(155, 466 - 5);
         ImGui.text(lblMax);
 
-        ImGui.setCursorPos(155,483 - 5);
+        ImGui.setCursorPos(155, 483 - 5);
         ImGui.text(lblMin);
 
 
@@ -155,7 +154,7 @@ public final class FBank extends Form{
     }
 
     private void updateLabels(boolean userInv) {
-        if(userInv) {
+        if (userInv) {
             if (invUser.getObjType(invUser.getSlotSelected()) == null) {
                 lblName = "";
                 lblMin = "";

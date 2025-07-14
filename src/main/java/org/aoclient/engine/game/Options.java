@@ -20,7 +20,7 @@ public enum Options {
     private boolean fullscreen = true;
     private boolean vsync = true;
     private boolean cursorGraphic = true;
-    private String nickName = "";
+    private String nick = "";
     private String ipServer = "127.0.0.1";
     private String portServer = "7666";
 
@@ -56,7 +56,7 @@ public enum Options {
             write(writer, "Music", music);
             write(writer, "Sound", sound);
             write(writer, "ShowName", showName);
-            write(writer, "Name", nickName);
+            write(writer, "Name", nick);
             write(writer, "IP", ipServer);
             write(writer, "PORT", portServer);
             write(writer, "Fullscreen", fullscreen);
@@ -67,12 +67,12 @@ public enum Options {
         }
     }
 
-    public String getNickName() {
-        return nickName;
+    public String getNick() {
+        return nick;
     }
 
-    public void setNickName(String nickName) {
-        this.nickName = nickName;
+    public void setNick(String nick) {
+        this.nick = nick;
     }
 
     public boolean isMusic() {
@@ -162,7 +162,7 @@ public enum Options {
             case "Music" -> music = Boolean.parseBoolean(value);
             case "Sound" -> sound = Boolean.parseBoolean(value);
             case "ShowName" -> showName = Boolean.parseBoolean(value);
-            case "Name" -> nickName = value;
+            case "Name" -> nick = value;
             case "IP" -> ipServer = value;
             case "PORT" -> portServer = value;
             case "Fullscreen" -> fullscreen = Boolean.parseBoolean(value);

@@ -130,7 +130,7 @@ public final class GameScene extends Scene {
                     if (KeyHandler.isKeyPressed(GLFW_KEY_RIGHT_SHIFT) &&
                             charList[user.getUserCharIndex()].getPriv() != 0) {
 
-                        warpChar("YO",
+                        teleport("YO",
                                 user.getUserMap(),
                                 getTileMouseX((int) MouseListener.getX() - POS_SCREEN_X),
                                 getTileMouseY((int) MouseListener.getY() - POS_SCREEN_Y));

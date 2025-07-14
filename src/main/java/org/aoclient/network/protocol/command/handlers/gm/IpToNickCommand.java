@@ -1,31 +1,18 @@
 package org.aoclient.network.protocol.command.handlers.gm;
 
-import org.aoclient.network.protocol.command.handlers.BaseCommandHandler;
 import org.aoclient.network.protocol.command.core.CommandContext;
 import org.aoclient.network.protocol.command.core.CommandException;
 import org.aoclient.network.protocol.command.core.CommandValidator;
+import org.aoclient.network.protocol.command.handlers.BaseCommandHandler;
 
-import static org.aoclient.network.protocol.Protocol.IPToNick;
-import static org.aoclient.network.protocol.command.metadata.GameCommand.IP2NICK;
-
-/**
- * Comando para obtener el nickname asociado a una dirección IP.
- * <p>
- * Uso: {@code /ip2nick <ip>}
- * <p>
- * Parametros:
- * <ul>
- * <li>ip: Dirección IP en formato IPv4 (ej: 192.168.1.1)
- * </ul>
- * <p>
- * Ejemplo: {@code /ip2nick 192.168.1.100} - Buscar nickname asociado a esta IP
- */
+import static org.aoclient.network.protocol.Protocol.IpToNick;
+import static org.aoclient.network.protocol.command.metadata.GameCommand.IP_TO_NICK;
 
 public class IpToNickCommand extends BaseCommandHandler {
 
     @Override
     public void handle(CommandContext commandContext) throws CommandException {
-        requireArguments(commandContext, 1, getCommandUsage(IP2NICK));
+        requireArguments(commandContext, 1, getCommandUsage(IP_TO_NICK));
 
         String ip = commandContext.argumentsRaw();
 
@@ -33,8 +20,7 @@ public class IpToNickCommand extends BaseCommandHandler {
 
         int[] ipArray = CommandValidator.parseIPv4ToArray(ip);
         if (ipArray == null) showError("Error parsing IP address.");
-
-        IPToNick(ipArray);
+        else IpToNick(ipArray);
     }
 
 }

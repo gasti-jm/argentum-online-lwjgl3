@@ -33,14 +33,14 @@ public final class FPanelGM extends Form {
                 ImGui.inputText("Arguments", myText);
                 ImGui.separator();
                 if (ImGui.button(TIME.getCommand(), 170, 20)) commandExecutor.execute(TIME.getCommand());
-                if (ImGui.button(MOTD_CHANGE.getCommand(), 170, 20)) commandExecutor.execute(MOTD_CHANGE.getCommand());
-                if (ImGui.button(TALKAS.getCommand(), 170, 20)) commandExecutor.execute(TALKAS.getCommand());
-                if (ImGui.button(GMSG.getCommand(), 170, 20)) commandExecutor.execute(GMSG.getCommand() + " " + myText.get());
-                if (ImGui.button(RMSG.getCommand(), 170, 20)) commandExecutor.execute(RMSG.getCommand() + " " + myText.get());
-                if (ImGui.button(SMSG.getCommand(), 170, 20)) commandExecutor.execute(SMSG.getCommand() + " " + myText.get());
-                if (ImGui.button(REALMSG.getCommand(), 170, 20)) commandExecutor.execute(REALMSG.getCommand() + " " + myText.get());
-                if (ImGui.button(CAOSMSG.getCommand(), 170, 20)) commandExecutor.execute(CAOSMSG.getCommand() + " " + myText.get());
-                if (ImGui.button(CIUMSG.getCommand(), 170, 20)) commandExecutor.execute(CIUMSG.getCommand() + " " + myText.get());
+                if (ImGui.button(CHANGE_MOTD.getCommand(), 170, 20)) commandExecutor.execute(CHANGE_MOTD.getCommand());
+                if (ImGui.button(TALK_AS_NPC.getCommand(), 170, 20)) commandExecutor.execute(TALK_AS_NPC.getCommand());
+                if (ImGui.button(GM_MSG.getCommand(), 170, 20)) commandExecutor.execute(GM_MSG.getCommand() + " " + myText.get());
+                if (ImGui.button(ADMIN_SERVER.getCommand(), 170, 20)) commandExecutor.execute(ADMIN_SERVER.getCommand() + " " + myText.get());
+                if (ImGui.button(SYSTEM_MESSAGE.getCommand(), 170, 20)) commandExecutor.execute(SYSTEM_MESSAGE.getCommand() + " " + myText.get());
+                if (ImGui.button(ROYAL_ARMY_MSG.getCommand(), 170, 20)) commandExecutor.execute(ROYAL_ARMY_MSG.getCommand() + " " + myText.get());
+                if (ImGui.button(CHAOS_MSG.getCommand(), 170, 20)) commandExecutor.execute(CHAOS_MSG.getCommand() + " " + myText.get());
+                if (ImGui.button(CITIZEN_MSG.getCommand(), 170, 20)) commandExecutor.execute(CITIZEN_MSG.getCommand() + " " + myText.get());
 
                 ImGui.endTabItem();
             }
@@ -50,8 +50,8 @@ public final class FPanelGM extends Form {
                 ImGui.separator();
                 if (ImGui.button(SHOW.getCommand() + " sos", 170, 20)) commandExecutor.execute(SHOW.getCommand() + " sos");
                 if (ImGui.button(CLEAN_SOS.getCommand() + " sos", 170, 20)) commandExecutor.execute(CLEAN_SOS.getCommand() + " sos");
-                if (ImGui.button(SEE_WORKERS.getCommand(), 170, 20)) commandExecutor.execute(SEE_WORKERS.getCommand());
-                if (ImGui.button(SHOW_HIDDEN_PLAYERS.getCommand(), 170, 20)) commandExecutor.execute(SHOW_HIDDEN_PLAYERS.getCommand());
+                if (ImGui.button(SHOW_WORKERS.getCommand(), 170, 20)) commandExecutor.execute(SHOW_WORKERS.getCommand());
+                if (ImGui.button(SHOW_HIDDEN.getCommand(), 170, 20)) commandExecutor.execute(SHOW_HIDDEN.getCommand());
                 if (ImGui.button(SHOW_MOBS.getCommand(), 170, 20)) commandExecutor.execute(SHOW_MOBS.getCommand() + " " + myText.get());
                 if (ImGui.button(ONLINE_MAP.getCommand(), 170, 20)) commandExecutor.execute(ONLINE_MAP.getCommand());
                 if (ImGui.button(ONLINE_ROYAL.getCommand(), 170, 20)) commandExecutor.execute(ONLINE_ROYAL.getCommand());
@@ -70,12 +70,12 @@ public final class FPanelGM extends Form {
                 ImGui.inputText("Arguments", myText);
                 ImGui.separator();
                 if (ImGui.button(INVISIBILITY.getCommand(), 170, 20)) commandExecutor.execute(INVISIBILITY.getCommand());
-                if (ImGui.button(SHOWIGNORED.getCommand(), 170, 20)) commandExecutor.execute(SHOWIGNORED.getCommand());
-                if (ImGui.button(NAVE.getCommand(), 170, 20)) commandExecutor.execute(NAVE.getCommand());
+                if (ImGui.button(SHOW_IGNORED.getCommand(), 170, 20)) commandExecutor.execute(SHOW_IGNORED.getCommand());
+                if (ImGui.button(NAVIGATION.getCommand(), 170, 20)) commandExecutor.execute(NAVIGATION.getCommand());
                 if (ImGui.button(SHOW_NAME.getCommand(), 170, 20)) commandExecutor.execute(SHOW_NAME.getCommand());
                 if (ImGui.button(CHAT_COLOR.getCommand(), 170, 20)) commandExecutor.execute(CHAT_COLOR.getCommand());
-                if (ImGui.button(SETDESC.getCommand(), 170, 20)) commandExecutor.execute(SETDESC.getCommand() + " " + myText.get());
-                if (ImGui.button(REM.getCommand(), 170, 20)) commandExecutor.execute(REM.getCommand() + " " + myText.get());
+                if (ImGui.button(SET_DESC.getCommand(), 170, 20)) commandExecutor.execute(SET_DESC.getCommand() + " " + myText.get());
+                if (ImGui.button(COMMENT_SERVER_LOG.getCommand(), 170, 20)) commandExecutor.execute(COMMENT_SERVER_LOG.getCommand() + " " + myText.get());
 
                 ImGui.endTabItem();
             }
@@ -84,12 +84,12 @@ public final class FPanelGM extends Form {
                 ImGui.inputText("Arguments", myText);
                 ImGui.separator();
                 if (ImGui.button(RAIN.getCommand(), 170, 20)) commandExecutor.execute(RAIN.getCommand());
-                if (ImGui.button(CLEAN.getCommand(), 170, 20)) commandExecutor.execute(CLEAN.getCommand());
-                if (ImGui.button(CC.getCommand(), 170, 20)) commandExecutor.execute(CC.getCommand());
+                if (ImGui.button(CLEAN_WORLD.getCommand(), 170, 20)) commandExecutor.execute(CLEAN_WORLD.getCommand());
+                if (ImGui.button(MOB_PANEL.getCommand(), 170, 20)) commandExecutor.execute(MOB_PANEL.getCommand());
                 if (ImGui.button(CREATE_TELEPORT.getCommand(), 170, 20)) commandExecutor.execute(CREATE_TELEPORT.getCommand() + " " + myText.get());
-                if (ImGui.button(DESTROYTELEPORT.getCommand(), 170, 20)) commandExecutor.execute(DESTROYTELEPORT.getCommand());
+                if (ImGui.button(REMOVE_TELEPORT.getCommand(), 170, 20)) commandExecutor.execute(REMOVE_TELEPORT.getCommand());
                 if (ImGui.button(CREATE_OBJ.getCommand(), 170, 20)) commandExecutor.execute(CREATE_OBJ.getCommand() + " " + myText.get());
-                if (ImGui.button(DESTROYITEMS.getCommand(), 170, 20)) commandExecutor.execute(DESTROYITEMS.getCommand());
+                if (ImGui.button(REMOVE_ITEM.getCommand(), 170, 20)) commandExecutor.execute(REMOVE_ITEM.getCommand());
                 if (ImGui.button(SHOW_OBJ_MAP.getCommand(), 170, 20)) commandExecutor.execute(SHOW_OBJ_MAP.getCommand());
                 if (ImGui.button(REMOVE_ITEM_AREA.getCommand(), 170, 20)) commandExecutor.execute(REMOVE_ITEM_AREA.getCommand());
 
@@ -99,13 +99,13 @@ public final class FPanelGM extends Form {
             if (ImGui.beginTabItem("Admin")) {
                 ImGui.inputText("Arguments", myText);
                 ImGui.separator();
-                if (ImGui.button(IP2NICK.getCommand(), 170, 20)) commandExecutor.execute(IP2NICK.getCommand() + " " + myText.get());
+                if (ImGui.button(IP_TO_NICK.getCommand(), 170, 20)) commandExecutor.execute(IP_TO_NICK.getCommand() + " " + myText.get());
                 if (ImGui.button(BAN_IP.getCommand(), 170, 20)) commandExecutor.execute(BAN_IP.getCommand() + " " + myText.get());
-                if (ImGui.button(UNBANIP.getCommand(), 170, 20)) commandExecutor.execute(UNBANIP.getCommand() + " " + myText.get());
-                if (ImGui.button(BANIPLIST.getCommand(), 170, 20)) commandExecutor.execute(BANIPLIST.getCommand());
-                if (ImGui.button(BANIPRELOAD.getCommand(), 170, 20)) commandExecutor.execute(BANIPRELOAD.getCommand());
-                if (ImGui.button(GUILD_MSG_HISTORY.getCommand(), 170, 20)) commandExecutor.execute(GUILD_MSG_HISTORY.getCommand());
-                if (ImGui.button(GUILD_MEMBER_LIST.getCommand(), 170, 20)) commandExecutor.execute(GUILD_MEMBER_LIST.getCommand() + " " + myText.get());
+                if (ImGui.button(UNBAN_IP.getCommand(), 170, 20)) commandExecutor.execute(UNBAN_IP.getCommand() + " " + myText.get());
+                if (ImGui.button(BAN_IP_LIST.getCommand(), 170, 20)) commandExecutor.execute(BAN_IP_LIST.getCommand());
+                if (ImGui.button(BAN_IP_RELOAD.getCommand(), 170, 20)) commandExecutor.execute(BAN_IP_RELOAD.getCommand());
+                if (ImGui.button(GUILD_MESSAGES.getCommand(), 170, 20)) commandExecutor.execute(GUILD_MESSAGES.getCommand());
+                if (ImGui.button(GUILD_MEMBERS.getCommand(), 170, 20)) commandExecutor.execute(GUILD_MEMBERS.getCommand() + " " + myText.get());
                 if (ImGui.button(GUILD_BAN.getCommand(), 170, 20)) commandExecutor.execute(GUILD_BAN.getCommand() + " " + myText.get());
 
                 ImGui.endTabItem();

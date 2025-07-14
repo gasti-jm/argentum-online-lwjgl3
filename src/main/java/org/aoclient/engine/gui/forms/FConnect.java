@@ -45,7 +45,7 @@ public final class FConnect extends Form {
 
     private final ImString ipStr = new ImString(options.getIpServer());
     private final ImString portStr = new ImString(options.getPortServer());
-    private final ImString nickStr = new ImString(options.getNickName());
+    private final ImString nickStr = new ImString(options.getNick());
     private final ImString passStr = new ImString();
 
     // Botones gráficos de 3 estados
@@ -208,7 +208,7 @@ public final class FConnect extends Form {
             new Thread(() -> {
                 if (SocketConnection.INSTANCE.connect()) loginExistingChar(nickStr.get(), passStr.get());
             }).start();
-            options.setNickName(nickStr.get());
+            options.setNick(nickStr.get());
             USER.setUserName(nickStr.get());
         } else ImGUISystem.INSTANCE.show(new FMessage("Please enter a username and/or password."));
     }
