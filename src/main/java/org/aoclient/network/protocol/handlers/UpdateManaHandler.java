@@ -9,7 +9,6 @@ public class UpdateManaHandler implements PacketHandler {
     public void handle(PacketBuffer buffer) {
         if (buffer.checkBytes(3)) return;
         buffer.readByte();
-
         User.INSTANCE.setUserMinMAN(buffer.readInteger());
     }
 

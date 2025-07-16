@@ -2,7 +2,6 @@ package org.aoclient.network.protocol.command.handlers.user;
 
 import org.aoclient.engine.game.Console;
 import org.aoclient.engine.game.User;
-import org.aoclient.engine.renderer.FontRenderer;
 import org.aoclient.engine.renderer.RGBColor;
 import org.aoclient.network.protocol.command.core.Command;
 import org.aoclient.network.protocol.command.core.CommandContext;
@@ -62,8 +61,8 @@ public class HelpCommand extends BaseCommandHandler {
                 .sorted()
                 .toList();
 
-        // Formatea los comandos con saltos de linea automaticos
-        formatCommandsWithLineBreaks(commands);
+        String commandsString = String.join(" ", commands);
+        console.addMsgToConsole(commandsString, false, false, new RGBColor(1f, 1f, 1f));
 
         console.addMsgToConsole("", false, false, new RGBColor());
         console.addMsgToConsole("Type '" + HELP.getCommand() + " <command>' for specific help.", false, false, new RGBColor(0f, 1f, 1f));
@@ -111,49 +110,6 @@ public class HelpCommand extends BaseCommandHandler {
 
         if (!suggestions.isEmpty())
             console.addMsgToConsole("Did you mean: " + suggestions + " ?", false, false, new RGBColor(0.6f, 0.6f, 0.6f));
-
-    }
-
-    /**
-     * Formatea una lista de comandos y los imprime en la consola respetando un ancho maximo por linea.
-     * <p>
-     * Esta funcion toma una lista de cadenas que representan comandos, los organiza agregando saltos de linea donde sea necesario
-     * para evitar exceder el ancho maximo establecido para la consola. Cada linea formada se imprime en la consola con un color
-     * gris claro.
-     *
-     * @param commands Lista de cadenas que representan los comandos a formatear e imprimir. Si esta lista esta vacia, el metodo
-     *                 no realiza ninguna accion.
-     */
-    private void formatCommandsWithLineBreaks(List<String> commands) {
-        if (commands.isEmpty()) return;
-
-        StringBuilder currentLine = new StringBuilder();
-
-        // Ancho de consola con 10 pixeles de margen
-        int consoleWidth = Console.CONSOLE_WIDTH - 10;
-
-        for (String command : commands) {
-
-            // Construye el texto del comando actual, agregandolo a la linea actual si existe
-            String text = currentLine.isEmpty() ? command : currentLine + " " + command;
-
-            // Calcula el ancho del texto
-            int textWidth = FontRenderer.getTextWidth(text, false);
-
-            // Si excede el ancho de la consola, imprime la linea actual y empieza una nueva
-            if (textWidth > consoleWidth && !currentLine.isEmpty()) {
-                console.addMsgToConsole(currentLine.toString(), false, false, new RGBColor(0.8f, 0.8f, 0.8f));
-                currentLine = new StringBuilder(command);
-            } else {
-                // Si la linea actual no esta vacia, entonces agrega un espacio
-                if (!currentLine.isEmpty()) currentLine.append(" ");
-                // Agrega el comando a la linea actual
-                currentLine.append(command);
-            }
-        }
-
-        // Imprime la ultima linea si no esta vacia
-        if (!currentLine.isEmpty()) console.addMsgToConsole(currentLine.toString(), false, false, new RGBColor(0.8f, 0.8f, 0.8f));
 
     }
 
