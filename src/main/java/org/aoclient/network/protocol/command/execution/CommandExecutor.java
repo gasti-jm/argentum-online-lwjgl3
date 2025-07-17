@@ -37,7 +37,7 @@ public enum CommandExecutor {
     public void execute(String command) {
         CommandContext commandContext = CommandContext.parse(command);
         if (commandContext.isCommand()) {
-            CommandHandler handler = commands.get(commandContext.command());
+            CommandHandler handler = commands.get(commandContext.command().toLowerCase());
             if (handler != null) {
 
                 if (isGMCommandWithoutPrivileges(commandContext.command())) {
