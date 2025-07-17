@@ -187,7 +187,7 @@ public final class CommandRegistry {
             Command.gm(PLAYER_INV, PlayerInvCommand::new),
             Command.gm(PLAYER_LOCATION, PlayerLocationCommand::new),
             Command.gm(PLAYER_SKILLS, PlayerSkillsCommand::new),
-            Command.gm(PLAYER_SLOT, PlayerSlotCommand::new), // FIXME Se rompe el cliente
+            Command.gm(PLAYER_SLOT, PlayerSlotCommand::new), // FIXME Rompe el cliente
             Command.gm(PLAYER_STATS, PlayerStatsCommand::new),
             Command.gm(PLAY_MUSIC, PlayMusicCommand::new),
             Command.gm(PLAY_SOUND, PlaySoundCommand::new),
@@ -195,7 +195,7 @@ public final class CommandRegistry {
             Command.gm(REMOVE_CHAOS, RemoveChaosCommand::new),
             Command.gm(REMOVE_FACTIONS, RemoveFactionsCommand::new),
             Command.gm(REMOVE_PUNISHMENT, RemovePunishmentCommand::new),
-            Command.gm(REVIVE, ReviveCommand::new), // TODO Cura o revive? Que diferencia hay con /resurrect
+            Command.gm(REVIVE, ReviveCommand::new), // TODO Cura o revive? Que diferencia hay con /resurrect?
             Command.gm(RMSG, RMSGCommand::new),
             Command.gm(ROYAL_ARMY_MSG, RoyalArmyMessageCommand::new),
             Command.gm(SET_DESC, SetDescCommand::new),

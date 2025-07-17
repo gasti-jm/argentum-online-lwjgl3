@@ -4,7 +4,7 @@ import org.aoclient.engine.game.User;
 import org.aoclient.engine.gui.ImGUISystem;
 import org.aoclient.engine.gui.forms.FMessage;
 import org.aoclient.network.PacketBuffer;
-import org.aoclient.network.SocketConnection;
+import org.aoclient.network.Connection;
 
 public class ErrorMessageHandler implements PacketHandler {
 
@@ -18,7 +18,7 @@ public class ErrorMessageHandler implements PacketHandler {
         String errMsg = tempBuffer.readCp1252String();
         ImGUISystem.INSTANCE.show(new FMessage(errMsg));
 
-        SocketConnection.INSTANCE.disconnect();
+        Connection.INSTANCE.disconnect();
         User.INSTANCE.setUserConected(false);
 
         buffer.copy(tempBuffer);

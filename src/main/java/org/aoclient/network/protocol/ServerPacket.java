@@ -32,17 +32,17 @@ import java.util.Map;
 
 public enum ServerPacket {
 
-    LOGGED(0),                   // LOGGED
-    REMOVE_DIALOGS(1),           // QTDL
-    REMOVE_CHAR_DIALOG(2),       // QDL
-    NAVIGATE_TOGGLE(3),          // NAVEG
-    DISCONNECT(4),               // FINOK
-    COMMERCE_END(5),             // FINCOMOK
-    BANK_END(6),                 // FINBANOK
-    COMMERCE_INIT(7),            // INITCOM
-    BANK_INIT(8),                // INITBANCO
-    USER_COMMERCE_INIT(9),       // INITCOMUSU
-    USER_COMMERCE_END(10),       // FINCOMUSUOK
+    LOGGED(0),                    // LOGGED
+    REMOVE_DIALOGS(1),            // QTDL
+    REMOVE_CHAR_DIALOG(2),        // QDL
+    NAVIGATE_TOGGLE(3),           // NAVEG
+    DISCONNECT(4),                // FINOK
+    COMMERCE_END(5),              // FINCOMOK
+    BANK_END(6),                  // FINBANOK
+    COMMERCE_INIT(7),             // INITCOM
+    BANK_INIT(8),                 // INITBANCO
+    USER_COMMERCE_INIT(9),        // INITCOMUSU
+    USER_COMMERCE_END(10),        // FINCOMUSUOK
     USER_OFFER_CONFIRM(11),
     COMMERCE_CHAT(12),
     SHOW_BLACKSMITH_FORM(13),     // SFH

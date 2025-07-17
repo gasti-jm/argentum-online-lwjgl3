@@ -7,7 +7,7 @@ import org.aoclient.engine.renderer.Surface;
 import org.aoclient.engine.scenes.*;
 import org.aoclient.engine.utils.GameData;
 import org.aoclient.engine.utils.Time;
-import org.aoclient.network.SocketConnection;
+import org.aoclient.network.Connection;
 import org.lwjgl.Version;
 import org.tinylog.Logger;
 
@@ -137,9 +137,9 @@ public final class Engine {
             MouseListener.resetReleasedButtons();
 
             // Si hay algo para enviar, lo envia (escribe lo que envia el cliente al servidor)
-            SocketConnection.INSTANCE.write();
+            Connection.INSTANCE.write();
             // Si hay algo para recibir, lo recibe (lee lo que recibe el cliente del servidor)
-            SocketConnection.INSTANCE.read();
+            Connection.INSTANCE.read();
 
         }
     }

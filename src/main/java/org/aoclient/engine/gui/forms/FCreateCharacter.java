@@ -18,7 +18,7 @@ import org.aoclient.engine.renderer.RGBColor;
 import org.aoclient.engine.renderer.Surface;
 import org.aoclient.engine.renderer.Texture;
 import org.aoclient.engine.utils.inits.BodyData;
-import org.aoclient.network.SocketConnection;
+import org.aoclient.network.Connection;
 
 import java.io.IOException;
 import java.util.regex.Matcher;
@@ -473,7 +473,7 @@ public final class FCreateCharacter extends Form {
         final int userHogar = currentItemHogar.get() + 1;
         if (!checkData()) return;
         new Thread(() -> {
-            if (SocketConnection.INSTANCE.connect())
+            if (Connection.INSTANCE.connect())
                 loginNewChar(txtNombre.get(), txtPassword.get(), userRaza, userSexo, userClase, userHead, txtMail.get(), userHogar);
         }).start();
         USER.setUserName(txtNombre.get());
@@ -481,7 +481,7 @@ public final class FCreateCharacter extends Form {
 
     private void buttonThrowDices() {
         new Thread(() -> {
-            if (SocketConnection.INSTANCE.connect()) throwDices();
+            if (Connection.INSTANCE.connect()) throwDices();
         }).start();
     }
 

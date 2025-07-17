@@ -13,15 +13,13 @@ import static org.aoclient.engine.utils.GameData.options;
 import static org.aoclient.network.protocol.Protocol.*;
 
 /**
- * <p>
  * Gestiona la conexion cliente-servidor a traves de sockets TCP. Ofrece metodos para conectar y desconectar a un servidor, y
  * metodos para enviar y recibir bytes dentro de un buffer por medio de los flujos de entrada y salida del socket.
  * <p>
- * TODO Se podria llamar Connection?
  * TODO Se podria usar NIO?
  */
 
-public enum SocketConnection {
+public enum Connection {
 
     INSTANCE;
 

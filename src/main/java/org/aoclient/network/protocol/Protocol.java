@@ -6,7 +6,7 @@ import org.aoclient.engine.game.models.Direction;
 import org.aoclient.engine.game.models.Skill;
 import org.aoclient.engine.renderer.RGBColor;
 import org.aoclient.network.PacketBuffer;
-import org.aoclient.network.SocketConnection;
+import org.aoclient.network.Connection;
 import org.aoclient.network.protocol.types.GMCommand;
 
 import java.nio.charset.StandardCharsets;
@@ -23,7 +23,7 @@ import static org.lwjgl.glfw.GLFW.glfwGetTime;
  * Esta clase contiene implementaciones para todos los comandos del protocolo del juego, incluyendo acciones de personaje,
  * interacciones con el entorno, comunicacion con otros jugadores y comandos administrativos.
  * <p>
- * Trabaja en conjunto con {@link SocketConnection} para la transmision real de los datos, y utiliza {@link PacketBuffer} para
+ * Trabaja en conjunto con {@link Connection} para la transmision real de los datos, y utiliza {@link PacketBuffer} para
  * almacenar temporalmente los bytes entrantes y salientes antes de su manejo.
  */
 
