@@ -33,7 +33,9 @@ public record CommandContext(
      * formato "en crudo"
      */
     public static CommandContext parse(String commandInput) {
-        String trimmedCommand = commandInput.trim();
+        /* Convierte la entrada de la cadena a minusculas en caso de que el usuario haya especificado el comando en mayusculas, y
+         * luego recorta los posibles espacios iniciales y finales del comando. */
+        String trimmedCommand = commandInput.toLowerCase().trim();
         String[] commandParts = splitCommand(trimmedCommand);
 
         String command = commandParts[0];

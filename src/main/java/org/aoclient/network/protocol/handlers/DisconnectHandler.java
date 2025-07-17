@@ -3,7 +3,7 @@ package org.aoclient.network.protocol.handlers;
 import org.aoclient.engine.Sound;
 import org.aoclient.engine.gui.ImGUISystem;
 import org.aoclient.network.PacketBuffer;
-import org.aoclient.network.SocketConnection;
+import org.aoclient.network.Connection;
 import org.tinylog.Logger;
 
 import static org.aoclient.engine.Sound.playMusic;
@@ -15,7 +15,7 @@ public class DisconnectHandler implements PacketHandler {
     public void handle(PacketBuffer buffer) {
         buffer.readByte();
 
-        SocketConnection.INSTANCE.disconnect();
+        Connection.INSTANCE.disconnect();
         eraseAllChars();
 
         ImGUISystem.INSTANCE.closeAllFrms();

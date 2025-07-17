@@ -4,12 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * <p>
  * Define todos los identificadores de paquetes enviados por el servidor al cliente.
- * <p>
- * Contiene constantes para cada tipo de mensaje que el servidor puede enviar al cliente, permitiendo una identificacion clara y
- * tipada de los paquetes durante el procesamiento de datos recibidos. Cada valor del enumerador corresponde a un tipo especifico
- * de operacion o informacion que el servidor transmite.
  * <p>
  * Estos identificadores se utilizan en el proceso de manejo de paquetes entrantes para determinar el tipo de paquete recibido y
  * dirigirlo al handler correspondiente. La estructura del enumerador refleja todas las posibles interacciones iniciadas por el
@@ -31,23 +26,23 @@ import java.util.Map;
  * correspondiente en el {@code ServerPacketID} del servidor VB6 dentro de {@code Protocol.bas}. Esta coincidencia es fundamental
  * para la correcta comunicacion cliente-servidor.
  * <p>
- * TODO Creo que el maximo de IDs de paquetes que pueden haber es de 255 (entero sin signo), ya que ese valor es lo maximo que se
+ * TODO Creo que el maximo de IDs de paquetes que pueden haber es de 127 (entero con signo), ya que ese valor es lo maximo que se
  * puede ocupar en un byte y el ID del paquete ocupa 1 byte... buscar forma de agregar mas paquetes
  */
 
 public enum ServerPacket {
 
-    LOGGED(0),                   // LOGGED
-    REMOVE_DIALOGS(1),           // QTDL
-    REMOVE_CHAR_DIALOG(2),       // QDL
-    NAVIGATE_TOGGLE(3),          // NAVEG
-    DISCONNECT(4),               // FINOK
-    COMMERCE_END(5),             // FINCOMOK
-    BANK_END(6),                 // FINBANOK
-    COMMERCE_INIT(7),            // INITCOM
-    BANK_INIT(8),                // INITBANCO
-    USER_COMMERCE_INIT(9),       // INITCOMUSU
-    USER_COMMERCE_END(10),       // FINCOMUSUOK
+    LOGGED(0),                    // LOGGED
+    REMOVE_DIALOGS(1),            // QTDL
+    REMOVE_CHAR_DIALOG(2),        // QDL
+    NAVIGATE_TOGGLE(3),           // NAVEG
+    DISCONNECT(4),                // FINOK
+    COMMERCE_END(5),              // FINCOMOK
+    BANK_END(6),                  // FINBANOK
+    COMMERCE_INIT(7),             // INITCOM
+    BANK_INIT(8),                 // INITBANCO
+    USER_COMMERCE_INIT(9),        // INITCOMUSU
+    USER_COMMERCE_END(10),        // FINCOMUSUOK
     USER_OFFER_CONFIRM(11),
     COMMERCE_CHAT(12),
     SHOW_BLACKSMITH_FORM(13),     // SFH
@@ -146,22 +141,14 @@ public enum ServerPacket {
     /** Utiliza un HashMap que proporciona acceso en tiempo constante (complejidad O(1)). */
     public static final Map<Integer, ServerPacket> PACKET_REGISTRY = new HashMap<>();
 
-    /* Bloque de inicializacion estatico que construye el mapa de busqueda para conversion eficiente de ID a objetos ServerPacket.
+    /* Inicializacion estatica del mapa de busqueda para ServerPackets
      *
-     * Este bloque se ejecuta una sola vez cuando la clase ServerPacket se carga en memoria por primera vez, realizando una
-     * inicializacion anticipada (eager initialization) del mapa de busqueda. El bloque recorre todos los valores del enum
-     * utilizando values() y registra cada constante enum en el mapa PACKET_REGISTRY, usando su ID numerico como clave.
-     *
-     * La inicializacion estatica ofrece varias ventajas importantes:
-     *
-     * 1. Rendimiento: Elimina la necesidad de inicializar el mapa o verificar su inicializacion en cada llamada al metodo
-     * getPacket(), mejorando asi el rendimiento del sistema en tiempo de ejecucion.
-     * 2. Seguridad de hilos: Garantiza que el mapa se inicialice correctamente incluso en entornos multi-hilo, ya que la JVM
-     * asegura que los bloques estaticos se ejecuten una sola vez y de forma segura durante la carga de la clase.
-     * 3. Deteccion temprana de errores: Si hubiera algun problema con la inicializacion del mapa (como IDs duplicados), se
-     * manifestaria inmediatamente al cargar la clase, en lugar de detectarse mas tarde durante la ejecucion del programa.
-     * 4. Optimizacion de memoria: Al crear el mapa con el tamaño exacto necesario (el numero de constantes enum), se evita la
-     * sobrecarga de redimensionamientos internos del HashMap. */
+     * Registra cada ServerPacket en el PACKET_REGISTRY usando su ID como clave.
+     * Ofrece:
+     * 1. Mayor rendimiento al evitar inicializaciones repetidas
+     * 2. Seguridad en entornos multihilo
+     * 3. Deteccion temprana de errores
+     * 4. Optimizacion de memoria al evitar redimensionamientos */
     static {
         for (ServerPacket packet : values())
             PACKET_REGISTRY.put(packet.getId(), packet);
@@ -174,16 +161,13 @@ public enum ServerPacket {
     }
 
     /**
-     * Obtiene el paquete del servidor correspondiente al ID proporcionado.
+     * Devuelve un paquete (ServerPacket) asociado con el identificador proporcionado.
      * <p>
-     * Este metodo proporciona una forma eficiente de recuperar la constante enum asociada a un ID especifico de paquete del
-     * servidor. Utiliza un mapa de busqueda optimizado para proporcionar acceso en tiempo constante O(1), evitando la necesidad
-     * de realizar busquedas lineales a traves de todos los valores del enum.
+     * Si no se encuentra un paquete correspondiente, lanza una excepcion.
      *
-     * @param id ID del paquete del servidor a obtener
-     * @return el paquete del servidor correspondiente al ID proporcionado
-     * @throws IllegalArgumentException si no existe un ServerPacket con el ID especificado, indicando que se recibio un ID de
-     *                                  paquete desconocido o no implementado
+     * @param id identificador unico del paquete que se desea obtener
+     * @return el paquete (ServerPacket) asociado con el identificador proporcionado
+     * @throws IllegalArgumentException si no se encuentra ningun paquete con el ID dado
      */
     public static ServerPacket getPacket(int id) {
         ServerPacket packet = PACKET_REGISTRY.get(id);

@@ -6,7 +6,7 @@ import org.aoclient.engine.game.models.Direction;
 import org.aoclient.engine.game.models.Skill;
 import org.aoclient.engine.renderer.RGBColor;
 import org.aoclient.network.PacketBuffer;
-import org.aoclient.network.SocketConnection;
+import org.aoclient.network.Connection;
 import org.aoclient.network.protocol.types.GMCommand;
 
 import java.nio.charset.StandardCharsets;
@@ -23,14 +23,11 @@ import static org.lwjgl.glfw.GLFW.glfwGetTime;
  * Esta clase contiene implementaciones para todos los comandos del protocolo del juego, incluyendo acciones de personaje,
  * interacciones con el entorno, comunicacion con otros jugadores y comandos administrativos.
  * <p>
- * Trabaja en conjunto con {@link SocketConnection} para la transmision real de los datos, y utiliza {@link PacketBuffer} para
+ * Trabaja en conjunto con {@link Connection} para la transmision real de los datos, y utiliza {@link PacketBuffer} para
  * almacenar temporalmente los bytes entrantes y salientes antes de su manejo.
- * <p>
- * TODO Los nombres de los metodos tienen que coincidir con los nombres de los comandos
  */
 
 public class Protocol {
-
 
     private static final Console CONSOLE = Console.INSTANCE;
     private static final User USER = User.INSTANCE;
@@ -46,6 +43,518 @@ public class Protocol {
      */
     public static void handleIncomingBytes() {
         PACKET_RECEIVER.handleIncomingBytes(inputBuffer);
+    }
+
+    public static void acceptChaosCouncil(String player) {
+        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
+        outputBuffer.writeByte(GMCommand.ACCEPT_CHAOS_COUNCIL.getId());
+        outputBuffer.writeCp1252String(player);
+    }
+
+    public static void acceptRoyalCouncil(String player) {
+        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
+        outputBuffer.writeByte(GMCommand.ACCEPT_ROYAL_COUNCIL.getId());
+        outputBuffer.writeCp1252String(player);
+    }
+
+    public static void adminServer() {
+        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
+        outputBuffer.writeByte(GMCommand.ADMIN_SERVER.getId());
+    }
+
+    public static void alternatePassword(String playerWithoutPassword, String playerWithPassword) {
+        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
+        outputBuffer.writeByte(GMCommand.ALTERNATE_PASSWORD.getId());
+        outputBuffer.writeCp1252String(playerWithoutPassword);
+        outputBuffer.writeCp1252String(playerWithPassword);
+    }
+
+    public static void attack() {
+        outputBuffer.writeByte(ClientPacket.ATTACK.getId());
+    }
+
+    public static void autoUpdate() {
+        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
+        outputBuffer.writeByte(GMCommand.AUTO_UPDATE.getId());
+    }
+
+    public static void backup() {
+        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
+        outputBuffer.writeByte(GMCommand.BACKUP.getId());
+    }
+
+    public static void balance() {
+        if (charList[USER.getUserCharIndex()].isDead()) {
+            CONSOLE.addMsgToConsole(new String("You are dead!".getBytes(), StandardCharsets.UTF_8), false, true, new RGBColor());
+            return;
+        }
+        outputBuffer.writeByte(ClientPacket.BALANCE.getId());
+    }
+
+    public static void ban(String player, String reason) {
+        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
+        outputBuffer.writeByte(GMCommand.BAN.getId());
+        outputBuffer.writeCp1252String(player);
+        outputBuffer.writeCp1252String(reason);
+    }
+
+    public static void banIP(boolean byIp, int[] ip, String nick, String reason) {
+        if (byIp && ip.length != 4) return; // IP invalida
+        // Escribir el mensaje "BanIP" en el buffer de datos salientes
+        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
+        outputBuffer.writeByte(GMCommand.BAN_IP.getId());
+        // Escribir si es por IP o por nick
+        outputBuffer.writeBoolean(byIp);
+        // Si es por IP, escribe los componentes de la IP
+        if (byIp) {
+            for (int b : ip)
+                outputBuffer.writeByte(b);
+        } else outputBuffer.writeCp1252String(nick); // Si es por nick, escribe el nick
+        // Escribe el motivo del baneo
+        outputBuffer.writeCp1252String(reason);
+    }
+
+    public static void banIpList() {
+        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
+        outputBuffer.writeByte(GMCommand.BAN_IP_LIST.getId());
+    }
+
+    public static void banIpReload() {
+        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
+        outputBuffer.writeByte(GMCommand.BAN_IP_RELOAD.getId());
+    }
+
+    public static void bankDeposit(int slot, int amount) {
+        outputBuffer.writeByte(ClientPacket.BANK_DEPOSIT.getId());
+        outputBuffer.writeByte(slot);
+        outputBuffer.writeInteger((short) amount);
+    }
+
+    public static void bankEnd() {
+        outputBuffer.writeByte(ClientPacket.BANK_END.getId());
+    }
+
+    public static void bankExtractItem(int slot, int amount) {
+        outputBuffer.writeByte(ClientPacket.BANK_EXTRACT_ITEM.getId());
+        outputBuffer.writeByte(slot);
+        outputBuffer.writeInteger((short) amount);
+    }
+
+    public static void bet(short amount) {
+        outputBuffer.writeByte(ClientPacket.BET.getId());
+        outputBuffer.writeInteger(amount);
+    }
+
+    public static void blockTile() {
+        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
+        outputBuffer.writeByte(GMCommand.BLOCK_TILE.getId());
+    }
+
+    public static void bug(String desc) {
+        outputBuffer.writeByte(ClientPacket.BUG.getId());
+        outputBuffer.writeCp1252String(desc);
+    }
+
+    public static void castSpell(int slot) {
+        outputBuffer.writeByte(ClientPacket.CAST_SPELL.getId());
+        outputBuffer.writeByte(slot);
+    }
+
+    public static void changeEmail(String nick, String email) {
+        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
+        outputBuffer.writeByte(GMCommand.CHANGE_EMAIL.getId());
+        outputBuffer.writeCp1252String(nick);
+        outputBuffer.writeCp1252String(email);
+    }
+
+    public static void changeHeading(Direction direction) {
+        outputBuffer.writeByte(ClientPacket.CHANGE_HEADING.getId());
+        outputBuffer.writeByte(direction.getId());
+    }
+
+    public static void changeMOTD() {
+        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
+        outputBuffer.writeByte(GMCommand.CHANGE_MOTD.getId());
+    }
+
+    public static void changeMapInfoBackup(boolean backup) {
+        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
+        outputBuffer.writeByte(GMCommand.CHANGE_MAP_INFO_BACKUP.getId());
+        outputBuffer.writeBoolean(backup);
+    }
+
+    public static void changeMapInfoLand(String land) {
+        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
+        outputBuffer.writeByte(GMCommand.CHANGE_MAP_INFO_LAND.getId());
+        outputBuffer.writeCp1252String(land);
+    }
+
+    public static void changeMapInfoNoInvi(boolean noInvi) {
+        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
+        outputBuffer.writeByte(GMCommand.CHANGE_MAP_INFO_NO_INVI.getId());
+        outputBuffer.writeBoolean(noInvi);
+    }
+
+    public static void changeMapInfoNoMagic(boolean noMagic) {
+        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
+        outputBuffer.writeByte(GMCommand.CHANGE_MAP_INFO_NO_MAGIC.getId());
+        outputBuffer.writeBoolean(noMagic);
+    }
+
+    public static void changeMapInfoNoResu(boolean noResu) {
+        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
+        outputBuffer.writeByte(GMCommand.CHANGE_MAP_INFO_NO_RESU.getId());
+        outputBuffer.writeBoolean(noResu);
+    }
+
+    public static void changeMapInfoPK(boolean isPK) {
+        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
+        outputBuffer.writeByte(GMCommand.CHANGE_MAP_INFO_PK.getId());
+        outputBuffer.writeBoolean(isPK);
+    }
+
+    public static void changeMapInfoRestricted(String restrict) {
+        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
+        outputBuffer.writeByte(GMCommand.CHANGE_MAP_INFO_RESTRICTED.getId());
+        outputBuffer.writeCp1252String(restrict);
+    }
+
+    public static void changeMapInfoZone(String zone) {
+        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
+        outputBuffer.writeByte(GMCommand.CHANGE_MAP_INFO_ZONE.getId());
+        outputBuffer.writeCp1252String(zone);
+    }
+
+    public static void changeNick(String nick, String newNick) {
+        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
+        outputBuffer.writeByte(GMCommand.CHANGE_NICK.getId());
+        outputBuffer.writeCp1252String(nick);
+        outputBuffer.writeCp1252String(newNick);
+    }
+
+    public static void changePassword(String oldPass, String newPass) {
+        outputBuffer.writeByte(ClientPacket.CHANGE_PASSWORD.getId());
+        outputBuffer.writeCp1252String(oldPass);
+        outputBuffer.writeCp1252String(newPass);
+    }
+
+    public static void chaosArmour(int armourIndex, short objectIndex) {
+        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
+        outputBuffer.writeByte(GMCommand.CHAOS_ARMOUR.getId());
+        outputBuffer.writeByte(armourIndex);
+        outputBuffer.writeInteger(objectIndex);
+    }
+
+    public static void chaosMessage(String message) {
+        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
+        outputBuffer.writeByte(GMCommand.CHAOS_MESSAGE.getId());
+        outputBuffer.writeCp1252String(message);
+    }
+
+    public static void chatColor(int r, int g, int b) {
+        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
+        outputBuffer.writeByte(GMCommand.CHAT_COLOR.getId());
+        outputBuffer.writeByte(r);
+        outputBuffer.writeByte(g);
+        outputBuffer.writeByte(b);
+    }
+
+    public static void citizenMessage(String message) {
+        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
+        outputBuffer.writeByte(GMCommand.CITIZEN_MESSAGE.getId());
+        outputBuffer.writeCp1252String(message);
+    }
+
+    public static void cleanNpcInventory() {
+        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
+        outputBuffer.writeByte(GMCommand.CLEAN_NPC_INVENTORY.getId());
+    }
+
+    public static void cleanSOS() {
+        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
+        outputBuffer.writeByte(GMCommand.CLEAN_SOS.getId());
+    }
+
+    public static void cleanWorld() {
+        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
+        outputBuffer.writeByte(GMCommand.CLEAN_WORLD.getId());
+    }
+
+    public static void commentServerLog(String message) {
+        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
+        outputBuffer.writeByte(GMCommand.COMMENT_SERVER_LOG.getId());
+        outputBuffer.writeCp1252String(message);
+    }
+
+    public static void commerceBuy(int slot, int amount) {
+        outputBuffer.writeByte(ClientPacket.COMMERCE_BUY.getId());
+        outputBuffer.writeByte(slot);
+        outputBuffer.writeInteger((short) amount);
+    }
+
+    public static void commerceEnd() {
+        outputBuffer.writeByte(ClientPacket.COMMERCE_END.getId());
+    }
+
+    public static void commerceSell(int slot, int amount) {
+        outputBuffer.writeByte(ClientPacket.COMMERCE_SELL.getId());
+        outputBuffer.writeByte(slot);
+        outputBuffer.writeInteger((short) amount);
+    }
+
+    public static void consultation() {
+        outputBuffer.writeByte(ClientPacket.CONSULTATION.getId());
+    }
+
+    public static void councilMessage(String message) {
+        outputBuffer.writeByte(ClientPacket.COUNCIL_MSG.getId());
+        outputBuffer.writeCp1252String(message);
+    }
+
+    public static void createNpc(Short npc) {
+        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
+        outputBuffer.writeByte(GMCommand.CREATE_NPC.getId());
+        outputBuffer.writeInteger(npc);
+    }
+
+    public static void createNpcRespawn(Short npc) {
+        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
+        outputBuffer.writeByte(GMCommand.CREATE_NPC_WITH_RESPAWN.getId());
+        outputBuffer.writeInteger(npc);
+    }
+
+    public static void createObj(int objId) {
+        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
+        outputBuffer.writeByte(GMCommand.CREATE_OBJ.getId());
+        outputBuffer.writeInteger((short) objId);
+    }
+
+    public static void createTeleport(short map, int x, int y, int radio) {
+        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
+        outputBuffer.writeByte(GMCommand.CREATE_TELEPORT.getId());
+        outputBuffer.writeInteger(map);
+        outputBuffer.writeByte(x);
+        outputBuffer.writeByte(y);
+        outputBuffer.writeByte(radio);
+    }
+
+    public static void criminalMessage(String message) {
+        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
+        outputBuffer.writeByte(GMCommand.CRIMINAL_MESSAGE.getId());
+        outputBuffer.writeCp1252String(message);
+    }
+
+    public static void desc(String desc) {
+        outputBuffer.writeByte(ClientPacket.DESC.getId());
+        outputBuffer.writeCp1252String(desc);
+    }
+
+    public static void depositGold(int amount) {
+        outputBuffer.writeByte(ClientPacket.DEPOSIT_GOLD.getId());
+        outputBuffer.writeLong(amount);
+    }
+
+    public static void doubleClick(int x, int y) {
+        outputBuffer.writeByte(ClientPacket.DOUBLE_CLICK.getId());
+        outputBuffer.writeByte(x);
+        outputBuffer.writeByte(y);
+    }
+
+    public static void drop(int slot, int amount) {
+        outputBuffer.writeByte(ClientPacket.DROP.getId());
+        outputBuffer.writeByte((byte) slot);
+        outputBuffer.writeInteger((short) amount);
+    }
+
+    public static void dumb(String player) {
+        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
+        outputBuffer.writeByte(GMCommand.DUMB.getId());
+        outputBuffer.writeCp1252String(player);
+    }
+
+    public static void dumpSecurity() {
+        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
+        outputBuffer.writeByte(GMCommand.DUMP_SECURITY.getId());
+    }
+
+    public static void enlist() {
+        outputBuffer.writeByte(ClientPacket.ENLIST.getId());
+    }
+
+    public static void equipItem(int slot) {
+        outputBuffer.writeByte(ClientPacket.EQUIP_ITEM.getId());
+        outputBuffer.writeByte(slot);
+    }
+
+    public static void extractGold(int amount) {
+        outputBuffer.writeByte(ClientPacket.EXTRACT_GOLD.getId());
+        outputBuffer.writeLong(amount);
+    }
+
+    public static void forgive(String player) {
+        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
+        outputBuffer.writeByte(GMCommand.FORGIVE.getId());
+        outputBuffer.writeCp1252String(player);
+    }
+
+    public static void GM() {
+        outputBuffer.writeByte(ClientPacket.GM.getId());
+    }
+
+    public static void GMMessage(String message) {
+        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
+        outputBuffer.writeByte(GMCommand.GM_MESSAGE.getId());
+        outputBuffer.writeCp1252String(message);
+    }
+
+    public static void GMPanel() {
+        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
+        outputBuffer.writeByte(GMCommand.GM_PANEL.getId());
+    }
+
+    public static void guildBan(String guild) {
+        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
+        outputBuffer.writeByte(GMCommand.GUILD_BAN.getId());
+        outputBuffer.writeCp1252String(guild);
+    }
+
+    public static void guildFound() {
+        outputBuffer.writeByte(ClientPacket.GUILD_FOUND.getId());
+    }
+
+    public static void guildFundation(int guildType) {
+        outputBuffer.writeByte(ClientPacket.GUILD_FUNDATION.getId());
+        outputBuffer.writeByte(guildType);
+    }
+
+    public static void guildKick(String player) {
+        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
+        outputBuffer.writeByte(GMCommand.GUILD_KICK.getId());
+        outputBuffer.writeCp1252String(player);
+    }
+
+    public static void guildLeave() {
+        outputBuffer.writeByte(ClientPacket.GUILD_LEAVE.getId());
+    }
+
+    public static void guildMembers(String guild) {
+        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
+        outputBuffer.writeByte(GMCommand.GUILD_MEMBERS.getId());
+        outputBuffer.writeCp1252String(guild);
+    }
+
+    public static void guildMessage(String message) {
+        outputBuffer.writeByte(ClientPacket.GUILD_MSG.getId());
+        outputBuffer.writeCp1252String(message);
+    }
+
+    public static void guildMessages(String guild) {
+        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
+        outputBuffer.writeByte(GMCommand.SHOW_GUILD_MESSAGES.getId());
+        outputBuffer.writeCp1252String(guild);
+    }
+
+    public static void guildOnline() {
+        outputBuffer.writeByte(ClientPacket.GUILD_ONLINE.getId());
+    }
+
+    public static void guildOnlineSpecific(String guild) {
+        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
+        outputBuffer.writeByte(GMCommand.GUILD_ONLINE_MEMBERS.getId());
+        outputBuffer.writeCp1252String(guild);
+    }
+
+    public static void guildVote(String player) {
+        outputBuffer.writeByte(ClientPacket.GUILD_VOTE.getId());
+        outputBuffer.writeCp1252String(player);
+    }
+
+    public static void heal() {
+        outputBuffer.writeByte(ClientPacket.HEAL.getId());
+    }
+
+    public static void help() {
+        outputBuffer.writeByte(ClientPacket.HELP.getId());
+    }
+
+    public static void home() {
+        outputBuffer.writeByte(ClientPacket.HOME.getId());
+    }
+
+    public static void imperialArmour(int armourId, short objId) {
+        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
+        outputBuffer.writeByte(GMCommand.IMPERIAL_ARMOUR.getId());
+        outputBuffer.writeByte(armourId);
+        outputBuffer.writeInteger(objId);
+    }
+
+    public static void information() {
+        outputBuffer.writeByte(ClientPacket.INFORMATION.getId());
+    }
+
+    public static void inquiry() {
+        outputBuffer.writeByte(ClientPacket.INQUIRY.getId());
+    }
+
+    public static void invisibility() {
+        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
+        outputBuffer.writeByte(GMCommand.INVISIBILITY.getId());
+    }
+
+    public static void IpToNick(int[] ip) {
+        // Valida que el tamaño del array sea de 4 bytes
+        if (ip.length != 4) return; // IP invalida
+        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
+        outputBuffer.writeByte(GMCommand.IP_TO_NICK.getId());
+        // Escribe cada byte de la IP en el buffer de datos salientes
+        for (int b : ip) outputBuffer.writeByte(b);
+    }
+
+    public static void jail(String player, String reason, int time) {
+        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
+        outputBuffer.writeByte(GMCommand.JAIL.getId());
+        outputBuffer.writeCp1252String(player);
+        outputBuffer.writeCp1252String(reason);
+        outputBuffer.writeByte(time);
+    }
+
+    public static void kick(String player) {
+        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
+        outputBuffer.writeByte(GMCommand.KICK.getId());
+        outputBuffer.writeCp1252String(player);
+    }
+
+    public static void kickAll() {
+        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
+        outputBuffer.writeByte(GMCommand.KICK_ALL.getId());
+    }
+
+    public static void kickCouncil(String player) {
+        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
+        outputBuffer.writeByte(GMCommand.KICK_COUNCIL.getId());
+        outputBuffer.writeCp1252String(player);
+    }
+
+    public static void kill(String player) {
+        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
+        outputBuffer.writeByte(GMCommand.KILL.getId());
+        outputBuffer.writeCp1252String(player);
+    }
+
+    public static void lastIp(String player) {
+        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
+        outputBuffer.writeByte(GMCommand.LAST_IP.getId());
+        outputBuffer.writeCp1252String(player);
+    }
+
+    public static void leaveFaction() {
+        outputBuffer.writeByte(ClientPacket.LEAVE_FACTION.getId());
+    }
+
+    public static void leftClick(int x, int y) {
+        outputBuffer.writeByte(ClientPacket.LEFT_CLICK.getId());
+        outputBuffer.writeByte(x);
+        outputBuffer.writeByte(y);
     }
 
     /**
@@ -64,10 +573,6 @@ public class Protocol {
         outputBuffer.writeByte(0); // App.Revision ?
     }
 
-    public static void throwDices() {
-        outputBuffer.writeByte(ClientPacket.THROW_DICES.getId());
-    }
-
     public static void loginNewChar(String userName, String userPassword, int userRaza, int userSexo, int userClase, int userHead, String userEmail, int userHogar) {
         outputBuffer.writeByte(ClientPacket.LOGIN_NEW_CHAR.getId());
         outputBuffer.writeCp1252String(userName);
@@ -82,13 +587,581 @@ public class Protocol {
         outputBuffer.writeByte(userClase);
         outputBuffer.writeInteger((short) userHead); // Convierte el valor int (32 bits) a short (16 bits) descartando los 16 bits mas significativos para ser compatible con el tipo Integer de VB6 (2 bytes)
 
-
         outputBuffer.writeCp1252String(userEmail);
         outputBuffer.writeByte(userHogar);
     }
 
+    public static void map(short map) {
+        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
+        outputBuffer.writeByte(GMCommand.ONLINE_MAP.getId());
+        outputBuffer.writeInteger(map);
+    }
+
+    public static void meditate() {
+        if (USER.getUserMaxMAN() == USER.getUserMinMAN()) return;
+        if (charList[USER.getUserCharIndex()].isDead()) {
+            CONSOLE.addMsgToConsole(new String("You are dead!".getBytes(), StandardCharsets.UTF_8), false, true, new RGBColor());
+            return;
+        }
+        outputBuffer.writeByte(ClientPacket.MEDITATE.getId());
+    }
+
+    public static void mobPanel() {
+        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
+        outputBuffer.writeByte(GMCommand.MOB_PANEL.getId());
+    }
+
+    public static void modPlayer(String player, int property, String value, String extraParam) {
+        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
+        outputBuffer.writeByte(GMCommand.MOD_PLAYER.getId());
+        outputBuffer.writeCp1252String(player);
+        outputBuffer.writeByte(property);
+        outputBuffer.writeCp1252String(value);
+        outputBuffer.writeCp1252String(extraParam);
+    }
+
+    public static void modifySkills(int[] skills) {
+        outputBuffer.writeByte(ClientPacket.MODIFY_SKILLS.getId());
+        for (Skill skill : Skill.values())
+            outputBuffer.writeByte(skills[skill.getId() - 1]);
+    }
+
+    public static void MOTD() {
+        outputBuffer.writeByte(ClientPacket.MOTD.getId());
+    }
+
+    public static void navigation() {
+        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
+        outputBuffer.writeByte(GMCommand.NAVIGATION.getId());
+    }
+
+    public static void nickToIp(String nick) {
+        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
+        outputBuffer.writeByte(GMCommand.NICK_TO_IP.getId());
+        outputBuffer.writeCp1252String(nick);
+    }
+
+    public static void night() {
+        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
+        outputBuffer.writeByte(GMCommand.NIGHT.getId());
+    }
+
+    public static void noDumb(String player) {
+        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
+        outputBuffer.writeByte(GMCommand.NO_DUMB.getId());
+        outputBuffer.writeCp1252String(player);
+    }
+
+    public static void NpcFollow() {
+        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
+        outputBuffer.writeByte(GMCommand.NPC_FOLLOW.getId());
+    }
+
+    public static void online() {
+        outputBuffer.writeByte(ClientPacket.ONLINE.getId());
+    }
+
+    public static void onlineChaos() {
+        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
+        outputBuffer.writeByte(GMCommand.ONLINE_CHAOS.getId());
+    }
+
+    public static void onlineGM() {
+        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
+        outputBuffer.writeByte(GMCommand.ONLINE_GM.getId());
+    }
+
+    public static void onlineRoyal() {
+        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
+        outputBuffer.writeByte(GMCommand.ONLINE_ROYAL.getId());
+    }
+
+    public static void openBank() {
+        outputBuffer.writeByte(ClientPacket.OPEN_BANK.getId());
+    }
+
+    public static void partyAccept(String player) {
+        outputBuffer.writeByte(ClientPacket.PARTY_ACCEPT.getId());
+        outputBuffer.writeCp1252String(player);
+    }
+
+    public static void partyCreate() {
+        if (charList[USER.getUserCharIndex()].isDead()) {
+            CONSOLE.addMsgToConsole(new String("You are dead!".getBytes(), StandardCharsets.UTF_8), false, true, new RGBColor());
+            return;
+        }
+        outputBuffer.writeByte(ClientPacket.PARTY_CREATE.getId());
+    }
+
+    public static void partyJoin() {
+        if (charList[USER.getUserCharIndex()].isDead()) {
+            CONSOLE.addMsgToConsole(new String("You are dead!".getBytes(), StandardCharsets.UTF_8), false, true, new RGBColor());
+            return;
+        }
+        outputBuffer.writeByte(ClientPacket.PARTY_JOIN.getId());
+    }
+
+    public static void partyKick(String player) {
+        outputBuffer.writeByte(ClientPacket.PARTY_KICK.getId());
+        outputBuffer.writeCp1252String(player);
+    }
+
+    public static void partyLeave() {
+        outputBuffer.writeByte(ClientPacket.PARTY_LEAVE.getId());
+    }
+
+    public static void partyMessage(String message) {
+        outputBuffer.writeByte(ClientPacket.PARTY_MESSAGE.getId());
+        outputBuffer.writeCp1252String(message);
+    }
+
+    public static void partyOnline() {
+        outputBuffer.writeByte(ClientPacket.PARTY_ONLINE.getId());
+    }
+
+    public static void partySetLeader(String player) {
+        outputBuffer.writeByte(ClientPacket.PARTY_SET_LEADER.getId());
+        outputBuffer.writeCp1252String(player);
+    }
+
+    public static void petFollow() {
+        if (charList[USER.getUserCharIndex()].isDead()) {
+            CONSOLE.addMsgToConsole(new String("You are dead!".getBytes(), StandardCharsets.UTF_8), false, true, new RGBColor());
+            return;
+        }
+        outputBuffer.writeByte(ClientPacket.PET_FOLLOW.getId());
+    }
+
+    public static void petRelease() {
+        if (charList[USER.getUserCharIndex()].isDead()) {
+            CONSOLE.addMsgToConsole(new String("You are dead!".getBytes(), StandardCharsets.UTF_8), false, true, new RGBColor());
+            return;
+        }
+        outputBuffer.writeByte(ClientPacket.PET_RELEASE.getId());
+    }
+
+    public static void petStay() {
+        if (charList[USER.getUserCharIndex()].isDead()) {
+            CONSOLE.addMsgToConsole(new String("You are dead!".getBytes(), StandardCharsets.UTF_8), false, true, new RGBColor());
+            return;
+        }
+        outputBuffer.writeByte(ClientPacket.PET_STAY.getId());
+    }
+
+    public static void pickUp() {
+        outputBuffer.writeByte(ClientPacket.PICK_UP.getId());
+    }
+
+    public static void ping() {
+        if (pingTime != 0) return;
+        outputBuffer.writeByte(ClientPacket.PING.getId());
+        pingTime = (int) glfwGetTime();
+    }
+
+    public static void playerBank(String player) {
+        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
+        outputBuffer.writeByte(GMCommand.PLAYER_BANK.getId());
+        outputBuffer.writeCp1252String(player);
+    }
+
+    public static void playerEmail(String player) {
+        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
+        outputBuffer.writeByte(GMCommand.PLAYER_EMAIL.getId());
+        outputBuffer.writeCp1252String(player);
+    }
+
+    public static void playerGold(String player) {
+        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
+        outputBuffer.writeByte(GMCommand.PLAYER_GOLD.getId());
+        outputBuffer.writeCp1252String(player);
+    }
+
+    public static void playerInfo(String player) {
+        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
+        outputBuffer.writeByte(GMCommand.PLAYER_INFO.getId());
+        outputBuffer.writeCp1252String(player);
+    }
+
+    public static void playerInv(String player) {
+        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
+        outputBuffer.writeByte(GMCommand.PLAYER_INVENTORY.getId());
+        outputBuffer.writeCp1252String(player);
+    }
+
+    public static void playerLocation(String player) {
+        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
+        outputBuffer.writeByte(GMCommand.PLAYER_LOCATION.getId());
+        outputBuffer.writeCp1252String(player);
+    }
+
+    public static void playerSkills(String player) {
+        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
+        outputBuffer.writeByte(GMCommand.PLAYER_SKILLS.getId());
+        outputBuffer.writeCp1252String(player);
+    }
+
+    public static void playerSlot(String player, int slot) {
+        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
+        outputBuffer.writeByte(GMCommand.PLAYER_SLOT.getId());
+        outputBuffer.writeCp1252String(player);
+        outputBuffer.writeByte(slot);
+    }
+
+    public static void playerStats(String player) {
+        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
+        outputBuffer.writeByte(GMCommand.STATS.getId());
+        outputBuffer.writeCp1252String(player);
+    }
+
+    public static void playMusic(int music) {
+        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
+        outputBuffer.writeByte(GMCommand.PLAY_MUSIC.getId());
+        outputBuffer.writeByte(music);
+    }
+
+    public static void playMusicMap(int music, short map) {
+        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
+        outputBuffer.writeByte(GMCommand.PLAY_MUSIC_MAP.getId());
+        outputBuffer.writeByte(music);
+        outputBuffer.writeInteger(map);
+    }
+
+    public static void playSound(int idSound) {
+        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
+        outputBuffer.writeByte(GMCommand.PLAY_SOUND.getId());
+        outputBuffer.writeByte(idSound);
+    }
+
+    public static void playSoundAtLocation(int sound, short map, int x, int y) {
+        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
+        outputBuffer.writeByte(GMCommand.PLAY_SOUND_AT_LOCATION.getId());
+        outputBuffer.writeByte(sound);
+        outputBuffer.writeInteger(map);
+        outputBuffer.writeByte(x);
+        outputBuffer.writeByte(y);
+    }
+
+    public static void poll(int option) {
+        outputBuffer.writeByte(ClientPacket.POLL.getId());
+        outputBuffer.writeByte(option);
+    }
+
+    public static void punishments(String message) {
+        outputBuffer.writeByte(ClientPacket.PUNISHMENTS.getId());
+        outputBuffer.writeCp1252String(message);
+    }
+
+    public static void quit() {
+        if (charList[USER.getUserCharIndex()].isParalizado()) {
+            CONSOLE.addMsgToConsole(new String("You can't get out while you're paralyzed.".getBytes(), StandardCharsets.UTF_8), false, true, new RGBColor());
+            return;
+        }
+        outputBuffer.writeByte(ClientPacket.QUIT.getId());
+    }
+
+    public static void rain() {
+        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
+        outputBuffer.writeByte(GMCommand.RAIN.getId());
+    }
+
+    public static void reloadNPC() {
+        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
+        outputBuffer.writeByte(GMCommand.RELOAD_NPC.getId());
+    }
+
+    public static void reloadObj() {
+        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
+        outputBuffer.writeByte(GMCommand.RELOAD_OBJ.getId());
+    }
+
+    public static void reloadServerIni() {
+        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
+        outputBuffer.writeByte(GMCommand.RELOAD_SERVER_INI.getId());
+    }
+
+    public static void reloadSpell() {
+        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
+        outputBuffer.writeByte(GMCommand.RELOAD_SPELL.getId());
+    }
+
+    public static void removeArmy(String player) {
+        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
+        outputBuffer.writeByte(GMCommand.REMOVE_ARMY.getId());
+        outputBuffer.writeCp1252String(player);
+    }
+
+    public static void removeChaos(String player) {
+        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
+        outputBuffer.writeByte(GMCommand.REMOVE_CHAOS.getId());
+        outputBuffer.writeCp1252String(player);
+    }
+
+    public static void removeFactions(String player) {
+        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
+        outputBuffer.writeByte(GMCommand.REMOVE_FACTIONS.getId());
+        outputBuffer.writeCp1252String(player);
+    }
+
+    public static void removeItem() {
+        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
+        outputBuffer.writeByte(GMCommand.REMOVE_ITEM.getId());
+    }
+
+    public static void removeItemArea() {
+        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
+        outputBuffer.writeByte(GMCommand.REMOVE_ITEM_AREA.getId());
+    }
+
+    public static void removeNpc() {
+        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
+        outputBuffer.writeByte(GMCommand.REMOVE_NPC.getId());
+    }
+
+    public static void removeNpcArea() {
+        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
+        outputBuffer.writeByte(GMCommand.REMOVE_NPC_AREA.getId());
+    }
+
+    public static void removeNpcNoRespawn() {
+        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
+        outputBuffer.writeByte(GMCommand.REMOVE_NPC_NO_RESPAWN.getId());
+    }
+
+    public static void removePunishment(String player, int punishment, String newText) {
+        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
+        outputBuffer.writeByte(GMCommand.REMOVE_PUNISHMENT.getId());
+        outputBuffer.writeCp1252String(player);
+        outputBuffer.writeByte(punishment);
+        outputBuffer.writeCp1252String(newText);
+    }
+
+    public static void removeTeleport() {
+        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
+        outputBuffer.writeByte(GMCommand.REMOVE_TELEPORT.getId());
+    }
+
+    public static void report(String message) {
+        outputBuffer.writeByte(ClientPacket.REPORT.getId());
+        outputBuffer.writeCp1252String(message);
+    }
+
+    public static void requestAttributes() {
+        outputBuffer.writeByte(ClientPacket.REQUEST_ATTRIBUTES.getId());
+    }
+
+    public static void requestFame() {
+        outputBuffer.writeByte(ClientPacket.REQUEST_FAME.getId());
+    }
+
+    public static void requestGuildLeaderInfo() {
+        outputBuffer.writeByte(ClientPacket.REQUEST_GUILD_LEADER_INFO.getId());
+    }
+
+    public static void requestMiniStats() {
+        outputBuffer.writeByte(ClientPacket.REQUEST_MINI_STATS.getId());
+    }
+
+    public static void requestPositionUpdate() {
+        outputBuffer.writeByte(ClientPacket.REQUEST_POSITION_UPDATE.getId());
+    }
+
+    public static void requestSkills() {
+        outputBuffer.writeByte(ClientPacket.REQUEST_SKILLS.getId());
+    }
+
+    public static void rest() {
+        if (charList[USER.getUserCharIndex()].isDead()) {
+            CONSOLE.addMsgToConsole(new String("You are dead!".getBytes(), StandardCharsets.UTF_8), false, true, new RGBColor());
+            return;
+        }
+        outputBuffer.writeByte(ClientPacket.REST.getId());
+    }
+
+    public static void restart() {
+        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
+        outputBuffer.writeByte(GMCommand.RESTART.getId());
+    }
+
+    public static void resucitationToggle() {
+        outputBuffer.writeByte(ClientPacket.RESUSCITATION_SAFE_TOGGLE.getId());
+    }
+
+    public static void resurrect() {
+        outputBuffer.writeByte(ClientPacket.RESURRECT.getId());
+    }
+
+    public static void revive(String player) {
+        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
+        outputBuffer.writeByte(GMCommand.REVIVE.getId());
+        outputBuffer.writeCp1252String(player);
+    }
+
+    public static void reward() {
+        outputBuffer.writeByte(ClientPacket.REWARD.getId());
+    }
+
+    public static void rmsg(String message) {
+        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
+        outputBuffer.writeByte(GMCommand.RMSG.getId());
+        outputBuffer.writeCp1252String(message);
+    }
+
+    public static void rol(String message) {
+        outputBuffer.writeByte(ClientPacket.ROL.getId());
+        outputBuffer.writeCp1252String(message);
+    }
+
+    public static void royalArmyMessage(String message) {
+        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
+        outputBuffer.writeByte(GMCommand.ROYAL_ARMY_MESSAGE.getId());
+        outputBuffer.writeCp1252String(message);
+    }
+
+    public static void safeToggle() {
+        outputBuffer.writeByte(ClientPacket.SAFE_TOGGLE.getId());
+    }
+
+    public static void saveChar() {
+        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
+        outputBuffer.writeByte(GMCommand.SAVE_CHAR.getId());
+    }
+
+    public static void saveMap() {
+        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
+        outputBuffer.writeByte(GMCommand.SAVE_MAP.getId());
+    }
+
+    public static void sentinel() {
+        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
+        outputBuffer.writeByte(GMCommand.SENTINEL.getId());
+    }
+
+    public static void sentinelCode(int code) {
+        outputBuffer.writeByte(ClientPacket.SENTINEL_CODE.getId());
+        outputBuffer.writeByte(code);
+    }
+
+    public static void setDesc(String desc) {
+        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
+        outputBuffer.writeByte(GMCommand.SET_DESC.getId());
+        outputBuffer.writeCp1252String(desc);
+    }
+
+    public static void setIniVar(String sLlave, String sClave, String sValor) {
+        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
+        outputBuffer.writeByte(GMCommand.SET_INI_VAR.getId());
+        outputBuffer.writeCp1252String(sLlave);
+        outputBuffer.writeCp1252String(sClave);
+        outputBuffer.writeCp1252String(sValor);
+    }
+
+    public static void setTrigger(int trigger) {
+        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
+        outputBuffer.writeByte(GMCommand.SET_TRIGGER.getId());
+        outputBuffer.writeByte(trigger);
+    }
+
+    public static void shareNpc() {
+        if (charList[USER.getUserCharIndex()].isDead()) {
+            CONSOLE.addMsgToConsole(new String("You are dead!".getBytes(), StandardCharsets.UTF_8), false, true, new RGBColor());
+            return;
+        }
+        outputBuffer.writeByte(ClientPacket.SHARE_NPC.getId());
+    }
+
+    public static void showHidden() {
+        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
+        outputBuffer.writeByte(GMCommand.SHOW_HIDDEN.getId());
+    }
+
+    public static void showIgnored() {
+        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
+        outputBuffer.writeByte(GMCommand.SHOW_IGNORED.getId());
+    }
+
+    public static void showMobs(short map) {
+        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
+        outputBuffer.writeByte(GMCommand.SHOW_MOBS.getId());
+        outputBuffer.writeInteger(map);
+    }
+
+    public static void showName() {
+        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
+        outputBuffer.writeByte(GMCommand.SHOW_NAME.getId());
+    }
+
+    public static void showObjMap() {
+        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
+        outputBuffer.writeByte(GMCommand.SHOW_OBJ_MAP.getId());
+    }
+
+    public static void showServerForm() {
+        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
+        outputBuffer.writeByte(GMCommand.SHOW_SERVER_FORM.getId());
+    }
+
+    public static void showTrigger() {
+        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
+        outputBuffer.writeByte(GMCommand.SHOW_TRIGGER.getId());
+    }
+
+    public static void showWorkers() {
+        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
+        outputBuffer.writeByte(GMCommand.SHOW_WORKERS.getId());
+    }
+
+    public static void shutdown() {
+        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
+        outputBuffer.writeByte(GMCommand.SHUTDOWN.getId());
+    }
+
+    public static void silence(String player) {
+        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
+        outputBuffer.writeByte(GMCommand.SILENCE.getId());
+        outputBuffer.writeCp1252String(player);
+    }
+
+    public static void SOSShowList() {
+        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
+        outputBuffer.writeByte(GMCommand.SOS_SHOW_LIST.getId());
+    }
+
+    public static void spawnCreature(short creatureIndex) {
+        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
+        outputBuffer.writeByte(GMCommand.SPAWN_CREATURE.getId());
+        outputBuffer.writeInteger(creatureIndex);
+    }
+
+    public static void spellInfo(final int slot) {
+        outputBuffer.writeByte(ClientPacket.SPELL_INFO.getId());
+        outputBuffer.writeByte(slot);
+    }
+
+    public static void stats() {
+        outputBuffer.writeByte(ClientPacket.STATS.getId());
+    }
+
+    public static void stopSharingNpc() {
+        if (charList[USER.getUserCharIndex()].isDead()) {
+            CONSOLE.addMsgToConsole(new String("You are dead!".getBytes(), StandardCharsets.UTF_8), false, true, new RGBColor());
+            return;
+        }
+        outputBuffer.writeByte(ClientPacket.STOP_SHARING_NPC.getId());
+    }
+
+    public static void summon(String player) {
+        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
+        outputBuffer.writeByte(GMCommand.SUMMON.getId());
+        outputBuffer.writeCp1252String(player);
+    }
+
+    public static void systemMessage(String message) {
+        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
+        outputBuffer.writeByte(GMCommand.SYSTEM_MESSAGE.getId());
+        outputBuffer.writeCp1252String(message);
+    }
+
     /**
-     * <p>
      * Escribe el paquete TALK para que sea procesado desde el servidor en el codigo de VB6 desde {@code Protocol.bas} dentro del
      * metodo {@code HandleTalk(ByVal UserIndex As Integer)}. Este metodo es llamado cuando el servidor recibe un paquete con ID 3
      * (TALK). Luego, el metodo {@code PrepareMessageChatOverHead} construye el paquete {@code CHAT_OVER_HEAD} que sera enviado a
@@ -139,91 +1212,82 @@ public class Protocol {
         outputBuffer.writeCp1252String(chat);
     }
 
-    public static void whisper(short charIndex, String chat) {
-        outputBuffer.writeByte(ClientPacket.WHISPER.getId());
-        outputBuffer.writeInteger(charIndex);
-        outputBuffer.writeCp1252String(chat);
+    public static void talkAsNpc(String message) {
+        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
+        outputBuffer.writeByte(GMCommand.TALK_AS_NPC.getId());
+        outputBuffer.writeCp1252String(message);
     }
 
-    public static void walk(Direction direction) {
-        outputBuffer.writeByte(ClientPacket.WALK.getId());
-        outputBuffer.writeByte(direction.getId());
-    }
-
-    public static void drop(int slot, int amount) {
-        outputBuffer.writeByte(ClientPacket.DROP.getId());
-        outputBuffer.writeByte((byte) slot);
-        outputBuffer.writeInteger((short) amount);
-    }
-
-    public static void requestPositionUpdate() {
-        outputBuffer.writeByte(ClientPacket.REQUEST_POSITION_UPDATE.getId());
-    }
-
-    public static void attack() {
-        outputBuffer.writeByte(ClientPacket.ATTACK.getId());
-    }
-
-    public static void pickUp() {
-        outputBuffer.writeByte(ClientPacket.PICK_UP.getId());
-    }
-
-    public static void safeToggle() {
-        outputBuffer.writeByte(ClientPacket.SAFE_TOGGLE.getId());
-    }
-
-    public static void resucitationToggle() {
-        outputBuffer.writeByte(ClientPacket.RESUSCITATION_SAFE_TOGGLE.getId());
-    }
-
-    public static void requestGuildLeaderInfo() {
-        outputBuffer.writeByte(ClientPacket.REQUEST_GUILD_LEADER_INFO.getId());
-    }
-
-    public static void requestAttributes() {
-        outputBuffer.writeByte(ClientPacket.REQUEST_ATTRIBUTES.getId());
-    }
-
-    public static void requestFame() {
-        outputBuffer.writeByte(ClientPacket.REQUEST_FAME.getId());
-    }
-
-    public static void requestSkills() {
-        outputBuffer.writeByte(ClientPacket.REQUEST_SKILLS.getId());
-    }
-
-    public static void requestMiniStats() {
-        outputBuffer.writeByte(ClientPacket.REQUEST_MINI_STATS.getId());
-    }
-
-    public static void changeHeading(Direction direction) {
-        outputBuffer.writeByte(ClientPacket.CHANGE_HEADING.getId());
-        outputBuffer.writeByte(direction.getId());
-    }
-
-    public static void modifySkills(int[] skills) {
-        outputBuffer.writeByte(ClientPacket.MODIFY_SKILLS.getId());
-        for (Skill skill : Skill.values())
-            outputBuffer.writeByte(skills[skill.getId() - 1]);
-    }
-
-    public static void leftClick(int x, int y) {
-        outputBuffer.writeByte(ClientPacket.LEFT_CLICK.getId());
+    public static void teleport(String nick, short map, int x, int y) {
+        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
+        outputBuffer.writeByte(GMCommand.TELEPORT.getId());
+        outputBuffer.writeCp1252String(nick);
+        outputBuffer.writeInteger(map);
         outputBuffer.writeByte(x);
         outputBuffer.writeByte(y);
     }
 
-    public static void workLeftClick(int x, int y, int skill) {
-        outputBuffer.writeByte(ClientPacket.WORK_LEFT_CLICK.getId());
-        outputBuffer.writeByte(x);
-        outputBuffer.writeByte(y);
-        outputBuffer.writeByte(skill);
+    public static void teleportNearToPlayer(String player) {
+        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
+        outputBuffer.writeByte(GMCommand.TELEPORT_NEAR_TO_PLAYER.getId());
+        outputBuffer.writeCp1252String(player);
     }
 
-    public static void doubleClick(int x, int y) {
-        outputBuffer.writeByte(ClientPacket.DOUBLE_CLICK.getId());
-        outputBuffer.writeByte(x);
-        outputBuffer.writeByte(y);
+    public static void teleportToPlayer(String player) {
+        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
+        outputBuffer.writeByte(GMCommand.TELEPORT_TO_PLAYER.getId());
+        outputBuffer.writeCp1252String(player);
+    }
+
+    public static void teleportToTarget() {
+        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
+        outputBuffer.writeByte(GMCommand.TELEPORT_TO_TARGET.getId());
+    }
+
+    public static void throwDices() {
+        outputBuffer.writeByte(ClientPacket.THROW_DICES.getId());
+    }
+
+    public static void time() {
+        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
+        outputBuffer.writeByte(GMCommand.TIME.getId());
+    }
+
+    public static void trade() {
+        outputBuffer.writeByte(ClientPacket.TRADE.getId());
+    }
+
+    public static void trainList() {
+        if (charList[USER.getUserCharIndex()].isDead()) {
+            CONSOLE.addMsgToConsole(new String("You are dead!".getBytes(), StandardCharsets.UTF_8), false, true, new RGBColor());
+            return;
+        }
+        outputBuffer.writeByte(ClientPacket.TRAIN_LIST.getId());
+    }
+
+    public static void turnCriminal(String player) {
+        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
+        outputBuffer.writeByte(GMCommand.TURN_CRIMINAL.getId());
+        outputBuffer.writeCp1252String(player);
+    }
+
+    public static void unban(String player) {
+        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
+        outputBuffer.writeByte(GMCommand.UNBAN.getId());
+        outputBuffer.writeCp1252String(player);
+    }
+
+    public static void unbanIp(int[] ip) {
+        if (ip.length != 4) return; // IP invalida
+        // Escribir el mensaje "UnbanIP" en el buffer de datos salientes
+        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
+        outputBuffer.writeByte(GMCommand.UNBAN_IP.getId());
+        // Escribir los componentes de la IP
+        for (int b : ip) outputBuffer.writeByte(b);
+    }
+
+    public static void uptime() {
+        outputBuffer.writeByte(ClientPacket.UPTIME.getId());
     }
 
     public static void useItem(int slot) {
@@ -231,1233 +1295,38 @@ public class Protocol {
         outputBuffer.writeByte(slot);
     }
 
-    public static void equipItem(int slot) {
-        outputBuffer.writeByte(ClientPacket.EQUIP_ITEM.getId());
-        outputBuffer.writeByte(slot);
+    public static void walk(Direction direction) {
+        outputBuffer.writeByte(ClientPacket.WALK.getId());
+        outputBuffer.writeByte(direction.getId());
+    }
+
+    public static void warning(String player, String reason) {
+        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
+        outputBuffer.writeByte(GMCommand.WARNING.getId());
+        outputBuffer.writeCp1252String(player);
+        outputBuffer.writeCp1252String(reason);
+    }
+
+    public static void whisper(short charIndex, String chat) {
+        outputBuffer.writeByte(ClientPacket.WHISPER.getId());
+        outputBuffer.writeInteger(charIndex);
+        outputBuffer.writeCp1252String(chat);
     }
 
     public static void work(int skill) {
         if (USER.isDead()) {
-            CONSOLE.addMsgToConsole(new String("¡¡Estas muerto!!".getBytes(), StandardCharsets.UTF_8),
-                    false, true, new RGBColor());
-
+            CONSOLE.addMsgToConsole(new String("¡You are dead!!".getBytes(), StandardCharsets.UTF_8), false, true, new RGBColor());
             return;
         }
-
         outputBuffer.writeByte(ClientPacket.WORK.getId());
         outputBuffer.writeByte(skill);
     }
 
-    public static void castSpell(int slot) {
-        outputBuffer.writeByte(ClientPacket.CAST_SPELL.getId());
-        outputBuffer.writeByte(slot);
-    }
-
-    public static void quit() {
-        if (charList[USER.getUserCharIndex()].isParalizado()) {
-            CONSOLE.addMsgToConsole(new String("No puedes salir estando paralizado.".getBytes(), StandardCharsets.UTF_8),
-                    false, true, new RGBColor());
-
-            return;
-        }
-
-        outputBuffer.writeByte(ClientPacket.QUIT.getId());
-    }
-
-    public static void spellInfo(final int slot) {
-        outputBuffer.writeByte(ClientPacket.SPELL_INFO.getId());
-        outputBuffer.writeByte(slot);
-    }
-
-    public static void commerceEnd() {
-        outputBuffer.writeByte(ClientPacket.COMMERCE_END.getId());
-    }
-
-    public static void bankEnd() {
-        outputBuffer.writeByte(ClientPacket.BANK_END.getId());
-    }
-
-    public static void changePassword(String oldPass, String newPass) {
-        outputBuffer.writeByte(ClientPacket.CHANGE_PASSWORD.getId());
-        outputBuffer.writeCp1252String(oldPass);
-        outputBuffer.writeCp1252String(newPass);
-    }
-
-    public static void online() {
-        outputBuffer.writeByte(ClientPacket.ONLINE.getId());
-    }
-
-    public static void meditate() {
-
-        if (USER.getUserMaxMAN() == USER.getUserMinMAN()) {
-            return;
-        }
-
-        if (charList[USER.getUserCharIndex()].isDead()) {
-            CONSOLE.addMsgToConsole(new String("¡Estas muerto!".getBytes(), StandardCharsets.UTF_8),
-                    false, true, new RGBColor());
-
-            return;
-        }
-
-        outputBuffer.writeByte(ClientPacket.MEDITATE.getId());
-    }
-
-    public static void commerceStart() {
-        outputBuffer.writeByte(ClientPacket.COMMERCE_START.getId());
-    }
-
-    public static void bankStart() {
-        outputBuffer.writeByte(ClientPacket.BANK_START.getId());
-    }
-
-    public static void guildLeave() {
-        outputBuffer.writeByte(ClientPacket.GUILD_LEAVE.getId());
-    }
-
-    public static void requestAccountState() {
-        if (charList[USER.getUserCharIndex()].isDead()) {
-            CONSOLE.addMsgToConsole(new String("¡Estas muerto!".getBytes(), StandardCharsets.UTF_8),
-                    false, true, new RGBColor());
-
-            return;
-        }
-
-        outputBuffer.writeByte(ClientPacket.REQUEST_ACCOUNT_STATE.getId());
-    }
-
-    public static void petStand() {
-        if (charList[USER.getUserCharIndex()].isDead()) {
-            CONSOLE.addMsgToConsole(new String("¡Estas muerto!".getBytes(), StandardCharsets.UTF_8),
-                    false, true, new RGBColor());
-
-            return;
-        }
-
-        outputBuffer.writeByte(ClientPacket.PET_STAND.getId());
-    }
-
-    public static void petFollow() {
-        if (charList[USER.getUserCharIndex()].isDead()) {
-            CONSOLE.addMsgToConsole(new String("¡Estas muerto!".getBytes(), StandardCharsets.UTF_8),
-                    false, true, new RGBColor());
-
-            return;
-        }
-
-        outputBuffer.writeByte(ClientPacket.PET_FOLLOW.getId());
-    }
-
-    public static void releasePet() {
-        if (charList[USER.getUserCharIndex()].isDead()) {
-            CONSOLE.addMsgToConsole(new String("¡Estas muerto!".getBytes(), StandardCharsets.UTF_8),
-                    false, true, new RGBColor());
-
-            return;
-        }
-
-        outputBuffer.writeByte(ClientPacket.RELEASE_PET.getId());
-    }
-
-    public static void trainList() {
-        if (charList[USER.getUserCharIndex()].isDead()) {
-            CONSOLE.addMsgToConsole(new String("¡Estas muerto!".getBytes(), StandardCharsets.UTF_8),
-                    false, true, new RGBColor());
-
-            return;
-        }
-
-        outputBuffer.writeByte(ClientPacket.TRAIN_LIST.getId());
-    }
-
-    public static void rest() {
-        if (charList[USER.getUserCharIndex()].isDead()) {
-            CONSOLE.addMsgToConsole(new String("¡Estas muerto!".getBytes(), StandardCharsets.UTF_8),
-                    false, true, new RGBColor());
-
-            return;
-        }
-
-        outputBuffer.writeByte(ClientPacket.REST.getId());
-    }
-
-    public static void consultation() {
-        outputBuffer.writeByte(ClientPacket.CONSULTA.getId());
-    }
-
-    public static void resucitate() {
-        outputBuffer.writeByte(ClientPacket.RESUCITATE.getId());
-    }
-
-    public static void heal() {
-        outputBuffer.writeByte(ClientPacket.HEAL.getId());
-    }
-
-    public static void requestStats() {
-        outputBuffer.writeByte(ClientPacket.REQUEST_STATS.getId());
-    }
-
-    public static void help() {
-        outputBuffer.writeByte(ClientPacket.HELP.getId());
-    }
-
-    public static void enlist() {
-        outputBuffer.writeByte(ClientPacket.ENLIST.getId());
-    }
-
-    public static void information() {
-        outputBuffer.writeByte(ClientPacket.INFORMATION.getId());
-    }
-
-    public static void reward() {
-        outputBuffer.writeByte(ClientPacket.REWARD.getId());
-    }
-
-    public static void requestMOTD() {
-        outputBuffer.writeByte(ClientPacket.REQUEST_MOTD.getId());
-    }
-
-    public static void upTime() {
-        outputBuffer.writeByte(ClientPacket.UPTIME.getId());
-    }
-
-    public static void partyLeave() {
-        outputBuffer.writeByte(ClientPacket.PARTY_LEAVE.getId());
-    }
-
-    public static void partyCreate() {
-        if (charList[USER.getUserCharIndex()].isDead()) {
-            CONSOLE.addMsgToConsole(new String("¡Estas muerto!".getBytes(), StandardCharsets.UTF_8),
-                    false, true, new RGBColor());
-
-            return;
-        }
-
-        outputBuffer.writeByte(ClientPacket.PARTY_CREATE.getId());
-    }
-
-    public static void partyJoin() {
-        if (charList[USER.getUserCharIndex()].isDead()) {
-            CONSOLE.addMsgToConsole(new String("¡Estas muerto!".getBytes(), StandardCharsets.UTF_8),
-                    false, true, new RGBColor());
-
-            return;
-        }
-
-        outputBuffer.writeByte(ClientPacket.PARTY_JOIN.getId());
-    }
-
-    public static void shareNpc() {
-        if (charList[USER.getUserCharIndex()].isDead()) {
-            CONSOLE.addMsgToConsole(new String("¡Estas muerto!".getBytes(), StandardCharsets.UTF_8),
-                    false, true, new RGBColor());
-
-            return;
-        }
-
-        outputBuffer.writeByte(ClientPacket.SHARE_NPC.getId());
-    }
-
-    public static void stopSharingNpc() {
-        if (charList[USER.getUserCharIndex()].isDead()) {
-            CONSOLE.addMsgToConsole(new String("¡Estas muerto!".getBytes(), StandardCharsets.UTF_8),
-                    false, true, new RGBColor());
-
-            return;
-        }
-
-        outputBuffer.writeByte(ClientPacket.STOP_SHARING_NPC.getId());
-    }
-
-    public static void inquiry() {
-        outputBuffer.writeByte(ClientPacket.INQUIRY.getId());
-    }
-
-    public static void inquiryVote(int op) {
-        outputBuffer.writeByte(ClientPacket.INQUIRY_VOTE.getId());
-        outputBuffer.writeByte(op);
-    }
-
-    public static void guildMessage(String message) {
-        outputBuffer.writeByte(ClientPacket.GUILD_MESSAGE.getId());
-        outputBuffer.writeCp1252String(message);
-    }
-
-    public static void partyMessage(String message) {
-        outputBuffer.writeByte(ClientPacket.PARTY_MESSAGE.getId());
-        outputBuffer.writeCp1252String(message);
-    }
-
-    public static void centinelReport(int number) {
-        outputBuffer.writeByte(ClientPacket.CENTINEL_REPORT.getId());
-        outputBuffer.writeByte(number);
-    }
-
-    public static void guildOnline() {
-        outputBuffer.writeByte(ClientPacket.GUILD_ONLINE.getId());
-    }
-
-    public static void partyOnline() {
-        outputBuffer.writeByte(ClientPacket.GUILD_ONLINE.getId());
-    }
-
-    public static void councilMessage(String message) {
-        outputBuffer.writeByte(ClientPacket.COUNCIL_MESSAGE.getId());
-        outputBuffer.writeCp1252String(message);
-    }
-
-    public static void roleMasterRequest(String message) {
-        outputBuffer.writeByte(ClientPacket.ROLE_MASTER_REQUEST.getId());
-        outputBuffer.writeCp1252String(message);
-    }
-
-    public static void GMRequest() {
-        outputBuffer.writeByte(ClientPacket.GM_REQUEST.getId());
-    }
-
-    public static void bugReport(String message) {
-        outputBuffer.writeByte(ClientPacket.BUG_REPORT.getId());
-        outputBuffer.writeCp1252String(message);
-    }
-
-    public static void changeDescription(String message) {
-        outputBuffer.writeByte(ClientPacket.CHANGE_DESCRIPTION.getId());
-        outputBuffer.writeCp1252String(message);
-    }
-
-    public static void guildVote(String message) {
-        outputBuffer.writeByte(ClientPacket.GUILD_VOTE.getId());
-        outputBuffer.writeCp1252String(message);
-    }
-
-    public static void punishments(String message) {
-        outputBuffer.writeByte(ClientPacket.PUNISHMENTS.getId());
-        outputBuffer.writeCp1252String(message);
-    }
-
-    public static void gamble(short amount) {
-        outputBuffer.writeByte(ClientPacket.GAMBLE.getId());
-        outputBuffer.writeInteger(amount);
-    }
-
-    public static void leaveFaction() {
-        outputBuffer.writeByte(ClientPacket.LEAVE_FACTION.getId());
-    }
-
-    public static void bankExtractGold(int amount) {
-        outputBuffer.writeByte(ClientPacket.BANK_EXTRACT_GOLD.getId());
-        outputBuffer.writeLong(amount);
-    }
-
-    public static void bankDepositGold(int amount) {
-        outputBuffer.writeByte(ClientPacket.BANK_DEPOSIT_GOLD.getId());
-        outputBuffer.writeLong(amount);
-    }
-
-    public static void denounce(String message) {
-        outputBuffer.writeByte(ClientPacket.DENOUNCE.getId());
-        outputBuffer.writeCp1252String(message);
-    }
-
-    public static void guildFundate() {
-        outputBuffer.writeByte(ClientPacket.GUILD_FUNDATE.getId());
-    }
-
-    public static void guildFundation(int clanType) {
-        outputBuffer.writeByte(ClientPacket.GUILD_FUNDATION.getId());
-        outputBuffer.writeByte(clanType);
-    }
-
-    public static void partyKick(String userName) {
-        outputBuffer.writeByte(ClientPacket.PARTY_KICK.getId());
-        outputBuffer.writeCp1252String(userName);
-    }
-
-    public static void partySetLeader(String userName) {
-        outputBuffer.writeByte(ClientPacket.PARTY_SET_LEADER.getId());
-        outputBuffer.writeCp1252String(userName);
-    }
-
-    public static void partyAcceptMember(String userName) {
-        outputBuffer.writeByte(ClientPacket.PARTY_ACCEPT_MEMBER.getId());
-        outputBuffer.writeCp1252String(userName);
-    }
-
-     /* ##############################################
-        #              COMANDOS DE GM                #
-        ##############################################*/
-
-    public static void GMMessage(String message) {
-        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
-        outputBuffer.writeByte(GMCommand.GM_MESSAGE.getId());
-
-        outputBuffer.writeCp1252String(message);
-    }
-
-    public static void showName() {
-        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
-        outputBuffer.writeByte(GMCommand.SHOW_NAME.getId());
-    }
-
-    public static void onlineRoyalArmy() {
-        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
-        outputBuffer.writeByte(GMCommand.ONLINE_ROYAL_ARMY.getId());
-    }
-
-    public static void onlineChaosLegion() {
-        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
-        outputBuffer.writeByte(GMCommand.ONLINE_CHAOS_LEGION.getId());
-    }
-
-    public static void goNearby(String userName) {
-        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
-        outputBuffer.writeByte(GMCommand.GO_NEARBY.getId());
-
-        outputBuffer.writeCp1252String(userName);
-    }
-
-    public static void comment(String message) {
-        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
-        outputBuffer.writeByte(GMCommand.COMMENT.getId());
-
-        outputBuffer.writeCp1252String(message);
-    }
-
-    public static void serverTime() {
-        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
-        outputBuffer.writeByte(GMCommand.SERVER_TIME.getId());
-    }
-
-    public static void where(String userName) {
-        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
-        outputBuffer.writeByte(GMCommand.WHERE.getId());
-
-        outputBuffer.writeCp1252String(userName);
-    }
-
-    public static void creaturesInMap(short Map) {
-        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
-        outputBuffer.writeByte(GMCommand.CREATURES_IN_MAP.getId());
-
-        outputBuffer.writeInteger(Map);
-    }
-
-    public static void createObject(int objId) {
-        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
-        outputBuffer.writeByte(GMCommand.CREATE_OBJECT.getId());
-        outputBuffer.writeInteger((short) objId);
-    }
-
-    public static void warpMeToTarget() {
-        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
-        outputBuffer.writeByte(GMCommand.WARP_ME_TO_TARGET.getId());
-    }
-
-    public static void warpChar(String userName, short map, int x, int y) {
-        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
-        outputBuffer.writeByte(GMCommand.WARP_CHAR.getId());
-
-        outputBuffer.writeCp1252String(userName);
-        outputBuffer.writeInteger(map);
+    public static void workLeftClick(int x, int y, int skill) {
+        outputBuffer.writeByte(ClientPacket.WORK_LEFT_CLICK.getId());
         outputBuffer.writeByte(x);
         outputBuffer.writeByte(y);
-    }
-
-    public static void silence(String userName) {
-        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
-        outputBuffer.writeByte(GMCommand.SILENCE.getId());
-
-        outputBuffer.writeCp1252String(userName);
-    }
-
-    public static void SOSShowList() {
-        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
-        outputBuffer.writeByte(GMCommand.SOS_SHOW_LIST.getId());
-    }
-
-    public static void showServerForm() {
-        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
-        outputBuffer.writeByte(GMCommand.SHOW_SERVER_FORM.getId());
-    }
-
-    public static void goToChar(String userName) {
-        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
-        outputBuffer.writeByte(GMCommand.GO_TO_CHAR.getId());
-
-        outputBuffer.writeCp1252String(userName);
-    }
-
-    public static void invisible() {
-        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
-        outputBuffer.writeByte(GMCommand.INVISIBLE.getId());
-    }
-
-    public static void GMPanel() {
-        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
-        outputBuffer.writeByte(GMCommand.GM_PANEL.getId());
-    }
-
-    public static void working() {
-        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
-        outputBuffer.writeByte(GMCommand.WORKING.getId());
-    }
-
-    public static void hiding() {
-        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
-        outputBuffer.writeByte(GMCommand.HIDING.getId());
-    }
-
-    public static void jail(String userName, String reason, int time) {
-        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
-        outputBuffer.writeByte(GMCommand.JAIL.getId());
-
-        outputBuffer.writeCp1252String(userName);
-        outputBuffer.writeCp1252String(reason);
-        outputBuffer.writeByte(time);
-    }
-
-    public static void killNPC() {
-        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
-        outputBuffer.writeByte(GMCommand.KILL_NPC.getId());
-    }
-
-    public static void warnUser(String userName, String reason) {
-        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
-        outputBuffer.writeByte(GMCommand.WARN_USER.getId());
-
-        outputBuffer.writeCp1252String(userName);
-        outputBuffer.writeCp1252String(reason);
-    }
-
-    public static void editChar(String userName, int editOption, String arg1, String arg2) {
-        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
-        outputBuffer.writeByte(GMCommand.EDIT_CHAR.getId());
-
-        outputBuffer.writeCp1252String(userName);
-
-        outputBuffer.writeByte(editOption);
-
-        outputBuffer.writeCp1252String(arg1);
-        outputBuffer.writeCp1252String(arg2);
-
-
-    }
-
-    public static void requestCharInfo(String userName) {
-        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
-        outputBuffer.writeByte(GMCommand.REQUEST_CHAR_INFO.getId());
-
-        outputBuffer.writeCp1252String(userName);
-    }
-
-    public static void requestCharStats(String userName) {
-        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
-        outputBuffer.writeByte(GMCommand.REQUEST_CHAR_STATS.getId());
-
-        outputBuffer.writeCp1252String(userName);
-    }
-
-    public static void requestCharGold(String userName) {
-        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
-        outputBuffer.writeByte(GMCommand.REQUEST_CHAR_GOLD.getId());
-
-        outputBuffer.writeCp1252String(userName);
-    }
-
-    public static void requestCharInventory(String userName) {
-        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
-        outputBuffer.writeByte(GMCommand.REQUEST_CHAR_INVENTORY.getId());
-
-        outputBuffer.writeCp1252String(userName);
-    }
-
-    public static void requestCharBank(String userName) {
-        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
-        outputBuffer.writeByte(GMCommand.REQUEST_CHAR_BANK.getId());
-
-        outputBuffer.writeCp1252String(userName);
-    }
-
-    public static void requestCharSkills(String userName) {
-        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
-        outputBuffer.writeByte(GMCommand.REQUEST_CHAR_SKILLS.getId());
-
-        outputBuffer.writeCp1252String(userName);
-    }
-
-    public static void reviveChar(String userName) {
-        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
-        outputBuffer.writeByte(GMCommand.REVIVE_CHAR.getId());
-
-        outputBuffer.writeCp1252String(userName);
-    }
-
-    public static void onlineGM() {
-        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
-        outputBuffer.writeByte(GMCommand.ONLINE_GM.getId());
-    }
-
-    public static void onlineMap(short map) {
-        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
-        outputBuffer.writeByte(GMCommand.ONLINE_MAP.getId());
-        outputBuffer.writeInteger(map);
-    }
-
-    public static void forgive(String userName) {
-        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
-        outputBuffer.writeByte(GMCommand.FORGIVE.getId());
-
-        outputBuffer.writeCp1252String(userName);
-    }
-
-    public static void kick(String userName) {
-        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
-        outputBuffer.writeByte(GMCommand.KICK.getId());
-
-        outputBuffer.writeCp1252String(userName);
-    }
-
-    public static void execute(String userName) {
-        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
-        outputBuffer.writeByte(GMCommand.EXECUTE.getId());
-
-        outputBuffer.writeCp1252String(userName);
-    }
-
-    public static void banChar(String userName, String reason) {
-        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
-        outputBuffer.writeByte(GMCommand.BAN_CHAR.getId());
-
-        outputBuffer.writeCp1252String(userName);
-        outputBuffer.writeCp1252String(reason);
-    }
-
-    public static void unbanChar(String userName) {
-        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
-        outputBuffer.writeByte(GMCommand.UNBAN_CHAR.getId());
-
-        outputBuffer.writeCp1252String(userName);
-    }
-
-    public static void NPCFollow() {
-        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
-        outputBuffer.writeByte(GMCommand.NPC_FOLLOW.getId());
-    }
-
-    public static void summonChar(String userName) {
-        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
-        outputBuffer.writeByte(GMCommand.SUMMON_CHAR.getId());
-        outputBuffer.writeCp1252String(userName);
-    }
-
-    public static void spawnListRequest() {
-        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
-        outputBuffer.writeByte(GMCommand.SPAWN_LIST_REQUEST.getId());
-    }
-
-    public static void spawnCreature(short creatureIndex) {
-        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
-        outputBuffer.writeByte(GMCommand.SPAWN_CREATURE.getId());
-        outputBuffer.writeInteger(creatureIndex);
-    }
-
-    public static void resetNPCInventory() {
-        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
-        outputBuffer.writeByte(GMCommand.RESET_NPC_INVENTORY.getId());
-    }
-
-    public static void cleanWorld() {
-        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
-        outputBuffer.writeByte(GMCommand.CLEAN_WORLD.getId());
-    }
-
-    public static void serverMessage() {
-        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
-        outputBuffer.writeByte(GMCommand.SERVER_MESSAGE.getId());
-    }
-
-    public static void nickToIP(String userName) {
-        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
-        outputBuffer.writeByte(GMCommand.NICK_TO_IP.getId());
-
-        outputBuffer.writeCp1252String(userName);
-    }
-
-    public static void IPToNick(int[] ip) {
-        // Validar que el tamaño del array sea 4 bytes
-        if (ip.length != 4) return; // IP invalida
-
-        // Escribir el mensaje "IPToNick" en el buffer de datos salientes
-        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
-        outputBuffer.writeByte(GMCommand.IP_TO_NICK.getId());
-
-        // Escribir cada byte de la IP en el buffer de datos salientes
-        for (int b : ip) {
-            outputBuffer.writeByte(b);
-        }
-    }
-
-    public static void guildOnlineMembers(String guild) {
-        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
-        outputBuffer.writeByte(GMCommand.GUILD_ONLINE_MEMBERS.getId());
-        outputBuffer.writeCp1252String(guild);
-    }
-
-    public static void teleportCreate(short map, int x, int y, int radio) {
-        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
-        outputBuffer.writeByte(GMCommand.TELEPORT_CREATE.getId());
-        outputBuffer.writeInteger(map);
-        outputBuffer.writeByte(x);
-        outputBuffer.writeByte(y);
-        outputBuffer.writeByte(radio);
-    }
-
-    public static void teleportDestroy() {
-        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
-        outputBuffer.writeByte(GMCommand.TELEPORT_DESTROY.getId());
-    }
-
-    public static void rainToggle() {
-        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
-        outputBuffer.writeByte(GMCommand.RAIN_TOGGLE.getId());
-    }
-
-    public static void setCharDescription(String desc) {
-        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
-        outputBuffer.writeByte(GMCommand.SET_CHAR_DESCRIPTION.getId());
-        outputBuffer.writeCp1252String(desc);
-    }
-
-    public static void playMusic(int musicId) {
-        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
-        outputBuffer.writeByte(GMCommand.FORCE_MIDI_ALL.getId());
-        outputBuffer.writeByte(musicId);
-    }
-
-    public static void playMusicOnMap(int musicId, short map) {
-        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
-        outputBuffer.writeByte(GMCommand.FORCE_MIDI_TO_MAP.getId());
-        outputBuffer.writeByte(musicId);
-        outputBuffer.writeInteger(map);
-    }
-
-    public static void playSound(int idSound) {
-        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
-        outputBuffer.writeByte(GMCommand.FORCE_WAVE_ALL.getId());
-        outputBuffer.writeByte(idSound);
-    }
-
-    public static void playSoundAtTheSpecifiedLocation(int soundId, short map, int x, int y) {
-        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
-        outputBuffer.writeByte(GMCommand.FORCE_WAVE_TO_MAP.getId());
-        outputBuffer.writeByte(soundId);
-        outputBuffer.writeInteger(map);
-        outputBuffer.writeByte(x);
-        outputBuffer.writeByte(y);
-    }
-
-    public static void royaleArmyMessage(String message) {
-        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
-        outputBuffer.writeByte(GMCommand.ROYAL_ARMY_MESSAGE.getId());
-
-        outputBuffer.writeCp1252String(message);
-    }
-
-    public static void chaosLegionMessage(String message) {
-        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
-        outputBuffer.writeByte(GMCommand.CHAOS_LEGION_MESSAGE.getId());
-
-        outputBuffer.writeCp1252String(message);
-    }
-
-    public static void citizenMessage(String message) {
-        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
-        outputBuffer.writeByte(GMCommand.CITIZEN_MESSAGE.getId());
-
-        outputBuffer.writeCp1252String(message);
-    }
-
-    public static void criminalMessage(String message) {
-        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
-        outputBuffer.writeByte(GMCommand.CRIMINAL_MESSAGE.getId());
-
-        outputBuffer.writeCp1252String(message);
-    }
-
-    public static void talkAsNPC(String message) {
-        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
-        outputBuffer.writeByte(GMCommand.TALK_AS_NPC.getId());
-
-        outputBuffer.writeCp1252String(message);
-    }
-
-    public static void destroyAllItemsInArea() {
-        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
-        outputBuffer.writeByte(GMCommand.DESTROY_ALL_ITEMS_IN_AREA.getId());
-    }
-
-    public static void acceptRoyalCouncilMember(String userName) {
-        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
-        outputBuffer.writeByte(GMCommand.ACCEPT_ROYAL_COUNCIL_MEMBER.getId());
-
-        outputBuffer.writeCp1252String(userName);
-    }
-
-    public static void acceptChaosCouncilMember(String userName) {
-        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
-        outputBuffer.writeByte(GMCommand.ACCEPT_CHAOS_COUNCIL_MEMBER.getId());
-
-        outputBuffer.writeCp1252String(userName);
-    }
-
-    public static void itemsInTheFloor() {
-        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
-        outputBuffer.writeByte(GMCommand.ITEMS_IN_THE_FLOOR.getId());
-    }
-
-    public static void makeDumb(String userName) {
-        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
-        outputBuffer.writeByte(GMCommand.MAKE_DUMB.getId());
-
-        outputBuffer.writeCp1252String(userName);
-    }
-
-    public static void makeDumbNoMore(String userName) {
-        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
-        outputBuffer.writeByte(GMCommand.MAKE_DUMB_NO_MORE.getId());
-
-        outputBuffer.writeCp1252String(userName);
-    }
-
-    public static void dumpIPTables() {
-        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
-        outputBuffer.writeByte(GMCommand.DUMP_IP_TABLES.getId());
-    }
-
-    public static void councilKick(String userName) {
-        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
-        outputBuffer.writeByte(GMCommand.COUNCIL_KICK.getId());
-
-        outputBuffer.writeCp1252String(userName);
-    }
-
-    public static void setTrigger(int trigger) {
-        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
-        outputBuffer.writeByte(GMCommand.SET_TRIGGER.getId());
-
-        outputBuffer.writeByte(trigger);
-    }
-
-    public static void askTrigger() {
-        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
-        outputBuffer.writeByte(GMCommand.ASK_TRIGGER.getId());
-    }
-
-    public static void bannedIPList() {
-        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
-        outputBuffer.writeByte(GMCommand.BANNED_IP_LIST.getId());
-    }
-
-    public static void bannedIPReload() {
-        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
-        outputBuffer.writeByte(GMCommand.BANNED_IP_RELOAD.getId());
-    }
-
-    public static void guildMemberList(String guild) {
-        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
-        outputBuffer.writeByte(GMCommand.GUILD_MEMBER_LIST.getId());
-        outputBuffer.writeCp1252String(guild);
-    }
-
-    public static void guildBan(String guild) {
-        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
-        outputBuffer.writeByte(GMCommand.GUILD_BAN.getId());
-        outputBuffer.writeCp1252String(guild);
-    }
-
-    public static void banIP(boolean byIp, int[] ip, String nick, String reason) {
-        if (byIp && ip.length != 4) return; // IP invalida
-
-        // Escribir el mensaje "BanIP" en el buffer de datos salientes
-        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
-        outputBuffer.writeByte(GMCommand.BAN_IP.getId());
-
-        // Escribir si es por IP o por nick
-        outputBuffer.writeBoolean(byIp);
-
-        // Si es por IP, escribir los componentes de la IP
-        if (byIp) {
-            for (int b : ip) {
-                outputBuffer.writeByte(b);
-            }
-        } else {
-            // Si es por nick, escribir el nick
-            outputBuffer.writeCp1252String(nick);
-        }
-
-        // Escribir el motivo del baneo
-        outputBuffer.writeCp1252String(reason);
-    }
-
-    public static void unbanIP(int[] ip) {
-        if (ip.length != 4) return; // IP invalida
-
-        // Escribir el mensaje "UnbanIP" en el buffer de datos salientes
-        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
-        outputBuffer.writeByte(GMCommand.UNBAN_IP.getId());
-
-        // Escribir los componentes de la IP
-        for (int b : ip) {
-            outputBuffer.writeByte(b);
-        }
-    }
-
-    public static void destroyItems() {
-        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
-        outputBuffer.writeByte(GMCommand.DESTROY_ITEMS.getId());
-    }
-
-    public static void chaosLegionKick(String userName) {
-        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
-        outputBuffer.writeByte(GMCommand.CHAOS_LEGION_KICK.getId());
-
-        outputBuffer.writeCp1252String(userName);
-    }
-
-    public static void royalArmyKick(String userName) {
-        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
-        outputBuffer.writeByte(GMCommand.ROYAL_ARMY_KICK.getId());
-
-        outputBuffer.writeCp1252String(userName);
-    }
-
-    public static void removePunishment(String userName, int punishment, String newText) {
-        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
-        outputBuffer.writeByte(GMCommand.REMOVE_PUNISHMENT.getId());
-
-        outputBuffer.writeCp1252String(userName);
-        outputBuffer.writeByte(punishment);
-        outputBuffer.writeCp1252String(newText);
-    }
-
-    public static void tileBlockedToggle() {
-        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
-        outputBuffer.writeByte(GMCommand.TILE_BLOCKED_TOGGLE.getId());
-    }
-
-    public static void killNPCNoRespawn() {
-        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
-        outputBuffer.writeByte(GMCommand.KILL_NPC_NO_RESPAWN.getId());
-    }
-
-    public static void killAllNearbyNPCs() {
-        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
-        outputBuffer.writeByte(GMCommand.KILL_ALL_NEARBY_NPCS.getId());
-    }
-
-    public static void lastIP(String userName) {
-        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
-        outputBuffer.writeByte(GMCommand.LAST_IP.getId());
-
-        outputBuffer.writeCp1252String(userName);
-    }
-
-    public static void changeMOTD() {
-        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
-        outputBuffer.writeByte(GMCommand.CHANGE_MOTD.getId());
-    }
-
-    public static void systemMessage(String message) {
-        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
-        outputBuffer.writeByte(GMCommand.SYSTEM_MESSAGE.getId());
-
-        outputBuffer.writeCp1252String(message);
-    }
-
-    public static void createNPC(Short NPCIndex) {
-        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
-        outputBuffer.writeByte(GMCommand.CREATE_NPC.getId());
-
-        outputBuffer.writeInteger(NPCIndex);
-    }
-
-    public static void createNPCWithRespawn(Short NPCIndex) {
-        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
-        outputBuffer.writeByte(GMCommand.CREATE_NPC_WITH_RESPAWN.getId());
-
-        outputBuffer.writeInteger(NPCIndex);
-    }
-
-    public static void imperialArmour(int armourIndex, short objectIndex) {
-        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
-        outputBuffer.writeByte(GMCommand.IMPERIAL_ARMOUR.getId());
-
-        outputBuffer.writeByte(armourIndex);
-        outputBuffer.writeInteger(objectIndex);
-    }
-
-    public static void chaosArmour(int armourIndex, short objectIndex) {
-        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
-        outputBuffer.writeByte(GMCommand.CHAOS_ARMOUR.getId());
-        outputBuffer.writeByte(armourIndex);
-        outputBuffer.writeInteger(objectIndex);
-    }
-
-    public static void navigateToggle() {
-        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
-        outputBuffer.writeByte(GMCommand.NAVIGATE_TOGGLE.getId());
-    }
-
-    public static void serverOpenToUsersToggle() {
-        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
-        outputBuffer.writeByte(GMCommand.SERVER_OPEN_TO_USERS_TOGGLE.getId());
-    }
-
-    public static void turnOffServer() {
-        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
-        outputBuffer.writeByte(GMCommand.TURN_OFF_SERVER.getId());
-    }
-
-    public static void turnCriminal(String userName) {
-        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
-        outputBuffer.writeByte(GMCommand.TURN_CRIMINAL.getId());
-
-        outputBuffer.writeCp1252String(userName);
-    }
-
-    public static void resetFactions(String userName) {
-        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
-        outputBuffer.writeByte(GMCommand.RESET_FACTIONS.getId());
-        outputBuffer.writeCp1252String(userName);
-    }
-
-    public static void removeCharFromGuild(String userName) {
-        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
-        outputBuffer.writeByte(GMCommand.REMOVE_CHAR_FROM_GUILD.getId());
-        outputBuffer.writeCp1252String(userName);
-    }
-
-    public static void requestCharMail(String userName) {
-        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
-        outputBuffer.writeByte(GMCommand.REQUEST_CHAR_MAIL.getId());
-
-        outputBuffer.writeCp1252String(userName);
-    }
-
-    public static void alterPassword(String userName, String copyFrom) {
-        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
-        outputBuffer.writeByte(GMCommand.ALTER_PASSWORD.getId());
-
-        outputBuffer.writeCp1252String(userName);
-        outputBuffer.writeCp1252String(copyFrom);
-    }
-
-    public static void alterMail(String userName, String newMail) {
-        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
-        outputBuffer.writeByte(GMCommand.ALTER_MAIL.getId());
-
-        outputBuffer.writeCp1252String(userName);
-        outputBuffer.writeCp1252String(newMail);
-    }
-
-    public static void alterName(String userName, String newName) {
-        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
-        outputBuffer.writeByte(GMCommand.ALTER_NAME.getId());
-
-        outputBuffer.writeCp1252String(userName);
-        outputBuffer.writeCp1252String(newName);
-    }
-
-    public static void checkSlot(String userName, int slot) {
-        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
-        outputBuffer.writeByte(GMCommand.CHECK_SLOT.getId());
-
-        outputBuffer.writeCp1252String(userName);
-        outputBuffer.writeByte(slot);
-    }
-
-    public static void toggleCentinelActivated() {
-        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
-        outputBuffer.writeByte(GMCommand.TOGGLE_CENTINEL_ACTIVATED.getId());
-    }
-
-    public static void doBackup() {
-        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
-        outputBuffer.writeByte(GMCommand.DO_BACKUP.getId());
-    }
-
-    public static void showGuildMessages(String guild) {
-        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
-        outputBuffer.writeByte(GMCommand.SHOW_GUILD_MESSAGES.getId());
-        outputBuffer.writeCp1252String(guild);
-    }
-
-    public static void saveMap() {
-        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
-        outputBuffer.writeByte(GMCommand.SAVE_MAP.getId());
-    }
-
-    public static void changeMapInfoPK(boolean isPK) {
-        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
-        outputBuffer.writeByte(GMCommand.CHANGE_MAP_INFO_PK.getId());
-
-        outputBuffer.writeBoolean(isPK);
-    }
-
-    public static void changeMapInfoBackup(boolean backup) {
-        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
-        outputBuffer.writeByte(GMCommand.CHANGE_MAP_INFO_BACKUP.getId());
-
-        outputBuffer.writeBoolean(backup);
-    }
-
-    public static void changeMapInfoRestricted(String restrict) {
-        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
-        outputBuffer.writeByte(GMCommand.CHANGE_MAP_INFO_RESTRICTED.getId());
-
-        outputBuffer.writeCp1252String(restrict);
-    }
-
-    public static void changeMapInfoNoMagic(boolean noMagic) {
-        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
-        outputBuffer.writeByte(GMCommand.CHANGE_MAP_INFO_NO_MAGIC.getId());
-
-        outputBuffer.writeBoolean(noMagic);
-    }
-
-    public static void changeMapInfoNoInvi(boolean noInvi) {
-        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
-        outputBuffer.writeByte(GMCommand.CHANGE_MAP_INFO_NO_INVI.getId());
-
-        outputBuffer.writeBoolean(noInvi);
-    }
-
-    public static void changeMapInfoNoResu(boolean noResu) {
-        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
-        outputBuffer.writeByte(GMCommand.CHANGE_MAP_INFO_NO_RESU.getId());
-
-        outputBuffer.writeBoolean(noResu);
-    }
-
-    public static void changeMapInfoLand(String land) {
-        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
-        outputBuffer.writeByte(GMCommand.CHANGE_MAP_INFO_LAND.getId());
-
-        outputBuffer.writeCp1252String(land);
-    }
-
-    public static void changeMapInfoZone(String zone) {
-        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
-        outputBuffer.writeByte(GMCommand.CHANGE_MAP_INFO_ZONE.getId());
-
-        outputBuffer.writeCp1252String(zone);
-    }
-
-    public static void saveChars() {
-        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
-        outputBuffer.writeByte(GMCommand.SAVE_CHARS.getId());
-    }
-
-    public static void cleanSOS() {
-        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
-        outputBuffer.writeByte(GMCommand.CLEAN_SOS.getId());
-    }
-
-    public static void night() {
-        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
-        outputBuffer.writeByte(GMCommand.NIGHT.getId());
-    }
-
-    public static void kickAllChars() {
-        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
-        outputBuffer.writeByte(GMCommand.KICK_ALL_CHARS.getId());
-    }
-
-    public static void reloadNPCs() {
-        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
-        outputBuffer.writeByte(GMCommand.RELOAD_NPCS.getId());
-    }
-
-    public static void reloadServerIni() {
-        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
-        outputBuffer.writeByte(GMCommand.RELOAD_SERVER_INI.getId());
-    }
-
-    public static void reloadSpells() {
-        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
-        outputBuffer.writeByte(GMCommand.RELOAD_SPELLS.getId());
-    }
-
-    public static void reloadObjects() {
-        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
-        outputBuffer.writeByte(GMCommand.RELOAD_OBJECTS.getId());
-    }
-
-    public static void restart() {
-        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
-        outputBuffer.writeByte(GMCommand.RESTART.getId());
-    }
-
-    public static void resetAutoUpdate() {
-        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
-        outputBuffer.writeByte(GMCommand.RESET_AUTO_UPDATE.getId());
-    }
-
-    public static void chatColor(int r, int g, int b) {
-        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
-        outputBuffer.writeByte(GMCommand.CHAT_COLOR.getId());
-
-        outputBuffer.writeByte(r);
-        outputBuffer.writeByte(g);
-        outputBuffer.writeByte(b);
-    }
-
-    public static void ignored() {
-        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
-        outputBuffer.writeByte(GMCommand.IGNORED.getId());
-    }
-
-    public static void ping() {
-        if (pingTime != 0) return;
-        outputBuffer.writeByte(ClientPacket.PING.getId());
-        pingTime = (int) glfwGetTime();
-    }
-
-    public static void setIniVar(String sLlave, String sClave, String sValor) {
-        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
-        outputBuffer.writeByte(GMCommand.SET_INI_VAR.getId());
-
-        outputBuffer.writeCp1252String(sLlave);
-        outputBuffer.writeCp1252String(sClave);
-        outputBuffer.writeCp1252String(sValor);
-    }
-
-    public static void home() {
-        outputBuffer.writeByte(ClientPacket.HOME.getId());
-    }
-
-    public static void commerceBuy(int slot, int amount) {
-        outputBuffer.writeByte(ClientPacket.COMMERCE_BUY.getId());
-        outputBuffer.writeByte(slot);
-        outputBuffer.writeInteger((short) amount);
-    }
-
-    public static void commerceSell(int slot, int amount) {
-        outputBuffer.writeByte(ClientPacket.COMMERCE_SELL.getId());
-        outputBuffer.writeByte(slot);
-        outputBuffer.writeInteger((short) amount);
-    }
-
-    public static void bankDeposit(int slot, int amount) {
-        outputBuffer.writeByte(ClientPacket.BANK_DEPOSIT.getId());
-        outputBuffer.writeByte(slot);
-        outputBuffer.writeInteger((short) amount);
-    }
-
-    public static void bankExtractItem(int slot, int amount) {
-        outputBuffer.writeByte(ClientPacket.BANK_EXTRACT_ITEM.getId());
-        outputBuffer.writeByte(slot);
-        outputBuffer.writeInteger((short) amount);
+        outputBuffer.writeByte(skill);
     }
 
 }

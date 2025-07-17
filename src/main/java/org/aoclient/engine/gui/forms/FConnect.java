@@ -10,7 +10,7 @@ import org.aoclient.engine.Engine;
 import org.aoclient.engine.Window;
 import org.aoclient.engine.gui.ImGUISystem;
 import org.aoclient.engine.gui.widgets.ImageButton3State;
-import org.aoclient.network.SocketConnection;
+import org.aoclient.network.Connection;
 
 import java.io.IOException;
 
@@ -45,7 +45,7 @@ public final class FConnect extends Form {
 
     private final ImString ipStr = new ImString(options.getIpServer());
     private final ImString portStr = new ImString(options.getPortServer());
-    private final ImString nickStr = new ImString(options.getNickName());
+    private final ImString nickStr = new ImString(options.getNick());
     private final ImString passStr = new ImString();
 
     // Botones gráficos de 3 estados
@@ -206,9 +206,9 @@ public final class FConnect extends Form {
         options.setPortServer(portStr.get());
         if (!nickStr.get().isEmpty() && !passStr.get().isEmpty()) {
             new Thread(() -> {
-                if (SocketConnection.INSTANCE.connect()) loginExistingChar(nickStr.get(), passStr.get());
+                if (Connection.INSTANCE.connect()) loginExistingChar(nickStr.get(), passStr.get());
             }).start();
-            options.setNickName(nickStr.get());
+            options.setNick(nickStr.get());
             USER.setUserName(nickStr.get());
         } else ImGUISystem.INSTANCE.show(new FMessage("Please enter a username and/or password."));
     }

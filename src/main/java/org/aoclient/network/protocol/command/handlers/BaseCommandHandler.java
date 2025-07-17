@@ -47,7 +47,7 @@ public abstract class BaseCommandHandler implements CommandHandler {
     }
 
     protected void requireArguments(CommandContext commandContext, int count, String usage) throws CommandException {
-        if (!commandContext.hasArguments()) showError("Missing arguments. Usage: " + usage);
+        if (!commandContext.hasArguments()) showError("Missing arguments. " + usage);
         // Evita que se verifique la cantidad de argumentos de mas de un argumento como la descripcion del bug por ejemplo
         if (count == UNLIMITED_ARGUMENTS) return;
         if (commandContext.getArgumentCount() != count)
