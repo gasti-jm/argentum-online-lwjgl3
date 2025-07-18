@@ -6,7 +6,6 @@ import org.aoclient.engine.game.models.Direction;
 import org.aoclient.engine.game.models.Skill;
 import org.aoclient.engine.renderer.RGBColor;
 import org.aoclient.network.PacketBuffer;
-import org.aoclient.network.Connection;
 import org.aoclient.network.protocol.types.GMCommand;
 
 import java.nio.charset.StandardCharsets;
@@ -14,36 +13,16 @@ import java.nio.charset.StandardCharsets;
 import static org.aoclient.engine.utils.GameData.charList;
 import static org.lwjgl.glfw.GLFW.glfwGetTime;
 
-/**
- * Maneja el protocolo de comunicacion entre el cliente y el servidor.
- * <p>
- * Implementa las operaciones necesarias para la comunicacion de red, procesando los paquetes entrantes desde el servidor y
- * preparando los paquetes salientes hacia el servidor.
- * <p>
- * Esta clase contiene implementaciones para todos los comandos del protocolo del juego, incluyendo acciones de personaje,
- * interacciones con el entorno, comunicacion con otros jugadores y comandos administrativos.
- * <p>
- * Trabaja en conjunto con {@link Connection} para la transmision real de los datos, y utiliza {@link PacketBuffer} para
- * almacenar temporalmente los bytes entrantes y salientes antes de su manejo.
- */
 
 public class Protocol {
 
     private static final Console CONSOLE = Console.INSTANCE;
     private static final User USER = User.INSTANCE;
-    private static final PacketReceiver PACKET_RECEIVER = new PacketReceiver();
-    public static int pingTime;
+    public static int pingTime; // TODO Se podria sacar de aca?
     /** Buffer para la salida de bytes (escribe lo que envia el cliente al servidor). */
     public static PacketBuffer outputBuffer = new PacketBuffer();
     /** Buffer para la entrada de bytes (lee lo que recibe el cliente del servidor). */
     public static PacketBuffer inputBuffer = new PacketBuffer();
-
-    /**
-     * Delega el manejo de los bytes del buffer de entrada a PacketReceiver.
-     */
-    public static void handleIncomingBytes() {
-        PACKET_RECEIVER.handleIncomingBytes(inputBuffer);
-    }
 
     public static void acceptChaosCouncil(String player) {
         outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
