@@ -18,18 +18,20 @@ Un sistema cliente-servidor en un MMORPG es una arquitectura de red distribuida 
 (ejecutándose en las computadoras de los jugadores) se conectan a un programa servidor centralizado que mantiene el
 estado autoritativo del mundo virtual.
 
-Imagina una red logística de distribución de mercaderia con camiones para transportar la mercaderia, almacenes locales y
-un sistema de ruta. Cuando quieres enviar mercancía:
+**_A lo largo de esta guia vamos a utilizar la analogia de una red logística de distribución de mercaderia con camiones 
+para transportar la mercaderia, almacenes locales y un sistema de ruta._**
 
-1. **Tu almacén local (cliente)** prepara un paquete con tu solicitud "Quiero hablar en el juego"
-2. **La oficina central (servidor)** recibe tu paquete, lo procesa y distribuye las respuestas
-3. **Tu almacén (cliente)** recibe los paquetes de respuesta y puede ver el resultado en tu pantalla
+Cuando quieres enviar mercancía:
+
+1. El almacén local (cliente) prepara un paquete como por ejemplo "Quiero hablar en el juego"
+2. La oficina central (servidor) recibe el paquete, lo procesa y distribuye
+3. El cliente recibe el paquete de repuesta y refleja el resultado en pantalla
 
 En nuestro juego funciona igual:
 
-- **El cliente Java** es como tu almacén local (el programa que ejecutas en tu computadora)
-- **El servidor VB6** es como el centro de distribución central (la computadora que maneja el juego para todos)
-- **Los paquetes** son como las mercaderias que se transportan por la red logística
+- El cliente Java es como tu almacén local (el programa que ejecutas en tu computadora)
+- El servidor VB6 es como el centro de distribución central (la computadora que maneja el juego para todos)
+- Los paquetes son como las mercaderias que se transportan por la red logística
 
 ## Conceptos básicos
 
@@ -104,7 +106,7 @@ seguridad y mantenibilidad.
 
 ## Los componentes del cliente Java
 
-### 1. PacketBuffer - La zona de carga/descarga
+### 1. `PacketBuffer.java` - La zona de carga/descarga
 
 Es como una zona especializada de tu almacén que puede empaquetar y desempaquetar mercancía en el formato que entiende
 el centro de distribución (el servidor).
@@ -117,14 +119,17 @@ el centro de distribución (el servidor).
 
 **Métodos más importantes:**
 
-- `writeByte()` - Escribe un número pequeño (0-255)
-- `writeInteger()` - Escribe un número mediano
-- `writeCp1252String()` - Escribe texto
-- `readByte()` - Lee un número pequeño
-- `readInteger()` - Lee un número mediano
-- `readCp1252String()` - Lee texto
+- `writeBlock()`
+- `writeByte()`
+- `writeInteger()`
+- `writeCp1252String()`
+- `readBytes()`
+- `readByte()`
+- `readInteger()`
+- `readCp1252String()`
+- `checkBytes()`
 
-### 2. Protocol - El traductor
+### 2. `Protocol.java` - El traductor
 
 Un protocolo es un **conjunto de reglas y especificaciones técnicas** que define cómo dos sistemas se comunican, similar
 a un manual de empaquetado y etiquetado con estándares estrictos. En redes, especifica el formato exacto de los
@@ -137,34 +142,34 @@ paquetes que el centro de distribución entiende.
 
 **¿Para qué sirve?**
 
-- **Crear paquetes** para diferentes acciones (hablar, caminar, atacar)
-- **Gestionar dos buffers principales:**
-    - `outputBuffer` - Para paquetes que vas a enviar
-    - `inputBuffer` - Para paquetes que recibiste
+- Crear paquetes para diferentes acciones (hablar, caminar, atacar)
+- Gestionar dos buffers principales:
+    - `outputBuffer` - Para enviar paquetes
+    - `inputBuffer` - Para recibir paquetes
 
 Cuando quieres hablar, `Protocol` sabe exactamente cómo crear el paquete correcto.
 
-### 3. ClientPacket y ServerPacket - Los códigos de mercancía
+### 3. `ClientPacket.java` y `ServerPacket.java` - Los indentificadores de mercancía
 
-Son como códigos de producto en logística. Cada tipo de paquete tiene su código único para que el centro de distribución
+Son como etiquetas de producto en logística. Cada tipo de paquete tiene su código único para que el centro de distribución
 sepa cómo clasificarlo y procesarlo.
 
-**ClientPacket** - Paquetes que envías al servidor:
+**ClientPacket.java** - Paquetes que envías al servidor:
 
 - `TALK(3)` - Paquete de chat (quiero hablar)
 - `WALK(6)` - Paquete de movimiento (quiero caminar)
 - `ATTACK(8)` - Paquete de ataque (quiero atacar)
 
-**ServerPacket** - Paquetes que el servidor te envía:
+**ServerPacket.java** - Paquetes que el servidor te envía:
 
 - `CHAT_OVER_HEAD(23)` - Distribución de chat
 - `LOGGED(0)` - Confirmación de conexión
 - `UPDATE_HP(17)` - Actualización de vida
 
-### 4. PacketProcessor - El clasificador automático
+### 4. `PacketProcessor.java` - El clasificador automático
 
 Es como un sistema automatizado que recibe paquetes del centro de distribución y decide qué hacer con cada uno según su
-etiqueta.
+ID.
 
 **¿Cómo funciona?**
 
@@ -173,17 +178,17 @@ etiqueta.
 3. Busca quién sabe manejar ese paquete
 4. Deriva el paquete al especialista correcto (handler)
 
-### 5. PacketHandler - Los especialistas
+### 5. `PacketHandler.java` - Los especialistas
 
-**¿Qué son?** Son como especialistas que saben manejar un tipo específico de paquete.
+Son como especialistas que saben manejar un tipo específico de paquete.
 
 **Ejemplo:** `ChatOverHeadHandler` es el especialista en manejar paquetes de chat. Cuando llega un paquete de chat, él
 sabe exactamente qué hacer: extraer el texto, identificar quién lo envió, leer el color, y mostrarlo en pantalla.
 
-### 6. Connection - La ruta de transporte
+### 6. `Connection.java` - La ruta de transporte
 
-**¿Qué hace?** Es como la infraestructura de transporte que se encarga de enviar y recibir paquetes entre tu almacén y
-el centro de distribución.
+Es como la infraestructura de transporte que se encarga de enviar y recibir paquetes entre tu almacén y el centro de 
+distribución.
 
 **Funciones principales:**
 
@@ -194,11 +199,11 @@ el centro de distribución.
 
 ## Los componentes del servidor VB6
 
-### 1. clsByteQueue.cls - El centro de sorting del servidor
+### 1. `clsByteQueue.cls` - El centro de sorting del servidor
 
 Similar al `PacketBuffer` del cliente, pero programada en VB6. Maneja la información que el servidor recibe y envía.
 
-### 2. Protocol.bas - El centro de control logístico
+### 2. `Protocol.bas` - El centro de control logístico
 
 Es el cerebro del servidor que:
 
@@ -206,7 +211,7 @@ Es el cerebro del servidor que:
 - Decide qué hacer con cada envío
 - Organiza las distribuciones a los clientes correspondientes
 
-### 3. TCP.bas y wsksock.bas - La infraestructura de transporte
+### 3. `TCP.bas` y `wsksock.bas` - La infraestructura de transporte
 
 Son las herramientas básicas que permiten al servidor comunicarse por internet. Es como la flota de camiones y el
 sistema de carreteras que permite las entregas.
@@ -241,7 +246,7 @@ Es como preparar mercancía en tu zona de carga antes de enviarla.
 3. Se agregan los datos específicos (tu mensaje)
 4. Todo se guarda en el `outputBuffer`
 
-Esto sucede en la clase `Protocol` con métodos como `talk("mi mensaje")`
+Esto sucede en la clase `Protocol` usando el metodo `talk("mi mensaje")`
 
 ### Paso 3: Enviar el paquete
 
@@ -324,7 +329,7 @@ Vamos a seguir el viaje completo de un mensaje desde que escribes "Hola mundo" h
 - **10**: Le dice al servidor cuántas letras tiene tu mensaje
 - **"Hola mundo"**: Tu mensaje exacto
 
-### 3. `Connection` envía el paquete al servidor
+### 3. `Connection.java` envía el paquete al servidor
 
 **¿Qué pasa?**
 
@@ -370,7 +375,7 @@ aparezca en tu pantalla, sino que todos los jugadores cercanos vean tu mensaje f
 
 **Explicación de las partes nuevas:**
 
-- **23**: Número que identifica un mensaje sobre la cabeza
+- **23**: Número que identifica un mensaje sobre la cabeza que pertenece a la constante `CHAT_OVER_HEAD` de `ServerPacketID`
 - **CharIndex**: Número que identifica a tu personaje en el juego
 - **R, G, B**: Números que definen el color del texto (rojo, verde, azul)
 
