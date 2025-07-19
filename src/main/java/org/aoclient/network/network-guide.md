@@ -83,7 +83,7 @@ colas de bytes, módulos de protocolo en servidor) que garantizan escalabilidad,
 ```
       Tu Computadora                    Servidor del Juego
     ┌─────────────────┐                ┌─────────────────┐
-    │   Cliente Java  │ ←──Internet──→ │  Servidor VB6   │
+    │   Cliente Java  │ <──Internet──> │  Servidor VB6   │
     │                 │                │                 │
     │ • PacketBuffer  │                │ • clsByteQueue  │
     │ • Protocol      │                │ • Protocol.bas  │
