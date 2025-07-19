@@ -136,6 +136,8 @@ public final class Engine {
 
             MouseListener.resetReleasedButtons();
 
+            // Depues de realizar cualquier accion, se comunica con el servidor para informarle de esta accion...
+
             // Si hay algo para enviar, lo envia (escribe lo que envia el cliente al servidor)
             Connection.INSTANCE.write();
             // Si hay algo para recibir, lo recibe (lee lo que recibe el cliente del servidor)

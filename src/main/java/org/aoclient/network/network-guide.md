@@ -14,8 +14,8 @@
 
 ## ¿Qué es la comunicación cliente-servidor?
 
-Un sistema cliente-servidor en un MMORPG es una arquitectura de red distribuida donde múltiples programas cliente (
-ejecutándose en las computadoras de los jugadores) se conectan a un programa servidor centralizado que mantiene el
+Un sistema cliente-servidor en un MMORPG es una arquitectura de red distribuida donde múltiples programas cliente
+(ejecutándose en las computadoras de los jugadores) se conectan a un programa servidor centralizado que mantiene el
 estado autoritativo del mundo virtual.
 
 Imagina que estás en un restaurante. Tú eres el **cliente** y el cocinero es el **servidor**. Cuando quieres comer algo:
@@ -336,7 +336,21 @@ Vamos a seguir el viaje completo de un mensaje desde que escribes "Hola mundo" h
 **¿Qué hace si todo está bien?**
 
 - Añade información extra: quién eres, tu posición, el color de tu texto
-- Prepara un paquete `CHAT_OVER_HEAD` para enviarte de vuelta
+- **Determina qué jugadores están cerca** de tu posición
+- Prepara un paquete `CHAT_OVER_HEAD` idéntico
+- **Envía el paquete a múltiples clientes:** a ti y a todos los jugadores cercanos simultáneamente
+
+#### 4.1 El servidor distribuye el mensaje (Broadcasting)
+
+**¿Qué significa distribuir?** El servidor no solo te responde a ti, sino que envía tu mensaje a todos los jugadores que
+deben verlo.
+
+**¿Cómo determina quién debe verlo?**
+
+- **Área**: Calcula qué jugadores están en tu mismo mapa y dentro del rango de visión
+
+**¿Por qué es importante?** Esto permite que cuando hablas, no solo aparezca en tu pantalla, sino que todos los
+jugadores cercanos vean tu mensaje flotando sobre tu cabeza, creando la experiencia social del MMORPG.
 
 ### 5. El servidor envía el paquete CHAT_OVER_HEAD
 
