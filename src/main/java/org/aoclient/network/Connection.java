@@ -3,6 +3,7 @@ package org.aoclient.network;
 import org.aoclient.engine.game.User;
 import org.aoclient.engine.gui.ImGUISystem;
 import org.aoclient.engine.gui.forms.FMessage;
+import org.aoclient.network.protocol.PacketProcessor;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -33,28 +34,14 @@ public enum Connection {
     private boolean tryConnect;
 
     /**
-     * <p>
      * Se conecta a una conexion con el servidor a traves de un socket.
      * <p>
      * Este metodo se llama primero en tres posibles casos: cuando se conecta el usuario por primera vez, cuando se crea un
      * personaje o cuando se lanza los dados. Esto es asi ya que son los tres posibles casos en donde se va a iniciar la conexion
      * con el servidor antes de iniciar el juego. Por lo tanto, se crea un subproceso para manejar la comunicacion
      * cliente-servidor.
-     * <p>
-     * La primera vez que se necesita la clase {@code Protocol} ocurre cuando:
-     * <ol>
-     *   <li>El usuario intenta conectarse al servidor desde la interfaz de usuario
-     *   <li>Como resultado, se llama al metodo {@code connect()} de {@code SocketConnection}
-     *   <li>Al ejecutar este metodo, la JVM necesita resolver las referencias a {@code inputBuffer} y {@code outputBuffer}
-     *   <li>La JVM carga la clase {@code Protocol} en memoria para resolver estas referencias
-     *   <li>Durante la carga de la clase, se inicializan los objetos estaticos:
-     *   <pre>{@code
-     *      public static NetworkBuffer outputBuffer = new NetworkBuffer();
-     *      public static NetworkBuffer inputBuffer = new NetworkBuffer();
-     *   }</pre>
-     * </ol>
      *
-     * @return true si la conexion fue exitosa, false en caso de error o si no logra establecerse la conexion con el servidor.
+     * @return true si la conexion fue exitosa, false en caso de error o si no logra establecerse la conexion con el servidor
      */
     public boolean connect() {
         // Comprueba si ya esta intentando conectarse
@@ -65,26 +52,21 @@ public enum Connection {
 
         // Comprueba si el socket no existe o esta cerrado, importante que sea en ese orden
         if (socket == null || socket.isClosed()) {
-            this.tryConnect = true;
+            tryConnect = true;
 
             try {
-                // Crea un socket a la IP y puerto del servidor especificado
+                // Crea una conexion a la IP y puerto del servidor especificado
                 socket = new Socket(options.getIpServer(), Integer.parseInt(options.getPortServer()));
                 // Inicializa los flujos de salida y entrada de bytes
                 outputStream = new DataOutputStream(socket.getOutputStream());
                 inputStream = new DataInputStream(socket.getInputStream());
 
-                // Si el socket se conecto, resuelve las referencias de los buffers de entrada y salida
-                if (socket.isConnected()) {
-                    this.tryConnect = false;
-                    // TODO No hay otra forma de crear estas dos instancias? Me parece raro llamar al metodo readBytes() para crear estas intancias
-                    inputBuffer.readBytes();
-                    outputBuffer.readBytes();
-                }
+                // Indica un intento de conexion si el socket se conecto
+                if (socket.isConnected()) tryConnect = false;
 
             } catch (Exception e) {
                 ImGUISystem.INSTANCE.show(new FMessage(e.getMessage()));
-                this.tryConnect = false;
+                tryConnect = false;
                 return false;
             }
         }
@@ -93,7 +75,6 @@ public enum Connection {
     }
 
     /**
-     * <p>
      * Cierra la conexion del socket y los flujos de entrada y salida asociados. En caso de que la conexion este activa, cierra
      * los flujos de entrada y salida, asi como el socket asociado, manejando posibles excepciones {@code IOException} que
      * pudieran ocurrir durante el cierre. Finalmente, resetea el estado del juego.
@@ -118,7 +99,7 @@ public enum Connection {
         if (!isReadyForWriting()) return;
         // Si hay bytes en el buffer de salida
         if (outputBuffer != null && outputBuffer.getLength() > 0) {
-            // Extrae los bytes del buffer de salida (que ya fue llenado con los metodos *write antes de enviarlos a travez del flujo de salida) y los almacena en el array de bytes
+            // Extrae los bytes del buffer de salida (que ya fue "llenado" desde los metodos de la clase Protocol antes de enviarlos a travez del flujo de salida) y los almacena en el array de bytes
             byte[] bytes = outputBuffer.readBytes();
             try {
                 // Envia los bytes al servidor a traves del flujo de salida
@@ -156,8 +137,8 @@ public enum Connection {
                 if (bytesRead > 0) {
                     // Escribe los bytes del servidor en el buffer de entrada
                     inputBuffer.writeBlock(buffer);
-                    // Delega el manejo de los bytes a PacketReceiver
-                    handleIncomingBytes();
+                    // Procesa los bytes del buffer de entrada, es decir, el paquete que envia el servidor
+                    PacketProcessor.process(inputBuffer);
                 }
             }
         } catch (IOException e) {

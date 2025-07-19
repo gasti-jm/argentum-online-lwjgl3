@@ -235,7 +235,7 @@ public final class GameScene extends Scene {
                     ImGUISystem.INSTANCE.show(new FCantidad());
                     break;
                 case TALK:
-                    if (!ImGUISystem.INSTANCE.isFormVisible(FCantidad.class.getSimpleName())) { // ?
+                    if (!ImGUISystem.INSTANCE.isFormVisible(FCantidad.class.getSimpleName())) { // TODO ?
                         if (!frmMain.getSendText().isBlank() && user.isTalking()) {
                             if (!frmMain.getSendText().startsWith("/")) {
                                 Console.INSTANCE.addMsgToConsole("[" + User.INSTANCE.getUserName().toLowerCase() + "] " + frmMain.getSendText(), false, false, new RGBColor(1f, 1f, 1f));

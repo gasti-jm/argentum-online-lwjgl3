@@ -2,7 +2,7 @@ package org.aoclient.network;
 
 import org.aoclient.engine.gui.ImGUISystem;
 import org.aoclient.engine.gui.forms.FMessage;
-import org.aoclient.network.protocol.PacketReceiver;
+import org.aoclient.network.protocol.PacketProcessor;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -491,9 +491,10 @@ public class PacketBuffer {
     }
 
     /**
-     * <p>
-     * Revisa la cantidad de bytes que tiene que leer de un paquete en caso de que no coincida la cantidad se presentara un
-     * error.
+     * Verifica si el tamaño del buffer es menor a una cantidad especifica de bytes, y desconecta si la condicion se cumple.
+     *
+     * @param bytes cantidad de bytes a comparar con el tamaño del buffer
+     * @return true si el tamaño del buffer es menor a los bytes indicados y se realiza la desconexion, false en caso contrario
      */
     public boolean checkBytes(int bytes) {
         if (bufferLength < bytes) {
@@ -514,7 +515,7 @@ public class PacketBuffer {
         int availableSpace = bufferCapacity - bufferLength;
         if (availableSpace < bytesToWrite) throw new RuntimeException("Not enough space in the buffer!");
         // Lee los bytes del buffer de origen y los copia al buffer
-        System.arraycopy(srcBuffer, 0, buffer, bufferLength, bytesToWrite); // Los bytes del buffer local creado en copyByffer() se copian al buffer!
+        System.arraycopy(srcBuffer, 0, buffer, bufferLength, bytesToWrite);
         bufferLength += bytesToWrite;
     }
 
@@ -604,7 +605,7 @@ public class PacketBuffer {
     }
 
     private void disconnect() {
-        String msgErr = "Not enough bytes to read from the packet " + PacketReceiver.serverPacket;
+        String msgErr = "Not enough bytes to read from the packet " + PacketProcessor.serverPacket;
         ImGUISystem.INSTANCE.show(new FMessage(msgErr));
         System.out.println(msgErr);
         Connection.INSTANCE.disconnect();

@@ -12,8 +12,7 @@ public class PingHandler implements PacketHandler {
     @Override
     public void handle(PacketBuffer buffer) {
         buffer.readByte();
-
-        Console.INSTANCE.addMsgToConsole("El ping es " + (int) (glfwGetTime() - Protocol.pingTime) + " ms.", false, false, new RGBColor(1f, 0f, 0f));
+        Console.INSTANCE.addMsgToConsole("The ping is " + String.format("%.2f", glfwGetTime() - Protocol.pingTime) + " ms", false, false, new RGBColor(1f, 0f, 0f));
         Protocol.pingTime = 0;
     }
 

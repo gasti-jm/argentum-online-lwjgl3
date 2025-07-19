@@ -9,24 +9,69 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Actua como un despachador que redirige cada paquete a su correspondiente manejador mediante una asociacion entre el tipo de
- * paquete del servidor y una implementacion concreta del manejador.
+ * Procesa paquetes recibidos del servidor y ejecuta las acciones correspondientes mediante los handlers registrados previamente.
  */
 
-public class PacketReceiver {
+public class PacketProcessor {
 
-    public static ServerPacket serverPacket;
     /** Almacena la asociacion entre paquetes del servidor y sus respectivos handlers. */
-    private final Map<ServerPacket, PacketHandler> handlers = new HashMap<>();
+    private static final Map<ServerPacket, PacketHandler> handlers = new HashMap<>();
+    public static ServerPacket serverPacket; // TODO Se podria sacar de aca?
 
-    public PacketReceiver() {
+    static {
         registerHandlers();
+    }
+
+    public static void process(PacketBuffer inputBuffer) {
+        if (inputBuffer.getLength() <= 0) return;
+
+        // Obtiene el ID del paquete del servidor
+        int packetId = inputBuffer.peekByte();
+
+        // Valida el ID del paquete del servidor antes de procesarlo
+        if (!isValidPacketId(packetId)) {
+            Logger.debug("Invalid package ID received: " + packetId);
+            return;
+        }
+
+        // Obtiene el paquete del servidor a partir del ID del paquete del servidor
+        ServerPacket serverPacket = ServerPacket.getPacket(packetId);
+
+        Logger.debug("Processing server packet [" + serverPacket + "] with ID " + packetId);
+
+        // Guarda la referencia del paquete del servidor en la variable estatica serverPacket de clase para poder usarla sin instanciarla en el metodo disconnect() de PacketBuffer
+        PacketProcessor.serverPacket = serverPacket;
+
+        // Obtiene el handler del paquete del servidor
+        PacketHandler handler = handlers.get(serverPacket);
+
+        // Si el handler existe
+        if (handler != null) {
+
+            // Maneja el inputBuffer en el handler correspondiente
+            handler.handle(inputBuffer);
+
+            // Si quedan bytes, continua procesando
+            if (inputBuffer.getLength() > 0) process(inputBuffer);
+
+        }
+
+    }
+
+    /**
+     * Verifica si existe un paquete del servidor con el ID especificado.
+     *
+     * @param packetId ID del paquete a validar
+     * @return true si existe un paquete con el ID especificado, false en caso contrario
+     */
+    private static boolean isValidPacketId(int packetId) {
+        return ServerPacket.PACKET_REGISTRY.containsKey(packetId);
     }
 
     /**
      * Registra los handlers asociados a los diferentes paquetes del servidor.
      */
-    private void registerHandlers() {
+    private static void registerHandlers() {
         handlers.put(ServerPacket.LOGGED, new LoggedHandler());
         handlers.put(ServerPacket.REMOVE_DIALOGS, new RemoveDialogsHandler());
         handlers.put(ServerPacket.REMOVE_CHAR_DIALOG, new RemoveCharDialogHandler());
@@ -131,57 +176,6 @@ public class PacketReceiver {
         handlers.put(ServerPacket.MULTI_MESSAGE, new MultiMessageHandler());
         handlers.put(ServerPacket.STOP_WORKING, new StopWorkingHandler());
         handlers.put(ServerPacket.CANCEL_OFFER_ITEM, new CancelOfferItemHandler());
-    }
-
-    /**
-     * Maneja los bytes entrantes desde el buffer del paquete del servidor, validando el paquete y procesandolo a traves del
-     * handler correspondiente, si esta disponible.
-     *
-     * @param buffer buffer que contiene los bytes del paquete recibido del servidor
-     */
-    public void handleIncomingBytes(PacketBuffer buffer) {
-        if (buffer.getLength() <= 0) return;
-
-        // Obtiene el ID del paquete del servidor
-        int packetId = buffer.peekByte();
-
-        // Valida el ID del paquete del servidor antes de procesarlo
-        if (!isValidPacketId(packetId)) {
-            Logger.debug("Invalid package ID received: " + packetId);
-            return;
-        }
-
-        // Obtiene el paquete del servidor a partir del ID del paquete del servidor
-        ServerPacket serverPacket = ServerPacket.getPacket(packetId);
-
-        Logger.debug("Processing server packet [" + serverPacket + "] with ID " + packetId);
-
-        // Guarda la referencia del paquete del servidor en la variable estatica serverPacket de clase para poder usarla sin instanciarla en el metodo disconnect() de PacketBuffer
-        PacketReceiver.serverPacket = serverPacket;
-
-        // Obtiene el handler del paquete del servidor
-        PacketHandler handler = handlers.get(serverPacket);
-
-        if (handler != null) {
-
-            // Maneja los bytes del buffer del paquete del servidor en el handler correspondiente
-            handler.handle(buffer);
-
-            // Si quedan bytes, continua manejando los bytes del buffer del paquete del servidor
-            if (buffer.getLength() > 0) handleIncomingBytes(buffer);
-
-        }
-
-    }
-
-    /**
-     * Verifica si existe un paquete del servidor con el ID especificado.
-     *
-     * @param packetId ID del paquete a validar
-     * @return true si existe un paquete con el ID especificado, false en caso contrario
-     */
-    private boolean isValidPacketId(int packetId) {
-        return ServerPacket.PACKET_REGISTRY.containsKey(packetId);
     }
 
 }
