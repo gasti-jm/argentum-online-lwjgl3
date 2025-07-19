@@ -1160,9 +1160,9 @@ public class Protocol {
      * <ol>
      * <li><b>Cliente Java envia un paquete TALK simple</b>:
      * <pre>{@code
-     * public static void writeTalk(String chat) {
+     * public static void writeTalk(String message) {
      *     outputBuffer.writeByte(ClientPacket.TALK.getId());
-     *     outputBuffer.writeCp1252String(chat);
+     *     outputBuffer.writeCp1252String(message);
      * }
      * }</pre>
      * <li><b>El servidor VB6 procesa el paquete en {@code HandleTalk}</b>:
@@ -1176,7 +1176,7 @@ public class Protocol {
      * <li><b>El cliente Java recibe y procesa un paquete CHAT_OVER_HEAD completo</b>:
      * <pre>{@code
      * // En ChatOverHeadHandler.java
-     * String chat = tempBuffer.readCp1252String(); // El cliente añadio esto!
+     * String message = tempBuffer.readCp1252String(); // El cliente añadio esto!
      * short charIndex = tempBuffer.readInteger(); // El servidor desde el codigo de VB6 añadio esto!
      * int r = tempBuffer.readByte(); // El servidor desde el codigo de VB6 añadio esto!
      * int g = tempBuffer.readByte(); // El servidor desde el codigo de VB6 añadio esto!
@@ -1184,11 +1184,11 @@ public class Protocol {
      * }</pre>
      * </ol>
      * <p>
-     * Ver: communication-protocol.md
+     * Ver: network-guide.md
      */
-    public static void talk(String chat) {
+    public static void talk(String message) {
         outputBuffer.writeByte(ClientPacket.TALK.getId());
-        outputBuffer.writeCp1252String(chat);
+        outputBuffer.writeCp1252String(message);
     }
 
     public static void talkAsNpc(String message) {
