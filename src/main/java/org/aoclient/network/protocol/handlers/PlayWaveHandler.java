@@ -2,7 +2,7 @@ package org.aoclient.network.protocol.handlers;
 
 import org.aoclient.network.PacketBuffer;
 
-import static org.aoclient.engine.Sound.playSound;
+import static org.aoclient.engine.audio.Sound.playSound;
 
 public class PlayWaveHandler implements PacketHandler {
 

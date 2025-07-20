@@ -1,4 +1,4 @@
-package org.aoclient.engine;
+package org.aoclient.engine.audio;
 
 import org.lwjgl.system.MemoryStack;
 

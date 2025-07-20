@@ -12,8 +12,8 @@ import org.aoclient.network.protocol.Protocol;
 
 import java.io.IOException;
 
-import static org.aoclient.engine.Sound.SND_CLICK;
-import static org.aoclient.engine.Sound.playSound;
+import static org.aoclient.engine.audio.Sound.SND_CLICK;
+import static org.aoclient.engine.audio.Sound.playSound;
 import static org.aoclient.engine.utils.Time.FPS;
 
 /**

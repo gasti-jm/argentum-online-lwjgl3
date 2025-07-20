@@ -1,6 +1,6 @@
 package org.aoclient.engine.game;
 
-import org.aoclient.engine.Sound;
+import org.aoclient.engine.audio.Sound;
 import org.aoclient.engine.renderer.RGBColor;
 import org.aoclient.engine.renderer.Surface;
 import org.aoclient.engine.renderer.Texture;

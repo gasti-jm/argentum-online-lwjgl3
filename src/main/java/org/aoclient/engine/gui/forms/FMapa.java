@@ -6,8 +6,8 @@ import imgui.flag.ImGuiWindowFlags;
 
 import java.io.IOException;
 
-import static org.aoclient.engine.Sound.SND_CLICK;
-import static org.aoclient.engine.Sound.playSound;
+import static org.aoclient.engine.audio.Sound.SND_CLICK;
+import static org.aoclient.engine.audio.Sound.playSound;
 
 /**
  * Formulario que muestra el mapa del mundo.

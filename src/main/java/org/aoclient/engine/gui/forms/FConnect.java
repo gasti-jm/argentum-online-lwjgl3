@@ -14,7 +14,7 @@ import org.aoclient.network.Connection;
 
 import java.io.IOException;
 
-import static org.aoclient.engine.Sound.playMusic;
+import static org.aoclient.engine.audio.Sound.playMusic;
 import static org.aoclient.engine.utils.GameData.options;
 import static org.aoclient.network.protocol.Protocol.loginExistingChar;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_ENTER;
