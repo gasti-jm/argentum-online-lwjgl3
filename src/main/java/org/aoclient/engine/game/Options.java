@@ -23,6 +23,7 @@ public enum Options {
     private String nick = "";
     private String ipServer = "127.0.0.1";
     private String portServer = "7666";
+    private String language = "es";
 
     /**
      * Carga las opciones.
@@ -62,6 +63,7 @@ public enum Options {
             write(writer, "Fullscreen", fullscreen);
             write(writer, "VSYNC", vsync);
             write(writer, "CursorGraphic", cursorGraphic);
+            write(writer, "Language", language);
         } catch (IOException e) {
             Logger.error("Could not write to options.ini file!");
         }
@@ -135,8 +137,18 @@ public enum Options {
         return cursorGraphic;
     }
 
+
+
     public void setCursorGraphic(boolean cursorGraphic) {
         this.cursorGraphic = cursorGraphic;
+    }
+
+    public String getLanguage() {
+        return language;
+    }
+
+    public void setLanguage(String language) {
+        this.language = language;
     }
 
     /**
@@ -168,6 +180,7 @@ public enum Options {
             case "Fullscreen" -> fullscreen = Boolean.parseBoolean(value);
             case "VSYNC" -> vsync = Boolean.parseBoolean(value);
             case "CursorGraphic" -> cursorGraphic = Boolean.parseBoolean(value);
+            case "Language" -> language = value;
             default -> Logger.warn("Unknown option ignored: {}", option);
         }
     }

@@ -2,6 +2,8 @@ package org.aoclient.engine;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -31,30 +33,24 @@ public class Messages {
         String filename = "strings_" + region + ".ini";
 
         try {
-
-            InputStream input;
-
             Path resources = Paths.get("resources", filename);
-            if (Files.exists(resources)) input = Files.newInputStream(resources);
-            else {
+            if (!Files.exists(resources)) {
                 System.err.println("The " + filename + " file could not be found!");
                 return;
             }
 
-            /* La clase Properties esta diseñada especificamente para trabajar con archivos de configuracion en formato
-             * clave-valor, siendo capas de reconocer el separador '='. */
-            Properties properties = new Properties();
-            properties.load(input);
+            // Leer el archivo con UTF-8
+            try (InputStreamReader reader = new InputStreamReader(Files.newInputStream(resources), StandardCharsets.UTF_8)) {
+                Properties properties = new Properties();
+                properties.load(reader);
 
-            // Itera todos los valores de MessageKey
-            for (MessageKey key : MessageKey.values()) {
-                // Obtiene el valor de la clave correspondiente en el archivo de propiedades. Si no existe o si existe pero esta vacio, se ignora.
-                String value = properties.getProperty(MESSAGE_PREFIX + key.name());
-                // Si el valor no es nulo y no esta vacio, se agrega al mapa de mensajes
-                if (value != null && !value.isEmpty()) messageCache.put(key, value);
+                for (MessageKey key : MessageKey.values()) {
+                    String value = properties.getProperty(MESSAGE_PREFIX + key.name());
+                    if (value != null && !value.isEmpty()) {
+                        messageCache.put(key, value);
+                    }
+                }
             }
-
-            input.close();
 
         } catch (IOException e) {
             System.err.println("Error loading messages: " + e.getMessage());
