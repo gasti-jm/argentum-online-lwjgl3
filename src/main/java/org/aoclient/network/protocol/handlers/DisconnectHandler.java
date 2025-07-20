@@ -1,12 +1,12 @@
 package org.aoclient.network.protocol.handlers;
 
-import org.aoclient.engine.Sound;
+import org.aoclient.engine.audio.Sound;
 import org.aoclient.engine.gui.ImGUISystem;
 import org.aoclient.network.PacketBuffer;
 import org.aoclient.network.Connection;
 import org.tinylog.Logger;
 
-import static org.aoclient.engine.Sound.playMusic;
+import static org.aoclient.engine.audio.Sound.playMusic;
 import static org.aoclient.engine.game.models.Character.eraseAllChars;
 
 public class DisconnectHandler implements PacketHandler {

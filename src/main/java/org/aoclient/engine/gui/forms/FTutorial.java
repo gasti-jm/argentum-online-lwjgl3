@@ -1,15 +1,13 @@
 package org.aoclient.engine.gui.forms;
 
 import imgui.ImGui;
-import imgui.flag.ImGuiCol;
 import imgui.flag.ImGuiCond;
-import imgui.flag.ImGuiStyleVar;
 import imgui.flag.ImGuiWindowFlags;
 
 import java.io.IOException;
 
-import static org.aoclient.engine.Sound.SND_CLICK;
-import static org.aoclient.engine.Sound.playSound;
+import static org.aoclient.engine.audio.Sound.SND_CLICK;
+import static org.aoclient.engine.audio.Sound.playSound;
 
 import org.aoclient.engine.gui.widgets.ImageButton3State;
 import org.aoclient.engine.utils.tutorial.TutorialData;

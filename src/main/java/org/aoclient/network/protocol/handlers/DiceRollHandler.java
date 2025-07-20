@@ -5,8 +5,8 @@ import org.aoclient.engine.gui.forms.FCreateCharacter;
 import org.aoclient.network.PacketBuffer;
 import org.tinylog.Logger;
 
-import static org.aoclient.engine.Sound.SND_DICE;
-import static org.aoclient.engine.Sound.playSound;
+import static org.aoclient.engine.audio.Sound.SND_DICE;
+import static org.aoclient.engine.audio.Sound.playSound;
 
 public class DiceRollHandler implements PacketHandler {
 

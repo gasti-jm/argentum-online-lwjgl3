@@ -3,7 +3,7 @@ package org.aoclient.network.protocol.handlers;
 import org.aoclient.network.PacketBuffer;
 import org.tinylog.Logger;
 
-import static org.aoclient.engine.Sound.playMusic;
+import static org.aoclient.engine.audio.Sound.playMusic;
 
 public class PlayMIDIHandler implements PacketHandler {
 

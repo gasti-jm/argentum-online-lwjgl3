@@ -1,5 +1,6 @@
 package org.aoclient.engine;
 
+import org.aoclient.engine.audio.Sound;
 import org.aoclient.engine.gui.ImGUISystem;
 import org.aoclient.engine.listeners.KeyHandler;
 import org.aoclient.engine.listeners.MouseListener;
@@ -11,7 +12,7 @@ import org.aoclient.network.Connection;
 import org.lwjgl.Version;
 import org.tinylog.Logger;
 
-import static org.aoclient.engine.Sound.playMusic;
+import static org.aoclient.engine.audio.Sound.playMusic;
 import static org.aoclient.engine.scenes.SceneType.INTRO_SCENE;
 import static org.aoclient.engine.utils.GameData.options;
 import static org.aoclient.engine.utils.Time.deltaTime;

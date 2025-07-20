@@ -11,8 +11,8 @@ import org.aoclient.engine.listeners.KeyHandler;
 
 import java.io.IOException;
 
-import static org.aoclient.engine.Sound.SND_CLICK;
-import static org.aoclient.engine.Sound.playSound;
+import static org.aoclient.engine.audio.Sound.SND_CLICK;
+import static org.aoclient.engine.audio.Sound.playSound;
 import static org.lwjgl.glfw.GLFW.*;
 
 public class FBindKeys extends Form {

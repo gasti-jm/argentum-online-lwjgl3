@@ -9,8 +9,8 @@ import imgui.type.ImString;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
-import static org.aoclient.engine.Sound.SND_CLICK;
-import static org.aoclient.engine.Sound.playSound;
+import static org.aoclient.engine.audio.Sound.SND_CLICK;
+import static org.aoclient.engine.audio.Sound.playSound;
 import static org.aoclient.network.protocol.Protocol.changePassword;
 
 /**
