@@ -42,12 +42,12 @@ public class ChatOverHeadHandler implements PacketHandler {
         tempBuffer.copy(buffer);
 
         /* Este byte identificador ya fue utilizado previamente para determinar que handler debe procesar el paquete (en la clase
-         * PacketReceiver). Una vez que el paquete llega al handler correcto, este byte identificador ya no es necesario para el
+         * PacketProcessor). Una vez que el paquete llega al handler correcto, este byte identificador ya no es necesario para el
          * procesamiento posterior, por lo que se lee para "consumirlo" y avanzar en el buffer, pero su valor no se usa. */
         tempBuffer.readByte(); // Descarta el ID "CHAT_OVER_HEAD" del paquete
 
         // Lee el contenido del buffer
-        String chat = tempBuffer.readCp1252String(); // El cliente añadio esto!
+        String message = tempBuffer.readCp1252String(); // El cliente añadio esto!
         short charIndex = tempBuffer.readInteger(); // El servidor desde el codigo de VB6 añadio esto!
         int r = tempBuffer.readByte(); // El servidor desde el codigo de VB6 añadio esto!
         int g = tempBuffer.readByte(); // El servidor desde el codigo de VB6 añadio esto!
@@ -55,7 +55,7 @@ public class ChatOverHeadHandler implements PacketHandler {
 
         // Realiza la accion correspondiente con los bytes leidos
         if (charList[charIndex].getName().length() <= 1) Dialogs.removeDialogsNPCArea();
-        charDialogSet(charIndex, chat, new RGBColor((float) r / 255, (float) g / 255, (float) b / 255));
+        charDialogSet(charIndex, message, new RGBColor((float) r / 255, (float) g / 255, (float) b / 255));
 
         /* Despues de leer todos los bytes del buffer temporal, este queda con una longitud 0, por lo tanto se pasa este estado
          * al buffer del servidor para "eliminar" los bytes leidos dejandolo limpio para recibir el siguiente paquete. */

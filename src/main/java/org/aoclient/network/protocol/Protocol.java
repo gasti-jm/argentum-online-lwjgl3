@@ -6,7 +6,6 @@ import org.aoclient.engine.game.models.Direction;
 import org.aoclient.engine.game.models.Skill;
 import org.aoclient.engine.renderer.RGBColor;
 import org.aoclient.network.PacketBuffer;
-import org.aoclient.network.Connection;
 import org.aoclient.network.protocol.types.GMCommand;
 
 import java.nio.charset.StandardCharsets;
@@ -14,36 +13,16 @@ import java.nio.charset.StandardCharsets;
 import static org.aoclient.engine.utils.GameData.charList;
 import static org.lwjgl.glfw.GLFW.glfwGetTime;
 
-/**
- * Maneja el protocolo de comunicacion entre el cliente y el servidor.
- * <p>
- * Implementa las operaciones necesarias para la comunicacion de red, procesando los paquetes entrantes desde el servidor y
- * preparando los paquetes salientes hacia el servidor.
- * <p>
- * Esta clase contiene implementaciones para todos los comandos del protocolo del juego, incluyendo acciones de personaje,
- * interacciones con el entorno, comunicacion con otros jugadores y comandos administrativos.
- * <p>
- * Trabaja en conjunto con {@link Connection} para la transmision real de los datos, y utiliza {@link PacketBuffer} para
- * almacenar temporalmente los bytes entrantes y salientes antes de su manejo.
- */
 
 public class Protocol {
 
     private static final Console CONSOLE = Console.INSTANCE;
     private static final User USER = User.INSTANCE;
-    private static final PacketReceiver PACKET_RECEIVER = new PacketReceiver();
-    public static int pingTime;
+    public static int pingTime; // TODO Se podria sacar de aca?
     /** Buffer para la salida de bytes (escribe lo que envia el cliente al servidor). */
     public static PacketBuffer outputBuffer = new PacketBuffer();
     /** Buffer para la entrada de bytes (lee lo que recibe el cliente del servidor). */
     public static PacketBuffer inputBuffer = new PacketBuffer();
-
-    /**
-     * Delega el manejo de los bytes del buffer de entrada a PacketReceiver.
-     */
-    public static void handleIncomingBytes() {
-        PACKET_RECEIVER.handleIncomingBytes(inputBuffer);
-    }
 
     public static void acceptChaosCouncil(String player) {
         outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
@@ -1181,9 +1160,9 @@ public class Protocol {
      * <ol>
      * <li><b>Cliente Java envia un paquete TALK simple</b>:
      * <pre>{@code
-     * public static void writeTalk(String chat) {
+     * public static void writeTalk(String message) {
      *     outputBuffer.writeByte(ClientPacket.TALK.getId());
-     *     outputBuffer.writeCp1252String(chat);
+     *     outputBuffer.writeCp1252String(message);
      * }
      * }</pre>
      * <li><b>El servidor VB6 procesa el paquete en {@code HandleTalk}</b>:
@@ -1197,7 +1176,7 @@ public class Protocol {
      * <li><b>El cliente Java recibe y procesa un paquete CHAT_OVER_HEAD completo</b>:
      * <pre>{@code
      * // En ChatOverHeadHandler.java
-     * String chat = tempBuffer.readCp1252String(); // El cliente añadio esto!
+     * String message = tempBuffer.readCp1252String(); // El cliente añadio esto!
      * short charIndex = tempBuffer.readInteger(); // El servidor desde el codigo de VB6 añadio esto!
      * int r = tempBuffer.readByte(); // El servidor desde el codigo de VB6 añadio esto!
      * int g = tempBuffer.readByte(); // El servidor desde el codigo de VB6 añadio esto!
@@ -1205,11 +1184,11 @@ public class Protocol {
      * }</pre>
      * </ol>
      * <p>
-     * Ver: communication-protocol.md
+     * Ver: network-guide.md
      */
-    public static void talk(String chat) {
+    public static void talk(String message) {
         outputBuffer.writeByte(ClientPacket.TALK.getId());
-        outputBuffer.writeCp1252String(chat);
+        outputBuffer.writeCp1252String(message);
     }
 
     public static void talkAsNpc(String message) {
