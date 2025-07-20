@@ -52,11 +52,9 @@ public final class GameData {
      * Inicializamos todos los datos almacenados en archivos.
      */
     public static void init() {
-
         for (int i = 0; i < charList.length; i++) charList[i] = new Character();
 
         reader = new BinaryDataReader();
-
         options.load();
 
         loadGrhData();
@@ -68,7 +66,7 @@ public final class GameData {
         loadFxs();
         loadFK();
         loadFonts();
-        loadMessages("es");
+        loadMessages(options.getLanguage());
     }
 
     /**
@@ -83,7 +81,6 @@ public final class GameData {
         }
 
         try {
-
             reader.init(data);
 
             final int fileVersion = reader.readInt();

@@ -118,7 +118,8 @@ public class MultiMessageHandler implements PacketHandler {
 
             case USER_HIT_NPC:
                 final int d = buffer.readLong();
-                console.addMsgToConsole(Messages.get(MessageKey.GOLPE_CRIATURA_1) + " " + d, false, false, new RGBColor(1f, 0f, 0f));
+                console.addMsgToConsole(Messages.get(MessageKey.GOLPE_CRIATURA_1) + " " + d + "!!",
+                        false, false, new RGBColor(1f, 0f, 0f));
 
                 charDialogHitSet(User.INSTANCE.getUserCharIndex(), d);
 
