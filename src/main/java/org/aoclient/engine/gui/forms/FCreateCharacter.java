@@ -175,7 +175,6 @@ public final class FCreateCharacter extends Form {
                 ImGuiWindowFlags.NoDecoration |
                 ImGuiWindowFlags.NoBackground |
                 ImGuiWindowFlags.NoResize |
-                ImGuiWindowFlags.NoCollapse |
                 ImGuiWindowFlags.NoSavedSettings |
                 ImGuiWindowFlags.NoBringToFrontOnFocus);
 
@@ -359,35 +358,35 @@ public final class FCreateCharacter extends Form {
 
         switch (index) {
             case 0:
-                drawGrhIndex(headGraphic, 429, 395, color);
+                drawGrhIndexNoBatch(headGraphic, 429, 395, color);
                 break;
             case 1:
-                drawGrhIndex(headGraphic, 456, 395, color);
+                drawGrhIndexNoBatch(headGraphic, 456, 395, color);
                 break;
             case 2:
-                drawGrhIndex(headGraphic, 483, 395, color);
+                drawGrhIndexNoBatch(headGraphic, 483, 395, color);
 
-                drawTexture(bodyGraphic.getWalk(dir),
+                drawTextureNoBatch(bodyGraphic.getWalk(dir),
                         (characterPos.left + (characterPos.right / 2)) - (grhData[bodyGraphic.getWalk(dir).getGrhIndex()].getPixelWidth() / 2) - 4,
                         450,
                         true, true, false, 1.0f, color);
                 // gnomo o enano
                 if (currentItemRaza.get() == 3 || currentItemRaza.get() == 4) {
-                    drawGrhIndex(headGraphic,
+                    drawGrhIndexNoBatch(headGraphic,
                             492 - (grhData[headGraphic].getPixelWidth() / 2),
                             487 - (grhData[headGraphic].getPixelHeight()), color);
                 } else {
-                    drawGrhIndex(headGraphic,
+                    drawGrhIndexNoBatch(headGraphic,
                             492 - (grhData[headGraphic].getPixelWidth() / 2),
                             478 - (grhData[headGraphic].getPixelHeight()), color);
                 }
                 break;
             case 3:
-                drawGrhIndex(headGraphic, 510, 395, color);
+                drawGrhIndexNoBatch(headGraphic, 510, 395, color);
                 break;
 
             case 4:
-                drawGrhIndex(headGraphic, 537, 395, color);
+                drawGrhIndexNoBatch(headGraphic, 537, 395, color);
                 break;
         }
     }
