@@ -4,6 +4,7 @@ import org.aoclient.engine.audio.Sound;
 import org.aoclient.engine.gui.ImGUISystem;
 import org.aoclient.engine.listeners.KeyHandler;
 import org.aoclient.engine.listeners.MouseListener;
+import org.aoclient.engine.renderer.BatchRenderer;
 import org.aoclient.engine.renderer.Surface;
 import org.aoclient.engine.scenes.*;
 import org.aoclient.engine.utils.GameData;
@@ -41,6 +42,7 @@ public final class Engine {
     private final ImGUISystem guiSystem = ImGUISystem.INSTANCE;
     /** Escena actual que esta siendo renderizada y actualizada en el motor. */
     private Scene currentScene;
+    public static BatchRenderer batch;
 
     /**
      * Finaliza el cliente del motor grafico cerrando los recursos necesarios y deteniendo su ejecucion.
@@ -61,10 +63,12 @@ public final class Engine {
         Logger.info("Running on {} / v{} [{}]", System.getProperty("os.name"), System.getProperty("os.version"), System.getProperty("os.arch"));
         Logger.info("Java version: {}", System.getProperty("java.version"));
 
+
         GameData.init();
         window.init();
         guiSystem.init();
         Surface.INSTANCE.init();
+        batch = new BatchRenderer();
 
         changeScene(INTRO_SCENE);
         playMusic("intro.ogg");
@@ -128,7 +132,9 @@ public final class Engine {
                 glClearColor(currentScene.getBackground().getRed(), currentScene.getBackground().getGreen(), currentScene.getBackground().getBlue(), 1.0f);
                 glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-                if (deltaTime >= 0) render();
+                if (deltaTime >= 0) {
+                    render();
+                }
 
                 glfwSwapBuffers(window.getWindow());
                 Time.updateTime();
@@ -175,10 +181,15 @@ public final class Engine {
      */
     private void render() {
         if (!currentScene.isVisible()) changeScene(currentScene.getChangeScene());
+
+        batch.begin();
         currentScene.mouseEvents();
         currentScene.keyEvents();
         currentScene.render();
+        batch.end();
         guiSystem.renderGUI();
+
+
         Sound.renderMusic();
         KeyHandler.update();
     }

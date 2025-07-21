@@ -26,8 +26,8 @@ import java.util.List;
 public enum Console {
     INSTANCE;
 
-    public static final int CONSOLE_WIDTH = 555;
-    public static final int CONSOLE_HEIGHT = 98;
+    private static final int CONSOLE_WIDTH = 555;
+    private static final int CONSOLE_HEIGHT = 98;
     private static final int MAX_SIZE_DATA = 500;
     private static final int MAX_CHARACTERS_LENGTH = 75; // Maxima cantidad de caracteres en horizontal.
     private final boolean autoScroll;
