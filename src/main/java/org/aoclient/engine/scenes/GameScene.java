@@ -127,7 +127,7 @@ public final class GameScene extends Scene {
                 if (user.getUsingSkill() == 0) {
 
                     // Estamos manteniendo Shift derecho?
-                    if (KeyHandler.isKeyPressed(GLFW_KEY_RIGHT_SHIFT) &&
+                    if ((KeyHandler.isKeyPressed(GLFW_KEY_RIGHT_SHIFT) || KeyHandler.isKeyPressed(GLFW_KEY_LEFT_SHIFT)) &&
                             charList[user.getUserCharIndex()].getPriv() != 0) {
 
                         teleport("YO",
