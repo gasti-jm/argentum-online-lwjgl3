@@ -1,7 +1,6 @@
-package org.aoclient.engine;
+package org.aoclient.engine.game;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -82,11 +81,7 @@ public class Messages {
         GOLPE_PIERNA_IZQ,
         GOLPE_PIERNA_DER,
         GOLPE_TORSO,
-        MENSAJE_1,
-        MENSAJE_2,
-        MENSAJE_11,
-        MENSAJE_22,
-        GOLPE_CRIATURA_1,
+        GOLPE_CRIATURA,
         ATAQUE_FALLO,
         RECIVE_IMPACTO_CABEZA,
         RECIVE_IMPACTO_BRAZO_IZQ,
@@ -94,7 +89,7 @@ public class Messages {
         RECIVE_IMPACTO_PIERNA_IZQ,
         RECIVE_IMPACTO_PIERNA_DER,
         RECIVE_IMPACTO_TORSO,
-        PRODUCE_IMPACTO_1,
+        PRODUCE_IMPACTO,
         PRODUCE_IMPACTO_CABEZA,
         PRODUCE_IMPACTO_BRAZO_IZQ,
         PRODUCE_IMPACTO_BRAZO_DER,
@@ -108,21 +103,17 @@ public class Messages {
         TRABAJO_MINERIA,
         TRABAJO_FUNDIRMETAL,
         TRABAJO_PROYECTILES,
-        ENTRAR_PARTY_1,
-        ENTRAR_PARTY_2,
+        ENTRAR_PARTY,
         NENE,
-        FRAGSHOOTER_TE_HA_MATADO,
-        FRAGSHOOTER_HAS_MATADO,
-        FRAGSHOOTER_HAS_GANADO,
-        FRAGSHOOTER_PUNTOS_DE_EXPERIENCIA,
         NO_VES_NADA_INTERESANTE,
         HAS_MATADO_A,
-        HAS_GANADO_EXPE_1,
-        HAS_GANADO_EXPE_2,
+        HAS_GANADO_EXPE,
         TE_HA_MATADO,
         HOGAR,
         HOGAR_CANCEL,
-        ESTAS_MUERTO
+        ESTAS_MUERTO,
+        NO_SALIR_PARALIZADO,
+        IR_HOGAR
     }
 
 }

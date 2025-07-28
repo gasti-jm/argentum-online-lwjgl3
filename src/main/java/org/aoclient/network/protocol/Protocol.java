@@ -1,6 +1,7 @@
 package org.aoclient.network.protocol;
 
 import org.aoclient.engine.game.Console;
+import org.aoclient.engine.game.Messages;
 import org.aoclient.engine.game.User;
 import org.aoclient.engine.game.models.Direction;
 import org.aoclient.engine.game.models.Skill;
@@ -64,7 +65,7 @@ public class Protocol {
 
     public static void balance() {
         if (charList[USER.getUserCharIndex()].isDead()) {
-            CONSOLE.addMsgToConsole(new String("You are dead!".getBytes(), StandardCharsets.UTF_8), false, true, new RGBColor());
+            CONSOLE.addMsgToConsole(Messages.get(Messages.MessageKey.ESTAS_MUERTO), false, true, new RGBColor());
             return;
         }
         outputBuffer.writeByte(ClientPacket.BALANCE.getId());
@@ -579,7 +580,7 @@ public class Protocol {
     public static void meditate() {
         if (USER.getUserMaxMAN() == USER.getUserMinMAN()) return;
         if (charList[USER.getUserCharIndex()].isDead()) {
-            CONSOLE.addMsgToConsole(new String("You are dead!".getBytes(), StandardCharsets.UTF_8), false, true, new RGBColor());
+            CONSOLE.addMsgToConsole(Messages.get(Messages.MessageKey.ESTAS_MUERTO), false, true, new RGBColor());
             return;
         }
         outputBuffer.writeByte(ClientPacket.MEDITATE.getId());
@@ -666,7 +667,7 @@ public class Protocol {
 
     public static void partyCreate() {
         if (charList[USER.getUserCharIndex()].isDead()) {
-            CONSOLE.addMsgToConsole(new String("You are dead!".getBytes(), StandardCharsets.UTF_8), false, true, new RGBColor());
+            CONSOLE.addMsgToConsole(Messages.get(Messages.MessageKey.ESTAS_MUERTO), false, true, new RGBColor());
             return;
         }
         outputBuffer.writeByte(ClientPacket.PARTY_CREATE.getId());
@@ -674,7 +675,7 @@ public class Protocol {
 
     public static void partyJoin() {
         if (charList[USER.getUserCharIndex()].isDead()) {
-            CONSOLE.addMsgToConsole(new String("You are dead!".getBytes(), StandardCharsets.UTF_8), false, true, new RGBColor());
+            CONSOLE.addMsgToConsole(Messages.get(Messages.MessageKey.ESTAS_MUERTO), false, true, new RGBColor());
             return;
         }
         outputBuffer.writeByte(ClientPacket.PARTY_JOIN.getId());
@@ -705,7 +706,7 @@ public class Protocol {
 
     public static void petFollow() {
         if (charList[USER.getUserCharIndex()].isDead()) {
-            CONSOLE.addMsgToConsole(new String("You are dead!".getBytes(), StandardCharsets.UTF_8), false, true, new RGBColor());
+            CONSOLE.addMsgToConsole(Messages.get(Messages.MessageKey.ESTAS_MUERTO), false, true, new RGBColor());
             return;
         }
         outputBuffer.writeByte(ClientPacket.PET_FOLLOW.getId());
@@ -713,7 +714,7 @@ public class Protocol {
 
     public static void petRelease() {
         if (charList[USER.getUserCharIndex()].isDead()) {
-            CONSOLE.addMsgToConsole(new String("You are dead!".getBytes(), StandardCharsets.UTF_8), false, true, new RGBColor());
+            CONSOLE.addMsgToConsole(Messages.get(Messages.MessageKey.ESTAS_MUERTO), false, true, new RGBColor());
             return;
         }
         outputBuffer.writeByte(ClientPacket.PET_RELEASE.getId());
@@ -721,7 +722,7 @@ public class Protocol {
 
     public static void petStay() {
         if (charList[USER.getUserCharIndex()].isDead()) {
-            CONSOLE.addMsgToConsole(new String("You are dead!".getBytes(), StandardCharsets.UTF_8), false, true, new RGBColor());
+            CONSOLE.addMsgToConsole(Messages.get(Messages.MessageKey.ESTAS_MUERTO), false, true, new RGBColor());
             return;
         }
         outputBuffer.writeByte(ClientPacket.PET_STAY.getId());
@@ -832,7 +833,7 @@ public class Protocol {
 
     public static void quit() {
         if (charList[USER.getUserCharIndex()].isParalizado()) {
-            CONSOLE.addMsgToConsole(new String("You can't get out while you're paralyzed.".getBytes(), StandardCharsets.UTF_8), false, true, new RGBColor());
+            CONSOLE.addMsgToConsole(Messages.get(Messages.MessageKey.NO_SALIR_PARALIZADO), false, true, new RGBColor());
             return;
         }
         outputBuffer.writeByte(ClientPacket.QUIT.getId());
@@ -950,7 +951,7 @@ public class Protocol {
 
     public static void rest() {
         if (charList[USER.getUserCharIndex()].isDead()) {
-            CONSOLE.addMsgToConsole(new String("You are dead!".getBytes(), StandardCharsets.UTF_8), false, true, new RGBColor());
+            CONSOLE.addMsgToConsole(Messages.get(Messages.MessageKey.ESTAS_MUERTO), false, true, new RGBColor());
             return;
         }
         outputBuffer.writeByte(ClientPacket.REST.getId());
@@ -1042,7 +1043,7 @@ public class Protocol {
 
     public static void shareNpc() {
         if (charList[USER.getUserCharIndex()].isDead()) {
-            CONSOLE.addMsgToConsole(new String("You are dead!".getBytes(), StandardCharsets.UTF_8), false, true, new RGBColor());
+            CONSOLE.addMsgToConsole(Messages.get(Messages.MessageKey.ESTAS_MUERTO), false, true, new RGBColor());
             return;
         }
         outputBuffer.writeByte(ClientPacket.SHARE_NPC.getId());
@@ -1122,7 +1123,7 @@ public class Protocol {
 
     public static void stopSharingNpc() {
         if (charList[USER.getUserCharIndex()].isDead()) {
-            CONSOLE.addMsgToConsole(new String("You are dead!".getBytes(), StandardCharsets.UTF_8), false, true, new RGBColor());
+            CONSOLE.addMsgToConsole(Messages.get(Messages.MessageKey.ESTAS_MUERTO), false, true, new RGBColor());
             return;
         }
         outputBuffer.writeByte(ClientPacket.STOP_SHARING_NPC.getId());
@@ -1238,7 +1239,7 @@ public class Protocol {
 
     public static void trainList() {
         if (charList[USER.getUserCharIndex()].isDead()) {
-            CONSOLE.addMsgToConsole(new String("You are dead!".getBytes(), StandardCharsets.UTF_8), false, true, new RGBColor());
+            CONSOLE.addMsgToConsole(Messages.get(Messages.MessageKey.ESTAS_MUERTO), false, true, new RGBColor());
             return;
         }
         outputBuffer.writeByte(ClientPacket.TRAIN_LIST.getId());
@@ -1294,7 +1295,7 @@ public class Protocol {
 
     public static void work(int skill) {
         if (USER.isDead()) {
-            CONSOLE.addMsgToConsole(new String("¡You are dead!!".getBytes(), StandardCharsets.UTF_8), false, true, new RGBColor());
+            CONSOLE.addMsgToConsole(Messages.get(Messages.MessageKey.ESTAS_MUERTO), false, true, new RGBColor());
             return;
         }
         outputBuffer.writeByte(ClientPacket.WORK.getId());
