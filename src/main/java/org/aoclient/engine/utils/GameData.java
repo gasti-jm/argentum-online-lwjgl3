@@ -7,7 +7,7 @@ import org.aoclient.engine.utils.inits.*;
 
 import java.io.IOException;
 
-import static org.aoclient.engine.Messages.loadMessages;
+import static org.aoclient.engine.game.Messages.loadMessages;
 import static org.aoclient.engine.game.models.Character.eraseAllChars;
 import static org.aoclient.engine.renderer.FontRenderer.loadFonts;
 import static org.aoclient.scripts.Compressor.readResource;

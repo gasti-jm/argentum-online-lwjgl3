@@ -1,6 +1,6 @@
 package org.aoclient.network.protocol.handlers;
 
-import org.aoclient.engine.Messages;
+import org.aoclient.engine.game.Messages;
 import org.aoclient.engine.Window;
 import org.aoclient.engine.game.Console;
 import org.aoclient.engine.game.User;
@@ -9,7 +9,7 @@ import org.aoclient.engine.renderer.RGBColor;
 import org.aoclient.network.PacketBuffer;
 import org.tinylog.Logger;
 
-import static org.aoclient.engine.Messages.MessageKey;
+import static org.aoclient.engine.game.Messages.MessageKey;
 import static org.aoclient.engine.game.models.Skill.FundirMetal;
 
 public class WorkRequestTargetHandler implements PacketHandler {

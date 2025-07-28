@@ -185,7 +185,6 @@ public final class GameScene extends Scene {
      */
     @Override
     public void keyEvents() {
-        if (KeyHandler.isKeyPressed(Key.EXIT_GAME.getKeyCode())) quit();
         this.checkBindedKeys();
     }
 
@@ -235,7 +234,9 @@ public final class GameScene extends Scene {
                     ImGUISystem.INSTANCE.show(new FCantidad());
                     break;
                 case TALK:
-                    if (!ImGUISystem.INSTANCE.isFormVisible(FCantidad.class.getSimpleName())) { // TODO ?
+                    // TODO: Es para evitar bugs y no se te trabe todo el juego cuando tenes algun frm abierto
+                    //  y sin querer pulsar para hablar.
+                    if (!ImGUISystem.INSTANCE.isFormVisible(FCantidad.class.getSimpleName())) {
                         if (!frmMain.getSendText().isBlank() && user.isTalking()) {
                             if (!frmMain.getSendText().startsWith("/")) {
                                 Console.INSTANCE.addMsgToConsole("[" + User.INSTANCE.getUserName().toLowerCase() + "] " + frmMain.getSendText(), false, false, new RGBColor(1f, 1f, 1f));
@@ -254,6 +255,9 @@ public final class GameScene extends Scene {
                     break;
                 case REQUEST_REFRESH:
                     if (intervalToUpdatePos.check()) requestPositionUpdate();
+                    break;
+                case EXIT_GAME:
+                    quit();
                     break;
             }
         }

@@ -7,6 +7,7 @@ import org.aoclient.engine.gui.forms.FConnect;
 import org.aoclient.engine.listeners.KeyHandler;
 
 import static org.aoclient.engine.Engine.closeClient;
+import static org.aoclient.engine.game.models.Key.EXIT_GAME;
 
 /**
  * <p>
@@ -49,7 +50,8 @@ public final class MainScene extends Scene {
 
     @Override
     public void keyEvents() {
-        if (KeyHandler.isKeyPressed(Key.EXIT_GAME.getKeyCode())) closeClient();
+        if (KeyHandler.isActionKeyJustPressed(EXIT_GAME))
+            closeClient();
     }
 
     /**
