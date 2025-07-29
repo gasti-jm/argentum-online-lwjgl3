@@ -24,7 +24,6 @@ public class SpawnListHandler implements PacketHandler {
         ImGUISystem.INSTANCE.show(new FSpawnList(creatureList));
 
         buffer.copy(tempBuffer);
-        Logger.debug("handleSpawnList Cargado! - FALTA TERMINAR!");
     }
 
 }
