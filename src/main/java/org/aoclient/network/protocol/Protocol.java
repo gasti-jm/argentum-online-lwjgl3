@@ -606,6 +606,11 @@ public class Protocol {
             outputBuffer.writeByte(skills[skill.getId() - 1]);
     }
 
+    public static void train(int creatureIndex) {
+        outputBuffer.writeByte(ClientPacket.TRAIN.getId());
+        outputBuffer.writeByte(creatureIndex);
+    }
+
     public static void MOTD() {
         outputBuffer.writeByte(ClientPacket.MOTD.getId());
     }
