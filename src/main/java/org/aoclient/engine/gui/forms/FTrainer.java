@@ -4,6 +4,7 @@ import imgui.ImGui;
 import imgui.flag.ImGuiCond;
 import imgui.flag.ImGuiWindowFlags;
 import imgui.type.ImInt;
+import org.aoclient.engine.game.User;
 import org.aoclient.network.protocol.Protocol;
 
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_ENTER;
@@ -56,7 +57,10 @@ public final class FTrainer extends Form {
         if (ImGui.button("Invocar", ImGui.getWindowWidth() - 16, 20) || ImGui.isKeyPressed(GLFW_KEY_ENTER)) {
             Protocol.train( selectedIndex.get() + 1);
         }
-        if (ImGui.button("Salir", ImGui.getWindowWidth() - 16, 20) || ImGui.isKeyPressed(GLFW_KEY_ENTER)) close();
+        if (ImGui.button("Salir", ImGui.getWindowWidth() - 16, 20) || ImGui.isKeyPressed(GLFW_KEY_ENTER)) {
+            User.INSTANCE.setUserBussy(false);
+            close();
+        }
 
     }
 

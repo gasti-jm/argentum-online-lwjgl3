@@ -119,7 +119,7 @@ public final class GameScene extends Scene {
      */
     @Override
     public void mouseEvents() {
-        if (user.isUserComerciando()) return;
+        if (user.isUserComerciando() || user.isUserBussy()) return;
 
         // Estamos haciendo click en el render?
         if (inGameArea()) {
@@ -200,7 +200,7 @@ public final class GameScene extends Scene {
      * Chequea y ejecuta la tecla que fue bindeada.
      */
     private void checkBindedKeys() {
-        if (user.isUserComerciando()) return;
+        if (user.isUserComerciando() || user.isUserBussy()) return;
 
         // Usando el metodo estatico de Key para obtener la tecla desde el codigo
         final Key key = Key.getKey(KeyHandler.getLastKeyPressed());
