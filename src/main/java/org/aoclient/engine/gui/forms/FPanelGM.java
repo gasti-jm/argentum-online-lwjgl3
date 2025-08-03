@@ -4,6 +4,7 @@ import imgui.ImGui;
 import imgui.flag.ImGuiCond;
 import imgui.flag.ImGuiWindowFlags;
 import imgui.type.ImString;
+import org.aoclient.engine.game.User;
 import org.aoclient.network.protocol.command.execution.CommandExecutor;
 
 import static org.aoclient.network.protocol.command.metadata.GameCommand.*;
@@ -112,7 +113,10 @@ public final class FPanelGM extends Form {
             }
 
             ImGui.setCursorPos(1, 349);
-            if (ImGui.button("Close", 350, 20)) this.close();
+            if (ImGui.button("Close", 350, 20)) {
+                User.INSTANCE.setUserBussy(false);
+                this.close();
+            }
             ImGui.endTabBar();
         }
 
