@@ -130,7 +130,7 @@ public enum Rain {
                         128,
                         128,
                         RLluvia[iFrameIndex].left,
-                        RLluvia[iFrameIndex].top, false, 1.0f, color);
+                        RLluvia[iFrameIndex].top, true, 0.5f, color);
             }
         }
 
