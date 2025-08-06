@@ -132,7 +132,16 @@ public class Messages {
         ROLE_WORKER,
         ROLE_PIRATE,
         GENDER_MALE,
-        GENDER_FEMININE
+        GENDER_FEMININE,
+        TRY_CONNECT,
+        ENTER_USER_PASS,
+        ACCEPT,
+        CLOSE,
+        PASS_NOT_MATCH,
+        COMPLETE_ALL_FIELDS,
+        INVALID_NICK,
+        INVALID_PASS,
+        INVALID_EMAIL
     }
 
 }

@@ -8,6 +8,7 @@ import imgui.flag.ImGuiWindowFlags;
 import imgui.type.ImString;
 import org.aoclient.engine.Engine;
 import org.aoclient.engine.Window;
+import org.aoclient.engine.game.Messages;
 import org.aoclient.engine.gui.ImGUISystem;
 import org.aoclient.engine.gui.widgets.ImageButton3State;
 import org.aoclient.network.Connection;
@@ -15,6 +16,7 @@ import org.aoclient.network.Connection;
 import java.io.IOException;
 
 import static org.aoclient.engine.audio.Sound.playMusic;
+import static org.aoclient.engine.game.Messages.MessageKey.ENTER_USER_PASS;
 import static org.aoclient.engine.utils.GameData.options;
 import static org.aoclient.network.protocol.Protocol.loginExistingChar;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_ENTER;
@@ -210,7 +212,7 @@ public final class FConnect extends Form {
             }).start();
             options.setNick(nickStr.get());
             USER.setUserName(nickStr.get());
-        } else ImGUISystem.INSTANCE.show(new FMessage("Please enter a username and/or password."));
+        } else ImGUISystem.INSTANCE.show(new FMessage(Messages.get(ENTER_USER_PASS)));
     }
 
     private void buttonCreateCharacter() {

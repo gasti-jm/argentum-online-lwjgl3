@@ -26,8 +26,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static org.aoclient.engine.audio.Sound.*;
-import static org.aoclient.engine.game.Messages.MessageKey.GENDER_FEMININE;
-import static org.aoclient.engine.game.Messages.MessageKey.GENDER_MALE;
+import static org.aoclient.engine.game.Messages.MessageKey.*;
 import static org.aoclient.engine.game.models.Character.*;
 import static org.aoclient.engine.renderer.Drawn.*;
 import static org.aoclient.engine.utils.GameData.*;
@@ -588,28 +587,28 @@ public final class FCreateCharacter extends Form {
 
     private boolean checkData() {
         if (txtNombre.get().isEmpty() || txtPassword.get().isEmpty() || txtMail.get().isEmpty()) {
-            IM_GUI_SYSTEM.show(new FMessage("Por favor, rellene todos los campos."));
+            IM_GUI_SYSTEM.show(new FMessage(Messages.get(COMPLETE_ALL_FIELDS)));
             return false;
         }
 
         if (txtNombre.get().endsWith(" ")) {
-            IM_GUI_SYSTEM.show(new FMessage("Nombre invalido, se ha removido un espacio en blanco al final del nombre."));
+            IM_GUI_SYSTEM.show(new FMessage(Messages.get(INVALID_NICK)));
             txtNombre.set(txtNombre.get().substring(0, txtNombre.get().length() - 1));
             return false;
         }
 
         if (!txtPassword.get().equals(txtConfirmPassword.get())) {
-            IM_GUI_SYSTEM.show(new FMessage("Las contraseñas no son iguales. Recuerde que no se permite caracteres especiales."));
+            IM_GUI_SYSTEM.show(new FMessage(Messages.get(PASS_NOT_MATCH)));
             return false;
         }
 
         if (!checkEmail(txtMail.get())) {
-            IM_GUI_SYSTEM.show(new FMessage("Direccion de correo electronico invalido."));
+            IM_GUI_SYSTEM.show(new FMessage(Messages.get(INVALID_EMAIL)));
             return false;
         }
 
         if (checkSpecialChar(txtPassword.get()) || txtPassword.get().contains(" ")) {
-            IM_GUI_SYSTEM.show(new FMessage("Password invalido, no puede contener caracteres especiales ni espacios en blanco."));
+            IM_GUI_SYSTEM.show(new FMessage(Messages.get(INVALID_PASS)));
             return false;
         }
 

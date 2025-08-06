@@ -3,9 +3,11 @@ package org.aoclient.engine.gui.forms;
 import imgui.ImGui;
 import imgui.flag.ImGuiCond;
 import imgui.flag.ImGuiWindowFlags;
+import org.aoclient.engine.game.Messages;
 
 import java.nio.charset.StandardCharsets;
 
+import static org.aoclient.engine.game.Messages.MessageKey.ACCEPT;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_ENTER;
 
 /**
@@ -45,7 +47,8 @@ public final class FMessage extends Form {
         ImGui.separator();
 
         ImGui.setCursorPos(8, ImGui.getWindowHeight() - 30);
-        if (ImGui.button("Aceptar", ImGui.getWindowWidth() - 16, 20) || ImGui.isKeyPressed(GLFW_KEY_ENTER)) close();
+        if (ImGui.button(Messages.get(ACCEPT), ImGui.getWindowWidth() - 16, 20) || ImGui.isKeyPressed(GLFW_KEY_ENTER))
+            close();
 
         ImGui.end();
 

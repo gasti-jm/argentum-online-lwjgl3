@@ -36,8 +36,8 @@ public class Texture {
     }
 
     public void loadTexture(Texture refTexture, String compressedFile, String file, boolean isGUI) {
-        ByteBuffer pixels;
-        BufferedImage bi;
+        final ByteBuffer pixels;
+        final BufferedImage bi;
 
         try {
             // Generate texture on GPU
@@ -45,16 +45,16 @@ public class Texture {
             glBindTexture(GL_TEXTURE_2D, id);
 
             // Lee los datos del recurso desde el archivo comprimido
-            byte[] resourceData = readResource("resources/" + compressedFile, file);
+            final byte[] resourceData = readResource("resources/" + compressedFile, file);
             /* if (resourceData == null) {
             System.err.println("No se pudieron cargar los datos de " + file);
             return -1;
             } */
 
-            InputStream is = new ByteArrayInputStream(resourceData);
+            final InputStream is = new ByteArrayInputStream(resourceData);
 
             //File fil = new File(file);
-            BufferedImage image = ImageIO.read(is);
+            final BufferedImage image = ImageIO.read(is);
 
             refTexture.tex_width = image.getWidth();
             refTexture.tex_height = image.getHeight();
@@ -65,7 +65,7 @@ public class Texture {
             g.scale(1, -1);
             g.drawImage(image, 0, 0, refTexture.tex_width, -refTexture.tex_height, null);
 
-            byte[] data = new byte[4 * refTexture.tex_width * refTexture.tex_height];
+            final byte[] data = new byte[4 * refTexture.tex_width * refTexture.tex_height];
             bi.getRaster().getDataElements(0, 0, refTexture.tex_width, refTexture.tex_height, data);
 
             if (!isGUI) {
@@ -86,16 +86,12 @@ public class Texture {
             glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA,
                     refTexture.tex_width, refTexture.tex_height, 0, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
 
-            //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
             // Set texture parameters
-            // Repeat image in both directions
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
-            // When stretching the image, pixelate
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-            // When shrinking an image, pixelate
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
         } catch (IOException ex) {
             ex.printStackTrace();
