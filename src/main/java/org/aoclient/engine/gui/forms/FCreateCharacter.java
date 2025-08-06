@@ -159,8 +159,11 @@ public final class FCreateCharacter extends Form {
     private void loadComboBoxes() {
         // Esto hay que internacionalizarlo en algun momento, es puro hardcodeo.
         // Hogar
-        for (int i = 0; i < City.values().length; i++)
-            strCities[i] = City.values()[i].name();
+        for (int i = 0; i < City.values().length; i++) {
+            String name = City.values()[i].name().toLowerCase();
+            strCities[i] = name.substring(0, 1).toUpperCase() + name.substring(1);
+        }
+
         // Raza
         for (int i = 0; i < Race.values().length; i++)
             strRazas[i] = Race.values()[i].getName();
