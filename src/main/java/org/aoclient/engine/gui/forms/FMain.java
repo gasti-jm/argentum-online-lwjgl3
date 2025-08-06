@@ -14,6 +14,7 @@ import java.io.IOException;
 
 import static org.aoclient.engine.audio.Sound.SND_CLICK;
 import static org.aoclient.engine.audio.Sound.playSound;
+import static org.aoclient.engine.gui.forms.FCreateCharacter.sendCreate;
 import static org.aoclient.engine.utils.Time.FPS;
 
 /**
@@ -57,6 +58,7 @@ public final class FMain extends Form {
     private ImageButton3State btnGuild;
 
     public FMain() {
+        sendCreate = false; // una vez logiado resetiamos esto para que se pueda volver a crear pj.
         this.viewInventory = true;
         USER.getUserInventory().setVisible(true);
 

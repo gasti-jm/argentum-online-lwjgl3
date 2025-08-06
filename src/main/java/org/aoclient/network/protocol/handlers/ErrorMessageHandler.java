@@ -2,6 +2,7 @@ package org.aoclient.network.protocol.handlers;
 
 import org.aoclient.engine.game.User;
 import org.aoclient.engine.gui.ImGUISystem;
+import org.aoclient.engine.gui.forms.FCreateCharacter;
 import org.aoclient.engine.gui.forms.FMessage;
 import org.aoclient.network.PacketBuffer;
 import org.aoclient.network.Connection;
@@ -20,6 +21,9 @@ public class ErrorMessageHandler implements PacketHandler {
 
         Connection.INSTANCE.disconnect();
         User.INSTANCE.setUserConected(false);
+
+        // Si tenemos un error en el FCreateCharacter, permite volver enviar la peticion al servidor.
+        FCreateCharacter.sendCreate = false;
 
         buffer.copy(tempBuffer);
     }

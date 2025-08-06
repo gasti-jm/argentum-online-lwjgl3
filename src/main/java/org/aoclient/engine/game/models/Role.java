@@ -1,6 +1,10 @@
 package org.aoclient.engine.game.models;
 
 
+import org.aoclient.engine.game.Messages;
+
+import static org.aoclient.engine.game.Messages.MessageKey.*;
+
 /**
  * Representa los diferentes roles disponibles que un jugador puede seleccionar para su personaje.
  * <p>
@@ -26,27 +30,33 @@ package org.aoclient.engine.game.models;
 
 public enum Role {
 
-    MAGE(1),
-    CLERIC(2),
-    WARRIOR(3),
-    ASSASSIN(4),
-    THIEF(5),
-    BARD(6),
-    DRUID(7),
-    BANDIT(8),
-    PALADIN(9),
-    HUNTER(10),
-    WORKER(11),
-    PIRATE(12);
+    MAGE(1, ROLE_MAGE),
+    CLERIC(2, ROLE_CLERIC),
+    WARRIOR(3, ROLE_WARRIOR),
+    ASSASSIN(4, ROLE_ASSASSIN),
+    THIEF(5, ROLE_THIEF),
+    BARD(6, ROLE_BARD),
+    DRUID(7, ROLE_DRUID),
+    BANDIT(8, ROLE_BANDIT),
+    PALADIN(9, ROLE_PALADIN),
+    HUNTER(10, ROLE_HUNTER),
+    WORKER(11, ROLE_WORKER),
+    PIRATE(12, ROLE_PIRATE);
 
     private final int id;
+    private final Messages.MessageKey name;
 
-    Role(int id) {
+    Role(int id, Messages.MessageKey name) {
         this.id = id;
+        this.name = name;
     }
 
     public int getId() {
         return id;
+    }
+
+    public String getName() {
+        return Messages.get(name);
     }
 
 }

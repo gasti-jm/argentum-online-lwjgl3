@@ -137,8 +137,6 @@ public enum Options {
         return cursorGraphic;
     }
 
-
-
     public void setCursorGraphic(boolean cursorGraphic) {
         this.cursorGraphic = cursorGraphic;
     }
