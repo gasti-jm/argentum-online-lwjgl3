@@ -1,5 +1,6 @@
 package org.aoclient.network;
 
+import org.aoclient.engine.game.Messages;
 import org.aoclient.engine.game.User;
 import org.aoclient.engine.gui.ImGUISystem;
 import org.aoclient.engine.gui.forms.FMessage;
@@ -10,6 +11,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 
+import static org.aoclient.engine.game.Messages.MessageKey.TRY_CONNECT;
 import static org.aoclient.engine.utils.GameData.options;
 import static org.aoclient.network.protocol.Protocol.*;
 
@@ -46,7 +48,7 @@ public enum Connection {
     public boolean connect() {
         // Comprueba si ya esta intentando conectarse
         if (tryConnect) {
-            ImGUISystem.INSTANCE.show(new FMessage("Trying to connect to the server, please wait..."));
+            ImGUISystem.INSTANCE.show(new FMessage(Messages.get(TRY_CONNECT)));
             return false;
         }
 
