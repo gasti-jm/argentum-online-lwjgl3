@@ -113,7 +113,26 @@ public class Messages {
         HOGAR_CANCEL,
         ESTAS_MUERTO,
         NO_SALIR_PARALIZADO,
-        IR_HOGAR
+        IR_HOGAR,
+        RACE_HUMAN,
+        RACE_ELF,
+        RACE_DROW_ELF,
+        RACE_GNOME,
+        RACE_DWARF,
+        ROLE_MAGE,
+        ROLE_CLERIC,
+        ROLE_WARRIOR,
+        ROLE_ASSASSIN,
+        ROLE_THIEF,
+        ROLE_BARD,
+        ROLE_DRUID,
+        ROLE_BANDIT,
+        ROLE_PALADIN,
+        ROLE_HUNTER,
+        ROLE_WORKER,
+        ROLE_PIRATE,
+        GENDER_MALE,
+        GENDER_FEMININE
     }
 
 }

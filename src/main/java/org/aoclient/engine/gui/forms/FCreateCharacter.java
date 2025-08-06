@@ -9,6 +9,7 @@ import imgui.flag.ImGuiWindowFlags;
 import imgui.type.ImInt;
 import imgui.type.ImString;
 import org.aoclient.engine.Window;
+import org.aoclient.engine.game.Messages;
 import org.aoclient.engine.game.models.City;
 import org.aoclient.engine.game.models.Role;
 import org.aoclient.engine.game.models.Direction;
@@ -25,6 +26,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static org.aoclient.engine.audio.Sound.*;
+import static org.aoclient.engine.game.Messages.MessageKey.GENDER_FEMININE;
+import static org.aoclient.engine.game.Messages.MessageKey.GENDER_MALE;
 import static org.aoclient.engine.game.models.Character.*;
 import static org.aoclient.engine.renderer.Drawn.*;
 import static org.aoclient.engine.utils.GameData.*;
@@ -79,7 +82,7 @@ public final class FCreateCharacter extends Form {
     private final String[] role = new String[Role.values().length];
 
     private final ImInt currentItemGenero = new ImInt(0);
-    private final String[] strGenero = {"Hombre", "Mujer"};
+    private final String[] strGenero = new String[2];
     private RGBColor color;
     private RECT characterPos;
     // para el dibujado
@@ -94,6 +97,12 @@ public final class FCreateCharacter extends Form {
     private int inteligencia = 0;
     private int carisma = 0;
     private int constitucion = 0;
+
+    /**
+     * Al crear un pj tenemos una pequeña demora, ya que el cliente se conecta al servidor. Pero si el usuario
+     * empieza a mandar varias peticiones el buffer se rompe y no te termina logiando o logias y se te desconecta.
+     */
+    public static boolean sendCreate = false;
 
     public void setAtributos(int fuerza, int agilidad, int inteligencia, int carisma, int constitucion) {
         this.fuerza = fuerza;
@@ -154,10 +163,13 @@ public final class FCreateCharacter extends Form {
             strCities[i] = City.values()[i].name();
         // Raza
         for (int i = 0; i < Race.values().length; i++)
-            strRazas[i] = Race.values()[i].name().replace("_", " "); // para quitar el "_" del enum
+            strRazas[i] = Race.values()[i].getName();
         // Clases
         for (int i = 0; i < Role.values().length; i++)
-            role[i] = Role.values()[i].name();
+            role[i] = Role.values()[i].getName();
+
+        strGenero[0] = Messages.get(GENDER_MALE);
+        strGenero[1] = Messages.get(GENDER_FEMININE);
     }
 
     @Override
@@ -466,16 +478,24 @@ public final class FCreateCharacter extends Form {
     }
 
     private void buttonCreateCharacter() {
+        if (sendCreate) return;
+
         final int userRaza = currentItemRaza.get() + 1;
         final int userSexo = currentItemGenero.get() + 1;
         final int userClase = currentItemClass.get() + 1;
         final int userHogar = currentItemHogar.get() + 1;
+
         if (!checkData()) return;
+
         new Thread(() -> {
             if (Connection.INSTANCE.connect())
                 loginNewChar(txtNombre.get(), txtPassword.get(), userRaza, userSexo, userClase, userHead, txtMail.get(), userHogar);
         }).start();
+
         USER.setUserName(txtNombre.get());
+
+        // listo basta no mandes mas peticiones al servidor.
+        sendCreate = true;
     }
 
     private void buttonThrowDices() {

@@ -1,7 +1,5 @@
 package org.aoclient.engine.renderer;
 
-import org.aoclient.engine.renderer.Texture;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -68,6 +66,7 @@ public class BatchRenderer {
      */
     public void end() {
         Texture lastTexture = null;
+
 
         for (Quad quad : quads) {
             if (lastTexture != quad.texture) {
