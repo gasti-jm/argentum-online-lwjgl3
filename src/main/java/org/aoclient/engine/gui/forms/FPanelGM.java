@@ -114,7 +114,6 @@ public final class FPanelGM extends Form {
 
             ImGui.setCursorPos(1, 349);
             if (ImGui.button("Close", 350, 20)) {
-                User.INSTANCE.setUserBussy(false);
                 this.close();
             }
             ImGui.endTabBar();

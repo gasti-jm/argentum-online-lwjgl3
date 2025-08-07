@@ -46,6 +46,7 @@ public abstract class Form {
     public abstract void render();
 
     public void close() {
+        User.INSTANCE.setUserBussy(false);
         glDeleteTextures(backgroundImage);
         IM_GUI_SYSTEM.deleteFrmArray(this);
     }

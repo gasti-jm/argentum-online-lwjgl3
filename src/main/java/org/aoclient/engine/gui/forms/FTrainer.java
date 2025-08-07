@@ -58,7 +58,6 @@ public final class FTrainer extends Form {
             Protocol.train( selectedIndex.get() + 1);
         }
         if (ImGui.button("Salir", ImGui.getWindowWidth() - 16, 20) || ImGui.isKeyPressed(GLFW_KEY_ENTER)) {
-            User.INSTANCE.setUserBussy(false);
             close();
         }
 
