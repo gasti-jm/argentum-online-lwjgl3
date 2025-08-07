@@ -16,7 +16,7 @@ import java.util.Properties;
 
 public class Messages {
 
-    private static final String MESSAGE_PREFIX = "MENSAJE_";
+    private static final String MESSAGE_PREFIX = "MENSAJE_"; // consola
     private static final Map<MessageKey, String> messageCache = new HashMap<>();
 
     private Messages() {

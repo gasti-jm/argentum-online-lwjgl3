@@ -59,7 +59,7 @@ public final class GameScene extends Scene {
 
     private final IntervalTimer intervalToUpdatePos = new IntervalTimer(INT_SENTRPU);
     private final User user = User.INSTANCE;
-    RGBColor ambientColor; // color de ambiente.
+    private Weather weather;// color de ambiente.
     private float offSetCounterX = 0;
     private float offSetCounterY = 0;
     private float alphaCeiling = 1.0f;
@@ -71,7 +71,7 @@ public final class GameScene extends Scene {
         super.init();
 
         canChangeTo = SceneType.MAIN_SCENE;
-        ambientColor = new RGBColor(1.0f, 1.0f, 1.0f);
+        weather = Weather.INSTANCE;
         frmMain = new FMain();
 
         ImGUISystem.INSTANCE.addFrm(frmMain);
@@ -313,7 +313,8 @@ public final class GameScene extends Scene {
         renderFourthLayer(pixelOffsetX, pixelOffsetY);
 
         Dialogs.updateDialogs();
-        Rain.INSTANCE.render(ambientColor);
+        weather.update();
+        Rain.INSTANCE.render(weather.getWeatherColor());
     }
 
 
@@ -325,7 +326,7 @@ public final class GameScene extends Scene {
                     drawTexture(mapData[x][y].getLayer(1),
                             POS_SCREEN_X + (camera.getScreenX() - 1) * TILE_PIXEL_SIZE + pixelOffsetX,
                             POS_SCREEN_Y + (camera.getScreenY() - 1) * TILE_PIXEL_SIZE + pixelOffsetY,
-                            true, true, false, 1.0f, ambientColor);
+                            true, true, false, 1.0f, weather.getWeatherColor());
                 }
                 camera.incrementScreenX();
             }
@@ -343,7 +344,7 @@ public final class GameScene extends Scene {
                     drawTexture(mapData[x][y].getLayer(2),
                             POS_SCREEN_X + camera.getScreenX() * TILE_PIXEL_SIZE + pixelOffsetX,
                             POS_SCREEN_Y + camera.getScreenY() * TILE_PIXEL_SIZE + pixelOffsetY,
-                            true, true, false, 1.0f, ambientColor);
+                            true, true, false, 1.0f, weather.getWeatherColor());
                 }
                 if (mapData[x][y].getObjGrh().getGrhIndex() != 0) {
                     if (grhData[mapData[x][y].getObjGrh().getGrhIndex()].getPixelWidth() == TILE_PIXEL_SIZE &&
@@ -351,7 +352,7 @@ public final class GameScene extends Scene {
                         drawTexture(mapData[x][y].getObjGrh(),
                                 POS_SCREEN_X + camera.getScreenX() * TILE_PIXEL_SIZE + pixelOffsetX,
                                 POS_SCREEN_Y + camera.getScreenY() * TILE_PIXEL_SIZE + pixelOffsetY,
-                                true, true, false, 1.0f, ambientColor);
+                                true, true, false, 1.0f, weather.getWeatherColor());
                     }
                 }
                 camera.incrementScreenX();
@@ -374,14 +375,14 @@ public final class GameScene extends Scene {
                         drawTexture(mapData[x][y].getObjGrh(),
                                 POS_SCREEN_X + camera.getScreenX() * TILE_PIXEL_SIZE + pixelOffsetX,
                                 POS_SCREEN_Y + camera.getScreenY() * TILE_PIXEL_SIZE + pixelOffsetY,
-                                true, true, false, 1.0f, ambientColor);
+                                true, true, false, 1.0f, weather.getWeatherColor());
                     }
                 }
 
                 if (mapData[x][y].getCharIndex() != 0) {
                     drawCharacter(mapData[x][y].getCharIndex(),
                             POS_SCREEN_X + camera.getScreenX() * TILE_PIXEL_SIZE + pixelOffsetX,
-                            POS_SCREEN_Y + camera.getScreenY() * TILE_PIXEL_SIZE + pixelOffsetY, ambientColor);
+                            POS_SCREEN_Y + camera.getScreenY() * TILE_PIXEL_SIZE + pixelOffsetY, weather.getWeatherColor());
                 }
 
 
@@ -389,7 +390,7 @@ public final class GameScene extends Scene {
                     drawTexture(mapData[x][y].getLayer(3),
                             POS_SCREEN_X + camera.getScreenX() * TILE_PIXEL_SIZE + pixelOffsetX,
                             POS_SCREEN_Y + camera.getScreenY() * TILE_PIXEL_SIZE + pixelOffsetY,
-                            true, true, false, 1.0f, ambientColor);
+                            true, true, false, 1.0f, weather.getWeatherColor());
                 }
 
                 camera.incrementScreenX();
@@ -410,7 +411,7 @@ public final class GameScene extends Scene {
                         drawTexture(mapData[x][y].getLayer(4),
                                 POS_SCREEN_X + camera.getScreenX() * TILE_PIXEL_SIZE + pixelOffsetX,
                                 POS_SCREEN_Y + camera.getScreenY() * TILE_PIXEL_SIZE + pixelOffsetY,
-                                true, true, false, alphaCeiling, ambientColor);
+                                true, true, false, alphaCeiling, weather.getWeatherColor());
                     }
 
                     camera.incrementScreenX();
