@@ -58,7 +58,6 @@ public final class FSpawnList extends Form {
             Protocol.spawnCreature((short) (selectedIndex.get() + 1));
         }
         if (ImGui.button("Salir", ImGui.getWindowWidth() - 16, 20) || ImGui.isKeyPressed(GLFW_KEY_ENTER)) {
-            User.INSTANCE.setUserBussy(false);
             close();
         }
     }

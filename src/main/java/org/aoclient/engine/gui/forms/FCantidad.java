@@ -5,6 +5,7 @@ import imgui.flag.ImGuiCond;
 import imgui.flag.ImGuiInputTextFlags;
 import imgui.flag.ImGuiWindowFlags;
 import imgui.type.ImString;
+import org.aoclient.engine.game.User;
 
 import java.io.IOException;
 
@@ -38,6 +39,7 @@ public final class FCantidad extends Form {
 
     public FCantidad() {
         this.dropOro = false;
+        User.INSTANCE.setUserBussy(true);
 
         try {
             this.backgroundImage = loadTexture("VentanaTirarOro");
@@ -48,6 +50,7 @@ public final class FCantidad extends Form {
 
     public FCantidad(boolean dropOro) {
         this.dropOro = dropOro;
+        User.INSTANCE.setUserBussy(true);
 
         try {
             this.backgroundImage = loadTexture("VentanaTirarOro");
@@ -87,6 +90,7 @@ public final class FCantidad extends Form {
                     else drop(USER.getUserInventory().getSlotSelected() + 1, cantToDrop);
                 }
             }
+
             this.close();
         }
 
@@ -100,6 +104,7 @@ public final class FCantidad extends Form {
                         drop(USER.getUserInventory().getSlotSelected() + 1, USER.getUserInventory().getAmountSlotSelected());
                 }
             }
+
             this.close();
         }
         ImGui.end();

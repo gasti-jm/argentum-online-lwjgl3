@@ -7,6 +7,7 @@ import imgui.flag.ImGuiInputTextFlags;
 import imgui.flag.ImGuiWindowFlags;
 import imgui.type.ImString;
 import org.aoclient.engine.game.Console;
+import org.aoclient.engine.game.User;
 import org.aoclient.engine.game.inventory.NPCInventory;
 import org.aoclient.engine.game.inventory.UserInventory;
 import org.aoclient.engine.renderer.RGBColor;
@@ -44,6 +45,8 @@ public final class FComerce extends Form {
     public static UserInventory invUser = USER.getUserInventory().clone();
 
     public FComerce() {
+        User.INSTANCE.setUserBussy(true);
+
         try {
             this.backgroundImage = loadTexture("VentanaComercio");
         } catch (IOException e) {

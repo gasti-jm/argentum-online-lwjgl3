@@ -6,6 +6,7 @@ import imgui.flag.ImGuiCond;
 import imgui.flag.ImGuiInputTextFlags;
 import imgui.flag.ImGuiWindowFlags;
 import imgui.type.ImString;
+import org.aoclient.engine.game.User;
 import org.aoclient.engine.game.inventory.NPCInventory;
 import org.aoclient.engine.game.inventory.UserInventory;
 
@@ -27,6 +28,7 @@ public final class FBank extends Form {
     private String lblMax = "";
 
     public FBank(int goldDeposited) {
+        User.INSTANCE.setUserBussy(true);
         FBank.goldDeposited = goldDeposited;
 
         try {
