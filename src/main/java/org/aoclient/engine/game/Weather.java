@@ -10,28 +10,27 @@ public enum Weather {
     INSTANCE;
 
     public enum TypeWeather {
-        MORNING(new RGBColor(0.7f, 0.7f, 0.5f)),
-        DAY(new RGBColor(1.0f, 1.0f, 1.0f)),
-        NIGHT(new RGBColor(0.2f, 0.2f, 0.2f)),
-        INVATION(new RGBColor(1f, 0.2f, 0.2f));
+        DAY(1f, 1f, 1f),
+        MORNING(0.5f, 0.5f, 0.3f),
+        NIGHT(0.2f, 0.2f, 0.2f),
+        INVATION(1f, 0.2f, 0.2f);
 
-        private final RGBColor color;
-
-        TypeWeather(RGBColor color) {
-            this.color = color;
-        }
-
-        public RGBColor getColor() {
-            return color;
+        private final float r, g, b;
+        TypeWeather(float r, float g, float b) {
+            this.r = r;
+            this.g = g;
+            this.b = b;
         }
     }
 
-    private static float hourTimer = 3600.0f; // 3600segs == 60min.
+    private static float hourTimer = 3.0f; // 3600segs == 60min.
     private boolean colorEvent;
     private TypeWeather actual;
+    private RGBColor renderColor;
 
     Weather() {
         this.actual = DAY; // por ahora, la idea es que lo setee el server y que el GM tenga comandos de tiempo.
+        this.renderColor = new RGBColor(actual.r, actual.g, actual.b);
         this.colorEvent = false;
     }
 
@@ -43,9 +42,12 @@ public enum Weather {
     public void update() {
         // paso 1h?
         if (hourTimer <= 0) {
-            hourTimer = 3600.0f;
+            hourTimer = 3.0f;
             this.changeWeather(null);
         }
+
+        this.checkEffect();
+        //System.err.println(actual + ": " + renderColor.getRed() + " " + renderColor.getGreen() + " " + renderColor.getBlue());
 
         hourTimer -= deltaTime;
     }
@@ -60,14 +62,44 @@ public enum Weather {
 
         if(type == null) {
             switch (actual) {
-                case MORNING -> actual = DAY;
-                case DAY -> actual = NIGHT;
-                case NIGHT -> actual = MORNING;
+                case NIGHT: actual = MORNING; break;
+                case MORNING: actual = DAY; break;
+                case DAY: actual = NIGHT; break;
             }
         } else {
             colorEvent = true;
             actual = type; // para Invasion o algun otro color falopa.
         }
+    }
+
+    /**
+     * Genera el cambio progresivo de color al cambiar el tiempo (dia, noche, etc)...
+     */
+    private void checkEffect() {
+        final float speed = 0.5f;
+
+        // red
+        if(renderColor.getRed() < actual.r) {
+            renderColor.incR(speed, actual.r);
+        } else {
+            renderColor.decR(speed, actual.r);
+        }
+
+        // green
+        if(renderColor.getGreen() < actual.g) {
+            renderColor.incG(speed, actual.g);
+        } else {
+            renderColor.decG(speed, actual.g);
+        }
+
+        // blue
+        if(renderColor.getBlue() < actual.b) {
+            renderColor.incB(speed, actual.b);
+        } else {
+            renderColor.decB(speed, actual.b);
+        }
+
+
     }
 
     /**
@@ -77,10 +109,12 @@ public enum Weather {
         // No entiendo pq no esta seteado desde el mapInfo...
         // Basicamente en las dungeons siempre (o en este caso, los mapas que no llueve) tendran el color de DIA.
         if(!bLluvia[User.INSTANCE.getUserMap()]) {
-            return DAY.color;
+            renderColor.setRed(1f);
+            renderColor.setBlue(1f);
+            renderColor.setGreen(1f);
         }
 
-        return this.actual.getColor();
+        return renderColor;
     }
 
 }
