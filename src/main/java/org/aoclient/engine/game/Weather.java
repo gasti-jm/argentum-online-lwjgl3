@@ -23,7 +23,7 @@ public enum Weather {
         }
     }
 
-    private static float hourTimer = 3.0f; // 3600segs == 60min.
+    private static float hourTimer = 3600.0f; // 3600segs == 60min.
     private boolean colorEvent;
     private TypeWeather actual;
     private RGBColor renderColor;
@@ -42,7 +42,7 @@ public enum Weather {
     public void update() {
         // paso 1h?
         if (hourTimer <= 0) {
-            hourTimer = 3.0f;
+            hourTimer = 3600.0f;
             this.changeWeather(null);
         }
 
