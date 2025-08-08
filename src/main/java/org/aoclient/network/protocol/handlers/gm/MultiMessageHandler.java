@@ -211,7 +211,7 @@ public class MultiMessageHandler implements PacketHandler {
                                 red, victimName, Messages.get(MessageKey.RECIVE_IMPACTO_TORSO), damage);
                         break;
                 }
-                charDialogHitSet(charIndexVictim, damage);
+                charDialogHitSet(User.INSTANCE.getUserCharIndex(), damage);
 
                 break;
 

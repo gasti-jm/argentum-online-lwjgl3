@@ -1,7 +1,10 @@
 package org.aoclient.network.protocol.handlers;
 
 import org.aoclient.network.PacketBuffer;
+import org.aoclient.network.protocol.types.NickColorType;
 import org.tinylog.Logger;
+
+import static org.aoclient.engine.utils.GameData.charList;
 
 public class UpdateTagAndStatusHandler implements PacketHandler {
 
@@ -16,29 +19,12 @@ public class UpdateTagAndStatusHandler implements PacketHandler {
         int nickColor = tempBuffer.readByte();
         String userTag = tempBuffer.readCp1252String();
 
-        //Dim CharIndex As Integer
-        //    Dim NickColor As Byte
-        //    Dim UserTag As String
-        //
-        //    CharIndex = Buffer.ReadInteger()
-        //    NickColor = Buffer.ReadByte()
-        //    UserTag = Buffer.ReadASCIIString()
-        //
-        //    'Update char status adn tag!
-        //    With charlist(CharIndex)
-        //        If (NickColor And eNickColor.ieCriminal) <> 0 Then
-        //            .Criminal = 1
-        //        Else
-        //            .Criminal = 0
-        //        End If
-        //
-        //        .Atacable = (NickColor And eNickColor.ieAtacable) <> 0
-        //
-        //        .Nombre = UserTag
-        //    End With
+
+        charList[charIndex].setCriminal((nickColor & NickColorType.CRIMINAL.getId()) != 0);
+        charList[charIndex].setAttackable((nickColor & NickColorType.ATACABLE.getId()) != 0);
+        charList[charIndex].setName(userTag);
 
         buffer.copy(tempBuffer);
-        Logger.debug("handleUpdateTagAndStatus Cargado! - FALTA TERMINAR!");
     }
 
 }
