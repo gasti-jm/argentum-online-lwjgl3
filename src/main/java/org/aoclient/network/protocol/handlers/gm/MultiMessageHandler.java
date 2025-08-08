@@ -193,22 +193,22 @@ public class MultiMessageHandler implements PacketHandler {
 
                     case 3: // bBrazoDerecho
                         console.addMsgToConsole(Messages.get(MessageKey.PRODUCE_IMPACTO), false, false,
-                                red, victimName, Messages.get(MessageKey.RECIVE_IMPACTO_BRAZO_DER), damage);
+                                red, victimName, Messages.get(MessageKey.PRODUCE_IMPACTO_BRAZO_DER), damage);
                         break;
 
                     case 4: // bPiernaIzquierda
                         console.addMsgToConsole(Messages.get(MessageKey.PRODUCE_IMPACTO), false, false,
-                                red, victimName, Messages.get(MessageKey.RECIVE_IMPACTO_PIERNA_IZQ), damage);
+                                red, victimName, Messages.get(MessageKey.PRODUCE_IMPACTO_PIERNA_IZQ), damage);
                         break;
 
                     case 5: // bPiernaDerecha
                         console.addMsgToConsole(Messages.get(MessageKey.PRODUCE_IMPACTO), false, false,
-                                red, victimName, Messages.get(MessageKey.RECIVE_IMPACTO_PIERNA_DER), damage);
+                                red, victimName, Messages.get(MessageKey.PRODUCE_IMPACTO_PIERNA_DER), damage);
                         break;
 
                     case 6: // bTorso
                         console.addMsgToConsole(Messages.get(MessageKey.PRODUCE_IMPACTO), false, false,
-                                red, victimName, Messages.get(MessageKey.RECIVE_IMPACTO_TORSO), damage);
+                                red, victimName, Messages.get(MessageKey.PRODUCE_IMPACTO_TORSO), damage);
                         break;
                 }
                 charDialogHitSet(User.INSTANCE.getUserCharIndex(), damage);
