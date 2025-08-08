@@ -87,6 +87,7 @@ public final class GameScene extends Scene {
 
         if (!visible) return;
 
+        weather.update();
         intervalToUpdatePos.update();
 
         if (user.isUserMoving()) {
@@ -313,7 +314,6 @@ public final class GameScene extends Scene {
         renderFourthLayer(pixelOffsetX, pixelOffsetY);
 
         Dialogs.updateDialogs();
-        weather.update();
         Rain.INSTANCE.render(weather.getWeatherColor());
     }
 

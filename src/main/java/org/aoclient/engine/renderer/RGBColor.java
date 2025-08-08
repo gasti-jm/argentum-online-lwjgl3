@@ -1,5 +1,7 @@
 package org.aoclient.engine.renderer;
 
+import static org.aoclient.engine.utils.Time.deltaTime;
+
 /**
  * Clase que representa un color en formato RGB utilizando valores de punto flotante.
  * <p>
@@ -51,6 +53,55 @@ public class RGBColor {
 
     public void setBlue(float blue) {
         this.blue = blue;
+    }
+
+    /**
+     * Incrementa el valor de la intencidad del color rojo hasta toR a cierta velocidad.
+     */
+    public void incR(float speed, float toR) {
+        this.red += speed * deltaTime;
+        if (this.red >= toR) this.red = toR;
+    }
+
+    /**
+     * Incrementa el valor de la intencidad del color verde hasta toG a cierta velocidad.
+     */
+    public void incG(float speed, float toG) {
+        this.green += speed * deltaTime;
+        if (this.green >= toG) this.green = toG;
+    }
+
+    /**
+     * Incrementa el valor de la intencidad del color azul hasta toB a cierta velocidad.
+     */
+    public void incB(float speed, float toB) {
+        this.blue += speed * deltaTime;
+        if (this.blue >= toB) this.blue = toB;
+    }
+
+
+    /**
+     * Reduce el valor de la intencidad del color rojo hasta toR a cierta velocidad.
+     */
+    public void decR(float speed, float toR) {
+        this.red -= speed * deltaTime;
+        if (this.red <= toR) this.red = toR;
+    }
+
+    /**
+     * Reduce el valor de la intencidad del color verde hasta toG a cierta velocidad.
+     */
+    public void decG(float speed, float toG) {
+        this.green -= speed * deltaTime;
+        if (this.green <= toG) this.green = toG;
+    }
+
+    /**
+     * Reduce el valor de la intencidad del color azul hasta toB a cierta velocidad.
+     */
+    public void decB(float speed, float toB) {
+        this.blue -= speed * deltaTime;
+        if (this.blue <= toB) this.blue = toB;
     }
 
 }
