@@ -381,9 +381,6 @@ public final class GameData {
                 if ((byte) (byflags & 16) != 0) mapData[x][y].setTrigger(reader.readShort());
                 else mapData[x][y].setTrigger(0);
 
-//                    if (mapData[x][y].getCharIndex() > 0) {
-//                        eraseChar(mapData[x][y].getCharIndex());
-//                    }
                 mapData[x][y].getObjGrh().setGrhIndex(0);
             }
         }
@@ -391,7 +388,6 @@ public final class GameData {
         // Liberar memoria
         Surface.INSTANCE.deleteAllTextures();
         eraseAllChars();
-
     }
 
     /**

@@ -21,8 +21,6 @@ public class SpawnListHandler implements PacketHandler {
         // Dividimos por el carácter nulo
         String[] creatureList = creatureListString.split("\0");
 
-        User.INSTANCE.setUserBussy(true);
-
         // Mostramos la lista en el GUI
         ImGUISystem.INSTANCE.show(new FSpawnList(creatureList));
 

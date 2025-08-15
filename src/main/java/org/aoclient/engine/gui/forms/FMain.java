@@ -8,6 +8,7 @@ import org.aoclient.engine.Engine;
 import org.aoclient.engine.Window;
 import org.aoclient.engine.game.Console;
 import org.aoclient.engine.game.User;
+import org.aoclient.engine.gui.ImGUISystem;
 import org.aoclient.engine.gui.widgets.ImageButton3State;
 import org.aoclient.network.protocol.Protocol;
 
@@ -266,7 +267,7 @@ public final class FMain extends Form {
             this.viewInventory = false;
         }
 
-        if (!User.INSTANCE.isUserBussy()) {
+        if (ImGUISystem.INSTANCE.isMainLast()) {
             drawButton(710, 417, 17, 17, "Tirar Oro");
             if (ImGui.beginPopupContextItem("Tirar Oro")) {
                 playSound(SND_CLICK);

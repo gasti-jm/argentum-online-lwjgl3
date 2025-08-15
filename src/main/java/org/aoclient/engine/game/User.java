@@ -47,7 +47,6 @@ public enum User {
     private boolean userMoving;
     private boolean userNavegando;
     private boolean userComerciando;
-    private boolean userBussy;
     // mapa
     private short userMap;
     private short userCharIndex;
@@ -111,7 +110,6 @@ public enum User {
         this.talking = false;
         this.userNavegando = false;
         this.userComerciando = false;
-        this.userBussy = false;
     }
 
     public void resetGameState() {
@@ -654,14 +652,6 @@ public enum User {
         this.userComerciando = userComerciando;
     }
 
-    public boolean isUserBussy() {
-        return userBussy;
-    }
-
-    public void setUserBussy(boolean userBussy) {
-        this.userBussy = userBussy;
-    }
-
     public int getFreeSkillPoints() {
         return freeSkillPoints;
     }
@@ -742,7 +732,6 @@ public enum User {
         this.setUserConected(false);
         this.setUserNavegando(false);
         this.setUserComerciando(false);
-        this.setUserBussy(false);
         this.setFreeSkillPoints(0);
     }
 

@@ -11,7 +11,6 @@ public class ShowGMPanelFormHandler implements PacketHandler {
     @Override
     public void handle(PacketBuffer buffer) {
         buffer.readByte();
-        User.INSTANCE.setUserBussy(true);
         ImGUISystem.INSTANCE.show(new FPanelGM());
     }
 

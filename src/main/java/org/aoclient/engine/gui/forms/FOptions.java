@@ -32,7 +32,6 @@ public final class FOptions extends Form {
     public FOptions() {
         try {
             this.backgroundImage = loadTexture("VentanaOpciones");
-            User.INSTANCE.setUserBussy(true);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

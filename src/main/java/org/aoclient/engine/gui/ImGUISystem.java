@@ -269,6 +269,17 @@ public enum ImGUISystem {
         return visible;
     }
 
+    /**
+     * Checkea si el frm solicitiado es el ultimo de nuestro array de frms.
+     */
+    public boolean isMainLast() {
+        if (frms.size() <= 0) return false;
+
+
+        return frms.get(frms.size() - 1).getClass().getSimpleName().equals("FMain");
+    }
+
+
     public void deleteFrmArray(Form frm) {
         frms.remove(frm);
     }
