@@ -11,8 +11,8 @@ public enum Weather {
 
     public enum TypeWeather {
         DAY(1f, 1f, 1f),
-        MORNING(0.5f, 0.5f, 0.3f),
-        NIGHT(0.2f, 0.2f, 0.2f),
+        MORNING(0.5f, 0.5f, 0.8f),
+        NIGHT(0.3f, 0.3f, 0.3f),
         INVATION(1f, 0.2f, 0.2f);
 
         private final float r, g, b;
@@ -47,7 +47,6 @@ public enum Weather {
         }
 
         this.checkEffect();
-        //System.err.println(actual + ": " + renderColor.getRed() + " " + renderColor.getGreen() + " " + renderColor.getBlue());
 
         hourTimer -= deltaTime;
     }
@@ -62,9 +61,9 @@ public enum Weather {
 
         if(type == null) {
             switch (actual) {
-                case NIGHT: actual = MORNING; break;
-                case MORNING: actual = DAY; break;
-                case DAY: actual = NIGHT; break;
+                case NIGHT -> actual = MORNING;
+                case MORNING  -> actual = DAY;
+                case DAY -> actual = NIGHT;
             }
         } else {
             colorEvent = true;

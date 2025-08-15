@@ -28,7 +28,6 @@ public final class FBank extends Form {
     private String lblMax = "";
 
     public FBank(int goldDeposited) {
-        User.INSTANCE.setUserBussy(true);
         FBank.goldDeposited = goldDeposited;
 
         try {

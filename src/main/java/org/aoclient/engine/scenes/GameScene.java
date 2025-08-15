@@ -120,7 +120,7 @@ public final class GameScene extends Scene {
      */
     @Override
     public void mouseEvents() {
-        if (user.isUserComerciando() || user.isUserBussy()) return;
+        if (user.isUserComerciando() || !ImGUISystem.INSTANCE.isMainLast()) return;
 
         // Estamos haciendo click en el render?
         if (inGameArea()) {
@@ -201,7 +201,7 @@ public final class GameScene extends Scene {
      * Chequea y ejecuta la tecla que fue bindeada.
      */
     private void checkBindedKeys() {
-        if (user.isUserComerciando() || user.isUserBussy()) return;
+        if (user.isUserComerciando() || !ImGUISystem.INSTANCE.isMainLast()) return;
 
         // Usando el metodo estatico de Key para obtener la tecla desde el codigo
         final Key key = Key.getKey(KeyHandler.getLastKeyPressed());
@@ -237,7 +237,7 @@ public final class GameScene extends Scene {
                 case TALK:
                     // TODO: Es para evitar bugs y no se te trabe todo el juego cuando tenes algun frm abierto
                     //  y sin querer pulsar para hablar.
-                    if (!ImGUISystem.INSTANCE.isFormVisible(FCantidad.class.getSimpleName())) {
+                    if (ImGUISystem.INSTANCE.isMainLast()) {
                         if (!frmMain.getSendText().isBlank() && user.isTalking()) {
                             if (!frmMain.getSendText().startsWith("/")) {
                                 Console.INSTANCE.addMsgToConsole("[" + User.INSTANCE.getUserName().toLowerCase() + "] " + frmMain.getSendText(), false, false, new RGBColor(1f, 1f, 1f));
@@ -328,6 +328,8 @@ public final class GameScene extends Scene {
                             POS_SCREEN_Y + (camera.getScreenY() - 1) * TILE_PIXEL_SIZE + pixelOffsetY,
                             true, true, false, 1.0f, weather.getWeatherColor());
                 }
+
+
                 camera.incrementScreenX();
             }
             camera.setScreenX(camera.getScreenX() - x + camera.getScreenminX());

@@ -3,6 +3,8 @@ package org.aoclient.engine.renderer;
 import java.util.HashMap;
 import java.util.Map;
 
+import static org.lwjgl.opengl.GL11.glDeleteTextures;
+
 /**
  * Gestiona un conjunto de texturas (instancias de la clase {@code Texture}) mediante un mapa de identificadores numericos.
  * Proporciona metodos para inicializar, obtener, crear y eliminar texturas.
@@ -32,7 +34,6 @@ public enum Surface {
      * instancias. Es util para liberar recursos o reinicializar el estado del sistema de gestion de texturas.
      */
     public void deleteAllTextures() {
-        // for (Map.Entry<Integer, Texture> entry : textures.entrySet()) glDeleteTextures(entry.getValue().getId());
         textures.clear();
     }
 

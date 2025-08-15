@@ -39,7 +39,6 @@ public final class FCantidad extends Form {
 
     public FCantidad() {
         this.dropOro = false;
-        User.INSTANCE.setUserBussy(true);
 
         try {
             this.backgroundImage = loadTexture("VentanaTirarOro");
@@ -50,7 +49,6 @@ public final class FCantidad extends Form {
 
     public FCantidad(boolean dropOro) {
         this.dropOro = dropOro;
-        User.INSTANCE.setUserBussy(true);
 
         try {
             this.backgroundImage = loadTexture("VentanaTirarOro");
