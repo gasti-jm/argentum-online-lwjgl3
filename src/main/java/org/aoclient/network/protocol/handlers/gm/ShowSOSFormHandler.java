@@ -1,5 +1,7 @@
 package org.aoclient.network.protocol.handlers.gm;
 
+import org.aoclient.engine.gui.ImGUISystem;
+import org.aoclient.engine.gui.forms.FMSG;
 import org.aoclient.network.PacketBuffer;
 import org.aoclient.network.protocol.handlers.PacketHandler;
 import org.tinylog.Logger;
@@ -14,19 +16,13 @@ public class ShowSOSFormHandler implements PacketHandler {
         tempBuffer.readByte();
         String sosList = tempBuffer.readCp1252String();
 
-        //Dim sosList() As String
-        //    Dim i As Long
-        //
-        //    sosList = Split(Buffer.ReadASCIIString(), SEPARATOR)
-        //
-        //    For i = 0 To UBound(sosList())
-        //        Call frmMSG.List1.AddItem(sosList(i))
-        //    Next i
-        //
-        //    frmMSG.Show , //FrmMain
+        // Dividimos por el carácter nulo
+        String[] MSGList = sosList.split("\0");
+
+        // Mostramos la lista en el GUI
+        ImGUISystem.INSTANCE.show(new FMSG(MSGList));
 
         buffer.copy(tempBuffer);
-        Logger.debug("handleShowSOSForm Cargado! - FALTA TERMINAR!");
     }
 
 }
