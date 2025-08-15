@@ -1111,6 +1111,12 @@ public class Protocol {
         outputBuffer.writeByte(GMCommand.SOS_SHOW_LIST.getId());
     }
 
+    public static void SOSRemove(String player) {
+        outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
+        outputBuffer.writeByte(GMCommand.SOS_REMOVE.getId());
+        outputBuffer.writeCp1252String(player);
+    }
+
     public static void spawnCreature(short creatureIndex) {
         outputBuffer.writeByte(ClientPacket.GM_COMMANDS.getId());
         outputBuffer.writeByte(GMCommand.SPAWN_CREATURE.getId());
