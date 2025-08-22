@@ -1,14 +1,16 @@
-package org.aoclient.engine.game;
+package org.aoclient.engine.game.console;
 
+import imgui.ImFont;
 import imgui.ImGui;
 import imgui.flag.ImGuiCol;
 import imgui.flag.ImGuiCond;
 import imgui.flag.ImGuiWindowFlags;
 import org.aoclient.engine.renderer.RGBColor;
 
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
+
+import static org.aoclient.engine.game.console.FontStyle.*;
 
 /**
  * Clase que implementa una consola de texto para mostrar mensajes al usuario.
@@ -44,7 +46,7 @@ public enum Console {
      * Agrega un nuevo mensaje en la consola y remplaza cada %s, %d, etc.
      * Esto mejora el uso de la consola.
      */
-    public void addMsgToConsole(String format, boolean bold, boolean italic, RGBColor color, Object... args) {
+    public void addMsgToConsole(String format, FontStyle style, RGBColor color, Object... args) {
         // Formateamos la string con los argumentos
         String text = String.format(format, args);
         StringBuilder resultado = new StringBuilder();
@@ -82,7 +84,7 @@ public enum Console {
             }
         }
 
-        data.add(new ConsoleData(resultado.toString(), color));
+        data.add(new ConsoleData(resultado.toString(), color, style));
         scrollToBottom = true;
     }
 
@@ -90,7 +92,7 @@ public enum Console {
     /**
      * Agrega un nuevo mensaje en la consola.
      */
-    public void addMsgToConsole(String text, boolean bold, boolean italic, RGBColor color) {
+    public void addMsgToConsole(String text, FontStyle style, RGBColor color) {
         StringBuilder resultado = new StringBuilder();
 
         for (String linea : text.split("\n")) {
@@ -126,7 +128,7 @@ public enum Console {
             }
         }
 
-        data.add(new ConsoleData(resultado.toString(), color));
+        data.add(new ConsoleData(resultado.toString(), color, style));
 
         // Activa el scroll hacia abajo cuando se agrega un mensaje
         scrollToBottom = true;
@@ -153,9 +155,18 @@ public enum Console {
 
         // Itera cada item y le asignamos un color y lo dibujamos.
         for (ConsoleData item : data) {
-            ImGui.pushStyleColor(ImGuiCol.Text, ImGui.getColorU32(item.color.getRed(), item.color.getGreen(), item.color.getBlue(), 1f));
-            ImGui.textUnformatted(item.consoleText);
-            ImGui.popStyleColor();
+            final ImFont font = switch (item.style) {
+                case REGULAR    -> ImGuiFonts.fontRegular;
+                case BOLD       -> ImGuiFonts.fontBold;
+                case ITALIC     -> ImGuiFonts.fontItalic;
+                case BOLD_ITALIC-> ImGuiFonts.fontBoldItalic;
+            };
+
+            ImGui.pushFont(font);
+                ImGui.pushStyleColor(ImGuiCol.Text, ImGui.getColorU32(item.color.getRed(), item.color.getGreen(), item.color.getBlue(), 1f));
+                    ImGui.textUnformatted(item.consoleText);
+                ImGui.popStyleColor();
+            ImGui.popFont();
         }
 
         // Hace scroll hacia abajo si se solicita o si el autoScroll esta activado y ya esta cerca del final
@@ -167,11 +178,12 @@ public enum Console {
         ImGui.end();
     }
 
-    private record ConsoleData(String consoleText, RGBColor color) {
+    private record ConsoleData(String consoleText, RGBColor color, FontStyle style) {
         public ConsoleData {
             // Validaciones si son necesarias
             if (consoleText == null) consoleText = "";
             if (color == null) color = new RGBColor(1f, 1f, 1f);
+            if (style == null) style = REGULAR;
         }
     }
 

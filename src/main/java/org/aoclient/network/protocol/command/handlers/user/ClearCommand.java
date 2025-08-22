@@ -1,6 +1,6 @@
 package org.aoclient.network.protocol.command.handlers.user;
 
-import org.aoclient.engine.game.Console;
+import org.aoclient.engine.game.console.Console;
 import org.aoclient.network.protocol.command.core.CommandContext;
 import org.aoclient.network.protocol.command.core.CommandException;
 import org.aoclient.network.protocol.command.handlers.BaseCommandHandler;
