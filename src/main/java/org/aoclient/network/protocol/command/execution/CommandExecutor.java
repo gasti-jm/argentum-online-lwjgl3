@@ -1,7 +1,8 @@
 package org.aoclient.network.protocol.command.execution;
 
-import org.aoclient.engine.game.Console;
+import org.aoclient.engine.game.console.Console;
 import org.aoclient.engine.game.User;
+import org.aoclient.engine.game.console.FontStyle;
 import org.aoclient.engine.renderer.RGBColor;
 import org.aoclient.network.protocol.command.core.CommandContext;
 import org.aoclient.network.protocol.command.core.CommandException;
@@ -41,18 +42,18 @@ public enum CommandExecutor {
             if (handler != null) {
 
                 if (isGMCommandWithoutPrivileges(commandContext.command())) {
-                    Console.INSTANCE.addMsgToConsole("'" + commandContext.command() + "' is not a game command. See '/?'.", false, true, new RGBColor());
+                    Console.INSTANCE.addMsgToConsole("'" + commandContext.command() + "' is not a game command. See '/?'.", FontStyle.ITALIC, new RGBColor());
                     return;
                 }
 
                 try {
                     handler.handle(commandContext);
                 } catch (CommandException e) {
-                    Console.INSTANCE.addMsgToConsole(e.getMessage(), false, true, new RGBColor());
+                    Console.INSTANCE.addMsgToConsole(e.getMessage(), FontStyle.ITALIC, new RGBColor());
                 }
 
             } else
-                Console.INSTANCE.addMsgToConsole("'" + commandContext.command() + "' is not a game command. See '/?'.", false, true, new RGBColor());
+                Console.INSTANCE.addMsgToConsole("'" + commandContext.command() + "' is not a game command. See '/?'.", FontStyle.ITALIC, new RGBColor());
         }
     }
 

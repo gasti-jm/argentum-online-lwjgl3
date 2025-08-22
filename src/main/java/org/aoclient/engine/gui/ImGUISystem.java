@@ -1,9 +1,6 @@
 package org.aoclient.engine.gui;
 
-import imgui.ImFontAtlas;
-import imgui.ImFontConfig;
-import imgui.ImGui;
-import imgui.ImGuiIO;
+import imgui.*;
 import imgui.callback.ImStrConsumer;
 import imgui.callback.ImStrSupplier;
 import imgui.flag.ImGuiBackendFlags;
@@ -12,6 +9,7 @@ import imgui.flag.ImGuiKey;
 import imgui.flag.ImGuiMouseCursor;
 import imgui.gl3.ImGuiImplGl3;
 import org.aoclient.engine.Window;
+import org.aoclient.engine.game.console.ImGuiFonts;
 import org.aoclient.engine.gui.forms.Form;
 
 import java.util.ArrayList;
@@ -165,6 +163,18 @@ public enum ImGUISystem {
         fontConfig.setMergeMode(true);
         fontConfig.setPixelSnapH(true);
         fontConfig.setGlyphRanges(fontAtlas.getGlyphRangesCyrillic());
+
+
+        fontConfig.setMergeMode(false);
+        fontConfig.setPixelSnapH(false);
+
+        fontConfig.setRasterizerMultiply(1.2f);
+
+        ImGuiFonts.fontRegular      = fontAtlas.addFontFromFileTTF("resources/fonts/LiberationSans-Regular.ttf", 13);
+        ImGuiFonts.fontBold         = fontAtlas.addFontFromFileTTF("resources/fonts/LiberationSans-Bold.ttf", 13);
+        ImGuiFonts.fontItalic       = fontAtlas.addFontFromFileTTF("resources/fonts/LiberationSans-Italic.ttf", 13);
+        ImGuiFonts.fontBoldItalic   = fontAtlas.addFontFromFileTTF("resources/fonts/LiberationSans-BoldItalic.ttf", 13);
+
 
         // We merge font loaded from resources with the default one. Thus we will get an absent cyrillic glyphs
         //fontAtlas.addFontFromMemoryTTF(loadFromResources("basis33.ttf"), 16, fontConfig);

@@ -6,8 +6,8 @@ import imgui.flag.ImGuiCond;
 import imgui.flag.ImGuiInputTextFlags;
 import imgui.flag.ImGuiWindowFlags;
 import imgui.type.ImString;
-import org.aoclient.engine.game.Console;
-import org.aoclient.engine.game.User;
+import org.aoclient.engine.game.console.Console;
+import org.aoclient.engine.game.console.FontStyle;
 import org.aoclient.engine.game.inventory.NPCInventory;
 import org.aoclient.engine.game.inventory.UserInventory;
 import org.aoclient.engine.renderer.RGBColor;
@@ -82,7 +82,7 @@ public final class FComerce extends Form {
                     commerceBuy(invNPC.getSlotSelected() + 1, Integer.parseInt(cant.get()));
                 }
             } else {
-                Console.INSTANCE.addMsgToConsole("No tienes oro suficiente.", true, false, new RGBColor(1f, 0.1f, 0.1f));
+                Console.INSTANCE.addMsgToConsole("No tienes oro suficiente.", FontStyle.BOLD, new RGBColor(1f, 0.1f, 0.1f));
             }
 
         }

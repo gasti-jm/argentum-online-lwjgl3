@@ -1,6 +1,7 @@
 package org.aoclient.network.protocol.handlers;
 
-import org.aoclient.engine.game.Console;
+import org.aoclient.engine.game.console.Console;
+import org.aoclient.engine.game.console.FontStyle;
 import org.aoclient.engine.game.models.FontType;
 import org.aoclient.engine.renderer.RGBColor;
 import org.aoclient.network.PacketBuffer;
@@ -18,7 +19,7 @@ public class ConsoleMessageHandler implements PacketHandler {
         String chat = tempBuffer.readCp1252String();
         FontType fontType = FontType.values()[tempBuffer.readByte()];
 
-        Console.INSTANCE.addMsgToConsole(chat, false, false, new RGBColor(fontType.r, fontType.g, fontType.b));
+        Console.INSTANCE.addMsgToConsole(chat, FontStyle.REGULAR, new RGBColor(fontType.r, fontType.g, fontType.b));
 
 
         //

@@ -2,6 +2,8 @@ package org.aoclient.engine.scenes;
 
 import org.aoclient.engine.Window;
 import org.aoclient.engine.game.*;
+import org.aoclient.engine.game.console.Console;
+import org.aoclient.engine.game.console.FontStyle;
 import org.aoclient.engine.game.models.Direction;
 import org.aoclient.engine.game.models.Key;
 import org.aoclient.engine.game.models.Skill;
@@ -240,7 +242,7 @@ public final class GameScene extends Scene {
                     if (ImGUISystem.INSTANCE.isMainLast()) {
                         if (!frmMain.getSendText().isBlank() && user.isTalking()) {
                             if (!frmMain.getSendText().startsWith("/")) {
-                                Console.INSTANCE.addMsgToConsole("[" + User.INSTANCE.getUserName().toLowerCase() + "] " + frmMain.getSendText(), false, false, new RGBColor(1f, 1f, 1f));
+                                Console.INSTANCE.addMsgToConsole("[" + User.INSTANCE.getUserName().toLowerCase() + "] " + frmMain.getSendText(), FontStyle.REGULAR, new RGBColor(1f, 1f, 1f));
                                 Protocol.talk(frmMain.getSendText());
                             } else CommandExecutor.INSTANCE.execute(frmMain.getSendText());
                         }

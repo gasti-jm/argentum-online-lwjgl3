@@ -1,7 +1,8 @@
 package org.aoclient.network.protocol.command.handlers.user;
 
-import org.aoclient.engine.game.Console;
+import org.aoclient.engine.game.console.Console;
 import org.aoclient.engine.game.User;
+import org.aoclient.engine.game.console.FontStyle;
 import org.aoclient.engine.renderer.RGBColor;
 import org.aoclient.network.protocol.command.core.Command;
 import org.aoclient.network.protocol.command.core.CommandContext;
@@ -52,7 +53,7 @@ public class HelpCommand extends BaseCommandHandler {
     }
 
     private void showGeneralHelp() {
-        console.addMsgToConsole("Commands...", false, false, new RGBColor(0f, 1f, 0f));
+        console.addMsgToConsole("Commands...", FontStyle.REGULAR, new RGBColor(0f, 1f, 0f));
 
         // Determina los comandos para GM o USER
         List<String> commands = isGM() ? CommandRegistry.getAllCommandNames() : CommandRegistry.getCommandsByCategory(CommandCategory.USER)
@@ -62,10 +63,10 @@ public class HelpCommand extends BaseCommandHandler {
                 .toList();
 
         String commandsString = String.join(" ", commands);
-        console.addMsgToConsole(commandsString, false, false, new RGBColor(1f, 1f, 1f));
+        console.addMsgToConsole(commandsString, FontStyle.REGULAR, new RGBColor(1f, 1f, 1f));
 
-        console.addMsgToConsole("", false, false, new RGBColor());
-        console.addMsgToConsole("Type '" + HELP.getCommand() + " <command>' for specific help.", false, false, new RGBColor(0f, 1f, 1f));
+        console.addMsgToConsole("", FontStyle.REGULAR, new RGBColor());
+        console.addMsgToConsole("Type '" + HELP.getCommand() + " <command>' for specific help.", FontStyle.REGULAR, new RGBColor(0f, 1f, 1f));
     }
 
     private void showCommandHelp(String commandName) {
@@ -82,19 +83,19 @@ public class HelpCommand extends BaseCommandHandler {
                 return;
             }
 
-            console.addMsgToConsole("Help for the " + command.command() + " command...", false, false, new RGBColor(0f, 1f, 0f));
+            console.addMsgToConsole("Help for the " + command.command() + " command...", FontStyle.REGULAR, new RGBColor(0f, 1f, 0f));
 
             // Muestra ayuda linea por linea
             command.getHelp()
                     .lines()
-                    .forEach(line -> console.addMsgToConsole(line, false, false, new RGBColor(1f, 1f, 1f)));
+                    .forEach(line -> console.addMsgToConsole(line, FontStyle.REGULAR, new RGBColor(1f, 1f, 1f)));
 
         } else handleCommandNotFound(commandName);
 
     }
 
     private void handleCommandNotFound(String commandName) {
-        console.addMsgToConsole("Command '" + commandName + "' not found.", false, false, new RGBColor(1f, 0f, 0f));
+        console.addMsgToConsole("Command '" + commandName + "' not found.", FontStyle.REGULAR, new RGBColor(1f, 0f, 0f));
 
         // Sugiere comandos similares usando CommandRegistry
         var suggestions = CommandRegistry.getAllCommandNames()
@@ -109,7 +110,7 @@ public class HelpCommand extends BaseCommandHandler {
                 .collect(Collectors.joining(", "));
 
         if (!suggestions.isEmpty())
-            console.addMsgToConsole("Did you mean: " + suggestions + " ?", false, false, new RGBColor(0.6f, 0.6f, 0.6f));
+            console.addMsgToConsole("Did you mean: " + suggestions + " ?", FontStyle.REGULAR, new RGBColor(0.6f, 0.6f, 0.6f));
 
     }
 
