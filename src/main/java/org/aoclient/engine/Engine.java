@@ -63,7 +63,6 @@ public final class Engine {
         Logger.info("Running on {} / v{} [{}]", System.getProperty("os.name"), System.getProperty("os.version"), System.getProperty("os.arch"));
         Logger.info("Java version: {}", System.getProperty("java.version"));
 
-
         GameData.init();
         window.init();
         guiSystem.init();
