@@ -30,7 +30,7 @@ public class ConsoleMessageHandler implements PacketHandler {
         //    End If
 
         buffer.copy(tempBuffer);
-        Logger.debug("handleConsoleMessage CARGADO - FALTA TERMINAR!");
+        Logger.debug("handleConsoleMessage CARGADO - FALTA TERMINAR: FOCO PARTY!");
     }
 
 }

@@ -207,14 +207,14 @@ public enum ImGUISystem {
     }
 
     public void renderGUI() {
+        final ImGuiIO io = ImGui.getIO();
+        if (io.getDeltaTime() <= 0) return;
+
         // Get window size properties and mouse position
         glfwGetWindowSize(window.getWindow(), winWidth, winHeight);
         glfwGetFramebufferSize(window.getWindow(), fbWidth, fbHeight);
         glfwGetCursorPos(window.getWindow(), mousePosX, mousePosY);
-
-        // IMPORTANT!!
-        // We SHOULD call those methods to update ImGui state for current frame
-        final ImGuiIO io = ImGui.getIO();
+        
         io.setDisplaySize(winWidth[0], winHeight[0]);
         io.setDisplayFramebufferScale((float) fbWidth[0] / winWidth[0], (float) fbHeight[0] / winHeight[0]);
         io.setMousePos((float) mousePosX[0], (float) mousePosY[0]);

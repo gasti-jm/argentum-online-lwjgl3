@@ -141,7 +141,8 @@ public class Messages {
         COMPLETE_ALL_FIELDS,
         INVALID_NICK,
         INVALID_PASS,
-        INVALID_EMAIL
+        INVALID_EMAIL,
+        ORO_INSUFICIENTE
     }
 
 }

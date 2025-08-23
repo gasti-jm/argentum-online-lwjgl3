@@ -251,7 +251,7 @@ public class MultiMessageHandler implements PacketHandler {
 
                 final int exp = buffer.readLong();
 
-                console.addMsgToConsole(Messages.get(MessageKey.HAS_GANADO_EXPE), FontStyle.BOLD, red, exp);
+                console.addMsgToConsole(Messages.get(MessageKey.HAS_GANADO_EXPE), FontStyle.BOLD, new RGBColor(0.0f, 0.65f, 0.9f), exp);
 
                 // sistema de captura al matar.
                 break;
@@ -261,8 +261,9 @@ public class MultiMessageHandler implements PacketHandler {
                 break;
 
             case EARN_EXP:
-                console.addMsgToConsole(Messages.get(MessageKey.HAS_GANADO_EXPE), FontStyle.BOLD, red, buffer.readLong());
+                console.addMsgToConsole(Messages.get(MessageKey.HAS_GANADO_EXPE), FontStyle.BOLD, new RGBColor(0.0f, 0.65f, 0.9f), buffer.readLong());
                 break;
+
 
             case GO_HOME:
                 int distance = buffer.readByte();
