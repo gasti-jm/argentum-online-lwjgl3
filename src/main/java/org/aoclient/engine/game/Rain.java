@@ -75,14 +75,17 @@ public enum Rain {
         RLluvia[1].top = 0;
         RLluvia[2].top = 0;
         RLluvia[3].top = 0;
+
         RLluvia[0].left = 0;
         RLluvia[1].left = 128;
         RLluvia[2].left = 256;
         RLluvia[3].left = 384;
+
         RLluvia[0].right = 128;
         RLluvia[1].right = 256;
         RLluvia[2].right = 384;
         RLluvia[3].right = 512;
+
         RLluvia[0].bottom = 128;
         RLluvia[1].bottom = 128;
         RLluvia[2].bottom = 128;
@@ -92,14 +95,17 @@ public enum Rain {
         RLluvia[5].top = 128;
         RLluvia[6].top = 128;
         RLluvia[7].top = 128;
+
         RLluvia[4].left = 0;
         RLluvia[5].left = 128;
         RLluvia[6].left = 256;
         RLluvia[7].left = 384;
+
         RLluvia[4].right = 128;
         RLluvia[5].right = 256;
         RLluvia[6].right = 384;
         RLluvia[7].right = 512;
+
         RLluvia[4].bottom = 256;
         RLluvia[5].bottom = 256;
         RLluvia[6].bottom = 256;
@@ -139,6 +145,7 @@ public enum Rain {
 
     private void renderSound() {
         if (!options.isSound()) return;
+
         if (bLluvia[user.getUserMap()] && bRain) {
             if (user.isUnderCeiling()) {
                 if (rainSounds[1].isPlaying()) rainSounds[1].stop();
@@ -148,6 +155,10 @@ public enum Rain {
                 if (!rainSounds[1].isPlaying()) rainSounds[1].play();
             }
         }
+    }
+
+    public void stopSounds() {
+        for (Sound rainSound: rainSounds) rainSound.stop();
     }
 
     public void stopRainingSoundLoop() {

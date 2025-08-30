@@ -394,7 +394,7 @@ public final class Sound {
      * Comprueba si el audio esta disponible. En caso afirmativo, se recorre la coleccion de musicas y se detienen todas las que
      * se estan reproduciendo.
      */
-    private static void stopMusic() {
+    public static void stopMusic() {
         if (Window.INSTANCE.isAudioAvailable())
             musics.forEach((m, musicReproducing) -> musicReproducing.stop());
     }

@@ -131,13 +131,12 @@ public final class Engine {
                 glClearColor(currentScene.getBackground().getRed(), currentScene.getBackground().getGreen(), currentScene.getBackground().getBlue(), 1.0f);
                 glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-                if (deltaTime >= 0) {
+                if (deltaTime >= 0)
                     render();
-                }
+
 
                 glfwSwapBuffers(window.getWindow());
                 Time.updateTime();
-
             }
 
             MouseListener.resetReleasedButtons();
@@ -187,7 +186,6 @@ public final class Engine {
         currentScene.render();
         batch.end();
         guiSystem.renderGUI();
-
 
         Sound.renderMusic();
         KeyHandler.update();
