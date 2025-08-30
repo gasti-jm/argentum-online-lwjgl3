@@ -4,13 +4,13 @@ import imgui.ImGui;
 import imgui.flag.ImGuiCond;
 import imgui.flag.ImGuiWindowFlags;
 import org.aoclient.engine.Window;
+import org.aoclient.engine.game.Rain;
 import org.aoclient.engine.game.User;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
-import static org.aoclient.engine.audio.Sound.SND_CLICK;
-import static org.aoclient.engine.audio.Sound.playSound;
+import static org.aoclient.engine.audio.Sound.*;
 import static org.aoclient.engine.utils.GameData.options;
 
 /**
@@ -57,9 +57,15 @@ public final class FOptions extends Form {
 
         ImGui.separator();
 
-        if (ImGui.checkbox("Musica", options.isMusic())) options.setMusic(!options.isMusic());
+        if (ImGui.checkbox("Musica", options.isMusic())) {
+            options.setMusic(!options.isMusic());
+            stopMusic();
+        }
 
-        if (ImGui.checkbox("Audio", options.isSound())) options.setSound(!options.isSound());
+        if (ImGui.checkbox("Audio", options.isSound())) {
+            options.setSound(!options.isSound());
+            Rain.INSTANCE.stopSounds();
+        }
 
         ImGui.separator();
 
