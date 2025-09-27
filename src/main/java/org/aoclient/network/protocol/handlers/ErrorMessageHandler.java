@@ -14,9 +14,9 @@ public class ErrorMessageHandler implements PacketHandler {
         if (buffer.checkBytes(3)) return;
         PacketBuffer tempBuffer = new PacketBuffer();
         tempBuffer.copy(buffer);
-        tempBuffer.readByte();
+        tempBuffer.readByte(); // Consume packet ID
 
-        String errMsg = tempBuffer.readCp1252String();
+        String errMsg = tempBuffer.readASCIIString();
         ImGUISystem.INSTANCE.show(new FMessage(errMsg));
 
         Connection.INSTANCE.disconnect();

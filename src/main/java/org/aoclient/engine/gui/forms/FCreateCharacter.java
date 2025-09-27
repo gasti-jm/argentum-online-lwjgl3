@@ -11,9 +11,9 @@ import imgui.type.ImString;
 import org.aoclient.engine.Window;
 import org.aoclient.engine.game.Messages;
 import org.aoclient.engine.game.models.City;
-import org.aoclient.engine.game.models.Role;
 import org.aoclient.engine.game.models.Direction;
 import org.aoclient.engine.game.models.Race;
+import org.aoclient.engine.game.models.Role;
 import org.aoclient.engine.gui.widgets.ImageButton3State;
 import org.aoclient.engine.renderer.RGBColor;
 import org.aoclient.engine.renderer.Surface;
@@ -57,31 +57,30 @@ import static org.aoclient.network.protocol.Protocol.throwDices;
 
 public final class FCreateCharacter extends Form {
 
-    // Necesito hacer esto para dibujar despues el cuerpo y cabeza por encima de la interfaz
-    private Texture background;
-
-    // Botones con 3 estados
-    private ImageButton3State btnVolver;
-    private ImageButton3State btnCrearPj;
-
+    /**
+     * Al crear un pj tenemos una pequeña demora, ya que el cliente se conecta al servidor. Pero si el usuario empieza a mandar
+     * varias peticiones el buffer se rompe y no te termina logiando o logias y se te desconecta.
+     */
+    public static boolean sendCreate = false;
     // Text Boxes
     private final ImString txtNombre = new ImString(20);
     private final ImString txtPassword = new ImString();
     private final ImString txtConfirmPassword = new ImString();
     private final ImString txtMail = new ImString();
-
     // Combo Boxes
     private final ImInt currentItemHogar = new ImInt(0);
     private final String[] strCities = new String[City.values().length];
-
     private final ImInt currentItemRaza = new ImInt(0);
     private final String[] strRazas = new String[Race.values().length];
-
     private final ImInt currentItemClass = new ImInt(0);
     private final String[] role = new String[Role.values().length];
-
     private final ImInt currentItemGenero = new ImInt(0);
     private final String[] strGenero = new String[2];
+    // Necesito hacer esto para dibujar despues el cuerpo y cabeza por encima de la interfaz
+    private Texture background;
+    // Botones con 3 estados
+    private ImageButton3State btnVolver;
+    private ImageButton3State btnCrearPj;
     private RGBColor color;
     private RECT characterPos;
     // para el dibujado
@@ -89,27 +88,12 @@ public final class FCreateCharacter extends Form {
     private int userHead;
     private int userBody;
     private BodyData bodyGraphic;
-
     // --- NUEVO: ATRIBUTOS PARA LOS LABELS DE LOS ATRIBUTOS ---
     private int fuerza = 0;
     private int agilidad = 0;
     private int inteligencia = 0;
     private int carisma = 0;
     private int constitucion = 0;
-
-    /**
-     * Al crear un pj tenemos una pequeña demora, ya que el cliente se conecta al servidor. Pero si el usuario
-     * empieza a mandar varias peticiones el buffer se rompe y no te termina logiando o logias y se te desconecta.
-     */
-    public static boolean sendCreate = false;
-
-    public void setAtributos(int fuerza, int agilidad, int inteligencia, int carisma, int constitucion) {
-        this.fuerza = fuerza;
-        this.agilidad = agilidad;
-        this.inteligencia = inteligencia;
-        this.carisma = carisma;
-        this.constitucion = constitucion;
-    }
 
     public FCreateCharacter() {
         try {
@@ -152,26 +136,12 @@ public final class FCreateCharacter extends Form {
 
     }
 
-    /**
-     * Carga los datos que tendran almacenados los combo boxes.
-     */
-    private void loadComboBoxes() {
-        // Esto hay que internacionalizarlo en algun momento, es puro hardcodeo.
-        // Hogar
-        for (int i = 0; i < City.values().length; i++) {
-            String name = City.values()[i].name().toLowerCase();
-            strCities[i] = name.substring(0, 1).toUpperCase() + name.substring(1);
-        }
-
-        // Raza
-        for (int i = 0; i < Race.values().length; i++)
-            strRazas[i] = Race.values()[i].getName();
-        // Clases
-        for (int i = 0; i < Role.values().length; i++)
-            role[i] = Role.values()[i].getName();
-
-        strGenero[0] = Messages.get(GENDER_MALE);
-        strGenero[1] = Messages.get(GENDER_FEMININE);
+    public void setAtributos(int fuerza, int agilidad, int inteligencia, int carisma, int constitucion) {
+        this.fuerza = fuerza;
+        this.agilidad = agilidad;
+        this.inteligencia = inteligencia;
+        this.carisma = carisma;
+        this.constitucion = constitucion;
     }
 
     @Override
@@ -197,13 +167,13 @@ public final class FCreateCharacter extends Form {
         final int shpColor = ImGui.getColorU32(1f, 0f, 0f, 1f);
 
         // btnVolver
-        if(btnVolver.render()) {
+        if (btnVolver.render()) {
             playSound(SND_CLICK);
             this.buttonGoBack();
         }
 
         // btnCreateCharacter
-        if(btnCrearPj.render()) {
+        if (btnCrearPj.render()) {
             playSound(SND_CLICK);
             this.buttonCreateCharacter();
         }
@@ -322,6 +292,28 @@ public final class FCreateCharacter extends Form {
         ImGui.text(String.valueOf(constitucion));
 
         ImGui.end();
+    }
+
+    /**
+     * Carga los datos que tendran almacenados los combo boxes.
+     */
+    private void loadComboBoxes() {
+        // Esto hay que internacionalizarlo en algun momento, es puro hardcodeo.
+        // Hogar
+        for (int i = 0; i < City.values().length; i++) {
+            String name = City.values()[i].name().toLowerCase();
+            strCities[i] = name.substring(0, 1).toUpperCase() + name.substring(1);
+        }
+
+        // Raza
+        for (int i = 0; i < Race.values().length; i++)
+            strRazas[i] = Race.values()[i].getName();
+        // Clases
+        for (int i = 0; i < Role.values().length; i++)
+            role[i] = Role.values()[i].getName();
+
+        strGenero[0] = Messages.get(GENDER_MALE);
+        strGenero[1] = Messages.get(GENDER_FEMININE);
     }
 
     private void dirPJButton(int index) {
