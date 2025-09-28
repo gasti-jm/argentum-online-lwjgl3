@@ -292,7 +292,7 @@ public class PacketBuffer {
         byte[] buffer = new byte[VB6_INTEGER_BYTES];
         int bytesRead = read(buffer);
         remove(bytesRead);
-        return ByteBuffer.wrap(buffer).order(ByteOrder.LITTLE_ENDIAN).getShort();
+        return ByteBuffer.wrap(buffer).getShort();
     }
 
     /**
