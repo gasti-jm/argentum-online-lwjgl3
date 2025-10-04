@@ -103,6 +103,10 @@ public class PacketBuffer {
         write(ByteBuffer.allocate(VB6_INTEGER_BYTES).order(ByteOrder.LITTLE_ENDIAN).putShort(value).array());
     }
 
+    public void writeInteger(int value) {
+        write(ByteBuffer.allocate(Integer.BYTES).putInt(value).array());
+    }
+
     /**
      * <p>
      * Escribe un valor de tipo {@code int} en el buffer, convirtiendolo a su representacion binaria en formato de orden de bytes
@@ -161,6 +165,15 @@ public class PacketBuffer {
         write(string.getBytes(StandardCharsets.US_ASCII));
     }
 
+    public void writeASCIIString(String string) {
+        byte[] stringBytes = string.getBytes(StandardCharsets.US_ASCII);
+        byte[] buffer = new byte[STRING_LENGTH_BYTES + stringBytes.length];
+        // Usar BIG_ENDIAN para compatibilidad con Netty
+        ByteBuffer.wrap(buffer).putShort((short) stringBytes.length); // Sin .order() usa BIG_ENDIAN por defecto
+        System.arraycopy(stringBytes, 0, buffer, STRING_LENGTH_BYTES, stringBytes.length);
+        write(buffer);
+    }
+
     /**
      * Escribe una cadena de texto en formato Cp1252 en el buffer.
      *
@@ -198,9 +211,23 @@ public class PacketBuffer {
         // Crea un buffer local con la capacidad para almacenar la longitud y los bytes de la cadena
         byte[] buffer = new byte[STRING_LENGTH_BYTES + bytes];
         // Agrega la longitud de la cadena en los primeros 2 bytes del buffer
-        ByteBuffer.wrap(buffer).order(ByteOrder.LITTLE_ENDIAN).putShort((short) bytes);
+        ByteBuffer.wrap(buffer).putShort((short) bytes);
         // Agrega los bytes de la cadena a partir de la posicion 2 del buffer, es decir, despues de haber agregado los dos bytes que representan la longitud de la cadena
         System.arraycopy(stringBytes, 0, buffer, STRING_LENGTH_BYTES, bytes);
+        write(buffer);
+    }
+
+    public void writeUTF8StringFixed(String string, int fixedLength) {
+        byte[] stringBytes = string.getBytes(StandardCharsets.UTF_8);
+        byte[] buffer = new byte[fixedLength];
+
+        int copyLength = Math.min(stringBytes.length, fixedLength);
+        System.arraycopy(stringBytes, 0, buffer, 0, copyLength);
+
+        // Los bytes restantes quedan en 0 (relleno automatico)
+        // Si stringBytes.length < fixedLength → padding con zeros
+        // Si stringBytes.length > fixedLength → se trunca
+
         write(buffer);
     }
 
@@ -265,7 +292,7 @@ public class PacketBuffer {
         byte[] buffer = new byte[VB6_INTEGER_BYTES];
         int bytesRead = read(buffer);
         remove(bytesRead);
-        return ByteBuffer.wrap(buffer).order(ByteOrder.LITTLE_ENDIAN).getShort();
+        return ByteBuffer.wrap(buffer).getShort();
     }
 
     /**
@@ -352,6 +379,89 @@ public class PacketBuffer {
             } else throw new RuntimeException("Not enough bytes!");
         }
         throw new RuntimeException("Not enough bytes!");
+    }
+
+    /**
+     * Lee una cadena UTF-8 de longitud fija del buffer.
+     * <p>
+     * Remueve automaticamente el padding de bytes nulos al final.
+     *
+     * @param fixedLength longitud fija a leer en bytes
+     * @return cadena UTF-8 sin padding
+     */
+    public String readUTF8StringFixed(int fixedLength) {
+        if (bufferLength < fixedLength)
+            throw new RuntimeException("Not enough bytes for fixed string: expected " + fixedLength + ", available " + bufferLength);
+
+        byte[] stringBytes = new byte[fixedLength];
+        int bytesRead = read(stringBytes);
+        remove(bytesRead);
+
+        // Busca el final real de la cadena (antes del padding de zeros)
+        int actualLength = fixedLength;
+        for (int i = fixedLength - 1; i >= 0; i--) {
+            if (stringBytes[i] != 0) {
+                actualLength = i + 1;
+                break;
+            }
+        }
+
+        // Si toda la cadena son zeros, actualLength sera 0
+        if (actualLength == 0) return "";
+
+        return new String(stringBytes, 0, actualLength, StandardCharsets.UTF_8);
+    }
+
+    /**
+     * Lee una cadena UTF-8 del buffer usando BIG_ENDIAN (compatible con servidor Java).
+     */
+    public String readUTF8String() {
+        // Verifica si hay suficientes bytes para leer la longitud de la cadena
+        if (bufferLength < 2) throw new RuntimeException("Not enough bytes for string length");
+
+        // Lee la longitud en BIG_ENDIAN (como Java/Netty por defecto)
+        byte[] lengthBytes = new byte[2];
+        int bytesRead = read(lengthBytes);
+        remove(bytesRead);
+        short length = ByteBuffer.wrap(lengthBytes).getShort(); // Sin .order() = BIG_ENDIAN
+
+        if (bufferLength < length)
+            throw new RuntimeException("Not enough bytes for string data: expected " + length + ", available " + bufferLength);
+
+        // Si la longitud es cero, devuelve cadena vacia
+        if (length <= 0) return "";
+
+        // Lee los datos de la cadena
+        byte[] stringBytes = new byte[length];
+        bytesRead = read(stringBytes);
+        remove(bytesRead);
+
+        return new String(stringBytes, StandardCharsets.UTF_8);
+    }
+
+    /**
+     * Lee una cadena ASCII del buffer usando BIG_ENDIAN (compatible con servidor Java).
+     */
+    public String readASCIIString() {
+        // Verifica si hay suficientes bytes para leer la longitud de la cadena
+        if (bufferLength < 2) throw new RuntimeException("Not enough bytes for string length");
+
+        // Lee la longitud en BIG_ENDIAN
+        byte[] lengthBytes = new byte[2];
+        int bytesRead = read(lengthBytes);
+        remove(bytesRead);
+        short length = ByteBuffer.wrap(lengthBytes).getShort();
+        if (bufferLength < length)
+            throw new RuntimeException("Not enough bytes for string data: expected " + length + ", available " + bufferLength);
+
+        if (length <= 0) return "";
+
+        // Lee los datos de la cadena
+        byte[] stringBytes = new byte[length];
+        bytesRead = read(stringBytes);
+        remove(bytesRead);
+
+        return new String(stringBytes, StandardCharsets.US_ASCII);
     }
 
     public long readBlock(byte[] block, long dataLength) {

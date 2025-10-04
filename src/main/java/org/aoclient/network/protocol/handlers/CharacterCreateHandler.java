@@ -32,7 +32,7 @@ public class CharacterCreateHandler implements PacketHandler {
 
         User.INSTANCE.setCharacterFx(charIndex, tempBuffer.readInteger(), tempBuffer.readInteger());
 
-        String name = tempBuffer.readCp1252String();
+        String name = tempBuffer.readUTF8String();
         charList[charIndex].setName(name);
 
         int nickColor = tempBuffer.readByte();
@@ -42,9 +42,6 @@ public class CharacterCreateHandler implements PacketHandler {
 
         charList[charIndex].setCriminal((nickColor & NickColorType.CRIMINAL.getId()) != 0);
         charList[charIndex].setAttackable((nickColor & NickColorType.ATACABLE.getId()) != 0);
-
-        // Log
-        // System.err.println("User privileges: " + privileges);
 
         /* Si el nombre del usuario es igual al nombre del usuario leido desde el servidor, entonces establece el privilegio (que
          * se definio en el servidor dependiendo del nombre) al usuario. */

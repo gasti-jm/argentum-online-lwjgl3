@@ -1,8 +1,8 @@
 package org.aoclient.network.protocol;
 
-import org.aoclient.engine.game.console.Console;
 import org.aoclient.engine.game.Messages;
 import org.aoclient.engine.game.User;
+import org.aoclient.engine.game.console.Console;
 import org.aoclient.engine.game.console.FontStyle;
 import org.aoclient.engine.game.models.Direction;
 import org.aoclient.engine.game.models.Skill;
@@ -16,6 +16,7 @@ import static org.lwjgl.glfw.GLFW.glfwGetTime;
 
 public class Protocol {
 
+    public static final int MD5_ASCII_LENGTH = 32;
     private static final Console CONSOLE = Console.INSTANCE;
     private static final User USER = User.INSTANCE;
     public static int pingTime; // TODO Se podria sacar de aca?
@@ -552,22 +553,30 @@ public class Protocol {
         outputBuffer.writeByte(0); // App.Revision ?
     }
 
-    public static void loginNewChar(String userName, String userPassword, int userRaza, int userSexo, int userClase, int userHead, String userEmail, int userHogar) {
+    public static void loginNewChar(String nick, String password, int raza, int sexo, int clase, int head, String email, int hogar) {
         outputBuffer.writeByte(ClientPacket.LOGIN_NEW_CHAR.getId());
-        outputBuffer.writeCp1252String(userName);
-        outputBuffer.writeCp1252String(userPassword);
 
+        // nick: longitud variable
+        outputBuffer.writeUTF8String(nick);
+        // password: longitud FIJA (probablemente un hash)
+        outputBuffer.writeUTF8StringFixed(password, MD5_ASCII_LENGTH);
+
+        // Version
         outputBuffer.writeByte(0);  // App.Major
         outputBuffer.writeByte(13); // App.Minor
         outputBuffer.writeByte(0);  // App.Revision
 
-        outputBuffer.writeByte(userRaza);
-        outputBuffer.writeByte(userSexo);
-        outputBuffer.writeByte(userClase);
-        outputBuffer.writeInteger((short) userHead); // Convierte el valor int (32 bits) a short (16 bits) descartando los 16 bits mas significativos para ser compatible con el tipo Integer de VB6 (2 bytes)
+        // El client hash todavia no se pasa
 
-        outputBuffer.writeCp1252String(userEmail);
-        outputBuffer.writeByte(userHogar);
+        outputBuffer.writeByte(raza);
+        outputBuffer.writeByte(sexo);
+        outputBuffer.writeByte(clase);
+
+        outputBuffer.writeByte(head);
+
+        outputBuffer.writeUTF8String(email);
+
+        outputBuffer.writeByte(hogar);
     }
 
     public static void map(short map) {
