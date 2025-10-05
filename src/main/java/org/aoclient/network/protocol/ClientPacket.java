@@ -17,7 +17,7 @@ package org.aoclient.network.protocol;
 
 public enum ClientPacket {
 
-    LOGIN_EXISTING_CHAR(0),         // OLOGIN
+    LOGIN_EXISTING_CHARACTER(0),         // OLOGIN
     THROW_DICES(1),                 // TIRDAD
     LOGIN_NEW_CHAR(2),              // NLOGIN
     TALK(3),                        // ;

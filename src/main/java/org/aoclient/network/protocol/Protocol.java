@@ -545,12 +545,12 @@ public class Protocol {
      */
     public static void loginExistingChar(String username, String password) {
         // Primero escribe el ID del paquete para que al momento de deserializar el paquete entrante, lea primero el ID del paquete
-        outputBuffer.writeByte(ClientPacket.LOGIN_EXISTING_CHAR.getId());
-        outputBuffer.writeCp1252String(username);
-        outputBuffer.writeCp1252String(password);
-        outputBuffer.writeByte(0); // App.Major ?
-        outputBuffer.writeByte(13); // App.Minor ?
-        outputBuffer.writeByte(0); // App.Revision ?
+        outputBuffer.writeByte(ClientPacket.LOGIN_EXISTING_CHARACTER.getId());
+        outputBuffer.writeUTF8String(username);
+        outputBuffer.writeUTF8StringFixed(password, MD5_ASCII_LENGTH);
+        outputBuffer.writeByte(0);
+        outputBuffer.writeByte(13);
+        outputBuffer.writeByte(0);
     }
 
     public static void loginNewChar(String nick, String password, int raza, int sexo, int clase, int head, String email, int hogar) {
