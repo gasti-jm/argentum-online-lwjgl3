@@ -211,7 +211,7 @@ public class PacketBuffer {
         // Crea un buffer local con la capacidad para almacenar la longitud y los bytes de la cadena
         byte[] buffer = new byte[STRING_LENGTH_BYTES + bytes];
         // Agrega la longitud de la cadena en los primeros 2 bytes del buffer
-        ByteBuffer.wrap(buffer).putShort((short) bytes);
+        ByteBuffer.wrap(buffer).putShort((short) stringBytes.length);
         // Agrega los bytes de la cadena a partir de la posicion 2 del buffer, es decir, despues de haber agregado los dos bytes que representan la longitud de la cadena
         System.arraycopy(stringBytes, 0, buffer, STRING_LENGTH_BYTES, bytes);
         write(buffer);
