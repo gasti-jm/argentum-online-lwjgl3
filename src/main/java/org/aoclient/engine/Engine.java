@@ -5,6 +5,7 @@ import org.aoclient.engine.gui.ImGUISystem;
 import org.aoclient.engine.listeners.KeyHandler;
 import org.aoclient.engine.listeners.MouseListener;
 import org.aoclient.engine.renderer.BatchRenderer;
+import org.aoclient.engine.renderer.Renderer;
 import org.aoclient.engine.renderer.Surface;
 import org.aoclient.engine.scenes.*;
 import org.aoclient.engine.utils.GameData;
@@ -42,7 +43,7 @@ public final class Engine {
     private final ImGUISystem guiSystem = ImGUISystem.INSTANCE;
     /** Escena actual que esta siendo renderizada y actualizada en el motor. */
     private Scene currentScene;
-    public static BatchRenderer batch;
+    public static Renderer renderer;
 
     /**
      * Finaliza el cliente del motor grafico cerrando los recursos necesarios y deteniendo su ejecucion.
@@ -67,7 +68,7 @@ public final class Engine {
         window.init();
         guiSystem.init();
         Surface.INSTANCE.init();
-        batch = new BatchRenderer();
+        renderer = new Renderer();
 
         changeScene(INTRO_SCENE);
         playMusic("intro.ogg");
@@ -180,11 +181,11 @@ public final class Engine {
     private void render() {
         if (!currentScene.isVisible()) changeScene(currentScene.getChangeScene());
 
-        batch.begin();
+
         currentScene.mouseEvents();
         currentScene.keyEvents();
-        currentScene.render();
-        batch.end();
+        renderer.render(currentScene);
+
         guiSystem.renderGUI();
 
         Sound.renderMusic();

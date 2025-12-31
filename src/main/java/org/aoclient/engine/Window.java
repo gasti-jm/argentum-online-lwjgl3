@@ -198,18 +198,15 @@ public enum Window {
         // Inicializa OpenGL
         GL.createCapabilities();
 
-        glEnable(GL_TEXTURE_2D);
-        glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-
-        glViewport(0, 0, width, height);
-        glOrtho(0, 800, 600, 0, 1, -1);
-
         glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
         glEnable(GL_ALPHA);
 
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         glEnable(GL_BLEND);
         glDisable(GL_DEPTH_TEST);
+
+//        glEnable(GL_BLEND);
+//        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     }
 
     public void setCursorGraphic(boolean cast) {

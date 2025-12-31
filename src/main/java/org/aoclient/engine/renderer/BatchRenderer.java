@@ -1,9 +1,22 @@
 package org.aoclient.engine.renderer;
 
+import org.lwjgl.system.MemoryUtil;
+
+import java.nio.FloatBuffer;
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL15.*;
+import static org.lwjgl.opengl.GL15.GL_ARRAY_BUFFER;
+import static org.lwjgl.opengl.GL15.GL_DYNAMIC_DRAW;
+import static org.lwjgl.opengl.GL15.glBindBuffer;
+import static org.lwjgl.opengl.GL15.glBufferData;
+import static org.lwjgl.opengl.GL15.glBufferSubData;
+import static org.lwjgl.opengl.GL15.glDeleteBuffers;
+import static org.lwjgl.opengl.GL20.glEnableVertexAttribArray;
+import static org.lwjgl.opengl.GL20.glVertexAttribPointer;
+import static org.lwjgl.opengl.GL30.*;
 
 /**
  * Clase Batch Renderer <br> <br>
@@ -15,93 +28,166 @@ import static org.lwjgl.opengl.GL11.*;
  * cada textura y como tiene que estar.
  */
 public class BatchRenderer {
+    private Texture currentTexture = null;
+    private boolean drawing = false;
+    private boolean currentBlend = false;
 
-    /**
-     * Toda la informacion de una quad con una textura.
-     */
-    private static class Quad {
-        float x, y, width, height;
-        float srcX, srcY;
-        float texWidth, texHeight;
-        float r, g, b, a;
-        boolean blend;
-        Texture texture;
+    private static final int MAX_QUADS = 10000;
+    private static final int VERTICES_PER_QUAD = 6;
+    private static final int FLOATS_PER_VERTEX = 8; // la concha de tu madre.
+
+    private int vao, vbo;
+    private FloatBuffer buffer;
+    private int vertexCount;
+
+    public BatchRenderer() {
+        buffer = MemoryUtil.memAllocFloat(
+                MAX_QUADS * VERTICES_PER_QUAD * FLOATS_PER_VERTEX
+        );
+
+        vao = glGenVertexArrays();
+        vbo = glGenBuffers();
+
+        glBindVertexArray(vao);
+        glBindBuffer(GL_ARRAY_BUFFER, vbo);
+
+        glBufferData(
+                GL_ARRAY_BUFFER,
+                buffer.capacity() * Float.BYTES,
+                GL_DYNAMIC_DRAW
+        );
+
+        int stride = FLOATS_PER_VERTEX * Float.BYTES;
+
+        // position
+        glVertexAttribPointer(0, 2, GL_FLOAT, false, stride, 0);
+        glEnableVertexAttribArray(0);
+
+        // uv
+        glVertexAttribPointer(1, 2, GL_FLOAT, false, stride, 2L * Float.BYTES);
+        glEnableVertexAttribArray(1);
+
+        // color
+        glVertexAttribPointer(
+                2,
+                4,
+                GL_FLOAT,
+                false,
+                stride,
+                4L * Float.BYTES
+        );
+        glEnableVertexAttribArray(2);
+
+        glBindVertexArray(0);
     }
 
-    private List<Quad> quads = new ArrayList<>();
+    // =========================
+    // FRAME
+    // =========================
 
-    /**
-     * Vaciamos nuestro array de quads con texturas para que se prepare a dibujar una nueva imagen.
-     */
     public void begin() {
-        quads.clear();
+        buffer.clear();
+        vertexCount = 0;
+        currentTexture = null;
+        currentBlend = false;
+        drawing = true;
     }
 
-    /**
-     * Preparamos las cosas para el dibujado, creando un nuevo quad con su informacion de textura, recorte, pos de recorte
-     * color y demas...
-     */
-    public void draw(Texture texture, float x, float y, float srcX, float srcY, float width, float height, boolean blend, float alpha, RGBColor color) {
-        Quad quad = new Quad();
-        quad.x = x;
-        quad.y = y;
-        quad.width = width;
-        quad.height = height;
-        quad.srcX = srcX;
-        quad.srcY = srcY;
-        quad.texWidth = texture.getTex_width();
-        quad.texHeight = texture.getTex_height();
-        quad.r = color.getRed();
-        quad.g = color.getGreen();
-        quad.b = color.getBlue();
-        quad.a = alpha;
-        quad.texture = texture;
-        quad.blend = blend;
+    // =========================
+    // DRAW
+    // =========================
 
-        quads.add(quad);
-    }
+    public void submitQuad(
+            Texture texture,
+            float x, float y,
+            float w, float h,
+            float u0, float v0,
+            float u1, float v1,
+            boolean blend,
+            float r, float g, float b, float a
+    ) {
+        if (!drawing) {
+            throw new IllegalStateException("Batch no iniciado");
+        }
 
-    /**
-     * Recorre nuestro array de quads y dibuja todas las texturas una sola vez.
-     */
-    public void end() {
-        Texture lastTexture = null;
+        if (currentBlend != blend) {
+            flush();
+            currentBlend = blend;
 
-
-        for (Quad quad : quads) {
-            if (lastTexture != quad.texture) {
-                if (lastTexture != null) {
-                    glEnd();
-                }
-
-                quad.texture.bind();
-
-                if (quad.blend) {
-                    glBlendFunc(GL_SRC_ALPHA, GL_ONE);
-                } else {
-                    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-                }
-
-                glBegin(GL_QUADS);
-                lastTexture = quad.texture;
+            if (blend) {
+                glBlendFunc(GL_SRC_ALPHA, GL_ONE);
+            } else {
+                glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
             }
-
-            float u0 = quad.srcX / quad.texWidth;
-            float v0 = (quad.srcY + quad.height) / quad.texHeight;
-            float u1 = (quad.srcX + quad.width) / quad.texWidth;
-            float v1 = quad.srcY / quad.texHeight;
-
-            glColor4f(quad.r, quad.g, quad.b, quad.a);
-
-            glTexCoord2f(u0, v0); glVertex2f(quad.x, quad.y + quad.height);
-            glTexCoord2f(u0, v1); glVertex2f(quad.x, quad.y);
-            glTexCoord2f(u1, v1); glVertex2f(quad.x + quad.width, quad.y);
-            glTexCoord2f(u1, v0); glVertex2f(quad.x + quad.width, quad.y + quad.height);
         }
 
-        if (lastTexture != null) {
-            glEnd();
+        if (currentTexture != texture) {
+            flush();
+            currentTexture = texture;
+            currentTexture.bind();
         }
+
+        push(x, y,         u0, v1, r, g, b, a);
+        push(x + w, y,     u1, v1, r, g, b, a);
+        push(x + w, y + h, u1, v0, r, g, b, a);
+
+        push(x, y + h,     u0, v0, r, g, b, a);
+        push(x, y,         u0, v1, r, g, b, a);
+        push(x + w, y + h, u1, v0, r, g, b, a);
     }
 
+    private void flush() {
+        if (vertexCount == 0) return;
+
+        buffer.flip();
+        glBindBuffer(GL_ARRAY_BUFFER, vbo);
+        glBufferSubData(GL_ARRAY_BUFFER, 0, buffer);
+
+        glBindVertexArray(vao);
+        glDrawArrays(GL_TRIANGLES, 0, vertexCount);
+        glBindVertexArray(0);
+
+        buffer.clear();
+        vertexCount = 0;
+    }
+
+
+    private void push(
+            float x, float y,
+            float u, float v,
+            float r, float g, float b, float a
+    ) {
+        buffer.put(x).put(y);
+        buffer.put(u).put(v);
+        buffer.put(r).put(g).put(b).put(a);
+        vertexCount++;
+    }
+
+    // =========================
+    // UPLOAD + RENDER
+    // =========================
+
+    public void end() {
+        if (!drawing) return;
+        flush();
+        drawing = false;
+        currentTexture = null;
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    }
+
+    public void render() {
+        glBindVertexArray(vao);
+        glDrawArrays(GL_TRIANGLES, 0, vertexCount);
+        glBindVertexArray(0);
+    }
+
+    // =========================
+    // CLEANUP
+    // =========================
+
+    public void dispose() {
+        MemoryUtil.memFree(buffer);
+        glDeleteBuffers(vbo);
+        glDeleteVertexArrays(vao);
+    }
 }

@@ -2,7 +2,7 @@ package org.aoclient.engine.renderer;
 
 import org.aoclient.engine.utils.inits.GrhInfo;
 
-import static org.aoclient.engine.Engine.batch;
+import static org.aoclient.engine.Engine.renderer;
 import static org.aoclient.engine.scenes.Camera.TILE_PIXEL_SIZE;
 import static org.aoclient.engine.utils.GameData.grhData;
 import static org.aoclient.engine.utils.Time.deltaTime;
@@ -42,14 +42,14 @@ public final class Drawn {
      */
     public static void geometryBoxRender(int grh_index, int x, int y, int src_width, int src_height, float sX, float sY, boolean blend, float alpha, RGBColor color) {
         final Texture texture = Surface.INSTANCE.getTexture(grhData[grh_index].getFileNum());
-        batch.draw(texture, x, y, sX, sY, src_width, src_height, blend, alpha, color);
+        renderer.draw(texture, x, y, sX, sY, src_width, src_height, blend, alpha, color);
     }
 
     /**
      * Lo mismo pero con una textura ya cargada.
      */
     public static void geometryBoxRender(Texture texture, int x, int y, int src_width, int src_height, float sX, float sY, boolean blend, float alpha, RGBColor color) {
-        batch.draw(texture, x, y, sX, sY, src_width, src_height, blend, alpha, color);
+        renderer.draw(texture, x, y, sX, sY, src_width, src_height, blend, alpha, color);
     }
 
     /**
@@ -98,9 +98,15 @@ public final class Drawn {
                 grhData[grhIndex].getsY(), false, 1.0f, color);
     }
 
+
+
+
+
     /**
      * ===============================================================
      * Dibujado sin batch (lo hago para el frmCrearPersonaje).
+     *
+     * TODO: esto es una villeriada mas grande que una casa. lo voy a eliminar a la mierda.
      * ===============================================================
      */
 

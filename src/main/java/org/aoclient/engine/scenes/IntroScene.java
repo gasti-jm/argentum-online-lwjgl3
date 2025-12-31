@@ -1,9 +1,11 @@
 package org.aoclient.engine.scenes;
 
 import org.aoclient.engine.listeners.KeyHandler;
+import org.aoclient.engine.renderer.RGBAColor;
 import org.aoclient.engine.renderer.Surface;
 import org.aoclient.engine.renderer.Texture;
 
+import static org.aoclient.engine.renderer.Drawn.geometryBoxRender;
 import static org.aoclient.engine.renderer.Drawn.geometryBoxRenderGUI;
 import static org.aoclient.engine.utils.Time.deltaTime;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_ENTER;
@@ -92,7 +94,7 @@ public final class IntroScene extends Scene {
             timePresentation = 3.75f;
             nextInterface++;
         }
-        geometryBoxRenderGUI(imgs[nextInterface], 0, 0, alphaInterface);
+        geometryBoxRender(imgs[nextInterface], 0, 0, 800, 600, 0, 0, false, alphaInterface, new RGBAColor());
         timePresentation -= deltaTime;
     }
 
@@ -109,7 +111,7 @@ public final class IntroScene extends Scene {
      */
     private void effectNoLandStudios() {
         alphaInterface += 0.3f * deltaTime;
-        geometryBoxRenderGUI(imgs[0], 0, 0, alphaInterface);
+        geometryBoxRender(imgs[0], 0, 0, 800, 600, 0, 0, false, alphaInterface, new RGBAColor());
         timeLogo -= deltaTime;
     }
 
