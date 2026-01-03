@@ -6,26 +6,8 @@ import static org.aoclient.engine.Engine.renderer;
 import static org.aoclient.engine.scenes.Camera.TILE_PIXEL_SIZE;
 import static org.aoclient.engine.utils.GameData.grhData;
 import static org.aoclient.engine.utils.Time.deltaTime;
-import static org.lwjgl.opengl.GL11.*;
 
-/**
- * <p>
- * Clase utilitaria central para el sistema de renderizado que proporciona metodos de dibujo para todos los elementos visuales.
- * <p>
- * Esta clase estatica contiene los metodos principales que permiten dibujar en la pantalla de renderizado, ofreciendo funciones
- * para renderizar texturas, figuras geometricas, lineas, rectangulos y otros elementos graficos con diferentes propiedades y
- * transformaciones.
- * <p>
- * Implementa la funcionalidad de bajo nivel para el renderizado mediante OpenGL, encapsulando las operaciones complejas en
- * metodos faciles de usar. Maneja aspectos como la aplicacion de efectos de mezcla (blending), transparencia, colores y
- * transformaciones de coordenadas.
- * <p>
- * Es utilizada por todos los subsistemas graficos del juego para dibujar desde elementos de la interfaz de usuario hasta
- * personajes, objetos del mapa y efectos visuales. La mayor parte del renderizado visible pasa por los metodos de esta clase.
- * <p>
- * El dibujado especifico de personajes se encuentra en la clase {@link Character}, el de la interfaz de usuario en
- * {@code ElementGUI} y los textos en la clase {@code FontText}.
- */
+
 
 public final class Drawn {
 
@@ -157,87 +139,87 @@ public final class Drawn {
     }
 
     public static void geometryBoxRenderNoBatch(int grh_index, int x, int y, int src_width, int src_height, float sX, float sY, boolean blend, float alpha, RGBColor color) {
-        if (blend) glBlendFunc(GL_SRC_ALPHA, GL_ONE);
-
-        final Texture texture = Surface.INSTANCE.getTexture(grhData[grh_index].getFileNum());
-        final float src_right = sX + src_width;
-        final float src_bottom = sY + src_height;
-
-        texture.bind();
-        glBegin(GL_QUADS);
-
-        {
-            //  0----0
-            //  |    |
-            //  1----0
-            glColor4f(color.getRed(), color.getGreen(), color.getBlue(), alpha);
-            glTexCoord2f(sX / texture.getTex_width(), (src_bottom) / texture.getTex_height());
-            glVertex2d(x, y + src_height);
-
-            //  1----0
-            //  |    |
-            //  0----0
-            glColor4f(color.getRed(), color.getGreen(), color.getBlue(), alpha);
-            glTexCoord2f(sX / texture.getTex_width(), sY / texture.getTex_height());
-            glVertex2d(x, y);
-
-            //  0----1
-            //  |    |
-            //  0----0
-            glColor4f(color.getRed(), color.getGreen(), color.getBlue(), alpha);
-            glTexCoord2f((src_right) / texture.getTex_width(), sY / texture.getTex_height());
-            glVertex2d(x + src_width, y);
-
-            //  0----0
-            //  |    |
-            //  0----1
-            glColor4f(color.getRed(), color.getGreen(), color.getBlue(), alpha);
-            glTexCoord2f((src_right) / texture.getTex_width(), (src_bottom) / texture.getTex_height());
-            glVertex2d(x + src_width, y + src_height);
-        }
-
-        texture.unbind();
-        glEnd();
-
-        if (blend) glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+//        if (blend) glBlendFunc(GL_SRC_ALPHA, GL_ONE);
+//
+//        final Texture texture = Surface.INSTANCE.getTexture(grhData[grh_index].getFileNum());
+//        final float src_right = sX + src_width;
+//        final float src_bottom = sY + src_height;
+//
+//        texture.bind();
+//        glBegin(GL_QUADS);
+//
+//        {
+//            //  0----0
+//            //  |    |
+//            //  1----0
+//            glColor4f(color.getRed(), color.getGreen(), color.getBlue(), alpha);
+//            glTexCoord2f(sX / texture.getTex_width(), (src_bottom) / texture.getTex_height());
+//            glVertex2d(x, y + src_height);
+//
+//            //  1----0
+//            //  |    |
+//            //  0----0
+//            glColor4f(color.getRed(), color.getGreen(), color.getBlue(), alpha);
+//            glTexCoord2f(sX / texture.getTex_width(), sY / texture.getTex_height());
+//            glVertex2d(x, y);
+//
+//            //  0----1
+//            //  |    |
+//            //  0----0
+//            glColor4f(color.getRed(), color.getGreen(), color.getBlue(), alpha);
+//            glTexCoord2f((src_right) / texture.getTex_width(), sY / texture.getTex_height());
+//            glVertex2d(x + src_width, y);
+//
+//            //  0----0
+//            //  |    |
+//            //  0----1
+//            glColor4f(color.getRed(), color.getGreen(), color.getBlue(), alpha);
+//            glTexCoord2f((src_right) / texture.getTex_width(), (src_bottom) / texture.getTex_height());
+//            glVertex2d(x + src_width, y + src_height);
+//        }
+//
+//        texture.unbind();
+//        glEnd();
+//
+//        if (blend) glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     }
 
     public static void geometryBoxRenderGUI(Texture texture, int x, int y, float alpha) {
-        texture.bind();
-        glBegin(GL_QUADS);
-
-        {
-            //  0----0
-            //  |    |,
-            //  1----0
-            glColor4f(1.0f, 1.0f, 1.0f, alpha);
-            glTexCoord2f(0, 1);
-            glVertex2d(x, y + texture.getTex_height());
-
-            //  1----0
-            //  |    |
-            //  0----0
-            glColor4f(1.0f, 1.0f, 1.0f, alpha);
-            glTexCoord2f(0, 0);
-            glVertex2d(x, y);
-
-            //  0----1
-            //  |    |
-            //  0----0
-            glColor4f(1.0f, 1.0f, 1.0f, alpha);
-            glTexCoord2f(1, 0);
-            glVertex2d(x + texture.getTex_width(), y);
-
-            //  0----0
-            //  |    |
-            //  0----1
-            glColor4f(1.0f, 1.0f, 1.0f, alpha);
-            glTexCoord2f(1, 1);
-            glVertex2d(x + texture.getTex_width(), y + texture.getTex_height());
-        }
-
-        texture.unbind();
-        glEnd();
+//        texture.bind();
+//        glBegin(GL_QUADS);
+//
+//        {
+//            //  0----0
+//            //  |    |,
+//            //  1----0
+//            glColor4f(1.0f, 1.0f, 1.0f, alpha);
+//            glTexCoord2f(0, 1);
+//            glVertex2d(x, y + texture.getTex_height());
+//
+//            //  1----0
+//            //  |    |
+//            //  0----0
+//            glColor4f(1.0f, 1.0f, 1.0f, alpha);
+//            glTexCoord2f(0, 0);
+//            glVertex2d(x, y);
+//
+//            //  0----1
+//            //  |    |
+//            //  0----0
+//            glColor4f(1.0f, 1.0f, 1.0f, alpha);
+//            glTexCoord2f(1, 0);
+//            glVertex2d(x + texture.getTex_width(), y);
+//
+//            //  0----0
+//            //  |    |
+//            //  0----1
+//            glColor4f(1.0f, 1.0f, 1.0f, alpha);
+//            glTexCoord2f(1, 1);
+//            glVertex2d(x + texture.getTex_width(), y + texture.getTex_height());
+//        }
+//
+//        texture.unbind();
+//        glEnd();
     }
 
 }

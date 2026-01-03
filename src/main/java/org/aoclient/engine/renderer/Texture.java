@@ -12,7 +12,7 @@ import java.nio.ByteBuffer;
 
 import static org.aoclient.scripts.Compressor.readResource;
 import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.opengl.GL12.GL_CLAMP_TO_EDGE;
+
 
 /**
  * La clase {@code Texture} representa una textura en OpenGL para el renderizado grafico.
@@ -37,59 +37,85 @@ public class Texture {
 
     public void loadTexture(Texture refTexture, String compressedFile, String file, boolean isGUI) {
         final ByteBuffer pixels;
-        final BufferedImage bi;
+        final BufferedImage image;
 
         try {
             // Generate texture on GPU
             this.id = glGenTextures();
             glBindTexture(GL_TEXTURE_2D, id);
 
+            // CRÍTICO EN macOS
+            glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+
             // Lee los datos del recurso desde el archivo comprimido
             final byte[] resourceData = readResource("resources/" + compressedFile, file);
-            /* if (resourceData == null) {
-            System.err.println("No se pudieron cargar los datos de " + file);
-            return -1;
-            } */
-
             final InputStream is = new ByteArrayInputStream(resourceData);
 
-            //File fil = new File(file);
-            final BufferedImage image = ImageIO.read(is);
+            image = ImageIO.read(is);
 
             refTexture.tex_width = image.getWidth();
             refTexture.tex_height = image.getHeight();
 
-            bi = new BufferedImage(refTexture.tex_width, refTexture.tex_height, BufferedImage.TYPE_4BYTE_ABGR);
+            // Leer pixeles ARGB
+            int[] srcPixels = new int[refTexture.tex_width * refTexture.tex_height];
+            image.getRGB(0, 0,
+                    refTexture.tex_width,
+                    refTexture.tex_height,
+                    srcPixels,
+                    0,
+                    refTexture.tex_width);
 
-            Graphics2D g = bi.createGraphics();
-            g.scale(1, -1);
-            g.drawImage(image, 0, 0, refTexture.tex_width, -refTexture.tex_height, null);
+            byte[] data = new byte[4 * refTexture.tex_width * refTexture.tex_height];
 
-            final byte[] data = new byte[4 * refTexture.tex_width * refTexture.tex_height];
-            bi.getRaster().getDataElements(0, 0, refTexture.tex_width, refTexture.tex_height, data);
+            // Flip vertical MANUAL (sin Graphics2D)
+            for (int y = 0; y < refTexture.tex_height; y++) {
+                for (int x = 0; x < refTexture.tex_width; x++) {
 
-            if (!isGUI) {
-                for (int j = 0; j < refTexture.tex_width * refTexture.tex_height; j++) {
-                    if (data[j * 4] == 0 && data[j * 4 + 1] == 0 && data[j * 4 + 2] == 0) {
-                        data[j * 4] = -1;
-                        data[j * 4 + 1] = -1;
-                        data[j * 4 + 2] = -1;
-                        data[j * 4 + 3] = 0;
-                    } else data[j * 4 + 3] = -1;
+                    int srcIndex = y * refTexture.tex_width + x;
+                    int dstIndex = (y * refTexture.tex_width + x) * 4;
+
+                    int pixel = srcPixels[srcIndex];
+
+                    byte a = (byte) ((pixel >> 24) & 0xFF);
+                    byte r = (byte) ((pixel >> 16) & 0xFF);
+                    byte g = (byte) ((pixel >> 8) & 0xFF);
+                    byte b = (byte) (pixel & 0xFF);
+
+                    if (!isGUI) {
+                        if (r == 0 && g == 0 && b == 0) {
+                            r = g = b = (byte) 255;
+                            a = 0;
+                        } else {
+                            a = (byte) 255;
+                        }
+                    }
+
+                    data[dstIndex]     = r;
+                    data[dstIndex + 1] = g;
+                    data[dstIndex + 2] = b;
+                    data[dstIndex + 3] = a;
                 }
             }
 
             pixels = BufferUtils.createByteBuffer(data.length);
             pixels.put(data);
-            pixels.rewind();
+            pixels.flip();
 
-            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA,
-                    refTexture.tex_width, refTexture.tex_height, 0, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
+            glTexImage2D(
+                    GL_TEXTURE_2D,
+                    0,
+                    GL_RGBA,
+                    refTexture.tex_width,
+                    refTexture.tex_height,
+                    0,
+                    GL_RGBA,
+                    GL_UNSIGNED_BYTE,
+                    pixels
+            );
 
-            // Set texture parameters
+            // Texture parameters
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
@@ -97,6 +123,7 @@ public class Texture {
             ex.printStackTrace();
         }
     }
+
 
     public void bind() {
         glBindTexture(GL_TEXTURE_2D, id);

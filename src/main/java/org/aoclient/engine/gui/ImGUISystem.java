@@ -34,6 +34,7 @@ import static org.lwjgl.glfw.GLFW.*;
  * asegurando una respuesta coherente de la interfaz.
  */
 
+
 public enum ImGUISystem {
 
     INSTANCE;
@@ -56,7 +57,7 @@ public enum ImGUISystem {
 
     // arreglo de ventanas gui
     private final List<Form> frms = new ArrayList<>();
-    
+
     private final Window window = Window.INSTANCE;
 
     public void init() {
@@ -86,7 +87,7 @@ public enum ImGUISystem {
         loadImGUIFonts(io);
 
         // Iniciamos ImGUI en OpenGL
-        imGuiGl3.init();
+        imGuiGl3.init("#version 150");
     }
 
     private void setKeyboardMapping(ImGuiIO io) {
@@ -105,7 +106,6 @@ public enum ImGUISystem {
         keyMap[ImGuiKey.Delete] = GLFW_KEY_DELETE;
         keyMap[ImGuiKey.Backspace] = GLFW_KEY_BACKSPACE;
         keyMap[ImGuiKey.Space] = GLFW_KEY_SPACE;
-        //keyMap[ImGuiKey.Enter]          = GLFW_KEY_ENTER;
         keyMap[ImGuiKey.Escape] = GLFW_KEY_ESCAPE;
         keyMap[ImGuiKey.KeyPadEnter] = GLFW_KEY_KP_ENTER;
         keyMap[ImGuiKey.A] = GLFW_KEY_A;
