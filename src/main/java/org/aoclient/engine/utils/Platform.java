@@ -1,6 +1,6 @@
 package org.aoclient.engine.utils;
 
-public class OS {
+public class Platform {
     public static String operationSystem;
     public static String osVersion;
     public static String javaVersion;
@@ -11,6 +11,10 @@ public class OS {
         osVersion = System.getProperty("os.version");
         arch = System.getProperty("os.arch");
         javaVersion = System.getProperty("java.version");
+    }
+
+    public static boolean isMac() {
+        return System.getProperty("os.name").toLowerCase().contains("mac");
     }
 
 }

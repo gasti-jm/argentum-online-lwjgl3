@@ -4,11 +4,11 @@ import org.aoclient.engine.audio.Sound;
 import org.aoclient.engine.gui.ImGUISystem;
 import org.aoclient.engine.listeners.KeyHandler;
 import org.aoclient.engine.listeners.MouseListener;
-import org.aoclient.engine.renderer.BatchRenderer;
 import org.aoclient.engine.renderer.Renderer;
 import org.aoclient.engine.renderer.Surface;
 import org.aoclient.engine.scenes.*;
 import org.aoclient.engine.utils.GameData;
+import org.aoclient.engine.utils.Platform;
 import org.aoclient.engine.utils.Time;
 import org.aoclient.network.Connection;
 import org.lwjgl.Version;
@@ -60,8 +60,10 @@ public final class Engine {
      * Inicializa los componentes esenciales del motor grafico.
      */
     public void init() {
+        Platform.init(); // Obtenemos informacion del SO.
+
         Logger.info("Starting LWJGL {}!", Version.getVersion());
-        Logger.info("Running on {} / v{} [{}]", System.getProperty("os.name"), System.getProperty("os.version"), System.getProperty("os.arch"));
+        Logger.info("Running on {} / v{} [{}]", Platform.operationSystem, System.getProperty("os.version"), System.getProperty("os.arch"));
         Logger.info("Java version: {}", System.getProperty("java.version"));
 
         GameData.init();

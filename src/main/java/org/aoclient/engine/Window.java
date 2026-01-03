@@ -2,6 +2,7 @@ package org.aoclient.engine;
 
 import org.aoclient.engine.listeners.KeyHandler;
 import org.aoclient.engine.listeners.MouseListener;
+import org.aoclient.engine.utils.Platform;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.glfw.GLFWImage;
 import org.lwjgl.glfw.GLFWVidMode;
@@ -79,11 +80,15 @@ public enum Window {
         // Configure GLFW
         glfwDefaultWindowHints();
 
-        // Sacamos esto por ahora, sino no va a ser compatible con linux. Habria que testiar en MacOS
-        glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-        glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GLFW_TRUE);
-        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+        if (Platform.isMac()) {
+            glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+            glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GLFW_TRUE);
+            glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+            glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+        } else {
+            glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+            glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+        }
 
         glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
         glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
@@ -178,6 +183,11 @@ public enum Window {
 
         // Make the OpenGL context current
         glfwMakeContextCurrent(window);
+
+        // En macOS, no se puede cargar el icono en glfw.
+        if (!Platform.isMac()) {
+            loadIcon();
+        }
 
         if (options.isVsync()) glfwSwapInterval(1);
         else glfwSwapInterval(0);

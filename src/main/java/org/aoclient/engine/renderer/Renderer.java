@@ -31,7 +31,6 @@ public class Renderer {
     public Renderer() {
         this.camera = new Camera2D(0,0); // y no se toca mas.
 
-
         // shaders vitales para nuestro dibujado.
         shader = new Shader(
                 "resources/shaders/default.vert",
