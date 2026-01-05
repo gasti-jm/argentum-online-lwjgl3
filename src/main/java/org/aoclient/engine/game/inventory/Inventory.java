@@ -4,8 +4,8 @@ import imgui.ImGui;
 import org.aoclient.engine.game.models.ObjectType;
 import org.aoclient.engine.listeners.MouseListener;
 import org.aoclient.engine.renderer.RGBColor;
-import org.aoclient.engine.renderer.Surface;
 import org.aoclient.engine.renderer.Texture;
+import org.aoclient.engine.renderer.TextureManager;
 
 import static org.aoclient.engine.scenes.Camera.TILE_PIXEL_SIZE;
 import static org.aoclient.engine.utils.GameData.grhData;
@@ -89,7 +89,15 @@ public abstract class Inventory {
         slots[slot].equipped = equipped;
         slots[slot].grhIndex = grhIndex;
 
-        if (grhIndex > 0) slots[slot].objTexture = Surface.INSTANCE.getTexture(grhData[grhIndex].getFileNum());
+
+
+        if (grhIndex > 0) {
+            TextureManager.requestTexture(grhIndex); // precargamos
+
+            // Si ya se precargo entonces lo seteamos de una para asi actualizar el inv.
+            slots[slot].objTexture = TextureManager.getTexture(grhData[slots[slot].grhIndex].getFileNum());
+        }
+
 
         slots[slot].maxHit = maxHit;
         slots[slot].minHit = minHit;

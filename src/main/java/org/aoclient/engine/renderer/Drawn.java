@@ -23,14 +23,18 @@ public final class Drawn {
      *  Se encargara de guardar la textura en la grafica y prepararla para su dibujado (en pocas palabras).
      */
     public static void geometryBoxRender(int grh_index, int x, int y, int src_width, int src_height, float sX, float sY, boolean blend, float alpha, RGBColor color) {
-        final Texture texture = Surface.INSTANCE.getTexture(grhData[grh_index].getFileNum());
-        renderer.draw(texture, x, y, sX, sY, src_width, src_height, blend, alpha, color);
+        //TextureManager.requestTexture(grhData[grh_index].getFileNum());
+        Texture tex = TextureManager.getTexture(grhData[grh_index].getFileNum());
+        if (tex == null) return; // todavía no está lista
+
+        renderer.draw(tex, x, y, sX, sY, src_width, src_height, blend, alpha, color);
     }
 
     /**
      * Lo mismo pero con una textura ya cargada.
      */
     public static void geometryBoxRender(Texture texture, int x, int y, int src_width, int src_height, float sX, float sY, boolean blend, float alpha, RGBColor color) {
+        if (texture == null) return;
         renderer.draw(texture, x, y, sX, sY, src_width, src_height, blend, alpha, color);
     }
 
@@ -79,9 +83,6 @@ public final class Drawn {
                 grhData[grhIndex].getsX(),
                 grhData[grhIndex].getsY(), false, 1.0f, color);
     }
-
-
-
 
 
     /**

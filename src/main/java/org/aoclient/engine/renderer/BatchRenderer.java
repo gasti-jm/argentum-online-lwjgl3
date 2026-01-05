@@ -110,6 +110,10 @@ public class BatchRenderer {
             throw new IllegalStateException("Batch no iniciado");
         }
 
+        if (texture == null ||  texture.getId() == 0) {
+            return;
+        }
+
         if (currentBlend != blend) {
             flush();
             currentBlend = blend;

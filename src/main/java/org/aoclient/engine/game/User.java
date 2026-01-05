@@ -3,6 +3,7 @@ package org.aoclient.engine.game;
 import org.aoclient.engine.game.inventory.InventorySpells;
 import org.aoclient.engine.game.inventory.UserInventory;
 import org.aoclient.engine.game.models.*;
+import org.aoclient.engine.renderer.TextureManager;
 
 import static org.aoclient.engine.audio.Sound.*;
 import static org.aoclient.engine.game.models.Character.*;
@@ -263,9 +264,12 @@ public enum User {
      * @param loops     Tiempo del efecto FX. Establece un efecto FX en un personaje.
      */
     public void setCharacterFx(int charIndex, int fx, int loops) {
+
+
         charList[charIndex].setFxIndex(fx);
         if (charList[charIndex].getFxIndex() > 0) {
             initGrh(charList[charIndex].getfX(), fxData[fx].getAnimacion(), true);
+            TextureManager.requestTexture(charList[charIndex].getfX().getGrhIndex());
             charList[charIndex].getfX().setLoops(loops);
         }
     }

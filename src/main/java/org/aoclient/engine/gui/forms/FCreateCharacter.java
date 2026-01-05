@@ -16,8 +16,8 @@ import org.aoclient.engine.game.models.Direction;
 import org.aoclient.engine.game.models.Race;
 import org.aoclient.engine.gui.widgets.ImageButton3State;
 import org.aoclient.engine.renderer.RGBColor;
-import org.aoclient.engine.renderer.Surface;
 import org.aoclient.engine.renderer.Texture;
+import org.aoclient.engine.renderer.TextureManager;
 import org.aoclient.engine.utils.inits.BodyData;
 import org.aoclient.network.Connection;
 
@@ -113,7 +113,7 @@ public final class FCreateCharacter extends Form {
 
     public FCreateCharacter() {
         try {
-            this.background = Surface.INSTANCE.createTexture("gui.ao", "VentanaCrearPersonaje", true);
+            this.background = TextureManager.createTexture("gui.ao", "VentanaCrearPersonaje");
             this.userHead = HUMANO_H_PRIMER_CABEZA;
             this.userBody = HUMANO_H_CUERPO_DESNUDO;
             this.dir = Direction.DOWN.getId();

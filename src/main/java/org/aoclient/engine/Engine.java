@@ -5,7 +5,7 @@ import org.aoclient.engine.gui.ImGUISystem;
 import org.aoclient.engine.listeners.KeyHandler;
 import org.aoclient.engine.listeners.MouseListener;
 import org.aoclient.engine.renderer.Renderer;
-import org.aoclient.engine.renderer.Surface;
+import org.aoclient.engine.renderer.TextureManager;
 import org.aoclient.engine.scenes.*;
 import org.aoclient.engine.utils.GameData;
 import org.aoclient.engine.utils.Platform;
@@ -63,13 +63,12 @@ public final class Engine {
         Platform.init(); // Obtenemos informacion del SO.
 
         Logger.info("Starting LWJGL {}!", Version.getVersion());
-        Logger.info("Running on {} / v{} [{}]", Platform.operationSystem, System.getProperty("os.version"), System.getProperty("os.arch"));
-        Logger.info("Java version: {}", System.getProperty("java.version"));
+        Logger.info("Running on {} / v{} [{}]", Platform.operationSystem, Platform.osVersion, Platform.arch);
+        Logger.info("Java version: {}", Platform.javaVersion);
 
         GameData.init();
         window.init();
         guiSystem.init();
-        Surface.INSTANCE.init();
         renderer = new Renderer();
 
         changeScene(INTRO_SCENE);
@@ -131,12 +130,13 @@ public final class Engine {
             glfwPollEvents();
 
             if (!window.isMinimized()) {
+                TextureManager.processPending();
+
                 glClearColor(currentScene.getBackground().getRed(), currentScene.getBackground().getGreen(), currentScene.getBackground().getBlue(), 1.0f);
                 glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
                 if (deltaTime >= 0)
                     render();
-
 
                 glfwSwapBuffers(window.getWindow());
                 Time.updateTime();
@@ -182,7 +182,6 @@ public final class Engine {
      */
     private void render() {
         if (!currentScene.isVisible()) changeScene(currentScene.getChangeScene());
-
 
         currentScene.mouseEvents();
         currentScene.keyEvents();

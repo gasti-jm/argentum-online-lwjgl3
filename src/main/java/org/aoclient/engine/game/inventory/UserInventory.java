@@ -3,9 +3,11 @@ package org.aoclient.engine.game.inventory;
 import imgui.ImGui;
 import org.aoclient.engine.game.IntervalTimer;
 import org.aoclient.engine.listeners.MouseListener;
+import org.aoclient.engine.renderer.TextureManager;
 import org.aoclient.network.protocol.Protocol;
 
 import static org.aoclient.engine.scenes.Camera.TILE_PIXEL_SIZE;
+import static org.aoclient.engine.utils.GameData.grhData;
 
 /**
  * <p>
@@ -68,6 +70,13 @@ public final class UserInventory extends Inventory implements Cloneable {
     public void drawInventory() {
         if (slots.length == 0) return;
 
+        // seteo las texturas precargadas para que las pueda dibujar.
+        if (slots[0].objTexture == null) {
+            for (int i = 0; i < slots.length; i++) {
+                slots[i].objTexture = TextureManager.getTexture(grhData[slots[i].grhIndex].getFileNum());
+            }
+        }
+
         // posiciones por slot
         int iX = posX;
         int iY = posY;
@@ -77,8 +86,13 @@ public final class UserInventory extends Inventory implements Cloneable {
 
         for (int i = 0; i < slots.length; i++) {
             if (slots[i].grhIndex > 0) {
+
                 ImGui.setCursorPos(iX + 5, iY);
-                ImGui.image(slots[i].objTexture.getId(), 32, 32);
+
+                if (slots[i].objTexture != null) {
+                    ImGui.image(slots[i].objTexture.getId(), 32, 32);
+                }
+
 
                 if(!invComerce) {
                     if (ImGui.isItemHovered()) ImGui.setTooltip(slots[i].name);

@@ -2,8 +2,8 @@ package org.aoclient.engine.game;
 
 import org.aoclient.engine.audio.Sound;
 import org.aoclient.engine.renderer.RGBColor;
-import org.aoclient.engine.renderer.Surface;
 import org.aoclient.engine.renderer.Texture;
+import org.aoclient.engine.renderer.TextureManager;
 
 import static org.aoclient.engine.renderer.Drawn.geometryBoxRender;
 import static org.aoclient.engine.utils.GameData.bLluvia;
@@ -31,11 +31,12 @@ public enum Rain {
     INSTANCE;
 
     // sonidos de la lluvia
+    private static final int RAIN_FILE_NUM_GRAPHIC = 15168;
     private static final String SND_LLUVIAIN = "resources/sounds/lluviain.ogg";
     private static final String SND_LLUVIAOUT = "resources/sounds/lluviaout.ogg";
     private static final String SND_LLUVIAINEND = "resources/sounds/lluviainend.ogg";
     private static final String SND_LLUVIAOUTEND = "resources/sounds/lluviaoutend.ogg";
-    private final Texture rainTexture;
+    private Texture rainTexture;
     private final RECT[] RLluvia;
     private final int[] LTLluvia;
     private final Sound[] rainSounds;
@@ -63,7 +64,7 @@ public enum Rain {
         this.loadData();
 
         // dios mio.
-        this.rainTexture = Surface.INSTANCE.createTexture("graphics.ao", "15168", false);
+        TextureManager.requestTextureFile(RAIN_FILE_NUM_GRAPHIC);
     }
 
     private void loadData() {
@@ -120,6 +121,11 @@ public enum Rain {
 
     public void render(RGBColor color) {
         if (!bLluvia[user.getUserMap()] || !bRain) return;
+
+        if (rainTexture == null) {
+            this.rainTexture = TextureManager.getTexture(RAIN_FILE_NUM_GRAPHIC);
+        }
+
 
         this.renderSound();
 

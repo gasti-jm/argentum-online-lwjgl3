@@ -2,7 +2,7 @@ package org.aoclient.engine.utils;
 
 import org.aoclient.engine.game.Options;
 import org.aoclient.engine.game.models.Character;
-import org.aoclient.engine.renderer.Surface;
+import org.aoclient.engine.renderer.TextureManager;
 import org.aoclient.engine.utils.inits.*;
 
 import java.io.IOException;
@@ -326,6 +326,8 @@ public final class GameData {
      * Cargamos el mapa.
      */
     public static void loadMap(int numMap) {
+        //TextureManager.clear();
+
         byte[] data = readResource("resources/maps.ao", "mapa" + numMap);
         if (data == null) {
             System.err.println("Could not load mapa" + numMap + " data!");
@@ -362,20 +364,33 @@ public final class GameData {
                 mapData[x][y].getLayer(1).setGrhIndex(reader.readShort());
                 mapData[x][y].setLayer(1, initGrh(mapData[x][y].getLayer(1), mapData[x][y].getLayer(1).getGrhIndex(), true));
 
+                // precargamos textura del layer 1
+                TextureManager.requestTexture(mapData[x][y].getLayer(1).getGrhIndex());
+
+
                 if ((byte) (byflags & 2) != 0) {
                     mapData[x][y].getLayer(2).setGrhIndex(reader.readShort());
                     mapData[x][y].setLayer(2, initGrh(mapData[x][y].getLayer(2), mapData[x][y].getLayer(2).getGrhIndex(), true));
+
+                    // precargamos textura del layer 2
+                    TextureManager.requestTexture(mapData[x][y].getLayer(2).getGrhIndex());
 
                 } else mapData[x][y].getLayer(2).setGrhIndex(0);
 
                 if ((byte) (byflags & 4) != 0) {
                     mapData[x][y].getLayer(3).setGrhIndex(reader.readShort());
                     mapData[x][y].setLayer(3, initGrh(mapData[x][y].getLayer(3), mapData[x][y].getLayer(3).getGrhIndex(), true));
+
+                    // precargamos textura del layer 3
+                    TextureManager.requestTexture(mapData[x][y].getLayer(3).getGrhIndex());
                 } else mapData[x][y].getLayer(3).setGrhIndex(0);
 
                 if ((byte) (byflags & 8) != 0) {
                     mapData[x][y].getLayer(4).setGrhIndex(reader.readShort());
                     mapData[x][y].setLayer(4, initGrh(mapData[x][y].getLayer(4), mapData[x][y].getLayer(4).getGrhIndex(), true));
+
+                    // precargamos textura del layer 4
+                    TextureManager.requestTexture(mapData[x][y].getLayer(4).getGrhIndex());
                 } else mapData[x][y].getLayer(4).setGrhIndex(0);
 
                 if ((byte) (byflags & 16) != 0) mapData[x][y].setTrigger(reader.readShort());
@@ -386,7 +401,7 @@ public final class GameData {
         }
 
         // Liberar memoria
-        Surface.INSTANCE.deleteAllTextures();
+        //Surface.INSTANCE.deleteAllTextures();
         eraseAllChars();
     }
 
