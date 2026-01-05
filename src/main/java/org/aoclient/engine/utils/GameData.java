@@ -326,7 +326,7 @@ public final class GameData {
      * Cargamos el mapa.
      */
     public static void loadMap(int numMap) {
-        //TextureManager.clear();
+        //TextureManager.clear(); juju nos quedamos sin algunas texturas.
 
         byte[] data = readResource("resources/maps.ao", "mapa" + numMap);
         if (data == null) {

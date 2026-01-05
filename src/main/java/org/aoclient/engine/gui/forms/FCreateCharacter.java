@@ -28,7 +28,6 @@ import java.util.regex.Pattern;
 import static org.aoclient.engine.audio.Sound.*;
 import static org.aoclient.engine.game.Messages.MessageKey.*;
 import static org.aoclient.engine.game.models.Character.*;
-import static org.aoclient.engine.renderer.Drawn.*;
 import static org.aoclient.engine.utils.GameData.*;
 import static org.aoclient.network.protocol.Protocol.loginNewChar;
 import static org.aoclient.network.protocol.Protocol.throwDices;
@@ -56,9 +55,6 @@ import static org.aoclient.network.protocol.Protocol.throwDices;
  */
 
 public final class FCreateCharacter extends Form {
-
-    // Necesito hacer esto para dibujar despues el cuerpo y cabeza por encima de la interfaz
-    private Texture background;
 
     // Botones con 3 estados
     private ImageButton3State btnVolver;
@@ -113,7 +109,7 @@ public final class FCreateCharacter extends Form {
 
     public FCreateCharacter() {
         try {
-            this.background = TextureManager.createTexture("gui.ao", "VentanaCrearPersonaje");
+            this.backgroundImage = loadTexture("VentanaCrearPersonaje");
             this.userHead = HUMANO_H_PRIMER_CABEZA;
             this.userBody = HUMANO_H_CUERPO_DESNUDO;
             this.dir = Direction.DOWN.getId();
@@ -176,9 +172,6 @@ public final class FCreateCharacter extends Form {
 
     @Override
     public void render() {
-        geometryBoxRenderGUI(background, 0, 0, 1.0f);
-        this.updateHeadSelection();
-
         ImGui.setNextWindowSize(Window.INSTANCE.getWidth() + 10, Window.INSTANCE.getHeight() + 5, ImGuiCond.Once);
         ImGui.setNextWindowPos(-5, -1, ImGuiCond.Once);
 
@@ -192,6 +185,8 @@ public final class FCreateCharacter extends Form {
                 ImGuiWindowFlags.NoSavedSettings |
                 ImGuiWindowFlags.NoBringToFrontOnFocus);
 
+
+        ImGui.getWindowDrawList().addImage(backgroundImage, 0, 0, Window.INSTANCE.getWidth(), Window.INSTANCE.getHeight());
 
         final ImDrawList drawList = ImGui.getWindowDrawList();
         final int shpColor = ImGui.getColorU32(1f, 0f, 0f, 1f);
@@ -321,6 +316,8 @@ public final class FCreateCharacter extends Form {
         ImGui.setCursorPos(307, 320);
         ImGui.text(String.valueOf(constitucion));
 
+        this.updateHeadSelection();
+
         ImGui.end();
     }
 
@@ -370,37 +367,71 @@ public final class FCreateCharacter extends Form {
         final int headGraphic = headData[head].getHead(dir).getGrhIndex();
         this.bodyGraphic.getWalk(dir).setStarted(true);
 
+        int firstFrameBody = grhData[bodyGraphic.getWalk(dir).getGrhIndex()].getFrame(1);
+
+        // precargamos textura
+        TextureManager.requestTexture(headGraphic);
+        TextureManager.requestTexture(bodyGraphic.getWalk(dir).getGrhIndex());
+
+        var headTex = TextureManager.getTexture(grhData[headGraphic].getFileNum());
+        var bodyTex = TextureManager.getTexture(grhData[firstFrameBody].getFileNum());
+
+        // si no se precargo la textura no se dibuja nada.
+        if (headTex == null || bodyTex == null) return;
+
         switch (index) {
             case 0:
-                drawGrhIndexNoBatch(headGraphic, 429, 395, color);
+                ImGui.setCursorPos(434, 395);
+                imageRegion(headTex,
+                        grhData[headGraphic].getsX(), grhData[headGraphic].getsY(),
+                        grhData[headGraphic].getPixelWidth(), grhData[headGraphic].getPixelHeight());
+
                 break;
             case 1:
-                drawGrhIndexNoBatch(headGraphic, 456, 395, color);
+                ImGui.setCursorPos(461, 395);
+                imageRegion(headTex,
+                        grhData[headGraphic].getsX(), grhData[headGraphic].getsY(),
+                        grhData[headGraphic].getPixelWidth(), grhData[headGraphic].getPixelHeight());
+
                 break;
             case 2:
-                drawGrhIndexNoBatch(headGraphic, 483, 395, color);
+                ImGui.setCursorPos(488, 395);
+                imageRegion(headTex,
+                        grhData[headGraphic].getsX(), grhData[headGraphic].getsY(),
+                        grhData[headGraphic].getPixelWidth(), grhData[headGraphic].getPixelHeight());
 
-                drawTextureNoBatch(bodyGraphic.getWalk(dir),
-                        (characterPos.left + (characterPos.right / 2)) - (grhData[bodyGraphic.getWalk(dir).getGrhIndex()].getPixelWidth() / 2) - 4,
-                        450,
-                        true, true, false, 1.0f, color);
+                ImGui.setCursorPos(485, 435);
+                imageRegion(bodyTex,
+                        grhData[firstFrameBody].getsX(), grhData[firstFrameBody].getsY(),
+                        grhData[firstFrameBody].getPixelWidth(), grhData[firstFrameBody].getPixelHeight());
+
                 // gnomo o enano
                 if (currentItemRaza.get() == 3 || currentItemRaza.get() == 4) {
-                    drawGrhIndexNoBatch(headGraphic,
-                            492 - (grhData[headGraphic].getPixelWidth() / 2),
-                            487 - (grhData[headGraphic].getPixelHeight()), color);
+
+                    ImGui.setCursorPos(497 - (grhData[headGraphic].getPixelWidth() / 2), 486 - (grhData[headGraphic].getPixelHeight()));
+                    imageRegion(headTex,
+                            grhData[headGraphic].getsX(), grhData[headGraphic].getsY(),
+                            grhData[headGraphic].getPixelWidth(), grhData[headGraphic].getPixelHeight());
+
                 } else {
-                    drawGrhIndexNoBatch(headGraphic,
-                            492 - (grhData[headGraphic].getPixelWidth() / 2),
-                            478 - (grhData[headGraphic].getPixelHeight()), color);
+                    ImGui.setCursorPos(497 - (grhData[headGraphic].getPixelWidth() / 2), 476 - (grhData[headGraphic].getPixelHeight()));
+                    imageRegion(headTex,
+                            grhData[headGraphic].getsX(), grhData[headGraphic].getsY(),
+                            grhData[headGraphic].getPixelWidth(), grhData[headGraphic].getPixelHeight());
                 }
                 break;
             case 3:
-                drawGrhIndexNoBatch(headGraphic, 510, 395, color);
+                ImGui.setCursorPos(515, 395);
+                imageRegion(headTex,
+                        grhData[headGraphic].getsX(), grhData[headGraphic].getsY(),
+                        grhData[headGraphic].getPixelWidth(), grhData[headGraphic].getPixelHeight());
                 break;
 
             case 4:
-                drawGrhIndexNoBatch(headGraphic, 537, 395, color);
+                ImGui.setCursorPos(542, 395);
+                imageRegion(headTex,
+                        grhData[headGraphic].getsX(), grhData[headGraphic].getsY(),
+                        grhData[headGraphic].getPixelWidth(), grhData[headGraphic].getPixelHeight());
                 break;
         }
     }
@@ -629,6 +660,22 @@ public final class FCreateCharacter extends Form {
 
     static class RECT {
         private int top, left, right, bottom;
+    }
+
+    public static void imageRegion(
+            Texture tex,
+            int x, int y, int w, int h
+    ) {
+        float u0 = (float) x / tex.getTex_width();
+        float v0 = (float) y / tex.getTex_height();
+        float u1 = (float) (x + w) / tex.getTex_width();
+        float v1 = (float) (y + h) / tex.getTex_height();
+
+        // si tenés Y invertido:
+        // float v0 = 1f - ((float)(y + h) / tex.height);
+        // float v1 = 1f - ((float)y / tex.height);
+
+        ImGui.image(tex.getId(), w, h, u0, v0, u1, v1);
     }
 
 }
