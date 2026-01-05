@@ -28,7 +28,6 @@ import static org.aoclient.scripts.Compressor.readResource;
  */
 
 public class FontRenderer {
-
     public static final int NORMAL_FONT = 0;
     public static final int HIT_FONT = 1;
     private static final BinaryDataReader reader = new BinaryDataReader();
@@ -59,11 +58,11 @@ public class FontRenderer {
             for (int k = 0; k < 256; k++) {
                 int grh = reader.readInt();
                 if (grh > 0) fonts[i].characters.put((char) k, grh);
+
+                // precargamos textura.
+                TextureManager.requestTextureFile(grhData[grh].getFileNum());
             }
         }
-
-        // debugPrintAvailableChars();
-
     }
 
     /**

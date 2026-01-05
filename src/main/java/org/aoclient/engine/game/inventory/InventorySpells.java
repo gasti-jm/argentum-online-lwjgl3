@@ -31,7 +31,6 @@ public class InventorySpells {
 
     public void draw() {
 
-
         ImGui.setNextWindowPos(595, 159);
         ImGui.setNextWindowSize(250, 171, ImGuiCond.Once);
 

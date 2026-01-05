@@ -1,6 +1,7 @@
 package org.aoclient.network.protocol.handlers;
 
 import org.aoclient.engine.gui.forms.FBank;
+import org.aoclient.engine.renderer.TextureManager;
 import org.aoclient.network.PacketBuffer;
 
 public class ChangeBankSlotHandler implements PacketHandler {

@@ -1,10 +1,11 @@
 package org.aoclient.engine.scenes;
 
 import org.aoclient.engine.listeners.KeyHandler;
-import org.aoclient.engine.renderer.Surface;
+import org.aoclient.engine.renderer.RGBAColor;
 import org.aoclient.engine.renderer.Texture;
+import org.aoclient.engine.renderer.TextureManager;
 
-import static org.aoclient.engine.renderer.Drawn.geometryBoxRenderGUI;
+import static org.aoclient.engine.renderer.Drawn.geometryBoxRender;
 import static org.aoclient.engine.utils.Time.deltaTime;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_ENTER;
 
@@ -45,10 +46,10 @@ public final class IntroScene extends Scene {
         this.canChangeTo = SceneType.MAIN_SCENE;
         this.imgs = new Texture[4];
 
-        this.imgs[0] = Surface.INSTANCE.createTexture("gui.ao", "noland", true);
-        this.imgs[1] = Surface.INSTANCE.createTexture("gui.ao", "Presentacion5", true);
-        this.imgs[2] = Surface.INSTANCE.createTexture("gui.ao", "Presentacion6", true);
-        this.imgs[3] = Surface.INSTANCE.createTexture("gui.ao", "Presentacion7", true);
+        this.imgs[0] = TextureManager.createTexture("gui.ao", "noland");
+        this.imgs[1] = TextureManager.createTexture("gui.ao", "Presentacion5");
+        this.imgs[2] = TextureManager.createTexture("gui.ao", "Presentacion6");
+        this.imgs[3] = TextureManager.createTexture("gui.ao", "Presentacion7");
     }
 
     @Override
@@ -92,7 +93,7 @@ public final class IntroScene extends Scene {
             timePresentation = 3.75f;
             nextInterface++;
         }
-        geometryBoxRenderGUI(imgs[nextInterface], 0, 0, alphaInterface);
+        geometryBoxRender(imgs[nextInterface], 0, 0, 800, 600, 0, 0, false, alphaInterface, new RGBAColor());
         timePresentation -= deltaTime;
     }
 
@@ -109,7 +110,7 @@ public final class IntroScene extends Scene {
      */
     private void effectNoLandStudios() {
         alphaInterface += 0.3f * deltaTime;
-        geometryBoxRenderGUI(imgs[0], 0, 0, alphaInterface);
+        geometryBoxRender(imgs[0], 0, 0, 800, 600, 0, 0, false, alphaInterface, new RGBAColor());
         timeLogo -= deltaTime;
     }
 

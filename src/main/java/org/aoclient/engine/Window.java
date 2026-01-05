@@ -2,6 +2,7 @@ package org.aoclient.engine;
 
 import org.aoclient.engine.listeners.KeyHandler;
 import org.aoclient.engine.listeners.MouseListener;
+import org.aoclient.engine.utils.Platform;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.glfw.GLFWImage;
 import org.lwjgl.glfw.GLFWVidMode;
@@ -23,6 +24,7 @@ import static org.lwjgl.openal.ALC10.*;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.system.MemoryStack.stackPush;
 import static org.lwjgl.system.MemoryUtil.NULL;
+
 
 /**
  * Clase encargada de gestionar la ventana principal del juego y sus contextos graficos.
@@ -78,11 +80,15 @@ public enum Window {
         // Configure GLFW
         glfwDefaultWindowHints();
 
-        // Sacamos esto por ahora, sino no va a ser compatible con linux. Habria que testiar en MacOS
-//        glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-//        glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GLFW_TRUE);
-//        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-//        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+        if (Platform.isMac()) {
+            glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+            glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GLFW_TRUE);
+            glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+            glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+        } else {
+            glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+            glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+        }
 
         glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
         glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
@@ -93,8 +99,6 @@ public enum Window {
         window = glfwCreateWindow(this.width, this.height, this.title, options.isFullscreen() ? glfwGetPrimaryMonitor() : NULL, NULL);
 
         if (window == NULL) throw new IllegalStateException("Failed to create the GLFW window.");
-
-        loadIcon();
 
         glfwSetCursorPosCallback(window, MouseListener::mousePosCallback);
         glfwSetMouseButtonCallback(window, MouseListener::mouseButtonCallback);
@@ -180,6 +184,11 @@ public enum Window {
         // Make the OpenGL context current
         glfwMakeContextCurrent(window);
 
+        // En macOS, no se puede cargar el icono en glfw.
+        if (!Platform.isMac()) {
+            loadIcon();
+        }
+
         if (options.isVsync()) glfwSwapInterval(1);
         else glfwSwapInterval(0);
 
@@ -198,13 +207,6 @@ public enum Window {
         // Inicializa OpenGL
         GL.createCapabilities();
 
-        glEnable(GL_TEXTURE_2D);
-        glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-
-        glViewport(0, 0, width, height);
-        glOrtho(0, 800, 600, 0, 1, -1);
-
-        glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
         glEnable(GL_ALPHA);
 
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
