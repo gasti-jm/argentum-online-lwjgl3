@@ -50,6 +50,8 @@ git clone https://github.com/gasti-jm/argentum-online-lwjgl3.git
    - Localiza la clase principal `org.aoclient.engine.Main`
    - Haz clic derecho y selecciona 'Run' o presiona Shift+F10
 
+<b>IMPORTANT:</b> Los usuarios de MacOS deberan iniciar el proyecto con `-XstartOnFirstThread` en VM option.
+
 # Notas de Desarrollo
 
 - El proyecto utiliza Gradle para la gestión de dependencias
@@ -61,6 +63,8 @@ git clone https://github.com/gasti-jm/argentum-online-lwjgl3.git
 ![Screenshot 2023-08-21 044542](https://github.com/gasti-jm/argentum-online-lwjgl3/assets/82490615/8f4c7864-feee-4ac6-b957-651a6b03a627)
 #
 ![VirtualBox_Linux_09_03_2024_04_13_54](https://github.com/gasti-jm/argentum-online-lwjgl3/assets/82490615/8f54e716-3824-48ac-92ca-f22bfcfe74d5)
+
+<img width="1360" height="768" alt="2R3ZxNl" src="https://github.com/user-attachments/assets/56cb53b9-2070-40b4-ae85-f044209e020c" />
 
 <h1>Agradecimientos:</h1>
 <br/>
