@@ -4,6 +4,9 @@ import imgui.ImGui;
 import imgui.ImVec2;
 import org.aoclient.engine.game.User;
 import org.aoclient.engine.gui.ImGUISystem;
+import org.aoclient.engine.renderer.RGBColor;
+import org.aoclient.engine.renderer.Texture;
+import org.aoclient.engine.utils.inits.GrhInfo;
 import org.lwjgl.BufferUtils;
 
 import javax.imageio.ImageIO;
@@ -17,6 +20,9 @@ import java.nio.ByteBuffer;
 
 import static org.aoclient.engine.Window.SCREEN_HEIGHT;
 import static org.aoclient.engine.Window.SCREEN_WIDTH;
+import static org.aoclient.engine.scenes.Camera.TILE_PIXEL_SIZE;
+import static org.aoclient.engine.utils.GameData.grhData;
+import static org.aoclient.engine.utils.Time.deltaTime;
 import static org.aoclient.scripts.Compressor.readResource;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL12.GL_CLAMP_TO_EDGE;
@@ -147,6 +153,43 @@ public abstract class Form {
                 e.printStackTrace();
             }
         } else System.out.println("La apertura de URL no es compatible en esta plataforma.");
+    }
+
+    protected void imageRegion(
+            Texture tex,
+            int x, int y, int w, int h
+    ) {
+        float u0 = (float) x / tex.getTex_width();
+        float v0 = (float) y / tex.getTex_height();
+        float u1 = (float) (x + w) / tex.getTex_width();
+        float v1 = (float) (y + h) / tex.getTex_height();
+
+        ImGui.image(tex.getId(), w, h, u0, v0, u1, v1);
+    }
+
+    protected void imageRegion(Texture tex, GrhInfo grh, boolean animate) {
+        if (grh.getGrhIndex() == 0 || grhData[grh.getGrhIndex()].getNumFrames() == 0) return;
+        if (animate && grh.isStarted()) {
+            grh.setFrameCounter(grh.getFrameCounter() + (deltaTime * grhData[grh.getGrhIndex()].getNumFrames() / grh.getSpeed()));
+            if (grh.getFrameCounter() > grhData[grh.getGrhIndex()].getNumFrames()) {
+                grh.setFrameCounter((grh.getFrameCounter() % grhData[grh.getGrhIndex()].getNumFrames()) + 1);
+                if (grh.getLoops() != -1) {
+                    if (grh.getLoops() > 0) grh.setLoops(grh.getLoops() - 1);
+                    else grh.setStarted(false);
+                }
+            }
+        }
+
+        final int currentGrhIndex = grhData[grh.getGrhIndex()].getFrame((int) (grh.getFrameCounter()));
+
+        if (currentGrhIndex == 0 || grhData[currentGrhIndex].getFileNum() == 0) return;
+
+        float u0 = (float) grhData[currentGrhIndex].getsX() / tex.getTex_width();
+        float v0 = (float) grhData[currentGrhIndex].getsY() / tex.getTex_height();
+        float u1 = (float) (grhData[currentGrhIndex].getsX() + grhData[currentGrhIndex].getPixelWidth()) / tex.getTex_width();
+        float v1 = (float) (grhData[currentGrhIndex].getsY() + grhData[currentGrhIndex].getPixelHeight()) / tex.getTex_height();
+
+        ImGui.image(tex.getId(), grhData[currentGrhIndex].getPixelWidth(), grhData[currentGrhIndex].getPixelHeight(), u0, v0, u1, v1);
     }
 
 }

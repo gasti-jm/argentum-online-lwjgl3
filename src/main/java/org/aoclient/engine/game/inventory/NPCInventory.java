@@ -66,8 +66,11 @@ public class NPCInventory extends Inventory {
                             wposX+ iX + 31, wposY + iY + 31, selectedColor);
                 }
 
-                ImGui.image(slots[i].objTexture.getId(), 32, 32);
-
+                if (slots[i].objTexture != null) {
+                    ImGui.image(slots[i].objTexture.getId(), 32, 32);
+                } else {
+                    slots[i].objTexture = TextureManager.getTexture(grhData[slots[i].grhIndex].getFileNum());
+                }
 
                 ImGui.setCursorPos(iX + 5, iY + 20);
                 ImGui.text(String.valueOf(slots[i].amount));

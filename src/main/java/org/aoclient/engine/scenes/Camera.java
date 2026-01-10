@@ -98,6 +98,9 @@ public final class Camera {
         }
 
         if (screenmaxY < YMaxMapSize) screenmaxY++;
+        else {
+            screenmaxY = 100;
+        }
 
         if (screenminX > XMinMapSize) screenminX--;
         else {
@@ -106,6 +109,9 @@ public final class Camera {
         }
 
         if (screenmaxX < XMaxMapSize) screenmaxX++;
+        else {
+            screenmaxX = 100;
+        }
     }
 
     public int getScreenminY() {
