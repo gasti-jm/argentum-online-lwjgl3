@@ -70,13 +70,6 @@ public final class UserInventory extends Inventory implements Cloneable {
     public void drawInventory() {
         if (slots.length == 0) return;
 
-        // seteo las texturas precargadas para que las pueda dibujar.
-        if (slots[0].objTexture == null) {
-            for (int i = 0; i < slots.length; i++) {
-                slots[i].objTexture = TextureManager.getTexture(grhData[slots[i].grhIndex].getFileNum());
-            }
-        }
-
         // posiciones por slot
         int iX = posX;
         int iY = posY;
@@ -91,8 +84,9 @@ public final class UserInventory extends Inventory implements Cloneable {
 
                 if (slots[i].objTexture != null) {
                     ImGui.image(slots[i].objTexture.getId(), 32, 32);
+                } else {
+                    slots[i].objTexture = TextureManager.getTexture(grhData[slots[i].grhIndex].getFileNum());
                 }
-
 
                 if(!invComerce) {
                     if (ImGui.isItemHovered()) ImGui.setTooltip(slots[i].name);

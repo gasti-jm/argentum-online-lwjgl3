@@ -78,8 +78,7 @@ public final class FCreateCharacter extends Form {
 
     private final ImInt currentItemGenero = new ImInt(0);
     private final String[] strGenero = new String[2];
-    private RGBColor color;
-    private RECT characterPos;
+
     // para el dibujado
     private int dir;
     private int userHead;
@@ -114,15 +113,6 @@ public final class FCreateCharacter extends Form {
             this.userBody = HUMANO_H_CUERPO_DESNUDO;
             this.dir = Direction.DOWN.getId();
             this.bodyGraphic = new BodyData(bodyData[userBody]);
-            this.color = new RGBColor(1, 1, 1);
-            this.characterPos = new RECT();
-
-            // pos
-            this.characterPos.left = 472;
-            this.characterPos.top = 425;
-            // size
-            this.characterPos.right = 41;
-            this.characterPos.bottom = 65;
 
             this.loadComboBoxes();
             this.giveBodyAndHead();
@@ -401,9 +391,7 @@ public final class FCreateCharacter extends Form {
                         grhData[headGraphic].getPixelWidth(), grhData[headGraphic].getPixelHeight());
 
                 ImGui.setCursorPos(485, 435);
-                imageRegion(bodyTex,
-                        grhData[firstFrameBody].getsX(), grhData[firstFrameBody].getsY(),
-                        grhData[firstFrameBody].getPixelWidth(), grhData[firstFrameBody].getPixelHeight());
+                imageRegion(bodyTex, bodyGraphic.getWalk(dir), true);
 
                 // gnomo o enano
                 if (currentItemRaza.get() == 3 || currentItemRaza.get() == 4) {
@@ -658,24 +646,5 @@ public final class FCreateCharacter extends Form {
         return text.matches(".*" + regex + ".*");
     }
 
-    static class RECT {
-        private int top, left, right, bottom;
-    }
-
-    public static void imageRegion(
-            Texture tex,
-            int x, int y, int w, int h
-    ) {
-        float u0 = (float) x / tex.getTex_width();
-        float v0 = (float) y / tex.getTex_height();
-        float u1 = (float) (x + w) / tex.getTex_width();
-        float v1 = (float) (y + h) / tex.getTex_height();
-
-        // si tenés Y invertido:
-        // float v0 = 1f - ((float)(y + h) / tex.height);
-        // float v1 = 1f - ((float)y / tex.height);
-
-        ImGui.image(tex.getId(), w, h, u0, v0, u1, v1);
-    }
 
 }
