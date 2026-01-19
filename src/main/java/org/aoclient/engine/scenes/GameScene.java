@@ -5,7 +5,7 @@ import org.aoclient.engine.game.*;
 import org.aoclient.engine.game.console.Console;
 import org.aoclient.engine.game.console.FontStyle;
 import org.aoclient.engine.game.models.Direction;
-import org.aoclient.engine.game.models.Key;
+import org.aoclient.engine.game.bindkeys.Key;
 import org.aoclient.engine.game.models.Skill;
 import org.aoclient.engine.gui.ImGUISystem;
 import org.aoclient.engine.gui.forms.FCantidad;
@@ -13,12 +13,14 @@ import org.aoclient.engine.gui.forms.FMain;
 import org.aoclient.engine.listeners.KeyHandler;
 import org.aoclient.engine.listeners.MouseListener;
 import org.aoclient.engine.renderer.RGBColor;
+import org.aoclient.engine.utils.inits.GrhInfo;
+import org.aoclient.engine.utils.inits.MapData;
 import org.aoclient.network.protocol.Protocol;
 import org.aoclient.network.protocol.command.execution.CommandExecutor;
 
 import static org.aoclient.engine.game.IntervalTimer.INT_SENTRPU;
 import static org.aoclient.engine.game.models.Character.drawCharacter;
-import static org.aoclient.engine.game.models.Key.TALK;
+import static org.aoclient.engine.game.bindkeys.Key.TALK;
 import static org.aoclient.engine.renderer.Drawn.drawTexture;
 import static org.aoclient.engine.scenes.Camera.*;
 import static org.aoclient.engine.utils.GameData.*;
@@ -59,14 +61,14 @@ import static org.lwjgl.glfw.GLFW.*;
 
 public final class GameScene extends Scene {
 
-    private final IntervalTimer intervalToUpdatePos = new IntervalTimer(INT_SENTRPU);
+    public static final IntervalTimer intervalToUpdatePos = new IntervalTimer(INT_SENTRPU);
     private final User user = User.INSTANCE;
     private Weather weather;// color de ambiente.
     private float offSetCounterX = 0;
     private float offSetCounterY = 0;
     private float alphaCeiling = 1.0f;
-    private boolean autoMove = false;
-    private FMain frmMain;
+    public static boolean autoMove = false;
+    public static FMain frmMain;
 
     @Override
     public void init() {
@@ -188,21 +190,6 @@ public final class GameScene extends Scene {
      */
     @Override
     public void keyEvents() {
-        this.checkBindedKeys();
-    }
-
-    /**
-     * Cierre de la escena.
-     */
-    @Override
-    public void close() {
-        visible = false;
-    }
-
-    /**
-     * Chequea y ejecuta la tecla que fue bindeada.
-     */
-    private void checkBindedKeys() {
         if (user.isUserComerciando() || !ImGUISystem.INSTANCE.isMainLast()) return;
 
         // Usando el metodo estatico de Key para obtener la tecla desde el codigo
@@ -213,58 +200,28 @@ public final class GameScene extends Scene {
         if (key == null) return; // ni me gasto si la tecla presionada no existe en nuestro bind.
 
         if (KeyHandler.isActionKeyJustPressed(key)) {
-
             // Para que al hablar no ejecute teclas bindeadas y solo permita cerrar nuevamente el sendText
             if (user.isTalking() && key != TALK) return;
 
+            key.playAction();
+
             switch (key) {
-                case USE_OBJECT:
-                    user.getUserInventory().useItem();
-                    break;
-                case GET_OBJECT:
-                    pickUp();
-                    break;
-                case ATTACK:
-                    attack();
-                    break;
-                case EQUIP_OBJECT:
-                    user.getUserInventory().equipItem();
-                    break;
-                case AUTO_MOVE:
-                    autoMove = !autoMove;
-                    break;
-                case DROP_OBJECT:
-                    ImGUISystem.INSTANCE.show(new FCantidad());
-                    break;
-                case TALK:
-                    // TODO: Es para evitar bugs y no se te trabe todo el juego cuando tenes algun frm abierto
-                    //  y sin querer pulsar para hablar.
-                    if (ImGUISystem.INSTANCE.isMainLast()) {
-                        if (!frmMain.getSendText().isBlank() && user.isTalking()) {
-                            if (!frmMain.getSendText().startsWith("/")) {
-                                Console.INSTANCE.addMsgToConsole("[" + User.INSTANCE.getUserName().toLowerCase() + "] " + frmMain.getSendText(), FontStyle.REGULAR, new RGBColor(1f, 1f, 1f));
-                                Protocol.talk(frmMain.getSendText());
-                            } else CommandExecutor.INSTANCE.execute(frmMain.getSendText());
-                        }
-                        user.setTalking(!user.isTalking());
-                        frmMain.clearSendTxt();
-                    }
-                    break;
-                case HIDE:
-                    work(Skill.CONCEALMENT.getId());
-                    break;
-                case STEAL:
-                    work(Skill.THEFT.getId());
-                    break;
+
                 case REQUEST_REFRESH:
-                    if (intervalToUpdatePos.check()) requestPositionUpdate();
+                    if (intervalToUpdatePos.check())
+                        requestPositionUpdate();
                     break;
-                case EXIT_GAME:
-                    quit();
-                    break;
+
             }
         }
+    }
 
+    /**
+     * Cierre de la escena.
+     */
+    @Override
+    public void close() {
+        visible = false;
     }
 
     private void checkWalkKeys() {
@@ -319,18 +276,20 @@ public final class GameScene extends Scene {
         Rain.INSTANCE.render(weather.getWeatherColor());
     }
 
-
     private void renderFirstLayer(final int pixelOffsetX, final int pixelOffsetY) {
         for (int y = camera.getScreenminY(); y <= camera.getScreenmaxY(); y++) {
             int x;
             for (x = camera.getScreenminX(); x <= camera.getScreenmaxX(); x++) {
-                if (mapData[x][y].getLayer(1).getGrhIndex() != 0) {
-                    drawTexture(mapData[x][y].getLayer(1),
-                            POS_SCREEN_X + (camera.getScreenX() - 1) * TILE_PIXEL_SIZE + pixelOffsetX,
-                            POS_SCREEN_Y + (camera.getScreenY() - 1) * TILE_PIXEL_SIZE + pixelOffsetY,
-                            true, true, false, 1.0f, weather.getWeatherColor());
-                }
 
+                final MapData tile = mapData[x][y];
+                final GrhInfo grh = tile.getLayer(1);
+
+                final int drawX = POS_SCREEN_X + (camera.getScreenX() - 1) * TILE_PIXEL_SIZE + pixelOffsetX;
+                final int drawY = POS_SCREEN_Y + (camera.getScreenY() - 1) * TILE_PIXEL_SIZE + pixelOffsetY;
+
+                if (grh.getGrhIndex() != 0) {
+                    drawTexture(grh, drawX, drawY, true, true, false, 1.0f, weather.getWeatherColor());
+                }
 
                 camera.incrementScreenX();
             }
@@ -344,21 +303,24 @@ public final class GameScene extends Scene {
         for (int y = camera.getMinY(); y <= camera.getMaxY(); y++) {
             camera.setScreenX(camera.getMinXOffset() - TILE_BUFFER_SIZE);
             for (int x = camera.getMinX(); x <= camera.getMaxX(); x++) {
-                if (mapData[x][y].getLayer(2).getGrhIndex() != 0) {
-                    drawTexture(mapData[x][y].getLayer(2),
-                            POS_SCREEN_X + camera.getScreenX() * TILE_PIXEL_SIZE + pixelOffsetX,
-                            POS_SCREEN_Y + camera.getScreenY() * TILE_PIXEL_SIZE + pixelOffsetY,
-                            true, true, false, 1.0f, weather.getWeatherColor());
+
+                final MapData tile = mapData[x][y];
+                GrhInfo grh = tile.getLayer(2);
+
+                final int drawX = POS_SCREEN_X + camera.getScreenX() * TILE_PIXEL_SIZE + pixelOffsetX;
+                final int drawY = POS_SCREEN_Y + camera.getScreenY() * TILE_PIXEL_SIZE + pixelOffsetY;
+
+                if (grh.getGrhIndex() != 0) {
+                    drawTexture(grh, drawX, drawY, true, true, false, 1.0f, weather.getWeatherColor());
                 }
-                if (mapData[x][y].getObjGrh().getGrhIndex() != 0) {
-                    if (grhData[mapData[x][y].getObjGrh().getGrhIndex()].getPixelWidth() == TILE_PIXEL_SIZE &&
-                            grhData[mapData[x][y].getObjGrh().getGrhIndex()].getPixelHeight() == TILE_PIXEL_SIZE) {
-                        drawTexture(mapData[x][y].getObjGrh(),
-                                POS_SCREEN_X + camera.getScreenX() * TILE_PIXEL_SIZE + pixelOffsetX,
-                                POS_SCREEN_Y + camera.getScreenY() * TILE_PIXEL_SIZE + pixelOffsetY,
-                                true, true, false, 1.0f, weather.getWeatherColor());
+
+                grh = tile.getObjGrh();
+                if (grh.getGrhIndex() != 0) {
+                    if (grhData[grh.getGrhIndex()].getPixelWidth() == TILE_PIXEL_SIZE && grhData[grh.getGrhIndex()].getPixelHeight() == TILE_PIXEL_SIZE) {
+                        drawTexture(grh, drawX, drawY, true, true, false, 1.0f, weather.getWeatherColor());
                     }
                 }
+
                 camera.incrementScreenX();
             }
             camera.incrementScreenY();
@@ -372,29 +334,26 @@ public final class GameScene extends Scene {
             camera.setScreenX(camera.getMinXOffset() - TILE_BUFFER_SIZE);
             for (int x = camera.getMinX(); x <= camera.getMaxX(); x++) {
 
-                if (mapData[x][y].getObjGrh().getGrhIndex() != 0) {
-                    if (grhData[mapData[x][y].getObjGrh().getGrhIndex()].getPixelWidth() != TILE_PIXEL_SIZE &&
-                            grhData[mapData[x][y].getObjGrh().getGrhIndex()].getPixelHeight() != TILE_PIXEL_SIZE) {
+                final MapData tile = mapData[x][y];
+                GrhInfo grh;
 
-                        drawTexture(mapData[x][y].getObjGrh(),
-                                POS_SCREEN_X + camera.getScreenX() * TILE_PIXEL_SIZE + pixelOffsetX,
-                                POS_SCREEN_Y + camera.getScreenY() * TILE_PIXEL_SIZE + pixelOffsetY,
-                                true, true, false, 1.0f, weather.getWeatherColor());
+                final int drawX = POS_SCREEN_X + camera.getScreenX() * TILE_PIXEL_SIZE + pixelOffsetX;
+                final int drawY = POS_SCREEN_Y + camera.getScreenY() * TILE_PIXEL_SIZE + pixelOffsetY;
+
+                grh = tile.getObjGrh();
+                if (grh.getGrhIndex() != 0) {
+                    if (grhData[grh.getGrhIndex()].getPixelWidth() != TILE_PIXEL_SIZE && grhData[grh.getGrhIndex()].getPixelHeight() != TILE_PIXEL_SIZE) {
+                        drawTexture(grh, drawX, drawY, true, true, false, 1.0f, weather.getWeatherColor());
                     }
                 }
 
-                if (mapData[x][y].getCharIndex() != 0) {
-                    drawCharacter(mapData[x][y].getCharIndex(),
-                            POS_SCREEN_X + camera.getScreenX() * TILE_PIXEL_SIZE + pixelOffsetX,
-                            POS_SCREEN_Y + camera.getScreenY() * TILE_PIXEL_SIZE + pixelOffsetY, weather.getWeatherColor());
+                if (tile.getCharIndex() != 0) {
+                    drawCharacter(tile.getCharIndex(), drawX, drawY, weather.getWeatherColor());
                 }
 
-
-                if (mapData[x][y].getLayer(3).getGrhIndex() != 0) {
-                    drawTexture(mapData[x][y].getLayer(3),
-                            POS_SCREEN_X + camera.getScreenX() * TILE_PIXEL_SIZE + pixelOffsetX,
-                            POS_SCREEN_Y + camera.getScreenY() * TILE_PIXEL_SIZE + pixelOffsetY,
-                            true, true, false, 1.0f, weather.getWeatherColor());
+                grh = tile.getLayer(3);
+                if (grh.getGrhIndex() != 0) {
+                    drawTexture(grh, drawX, drawY, true, true, false, 1.0f, weather.getWeatherColor());
                 }
 
                 camera.incrementScreenX();
@@ -405,17 +364,21 @@ public final class GameScene extends Scene {
 
     private void renderFourthLayer(final int pixelOffsetX, final int pixelOffsetY) {
         this.checkEffectCeiling();
+
         if (alphaCeiling > 0.0f) {
             camera.setScreenY(camera.getMinYOffset() - TILE_BUFFER_SIZE);
             for (int y = camera.getMinY(); y <= camera.getMaxY(); y++) {
                 camera.setScreenX(camera.getMinXOffset() - TILE_BUFFER_SIZE);
                 for (int x = camera.getMinX(); x <= camera.getMaxX(); x++) {
 
-                    if (mapData[x][y].getLayer(4).getGrhIndex() > 0) {
-                        drawTexture(mapData[x][y].getLayer(4),
-                                POS_SCREEN_X + camera.getScreenX() * TILE_PIXEL_SIZE + pixelOffsetX,
-                                POS_SCREEN_Y + camera.getScreenY() * TILE_PIXEL_SIZE + pixelOffsetY,
-                                true, true, false, alphaCeiling, weather.getWeatherColor());
+                    final MapData tile = mapData[x][y];
+                    final GrhInfo grh = tile.getLayer(4);
+
+                    final int drawX = POS_SCREEN_X + camera.getScreenX() * TILE_PIXEL_SIZE + pixelOffsetX;
+                    final int drawY = POS_SCREEN_Y + camera.getScreenY() * TILE_PIXEL_SIZE + pixelOffsetY;
+
+                    if (grh.getGrhIndex() > 0) {
+                        drawTexture(grh, drawX, drawY, true, true, false, alphaCeiling, weather.getWeatherColor());
                     }
 
                     camera.incrementScreenX();

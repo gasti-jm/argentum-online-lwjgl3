@@ -2,7 +2,7 @@ package org.aoclient.engine.listeners;
 
 import imgui.ImGui;
 import imgui.ImGuiIO;
-import org.aoclient.engine.game.models.Key;
+import org.aoclient.engine.game.bindkeys.Key;
 
 import java.util.Arrays;
 import java.util.Set;
