@@ -5,7 +5,7 @@ import imgui.flag.ImGuiCol;
 import imgui.flag.ImGuiCond;
 import imgui.flag.ImGuiStyleVar;
 import imgui.flag.ImGuiWindowFlags;
-import org.aoclient.engine.game.models.Key;
+import org.aoclient.engine.game.bindkeys.Key;
 import org.aoclient.engine.gui.widgets.ImageButton3State;
 import org.aoclient.engine.listeners.KeyHandler;
 

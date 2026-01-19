@@ -1,6 +1,7 @@
 package org.aoclient.network.protocol.handlers;
 
 import org.aoclient.engine.game.User;
+import org.aoclient.engine.game.models.Character;
 import org.aoclient.engine.game.models.Direction;
 import org.aoclient.network.PacketBuffer;
 import org.aoclient.network.protocol.types.NickColorType;
@@ -30,18 +31,19 @@ public class CharacterCreateHandler implements PacketHandler {
         short shield = tempBuffer.readInteger();
         short helmet = tempBuffer.readInteger();
 
+        final Character character = charList[charIndex];
         User.INSTANCE.setCharacterFx(charIndex, tempBuffer.readInteger(), tempBuffer.readInteger());
 
         String name = tempBuffer.readCp1252String();
-        charList[charIndex].setName(name);
+        character.setName(name);
 
         int nickColor = tempBuffer.readByte();
         /* Se nombra como plural ya que el servidor maneja varios privilegios (user, consejero, semidios, etc.), pero deberia
          * cambiar a solo dos privilegios: user o admin (gm). */
         int privileges = tempBuffer.readByte();
 
-        charList[charIndex].setCriminal((nickColor & NickColorType.CRIMINAL.getId()) != 0);
-        charList[charIndex].setAttackable((nickColor & NickColorType.ATACABLE.getId()) != 0);
+        character.setCriminal((nickColor & NickColorType.CRIMINAL.getId()) != 0);
+        character.setAttackable((nickColor & NickColorType.ATACABLE.getId()) != 0);
 
         // Log
         // System.err.println("User privileges: " + privileges);
@@ -59,9 +61,9 @@ public class CharacterCreateHandler implements PacketHandler {
             if ((privileges & PlayerType.ROLE_MASTER.getId()) != 0) privileges = PlayerType.ROLE_MASTER.getId();
 
             int logPrivs = (int) (Math.log(privileges) / Math.log(2));
-            charList[charIndex].setPriv(logPrivs);
+            character.setPriv(logPrivs);
 
-        } else charList[charIndex].setPriv(0);
+        } else character.setPriv(0);
 
         makeChar(charIndex, body, head, direction, x, y, weapon, shield, helmet);
         refreshAllChars();

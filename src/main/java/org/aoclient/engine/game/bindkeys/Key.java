@@ -1,4 +1,6 @@
-package org.aoclient.engine.game.models;
+package org.aoclient.engine.game.bindkeys;
+
+import org.aoclient.engine.game.bindkeys.actions.*;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -21,37 +23,37 @@ import static org.lwjgl.glfw.GLFW.*;
 public enum Key {
 
     // Movimiento
-    UP(GLFW_KEY_W),
-    DOWN(GLFW_KEY_S),
-    LEFT(GLFW_KEY_A),
-    RIGHT(GLFW_KEY_D),
+    UP(GLFW_KEY_W, new UpMovement()),
+    DOWN(GLFW_KEY_S, new DownMovement()),
+    LEFT(GLFW_KEY_A, new LeftMovement()),
+    RIGHT(GLFW_KEY_D, new RightMovement()),
     // Audio
-    TOGGLE_MUSIC(GLFW_KEY_M),
-    TOGGLE_SOUND(GLFW_KEY_F1),
-    TOGGLE_FXS(GLFW_KEY_F),
+    TOGGLE_MUSIC(GLFW_KEY_M, new ToggleMusic()),
+    TOGGLE_SOUND(GLFW_KEY_F1, new ToggleSound()),
+    TOGGLE_FXS(GLFW_KEY_F, new ToggleFXs()),
     // Acciones del juego
-    REQUEST_REFRESH(GLFW_KEY_L),
-    TOGGLE_NAMES(GLFW_KEY_N),
-    GET_OBJECT(GLFW_KEY_Q),
-    EQUIP_OBJECT(GLFW_KEY_E),
-    TAME_ANIMAL(GLFW_KEY_Y),
-    STEAL(GLFW_KEY_R),
-    TOGGLE_SAFE_MODE(GLFW_KEY_KP_MULTIPLY),
-    TOGGLE_RESUSCITATION_SAFE(GLFW_KEY_END),
-    HIDE(GLFW_KEY_O),
-    DROP_OBJECT(GLFW_KEY_T),
-    USE_OBJECT(GLFW_KEY_SPACE),
-    ATTACK(GLFW_KEY_LEFT_CONTROL),
-    TALK(GLFW_KEY_ENTER),
-    TALK_WITH_GUILD(GLFW_KEY_DELETE),
+    REQUEST_REFRESH(GLFW_KEY_L, new RequestRefresh()),
+    TOGGLE_NAMES(GLFW_KEY_N, new ToggleNames()),
+    GET_OBJECT(GLFW_KEY_Q, new GetObject()),
+    EQUIP_OBJECT(GLFW_KEY_E, new EquipObject()),
+    TAME_ANIMAL(GLFW_KEY_Y, new TameAnimal()),
+    STEAL(GLFW_KEY_R, new Steal()),
+    TOGGLE_SAFE_MODE(GLFW_KEY_KP_MULTIPLY, new ToggleSafeMode()),
+    TOGGLE_RESUSCITATION_SAFE(GLFW_KEY_END, new ToggleResuscitationSafe()),
+    HIDE(GLFW_KEY_O, new Hide()),
+    DROP_OBJECT(GLFW_KEY_T, new DropObject()),
+    USE_OBJECT(GLFW_KEY_SPACE, new UseObject()),
+    ATTACK(GLFW_KEY_LEFT_CONTROL, new Attack()),
+    TALK(GLFW_KEY_ENTER, new Talk()),
+    TALK_WITH_GUILD(GLFW_KEY_DELETE, new TalkWithGuild()),
     // Sistemas
-    TAKE_SCREENSHOT(GLFW_KEY_F2),
-    SHOW_OPTIONS(GLFW_KEY_F5),
-    MEDITATE(GLFW_KEY_F6),
-    CAST_SPELL_MACRO(GLFW_KEY_F7),
-    WORK_MACRO(GLFW_KEY_F8),
-    AUTO_MOVE(GLFW_KEY_TAB),
-    EXIT_GAME(GLFW_KEY_ESCAPE);
+    TAKE_SCREENSHOT(GLFW_KEY_F2, new TakeScreenshot()),
+    SHOW_OPTIONS(GLFW_KEY_F5, new ShowOptions()),
+    MEDITATE(GLFW_KEY_F6, new Meditate()),
+    CAST_SPELL_MACRO(GLFW_KEY_F7, new CastSpellMacro()),
+    WORK_MACRO(GLFW_KEY_F8, new WorkMacro()),
+    AUTO_MOVE(GLFW_KEY_TAB, new AutoMove()),
+    EXIT_GAME(GLFW_KEY_ESCAPE, new ExitGameKey());
 
     private static final String KEYS_CONFIG_FILE = "resources/keys.properties";
     private static final Logger LOGGER = Logger.getLogger(Key.class.getName());
@@ -71,10 +73,12 @@ public enum Key {
     /** Valor de keyCode predeterminado para esta asignacion de tecla. */
     private final int defaultKeyCode;
     private boolean preparedToBind;
+    private KeyAction a;
 
-    Key(int defaultKeyCode) {
+    Key(int defaultKeyCode, KeyAction action) {
         this.defaultKeyCode = defaultKeyCode;
         this.preparedToBind = false;
+        this.a = action;
     }
 
     public static Key getKey(int keyCode) {
@@ -84,6 +88,7 @@ public enum Key {
     public static boolean containsKey(int keyCode) {
         return codeToKeyMap.containsKey(keyCode);
     }
+
 
     /**
      * Carga la configuracion de teclas desde un archivo de propiedades.
@@ -230,6 +235,13 @@ public enum Key {
     public void resetToDefault() {
         keyCodeMap.put(this, defaultKeyCode);
         updateMaps();
+    }
+
+    /**
+     * Accion para la key bindeada.
+     */
+    public void playAction() {
+        a.action();
     }
 
     public int getDefaultKeyCode() {
