@@ -1208,7 +1208,7 @@ public class Protocol {
      */
     public static void talk(String message) {
         outputBuffer.writeByte(ClientPacket.TALK.getId());
-        outputBuffer.writeCp1252String(message);
+        outputBuffer.writeASCIIString(message);
     }
 
     public static void talkAsNpc(String message) {
