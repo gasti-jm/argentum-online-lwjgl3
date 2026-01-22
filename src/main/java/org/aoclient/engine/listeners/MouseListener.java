@@ -26,7 +26,7 @@ public enum MouseListener {
 
     INSTANCE;
 
-    private static final double DOUBLE_CLICK_TIME = 0.2;
+    private static final double DOUBLE_CLICK_TIME = 0.5;
     private static final ImGuiIO IM_GUI_IO = ImGui.getIO();
     private static final boolean[] MOUSE_BUTTON_PRESSED = new boolean[3];
     private static final boolean[] MOUSE_BUTTON_DOBLE_CLICK_PRESSED = new boolean[3];
@@ -36,7 +36,7 @@ public enum MouseListener {
     private static double xPos, yPos;
     private static double lastY, lastX;
     private static boolean isDragging;
-    private static double lastTimeClick;
+    private static final double[] lastTimeClick = new double[3];
 
     /**
      *  Funcion callBack para detectar y actualizar la posicion del mouse.
@@ -73,9 +73,9 @@ public enum MouseListener {
                 // Doble click!
                 double currentTime = glfwGetTime();
 
-                MOUSE_BUTTON_DOBLE_CLICK_PRESSED[button] = currentTime - lastTimeClick <= DOUBLE_CLICK_TIME;
+                MOUSE_BUTTON_DOBLE_CLICK_PRESSED[button] = currentTime - lastTimeClick[button] <= DOUBLE_CLICK_TIME;
 
-                lastTimeClick = currentTime;
+                lastTimeClick[button] = currentTime;
             }
         } else if (action == GLFW_RELEASE) {
             if (button < MOUSE_BUTTON_PRESSED.length) {
@@ -163,7 +163,7 @@ public enum MouseListener {
         if (button < MOUSE_BUTTON_PRESSED.length) {
             boolean retVal = MOUSE_BUTTON_DOBLE_CLICK_PRESSED[button];
             if (retVal) {
-                lastTimeClick = 0;
+                lastTimeClick[button] = 0;
                 MOUSE_BUTTON_DOBLE_CLICK_PRESSED[button] = false;
             }
             return retVal;

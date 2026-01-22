@@ -177,7 +177,11 @@ public final class GameScene extends Scene {
 
         // estamos haciendo doble click?
         if (MouseListener.mouseButtonDoubleClick(GLFW_MOUSE_BUTTON_LEFT)) {
-            user.getUserInventory().dobleClickInventory();
+            if (user.getUserInventory().inInventoryArea()) {
+                user.getUserInventory().dobleClickInventory();
+            } else {
+                doubleClick(getTileMouseX((int) MouseListener.getX() - POS_SCREEN_X), getTileMouseY((int) MouseListener.getY() - POS_SCREEN_Y));
+            }
         } else if (MouseListener.mouseButtonDoubleClick(GLFW_MOUSE_BUTTON_RIGHT)) {
             doubleClick(getTileMouseX((int) MouseListener.getX() - POS_SCREEN_X), getTileMouseY((int) MouseListener.getY() - POS_SCREEN_Y));
         }

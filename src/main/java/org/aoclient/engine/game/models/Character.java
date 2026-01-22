@@ -167,9 +167,15 @@ public final class Character {
         // apuntamos al ultimo char
         if (charIndex > lastChar) lastChar = charIndex;
 
-        if (weapon == 0) weapon = 2;
-        if (shield == 0) shield = 2;
-        if (helmet == 0) helmet = 2;
+        if (charList[charIndex] == null) {
+            charList[charIndex] = new Character();
+        }
+
+        if (weapon < 0 || weapon >= weaponData.length) weapon = 2;
+        if (shield < 0 || shield >= shieldData.length) shield = 2;
+        if (helmet < 0 || helmet >= helmetsData.length) helmet = 2;
+        if (head < 0 || head >= headData.length) head = 0;
+        if (body < 0 || body >= bodyData.length) body = 0;
 
         char f = '<', u = '>';
 

@@ -31,6 +31,10 @@ public class CharacterCreateHandler implements PacketHandler {
         short shield = tempBuffer.readInteger();
         short helmet = tempBuffer.readInteger();
 
+        if (charList[charIndex] == null) {
+            charList[charIndex] = new Character();
+        }
+
         final Character character = charList[charIndex];
         User.INSTANCE.setCharacterFx(charIndex, tempBuffer.readInteger(), tempBuffer.readInteger());
 
