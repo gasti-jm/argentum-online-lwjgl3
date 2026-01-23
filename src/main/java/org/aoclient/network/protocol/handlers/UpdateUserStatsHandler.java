@@ -11,7 +11,7 @@ public class UpdateUserStatsHandler implements PacketHandler {
 
     @Override
     public void handle(PacketBuffer buffer) {
-        if (buffer.checkBytes(26)) return;
+        if (buffer.checkBytes(30)) return;
         buffer.readByte();
 
         user.setUserMaxHP(buffer.readInteger());
@@ -24,18 +24,10 @@ public class UpdateUserStatsHandler implements PacketHandler {
         user.setUserLvl(buffer.readByte());
         user.setUserPasarNivel(buffer.readLong());
         user.setUserExp(buffer.readLong());
+        int points = buffer.readLong();
+        user.setFreeSkillPoints(points);
 
         charList[user.getUserCharIndex()].setDead(user.getUserMinHP() <= 0);
-
-        //
-        //    If UserMinHP = 0 Then
-        //        UserEstado = 1
-        //        If //FrmMain.TrainingMacro Then Call //FrmMain.DesactivarMacroHechizos
-        //        If //FrmMain.macrotrabajo Then Call //FrmMain.DesactivarMacroTrabajo
-        //    Else
-        //        UserEstado = 0
-        //    End If
-        //
     }
 
 }
