@@ -9,7 +9,7 @@ public class SendSkillsHandler implements PacketHandler {
 
     @Override
     public void handle(PacketBuffer buffer) {
-        if (buffer.checkBytes(2 + 20 * 2)) return;
+        if (buffer.checkBytes(46)) return;
         buffer.readByte();
 
         // variables globales
@@ -27,12 +27,13 @@ public class SendSkillsHandler implements PacketHandler {
             porcentajeSkills[skill.getId() - 1] = buffer.readByte();
         }
 
+        int points = buffer.readLong();
+        User.INSTANCE.setFreeSkillPoints(points);
+
         /* TODO: este flag es para mostrar el boton de asignar skills '+' del main
             como 'iluminado' para que sepas que tenes skills libres para agregar
         */
         // LlegaronSkills = true;
-
-        Logger.debug("handleSendSkills Cargado! - FALTA TERMINAR!");
     }
 
 }
