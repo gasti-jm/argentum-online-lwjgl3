@@ -47,9 +47,13 @@ public class PacketProcessor {
 
         // Si el handler existe
         if (handler != null) {
+            int oldLength = inputBuffer.getLength();
 
             // Maneja el inputBuffer en el handler correspondiente
             handler.handle(inputBuffer);
+
+            // Si no se consumio nada, es porque el paquete esta incompleto
+            if (oldLength == inputBuffer.getLength()) return;
 
             // Si quedan bytes, continua procesando
             if (inputBuffer.getLength() > 0) process(inputBuffer);

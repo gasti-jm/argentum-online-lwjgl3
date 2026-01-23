@@ -498,7 +498,6 @@ public class PacketBuffer {
      */
     public boolean checkBytes(int bytes) {
         if (bufferLength < bytes) {
-            disconnect();
             return true;
         }
         return false;
