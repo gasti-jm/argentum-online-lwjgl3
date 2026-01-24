@@ -1,9 +1,14 @@
 plugins {
     id 'java'
+    id 'application'
 }
 
 group = 'org.aoclient'
 version = '1.0-SNAPSHOT'
+
+application {
+    mainClass = 'org.aoclient.Main'
+}
 
 import org.gradle.internal.os.OperatingSystem
 
@@ -20,22 +25,27 @@ switch (OperatingSystem.current()) {
         def osArch = System.getProperty("os.arch")
         if (osArch.startsWith("arm") || osArch.startsWith("aarch64")) {
             project.ext.lwjglNatives += osArch.contains("64") || osArch.startsWith("armv8") ? "-arm64" : "-arm32"
-        } else if  (osArch.startsWith("ppc")) {
+        } else if (osArch.startsWith("ppc")) {
             project.ext.lwjglNatives += "-ppc64le"
-        } else if  (osArch.startsWith("riscv")) {
+        } else if (osArch.startsWith("riscv")) {
             project.ext.lwjglNatives += "-riscv64"
         }
         break
+
     case OperatingSystem.MAC_OS:
-        project.ext.lwjglNatives = System.getProperty("os.arch").startsWith("aarch64") ? "natives-macos-arm64" : "natives-macos"
+        project.ext.lwjglNatives =
+                System.getProperty("os.arch").startsWith("aarch64")
+                        ? "natives-macos-arm64"
+                        : "natives-macos"
         project.ext.imguiNatives = "imgui-java-natives-macos"
         break
+
     case OperatingSystem.WINDOWS:
         def osArch = System.getProperty("os.arch")
-        project.ext.lwjglNatives = osArch.contains("64")
-                ? "natives-windows${osArch.startsWith("aarch64") ? "-arm64" : ""}"
-                : "natives-windows-x86"
-
+        project.ext.lwjglNatives =
+                osArch.contains("64")
+                        ? "natives-windows${osArch.startsWith("aarch64") ? "-arm64" : ""}"
+                        : "natives-windows-x86"
         project.ext.imguiNatives = "imgui-java-natives-windows"
         break
 }
@@ -45,18 +55,17 @@ repositories {
 }
 
 dependencies {
-    //Logger
+    // Logger
     implementation "org.tinylog:tinylog-api:$loggerVersion"
     implementation "org.tinylog:tinylog-impl:$loggerVersion"
 
-    // ImGUI dependencies
+    // ImGui
     implementation "io.github.spair:imgui-java-app:$imguiVersion"
     implementation "io.github.spair:imgui-java-binding:$imguiVersion"
     implementation "io.github.spair:imgui-java-lwjgl3:$imguiVersion"
-
     implementation "io.github.spair:$imguiNatives:$imguiVersion"
 
-    // LWJGL3 Dependencies
+    // LWJGL
     implementation platform("org.lwjgl:lwjgl-bom:$lwjglVersion")
 
     implementation "org.lwjgl:lwjgl"
@@ -70,6 +79,7 @@ dependencies {
     implementation "org.lwjgl:lwjgl-par"
     implementation "org.lwjgl:lwjgl-stb"
     implementation "org.lwjgl:lwjgl-vulkan"
+
     runtimeOnly "org.lwjgl:lwjgl::$lwjglNatives"
     runtimeOnly "org.lwjgl:lwjgl-assimp::$lwjglNatives"
     runtimeOnly "org.lwjgl:lwjgl-bgfx::$lwjglNatives"
@@ -80,11 +90,30 @@ dependencies {
     runtimeOnly "org.lwjgl:lwjgl-opengl::$lwjglNatives"
     runtimeOnly "org.lwjgl:lwjgl-par::$lwjglNatives"
     runtimeOnly "org.lwjgl:lwjgl-stb::$lwjglNatives"
-    implementation "org.joml:joml:${jomlVersion}"
-    if (lwjglNatives == "natives-macos" || lwjglNatives == "natives-macos-arm64") runtimeOnly "org.lwjgl:lwjgl-vulkan::$lwjglNatives"
+
+    implementation "org.joml:joml:$jomlVersion"
+
+    if (lwjglNatives == "natives-macos" || lwjglNatives == "natives-macos-arm64") {
+        runtimeOnly "org.lwjgl:lwjgl-vulkan::$lwjglNatives"
+    }
 }
 
 test {
     useJUnitPlatform()
 }
 
+jar {
+    manifest {
+        attributes(
+                'Main-Class': application.mainClass
+        )
+    }
+
+    from {
+        configurations.runtimeClasspath.collect {
+            it.isDirectory() ? it : zipTree(it)
+        }
+    }
+
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
