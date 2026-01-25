@@ -41,12 +41,13 @@ public class Shader {
 
     private int compileShader(String path, int type) {
         String source;
-        String resourcePath = path.startsWith("/") ? path : "/" + path;
+        java.io.File file = new java.io.File(path);
 
-        try (java.io.InputStream is = Shader.class.getResourceAsStream(resourcePath)) {
-            if (is == null) {
-                throw new RuntimeException("Shader file not found in classpath: " + resourcePath);
-            }
+        if (!file.exists()) {
+            throw new RuntimeException("Shader file not found: " + file.getAbsolutePath());
+        }
+
+        try (java.io.InputStream is = new java.io.FileInputStream(file)) {
             source = new String(is.readAllBytes(), java.nio.charset.StandardCharsets.UTF_8);
         } catch (IOException e) {
             throw new RuntimeException("No se pudo leer shader: " + path);

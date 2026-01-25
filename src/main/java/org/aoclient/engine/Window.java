@@ -322,7 +322,7 @@ public enum Window {
     private void loadIcon() {
         try (MemoryStack stack = MemoryStack.stackPush()) {
             final IntBuffer ch = stack.mallocInt(1), w = stack.mallocInt(1), h = stack.mallocInt(1);
-            ByteBuffer imgData = ioResourceToByteBuffer("/resources/icon.png");
+            ByteBuffer imgData = ioResourceToByteBuffer("assets/icon.png");
             if (imgData == null) return;
 
             final ByteBuffer imgBuff = STBImage.stbi_load_from_memory(imgData, w, h, ch, 4);
@@ -348,7 +348,7 @@ public enum Window {
     private long loadCursor(final String fileName) {
         try (MemoryStack stack = MemoryStack.stackPush()) {
             final IntBuffer ch = stack.mallocInt(1), w = stack.mallocInt(1), h = stack.mallocInt(1);
-            ByteBuffer imgData = ioResourceToByteBuffer("/resources/" + fileName + ".png");
+            ByteBuffer imgData = ioResourceToByteBuffer("assets/" + fileName + ".png");
             if (imgData == null) return 0;
 
             final ByteBuffer imgBuff = STBImage.stbi_load_from_memory(imgData, w, h, ch, 4);
@@ -378,16 +378,14 @@ public enum Window {
     }
 
     private ByteBuffer ioResourceToByteBuffer(String resource) {
-        String path = resource.startsWith("/") ? resource : "/" + resource;
-        try (java.io.InputStream source = Window.class.getResourceAsStream(path)) {
-            if (source == null) return null;
-            byte[] bytes = source.readAllBytes();
-            ByteBuffer buffer = org.lwjgl.BufferUtils.createByteBuffer(bytes.length);
-            buffer.put(bytes);
-            buffer.flip();
-            return buffer;
-        } catch (java.io.IOException e) {
-            e.printStackTrace();
+        java.io.File file = new java.io.File(resource);
+        if (file.exists()) {
+            try (java.io.RandomAccessFile raf = new java.io.RandomAccessFile(file, "r");
+                 java.nio.channels.FileChannel channel = raf.getChannel()) {
+                return channel.map(java.nio.channels.FileChannel.MapMode.READ_ONLY, 0, channel.size());
+            } catch (java.io.IOException e) {
+                e.printStackTrace();
+            }
         }
         return null;
     }

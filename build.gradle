@@ -109,3 +109,17 @@ test {
     useJUnitPlatform()
 }
 
+processResources {
+    exclude("resources/**")
+}
+
+distributions {
+    main {
+        contents {
+            from("assets") {
+                into("assets")
+            }
+        }
+    }
+}
+

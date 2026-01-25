@@ -41,6 +41,16 @@ public class BinaryDataReader {
         buffer.order(ByteOrder.LITTLE_ENDIAN); // Especifica el orden de los bytes (BIG_ENDIAN o LITTLE_ENDIAN)
     }
 
+    public void init(ByteBuffer buffer) {
+        this.buffer = buffer;
+        this.buffer.order(ByteOrder.LITTLE_ENDIAN);
+    }
+
+    public void init(ByteBuffer buffer, ByteOrder order) {
+        this.buffer = buffer;
+        this.buffer.order(order);
+    }
+
     public void init(byte[] data, ByteOrder order) {
         buffer = ByteBuffer.wrap(data);
         buffer.order(order); // Especifica el orden de los bytes (BIG_ENDIAN o LITTLE_ENDIAN)

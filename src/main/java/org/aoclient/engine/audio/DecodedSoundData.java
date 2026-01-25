@@ -54,16 +54,14 @@ public final class DecodedSoundData {
     }
 
     private static ByteBuffer ioResourceToByteBuffer(String resource) {
-        String path = resource.startsWith("/") ? resource : "/" + resource;
-        try (InputStream source = DecodedSoundData.class.getResourceAsStream(path)) {
-            if (source == null) return null;
-            byte[] bytes = source.readAllBytes();
-            ByteBuffer buffer = BufferUtils.createByteBuffer(bytes.length);
-            buffer.put(bytes);
-            buffer.flip();
-            return buffer;
-        } catch (IOException e) {
-            e.printStackTrace();
+        java.io.File file = new java.io.File(resource);
+        if (file.exists()) {
+            try (java.io.RandomAccessFile raf = new java.io.RandomAccessFile(file, "r");
+                 java.nio.channels.FileChannel channel = raf.getChannel()) {
+                return channel.map(java.nio.channels.FileChannel.MapMode.READ_ONLY, 0, channel.size());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
         return null;
     }

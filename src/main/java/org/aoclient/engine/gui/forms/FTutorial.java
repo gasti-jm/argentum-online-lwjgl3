@@ -44,7 +44,7 @@ public final class FTutorial extends Form {
             this.botonAnteriorClickTextureId = loadTexture("BotonAnteriorClickTutorial");
             // Cargar el tutorial
             try {
-                tutorialData = TutorialLoader.loadFromFile(new java.io.File("Resources/Tutorial.dat"));
+                tutorialData = TutorialLoader.loadFromFile(new java.io.File("assets/Tutorial.dat"));
                 tutorialLoaded = true;
             } catch (Exception ex) {
                 tutorialLoaded = false;

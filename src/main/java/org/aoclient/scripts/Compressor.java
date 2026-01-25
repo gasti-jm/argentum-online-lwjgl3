@@ -1,354 +1,264 @@
 package org.aoclient.scripts;
 
-import org.aoclient.Main;
-
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.RandomAccessFile;
+import java.nio.ByteBuffer;
+import java.nio.MappedByteBuffer;
+import java.nio.channels.FileChannel;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Enumeration;
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.*;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.zip.ZipEntry;
-import java.util.zip.ZipFile;
 import java.util.zip.ZipInputStream;
-import java.util.zip.ZipOutputStream;
 
 /**
  * <p>
- * Esta clase proporciona funcionalidades para comprimir directorios completos en archivos con extension <b>.ao</b> (que son
- * archivos zip con extension personalizada) y para extraer recursos especificos de estos archivos comprimidos.
+ * Se han implementado las mejoras solicitadas para optimizar el consumo de memoria, la latencia de carga y la eficiencia del motor gráfico:
+ * <ol>
+ *   <li><b>Nuevo Formato Packed (.ao):</b> Sustitución del formato ZIP por un formato binario personalizado con cabecera e índice, permitiendo acceso aleatorio.</li>
+ *   <li><b>Mapeo de Memoria (MMap):</b> Uso de FileChannel.map() para que el SO gestione la carga, evitando el consumo masivo de RAM.</li>
+ *   <li><b>Integración de STB Image:</b> Reemplazo de ImageIO por STB Image para una decodificación más rápida y eficiente.</li>
+ *   <li><b>Recursos Externos:</b> Priorización de la carga desde la carpeta resources/ externa para facilitar parches y modding.</li>
+ *   <li><b>Optimización de Lectura Binaria:</b> Uso directo de ByteBuffer en BinaryDataReader y GameData.</li>
+ *   <li><b>Herramienta de Conversión:</b> Inclusión de utilidad para migrar de ZIP al nuevo formato optimizado.</li>
+ * </ol>
  * <p>
- * Permite comprimir carpetas enteras manteniendo su estructura de directorios, lo que resulta util para empaquetar recursos del
- * juego como graficos, sonidos, o datos de inicializacion. Tambien ofrece la capacidad de leer archivos individuales dentro de
- * estos paquetes comprimidos buscando coincidencias por nombre base.
- * <p>
- * El formato ao se utiliza como un sistema de empaquetado de recursos para el juego, permitiendo una gestion eficiente de los
- * archivos y reduciendo el espacio de almacenamiento necesario. La clase incluye un metodo main que proporciona un ejemplo de
- * compresion y extraccion de recursos.
- * <p>
- * Esta utilidad es fundamental para el sistema de carga de recursos del juego, ya que muchos componentes como sonidos, graficos y
- * datos de inicializacion se almacenan en archivos comprimidos ao.
- * <p>
- * El sistema operativo puede cachear los accesos a recursos mas eficientemente que el ClassLoader. Por esa razon y porque el
- * proyecto tiene muchas dependencias (classpath extenso), no se usa el ClassLoader, ya que la task {@code processResources} de
- * Gradle tarda mucho tiempo en procesar los recursos.
- * <p>
- * TODO Deberia configurar el nivel de compresion?
+ * Esta clase proporciona funcionalidades para gestionar los archivos empaquetados .ao utilizando mapeo de memoria
+ * y acceso aleatorio para optimizar el rendimiento del juego.
  */
-
 public class Compressor {
+    private static final int MAGIC = 0x414F504B; // 'AOPK'
 
-    /**
-     * <p>
-     * Comprime todos los archivos y subcarpetas de una carpeta en un archivo con formato ao (extension zip personalizada).
-     * <p>
-     * <b>Por ahora este metodo no admite la compresion de archivos individuales.</b>
-     * <p>
-     * Este metodo preserva la estructura jerarquica original de la carpeta dentro del archivo comprimido y utiliza codificacion
-     * UTF-8 para garantizar la compatibilidad de caracteres especiales en los nombres de archivos y carpetas.
-     * <p>
-     * El proceso interno funciona de la siguiente manera:
-     * <ol>
-     * <li>Convierte {@code resourceName} en un objeto {@link Path} para la manipulacion eficiente de rutas
-     * <li>Valida que el nombre del recurso (que es una carpeta en este caso) exista y sea un directorio
-     * <li>Crea un {@link FileOutputStream} hacia el archivo ao especificado
-     * <li>Envuelve este stream en un {@link ZipOutputStream} para manejar la compresion ao
-     * <li>Crea un flujo de ruta ({@code pathStream}) utilizando {@link Files#walk} envuelto en <i>try-with-resources</i>
-     * <li>Recorre recursivamente todos los archivos regulares encontrados en la carpeta y subcarpetas
-     * <li>Para cada archivo encontrado, delega la compresion al metodo {@link #compressFile} que utiliza un buffer optimizado
-     * </ol>
-     * <p>
-     * Si ocurre un error durante la compresion, se retorna un valor negativo (-1) con informacion sobre la causa del problema,
-     * evitando que se cierre el compresor.
-     * <p>
-     * Es importante aclarar que siempre sobrescribe el archivo ao si existe.
-     * <p>
-     * La codificacion UTF-8 asegura que los archivos o carpetas con nombres que contienen caracteres especiales (acentos, ñ,
-     * caracteres no latinos, etc.) se manejen correctamente y puedan ser extraidos en cualquier sistema operativo.
-     * <p>
-     * Ejemplo de uso:
-     * <pre>{@code
-     * String resourceName = "resources/sounds";
-     * String aoName = "resources/sounds.ao";
-     * int filesCompressed = Compressor.compressResource(resourceName, aoName);
-     * }</pre>
-     * <p>
-     * TODO Implementar la compresion de archivos individuales
-     *
-     * @param resourceName nombre del recurso a comprimir (solo carpetas)
-     * @param aoName       nombre del archivo ao resultante
-     * @return el numero de archivos comprimidos exitosamente, o -1 si ocurrio un error
-     */
+    private static class ResourceEntry {
+        final long offset;
+        final long size;
+
+        ResourceEntry(long offset, long size) {
+            this.offset = offset;
+            this.size = size;
+        }
+    }
+
+    private static final Map<String, Map<String, ResourceEntry>> fileIndexes = new HashMap<>();
+    private static final Map<String, MappedByteBuffer> mappedFiles = new HashMap<>();
+
     public static int compressResource(String resourceName, String aoName) {
-
         if (resourceName == null || resourceName.isEmpty() || aoName == null || aoName.isEmpty()) {
             System.err.println("resourceName or aoName cannot be null or empty");
             return -1;
         }
 
         Path path = Paths.get(resourceName);
-
-        if (!Files.exists(path)) {
-            System.err.println("'" + resourceName + "' does not exist");
+        if (!Files.exists(path) || !Files.isDirectory(path)) {
+            System.err.println("'" + resourceName + "' is not a valid directory");
             return -1;
         }
 
-        if (!Files.isDirectory(path)) {
-            System.err.println("'" + resourceName + "' is not a directory");
-            return -1;
-        }
-
-        final AtomicInteger fileCount = new AtomicInteger(0);
-        try (FileOutputStream fos = new FileOutputStream(aoName); ZipOutputStream zos = new ZipOutputStream(fos, StandardCharsets.UTF_8)) {
-            try (Stream<Path> pathStream = Files.walk(path)) {
-                pathStream.filter(Files::isRegularFile).forEach(file -> {
-                    if (compressFile(path, file, zos)) fileCount.incrementAndGet();
-                });
-            } catch (IOException e) {
-                System.err.println("Error walking directory structure: " + e.getMessage());
-                return -1;
-            } catch (Exception e) {
-                System.err.println("Unexpected error during directory traversal: " + e.getClass().getName() + ": " + e.getMessage());
-                return -1;
+        try (RandomAccessFile raf = new RandomAccessFile(aoName, "rw")) {
+            raf.setLength(0);
+            raf.writeInt(MAGIC);
+            
+            List<Path> files;
+            try (Stream<Path> stream = Files.walk(path)) {
+                files = stream.filter(Files::isRegularFile).collect(Collectors.toList());
             }
-            return fileCount.get();
+
+            raf.writeInt(files.size());
+            long indexPosition = raf.getFilePointer();
+            
+            int indexSize = 0;
+            for (Path file : files) {
+                String name = getBaseName(file.getFileName().toString()).toLowerCase();
+                byte[] nameBytes = name.getBytes(StandardCharsets.UTF_8);
+                indexSize += 4 + nameBytes.length + 8 + 8;
+            }
+            
+            long dataStartOffset = indexPosition + indexSize;
+            raf.seek(dataStartOffset);
+
+            Map<String, ResourceEntry> entries = new LinkedHashMap<>();
+            for (Path file : files) {
+                long offset = raf.getFilePointer();
+                byte[] data = Files.readAllBytes(file);
+                raf.write(data);
+                long size = data.length;
+                String name = getBaseName(file.getFileName().toString()).toLowerCase();
+                entries.put(name, new ResourceEntry(offset, size));
+            }
+
+            raf.seek(indexPosition);
+            for (Map.Entry<String, ResourceEntry> entry : entries.entrySet()) {
+                byte[] nameBytes = entry.getKey().getBytes(StandardCharsets.UTF_8);
+                raf.writeInt(nameBytes.length);
+                raf.write(nameBytes);
+                raf.writeLong(entry.getValue().offset);
+                raf.writeLong(entry.getValue().size);
+            }
+
+            return files.size();
         } catch (IOException e) {
             System.err.println("Error creating ao file: " + e.getMessage());
             return -1;
-        } catch (Exception e) {
-            System.err.println("Unexpected error: " + e.getClass().getName() + ": " + e.getMessage());
-            return -1;
         }
     }
 
-    // Cache: Map<AO_Path, Map<FileName_NoExt, Bytes>>
-    private static final java.util.Map<String, java.util.Map<String, byte[]>> cache = new java.util.HashMap<>();
-
-    /**
-     * Carga y cachea TODO el contenido de un archivo .ao en memoria.
-     * Esto evita leer el ZIP secuencialmente cada vez que se pide un archivo.
-     */
-    private static void loadAndCache(String aoPath) {
-        if (cache.containsKey(aoPath)) return;
-
-        java.util.Map<String, byte[]> resourceMap = new java.util.HashMap<>();
-        
-        // Asegurar ruta absoluta para classpath
-        String fullPath = aoPath.startsWith("/") ? aoPath : "/" + aoPath;
-
-        try (InputStream aoStream = Main.class.getResourceAsStream(fullPath)) {
-            if (aoStream == null) {
-                System.err.println("AO resource not found in classpath (caching): " + fullPath);
-                return;
-            }
-
-            try (ZipInputStream zip = new ZipInputStream(aoStream)) {
-                ZipEntry entry;
-                while ((entry = zip.getNextEntry()) != null) {
-                    if (entry.isDirectory()) continue;
-
-                    String fileName = getFileName(entry.getName());
-                    String baseName = getBaseName(fileName);
-                    
-                    // Leemos todos los bytes de la entrada actual
-                    byte[] data = zip.readAllBytes();
-                    resourceMap.put(baseName.toLowerCase(), data); // Guardamos en minusculas para búsqueda insensible
-                }
+    public static void convertZipToAo(String zipPath, String aoPath) {
+        System.out.println("Converting " + zipPath + " to " + aoPath + "...");
+        try (InputStream is = Files.newInputStream(Paths.get(zipPath));
+             ZipInputStream zis = new ZipInputStream(is);
+             RandomAccessFile raf = new RandomAccessFile(aoPath, "rw")) {
+            
+            raf.setLength(0);
+            raf.writeInt(MAGIC);
+            
+            Map<String, byte[]> dataMap = new LinkedHashMap<>();
+            ZipEntry ze;
+            while ((ze = zis.getNextEntry()) != null) {
+                if (ze.isDirectory()) continue;
+                String name = getBaseName(getFileName(ze.getName())).toLowerCase();
+                dataMap.put(name, zis.readAllBytes());
             }
             
-            cache.put(aoPath, resourceMap);
-            // System.out.println("Cached " + resourceMap.size() + " files from " + aoPath);
-
+            raf.writeInt(dataMap.size());
+            long indexPos = raf.getFilePointer();
+            
+            int indexSize = 0;
+            for (String name : dataMap.keySet()) {
+                indexSize += 4 + name.getBytes(StandardCharsets.UTF_8).length + 8 + 8;
+            }
+            
+            raf.seek(indexPos + indexSize);
+            Map<String, ResourceEntry> entries = new LinkedHashMap<>();
+            for (Map.Entry<String, byte[]> entry : dataMap.entrySet()) {
+                long offset = raf.getFilePointer();
+                raf.write(entry.getValue());
+                entries.put(entry.getKey(), new ResourceEntry(offset, entry.getValue().length));
+            }
+            
+            raf.seek(indexPos);
+            for (Map.Entry<String, ResourceEntry> entry : entries.entrySet()) {
+                byte[] nameBytes = entry.getKey().getBytes(StandardCharsets.UTF_8);
+                raf.writeInt(nameBytes.length);
+                raf.write(nameBytes);
+                raf.writeLong(entry.getValue().offset);
+                raf.writeLong(entry.getValue().size);
+            }
+            
+            System.out.println("Done. Converted " + dataMap.size() + " files.");
         } catch (IOException e) {
-            System.err.println("Error caching AO resource: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 
-    /**
-     * Lee un recurso especifico desde un archivo comprimido ao (usando caché).
-     */
-    public static byte[] readResource(String aoPath, String resourceName) {
+    private static void loadAndMap(String aoPath) {
+        if (mappedFiles.containsKey(aoPath)) return;
 
+        // Si el path ya empieza con assets/, lo usamos, sino lo agregamos.
+        String normalizedPath = aoPath.startsWith("assets/") ? aoPath : "assets/" + aoPath;
+        File file = new File(normalizedPath);
+
+        if (!file.exists()) {
+             // Fallback a la ruta original por si acaso
+             file = new File(aoPath);
+        }
+
+        if (!file.exists()) {
+            System.err.println("AO file not found: " + normalizedPath);
+            return;
+        }
+
+        try (RandomAccessFile raf = new RandomAccessFile(file, "r")) {
+            if (raf.readInt() != MAGIC) {
+                throw new IOException("Invalid AO file format (Magic mismatch): " + aoPath);
+            }
+
+            int count = raf.readInt();
+            Map<String, ResourceEntry> index = new HashMap<>();
+            for (int i = 0; i < count; i++) {
+                int nameLen = raf.readInt();
+                byte[] nameBytes = new byte[nameLen];
+                raf.readFully(nameBytes);
+                String name = new String(nameBytes, StandardCharsets.UTF_8);
+                long offset = raf.readLong();
+                long size = raf.readLong();
+                index.put(name, new ResourceEntry(offset, size));
+            }
+
+            FileChannel channel = raf.getChannel();
+            MappedByteBuffer buffer = channel.map(FileChannel.MapMode.READ_ONLY, 0, channel.size());
+            
+            fileIndexes.put(aoPath, index);
+            mappedFiles.put(aoPath, buffer);
+
+        } catch (IOException e) {
+            System.err.println("Error mapping AO resource: " + e.getMessage() + " (" + aoPath + ")");
+        }
+    }
+
+    public static byte[] readResource(String aoPath, String resourceName) {
+        ByteBuffer buffer = readResourceAsBuffer(aoPath, resourceName);
+        if (buffer == null) return null;
+
+        byte[] data = new byte[buffer.remaining()];
+        buffer.get(data);
+        return data;
+    }
+
+    public static ByteBuffer readResourceAsBuffer(String aoPath, String resourceName) {
         if (aoPath == null || resourceName == null || aoPath.isEmpty() || resourceName.isEmpty()) {
-            System.err.println("Invalid parameters");
             return null;
         }
 
-        // 1. Aseguramos que el .ao esté cargado en caché
-        if (!cache.containsKey(aoPath)) {
-            loadAndCache(aoPath);
+        if (!mappedFiles.containsKey(aoPath)) {
+            loadAndMap(aoPath);
         }
 
-        // 2. Buscamos en el caché
-        java.util.Map<String, byte[]> fileMap = cache.get(aoPath);
-        if (fileMap != null) {
-            byte[] data = fileMap.get(resourceName.toLowerCase());
-            if (data != null) {
-                return data;
+        MappedByteBuffer fileBuffer = mappedFiles.get(aoPath);
+        Map<String, ResourceEntry> index = fileIndexes.get(aoPath);
+
+        if (fileBuffer != null && index != null) {
+            ResourceEntry entry = index.get(resourceName.toLowerCase());
+            if (entry != null) {
+                return fileBuffer.slice((int)entry.offset, (int)entry.size).asReadOnlyBuffer();
             }
         }
-        
-        System.err.println("Resource not found in cache: " + resourceName + " (in " + aoPath + ")");
+
         return null;
     }
 
-    /**
-     * Extrae el nombre del archivo de una ruta completa.
-     * <p>
-     * Este metodo obtiene unicamente el nombre del archivo a partir de una ruta completa, independientemente del sistema
-     * operativo utilizado para crear la ruta.
-     * <p>
-     * Se utiliza en lugar de acceder directamente a {@code entry.getName()} porque:
-     * <ul>
-     * <li>{@code entry.getName()} devuelve la ruta completa del archivo dentro del ao, no solo el nombre
-     * <li>Para buscar coincidencias por nombre base necesitamos extraer solo el archivo sin la estructura de directorios
-     * <li>Es mas eficiente que utilizar {@code Paths.get(entry.getName()).getFileName().toString()}
-     * <li>No requiere importar dependencias adicionales como {@code java.nio.file.Paths}
-     * </ul>
-     * <pre>{@code
-     * // Ejemplos de uso:
-     * getFileName("carpeta/archivo.txt") // devuelve "archivo.txt"
-     * getFileName("carpeta\archivo.txt") // devuelve "archivo.txt"
-     * getFileName("archivo.txt") // devuelve "archivo.txt"
-     * getFileName("carpeta/subcarpeta/a.txt") // devuelve "a.txt"
-     * }</pre>
-     *
-     * @param path ruta completa del archivo
-     * @return el nombre del archivo sin la estructura de directorios
-     */
     private static String getFileName(String path) {
-        // Obtiene el indice de la ultima ocurrencia del separador (del sistema operativo actual) de archivos en la ruta
-        int lastSeparatorIndex = path.lastIndexOf(File.separatorChar);
-        /* Si encontro algun separador (lastSeparatorIndex >= 0), extrae la subcadena desde la posicion justo despues del ultimo
-         * separador hasta el final. Si no se encontro ningun separador (lastSeparatorIndex == -1), devuelve la cadena original
-         * completa, asumiendo que ya es solo un nombre de archivo. */
+        int lastSeparatorIndex = Math.max(path.lastIndexOf('/'), path.lastIndexOf('\\'));
         return lastSeparatorIndex >= 0 ? path.substring(lastSeparatorIndex + 1) : path;
     }
 
-    /**
-     * Obtiene el nombre base de un archivo (sin extension).
-     * <p>
-     * Este metodo extrae el nombre base de un archivo eliminando la extension. El nombre base es la parte del nombre del archivo
-     * antes del ultimo punto (.). Si el archivo no tiene extension (no contiene un punto), se devuelve el nombre completo.
-     * <p>
-     * Es importante destacar que el metodo:
-     * <ul>
-     * <li>Solo considera el ultimo punto como separador de extension
-     * <li>Requiere que el parametro sea solo el nombre del archivo, no una ruta completa
-     * <li>Devuelve el nombre completo si no hay punto o si el punto es el primer caracter
-     * </ul>
-     * <pre>{@code
-     * // Ejemplos de uso:
-     * getBaseName("archivo.txt") // devuelve "archivo"
-     * getBaseName("imagen.original.png") // devuelve "imagen.original"
-     * getBaseName("config") // devuelve "config" (sin extension)
-     * getBaseName(".htaccess") // devuelve ".htaccess" (el punto es parte del nombre)
-     * }</pre>
-     *
-     * @param fileName el nombre del archivo del que se extraera el nombre base
-     * @return el nombre base del archivo sin la extension
-     */
     private static String getBaseName(String fileName) {
         int dotIndex = fileName.lastIndexOf('.');
         return dotIndex > 0 ? fileName.substring(0, dotIndex) : fileName;
     }
 
-    /**
-     * <p>
-     * Comprime un archivo individual dentro del archivo ao utilizando un buffer optimizado.
-     * <p>
-     * El proceso funciona de la siguiente manera:
-     * <ol>
-     * <li>Crea una entrada zip con la ruta relativa del archivo respecto a la carpeta base
-     * <li>Establece un buffer de 8KB para transferir el contenido del archivo por fragmentos
-     * <li>Lee el archivo de entrada utilizando un {@link InputStream} con <i>try-with-resources</i>
-     * <li>Transfiere los datos por bloques, optimizando el uso de memoria
-     * <li>Cierra la entrada zip actual una vez completada la transferencia
-     * </ol>
-     * <p>
-     * La implementacion del buffer personalizado de 8KB (8192 bytes) ofrece un equilibrio optimo entre:
-     * <ul>
-     * <li>Rendimiento de compresion: evita lecturas/escrituras por byte que serian ineficientes
-     * <li>Uso de memoria: no ocupa demasiado espacio en RAM durante la operacion
-     * <li>Compatibilidad: funciona bien con la mayoria de tipos de sistemas de archivos
-     * </ul>
-     * <p>
-     * El buffer es esencial para archivos grandes, ya que evita cargar todo el contenido en memoria a la vez. Esto previene
-     * posibles errores de {@code OutOfMemoryError} y mejora significativamente el rendimiento al reducir el numero de operaciones
-     * de I/O necesarias.
-     * <p>
-     * Realize las siguientes compresiones de la carpeta sounds y estos fueron los resultados:
-     * <pre>{@code
-     * Primera prueba
-     * Se comprimio en 3550 ms sin buffer
-     * Se comprimio en 755 ms con buffer
-     * Segunda prueba
-     * Se comprimio en 2580 ms sin buffer
-     * Se comprimio en 782 ms con buffer
-     * }</pre>
-     * <p>
-     * Por lo tanto, usar buffer mejora la velocidad de compresion aproximadamente un <b>70%</b>, siendo 4 veces mas rapida que
-     * sin buffer!
-     *
-     * @param path carpeta que se esta comprimiendo
-     * @param file archivo que se va a comprimir
-     * @param zos  stream de salida zip donde se escribira el archivo
-     * @return {@code true} si el archivo se comprimio exitosamente, {@code false} si ocurrio algun error
-     */
-    private static boolean compressFile(Path path, Path file, ZipOutputStream zos) {
-
-        final int defaultBufferSize = 8192; // 8KB
-
-        try {
-            zos.putNextEntry(new ZipEntry(path.relativize(file).toString()));
-            byte[] buffer = new byte[defaultBufferSize];
-            int bytesRead;
-            try (InputStream in = Files.newInputStream(file)) {
-                while ((bytesRead = in.read(buffer)) != -1)
-                    zos.write(buffer, 0, bytesRead);
+    public static void main(String[] args) {
+        if (args.length > 0 && args[0].equals("convert")) {
+            System.out.println("Starting conversion process...");
+            String[] files = {"graphics", "gui", "inits", "maps"};
+            for (String f : files) {
+                String zipPath = "src/main/resources/resources/" + f + ".ao";
+                String outPath = "assets/" + f + ".ao";
+                new File("assets").mkdirs();
+                File zipFile = new File(zipPath);
+                if (zipFile.exists()) {
+                    convertZipToAo(zipPath, outPath);
+                } else {
+                    System.err.println("ZIP source not found for conversion: " + zipPath);
+                }
             }
-            zos.closeEntry();
-            return true;
-        } catch (IOException e) {
-            System.err.println("Error compressing '" + file + "' - I/O error: " + e.getMessage());
-            return false;
-        } catch (Exception e) {
-            System.err.println("Error compressing '" + file + "' - Unexpected error: " + e.getClass().getName() + ": " + e.getMessage());
-            return false;
+            System.out.println("Conversion process finished.");
+            System.exit(0); // Terminar después de convertir
         }
     }
-
-    public static void main(String[] args) {
-
-        String resourceName = "resources/inits-descompressed";
-        String aoName = "resources/inits.ao";
-
-        long start = System.nanoTime();
-        int filesCompressed = compressResource(resourceName, aoName);
-        long time = (System.nanoTime() - start) / 1_000_000;
-
-        if (filesCompressed > 0)
-            System.out.println("Compressed " + filesCompressed + " file" + (filesCompressed > 1 ? "s" : "") + " in " + time + " ms from '" + resourceName + "' in '" + aoName + "'");
-        else if (filesCompressed == 0) System.out.println("The folder has no files!");
-        else System.err.println("Compression failed!");
-
-        String resourceNameToRead = "2"; // 2.ogg
-        // byte[] bytes = readResource(aoName, resourceNameToRead);
-        //if (bytes != null) {
-        // System.out.println(bytes.length + " bytes were read from resource '" + resourceNameToRead + "'");
-        // Opcional: guarda el recurso leido para verificar
-            /* try {
-                Files.write(Paths.get("output_" + Paths.get(resourceNameToRead).getFileName() + ".map"), bytes);
-            } catch (IOException e) {
-                System.err.println("Error: " + e.getMessage());
-            } */
-        //}
-
-    }
-
 }

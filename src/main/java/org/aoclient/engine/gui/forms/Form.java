@@ -9,23 +9,21 @@ import org.aoclient.engine.renderer.Texture;
 import org.aoclient.engine.utils.inits.GrhInfo;
 import org.lwjgl.BufferUtils;
 
-import javax.imageio.ImageIO;
 import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.URI;
 import java.nio.ByteBuffer;
+import java.nio.IntBuffer;
 
 import static org.aoclient.engine.Window.SCREEN_HEIGHT;
 import static org.aoclient.engine.Window.SCREEN_WIDTH;
 import static org.aoclient.engine.scenes.Camera.TILE_PIXEL_SIZE;
 import static org.aoclient.engine.utils.GameData.grhData;
 import static org.aoclient.engine.utils.Time.deltaTime;
-import static org.aoclient.scripts.Compressor.readResource;
+import static org.aoclient.scripts.Compressor.readResourceAsBuffer;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL12.GL_CLAMP_TO_EDGE;
+import static org.lwjgl.stb.STBImage.*;
 
 /**
  * <p>
@@ -101,30 +99,19 @@ public abstract class Form {
     }
 
     protected int loadTexture(final String file) throws IOException {
-        // Lee los datos del recurso desde el archivo comprimido
-        byte[] resourceData = readResource("resources/gui.ao", file);
-        /* if (resourceData == null) {
-            System.err.println("No se pudieron cargar los datos de " + file);
-            return -1; // TODO Deberia devolver -1 en este caso?
-        } */
-
-        InputStream is = new ByteArrayInputStream(resourceData);
-        BufferedImage image = ImageIO.read(is);
-
-        final int[] pixels = new int[image.getWidth() * image.getHeight()];
-        image.getRGB(0, 0, image.getWidth(), image.getHeight(), pixels, 0, image.getWidth());
-
-        final ByteBuffer buffer = BufferUtils.createByteBuffer(image.getWidth() * image.getHeight() * 4); // 4 for RGBA, 3 for RGB
-        for (int y = 0; y < image.getHeight(); y++) {
-            for (int x = 0; x < image.getWidth(); x++) {
-                final int pixel = pixels[y * image.getWidth() + x];
-                buffer.put((byte) ((pixel >> 16) & 0xFF));
-                buffer.put((byte) ((pixel >> 8) & 0xFF));
-                buffer.put((byte) (pixel & 0xFF));
-                buffer.put((byte) ((pixel >> 24) & 0xFF));
-            }
+        ByteBuffer resourceBuffer = readResourceAsBuffer("assets/gui.ao", file);
+        if (resourceBuffer == null) {
+            return -1;
         }
-        buffer.flip();
+
+        IntBuffer w = BufferUtils.createIntBuffer(1);
+        IntBuffer h = BufferUtils.createIntBuffer(1);
+        IntBuffer comp = BufferUtils.createIntBuffer(1);
+
+        ByteBuffer image = stbi_load_from_memory(resourceBuffer, w, h, comp, 4);
+        if (image == null) {
+            throw new RuntimeException("Failed to load image: " + stbi_failure_reason());
+        }
 
         final int textureID = glGenTextures();
         glBindTexture(GL_TEXTURE_2D, textureID);
@@ -135,7 +122,9 @@ public abstract class Form {
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, image.getWidth(), image.getHeight(), 0, GL_RGBA, GL_UNSIGNED_BYTE, buffer);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, w.get(0), h.get(0), 0, GL_RGBA, GL_UNSIGNED_BYTE, image);
+
+        stbi_image_free(image);
 
         return textureID;
     }

@@ -55,7 +55,7 @@ public enum Key {
     AUTO_MOVE(GLFW_KEY_TAB, new AutoMove()),
     EXIT_GAME(GLFW_KEY_ESCAPE, new ExitGameKey());
 
-    private static final String KEYS_CONFIG_FILE = "resources/keys.properties";
+    private static final String KEYS_CONFIG_FILE = "assets/keys.properties";
     private static final Logger LOGGER = Logger.getLogger(Key.class.getName());
 
     /** Mapa que almacena la correspondencia entre las teclas del enum y sus codigos asociados. */

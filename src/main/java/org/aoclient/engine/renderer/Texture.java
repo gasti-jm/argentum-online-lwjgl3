@@ -1,30 +1,15 @@
 package org.aoclient.engine.renderer;
 
 import org.lwjgl.BufferUtils;
+import org.lwjgl.system.MemoryUtil;
 
-import javax.imageio.ImageIO;
-import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.nio.ByteBuffer;
+import java.nio.IntBuffer;
 
-import static org.aoclient.scripts.Compressor.readResource;
+import static org.aoclient.scripts.Compressor.readResourceAsBuffer;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL12.GL_CLAMP_TO_EDGE;
-
-
-/**
- * La clase {@code Texture} representa una textura en OpenGL para el renderizado grafico.
- * <p>
- * OpenGL guarda las texturas creadas con un identificador numerico (ID), que esta clase almacena junto con informacion sobre el
- * tamaño de la textura. Proporciona funcionalidad para cargar texturas desde archivos comprimidos, y metodos para vincular y
- * desvincular texturas durante el proceso de renderizado.
- * <p>
- * Esta clase es fundamental en el sistema de renderizado, ya que permite que las texturas sean cargadas en memoria grafica y se
- * puedan dibujar en pantalla de manera eficiente a traves de OpenGL.
- */
+import static org.lwjgl.stb.STBImage.*;
 
 public class Texture {
 
@@ -37,73 +22,54 @@ public class Texture {
     }
 
     public void loadTexture(Texture refTexture, String compressedFile, String file, boolean isGUI) {
-        final ByteBuffer pixels;
-
         try {
             this.id = glGenTextures();
             glBindTexture(GL_TEXTURE_2D, id);
 
-            // CLAVE para texturas chicas (fuentes)
             glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
-            // Leer recurso
-            final byte[] resourceData = readResource("resources/" + compressedFile, file);
-            final InputStream is = new ByteArrayInputStream(resourceData);
-
-            BufferedImage image = ImageIO.read(is);
-            if (image == null) {
-                throw new RuntimeException("No se pudo leer imagen: " + file);
+            // Leer recurso como buffer mapeado
+            final ByteBuffer resourceBuffer = readResourceAsBuffer("assets/" + compressedFile, file);
+            if (resourceBuffer == null) {
+                throw new RuntimeException("No se pudo leer recurso: " + file);
             }
 
-            refTexture.tex_width = image.getWidth();
-            refTexture.tex_height = image.getHeight();
+            IntBuffer w = BufferUtils.createIntBuffer(1);
+            IntBuffer h = BufferUtils.createIntBuffer(1);
+            IntBuffer comp = BufferUtils.createIntBuffer(1);
+
+            // Cargamos con 4 canales (RGBA)
+            ByteBuffer image = stbi_load_from_memory(resourceBuffer, w, h, comp, 4);
+            if (image == null) {
+                throw new RuntimeException("Failed to load image: " + stbi_failure_reason());
+            }
+
+            refTexture.tex_width = w.get(0);
+            refTexture.tex_height = h.get(0);
 
             int width = refTexture.tex_width;
             int height = refTexture.tex_height;
 
-            // ¿Tiene alpha real?
-            boolean hasAlpha = image.getColorModel().hasAlpha();
+            // Argentum Online Legacy BMP: Negro (0,0,0) es transparente si no hay alpha real
+            // STB nos dice cuantos canales tenia el archivo original en 'comp'
+            boolean hasAlpha = comp.get(0) == 4;
 
-            int[] srcPixels = new int[width * height];
-            image.getRGB(0, 0, width, height, srcPixels, 0, width);
+            if (!hasAlpha) {
+                for (int i = 0; i < width * height; i++) {
+                    int r = image.get(i * 4) & 0xFF;
+                    int g = image.get(i * 4 + 1) & 0xFF;
+                    int b = image.get(i * 4 + 2) & 0xFF;
 
-            byte[] data = new byte[width * height * 4];
-
-            for (int y = 0; y < height; y++) {
-                for (int x = 0; x < width; x++) {
-
-                    int srcIndex = y * width + x;
-                    int dstIndex = srcIndex * 4;
-
-                    int pixel = srcPixels[srcIndex];
-
-                    int a = (pixel >> 24) & 0xFF;
-                    int r = (pixel >> 16) & 0xFF;
-                    int g = (pixel >> 8) & 0xFF;
-                    int b = pixel & 0xFF;
-
-                    // BMP legacy: negro = transparente
-                    if (!hasAlpha) {
-                        if (r == 0 && g == 0 && b == 0) {
-                            a = 0;
-                            r = 255;
-                            g = 255;
-                            b = 255;
-                        } else {
-                            a = 255;
-                        }
+                    if (r == 0 && g == 0 && b == 0) {
+                        image.put(i * 4, (byte) 255);
+                        image.put(i * 4 + 1, (byte) 255);
+                        image.put(i * 4 + 2, (byte) 255);
+                        image.put(i * 4 + 3, (byte) 0);
+                    } else {
+                        image.put(i * 4 + 3, (byte) 255);
                     }
-
-                    data[dstIndex]     = (byte) r;
-                    data[dstIndex + 1] = (byte) g;
-                    data[dstIndex + 2] = (byte) b;
-                    data[dstIndex + 3] = (byte) a;
                 }
             }
-
-            pixels = BufferUtils.createByteBuffer(data.length);
-            pixels.put(data);
-            pixels.flip();
 
             glTexImage2D(
                     GL_TEXTURE_2D,
@@ -114,8 +80,10 @@ public class Texture {
                     0,
                     GL_RGBA,
                     GL_UNSIGNED_BYTE,
-                    pixels
+                    image
             );
+
+            stbi_image_free(image);
 
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);

@@ -170,10 +170,10 @@ public enum ImGUISystem {
 
         fontConfig.setRasterizerMultiply(1.2f);
 
-        byte[] fontRegular = loadFont("/resources/fonts/LiberationSans-Regular.ttf");
-        byte[] fontBold = loadFont("/resources/fonts/LiberationSans-Bold.ttf");
-        byte[] fontItalic = loadFont("/resources/fonts/LiberationSans-Italic.ttf");
-        byte[] fontBoldItalic = loadFont("/resources/fonts/LiberationSans-BoldItalic.ttf");
+        byte[] fontRegular = loadFont("assets/fonts/LiberationSans-Regular.ttf");
+        byte[] fontBold = loadFont("assets/fonts/LiberationSans-Bold.ttf");
+        byte[] fontItalic = loadFont("assets/fonts/LiberationSans-Italic.ttf");
+        byte[] fontBoldItalic = loadFont("assets/fonts/LiberationSans-BoldItalic.ttf");
 
         if (fontRegular != null) ImGuiFonts.fontRegular = fontAtlas.addFontFromMemoryTTF(fontRegular, 13);
         if (fontBold != null) ImGuiFonts.fontBold = fontAtlas.addFontFromMemoryTTF(fontBold, 13);
@@ -184,10 +184,13 @@ public enum ImGUISystem {
     }
 
     private byte[] loadFont(String path) {
-        try (java.io.InputStream is = ImGUISystem.class.getResourceAsStream(path)) {
-            if (is != null) return is.readAllBytes();
-        } catch (java.io.IOException e) {
-            e.printStackTrace();
+        java.io.File file = new java.io.File(path);
+        if (file.exists()) {
+            try {
+                return java.nio.file.Files.readAllBytes(file.toPath());
+            } catch (java.io.IOException e) {
+                e.printStackTrace();
+            }
         }
         return null;
     }

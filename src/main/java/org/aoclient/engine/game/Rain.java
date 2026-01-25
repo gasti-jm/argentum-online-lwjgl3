@@ -32,10 +32,10 @@ public enum Rain {
 
     // sonidos de la lluvia
     private static final int RAIN_FILE_NUM_GRAPHIC = 15168;
-    private static final String SND_LLUVIAIN = "resources/sounds/lluviain.ogg";
-    private static final String SND_LLUVIAOUT = "resources/sounds/lluviaout.ogg";
-    private static final String SND_LLUVIAINEND = "resources/sounds/lluviainend.ogg";
-    private static final String SND_LLUVIAOUTEND = "resources/sounds/lluviaoutend.ogg";
+    private static final String SND_LLUVIAIN = "assets/sounds/lluviain.ogg";
+    private static final String SND_LLUVIAOUT = "assets/sounds/lluviaout.ogg";
+    private static final String SND_LLUVIAINEND = "assets/sounds/lluviainend.ogg";
+    private static final String SND_LLUVIAOUTEND = "assets/sounds/lluviaoutend.ogg";
     private Texture rainTexture;
     private final RECT[] RLluvia;
     private final int[] LTLluvia;

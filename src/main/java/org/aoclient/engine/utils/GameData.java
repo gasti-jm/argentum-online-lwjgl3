@@ -10,7 +10,7 @@ import java.io.IOException;
 import static org.aoclient.engine.game.Messages.loadMessages;
 import static org.aoclient.engine.game.models.Character.eraseAllChars;
 import static org.aoclient.engine.renderer.FontRenderer.loadFonts;
-import static org.aoclient.scripts.Compressor.readResource;
+import static org.aoclient.scripts.Compressor.readResourceAsBuffer;
 
 /**
  * <p>
@@ -74,7 +74,7 @@ public final class GameData {
      */
     private static void loadGrhData() {
 
-        byte[] data = readResource("resources/inits.ao", "graphics");
+        java.nio.ByteBuffer data = readResourceAsBuffer("assets/inits.ao", "graphics");
         if (data == null) {
             System.err.println("Could not load graphics data!");
             return;
@@ -157,7 +157,7 @@ public final class GameData {
      * Cargamos y almacenamos los datos del archivo "heads.ind".
      */
     private static void loadHeads() {
-        byte[] data = readResource("resources/inits.ao", "heads");
+        java.nio.ByteBuffer data = readResourceAsBuffer("assets/inits.ao", "heads");
         if (data == null) {
             System.err.println("Could not load heads data!");
             return;
@@ -194,7 +194,7 @@ public final class GameData {
      * Cargamos y almacenamos los datos del archivo "helmets.ind".
      */
     private static void loadHelmets() {
-        byte[] data = readResource("resources/inits.ao", "helmets");
+        java.nio.ByteBuffer data = readResourceAsBuffer("assets/inits.ao", "helmets");
         if (data == null) {
             System.err.println("Could not load helmets data!");
             return;
@@ -231,7 +231,7 @@ public final class GameData {
      * Cargamos y almacenamos los datos del archivo "bodys.ind".
      */
     private static void loadBodys() {
-        byte[] data = readResource("resources/inits.ao", "bodys");
+        java.nio.ByteBuffer data = readResourceAsBuffer("assets/inits.ao", "bodys");
         if (data == null) {
             System.err.println("Could not load bodys data!");
             return;
@@ -274,7 +274,7 @@ public final class GameData {
      * Cargamos y almacenamos los datos del archivo "arms.ind".
      */
     private static void loadWeapons() {
-        byte[] data = readResource("resources/inits.ao", "weapons");
+        java.nio.ByteBuffer data = readResourceAsBuffer("assets/inits.ao", "weapons");
         if (data == null) {
             System.err.println("Could not load weapons data!");
             return;
@@ -300,7 +300,7 @@ public final class GameData {
      * Cargamos y almacenamos los datos del archivo "shields.ind".
      */
     private static void loadShields() {
-        byte[] data = readResource("resources/inits.ao", "shields");
+        java.nio.ByteBuffer data = readResourceAsBuffer("assets/inits.ao", "shields");
         if (data == null) {
             System.err.println("Could not load shields data!");
             return;
@@ -328,7 +328,7 @@ public final class GameData {
     public static void loadMap(int numMap) {
         //TextureManager.clear(); juju nos quedamos sin algunas texturas.
 
-        byte[] data = readResource("resources/maps.ao", "mapa" + numMap);
+        java.nio.ByteBuffer data = readResourceAsBuffer("assets/maps.ao", "mapa" + numMap);
         if (data == null) {
             System.err.println("Could not load mapa" + numMap + " data!");
             return;
@@ -409,7 +409,7 @@ public final class GameData {
      * Cargamos los indices de animaciones FXs del archivo "fxs.ind"
      */
     private static void loadFxs() {
-        byte[] data = readResource("resources/inits.ao", "fxs");
+        java.nio.ByteBuffer data = readResourceAsBuffer("assets/inits.ao", "fxs");
         if (data == null) {
             System.err.println("Could not load fxs data!");
             return;
@@ -433,7 +433,7 @@ public final class GameData {
      * Cargamos los indices de mapas donde se puede visualizar la lluvia en el archivo "fk.ind"
      */
     private static void loadFK() {
-        byte[] data = readResource("resources/inits.ao", "fk");
+        java.nio.ByteBuffer data = readResourceAsBuffer("assets/inits.ao", "fk");
         if (data == null) {
             System.err.println("Could not load fk data!");
             return;

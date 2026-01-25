@@ -3,11 +3,14 @@ package org.aoclient.engine.audio;
 import org.aoclient.engine.Window;
 import org.lwjgl.BufferUtils;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 import java.nio.ShortBuffer;
+import java.nio.channels.FileChannel;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -131,17 +134,22 @@ public final class Sound {
     }
 
     private ByteBuffer ioResourceToByteBuffer(String resource) {
-        String path = resource.startsWith("/") ? resource : "/" + resource;
-        try (InputStream source = Sound.class.getResourceAsStream(path)) {
-            if (source == null) return null;
-            byte[] bytes = source.readAllBytes();
-            ByteBuffer buffer = BufferUtils.createByteBuffer(bytes.length);
-            buffer.put(bytes);
-            buffer.flip();
-            return buffer;
-        } catch (IOException e) {
-            e.printStackTrace();
+        String normalizedPath = resource.startsWith("assets/") ? resource : "assets/" + resource;
+        File file = new File(normalizedPath);
+
+        if (!file.exists()) {
+            file = new File(resource);
         }
+
+        if (file.exists()) {
+            try (RandomAccessFile raf = new RandomAccessFile(file, "r");
+                 FileChannel channel = raf.getChannel()) {
+                return channel.map(FileChannel.MapMode.READ_ONLY, 0, channel.size());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
         return null;
     }
 
@@ -199,7 +207,7 @@ public final class Sound {
      */
     public static void playSound(String soundName) {
         if (options.isSound() && Window.INSTANCE.isAudioAvailable()) {
-            String path = "resources/sounds/" + soundName;
+            String path = "assets/sounds/" + soundName;
             if (sounds.containsKey(path)) sounds.get(path).play();
             else addSound(path).play();
         }
@@ -228,7 +236,7 @@ public final class Sound {
 
         stopMusic();
 
-        String path = "resources/music/" + musicName;
+        String path = "assets/music/" + musicName;
 
         if (musics.containsKey(path)) {
             if (options.isMusic()) musics.get(path).play();

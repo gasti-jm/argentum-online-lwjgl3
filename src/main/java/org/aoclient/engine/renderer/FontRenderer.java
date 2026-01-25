@@ -8,7 +8,7 @@ import java.util.Map;
 
 import static org.aoclient.engine.renderer.Drawn.drawGrhIndex;
 import static org.aoclient.engine.utils.GameData.grhData;
-import static org.aoclient.scripts.Compressor.readResource;
+import static org.aoclient.scripts.Compressor.readResourceAsBuffer;
 
 /**
  * Clase utilitaria que maneja la carga y renderizado de fuentes de texto.
@@ -38,7 +38,7 @@ public class FontRenderer {
     private static Font[] fonts;
 
     public static void loadFonts() {
-        byte[] data = readResource("resources/inits.ao", "fonts");
+        java.nio.ByteBuffer data = readResourceAsBuffer("assets/inits.ao", "fonts");
         if (data == null) {
             System.err.println("Could not load fonts data!");
             return;

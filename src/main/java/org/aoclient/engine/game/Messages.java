@@ -30,14 +30,14 @@ public class Messages {
         messageCache.clear();
 
         String filename = "strings_" + region + ".ini";
-        String resourcePath = "/resources/" + filename;
+        java.io.File file = new java.io.File("assets/" + filename);
 
-        try (java.io.InputStream is = Messages.class.getResourceAsStream(resourcePath)) {
-            if (is == null) {
-                System.err.println("The " + filename + " file could not be found in classpath: " + resourcePath);
-                return;
-            }
+        if (!file.exists()) {
+            System.err.println("The " + filename + " file could not be found: " + file.getAbsolutePath());
+            return;
+        }
 
+        try (java.io.InputStream is = new java.io.FileInputStream(file)) {
             // Leer el archivo con UTF-8
             try (InputStreamReader reader = new InputStreamReader(is, StandardCharsets.UTF_8)) {
                 Properties properties = new Properties();

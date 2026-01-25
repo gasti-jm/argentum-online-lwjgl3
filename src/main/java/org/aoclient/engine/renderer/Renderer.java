@@ -21,8 +21,8 @@ public class Renderer {
         camera = new Camera2D(0, 0);
 
         shader = new Shader(
-                "resources/shaders/default.vert",
-                "resources/shaders/default.frag"
+                "assets/shaders/default.vert",
+                "assets/shaders/default.frag"
         );
 
         projection = new Matrix4f()
