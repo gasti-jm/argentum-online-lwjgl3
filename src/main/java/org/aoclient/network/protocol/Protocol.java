@@ -577,6 +577,7 @@ public class Protocol {
     }
 
     public static void meditate() {
+        if (USER.isUserMoving()) return;
         if (USER.getUserMaxMAN() == USER.getUserMinMAN()) return;
         if (charList[USER.getUserCharIndex()].isDead()) {
             CONSOLE.addMsgToConsole(Messages.get(Messages.MessageKey.ESTAS_MUERTO), FontStyle.ITALIC, new RGBColor());

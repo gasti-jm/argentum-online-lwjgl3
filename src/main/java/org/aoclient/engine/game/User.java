@@ -48,6 +48,7 @@ public enum User {
     private boolean userMoving;
     private boolean userNavegando;
     private boolean userComerciando;
+    private boolean meditating;
     // mapa
     private short userMap;
     private short userCharIndex;
@@ -331,6 +332,7 @@ public enum User {
             case LEFT -> moveToLegalPos(userPos.getX() - 1, userPos.getY());
         };
         if (legalOk && !charList[userCharIndex].isParalizado()) {
+            if (meditating) meditating = false;
             walk(direction);
             moveScreen(direction);
             moveCharbyHead(userCharIndex, direction);
@@ -656,6 +658,14 @@ public enum User {
         this.userComerciando = userComerciando;
     }
 
+    public boolean isMeditating() {
+        return meditating;
+    }
+
+    public void setMeditating(boolean meditating) {
+        this.meditating = meditating;
+    }
+
     public int getFreeSkillPoints() {
         return freeSkillPoints;
     }
@@ -736,6 +746,7 @@ public enum User {
         this.setUserConected(false);
         this.setUserNavegando(false);
         this.setUserComerciando(false);
+        this.setMeditating(false);
         this.setFreeSkillPoints(0);
     }
 
