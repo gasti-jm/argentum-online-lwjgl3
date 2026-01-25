@@ -1,6 +1,7 @@
 package org.aoclient.engine;
 
 import org.aoclient.engine.audio.Sound;
+import org.aoclient.engine.game.User;
 import org.aoclient.engine.gui.ImGUISystem;
 import org.aoclient.engine.listeners.KeyHandler;
 import org.aoclient.engine.listeners.MouseListener;
@@ -11,6 +12,7 @@ import org.aoclient.engine.utils.GameData;
 import org.aoclient.engine.utils.Platform;
 import org.aoclient.engine.utils.Time;
 import org.aoclient.network.Connection;
+import org.aoclient.network.protocol.Protocol;
 import org.lwjgl.Version;
 import org.tinylog.Logger;
 
@@ -18,8 +20,7 @@ import static org.aoclient.engine.audio.Sound.playMusic;
 import static org.aoclient.engine.scenes.SceneType.INTRO_SCENE;
 import static org.aoclient.engine.utils.GameData.options;
 import static org.aoclient.engine.utils.Time.deltaTime;
-import static org.lwjgl.glfw.GLFW.glfwPollEvents;
-import static org.lwjgl.glfw.GLFW.glfwSwapBuffers;
+import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.*;
 
 /**
@@ -52,6 +53,10 @@ public final class Engine {
      * Adicionalmente, ajusta el estado del programa a inactivo configurando {@code prgRun} a {@code false}.
      */
     public static void closeClient() {
+        if (User.INSTANCE.isUserConected()) {
+            Protocol.quit();
+        }
+
         options.save();
         prgRun = false;
     }
@@ -127,6 +132,10 @@ public final class Engine {
         Time.initTime();
 
         while (prgRun) {
+            if (glfwWindowShouldClose(window.getWindow())) {
+                closeClient();
+            }
+
             glfwPollEvents();
 
             if (!window.isMinimized()) {
