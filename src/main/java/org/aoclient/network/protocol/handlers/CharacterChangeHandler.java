@@ -48,13 +48,15 @@ public class CharacterChangeHandler implements PacketHandler {
 
         tempint = buffer.readInteger();
         if (tempint != 0) charList[charIndex].setWeapon(new WeaponData(weaponData[tempint]));
-
+        else charList[charIndex].setWeapon(new WeaponData());
 
         tempint = buffer.readInteger();
         if (tempint != 0) charList[charIndex].setShield(new ShieldData(shieldData[tempint]));
+        else charList[charIndex].setShield(new ShieldData());
 
         tempint = buffer.readInteger();
         if (tempint != 0) charList[charIndex].setHelmet(new HeadData(helmetsData[tempint]));
+        else charList[charIndex].setHelmet(new HeadData());
 
         User.INSTANCE.setCharacterFx(charIndex, buffer.readInteger(), buffer.readInteger());
 

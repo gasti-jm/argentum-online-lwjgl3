@@ -1,6 +1,7 @@
 package org.aoclient.network.protocol.handlers;
 
 import org.aoclient.engine.audio.Sound;
+import org.aoclient.engine.game.User;
 import org.aoclient.engine.gui.ImGUISystem;
 import org.aoclient.network.PacketBuffer;
 import org.aoclient.network.Connection;
@@ -17,6 +18,7 @@ public class DisconnectHandler implements PacketHandler {
 
         Connection.INSTANCE.disconnect();
         eraseAllChars();
+        User.INSTANCE.getUserInventory().removeAll();
 
         ImGUISystem.INSTANCE.closeAllFrms();
 

@@ -47,6 +47,7 @@ public final class FComerce extends Form {
     public static UserInventory invUser = USER.getUserInventory().clone();
 
     public FComerce() {
+        invNPC.removeAll();
         try {
             this.backgroundImage = loadTexture("VentanaComercio");
         } catch (IOException e) {

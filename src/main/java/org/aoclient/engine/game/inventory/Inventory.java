@@ -59,6 +59,12 @@ public abstract class Inventory {
         this.cantRows = sHeigth / TILE_PIXEL_SIZE;
     }
 
+    public void removeAll() {
+        for (int i = 0; i < slots.length; i++) {
+            slots[i] = new Slot();
+        }
+    }
+
     /**
      *  Chekeamos que el mouse este dentro del inventario.
      */
