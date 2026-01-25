@@ -1,7 +1,6 @@
 package org.aoclient.engine.renderer;
 
 import org.lwjgl.BufferUtils;
-import org.lwjgl.system.MemoryUtil;
 
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
@@ -22,16 +21,19 @@ public class Texture {
     }
 
     public void loadTexture(Texture refTexture, String compressedFile, String file, boolean isGUI) {
+        TextureData data = loadToCPU(compressedFile, file);
+        if (data != null) {
+            uploadToGPU(data);
+        }
+    }
+
+    public static TextureData loadToCPU(String compressedFile, String file) {
         try {
-            this.id = glGenTextures();
-            glBindTexture(GL_TEXTURE_2D, id);
-
-            glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-
             // Leer recurso como buffer mapeado
             final ByteBuffer resourceBuffer = readResourceAsBuffer("assets/" + compressedFile, file);
             if (resourceBuffer == null) {
-                throw new RuntimeException("No se pudo leer recurso: " + file);
+                // throw new RuntimeException("No se pudo leer recurso: " + file);
+                return null;
             }
 
             IntBuffer w = BufferUtils.createIntBuffer(1);
@@ -44,11 +46,8 @@ public class Texture {
                 throw new RuntimeException("Failed to load image: " + stbi_failure_reason());
             }
 
-            refTexture.tex_width = w.get(0);
-            refTexture.tex_height = h.get(0);
-
-            int width = refTexture.tex_width;
-            int height = refTexture.tex_height;
+            int width = w.get(0);
+            int height = h.get(0);
 
             // Argentum Online Legacy BMP: Negro (0,0,0) es transparente si no hay alpha real
             // STB nos dice cuantos canales tenia el archivo original en 'comp'
@@ -71,28 +70,42 @@ public class Texture {
                 }
             }
 
-            glTexImage2D(
-                    GL_TEXTURE_2D,
-                    0,
-                    GL_RGBA,
-                    width,
-                    height,
-                    0,
-                    GL_RGBA,
-                    GL_UNSIGNED_BYTE,
-                    image
-            );
-
-            stbi_image_free(image);
-
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-
+            return new TextureData(image, width, height);
         } catch (Exception e) {
             e.printStackTrace();
+            return null;
         }
+    }
+
+    public void uploadToGPU(TextureData data) {
+        if (data == null) return;
+
+        this.tex_width = data.getWidth();
+        this.tex_height = data.getHeight();
+
+        this.id = glGenTextures();
+        glBindTexture(GL_TEXTURE_2D, id);
+
+        glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+
+        glTexImage2D(
+                GL_TEXTURE_2D,
+                0,
+                GL_RGBA,
+                tex_width,
+                tex_height,
+                0,
+                GL_RGBA,
+                GL_UNSIGNED_BYTE,
+                data.getBuffer()
+        );
+
+        stbi_image_free(data.getBuffer());
+
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
     }
 
     public void bind() {
@@ -114,6 +127,4 @@ public class Texture {
     public int getTex_height() {
         return tex_height;
     }
-
-
 }

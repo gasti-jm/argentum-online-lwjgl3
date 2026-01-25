@@ -156,7 +156,7 @@ public class Compressor {
         }
     }
 
-    private static void loadAndMap(String aoPath) {
+    private static synchronized void loadAndMap(String aoPath) {
         if (mappedFiles.containsKey(aoPath)) return;
 
         // Si el path ya empieza con assets/, lo usamos, sino lo agregamos.
