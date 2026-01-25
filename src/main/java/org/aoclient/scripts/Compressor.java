@@ -1,5 +1,7 @@
 package org.aoclient.scripts;
 
+import org.aoclient.Main;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -13,6 +15,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Stream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
+import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 
 /**
@@ -123,71 +126,74 @@ public class Compressor {
         }
     }
 
+    // Cache: Map<AO_Path, Map<FileName_NoExt, Bytes>>
+    private static final java.util.Map<String, java.util.Map<String, byte[]>> cache = new java.util.HashMap<>();
+
     /**
-     * Lee un recurso especifico desde un archivo comprimido ao.
-     * <p>
-     * Este metodo busca dentro del archivo ao especificado un recurso cuyo nombre base (sin la extension) coincida con el nombre
-     * del recurso proporcionado. Si se encuentra una coincidencia, el contenido del recurso se lee y se devuelve como un array de
-     * bytes. Si ocurre un error, se registra en la consola y se devuelve null.
-     * <pre>{@code
-     * // Lee un archivo desde un ao
-     * byte[] data = readResource("resources/inits.ao", "heads");
-     * if (data == null) {
-     *     // Maneja el caso de error
-     *    System.err.println("Could not load heads data!");
-     *    return;
-     * }
-     * // Procesa el recurso normalmente...
-     * }</pre>
-     *
-     * @param aoName       nombre del archivo ao que contiene el recurso
-     * @param resourceName nombre del recurso a leer (sin extension)
-     * @return bytes del recurso encontrado, o null si ocurre un error
+     * Carga y cachea TODO el contenido de un archivo .ao en memoria.
+     * Esto evita leer el ZIP secuencialmente cada vez que se pide un archivo.
      */
-    public static byte[] readResource(String aoName, String resourceName) {
+    private static void loadAndCache(String aoPath) {
+        if (cache.containsKey(aoPath)) return;
 
-        if (aoName == null || resourceName == null) {
-            System.err.println("aoName and resourceName cannot be null");
-            return null;
-        }
+        java.util.Map<String, byte[]> resourceMap = new java.util.HashMap<>();
+        
+        // Asegurar ruta absoluta para classpath
+        String fullPath = aoPath.startsWith("/") ? aoPath : "/" + aoPath;
 
-        if (aoName.isEmpty() || resourceName.isEmpty()) {
-            System.err.println("aoName and resourceName cannot be empty");
-            return null;
-        }
-
-        try (ZipFile zipFile = new ZipFile(aoName, StandardCharsets.UTF_8)) {
-
-            Enumeration<? extends ZipEntry> entries = zipFile.entries();
-
-            while (entries.hasMoreElements()) {
-
-                ZipEntry entry = entries.nextElement();
-
-                // Ignora directorios
-                if (entry.isDirectory()) continue;
-
-                String fileName = getFileName(entry.getName());
-                String baseName = getBaseName(fileName);
-
-                if (baseName.equalsIgnoreCase(resourceName)) {
-                    // Lee los datos del recurso encontrado desde un try-with-resources garantizando que el stream se cierre automaticamente al finalizar
-                    try (InputStream is = zipFile.getInputStream(entry)) {
-                        return is.readAllBytes();
-                    } catch (IOException e) {
-                        System.err.println("Error reading resource data for '" + resourceName + "': " + e.getMessage());
-                        return null;
-                    }
-                }
-
+        try (InputStream aoStream = Main.class.getResourceAsStream(fullPath)) {
+            if (aoStream == null) {
+                System.err.println("AO resource not found in classpath (caching): " + fullPath);
+                return;
             }
 
-            System.err.println("No files were found matching '" + resourceName + "' in " + aoName);
+            try (ZipInputStream zip = new ZipInputStream(aoStream)) {
+                ZipEntry entry;
+                while ((entry = zip.getNextEntry()) != null) {
+                    if (entry.isDirectory()) continue;
+
+                    String fileName = getFileName(entry.getName());
+                    String baseName = getBaseName(fileName);
+                    
+                    // Leemos todos los bytes de la entrada actual
+                    byte[] data = zip.readAllBytes();
+                    resourceMap.put(baseName.toLowerCase(), data); // Guardamos en minusculas para búsqueda insensible
+                }
+            }
+            
+            cache.put(aoPath, resourceMap);
+            // System.out.println("Cached " + resourceMap.size() + " files from " + aoPath);
 
         } catch (IOException e) {
-            System.err.println("Error accessing ao file '" + aoName + "'");
+            System.err.println("Error caching AO resource: " + e.getMessage());
+        }
+    }
+
+    /**
+     * Lee un recurso especifico desde un archivo comprimido ao (usando caché).
+     */
+    public static byte[] readResource(String aoPath, String resourceName) {
+
+        if (aoPath == null || resourceName == null || aoPath.isEmpty() || resourceName.isEmpty()) {
+            System.err.println("Invalid parameters");
+            return null;
         }
 
+        // 1. Aseguramos que el .ao esté cargado en caché
+        if (!cache.containsKey(aoPath)) {
+            loadAndCache(aoPath);
+        }
+
+        // 2. Buscamos en el caché
+        java.util.Map<String, byte[]> fileMap = cache.get(aoPath);
+        if (fileMap != null) {
+            byte[] data = fileMap.get(resourceName.toLowerCase());
+            if (data != null) {
+                return data;
+            }
+        }
+        
+        System.err.println("Resource not found in cache: " + resourceName + " (in " + aoPath + ")");
         return null;
     }
 

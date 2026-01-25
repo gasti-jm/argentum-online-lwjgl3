@@ -1,8 +1,11 @@
 package org.aoclient.engine.audio;
 
 import org.aoclient.engine.Window;
+import org.lwjgl.BufferUtils;
 
-import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 import java.nio.ShortBuffer;
 import java.util.HashMap;
@@ -10,7 +13,7 @@ import java.util.Map;
 
 import static org.aoclient.engine.utils.GameData.options;
 import static org.lwjgl.openal.AL10.*;
-import static org.lwjgl.stb.STBVorbis.stb_vorbis_decode_filename;
+import static org.lwjgl.stb.STBVorbis.stb_vorbis_decode_memory;
 import static org.lwjgl.system.MemoryStack.*;
 import static org.lwjgl.system.libc.LibCStdlib.free;
 
@@ -75,10 +78,18 @@ public final class Sound {
         stackPush();
         IntBuffer sampleRateBuffer = stackMallocInt(1);
 
-        ShortBuffer rawAudioBuffer = stb_vorbis_decode_filename(filepath, channelsBuffer, sampleRateBuffer);
+        ByteBuffer vorbisData = ioResourceToByteBuffer(filepath);
+        if (vorbisData == null) {
+            System.out.println("Could not load sound resource '" + filepath + "'");
+            stackPop();
+            stackPop();
+            return;
+        }
+
+        ShortBuffer rawAudioBuffer = stb_vorbis_decode_memory(vorbisData, channelsBuffer, sampleRateBuffer);
 
         if (rawAudioBuffer == null) {
-            System.out.println("Could not load sound '" + filepath + "'");
+            System.out.println("Could not decode sound '" + filepath + "'");
             stackPop();
             stackPop();
             return;
@@ -116,7 +127,22 @@ public final class Sound {
         }
 
         // Free stb raw audio buffer
-        free(rawAudioBuffer);
+        // free(rawAudioBuffer);
+    }
+
+    private ByteBuffer ioResourceToByteBuffer(String resource) {
+        String path = resource.startsWith("/") ? resource : "/" + resource;
+        try (InputStream source = Sound.class.getResourceAsStream(path)) {
+            if (source == null) return null;
+            byte[] bytes = source.readAllBytes();
+            ByteBuffer buffer = BufferUtils.createByteBuffer(bytes.length);
+            buffer.put(bytes);
+            buffer.flip();
+            return buffer;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     /**
@@ -152,12 +178,11 @@ public final class Sound {
             validSound = false;
         }
 
-        free(data.pcm);
+        // free(data.pcm);
     }
 
     public static Sound getSound(String soundFile) {
-        File file = new File(soundFile);
-        if (sounds.containsKey(file.getAbsolutePath())) return sounds.get(file.getAbsolutePath());
+        if (sounds.containsKey(soundFile)) return sounds.get(soundFile);
         else System.out.println("Sound file not added '" + soundFile + "'");
         return null;
     }
@@ -174,9 +199,9 @@ public final class Sound {
      */
     public static void playSound(String soundName) {
         if (options.isSound() && Window.INSTANCE.isAudioAvailable()) {
-            File file = new File("resources/sounds/" + soundName);
-            if (sounds.containsKey(file.getAbsolutePath())) sounds.get(file.getAbsolutePath()).play();
-            else addSound("resources/sounds/" + soundName).play();
+            String path = "resources/sounds/" + soundName;
+            if (sounds.containsKey(path)) sounds.get(path).play();
+            else addSound(path).play();
         }
     }
 
@@ -203,18 +228,18 @@ public final class Sound {
 
         stopMusic();
 
-        File file = new File("resources/music/" + musicName);
+        String path = "resources/music/" + musicName;
 
-        if (musics.containsKey(file.getAbsolutePath())) {
-            if (options.isMusic()) musics.get(file.getAbsolutePath()).play();
+        if (musics.containsKey(path)) {
+            if (options.isMusic()) musics.get(path).play();
         } else {
             if (options.isMusic()) {
                 // Lee el ogg en un hilo aparte
                 new Thread(() -> {
                     try {
-                        preloadedMusic = DecodedSoundData.decodeOgg(file.getAbsolutePath());
+                        preloadedMusic = DecodedSoundData.decodeOgg(path);
                     } catch (Exception e) {
-                        System.err.println("Error decoding music: " + file.getAbsolutePath() + " - " + e.getMessage());
+                        System.err.println("Error decoding music: " + path + " - " + e.getMessage());
                         preloadedMusic = null;
                     }
                 }).start();
@@ -360,12 +385,11 @@ public final class Sound {
      * @return el objeto {@code Sound} asociado al archivo de sonido proporcionado
      */
     private static Sound addSound(String soundFile) {
-        File file = new File(soundFile);
-        if (sounds.containsKey(file.getAbsolutePath())) return sounds.get(file.getAbsolutePath());
+        if (sounds.containsKey(soundFile)) return sounds.get(soundFile);
         else {
             if (sounds.size() == MAX_SOUNDS) clearSounds();
-            Sound sound = new Sound(file.getAbsolutePath(), false);
-            sounds.put(file.getAbsolutePath(), sound);
+            Sound sound = new Sound(soundFile, false);
+            sounds.put(soundFile, sound);
             return sound;
         }
     }

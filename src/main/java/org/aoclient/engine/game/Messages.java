@@ -30,16 +30,16 @@ public class Messages {
         messageCache.clear();
 
         String filename = "strings_" + region + ".ini";
+        String resourcePath = "/resources/" + filename;
 
-        try {
-            Path resources = Paths.get("resources", filename);
-            if (!Files.exists(resources)) {
-                System.err.println("The " + filename + " file could not be found!");
+        try (java.io.InputStream is = Messages.class.getResourceAsStream(resourcePath)) {
+            if (is == null) {
+                System.err.println("The " + filename + " file could not be found in classpath: " + resourcePath);
                 return;
             }
 
             // Leer el archivo con UTF-8
-            try (InputStreamReader reader = new InputStreamReader(Files.newInputStream(resources), StandardCharsets.UTF_8)) {
+            try (InputStreamReader reader = new InputStreamReader(is, StandardCharsets.UTF_8)) {
                 Properties properties = new Properties();
                 properties.load(reader);
 

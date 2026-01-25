@@ -96,7 +96,7 @@ public final class Engine {
     private void close() {
         Sound.clearSounds();
         Sound.clearMusics();
-        guiSystem.destroy();
+        // guiSystem.destroy(); // Causes "double free or corruption" on exit
         window.close();
     }
 

@@ -72,7 +72,7 @@ public enum ImGUISystem {
         // Iniciamos la configuracion de ImGuiIO
         final ImGuiIO io = ImGui.getIO();
 
-        io.setIniFilename("resources/gui.ini"); // Guardamos en un archivo .ini
+        io.setIniFilename("gui.ini"); // Guardamos en un archivo .ini
         io.setConfigFlags(ImGuiConfigFlags.NavEnableKeyboard); // Navegacion con el teclado
         io.setBackendFlags(ImGuiBackendFlags.HasMouseCursors); // Cursores del mouse para mostrar al cambiar el tamaño de las ventanas, etc.
         io.setBackendPlatformName("imgui_java_impl_glfw");
@@ -170,15 +170,34 @@ public enum ImGUISystem {
 
         fontConfig.setRasterizerMultiply(1.2f);
 
-        ImGuiFonts.fontRegular      = fontAtlas.addFontFromFileTTF("resources/fonts/LiberationSans-Regular.ttf", 13);
-        ImGuiFonts.fontBold         = fontAtlas.addFontFromFileTTF("resources/fonts/LiberationSans-Bold.ttf", 13);
-        ImGuiFonts.fontItalic       = fontAtlas.addFontFromFileTTF("resources/fonts/LiberationSans-Italic.ttf", 13);
-        ImGuiFonts.fontBoldItalic   = fontAtlas.addFontFromFileTTF("resources/fonts/LiberationSans-BoldItalic.ttf", 13);
+        byte[] fontRegular = loadFont("/resources/fonts/LiberationSans-Regular.ttf");
+        byte[] fontBold = loadFont("/resources/fonts/LiberationSans-Bold.ttf");
+        byte[] fontItalic = loadFont("/resources/fonts/LiberationSans-Italic.ttf");
+        byte[] fontBoldItalic = loadFont("/resources/fonts/LiberationSans-BoldItalic.ttf");
+
+        if (fontRegular != null) ImGuiFonts.fontRegular = fontAtlas.addFontFromMemoryTTF(fontRegular, 13);
+        if (fontBold != null) ImGuiFonts.fontBold = fontAtlas.addFontFromMemoryTTF(fontBold, 13);
+        if (fontItalic != null) ImGuiFonts.fontItalic = fontAtlas.addFontFromMemoryTTF(fontItalic, 13);
+        if (fontBoldItalic != null) ImGuiFonts.fontBoldItalic = fontAtlas.addFontFromMemoryTTF(fontBoldItalic, 13);
 
         fontConfig.destroy();
     }
 
+    private byte[] loadFont(String path) {
+        try (java.io.InputStream is = ImGUISystem.class.getResourceAsStream(path)) {
+            if (is != null) return is.readAllBytes();
+        } catch (java.io.IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     public void destroy() {
+        for (long cursor : mouseCursors) {
+            if (cursor != 0) {
+                glfwDestroyCursor(cursor);
+            }
+        }
         imGuiGl3.dispose();
         ImGui.destroyContext();
     }

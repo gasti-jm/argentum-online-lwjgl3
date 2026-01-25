@@ -12,7 +12,7 @@ public enum Options {
 
     INSTANCE; // Implementacion del patron Singleton de Joshua Bloch (considerada la mejor)
 
-    private static final String OPTIONS_FILE_PATH = "resources/options.ini";
+    private static final String OPTIONS_FILE_PATH = "options.ini";
 
     private boolean music = true;
     private boolean sound = true;

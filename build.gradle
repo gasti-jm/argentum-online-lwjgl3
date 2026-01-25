@@ -1,6 +1,7 @@
 plugins {
     id 'java'
     id 'application'
+    id 'com.github.johnrengelman.shadow' version '8.1.1'
 }
 
 group = 'org.aoclient'
@@ -8,6 +9,12 @@ version = '1.0-SNAPSHOT'
 
 application {
     mainClass = 'org.aoclient.Main'
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(19)
+    }
 }
 
 import org.gradle.internal.os.OperatingSystem
@@ -102,18 +109,3 @@ test {
     useJUnitPlatform()
 }
 
-jar {
-    manifest {
-        attributes(
-                'Main-Class': application.mainClass
-        )
-    }
-
-    from {
-        configurations.runtimeClasspath.collect {
-            it.isDirectory() ? it : zipTree(it)
-        }
-    }
-
-    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-}

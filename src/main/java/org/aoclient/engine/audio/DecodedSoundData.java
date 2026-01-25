@@ -1,15 +1,20 @@
 package org.aoclient.engine.audio;
 
+import org.lwjgl.BufferUtils;
 import org.lwjgl.system.MemoryStack;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 import java.nio.ShortBuffer;
+import java.nio.channels.Channels;
+import java.nio.channels.ReadableByteChannel;
 
 import static org.lwjgl.openal.AL10.AL_FORMAT_MONO16;
 import static org.lwjgl.openal.AL10.AL_FORMAT_STEREO16;
-import static org.lwjgl.stb.STBVorbis.stb_vorbis_decode_filename;
-import static org.lwjgl.system.MemoryStack.stackMallocInt;
-import static org.lwjgl.system.MemoryStack.stackPush;
+import static org.lwjgl.stb.STBVorbis.stb_vorbis_decode_memory;
+import static org.lwjgl.system.MemoryStack.*;
 
 /**
  * Esta clase nos permite precargar los datos de algun sonido en {@code .ogg }
@@ -34,7 +39,10 @@ public final class DecodedSoundData {
             IntBuffer channelsBuffer = stackMallocInt(1);
             IntBuffer sampleRateBuffer = stackMallocInt(1);
 
-            ShortBuffer pcm = stb_vorbis_decode_filename(filepath, channelsBuffer, sampleRateBuffer);
+            ByteBuffer vorbisData = ioResourceToByteBuffer(filepath);
+            if (vorbisData == null) throw new RuntimeException("Error loading resource: " + filepath);
+
+            ShortBuffer pcm = stb_vorbis_decode_memory(vorbisData, channelsBuffer, sampleRateBuffer);
             if (pcm == null) throw new RuntimeException("Error decoding: " + filepath);
 
             int channels = channelsBuffer.get(0);
@@ -43,6 +51,21 @@ public final class DecodedSoundData {
             int format = channels == 1 ? AL_FORMAT_MONO16 : AL_FORMAT_STEREO16;
             return new DecodedSoundData(filepath, pcm, format, sampleRate);
         }
+    }
+
+    private static ByteBuffer ioResourceToByteBuffer(String resource) {
+        String path = resource.startsWith("/") ? resource : "/" + resource;
+        try (InputStream source = DecodedSoundData.class.getResourceAsStream(path)) {
+            if (source == null) return null;
+            byte[] bytes = source.readAllBytes();
+            ByteBuffer buffer = BufferUtils.createByteBuffer(bytes.length);
+            buffer.put(bytes);
+            buffer.flip();
+            return buffer;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
 }

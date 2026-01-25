@@ -322,7 +322,10 @@ public enum Window {
     private void loadIcon() {
         try (MemoryStack stack = MemoryStack.stackPush()) {
             final IntBuffer ch = stack.mallocInt(1), w = stack.mallocInt(1), h = stack.mallocInt(1);
-            final ByteBuffer imgBuff = STBImage.stbi_load("./resources/icon.png", w, h, ch, 4);
+            ByteBuffer imgData = ioResourceToByteBuffer("/resources/icon.png");
+            if (imgData == null) return;
+
+            final ByteBuffer imgBuff = STBImage.stbi_load_from_memory(imgData, w, h, ch, 4);
 
             if (imgBuff == null) return;
 
@@ -332,6 +335,10 @@ public enum Window {
             image.set(w.get(), h.get(), imgBuff);
             imageBf.put(0, image);
             glfwSetWindowIcon(window, imageBf);
+            
+            STBImage.stbi_image_free(imgBuff);
+            imageBf.free();
+            image.free();
         }
     }
 
@@ -341,7 +348,10 @@ public enum Window {
     private long loadCursor(final String fileName) {
         try (MemoryStack stack = MemoryStack.stackPush()) {
             final IntBuffer ch = stack.mallocInt(1), w = stack.mallocInt(1), h = stack.mallocInt(1);
-            final ByteBuffer imgBuff = STBImage.stbi_load("./resources/" + fileName + ".png", w, h, ch, 4);
+            ByteBuffer imgData = ioResourceToByteBuffer("/resources/" + fileName + ".png");
+            if (imgData == null) return 0;
+
+            final ByteBuffer imgBuff = STBImage.stbi_load_from_memory(imgData, w, h, ch, 4);
 
             if (imgBuff == null) return 0;
 
@@ -357,8 +367,29 @@ public enum Window {
             final int hotspotY = 6;
 
             // create custom cursor and store its ID
-            return glfwCreateCursor(image, hotspotX, hotspotY);
+            long cursorId = glfwCreateCursor(image, hotspotX, hotspotY);
+            
+            STBImage.stbi_image_free(imgBuff);
+            imageBf.free();
+            image.free();
+            
+            return cursorId;
         }
+    }
+
+    private ByteBuffer ioResourceToByteBuffer(String resource) {
+        String path = resource.startsWith("/") ? resource : "/" + resource;
+        try (java.io.InputStream source = Window.class.getResourceAsStream(path)) {
+            if (source == null) return null;
+            byte[] bytes = source.readAllBytes();
+            ByteBuffer buffer = org.lwjgl.BufferUtils.createByteBuffer(bytes.length);
+            buffer.put(bytes);
+            buffer.flip();
+            return buffer;
+        } catch (java.io.IOException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
 }
