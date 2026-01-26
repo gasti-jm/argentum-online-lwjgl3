@@ -259,6 +259,17 @@ public class Compressor {
             }
             System.out.println("Conversion process finished.");
             System.exit(0); // Terminar después de convertir
+        } else if (args.length > 2 && args[0].equals("pack")) {
+            String inputDir = args[1];
+            String outputAo = args[2];
+            System.out.println("Packing " + inputDir + " into " + outputAo + "...");
+            int count = compressResource(inputDir, outputAo);
+            if (count >= 0) {
+                System.out.println("Done. Packed " + count + " files.");
+            } else {
+                System.err.println("Failed to pack files.");
+            }
+            System.exit(0);
         }
     }
 }
