@@ -144,7 +144,16 @@ public class BatchRenderer {
         if (vertexCount == 0) return;
 
         buffer.flip();
+
         glBindBuffer(GL_ARRAY_BUFFER, vbo);
+
+        // 👇 ORPHANING (LA CLAVE)
+        glBufferData(
+                GL_ARRAY_BUFFER,
+                buffer.capacity() * Float.BYTES,
+                GL_DYNAMIC_DRAW
+        );
+
         glBufferSubData(GL_ARRAY_BUFFER, 0, buffer);
 
         glBindVertexArray(vao);

@@ -15,7 +15,10 @@ public class Renderer {
     private final Shader shader;
     private final Matrix4f projection;
 
+    private final FloatBuffer projBuf = MemoryUtil.memAllocFloat(16);
+    private final FloatBuffer viewBuf = MemoryUtil.memAllocFloat(16);
     private final BatchRenderer batch = new BatchRenderer();
+
 
     public Renderer() {
         camera = new Camera2D(0, 0);
@@ -45,6 +48,7 @@ public class Renderer {
         float v1 = srcY / tex.getTex_height();
         float v0 = (srcY + srcH) / tex.getTex_height();
 
+
         batch.submitQuad(
                 tex,
                 x, y,
@@ -54,8 +58,8 @@ public class Renderer {
                 color.getRed(),
                 color.getGreen(),
                 color.getBlue(),
-                alpha
-        );
+                alpha);
+
     }
 
     public void render(Scene scene) {
@@ -64,23 +68,22 @@ public class Renderer {
         int texLoc = glGetUniformLocation(shader.getId(), "uTexture");
         glUniform1i(texLoc, 0);
 
-        int projLoc = glGetUniformLocation(shader.getId(), "uProjection");
-        FloatBuffer projBuf = MemoryUtil.memAllocFloat(16);
-        projection.get(projBuf);
-        glUniformMatrix4fv(projLoc, false, projBuf);
-
-        int viewLoc = glGetUniformLocation(shader.getId(), "uView");
-        FloatBuffer viewBuf = MemoryUtil.memAllocFloat(16);
-        camera.getViewMatrix().get(viewBuf);
-        glUniformMatrix4fv(viewLoc, false, viewBuf);
+        setMatrices();
 
         batch.begin();
         scene.render();
         batch.end();
 
-        MemoryUtil.memFree(projBuf);
-        MemoryUtil.memFree(viewBuf);
-
         shader.unbind();
+    }
+
+    private void setMatrices() {
+        int projLoc = glGetUniformLocation(shader.getId(), "uProjection");
+        projection.get(projBuf);
+        glUniformMatrix4fv(projLoc, false, projBuf);
+
+        int viewLoc = glGetUniformLocation(shader.getId(), "uView");
+        camera.getViewMatrix().get(viewBuf);
+        glUniformMatrix4fv(viewLoc, false, viewBuf);
     }
 }
