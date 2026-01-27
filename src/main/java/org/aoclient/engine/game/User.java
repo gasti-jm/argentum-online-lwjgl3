@@ -748,6 +748,7 @@ public enum User {
         this.setUserComerciando(false);
         this.setMeditating(false);
         this.setFreeSkillPoints(0);
+        this.inventorySpells.clear();
     }
 
     /**

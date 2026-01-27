@@ -81,4 +81,9 @@ public class InventorySpells {
         spellInfo(currentItemSpell.get() + 1);
     }
 
+    public void clear() {
+        for (int i = 0; i < MAX_INVENTORY_SPELLS; i++) spells[i] = "";
+        currentItemSpell.set(0);
+    }
+
 }
