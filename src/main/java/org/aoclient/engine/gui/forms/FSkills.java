@@ -20,7 +20,9 @@ public final class FSkills extends Form {
 
     private String hoverSkillDescription = "";
     private final int[] userSkills = USER.getSkills().clone();
+    private final int[] editSkills = USER.getSkills().clone();
     private final int userFreeSkillsPoints = USER.getFreeSkillPoints();
+    private int editFreeSkillPoints = USER.getFreeSkillPoints();
     private boolean visibleButtonSave;
 
     public FSkills() {
@@ -47,7 +49,7 @@ public final class FSkills extends Form {
         ImGui.image(backgroundImage, 600, 450);
 
         ImGui.setCursorPos(320, 15);
-        ImGui.text(String.valueOf(USER.getFreeSkillPoints()));
+        ImGui.text(String.valueOf(editFreeSkillPoints));
 
         this.drawSkills();
         this.drawSkillsHovers();
@@ -61,7 +63,6 @@ public final class FSkills extends Form {
 
         ImGui.setCursorPos(40, 410);
         if (ImGui.button("Cancelar", 97, 24)) {
-            this.rollbackChanges();
             playSound(SND_CLICK);
             this.close();
         }
@@ -88,7 +89,7 @@ public final class FSkills extends Form {
             this.minusSkill(skill.getId());
         }
         ImGui.sameLine(0, spacing);
-        ImGui.text(String.valueOf(USER.getSkill(skill.getId())));
+        ImGui.text(String.valueOf(editSkills[skill.getId() - 1]));
         ImGui.sameLine(0, spacing);
         if (ImGui.arrowButton("FSkill_" + skill.getId() + "_add", 1)) {
             this.plusSkill(skill.getId());
@@ -128,33 +129,26 @@ public final class FSkills extends Form {
     }
 
     private void plusSkill(int skill) {
-        int freeSkillPts = USER.getFreeSkillPoints();
-        if (freeSkillPts > 0 && USER.getSkill(skill) + 1 <= 100) {
+        if (editFreeSkillPoints > 0 && editSkills[skill - 1] < 100) {
             this.visibleButtonSave = true;
-            USER.setSkill(skill, USER.getSkill(skill) + 1);
-            USER.setFreeSkillPoints(freeSkillPts - 1);
+            editSkills[skill - 1]++;
+            editFreeSkillPoints--;
         }
     }
 
     private void minusSkill(int skill) {
-        int result = (USER.getSkill(skill) - 1);
-        if (result >= this.userSkills[skill - 1]) {
+        if (editSkills[skill - 1] > userSkills[skill - 1]) {
             this.visibleButtonSave = true;
-            USER.setSkill(skill, USER.getSkill(skill) - 1);
-            USER.setFreeSkillPoints(USER.getFreeSkillPoints() + 1);
+            editSkills[skill - 1]--;
+            editFreeSkillPoints++;
         }
-    }
-
-    private void rollbackChanges() {
-        USER.setFreeSkillPoints(this.userFreeSkillsPoints);
-        USER.setSkills(this.userSkills);
     }
 
     private void saveChanges() {
         int[] modifiedSkills = new int[Skill.values().length];
         for (Skill skill : Skill.values()) {
             int skillIndex = skill.getId() - 1;
-            modifiedSkills[skillIndex] = USER.getSkill(skill.getId()) - this.userSkills[skillIndex];
+            modifiedSkills[skillIndex] = editSkills[skillIndex] - this.userSkills[skillIndex];
         }
         modifySkills(modifiedSkills);
     }
