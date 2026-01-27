@@ -9,8 +9,10 @@ import imgui.type.ImString;
 import org.aoclient.engine.game.Messages;
 import org.aoclient.engine.game.console.Console;
 import org.aoclient.engine.game.console.FontStyle;
+import org.aoclient.engine.game.inventory.Inventory;
 import org.aoclient.engine.game.inventory.NPCInventory;
 import org.aoclient.engine.game.inventory.UserInventory;
+import org.aoclient.engine.game.models.ObjectType;
 import org.aoclient.engine.renderer.RGBColor;
 
 import java.io.IOException;
@@ -45,16 +47,18 @@ public final class FComerce extends Form {
     private final ImString cant = new ImString("1");
     public static NPCInventory invNPC = new NPCInventory(false);
     public static UserInventory invUser = USER.getUserInventory().clone();
+    private Inventory lastSelectedInventory;
 
     public FComerce() {
         invNPC.removeAll();
+        invUser = USER.getUserInventory().clone();
+        invUser.transformInvComerce(false);
+
         try {
             this.backgroundImage = loadTexture("VentanaComercio");
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-
-        invUser.transformInvComerce(false);
     }
 
     @Override
@@ -108,11 +112,46 @@ public final class FComerce extends Form {
 
 
         this.checkInventoryEvents();
+        this.drawSelectedItemInfo();
 
         invNPC.drawInventory();
         invUser.drawInventory();
 
         ImGui.end();
+    }
+
+    private void drawSelectedItemInfo() {
+        if (lastSelectedInventory == null) return;
+        int slot = lastSelectedInventory.getSlotSelected();
+        String name = lastSelectedInventory.getItemName(slot);
+        if (name == null || name.isEmpty()) return;
+
+        ImGui.setCursorPos(150, 41);
+        ImGui.textColored(1.0f, 1.0f, 0.0f, 1.0f, name);
+
+        float value = lastSelectedInventory.getValue(slot);
+        ImGui.setCursorPos(150, 58);
+        ImGui.text("Precio: " + (int)value);
+
+        ObjectType type = lastSelectedInventory.getObjType(slot);
+        if (type != null) {
+            ImGui.setCursorPos(150, 76);
+            ImGui.text("Tipo: " + type.name());
+        }
+
+        short maxHit = lastSelectedInventory.getMaxHit(slot);
+        short minHit = lastSelectedInventory.getMinHit(slot);
+        if (maxHit > 0) {
+            ImGui.setCursorPos(256, 84);
+            ImGui.text("Daño: " + minHit + "/" + maxHit);
+        }
+
+        short maxDef = lastSelectedInventory.getMaxDef(slot);
+        short minDef = lastSelectedInventory.getMinDef(slot);
+        if (maxDef > 0) {
+            ImGui.setCursorPos(256, 102);
+            ImGui.text("Defensa: " + minDef + "/" + maxDef);
+        }
     }
 
     private void checkInventoryEvents() {
@@ -126,12 +165,14 @@ public final class FComerce extends Form {
         if (invNPC.inInventoryArea(localPos.x, localPos.y)) {
             if (ImGui.isMouseClicked(0)) { // click izq
                 invNPC.clickInventory(localPos.x, localPos.y);
+                lastSelectedInventory = invNPC;
             }
         }
 
         if (invUser.inInventoryArea(localPos.x, localPos.y)) {
             if (ImGui.isMouseClicked(0)) { // click izq
                 invUser.clickInventory(localPos.x, localPos.y);
+                lastSelectedInventory = invUser;
             }
         }
     }
