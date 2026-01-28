@@ -1,0 +1,64 @@
+name: Build and Release
+
+on:
+  push:
+    branches: [ "master", "main" ]
+    tags: [ "v*" ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up JDK 21
+      uses: actions/setup-java@v4
+      with:
+        java-version: '21'
+        distribution: 'temurin'
+
+    - name: Setup Gradle
+      uses: gradle/actions/setup-gradle@v3
+
+    - name: Build Fat JAR
+      run: ./gradlew shadowJar
+
+    - name: Verify JAR existence
+      run: dir build\libs
+
+    # Create a portable app image (directory with everything needed)
+    - name: Create Portable App Image
+      run: |
+        jpackage --input build/libs --name ArgentumOnline --main-jar argentum-online.jar --main-class org.aoclient.Main --type app-image --dest build/dist
+      # Note: Add --icon src/main/resources/icon.ico if you have an icon file
+
+    # Compress the portable app image for distribution
+    - name: Zip Portable App
+      run: |
+        Compress-Archive -Path build/dist/ArgentumOnline -DestinationPath build/dist/ArgentumOnline-Portable.zip
+
+    # Create a Windows Installer (setup.exe)
+    - name: Create EXE Installer
+      run: |
+        jpackage --input build/libs --name ArgentumOnline --main-jar argentum-online.jar --main-class org.aoclient.Main --type exe --dest build/dist --win-dir-chooser --win-menu --win-shortcut
+      continue-on-error: true # Depends on WiX Toolset stability or availability
+
+    - name: Upload Artifacts (Build)
+      uses: actions/upload-artifact@v4
+      with:
+        name: ArgentumOnline-Builds
+        path: |
+          build/libs/*.jar
+          build/dist/*.exe
+          build/dist/*.zip
+
+    - name: Create Release
+      if: startsWith(github.ref, 'refs/tags/')
+      uses: softprops/action-gh-release@v1
+      with:
+        files: |
+          build/libs/argentum-online.jar
+          build/dist/*.exe
+          build/dist/*.zip
