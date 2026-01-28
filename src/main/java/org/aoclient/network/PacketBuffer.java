@@ -92,7 +92,7 @@ public class PacketBuffer {
     /**
      * <p>
      * Escribe un valor de tipo {@code short} en el buffer, convirtiendolo a su representacion binaria en formato de orden de
-     * bytes {@code LITTLE_ENDIAN}.
+     * bytes {@code BIG_ENDIAN}.
      * <p>
      * Este metodo implementa la compatibilidad con el protocolo de red original del juego, usando el tipo de dato {@code short}
      * de Java (16 bits con signo) para representar al equivalente <b>Integer</b> de Visual Basic 6 que ocupa 2 bytes.
@@ -100,13 +100,13 @@ public class PacketBuffer {
      * @param value valor de tipo {@code short} a escribir en el buffer
      */
     public void writeInteger(short value) {
-        write(ByteBuffer.allocate(VB6_INTEGER_BYTES).order(ByteOrder.LITTLE_ENDIAN).putShort(value).array());
+        write(ByteBuffer.allocate(VB6_INTEGER_BYTES).order(ByteOrder.BIG_ENDIAN).putShort(value).array());
     }
 
     /**
      * <p>
      * Escribe un valor de tipo {@code int} en el buffer, convirtiendolo a su representacion binaria en formato de orden de bytes
-     * {@code LITTLE_ENDIAN}.
+     * {@code BIG_ENDIAN}.
      * <p>
      * Este metodo implementa la compatibilidad con el protocolo de red original del juego, usando el tipo de dato {@code int} de
      * Java (32 bits con signo) para representar al equivalente <b>Long</b> de Visual Basic 6 que ocupa 4 bytes.
@@ -114,31 +114,31 @@ public class PacketBuffer {
      * @param value valor de tipo {@code int} a escribir en el buffer
      */
     public void writeLong(int value) {
-        write(ByteBuffer.allocate(VB6_LONG_BYTES).order(ByteOrder.LITTLE_ENDIAN).putInt(value).array());
+        write(ByteBuffer.allocate(VB6_LONG_BYTES).order(ByteOrder.BIG_ENDIAN).putInt(value).array());
     }
 
     /**
      * <p>
      * Escribe un valor de tipo {@code float} en el buffer, convirtiendolo a su representacion binaria en formato de orden de
-     * bytes {@code LITTLE_ENDIAN}.
+     * bytes {@code BIG_ENDIAN}.
      * <p>
      * Nota: En VB6, el tipo de dato {@code float} se conoce como <b>Single</b>.
      *
      * @param value valor de tipo {@code float} a escribir en el buffer
      */
     public void writeFloat(float value) {
-        write(ByteBuffer.allocate(Float.BYTES).order(ByteOrder.LITTLE_ENDIAN).putFloat(value).array());
+        write(ByteBuffer.allocate(Float.BYTES).order(ByteOrder.BIG_ENDIAN).putFloat(value).array());
     }
 
     /**
      * <p>
      * Escribe un valor de tipo {@code double} en el buffer, convirtiendolo a su representacion binaria en formato de orden de
-     * bytes {@code LITTLE_ENDIAN}.
+     * bytes {@code BIG_ENDIAN}.
      *
      * @param value valor de tipo {@code double} a escribir en el buffer
      */
     public void writeDouble(double value) {
-        write(ByteBuffer.allocate(Double.BYTES).order(ByteOrder.LITTLE_ENDIAN).putDouble(value).array());
+        write(ByteBuffer.allocate(Double.BYTES).order(ByteOrder.BIG_ENDIAN).putDouble(value).array());
     }
 
     /**
@@ -167,12 +167,12 @@ public class PacketBuffer {
      * @param string cadena de texto que sera codificada en Cp1252 y escrita en el buffer
      */
     public void writeCp1252String(String string) {
-        byte[] stringBytes = string.getBytes(Charset.forName("Cp1252"));
+        byte[] stringBytes = string.getBytes(StandardCharsets.UTF_8);
         byte[] buffer = new byte[STRING_LENGTH_BYTES + stringBytes.length];
         /* Como se esta escribiendo una cadena codificada en Cp1252, entonces los caracteres ocupan solo 1 byte, por lo tanto es
          * valido obtener la longitud de la cadena con string.length(), aunque por simplicidad se usa la variable ya creada
          * stringBytes. */
-        ByteBuffer.wrap(buffer).order(ByteOrder.LITTLE_ENDIAN).putShort((short) stringBytes.length); // Almacena la longitud como un short (2 bytes) en formato little-endian
+        ByteBuffer.wrap(buffer).order(ByteOrder.BIG_ENDIAN).putShort((short) stringBytes.length); // Almacena la longitud como un short (2 bytes) en formato big-endian
         // Copia los bytes de la cadena al buffer despues de la longitud
         System.arraycopy(stringBytes, 0, buffer, STRING_LENGTH_BYTES, stringBytes.length);
         write(buffer);
@@ -198,7 +198,7 @@ public class PacketBuffer {
         // Crea un buffer local con la capacidad para almacenar la longitud y los bytes de la cadena
         byte[] buffer = new byte[STRING_LENGTH_BYTES + bytes];
         // Agrega la longitud de la cadena en los primeros 2 bytes del buffer
-        ByteBuffer.wrap(buffer).order(ByteOrder.LITTLE_ENDIAN).putShort((short) bytes);
+        ByteBuffer.wrap(buffer).order(ByteOrder.BIG_ENDIAN).putShort((short) bytes);
         // Agrega los bytes de la cadena a partir de la posicion 2 del buffer, es decir, despues de haber agregado los dos bytes que representan la longitud de la cadena
         System.arraycopy(stringBytes, 0, buffer, STRING_LENGTH_BYTES, bytes);
         write(buffer);
@@ -249,7 +249,7 @@ public class PacketBuffer {
         int bytesRead = read(buffer);
         // "Elimina" el byte leido del buffer, avanzando efectivamente el puntero
         remove(bytesRead);
-        return ByteBuffer.wrap(buffer).order(ByteOrder.LITTLE_ENDIAN).get() & 0xFF;
+        return ByteBuffer.wrap(buffer).order(ByteOrder.BIG_ENDIAN).get() & 0xFF;
     }
 
     /**
@@ -265,7 +265,7 @@ public class PacketBuffer {
         byte[] buffer = new byte[VB6_INTEGER_BYTES];
         int bytesRead = read(buffer);
         remove(bytesRead);
-        return ByteBuffer.wrap(buffer).order(ByteOrder.LITTLE_ENDIAN).getShort();
+        return ByteBuffer.wrap(buffer).order(ByteOrder.BIG_ENDIAN).getShort();
     }
 
     /**
@@ -281,7 +281,7 @@ public class PacketBuffer {
         byte[] buffer = new byte[VB6_LONG_BYTES];
         int bytesRead = read(buffer);
         remove(bytesRead);
-        return ByteBuffer.wrap(buffer).order(ByteOrder.LITTLE_ENDIAN).getInt();
+        return ByteBuffer.wrap(buffer).order(ByteOrder.BIG_ENDIAN).getInt();
     }
 
     /**
@@ -293,7 +293,7 @@ public class PacketBuffer {
         byte[] buffer = new byte[Float.BYTES];
         int bytesRead = read(buffer);
         remove(bytesRead);
-        return ByteBuffer.wrap(buffer).order(ByteOrder.LITTLE_ENDIAN).getFloat();
+        return ByteBuffer.wrap(buffer).order(ByteOrder.BIG_ENDIAN).getFloat();
     }
 
     /**
@@ -335,7 +335,7 @@ public class PacketBuffer {
         if (bufferLength < stringLength) throw new RuntimeException("Not enough byte!");
         // Si la longitud es cero, devuelve cadena vacia
         if (stringLength <= 0) return "";
-        return readString(stringLength, Charset.forName("Cp1252"));
+        return readString(stringLength, StandardCharsets.UTF_8);
     }
 
     public String readUnicodeString() {
@@ -572,14 +572,14 @@ public class PacketBuffer {
      * Lee la longitud de una cadena desde un array de bytes.
      * <p>
      * El metodo asume que los bytes correspondientes a la longitud se encuentran al principio del buffer y se almacenan en
-     * formato LITTLE_ENDIAN.
+     * formato BIG_ENDIAN.
      *
      * @return La longitud de la cadena representada como un valor de tipo short
      */
     private short readStringLength() {
         byte[] buffer = new byte[STRING_LENGTH_BYTES];
         read(buffer);
-        short length = ByteBuffer.wrap(buffer).order(ByteOrder.LITTLE_ENDIAN).getShort();
+        short length = ByteBuffer.wrap(buffer).order(ByteOrder.BIG_ENDIAN).getShort();
         // Elimina los bytes de la longitud de la cadena que ya fueron leidos
         remove(STRING_LENGTH_BYTES);
         return length;
