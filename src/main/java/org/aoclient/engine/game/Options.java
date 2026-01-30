@@ -5,7 +5,8 @@ import org.tinylog.Logger;
 import java.io.*;
 
 /**
- * Sistema de configuracion del juego que permite cargar y guardar opciones en {@code options.ini}.
+ * Sistema de configuracion del juego que permite cargar y guardar opciones en
+ * {@code options.ini}.
  */
 
 public enum Options {
@@ -20,6 +21,7 @@ public enum Options {
     private boolean fullscreen = true;
     private boolean vsync = true;
     private boolean cursorGraphic = true;
+    private boolean breathingEffect = true;
     private String nick = "";
     private String ipServer = "127.0.0.1";
     private String portServer = "7666";
@@ -28,8 +30,10 @@ public enum Options {
     /**
      * Carga las opciones.
      * <p>
-     * Si el archivo existe y puede leerse, se recorren sus lineas para extraer las opciones y sus valores, que luego son cargados
-     * en las propiedades correspondientes. En caso de que el archivo no exista o ocurra un error al leerlo, se genera una nueva
+     * Si el archivo existe y puede leerse, se recorren sus lineas para extraer las
+     * opciones y sus valores, que luego son cargados
+     * en las propiedades correspondientes. En caso de que el archivo no exista o
+     * ocurra un error al leerlo, se genera una nueva
      * configuracion con valores predeterminados.
      */
     public void load() {
@@ -44,7 +48,8 @@ public enum Options {
                 }
             }
         } catch (IOException e) {
-            Logger.error("The " + OPTIONS_FILE_PATH + " file was not found or could not be read, a new one was created with the default configuration.");
+            Logger.error("The " + OPTIONS_FILE_PATH
+                    + " file was not found or could not be read, a new one was created with the default configuration.");
             save();
         }
     }
@@ -63,6 +68,7 @@ public enum Options {
             write(writer, "Fullscreen", fullscreen);
             write(writer, "VSYNC", vsync);
             write(writer, "CursorGraphic", cursorGraphic);
+            write(writer, "BreathingEffect", breathingEffect);
             write(writer, "Language", language);
         } catch (IOException e) {
             Logger.error("Could not write to options.ini file!");
@@ -149,10 +155,19 @@ public enum Options {
         this.language = language;
     }
 
+    public void setBreathingEffect(boolean breathingEffect) {
+        this.breathingEffect = breathingEffect;
+    }
+
+    public boolean isBreathingEffect() {
+        return breathingEffect;
+    }
+
     /**
      * Escribe una opcion con su valor asociado en un objeto {@code BufferedWriter}.
      *
-     * @param writer objeto {@code BufferedWriter} que sera utilizado para escribir la opcion
+     * @param writer objeto {@code BufferedWriter} que sera utilizado para escribir
+     *               la opcion
      * @param option nombre de la opcion
      * @param value  valor de la opcion
      */
@@ -178,6 +193,7 @@ public enum Options {
             case "Fullscreen" -> fullscreen = Boolean.parseBoolean(value);
             case "VSYNC" -> vsync = Boolean.parseBoolean(value);
             case "CursorGraphic" -> cursorGraphic = Boolean.parseBoolean(value);
+            case "BreathingEffect" -> breathingEffect = Boolean.parseBoolean(value);
             case "Language" -> language = value;
             default -> Logger.warn("Unknown option ignored: {}", option);
         }

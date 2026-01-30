@@ -3,6 +3,7 @@ package org.aoclient.engine.game.models;
 import org.aoclient.engine.renderer.RGBColor;
 import org.aoclient.engine.renderer.TextureManager;
 import org.aoclient.engine.utils.inits.*;
+import org.aoclient.engine.utils.Time;
 
 import static org.aoclient.engine.game.models.Direction.DOWN;
 import static org.aoclient.engine.renderer.Drawn.drawTexture;
@@ -13,7 +14,8 @@ import static org.aoclient.engine.utils.Time.timerTicksPerFrame;
 /**
  * Clase que representa a un personaje dentro del mundo de Argentum Online.
  * <p>
- * Esta clase implementa toda la funcionalidad relacionada con los personajes, incluyendo jugadores controlados por usuarios, NPCs
+ * Esta clase implementa toda la funcionalidad relacionada con los personajes,
+ * incluyendo jugadores controlados por usuarios, NPCs
  * y criaturas.
  * <p>
  * Gestiona los siguientes aspectos:
@@ -27,10 +29,13 @@ import static org.aoclient.engine.utils.Time.timerTicksPerFrame;
  * <li>Faccion, clan y nombre del personaje
  * </ul>
  * <p>
- * La clase contiene numerosas constantes que definen los rangos de indices de cabezas y cuerpos para diferentes razas y generos,
- * asi como metodos estaticos para operaciones como crear, eliminar o redibujar personajes en el mapa.
+ * La clase contiene numerosas constantes que definen los rangos de indices de
+ * cabezas y cuerpos para diferentes razas y generos,
+ * asi como metodos estaticos para operaciones como crear, eliminar o redibujar
+ * personajes en el mapa.
  * <p>
- * Character es una pieza central del motor grafico, gestionando tanto la representacion visual como la logica de estado de todas
+ * Character es una pieza central del motor grafico, gestionando tanto la
+ * representacion visual como la logica de estado de todas
  * las entidades animadas que pueblan el mundo.
  */
 
@@ -40,7 +45,8 @@ public final class Character {
     public static final int FRAGATA_FANTASMAL = 87;
 
     public static final int HUMANO_H_PRIMER_CABEZA = 1;
-    public static final int HUMANO_H_ULTIMA_CABEZA = 40; //En verdad es hasta la 51, pero como son muchas estas las dejamos no seleccionables
+    public static final int HUMANO_H_ULTIMA_CABEZA = 40; // En verdad es hasta la 51, pero como son muchas estas las
+                                                         // dejamos no seleccionables
     public static final int HUMANO_H_CUERPO_DESNUDO = 21;
 
     public static final int ELFO_H_PRIMER_CABEZA = 101;
@@ -161,19 +167,25 @@ public final class Character {
     }
 
     /**
-     *  Crea un nuevo personaje segun los parametros establecidos.
+     * Crea un nuevo personaje segun los parametros establecidos.
      */
-    public static void makeChar(short charIndex, int body, int head, Direction direction, int x, int y, int weapon, int shield, int helmet) {
+    public static void makeChar(short charIndex, int body, int head, Direction direction, int x, int y, int weapon,
+            int shield, int helmet) {
         // apuntamos al ultimo char
-        if (charIndex > lastChar) lastChar = charIndex;
+        if (charIndex > lastChar)
+            lastChar = charIndex;
 
-        if (weapon == 0) weapon = 2;
-        if (shield == 0) shield = 2;
-        if (helmet == 0) helmet = 2;
+        if (weapon == 0)
+            weapon = 2;
+        if (shield == 0)
+            shield = 2;
+        if (helmet == 0)
+            helmet = 2;
 
         char f = '<', u = '>';
 
-        if (charList[charIndex].priv != 0) charList[charIndex].setClanName(f + "Game Master" + u);
+        if (charList[charIndex].priv != 0)
+            charList[charIndex].setClanName(f + "Game Master" + u);
 
         charList[charIndex].setDead(head == CASPER_HEAD);
         charList[charIndex].setiHead(head);
@@ -207,7 +219,7 @@ public final class Character {
 
     /**
      * @param charIndex Numero de identificador de personaje
-     *  Elimina un personaje del array de personajes.
+     *                  Elimina un personaje del array de personajes.
      */
     public static void eraseChar(short charIndex) {
         charList[charIndex].setActive(false);
@@ -215,22 +227,23 @@ public final class Character {
         if (charIndex == lastChar) {
             while (!charList[lastChar].isActive()) {
                 lastChar--;
-                if (lastChar == 0) break;
+                if (lastChar == 0)
+                    break;
             }
         }
 
         mapData[charList[charIndex].getPos().getX()][charList[charIndex].getPos().getY()].setCharIndex(0);
 
         /*
-            'Remove char's dialog
-            Call Dialogos.RemoveDialog(CharIndex)
+         * 'Remove char's dialog
+         * Call Dialogos.RemoveDialog(CharIndex)
          */
 
         resetCharInfo(charIndex);
     }
 
     /**
-     *  elimina todos los personajes de nuestro array charList.
+     * elimina todos los personajes de nuestro array charList.
      */
     public static void eraseAllChars() {
         for (short i = 1; i < charList.length; i++) {
@@ -242,14 +255,15 @@ public final class Character {
 
     /**
      * @param charIndex Numero de identificador del personaje
-     *  Resetea los atributos del personaje.
+     *                  Resetea los atributos del personaje.
      */
     private static void resetCharInfo(short charIndex) {
-        charList[charIndex] = new Character(); // al crear un obj nuevo, el viejo sera eliminado por el recolector de basura de java.
+        charList[charIndex] = new Character(); // al crear un obj nuevo, el viejo sera eliminado por el recolector de
+                                               // basura de java.
     }
 
     /**
-     *  Actualiza todos los personajes visibles.
+     * Actualiza todos los personajes visibles.
      */
     public static void refreshAllChars() {
         for (int loopC = 1; loopC <= lastChar; loopC++)
@@ -258,7 +272,7 @@ public final class Character {
     }
 
     /**
-     *  Dibuja nuestro personaje!
+     * Dibuja nuestro personaje!
      */
     public static void drawCharacter(int charIndex, int PixelOffsetX, int PixelOffsetY, RGBColor ambientcolor) {
         boolean moved = false;
@@ -267,7 +281,8 @@ public final class Character {
 
         if (character.moving) {
             if (character.scrollDirectionX != 0) {
-                character.moveOffsetX = character.moveOffsetX + character.walkingSpeed * sgn(character.scrollDirectionX) * timerTicksPerFrame;
+                character.moveOffsetX = character.moveOffsetX
+                        + character.walkingSpeed * sgn(character.scrollDirectionX) * timerTicksPerFrame;
 
                 if (character.body.getWalk(character.direction.getId()).getSpeed() > 0.0f) {
                     character.body.getWalk(character.direction.getId()).setStarted(true);
@@ -287,7 +302,8 @@ public final class Character {
             }
 
             if (character.scrollDirectionY != 0) {
-                character.moveOffsetY = character.moveOffsetY + character.walkingSpeed * sgn(character.scrollDirectionY) * timerTicksPerFrame;
+                character.moveOffsetY = character.moveOffsetY
+                        + character.walkingSpeed * sgn(character.scrollDirectionY) * timerTicksPerFrame;
 
                 if (character.body.getWalk(character.direction.getId()).getSpeed() > 0.0f) {
                     character.body.getWalk(character.direction.getId()).setStarted(true);
@@ -322,38 +338,60 @@ public final class Character {
         PixelOffsetX += (int) character.moveOffsetX;
         PixelOffsetY += (int) character.moveOffsetY;
 
+        // -=-=-=-=-=- [EFECTO RESPIRACIÓN - INICIO] -=-=-=-=-=-
+
+        int breathingOffsetY = 0;
+
+        // Si el PJ se está moviendo, muerto o invisible no aplicamos el efecto.
+        if (options.isBreathingEffect() && !character.dead && !character.moving & !character.invisible) {
+
+            // Velocidad, ajustar para más rapido/lento
+            float breathSpeed = 4.0f;
+            // Amplitud, pixeles arriba/abajo
+            float breathAmplitude = 2.0f;
+
+            // Math.sin crea la onda suave de -1 a 1
+            float breathWave = (float) Math.sin(Time.beginTime * breathSpeed);
+            breathingOffsetY = (int) (breathWave * breathAmplitude);
+
+        }
+
         if (character.head.getHead(character.direction.getId()).getGrhIndex() != 0) {
             if (!character.invisible) {
 
+                // Dibuja Cuerpo
                 if (character.body.getWalk(character.direction.getId()).getGrhIndex() != 0) {
                     drawTexture(character.body.getWalk(character.direction.getId()),
-                            PixelOffsetX, PixelOffsetY,
+                            PixelOffsetX, PixelOffsetY + breathingOffsetY,
                             true, true, false, 1.0f, ambientcolor);
                 }
 
+                // Dibuja Cabeza
                 if (character.head.getHead(character.direction.getId()).getGrhIndex() != 0) {
                     drawTexture(character.head.getHead(character.direction.getId()),
                             PixelOffsetX + character.body.getHeadOffset().getX(),
-                            PixelOffsetY + character.body.getHeadOffset().getY(),
+                            PixelOffsetY + character.body.getHeadOffset().getY() + breathingOffsetY,
                             true, false, false, 1.0f, ambientcolor);
 
-
+                    // Dibuja Casco
                     if (character.helmet.getHead(character.direction.getId()).getGrhIndex() != 0) {
                         drawTexture(character.helmet.getHead(character.direction.getId()),
                                 PixelOffsetX + character.body.getHeadOffset().getX(),
-                                PixelOffsetY + character.body.getHeadOffset().getY() - 34,
+                                PixelOffsetY + character.body.getHeadOffset().getY() - 34 + breathingOffsetY,
                                 true, false, false, 1.0f, ambientcolor);
                     }
 
+                    // Dibuja Arma
                     if (character.weapon.getWeaponWalk(character.direction.getId()).getGrhIndex() != 0) {
                         drawTexture(character.weapon.getWeaponWalk(character.direction.getId()),
-                                PixelOffsetX, PixelOffsetY,
+                                PixelOffsetX, PixelOffsetY + breathingOffsetY,
                                 true, true, false, 1.0f, ambientcolor);
                     }
 
+                    // Dibuja Escudo
                     if (character.shield.getShieldWalk(character.direction.getId()).getGrhIndex() != 0) {
                         drawTexture(character.shield.getShieldWalk(character.direction.getId()),
-                                PixelOffsetX, PixelOffsetY, true, true, false, 1.0f, ambientcolor);
+                                PixelOffsetX, PixelOffsetY + breathingOffsetY, true, true, false, 1.0f, ambientcolor);
                     }
 
                     if (options.isShowName()) {
@@ -385,7 +423,6 @@ public final class Character {
                                     PixelOffsetX + 16 - getTextWidth(character.name, false) / 2,
                                     PixelOffsetY + 30, color, NORMAL_FONT, false);
 
-
                             if (!character.clanName.isEmpty()) {
                                 drawText(character.clanName,
                                         PixelOffsetX + 16 - getTextWidth(character.clanName, false) / 2,
@@ -395,7 +432,6 @@ public final class Character {
                     }
                 }
             }
-
 
         } else {
             if (character.body.getWalk(character.direction.getId()).getGrhIndex() > 0) {
@@ -418,7 +454,8 @@ public final class Character {
     }
 
     public static int sgn(short number) {
-        if (number == 0) return 0;
+        if (number == 0)
+            return 0;
         return (number / Math.abs(number));
     }
 
