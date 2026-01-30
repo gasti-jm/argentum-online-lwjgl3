@@ -12,8 +12,7 @@ void main() {
 
     vec4 finalColor = tex * vColor;
 
-    if (finalColor.a <= 0.01)
-    discard;
+    if (tex.a < 0.5) discard;
 
     FragColor = finalColor;
 }

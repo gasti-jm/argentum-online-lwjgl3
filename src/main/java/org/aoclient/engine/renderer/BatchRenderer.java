@@ -30,7 +30,7 @@ import static org.lwjgl.opengl.GL30.*;
 public class BatchRenderer {
     private Texture currentTexture = null;
     private boolean drawing = false;
-    private boolean currentBlend = false;
+    private boolean currentBlend;
 
     private static final int MAX_QUADS = 10000;
     private static final int VERTICES_PER_QUAD = 6;
@@ -89,8 +89,8 @@ public class BatchRenderer {
         buffer.clear();
         vertexCount = 0;
         currentTexture = null;
-        currentBlend = false;
         drawing = true;
+        currentBlend = false;
     }
 
     // =========================
@@ -114,8 +114,10 @@ public class BatchRenderer {
             return;
         }
 
-        if (currentBlend != blend) {
+
+        if (currentTexture != texture || currentBlend != blend) {
             flush();
+
             currentBlend = blend;
 
             if (blend) {
@@ -123,13 +125,15 @@ public class BatchRenderer {
             } else {
                 glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
             }
-        }
 
-        if (currentTexture != texture) {
-            flush();
             currentTexture = texture;
             currentTexture.bind();
         }
+
+        if (vertexCount + 6 >= MAX_QUADS * VERTICES_PER_QUAD) {
+            flush();
+        }
+
 
         push(x, y,         u0, v1, r, g, b, a);
         push(x + w, y,     u1, v1, r, g, b, a);
@@ -147,7 +151,6 @@ public class BatchRenderer {
 
         glBindBuffer(GL_ARRAY_BUFFER, vbo);
 
-        // 👇 ORPHANING (LA CLAVE)
         glBufferData(
                 GL_ARRAY_BUFFER,
                 buffer.capacity() * Float.BYTES,
@@ -185,7 +188,6 @@ public class BatchRenderer {
         flush();
         drawing = false;
         currentTexture = null;
-        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     }
 
     public void render() {
