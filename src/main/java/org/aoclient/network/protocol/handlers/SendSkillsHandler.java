@@ -2,6 +2,7 @@ package org.aoclient.network.protocol.handlers;
 
 import org.aoclient.engine.game.User;
 import org.aoclient.engine.game.models.Skill;
+import org.aoclient.engine.utils.Log;
 import org.aoclient.network.PacketBuffer;
 import org.tinylog.Logger;
 
@@ -32,7 +33,7 @@ public class SendSkillsHandler implements PacketHandler {
         */
         // LlegaronSkills = true;
 
-        Logger.debug("handleSendSkills Cargado! - FALTA TERMINAR!");
+        Log.debug("handleSendSkills Cargado! - FALTA TERMINAR!");
     }
 
 }

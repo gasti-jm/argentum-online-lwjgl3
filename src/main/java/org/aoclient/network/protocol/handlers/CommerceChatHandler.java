@@ -1,5 +1,6 @@
 package org.aoclient.network.protocol.handlers;
 
+import org.aoclient.engine.utils.Log;
 import org.aoclient.network.PacketBuffer;
 import org.tinylog.Logger;
 
@@ -48,7 +49,7 @@ public class CommerceChatHandler implements PacketHandler {
 
         buffer.copy(tempBuffer);
 
-        Logger.debug("handleCommerceChat CARGADO - FALTA TERMINAR!");
+        Log.debug("handleCommerceChat CARGADO - FALTA TERMINAR!");
     }
 
 }

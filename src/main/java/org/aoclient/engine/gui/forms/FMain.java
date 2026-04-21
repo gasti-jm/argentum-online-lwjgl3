@@ -4,8 +4,8 @@ import imgui.ImDrawList;
 import imgui.ImGui;
 import imgui.flag.*;
 import imgui.type.ImString;
-import org.aoclient.engine.Engine;
-import org.aoclient.engine.Window;
+import org.aoclient.engine.EngineGL;
+import org.aoclient.engine.window.Window;
 import org.aoclient.engine.game.console.Console;
 import org.aoclient.engine.gui.ImGUISystem;
 import org.aoclient.engine.gui.widgets.ImageButton3State;
@@ -214,7 +214,7 @@ public final class FMain extends Form {
         -=--=--=--=--=--=--=--=--=--=--=--=--=--=--=--=--=--=--=--=-*/
         if (drawButton(775, 3, 17, 17, "close")) {
             playSound(SND_CLICK);
-            Engine.closeClient();
+            EngineGL.closeClient();
         }
         if (drawButton(755, 3, 17, 17, "minimizar")) {
             playSound(SND_CLICK);

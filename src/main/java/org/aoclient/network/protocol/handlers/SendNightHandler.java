@@ -1,5 +1,6 @@
 package org.aoclient.network.protocol.handlers;
 
+import org.aoclient.engine.utils.Log;
 import org.aoclient.network.PacketBuffer;
 import org.tinylog.Logger;
 
@@ -11,7 +12,7 @@ public class SendNightHandler implements PacketHandler {
         buffer.readByte();
 
         boolean tBool = buffer.readBoolean();
-        Logger.debug("handleSendNight Cargado! - FALTA TERMINAR!");
+        Log.debug("handleSendNight Cargado! - FALTA TERMINAR!");
     }
 
 }

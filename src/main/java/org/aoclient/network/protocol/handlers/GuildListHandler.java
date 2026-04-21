@@ -2,6 +2,7 @@ package org.aoclient.network.protocol.handlers;
 
 import org.aoclient.engine.gui.ImGUISystem;
 import org.aoclient.engine.gui.forms.FGuildAdm;
+import org.aoclient.engine.utils.Log;
 import org.aoclient.network.PacketBuffer;
 import org.tinylog.Logger;
 
@@ -25,6 +26,6 @@ public class GuildListHandler implements PacketHandler {
         ImGUISystem.INSTANCE.show(guildAdm);
 
         buffer.copy(tempBuffer);
-        Logger.debug("Guild list loaded with " + guildsArray.length + " guilds");
+        Log.debug("Guild list loaded with " + guildsArray.length + " guilds");
     }
 }

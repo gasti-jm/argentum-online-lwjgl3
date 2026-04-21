@@ -1,5 +1,6 @@
 package org.aoclient.network.protocol.handlers;
 
+import org.aoclient.engine.utils.Log;
 import org.aoclient.network.PacketBuffer;
 import org.tinylog.Logger;
 
@@ -53,7 +54,7 @@ public class ChangeUserTradeSlotHandler implements PacketHandler {
         //    Call frmComerciarUsu.PrintCommerceMsg(TradingUserName & " ha modificado su oferta.", FontTypeNames.FONTTYPE_VENENO)
 
         buffer.copy(tempBuffer);
-        Logger.debug("handleChangeUserTradeSlot Cargado! - FALTA TERMINAR!");
+        Log.debug("handleChangeUserTradeSlot Cargado! - FALTA TERMINAR!");
     }
 
 }

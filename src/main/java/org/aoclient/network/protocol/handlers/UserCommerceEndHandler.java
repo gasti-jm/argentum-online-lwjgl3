@@ -1,5 +1,6 @@
 package org.aoclient.network.protocol.handlers;
 
+import org.aoclient.engine.utils.Log;
 import org.aoclient.network.PacketBuffer;
 import org.tinylog.Logger;
 
@@ -20,7 +21,7 @@ public class UserCommerceEndHandler implements PacketHandler {
         //    Unload frmComerciarUsu
         //    Comerciando = False
 
-        Logger.debug("handleUserCommerceEnd CARGADO - FALTA TERMINAR!");
+        Log.debug("handleUserCommerceEnd CARGADO - FALTA TERMINAR!");
     }
 
 }

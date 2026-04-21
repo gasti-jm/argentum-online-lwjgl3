@@ -2,6 +2,7 @@ package org.aoclient.network.protocol.handlers;
 
 import org.aoclient.engine.gui.ImGUISystem;
 import org.aoclient.engine.gui.forms.FCreateCharacter;
+import org.aoclient.engine.utils.Log;
 import org.aoclient.network.PacketBuffer;
 import org.tinylog.Logger;
 
@@ -32,7 +33,7 @@ public class DiceRollHandler implements PacketHandler {
                 }
             }
         } catch (Exception e) {
-            Logger.error("Error actualizando atributos en FCreateCharacter: " + e.getMessage(), e);
+            Log.err("Error actualizando atributos en FCreateCharacter: " + e.getMessage(), e);
         }
     }
 

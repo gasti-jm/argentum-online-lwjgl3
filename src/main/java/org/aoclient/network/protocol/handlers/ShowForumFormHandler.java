@@ -1,5 +1,6 @@
 package org.aoclient.network.protocol.handlers;
 
+import org.aoclient.engine.utils.Log;
 import org.aoclient.network.PacketBuffer;
 import org.tinylog.Logger;
 
@@ -18,7 +19,7 @@ public class ShowForumFormHandler implements PacketHandler {
         //    If Not MirandoForo Then
         //        frmForo.Show , //FrmMain
         //    End If
-        Logger.debug("handleShowForumForm Cargado! - FALTA TERMINAR!");
+        Log.debug("handleShowForumForm Cargado! - FALTA TERMINAR!");
     }
 
 }

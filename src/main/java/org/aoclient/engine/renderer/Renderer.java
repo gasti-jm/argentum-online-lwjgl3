@@ -1,6 +1,6 @@
 package org.aoclient.engine.renderer;
 
-import org.aoclient.engine.Window;
+import org.aoclient.engine.window.Window;
 import org.aoclient.engine.scenes.Scene;
 import org.joml.Matrix4f;
 import org.lwjgl.system.MemoryUtil;

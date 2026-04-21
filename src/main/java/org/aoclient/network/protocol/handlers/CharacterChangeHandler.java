@@ -3,6 +3,7 @@ package org.aoclient.network.protocol.handlers;
 import org.aoclient.engine.game.User;
 import org.aoclient.engine.game.models.Direction;
 import org.aoclient.engine.renderer.TextureManager;
+import org.aoclient.engine.utils.Log;
 import org.aoclient.engine.utils.inits.BodyData;
 import org.aoclient.engine.utils.inits.HeadData;
 import org.aoclient.engine.utils.inits.ShieldData;
@@ -59,7 +60,7 @@ public class CharacterChangeHandler implements PacketHandler {
         User.INSTANCE.setCharacterFx(charIndex, buffer.readInteger(), buffer.readInteger());
 
         refreshAllChars();
-        Logger.debug("handleCharacterChange Cargado! - FALTA TERMINAR!");
+        Log.debug("handleCharacterChange Cargado! - FALTA TERMINAR!");
     }
 
 }

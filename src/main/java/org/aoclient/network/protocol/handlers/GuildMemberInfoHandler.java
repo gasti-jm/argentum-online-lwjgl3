@@ -1,5 +1,6 @@
 package org.aoclient.network.protocol.handlers;
 
+import org.aoclient.engine.utils.Log;
 import org.aoclient.network.PacketBuffer;
 import org.tinylog.Logger;
 
@@ -45,7 +46,7 @@ public class GuildMemberInfoHandler implements PacketHandler {
         //    End With
 
         buffer.copy(tempBuffer);
-        Logger.debug("handleGuildMemberInfo Cargado! - FALTA TERMINAR!");
+        Log.debug("handleGuildMemberInfo Cargado! - FALTA TERMINAR!");
     }
 
 }

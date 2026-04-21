@@ -1,4 +1,4 @@
-package org.aoclient.engine;
+package org.aoclient.engine.window;
 
 import org.aoclient.engine.listeners.KeyHandler;
 import org.aoclient.engine.listeners.MouseListener;

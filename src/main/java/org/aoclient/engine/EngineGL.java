@@ -8,8 +8,10 @@ import org.aoclient.engine.renderer.Renderer;
 import org.aoclient.engine.renderer.TextureManager;
 import org.aoclient.engine.scenes.*;
 import org.aoclient.engine.utils.GameData;
+import org.aoclient.engine.utils.Log;
 import org.aoclient.engine.utils.Platform;
 import org.aoclient.engine.utils.Time;
+import org.aoclient.engine.window.Window;
 import org.aoclient.network.Connection;
 import org.lwjgl.Version;
 import org.tinylog.Logger;
@@ -17,6 +19,7 @@ import org.tinylog.Logger;
 import static org.aoclient.engine.audio.Sound.playMusic;
 import static org.aoclient.engine.scenes.SceneType.INTRO_SCENE;
 import static org.aoclient.engine.utils.GameData.options;
+import static org.aoclient.engine.utils.LaunchOptions.CLIENT_DEBUG;
 import static org.aoclient.engine.utils.Time.deltaTime;
 import static org.lwjgl.glfw.GLFW.glfwPollEvents;
 import static org.lwjgl.glfw.GLFW.glfwSwapBuffers;
@@ -33,7 +36,7 @@ import static org.lwjgl.opengl.GL11.*;
  * {@code close()}.
  */
 
-public final class Engine {
+public final class EngineGL implements IEngine {
 
     /** Flag que indica si el programa esta corriendo. */
     private static boolean prgRun = true;
@@ -59,12 +62,12 @@ public final class Engine {
     /**
      * Inicializa los componentes esenciales del motor grafico.
      */
-    public void init() {
+    private void init() {
         Platform.init(); // Obtenemos informacion del SO.
 
-        Logger.info("Starting LWJGL {}!", Version.getVersion());
-        Logger.info("Running on {} / v{} [{}]", Platform.operationSystem, Platform.osVersion, Platform.arch);
-        Logger.info("Java version: {}", Platform.javaVersion);
+        Log.debug("Starting LWJGL {}!", Version.getVersion());
+        Log.debug("Running on {} / v{} [{}]", Platform.operationSystem, Platform.osVersion, Platform.arch);
+        Log.debug("Java version: {}", Platform.javaVersion);
 
         GameData.init();
         window.init();
@@ -84,6 +87,7 @@ public final class Engine {
      * renderizado y la comunicacion con el servidor. Finalmente, se limpian y cierran los recursos utilizados llamando al metodo
      * {@code close()}.
      */
+    @Override
     public void start() {
         init();
         loop();

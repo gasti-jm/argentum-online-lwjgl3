@@ -1,7 +1,7 @@
 package org.aoclient.network.protocol.handlers.gm;
 
 import org.aoclient.engine.game.Messages;
-import org.aoclient.engine.Window;
+import org.aoclient.engine.window.Window;
 import org.aoclient.engine.game.console.Console;
 import org.aoclient.engine.game.User;
 import org.aoclient.engine.game.console.FontStyle;

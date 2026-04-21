@@ -2,6 +2,7 @@ package org.aoclient.network.protocol.handlers;
 
 import org.aoclient.engine.audio.Sound;
 import org.aoclient.engine.gui.ImGUISystem;
+import org.aoclient.engine.utils.Log;
 import org.aoclient.network.PacketBuffer;
 import org.aoclient.network.Connection;
 import org.tinylog.Logger;
@@ -63,7 +64,7 @@ public class DisconnectHandler implements PacketHandler {
          */
 
         playMusic("2.ogg");
-        Logger.debug("handleDisconnect CARGADO - FALTA TERMINAR!");
+        Log.debug("handleDisconnect CARGADO - FALTA TERMINAR!");
     }
 
 }

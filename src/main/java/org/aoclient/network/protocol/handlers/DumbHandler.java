@@ -1,5 +1,6 @@
 package org.aoclient.network.protocol.handlers;
 
+import org.aoclient.engine.utils.Log;
 import org.aoclient.network.PacketBuffer;
 import org.tinylog.Logger;
 
@@ -9,7 +10,7 @@ public class DumbHandler implements PacketHandler {
     public void handle(PacketBuffer buffer) {
         buffer.readByte();
         //UserEstupido = True
-        Logger.debug("handleDumb Cargado! - FALTA TERMINAR!");
+        Log.debug("handleDumb Cargado! - FALTA TERMINAR!");
     }
 
 }

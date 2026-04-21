@@ -1,6 +1,7 @@
 package org.aoclient.network.protocol.handlers;
 
 import org.aoclient.engine.game.User;
+import org.aoclient.engine.utils.Log;
 import org.aoclient.network.PacketBuffer;
 import org.tinylog.Logger;
 
@@ -22,7 +23,7 @@ public class ChangeSpellSlotHandler implements PacketHandler {
         User.INSTANCE.getInventorySpells().addSpell(slot - 1, hechizoName);
 
         buffer.copy(tempBuffer);
-        Logger.debug("ChangeSpellSlot Cargado! - FALTA TERMINAR!");
+        Log.debug("ChangeSpellSlot Cargado! - FALTA TERMINAR!");
     }
 
 }

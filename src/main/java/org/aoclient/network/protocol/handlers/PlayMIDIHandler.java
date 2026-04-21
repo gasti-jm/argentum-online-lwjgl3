@@ -1,5 +1,6 @@
 package org.aoclient.network.protocol.handlers;
 
+import org.aoclient.engine.utils.Log;
 import org.aoclient.network.PacketBuffer;
 import org.tinylog.Logger;
 
@@ -17,7 +18,7 @@ public class PlayMIDIHandler implements PacketHandler {
         buffer.readInteger(); // Remove the bytes to prevent errors
         if (currentMusic > 0) playMusic(currentMusic + ".ogg"); // play music
 
-        Logger.debug("handlePlayMIDI Cargado! - FALTA TERMINAR!");
+        Log.debug("handlePlayMIDI Cargado! - FALTA TERMINAR!");
     }
 
 }

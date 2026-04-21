@@ -1,5 +1,6 @@
 package org.aoclient.network.protocol.handlers;
 
+import org.aoclient.engine.utils.Log;
 import org.aoclient.network.PacketBuffer;
 import org.tinylog.Logger;
 
@@ -38,7 +39,7 @@ public class GuildNewsHandler implements PacketHandler {
         //    If ClientSetup.bGuildNews Then frmGuildNews.Show vbModeless, //FrmMain
 
         buffer.copy(tempBuffer);
-        Logger.debug("handleGuildNews Cargado! - FALTA TERMINAR!");
+        Log.debug("handleGuildNews Cargado! - FALTA TERMINAR!");
     }
 
 }

@@ -3,9 +3,8 @@ package org.aoclient.engine.gui.forms;
 import imgui.ImGui;
 import imgui.flag.ImGuiCond;
 import imgui.flag.ImGuiWindowFlags;
-import org.aoclient.engine.Window;
+import org.aoclient.engine.window.Window;
 import org.aoclient.engine.game.Rain;
-import org.aoclient.engine.game.User;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;

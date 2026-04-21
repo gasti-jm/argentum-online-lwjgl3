@@ -1,6 +1,6 @@
 package org.aoclient.engine.audio;
 
-import org.aoclient.engine.Window;
+import org.aoclient.engine.window.Window;
 
 import java.io.File;
 import java.nio.IntBuffer;

@@ -1,5 +1,6 @@
 package org.aoclient.network.protocol.handlers;
 
+import org.aoclient.engine.utils.Log;
 import org.aoclient.network.PacketBuffer;
 import org.tinylog.Logger;
 
@@ -13,7 +14,7 @@ public class SetInvisibleHandler implements PacketHandler {
         buffer.readByte();
 
         charList[buffer.readInteger()].setInvisible(buffer.readBoolean());
-        Logger.debug("handleSetInvisible Cargado!");
+        Log.debug("handleSetInvisible Cargado!");
     }
 
 }
