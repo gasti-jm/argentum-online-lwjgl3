@@ -1,5 +1,6 @@
 package org.aoclient.network.protocol.handlers;
 
+import org.aoclient.engine.utils.Log;
 import org.aoclient.network.PacketBuffer;
 import org.tinylog.Logger;
 
@@ -15,7 +16,7 @@ public class OfferDetailsHandler implements PacketHandler {
         String recievePeticion = tempBuffer.readCp1252String();
 
         buffer.copy(tempBuffer);
-        Logger.debug("handleOfferDetails Cargado! - FALTA TERMINAR!");
+        Log.debug("handleOfferDetails Cargado! - FALTA TERMINAR!");
     }
 
 }

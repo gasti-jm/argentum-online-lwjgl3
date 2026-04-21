@@ -1,6 +1,12 @@
 package org.aoclient;
 
-import org.aoclient.engine.Engine;
+import org.aoclient.engine.EngineGL;
+import org.aoclient.engine.EngineVulkan;
+import org.aoclient.engine.IEngine;
+import org.aoclient.engine.utils.LaunchOptions;
+
+import static org.aoclient.engine.utils.LaunchOptions.GRAPHIC_LIBRARY;
+
 
 /**
  * Clase principal que actua como punto de entrada de la aplicacion.
@@ -11,9 +17,18 @@ import org.aoclient.engine.Engine;
  */
 
 public class Main {
-
     public static void main(String[] args) {
-        new Engine().start();
+        LaunchOptions.init(args);
+        IEngine engine;
+
+        // TODO: if we want to implement another graphics library. The plan is to use Vulkan in the future.
+        if(GRAPHIC_LIBRARY.equals("vulkan")) {
+            engine = new EngineVulkan();
+        } else {
+            engine = new EngineGL();
+        }
+
+        engine.start();
     }
 
 }

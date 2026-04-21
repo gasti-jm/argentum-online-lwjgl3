@@ -4,6 +4,7 @@ import org.aoclient.engine.game.console.Console;
 import org.aoclient.engine.game.console.FontStyle;
 import org.aoclient.engine.game.models.FontType;
 import org.aoclient.engine.renderer.RGBColor;
+import org.aoclient.engine.utils.Log;
 import org.aoclient.network.PacketBuffer;
 import org.tinylog.Logger;
 
@@ -30,7 +31,7 @@ public class ConsoleMessageHandler implements PacketHandler {
         //    End If
 
         buffer.copy(tempBuffer);
-        Logger.debug("handleConsoleMessage CARGADO - FALTA TERMINAR: FOCO PARTY!");
+        Log.debug("handleConsoleMessage CARGADO - FALTA TERMINAR: FOCO PARTY!");
     }
 
 }

@@ -1,5 +1,6 @@
 package org.aoclient.network.protocol.handlers;
 
+import org.aoclient.engine.utils.Log;
 import org.aoclient.network.PacketBuffer;
 import org.tinylog.Logger;
 
@@ -73,7 +74,7 @@ public class CarpenterObjectsHandler implements PacketHandler {
         //    Next i
 
         buffer.copy(tempBuffer);
-        Logger.debug("handleCarpenterObjects Cargado! - FALTA TERMINAR!");
+        Log.debug("handleCarpenterObjects Cargado! - FALTA TERMINAR!");
     }
 
 }

@@ -1,5 +1,6 @@
 package org.aoclient.network.protocol.handlers;
 
+import org.aoclient.engine.utils.Log;
 import org.aoclient.network.PacketBuffer;
 import org.tinylog.Logger;
 
@@ -42,7 +43,7 @@ public class UserCommerceInitHandler implements PacketHandler {
         //    Comerciando = True
         //    Call frmComerciarUsu.Show(vbModeless, //FrmMain)
 
-        Logger.debug("handleUserCommerceInit CARGADO - FALTA TERMINAR!");
+        Log.debug("handleUserCommerceInit CARGADO - FALTA TERMINAR!");
     }
 
 }

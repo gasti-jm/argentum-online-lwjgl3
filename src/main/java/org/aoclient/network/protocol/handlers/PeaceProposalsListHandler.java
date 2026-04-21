@@ -1,5 +1,6 @@
 package org.aoclient.network.protocol.handlers;
 
+import org.aoclient.engine.utils.Log;
 import org.aoclient.network.PacketBuffer;
 import org.tinylog.Logger;
 
@@ -28,7 +29,7 @@ public class PeaceProposalsListHandler implements PacketHandler {
         //    Call frmPeaceProp.Show(vbModeless, //FrmMain)
 
         buffer.copy(tempBuffer);
-        Logger.debug("handlePeaceProposalsList Cargado! - FALTA TERMINAR!");
+        Log.debug("handlePeaceProposalsList Cargado! - FALTA TERMINAR!");
     }
 
 }

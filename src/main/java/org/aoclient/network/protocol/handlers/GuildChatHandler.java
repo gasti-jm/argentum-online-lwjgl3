@@ -1,5 +1,6 @@
 package org.aoclient.network.protocol.handlers;
 
+import org.aoclient.engine.utils.Log;
 import org.aoclient.network.PacketBuffer;
 import org.tinylog.Logger;
 
@@ -58,7 +59,7 @@ public class GuildChatHandler implements PacketHandler {
         //    End If
 
         buffer.copy(tempBuffer);
-        Logger.debug("handleGuildChat CARGADO - FALTA TERMINAR");
+        Log.debug("handleGuildChat CARGADO - FALTA TERMINAR");
     }
 
 }

@@ -1,5 +1,6 @@
 package org.aoclient.network.protocol.handlers;
 
+import org.aoclient.engine.utils.Log;
 import org.aoclient.network.PacketBuffer;
 import org.tinylog.Logger;
 
@@ -94,7 +95,7 @@ public class CharacterInfoHandler implements PacketHandler {
         //    End With
 
         buffer.copy(tempBuffer);
-        Logger.debug("handleCharacterInfo Cargado! - FALTA TERMINAR!");
+        Log.debug("handleCharacterInfo Cargado! - FALTA TERMINAR!");
     }
 
 }

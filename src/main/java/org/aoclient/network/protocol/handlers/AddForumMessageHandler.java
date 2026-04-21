@@ -1,5 +1,6 @@
 package org.aoclient.network.protocol.handlers;
 
+import org.aoclient.engine.utils.Log;
 import org.aoclient.network.PacketBuffer;
 import org.tinylog.Logger;
 
@@ -25,7 +26,7 @@ public class AddForumMessageHandler implements PacketHandler {
         //    Call clsForos.AddPost(ForumAlignment(ForumType), Title, Author, Message, EsAnuncio(ForumType))
 
         buffer.copy(tempBuffer);
-        Logger.debug("handleAddForumMessage Cargado! - FALTA TERMINAR!");
+        Log.debug("handleAddForumMessage Cargado! - FALTA TERMINAR!");
     }
 
 }

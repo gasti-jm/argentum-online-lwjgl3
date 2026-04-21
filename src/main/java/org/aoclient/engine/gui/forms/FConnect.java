@@ -6,8 +6,8 @@ import imgui.flag.ImGuiCond;
 import imgui.flag.ImGuiInputTextFlags;
 import imgui.flag.ImGuiWindowFlags;
 import imgui.type.ImString;
-import org.aoclient.engine.Engine;
-import org.aoclient.engine.Window;
+import org.aoclient.engine.EngineGL;
+import org.aoclient.engine.window.Window;
 import org.aoclient.engine.game.Messages;
 import org.aoclient.engine.gui.ImGUISystem;
 import org.aoclient.engine.gui.widgets.ImageButton3State;
@@ -231,7 +231,7 @@ public final class FConnect extends Form {
     }
 
     private void buttonExitGame() {
-        Engine.closeClient();
+        EngineGL.closeClient();
     }
 
 }

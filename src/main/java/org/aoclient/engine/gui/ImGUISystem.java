@@ -8,7 +8,7 @@ import imgui.flag.ImGuiConfigFlags;
 import imgui.flag.ImGuiKey;
 import imgui.flag.ImGuiMouseCursor;
 import imgui.gl3.ImGuiImplGl3;
-import org.aoclient.engine.Window;
+import org.aoclient.engine.window.Window;
 import org.aoclient.engine.game.console.ImGuiFonts;
 import org.aoclient.engine.gui.forms.Form;
 

@@ -5,7 +5,7 @@ import org.aoclient.engine.gui.ImGUISystem;
 import org.aoclient.engine.gui.forms.FConnect;
 import org.aoclient.engine.listeners.KeyHandler;
 
-import static org.aoclient.engine.Engine.closeClient;
+import static org.aoclient.engine.EngineGL.closeClient;
 import static org.aoclient.engine.game.bindkeys.Key.EXIT_GAME;
 
 /**

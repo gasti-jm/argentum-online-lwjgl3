@@ -2,7 +2,7 @@ package org.aoclient.engine.renderer;
 
 import org.aoclient.engine.utils.inits.GrhInfo;
 
-import static org.aoclient.engine.Engine.renderer;
+import static org.aoclient.engine.EngineGL.renderer;
 import static org.aoclient.engine.scenes.Camera.TILE_PIXEL_SIZE;
 import static org.aoclient.engine.utils.GameData.grhData;
 import static org.aoclient.engine.utils.Time.deltaTime;

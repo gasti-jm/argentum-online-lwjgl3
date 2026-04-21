@@ -1,5 +1,6 @@
 package org.aoclient.network.protocol.handlers;
 
+import org.aoclient.engine.utils.Log;
 import org.aoclient.network.PacketBuffer;
 import org.tinylog.Logger;
 
@@ -11,7 +12,7 @@ public class ShowGuildFundationFormHandler implements PacketHandler {
 
         //CreandoClan = True
         //    frmGuildFoundation.Show , //FrmMain
-        Logger.debug("handleShowGuildFundationForm Cargado! - FALTA TERMINAR!");
+        Log.debug("handleShowGuildFundationForm Cargado! - FALTA TERMINAR!");
     }
 
 }

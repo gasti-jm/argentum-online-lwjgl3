@@ -98,24 +98,33 @@ public class Dialogs {
         }
     }
 
-    public static void renderDialogs(final Camera camera, final int x, final int y, final int pixelOffsetX, final int pixelOffsetY) {
-        if (mapData[x][y].getCharIndex() != 0) {
-            final Character chrActual = charList[mapData[x][y].getCharIndex()];
+    public static void renderDialogs(final Camera camera, final int pixelOffsetX, final int pixelOffsetY) {
+        camera.setScreenY(camera.getMinYOffset() - TILE_BUFFER_SIZE);
+        for (int y = camera.getMinY(); y <= camera.getMaxY(); y++) {
+            camera.setScreenX(camera.getMinXOffset() - TILE_BUFFER_SIZE);
+            for (int x = camera.getMinX(); x <= camera.getMaxX(); x++) {
 
-            if (!chrActual.getDialog().isEmpty()) {
-                if (chrActual.getDialog_offset_counter_y() < 10)
-                    chrActual.setDialog_offset_counter_y(chrActual.getDialog_offset_counter_y() + 50 * deltaTime);
+                if (mapData[x][y].getCharIndex() != 0) {
+                    final Character chrActual = charList[mapData[x][y].getCharIndex()];
 
-                final int dX = (POS_SCREEN_X + camera.getScreenX() * TILE_PIXEL_SIZE) + ((int) (chrActual.getMoveOffsetX()) + pixelOffsetX);
-                final int dY = (POS_SCREEN_Y + camera.getScreenY() * TILE_PIXEL_SIZE) + ((int) (chrActual.getMoveOffsetY()) + pixelOffsetY);
+                    if (!chrActual.getDialog().isEmpty()) {
+                        if (chrActual.getDialog_offset_counter_y() < 10)
+                            chrActual.setDialog_offset_counter_y(chrActual.getDialog_offset_counter_y() + 50 * deltaTime);
 
-                // Render dialog
-                drawText(chrActual.getDialog(),
-                        dX + 16 - getTextWidth(chrActual.getDialog(), true) / 2,
-                        dY - 13 + chrActual.getBody().getHeadOffset().getY() - getTextHeight(chrActual.getDialog(), true) - (int) chrActual.getDialog_offset_counter_y(),
-                        chrActual.getDialog_color(),
-                        chrActual.getDialog_font_index(), true);
+                        final int dX = (POS_SCREEN_X + camera.getScreenX() * TILE_PIXEL_SIZE) + ((int) (chrActual.getMoveOffsetX()) + pixelOffsetX);
+                        final int dY = (POS_SCREEN_Y + camera.getScreenY() * TILE_PIXEL_SIZE) + ((int) (chrActual.getMoveOffsetY()) + pixelOffsetY);
+
+                        // Render dialog
+                        drawText(chrActual.getDialog(),
+                                dX + 16 - getTextWidth(chrActual.getDialog(), true) / 2,
+                                dY - 13 + chrActual.getBody().getHeadOffset().getY() - getTextHeight(chrActual.getDialog(), true) - (int) chrActual.getDialog_offset_counter_y(),
+                                chrActual.getDialog_color(),
+                                chrActual.getDialog_font_index(), true);
+                    }
+                }
+                camera.incrementScreenX();
             }
+            camera.incrementScreenY();
         }
     }
 

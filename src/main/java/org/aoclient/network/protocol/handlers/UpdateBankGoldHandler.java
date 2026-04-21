@@ -1,5 +1,6 @@
 package org.aoclient.network.protocol.handlers;
 
+import org.aoclient.engine.utils.Log;
 import org.aoclient.network.PacketBuffer;
 import org.tinylog.Logger;
 
@@ -12,7 +13,7 @@ public class UpdateBankGoldHandler implements PacketHandler {
 
         int bankGold = buffer.readLong();
         //frmBancoObj.lblUserGld.Caption = incomingData.ReadLong
-        Logger.debug("handleUpdateBankGold CARGADO - FALTA TERMINAR!");
+        Log.debug("handleUpdateBankGold CARGADO - FALTA TERMINAR!");
     }
 
 }

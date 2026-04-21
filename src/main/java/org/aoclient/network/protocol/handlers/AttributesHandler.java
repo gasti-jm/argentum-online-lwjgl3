@@ -2,6 +2,7 @@ package org.aoclient.network.protocol.handlers;
 
 import org.aoclient.engine.game.User;
 import org.aoclient.engine.game.models.Attribute;
+import org.aoclient.engine.utils.Log;
 import org.aoclient.network.PacketBuffer;
 import org.tinylog.Logger;
 
@@ -32,7 +33,7 @@ public class AttributesHandler implements PacketHandler {
         //        LlegaronAtrib = True
         //    End If
 
-        Logger.debug("handleAtributes Cargado! - FALTA TERMINAR!");
+        Log.debug("handleAtributes Cargado! - FALTA TERMINAR!");
     }
 
 }

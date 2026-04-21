@@ -1,5 +1,6 @@
 package org.aoclient.network.protocol.handlers;
 
+import org.aoclient.engine.utils.Log;
 import org.aoclient.network.PacketBuffer;
 import org.tinylog.Logger;
 
@@ -16,7 +17,7 @@ public class UserOfferConfirmHandler implements PacketHandler {
         //        .PrintCommerceMsg TradingUserName & " ha confirmado su oferta!", FontTypeNames.FONTTYPE_CONSE
         //    End With
 
-        Logger.debug("handleUserOfferConfirm CARGADO - FALTA TERMINAR!");
+        Log.debug("handleUserOfferConfirm CARGADO - FALTA TERMINAR!");
     }
 
 }

@@ -1,22 +1,15 @@
 package org.aoclient.engine.scenes;
 
-import org.aoclient.engine.Window;
+import org.aoclient.engine.window.Window;
 import org.aoclient.engine.game.*;
-import org.aoclient.engine.game.console.Console;
-import org.aoclient.engine.game.console.FontStyle;
 import org.aoclient.engine.game.models.Direction;
 import org.aoclient.engine.game.bindkeys.Key;
-import org.aoclient.engine.game.models.Skill;
 import org.aoclient.engine.gui.ImGUISystem;
-import org.aoclient.engine.gui.forms.FCantidad;
 import org.aoclient.engine.gui.forms.FMain;
 import org.aoclient.engine.listeners.KeyHandler;
 import org.aoclient.engine.listeners.MouseListener;
-import org.aoclient.engine.renderer.RGBColor;
 import org.aoclient.engine.utils.inits.GrhInfo;
 import org.aoclient.engine.utils.inits.MapData;
-import org.aoclient.network.protocol.Protocol;
-import org.aoclient.network.protocol.command.execution.CommandExecutor;
 
 import static org.aoclient.engine.game.IntervalTimer.INT_SENTRPU;
 import static org.aoclient.engine.game.models.Character.drawCharacter;
@@ -255,136 +248,113 @@ public final class GameScene extends Scene {
     private void renderScreen(int tileX, int tileY, int pixelOffsetX, int pixelOffsetY) {
         camera.update(tileX, tileY);
 
-        renderFirstLayer(pixelOffsetX, pixelOffsetY);
-        renderSecondLayer(pixelOffsetX, pixelOffsetY);
-        renderThirdLayer(pixelOffsetX, pixelOffsetY);
+        renderLayer(1, pixelOffsetX, pixelOffsetY);
+        renderLayer(2, pixelOffsetX, pixelOffsetY);
+        renderLayer(3, pixelOffsetX, pixelOffsetY);
 
         // Dialogs
-        camera.setScreenY(camera.getMinYOffset() - TILE_BUFFER_SIZE);
-        for (int y = camera.getMinY(); y <= camera.getMaxY(); y++) {
-            camera.setScreenX(camera.getMinXOffset() - TILE_BUFFER_SIZE);
-            for (int x = camera.getMinX(); x <= camera.getMaxX(); x++) {
-                Dialogs.renderDialogs(camera, x, y, pixelOffsetX, pixelOffsetY);
-                camera.incrementScreenX();
-            }
-            camera.incrementScreenY();
-        }
+        Dialogs.renderDialogs(camera, pixelOffsetX, pixelOffsetY);
 
-        renderFourthLayer(pixelOffsetX, pixelOffsetY);
+        this.updateEffectCeiling();
+        if (alphaCeiling > 0.0f) {
+            renderLayer(4, pixelOffsetX, pixelOffsetY);
+        }
 
         Dialogs.updateDialogs();
         Rain.INSTANCE.render(weather.getWeatherColor());
     }
 
-    private void renderFirstLayer(final int pixelOffsetX, final int pixelOffsetY) {
-        for (int y = camera.getScreenminY(); y <= camera.getScreenmaxY(); y++) {
-            int x;
-            for (x = camera.getScreenminX(); x <= camera.getScreenmaxX(); x++) {
+    /**
+     * Dibujamos la capa que se desea
+     *
+     * Orden:
+     * Layer 1 - Piso (Se dibuja de una manera más óptima que las demás capas)
+     * Layer 2 - graficos por encima del suelo (Costas, objetos de 32x32px, etc.)
+     * Layer 3 - objetos con más tamaño, personaje y graficos por encima del personaje.
+     * Dialogos - dialogos de los personajes.
+     * Layer 4 - Techos
+     */
+    private void renderLayer(final int layer, int pixelOffsetX, int pixelOffsetY) {
+        if (layer == 1) { //  floor.
+            for (int y = camera.getScreenminY(); y <= camera.getScreenmaxY(); y++) {
+                int x;
+                for (x = camera.getScreenminX(); x <= camera.getScreenmaxX(); x++) {
 
-                final MapData tile = mapData[x][y];
-                final GrhInfo grh = tile.getLayer(1);
+                    final MapData tile = mapData[x][y];
+                    final GrhInfo grh = tile.getLayer(layer);
 
-                final int drawX = POS_SCREEN_X + (camera.getScreenX() - 1) * TILE_PIXEL_SIZE + pixelOffsetX;
-                final int drawY = POS_SCREEN_Y + (camera.getScreenY() - 1) * TILE_PIXEL_SIZE + pixelOffsetY;
+                    final int drawX = POS_SCREEN_X + (camera.getScreenX() - 1) * TILE_PIXEL_SIZE + pixelOffsetX;
+                    final int drawY = POS_SCREEN_Y + (camera.getScreenY() - 1) * TILE_PIXEL_SIZE + pixelOffsetY;
 
-                if (grh.getGrhIndex() != 0) {
-                    drawTexture(grh, drawX, drawY, true, true, false, 1.0f, weather.getWeatherColor());
-                }
-
-                camera.incrementScreenX();
-            }
-            camera.setScreenX(camera.getScreenX() - x + camera.getScreenminX());
-            camera.incrementScreenY();
-        }
-    }
-
-    private void renderSecondLayer(final int pixelOffsetX, final int pixelOffsetY) {
-        camera.setScreenY(camera.getMinYOffset() - TILE_BUFFER_SIZE);
-        for (int y = camera.getMinY(); y <= camera.getMaxY(); y++) {
-            camera.setScreenX(camera.getMinXOffset() - TILE_BUFFER_SIZE);
-            for (int x = camera.getMinX(); x <= camera.getMaxX(); x++) {
-
-                final MapData tile = mapData[x][y];
-                GrhInfo grh = tile.getLayer(2);
-
-                final int drawX = POS_SCREEN_X + camera.getScreenX() * TILE_PIXEL_SIZE + pixelOffsetX;
-                final int drawY = POS_SCREEN_Y + camera.getScreenY() * TILE_PIXEL_SIZE + pixelOffsetY;
-
-                if (grh.getGrhIndex() != 0) {
-                    drawTexture(grh, drawX, drawY, true, true, false, 1.0f, weather.getWeatherColor());
-                }
-
-                grh = tile.getObjGrh();
-                if (grh.getGrhIndex() != 0) {
-                    if (grhData[grh.getGrhIndex()].getPixelWidth() == TILE_PIXEL_SIZE && grhData[grh.getGrhIndex()].getPixelHeight() == TILE_PIXEL_SIZE) {
+                    if (grh.getGrhIndex() != 0) {
                         drawTexture(grh, drawX, drawY, true, true, false, 1.0f, weather.getWeatherColor());
                     }
-                }
 
-                camera.incrementScreenX();
+                    camera.incrementScreenX();
+                }
+                camera.setScreenX(camera.getScreenX() - x + camera.getScreenminX());
+                camera.incrementScreenY();
             }
-            camera.incrementScreenY();
-        }
-    }
 
-    private void renderThirdLayer(final int pixelOffsetX, final int pixelOffsetY) {
-        // LAYER 3, CHARACTERS & OBJECTS > 32x32
-        camera.setScreenY(camera.getMinYOffset() - TILE_BUFFER_SIZE);
-        for (int y = camera.getMinY(); y <= camera.getMaxY(); y++) {
-            camera.setScreenX(camera.getMinXOffset() - TILE_BUFFER_SIZE);
-            for (int x = camera.getMinX(); x <= camera.getMaxX(); x++) {
+        } else { // another layer
 
-                final MapData tile = mapData[x][y];
-                GrhInfo grh;
-
-                final int drawX = POS_SCREEN_X + camera.getScreenX() * TILE_PIXEL_SIZE + pixelOffsetX;
-                final int drawY = POS_SCREEN_Y + camera.getScreenY() * TILE_PIXEL_SIZE + pixelOffsetY;
-
-                grh = tile.getObjGrh();
-                if (grh.getGrhIndex() != 0) {
-                    if (grhData[grh.getGrhIndex()].getPixelWidth() != TILE_PIXEL_SIZE && grhData[grh.getGrhIndex()].getPixelHeight() != TILE_PIXEL_SIZE) {
-                        drawTexture(grh, drawX, drawY, true, true, false, 1.0f, weather.getWeatherColor());
-                    }
-                }
-
-                if (tile.getCharIndex() != 0) {
-                    drawCharacter(tile.getCharIndex(), drawX, drawY, weather.getWeatherColor());
-                }
-
-                grh = tile.getLayer(3);
-                if (grh.getGrhIndex() != 0) {
-                    drawTexture(grh, drawX, drawY, true, true, false, 1.0f, weather.getWeatherColor());
-                }
-
-                camera.incrementScreenX();
-            }
-            camera.incrementScreenY();
-        }
-    }
-
-    private void renderFourthLayer(final int pixelOffsetX, final int pixelOffsetY) {
-        this.checkEffectCeiling();
-
-        if (alphaCeiling > 0.0f) {
             camera.setScreenY(camera.getMinYOffset() - TILE_BUFFER_SIZE);
             for (int y = camera.getMinY(); y <= camera.getMaxY(); y++) {
                 camera.setScreenX(camera.getMinXOffset() - TILE_BUFFER_SIZE);
                 for (int x = camera.getMinX(); x <= camera.getMaxX(); x++) {
 
                     final MapData tile = mapData[x][y];
-                    final GrhInfo grh = tile.getLayer(4);
+                    GrhInfo grh = tile.getLayer(layer);
 
                     final int drawX = POS_SCREEN_X + camera.getScreenX() * TILE_PIXEL_SIZE + pixelOffsetX;
                     final int drawY = POS_SCREEN_Y + camera.getScreenY() * TILE_PIXEL_SIZE + pixelOffsetY;
 
-                    if (grh.getGrhIndex() > 0) {
-                        drawTexture(grh, drawX, drawY, true, true, false, alphaCeiling, weather.getWeatherColor());
+                    switch (layer) {
+                        case 2:
+                            if (grh.getGrhIndex() != 0) {
+                                drawTexture(grh, drawX, drawY, true, true, false, 1.0f, weather.getWeatherColor());
+                            }
+
+                            grh = tile.getObjGrh();
+                            if (grh.getGrhIndex() != 0) {
+                                if (grhData[grh.getGrhIndex()].getPixelWidth() == TILE_PIXEL_SIZE && grhData[grh.getGrhIndex()].getPixelHeight() == TILE_PIXEL_SIZE) {
+                                    drawTexture(grh, drawX, drawY, true, true, false, 1.0f, weather.getWeatherColor());
+                                }
+                            }
+
+                            break;
+
+                        case 3: // LAYER 3, CHARACTERS & OBJECTS > 32x32
+                            grh = tile.getObjGrh();
+                            if (grh.getGrhIndex() != 0) {
+                                if (grhData[grh.getGrhIndex()].getPixelWidth() != TILE_PIXEL_SIZE && grhData[grh.getGrhIndex()].getPixelHeight() != TILE_PIXEL_SIZE) {
+                                    drawTexture(grh, drawX, drawY, true, true, false, 1.0f, weather.getWeatherColor());
+                                }
+                            }
+
+                            if (tile.getCharIndex() != 0) {
+                                drawCharacter(tile.getCharIndex(), drawX, drawY, weather.getWeatherColor());
+                            }
+
+                            grh = tile.getLayer(3);
+                            if (grh.getGrhIndex() != 0) {
+                                drawTexture(grh, drawX, drawY, true, true, false, 1.0f, weather.getWeatherColor());
+                            }
+
+                            break;
+
+                        case 4:
+                            if (grh.getGrhIndex() > 0) {
+                                drawTexture(grh, drawX, drawY, true, true, false, alphaCeiling, weather.getWeatherColor());
+                            }
+                            break;
                     }
 
                     camera.incrementScreenX();
                 }
                 camera.incrementScreenY();
             }
+
         }
     }
 
@@ -392,7 +362,7 @@ public final class GameScene extends Scene {
     /**
      * Detecta si el usuario esta debajo del techo. Si es asi, se desvanecera y en caso contrario re aparece.
      */
-    private void checkEffectCeiling() {
+    private void updateEffectCeiling() {
         if (user.isUnderCeiling()) {
             if (alphaCeiling > 0.0f) alphaCeiling -= 0.5f * deltaTime;
         } else {

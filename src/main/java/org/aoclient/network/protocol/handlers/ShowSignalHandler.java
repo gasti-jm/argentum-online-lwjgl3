@@ -1,5 +1,6 @@
 package org.aoclient.network.protocol.handlers;
 
+import org.aoclient.engine.utils.Log;
 import org.aoclient.network.PacketBuffer;
 import org.tinylog.Logger;
 
@@ -17,7 +18,7 @@ public class ShowSignalHandler implements PacketHandler {
         // Call InitCartel(tmp, Buffer.ReadInteger())
 
         buffer.copy(tempBuffer);
-        Logger.debug("handleShowSignal Cargado! - FALTA TERMINAR!");
+        Log.debug("handleShowSignal Cargado! - FALTA TERMINAR!");
     }
 
 }

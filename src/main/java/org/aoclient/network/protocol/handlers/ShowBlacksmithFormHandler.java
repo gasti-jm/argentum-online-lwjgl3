@@ -1,5 +1,6 @@
 package org.aoclient.network.protocol.handlers;
 
+import org.aoclient.engine.utils.Log;
 import org.aoclient.network.PacketBuffer;
 import org.tinylog.Logger;
 
@@ -15,7 +16,7 @@ public class ShowBlacksmithFormHandler implements PacketHandler {
         //        frmHerrero.Show , //FrmMain
         //    End If
 
-        Logger.debug("handleShowBlacksmithForm CARGADO - FALTA TERMINAR!");
+        Log.debug("handleShowBlacksmithForm CARGADO - FALTA TERMINAR!");
     }
 
 }

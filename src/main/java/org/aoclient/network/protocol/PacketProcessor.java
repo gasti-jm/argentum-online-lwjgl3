@@ -1,9 +1,9 @@
 package org.aoclient.network.protocol;
 
+import org.aoclient.engine.utils.Log;
 import org.aoclient.network.PacketBuffer;
 import org.aoclient.network.protocol.handlers.*;
 import org.aoclient.network.protocol.handlers.gm.*;
-import org.tinylog.Logger;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -30,14 +30,14 @@ public class PacketProcessor {
 
         // Valida el ID del paquete del servidor antes de procesarlo
         if (!isValidPacketId(packetId)) {
-            Logger.debug("Invalid package ID received: " + packetId);
+            Log.debug("Invalid package ID received: {}", packetId);
             return;
         }
 
         // Obtiene el paquete del servidor a partir del ID del paquete del servidor
         ServerPacket serverPacket = ServerPacket.getPacket(packetId);
 
-        Logger.debug("Processing server packet [" + serverPacket + "] with ID " + packetId);
+        Log.debug("Processing server packet [{}] with ID {}", serverPacket, packetId);
 
         // Guarda la referencia del paquete del servidor en la variable estatica serverPacket de clase para poder usarla sin instanciarla en el metodo disconnect() de PacketBuffer
         PacketProcessor.serverPacket = serverPacket;
