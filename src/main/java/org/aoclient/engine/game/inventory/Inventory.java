@@ -89,8 +89,6 @@ public abstract class Inventory {
         slots[slot].equipped = equipped;
         slots[slot].grhIndex = grhIndex;
 
-
-
         if (grhIndex > 0) {
             TextureManager.requestTexture(grhIndex); // precargamos
 

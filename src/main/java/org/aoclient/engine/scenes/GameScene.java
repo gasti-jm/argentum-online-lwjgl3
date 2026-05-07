@@ -256,6 +256,7 @@ public final class GameScene extends Scene {
         Dialogs.renderDialogs(camera, pixelOffsetX, pixelOffsetY);
 
         this.updateEffectCeiling();
+
         if (alphaCeiling > 0.0f) {
             renderLayer(4, pixelOffsetX, pixelOffsetY);
         }
@@ -279,14 +280,12 @@ public final class GameScene extends Scene {
             for (int y = camera.getScreenminY(); y <= camera.getScreenmaxY(); y++) {
                 int x;
                 for (x = camera.getScreenminX(); x <= camera.getScreenmaxX(); x++) {
-
-                    final MapData tile = mapData[x][y];
-                    final GrhInfo grh = tile.getLayer(layer);
+                    final GrhInfo grh = mapData[x][y].getLayer(layer);
 
                     final int drawX = POS_SCREEN_X + (camera.getScreenX() - 1) * TILE_PIXEL_SIZE + pixelOffsetX;
                     final int drawY = POS_SCREEN_Y + (camera.getScreenY() - 1) * TILE_PIXEL_SIZE + pixelOffsetY;
 
-                    if (grh.getGrhIndex() != 0) {
+                    if (grh.getGrhIndex() > 1) { // no dibujar texturas con grafico negro xd (MAS FPS).
                         drawTexture(grh, drawX, drawY, true, true, false, 1.0f, weather.getWeatherColor());
                     }
 
@@ -344,9 +343,10 @@ public final class GameScene extends Scene {
                             break;
 
                         case 4:
-                            if (grh.getGrhIndex() > 0) {
+                            if (grh.getGrhIndex() != 0) {
                                 drawTexture(grh, drawX, drawY, true, true, false, alphaCeiling, weather.getWeatherColor());
                             }
+
                             break;
                     }
 

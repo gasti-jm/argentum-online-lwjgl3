@@ -1,5 +1,7 @@
 package org.aoclient.engine.renderer;
 
+import org.aoclient.engine.utils.Log;
+
 import java.util.*;
 
 import static org.aoclient.engine.utils.GameData.grhData;
@@ -70,7 +72,7 @@ public final class TextureManager {
         for (int fileNum : pending) {
             if (fileNum == 0) continue;
 
-            Texture tex = new Texture();
+            final var tex = new Texture();
             tex.loadTexture(tex, "graphics.ao", String.valueOf(fileNum), false);
             textures.put(fileNum, tex);
         }
@@ -85,17 +87,13 @@ public final class TextureManager {
         if (pending.isEmpty()) return;
 
         for (int fileNum : pending) {
-            Texture tex = new Texture();
+            final var tex = new Texture();
             tex.loadTexture(tex, "graphics.ao", String.valueOf(fileNum), isGUI);
             textures.put(fileNum, tex);
         }
 
         pending.clear();
     }
-
-    // =========================
-    // CLEANUP
-    // =========================
 
     public static void clear() {
         textures.clear();
@@ -110,13 +108,12 @@ public final class TextureManager {
      *
      * @param fileCompressed nombre del archivo comprimido que contiene la textura
      * @param file           nombre del archivo dentro del archivo comprimido que contiene los datos de la textura
-     * @param isGUI          indica si la textura esta destinada a ser utilizada en interfaces graficas de usuario (GUI)
      * @return la textura creada, o {@code null} si el nombre del archivo especificado esta vacio
      */
     public static Texture createTexture(String fileCompressed, String file) {
         if (file.isEmpty()) return null;
 
-        var texture = new Texture();
+        final var texture = new Texture();
         texture.loadTexture(texture, fileCompressed, file, true);
         return texture;
     }

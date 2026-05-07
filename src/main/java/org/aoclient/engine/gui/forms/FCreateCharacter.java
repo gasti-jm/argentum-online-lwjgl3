@@ -357,10 +357,6 @@ public final class FCreateCharacter extends Form {
 
         int firstFrameBody = grhData[bodyGraphic.getWalk(dir).getGrhIndex()].getFrame(1);
 
-        // precargamos textura
-        TextureManager.requestTexture(headGraphic);
-        TextureManager.requestTexture(bodyGraphic.getWalk(dir).getGrhIndex());
-
         var headTex = TextureManager.getTexture(grhData[headGraphic].getFileNum());
         var bodyTex = TextureManager.getTexture(grhData[firstFrameBody].getFileNum());
 
