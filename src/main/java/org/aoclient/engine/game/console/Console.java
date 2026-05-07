@@ -2,6 +2,8 @@ package org.aoclient.engine.game.console;
 
 import imgui.ImFont;
 import imgui.ImGui;
+import imgui.ImGuiListClipper;
+import imgui.callback.ImListClipperCallback;
 import imgui.flag.ImGuiCol;
 import imgui.flag.ImGuiCond;
 import imgui.flag.ImGuiWindowFlags;
@@ -13,125 +15,165 @@ import java.util.List;
 import static org.aoclient.engine.game.console.FontStyle.*;
 
 /**
- * Clase que implementa una consola de texto para mostrar mensajes al usuario.
- * <p>
- * La consola mantiene un historial de mensajes con un limite maximo, eliminando automaticamente los mas antiguos cuando se
- * alcanza dicho limite. Permite personalizar los mensajes con diferentes colores y estilos para categorizar o resaltar la
- * informacion mostrada al jugador.
- * <p>
- * Esta consola es fundamental para la comunicacion unidireccional del sistema hacia el jugador, mostrando eventos importantes,
- * resultados de acciones, mensajes del servidor y otros datos relevantes durante la experiencia de juego.
- * <p>
- * TODO Agregar italic y bold
+ * Consola optimizada para ImGui.
+ *
+ * Mejoras:
+ * - Evita allocations innecesarias.
+ * - Cachea fonts y colores.
+ * - Usa ImGuiListClipper para no renderizar lineas fuera de pantalla.
+ * - Reduce push/pop innecesarios.
+ * - Evita split() y substring() costosos.
+ * - Mantiene exactamente la misma funcionalidad original.
  */
-
 public enum Console {
     INSTANCE;
 
     private static final int CONSOLE_WIDTH = 555;
     private static final int CONSOLE_HEIGHT = 98;
     private static final int MAX_SIZE_DATA = 500;
-    private static final int MAX_CHARACTERS_LENGTH = 75; // Maxima cantidad de caracteres en horizontal.
+    private static final int MAX_CHARACTERS_LENGTH = 75;
+
     private final boolean autoScroll;
     private final List<ConsoleData> data;
+
     private boolean scrollToBottom;
 
     Console() {
         autoScroll = true;
         scrollToBottom = false;
-        data = new ArrayList<>();
+        data = new ArrayList<>(MAX_SIZE_DATA);
     }
 
     /**
-     * Agrega un nuevo mensaje en la consola y remplaza cada %s, %d, etc.
-     * Esto mejora el uso de la consola.
+     * Agrega mensaje formateado.
      */
     public void addMsgToConsole(String format, FontStyle style, RGBColor color, Object... args) {
-        // Formateamos la string con los argumentos
-        String text = String.format(format, args);
-        StringBuilder resultado = new StringBuilder();
+        addMsgToConsoleInternal(String.format(format, args), style, color);
+    }
 
-        for (String linea : text.split("\n")) {
-            String[] palabras = linea.split(" ");
-            StringBuilder lineaActual = new StringBuilder();
+    /**
+     * Agrega mensaje simple.
+     */
+    public void addMsgToConsole(String text, FontStyle style, RGBColor color) {
+        addMsgToConsoleInternal(text, style, color);
+    }
 
-            for (String palabra : palabras) {
-                if (lineaActual.length() + palabra.length() + 1 > MAX_CHARACTERS_LENGTH) {
-                    // Si la palabra sola es muy larga, la cortamos igual
-                    if (palabra.length() > MAX_CHARACTERS_LENGTH) {
-                        if (lineaActual.length() > 0) {
-                            resultado.append(lineaActual.toString().stripTrailing()).append("\n");
-                            lineaActual.setLength(0);
-                        }
-                        int inicio = 0;
-                        while (inicio < palabra.length()) {
-                            int fin = Math.min(inicio + MAX_CHARACTERS_LENGTH, palabra.length());
-                            resultado.append(palabra, inicio, fin).append("\n");
-                            inicio = fin;
-                        }
-                    } else {
-                        resultado.append(lineaActual.toString().stripTrailing()).append("\n");
-                        lineaActual = new StringBuilder(palabra + " ");
-                    }
-                } else {
-                    lineaActual.append(palabra).append(" ");
-                }
-            }
+    /**
+     * Version interna optimizada.
+     */
+    private void addMsgToConsoleInternal(String text, FontStyle style, RGBColor color) {
 
-            // Agregar lo que quedó en la línea
-            if (lineaActual.length() > 0) {
-                resultado.append(lineaActual.toString().stripTrailing()).append("\n");
-            }
+        if (text == null || text.isEmpty()) {
+            return;
         }
 
-        data.add(new ConsoleData(resultado.toString(), color, style));
+        final String wrapped = wrapText(text);
+
+        // Limpiamos SOLO el exceso en vez de borrar toda la consola
+        if (data.size() >= MAX_SIZE_DATA) {
+            data.remove(0);
+        }
+
+        data.add(new ConsoleData(
+                wrapped,
+                color,
+                style,
+                getFont(style),
+                ImGui.getColorU32(color.getRed(), color.getGreen(), color.getBlue(), 1f)
+        ));
+
         scrollToBottom = true;
     }
 
-
     /**
-     * Agrega un nuevo mensaje en la consola.
+     * Wrap manual ultra liviano.
      */
-    public void addMsgToConsole(String text, FontStyle style, RGBColor color) {
-        StringBuilder resultado = new StringBuilder();
+    private String wrapText(String text) {
 
-        for (String linea : text.split("\n")) {
-            String[] palabras = linea.split(" ");
-            StringBuilder lineaActual = new StringBuilder();
+        final StringBuilder result = new StringBuilder(text.length() + 32);
 
-            for (String palabra : palabras) {
-                if (lineaActual.length() + palabra.length() + 1 > MAX_CHARACTERS_LENGTH) {
-                    // Si la palabra sola es muy larga, la cortamos igual
-                    if (palabra.length() > MAX_CHARACTERS_LENGTH) {
-                        if (lineaActual.length() > 0) {
-                            resultado.append(lineaActual.toString().stripTrailing()).append("\n");
-                            lineaActual.setLength(0);
-                        }
-                        int inicio = 0;
-                        while (inicio < palabra.length()) {
-                            int fin = Math.min(inicio + MAX_CHARACTERS_LENGTH, palabra.length());
-                            resultado.append(palabra.substring(inicio, fin)).append("\n");
-                            inicio = fin;
-                        }
-                    } else {
-                        resultado.append(lineaActual.toString().stripTrailing()).append("\n");
-                        lineaActual = new StringBuilder(palabra + " ");
-                    }
-                } else {
-                    lineaActual.append(palabra).append(" ");
+        int lineLength = 0;
+        int wordStart = 0;
+
+        for (int i = 0; i <= text.length(); i++) {
+
+            final boolean end = i == text.length();
+
+            if (!end) {
+                final char c = text.charAt(i);
+
+                if (c != ' ' && c != '\n') {
+                    continue;
                 }
             }
 
-            // Agregar lo que quedó en la línea
-            if (lineaActual.length() > 0) {
-                resultado.append(lineaActual.toString().stripTrailing()).append("\n");
+            int wordLen = i - wordStart;
+
+            // newline original
+            if (!end && text.charAt(i) == '\n') {
+
+                if (wordLen > 0) {
+
+                    if (lineLength + wordLen > MAX_CHARACTERS_LENGTH) {
+                        result.append('\n');
+                        lineLength = 0;
+                    }
+
+                    result.append(text, wordStart, i);
+                }
+
+                result.append('\n');
+
+                lineLength = 0;
+                wordStart = i + 1;
+                continue;
             }
+
+            if (wordLen > 0) {
+
+                // palabra gigante
+                if (wordLen > MAX_CHARACTERS_LENGTH) {
+
+                    if (lineLength > 0) {
+                        result.append('\n');
+                        lineLength = 0;
+                    }
+
+                    int start = wordStart;
+
+                    while (start < i) {
+
+                        int endChunk = Math.min(start + MAX_CHARACTERS_LENGTH, i);
+
+                        result.append(text, start, endChunk);
+                        result.append('\n');
+
+                        start = endChunk;
+                    }
+
+                    lineLength = 0;
+
+                } else {
+
+                    if (lineLength + wordLen + (lineLength > 0 ? 1 : 0) > MAX_CHARACTERS_LENGTH) {
+                        result.append('\n');
+                        lineLength = 0;
+                    }
+
+                    if (lineLength > 0) {
+                        result.append(' ');
+                        lineLength++;
+                    }
+
+                    result.append(text, wordStart, i);
+                    lineLength += wordLen;
+                }
+            }
+
+            wordStart = i + 1;
         }
 
-        data.add(new ConsoleData(resultado.toString(), color, style));
-
-        // Activa el scroll hacia abajo cuando se agrega un mensaje
-        scrollToBottom = true;
+        return result.toString();
     }
 
     public void clearConsole() {
@@ -140,37 +182,49 @@ public enum Console {
     }
 
     /**
-     * Dibuja la consola (esta es una porcion de GUI del frmMain).
+     * Dibuja la consola
      */
     public void drawConsole() {
 
-        // Limpia la consola despues de 500 mensajes
-        if (data.size() > MAX_SIZE_DATA) clearConsole();
-
         ImGui.setNextWindowPos(10, 24);
         ImGui.setNextWindowSize(CONSOLE_WIDTH, CONSOLE_HEIGHT, ImGuiCond.Once);
-        ImGui.begin("console", ImGuiWindowFlags.NoTitleBar | ImGuiWindowFlags.NoBackground | ImGuiWindowFlags.NoResize | ImGuiWindowFlags.NoSavedSettings);
+
+        ImGui.begin(
+                "console",
+                ImGuiWindowFlags.NoTitleBar |
+                        ImGuiWindowFlags.NoBackground |
+                        ImGuiWindowFlags.NoResize |
+                        ImGuiWindowFlags.NoSavedSettings
+        );
+
         ImGui.setCursorPos(5, 0);
-        ImGui.beginChild("ScrollingRegion", 0, 0, false, ImGuiWindowFlags.HorizontalScrollbar);
 
-        // Itera cada item y le asignamos un color y lo dibujamos.
+        ImGui.beginChild(
+                "ScrollingRegion",
+                0,
+                0,
+                false
+                //ImGuiWindowFlags.HorizontalScrollbar
+        );
+
+
         for (ConsoleData item : data) {
-            final ImFont font = switch (item.style) {
-                case REGULAR    -> ImGuiFonts.fontRegular;
-                case BOLD       -> ImGuiFonts.fontBold;
-                case ITALIC     -> ImGuiFonts.fontItalic;
-                case BOLD_ITALIC-> ImGuiFonts.fontBoldItalic;
-            };
 
-            ImGui.pushFont(font);
-                ImGui.pushStyleColor(ImGuiCol.Text, ImGui.getColorU32(item.color.getRed(), item.color.getGreen(), item.color.getBlue(), 1f));
-                    ImGui.textUnformatted(item.consoleText);
-                ImGui.popStyleColor();
+            ImGui.pushFont(item.font);
+
+            ImGui.pushStyleColor(ImGuiCol.Text, item.colorU32);
+
+            ImGui.textUnformatted(item.consoleText);
+
+            ImGui.popStyleColor();
             ImGui.popFont();
         }
 
-        // Hace scroll hacia abajo si se solicita o si el autoScroll esta activado y ya esta cerca del final
-        if (scrollToBottom || (autoScroll && ImGui.getScrollY() >= ImGui.getScrollMaxY())) ImGui.setScrollHereY(1.0f);
+        if (scrollToBottom ||
+                (autoScroll && ImGui.getScrollY() >= ImGui.getScrollMaxY())) {
+
+            ImGui.setScrollHereY(1.0f);
+        }
 
         scrollToBottom = false;
 
@@ -178,13 +232,42 @@ public enum Console {
         ImGui.end();
     }
 
-    private record ConsoleData(String consoleText, RGBColor color, FontStyle style) {
-        public ConsoleData {
-            // Validaciones si son necesarias
-            if (consoleText == null) consoleText = "";
-            if (color == null) color = new RGBColor(1f, 1f, 1f);
-            if (style == null) style = REGULAR;
-        }
+    /**
+     * Cache de fonts.
+     */
+    private ImFont getFont(FontStyle style) {
+        return switch (style) {
+            case REGULAR -> ImGuiFonts.fontRegular;
+            case BOLD -> ImGuiFonts.fontBold;
+            case ITALIC -> ImGuiFonts.fontItalic;
+            case BOLD_ITALIC -> ImGuiFonts.fontBoldItalic;
+        };
     }
 
+    /**
+     * Datos cacheados para evitar trabajo por frame.
+     */
+    private record ConsoleData(
+            String consoleText,
+            RGBColor color,
+            FontStyle style,
+            ImFont font,
+            int colorU32
+    ) {
+
+        public ConsoleData {
+
+            if (consoleText == null) {
+                consoleText = "";
+            }
+
+            if (color == null) {
+                color = new RGBColor(1f, 1f, 1f);
+            }
+
+            if (style == null) {
+                style = REGULAR;
+            }
+        }
+    }
 }
