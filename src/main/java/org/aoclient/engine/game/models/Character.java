@@ -505,7 +505,6 @@ public final class Character {
 
     public void setBody(BodyData body) {
         this.body = body;
-        TextureManager.requestTexture(body.getWalk(1).getGrhIndex());
     }
 
     public HeadData getHead() {
@@ -514,7 +513,6 @@ public final class Character {
 
     public void setHead(HeadData head) {
         this.head = head;
-        TextureManager.requestTexture(head.getHead(1).getGrhIndex());
     }
 
     public HeadData getHelmet() {
@@ -523,7 +521,6 @@ public final class Character {
 
     public void setHelmet(HeadData helmet) {
         this.helmet = helmet;
-        TextureManager.requestTexture(helmet.getHead(1).getGrhIndex());
     }
 
     public WeaponData getWeapon() {
@@ -532,7 +529,6 @@ public final class Character {
 
     public void setWeapon(WeaponData weapon) {
         this.weapon = weapon;
-        TextureManager.requestTexture(weapon.getWeaponWalk(1).getGrhIndex());
     }
 
     public ShieldData getShield() {
@@ -541,7 +537,6 @@ public final class Character {
 
     public void setShield(ShieldData shield) {
         this.shield = shield;
-        TextureManager.requestTexture(shield.getShieldWalk(1).getGrhIndex());
     }
 
     public boolean isUsingArm() {

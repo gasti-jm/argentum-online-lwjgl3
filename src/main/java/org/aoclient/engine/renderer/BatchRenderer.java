@@ -34,7 +34,7 @@ public class BatchRenderer {
 
     private static final int MAX_QUADS = 10000;
     private static final int VERTICES_PER_QUAD = 6;
-    private static final int FLOATS_PER_VERTEX = 8; // la concha de tu madre.
+    private static final int FLOATS_PER_VERTEX = 8;
 
     private int vao, vbo;
     private FloatBuffer buffer;
@@ -159,7 +159,6 @@ public class BatchRenderer {
         buffer.clear();
         vertexCount = 0;
     }
-
 
     private void push(
             float x, float y,

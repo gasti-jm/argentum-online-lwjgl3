@@ -4,6 +4,7 @@ import org.aoclient.engine.renderer.TextureManager;
 import org.aoclient.network.PacketBuffer;
 
 import static org.aoclient.engine.utils.GameData.*;
+import static org.aoclient.engine.utils.inits.GrhInfo.initGrh;
 
 public class ObjectCreateHandler implements PacketHandler {
 
@@ -20,7 +21,7 @@ public class ObjectCreateHandler implements PacketHandler {
         initGrh(mapData[x][y].getObjGrh(), mapData[x][y].getObjGrh().getGrhIndex(), true);
 
         // precargamos la textura
-        TextureManager.requestTexture(grhIndex);
+        //TextureManager.requestTexture(grhIndex);
     }
 
 }

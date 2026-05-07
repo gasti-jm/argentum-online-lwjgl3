@@ -22,11 +22,10 @@ public class Main {
         IEngine engine;
 
         // TODO: if we want to implement another graphics library. The plan is to use Vulkan in the future.
-        if(GRAPHIC_LIBRARY.equals("vulkan")) {
+        if (GRAPHIC_LIBRARY.equals("vulkan"))
             engine = new EngineVulkan();
-        } else {
+        else
             engine = new EngineGL();
-        }
 
         engine.start();
     }

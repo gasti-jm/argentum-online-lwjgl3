@@ -1,5 +1,10 @@
 package org.aoclient.engine.utils.inits;
 
+import org.aoclient.engine.renderer.TextureManager;
+
+import static org.aoclient.engine.utils.GameData.grhData;
+import static org.aoclient.engine.utils.Time.deltaTime;
+
 /**
  * Simula el "Type" o la estructura de {@code Grh}, gestionando la informacion basica de los graficos y animaciones.
  * <p>
@@ -35,6 +40,54 @@ public final class GrhInfo {
         this.started = other.started;
         this.loops = other.loops;
         this.angle = other.angle;
+    }
+
+    /**
+     * Inicializa los graficos, ya sean animaciones o no.
+     */
+    public static GrhInfo initGrh(GrhInfo grh, short grhIndex, boolean started) {
+        if (grh == null) throw new NullPointerException("Se esta intentando incializar un GrhInfo nulo...");
+
+        grh.setGrhIndex(grhIndex);
+        grh.setStarted(false);
+        grh.setLoops(0);
+
+        if (started) grh.setStarted(grhData[grh.getGrhIndex()].getNumFrames() > 1);
+
+        if (grh.isStarted()) grh.setLoops(-1);
+
+        grh.setFrameCounter(1);
+        //grh.setSpeed( grhData[grhIndex].getSpeed() );
+        grh.setSpeed(0.4f);
+
+        // precarga de textura.
+        TextureManager.requestTexture(grhIndex);
+
+        return grh;
+    }
+
+    /**
+     * Actualiza las animaciones, cambia a su siguiente frame según la velocidad de animacion.
+     */
+    public void updateAnim() {
+        if (started) {
+            frameCounter += (deltaTime * grhData[grhIndex].getNumFrames() / speed);
+            if (frameCounter > grhData[grhIndex].getNumFrames()) {
+                frameCounter = (frameCounter % grhData[grhIndex].getNumFrames()) + 1;
+
+                if (loops != -1) {
+                    if (loops > 0) loops--;
+                    else started = false;
+                }
+            }
+        }
+    }
+
+    /**
+     * @return Indice de grafico actual en animacion.
+     */
+    public int getCurrentIndex() {
+        return grhData[grhIndex].getFrame((int) (frameCounter));
     }
 
     public short getGrhIndex() {

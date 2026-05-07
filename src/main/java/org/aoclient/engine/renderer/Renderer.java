@@ -48,7 +48,6 @@ public class Renderer {
         float v1 = srcY / tex.getTex_height();
         float v0 = (srcY + srcH) / tex.getTex_height();
 
-
         batch.submitQuad(
                 tex,
                 x, y,

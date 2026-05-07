@@ -10,6 +10,7 @@ import static org.aoclient.engine.game.models.Character.*;
 import static org.aoclient.engine.game.models.Direction.*;
 import static org.aoclient.engine.scenes.Camera.*;
 import static org.aoclient.engine.utils.GameData.*;
+import static org.aoclient.engine.utils.inits.GrhInfo.initGrh;
 import static org.aoclient.network.protocol.Protocol.changeHeading;
 import static org.aoclient.network.protocol.Protocol.walk;
 
@@ -264,12 +265,9 @@ public enum User {
      * @param loops     Tiempo del efecto FX. Establece un efecto FX en un personaje.
      */
     public void setCharacterFx(int charIndex, int fx, int loops) {
-
-
         charList[charIndex].setFxIndex(fx);
         if (charList[charIndex].getFxIndex() > 0) {
             initGrh(charList[charIndex].getfX(), fxData[fx].getAnimacion(), true);
-            TextureManager.requestTexture(charList[charIndex].getfX().getGrhIndex());
             charList[charIndex].getfX().setLoops(loops);
         }
     }
@@ -304,16 +302,8 @@ public enum User {
         charList[charIndex].setScrollDirectionX(sgn((short) addX));
         charList[charIndex].setScrollDirectionY(sgn((short) addY));
 
-        /*
-            'parche para que no medite cuando camina
-            If .FxIndex = FxMeditar.CHICO Or .FxIndex = FxMeditar.GRANDE Or .FxIndex = FxMeditar.MEDIANO Or .FxIndex = FxMeditar.XGRANDE Or .FxIndex = FxMeditar.XXGRANDE Then
-                .FxIndex = 0
-            End If
-         */
 
         if (!estaPCarea(charIndex)) Dialogs.removeDialog(charIndex);
-
-        // If Not EstaPCarea(CharIndex) Then Call Dialogos.RemoveDialog(CharIndex)
 
         if ((nY < minLimiteY) || (nY > maxLimiteY) || (nX < minLimiteX) || (nX > maxLimiteX))
             if (charIndex != userCharIndex) eraseChar(charIndex);
@@ -330,12 +320,12 @@ public enum User {
             case DOWN -> moveToLegalPos(userPos.getX(), userPos.getY() + 1);
             case LEFT -> moveToLegalPos(userPos.getX() - 1, userPos.getY());
         };
+
         if (legalOk && !charList[userCharIndex].isParalizado()) {
             walk(direction);
             moveScreen(direction);
             moveCharbyHead(userCharIndex, direction);
         } else if (charList[userCharIndex].getHeading() != direction) changeHeading(direction);
-
     }
 
     /**
@@ -747,6 +737,7 @@ public enum User {
     private boolean moveToLegalPos(int x, int y) {
         // Limite del mapa
         if (x < minXBorder || x > maxXBorder || y < minYBorder || y > maxYBorder) return false;
+
         // Tile Bloqueado?
         if (mapData[x][y].getBlocked()) return false;
 

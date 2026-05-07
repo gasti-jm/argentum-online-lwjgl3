@@ -71,6 +71,10 @@ public final class EngineGL implements IEngine {
 
         GameData.init();
         window.init();
+
+        // important graphics.
+        TextureManager.processPending();
+
         guiSystem.init();
         renderer = new Renderer();
 
@@ -171,6 +175,7 @@ public final class EngineGL implements IEngine {
             case GAME_SCENE -> currentScene = new GameScene();
             case MAIN_SCENE -> currentScene = new MainScene();
         }
+
         currentScene.init();
     }
 
@@ -185,7 +190,8 @@ public final class EngineGL implements IEngine {
      * Por ultimo, dibuja la escena en la que estemos y renderiza nuestra GUI del framework "Dear ImGUI".
      */
     private void render() {
-        if (!currentScene.isVisible()) changeScene(currentScene.getChangeScene());
+        if (!currentScene.isVisible())
+            changeScene(currentScene.getChangeScene());
 
         currentScene.mouseEvents();
         currentScene.keyEvents();
