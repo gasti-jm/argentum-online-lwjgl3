@@ -319,8 +319,8 @@ public class Compressor {
 
     public static void main(String[] args) {
 
-        String resourceName = "resources/graphics-descompressed";
-        String aoName = "resources/graphics.ao";
+        String resourceName = "resources/inits-descompressed";
+        String aoName = "resources/inits.ao";
 
         long start = System.nanoTime();
         int filesCompressed = compressResource(resourceName, aoName);
