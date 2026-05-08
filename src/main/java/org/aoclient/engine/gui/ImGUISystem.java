@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.aoclient.engine.utils.GameData.options;
+import static org.aoclient.engine.utils.LaunchOptions.CLIENT_DEBUG;
 import static org.aoclient.engine.utils.Time.deltaTime;
 import static org.lwjgl.glfw.GLFW.*;
 
@@ -229,7 +230,7 @@ public enum ImGUISystem {
         for (int i = 0; i < frms.size(); i++)
             frms.get(i).render();
 
-        ImGui.showDemoWindow();
+        if (CLIENT_DEBUG)  ImGui.showDemoWindow();
     }
 
     public void show(Form frm) {
