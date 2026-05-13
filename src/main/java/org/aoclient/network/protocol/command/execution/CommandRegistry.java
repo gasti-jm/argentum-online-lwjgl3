@@ -17,28 +17,36 @@ import static org.aoclient.network.protocol.command.metadata.GameCommand.*;
 /**
  * Gestiona el registro y acceso a los comandos disponibles.
  * <p>
- * Los comandos permiten realizar diferentes acciones y acceder a funciones especificas dentro del sistema. Cada comando esta
+ * Los comandos permiten realizar diferentes acciones y acceder a funciones
+ * especificas dentro del sistema. Cada comando esta
  * configurado con su correspondiente manejador que define su comportamiento.
  * <p>
  * Los comandos estan organizados de la siguiente manera:
  * <ul>
- * <li><b>Comandos de usuario</b>: Estos comandos son accesibles para jugadores regulares y proporcionan acciones como consultar
- * el estado de la cuenta, unirse a eventos, interactuar con NPCs, manejar mascotas, acceder a cofres bancarios, entre otros.
- * <li><b>Comandos de Game Master (GM)</b>: Estos comandos son exclusivos para administradores del juego. Permiten realizar tareas
- * de mantenimiento, control y gestion del mundo del juego, como expulsar jugadores, realizar modificaciones en los mapas, manejar
+ * <li><b>Comandos de usuario</b>: Estos comandos son accesibles para jugadores
+ * regulares y proporcionan acciones como consultar
+ * el estado de la cuenta, unirse a eventos, interactuar con NPCs, manejar
+ * mascotas, acceder a cofres bancarios, entre otros.
+ * <li><b>Comandos de Game Master (GM)</b>: Estos comandos son exclusivos para
+ * administradores del juego. Permiten realizar tareas
+ * de mantenimiento, control y gestion del mundo del juego, como expulsar
+ * jugadores, realizar modificaciones en los mapas, manejar
  * NPCs, habilitar o deshabilitar caracteristicas globales del juego, y mas.
  * </ul>
  * <p>
- * TODO Los nombres de los handlers tienen que coincidir con los nombres de los comandos
+ * TODO Los nombres de los handlers tienen que coincidir con los nombres de los
+ * comandos
  */
 
 public final class CommandRegistry {
 
     /**
-     * Lista inmutable de todos los comandos disponibles en el sistema, dividida en comandos para usuarios y comandos exclusivos
+     * Lista inmutable de todos los comandos disponibles en el sistema, dividida en
+     * comandos para usuarios y comandos exclusivos
      * para Game Masters (GMs).
      * <p>
-     * La lista incluye tanto comandos directos (que utilizan metodos predefinidos del protocolo) como comandos gestionados por
+     * La lista incluye tanto comandos directos (que utilizan metodos predefinidos
+     * del protocolo) como comandos gestionados por
      * handlers personalizados que encapsulan logicas mas complejas.
      */
     private static final List<Command> commands = List.of(
@@ -94,6 +102,7 @@ public final class CommandRegistry {
             Command.user(REPORT, ReportCommand::new),
             Command.user(ROL, RolCommand::new),
             Command.user(SENTINEL_CODE, SentinelCodeCommand::new), // FIXME Rompe el cliente
+            Command.user(PING, Protocol::ping),
 
             // ==================== GM COMMANDS ====================
             Command.gm(ADMIN_SERVER, Protocol::adminServer),
@@ -105,7 +114,7 @@ public final class CommandRegistry {
             Command.gm(CHANGE_MOTD, Protocol::changeMOTD),
             Command.gm(CLEAN_NPC_INV, Protocol::cleanNpcInventory),
             Command.gm(CLEAN_SOS, Protocol::cleanSOS),
-            Command.gm(CLEAN_WORLD, Protocol::cleanWorld), // FIXME No hace nada 
+            Command.gm(CLEAN_WORLD, Protocol::cleanWorld), // FIXME No hace nada
             Command.gm(DUMP_SECURITY, Protocol::dumpSecurity), // FIXME No hace nada
             Command.gm(GM_PANEL, Protocol::GMPanel),
             Command.gm(HOME, Protocol::home),
@@ -118,7 +127,6 @@ public final class CommandRegistry {
             Command.gm(ONLINE_CHAOS, Protocol::onlineChaos),
             Command.gm(ONLINE_GM, Protocol::onlineGM),
             Command.gm(ONLINE_ROYAL, Protocol::onlineRoyal),
-            Command.gm(PING, Protocol::ping),
             Command.gm(RAIN, Protocol::rain),
             Command.gm(RELOAD_NPC, Protocol::reloadNPC),
             Command.gm(RELOAD_OBJ, Protocol::reloadObj),
@@ -212,19 +220,22 @@ public final class CommandRegistry {
             Command.gm(TRIGGER, TriggerCommand::new),
             Command.gm(UNBAN, UnbanCommand::new),
             Command.gm(UNBAN_IP, UnbanIpCommand::new),
-            Command.gm(WARNING, WarningCommand::new)
-    );
+            Command.gm(WARNING, WarningCommand::new));
 
     /**
-     * Construye un mapa que asocia nombres de comandos con sus respectivos handlers ({@link CommandHandler}). Este mapa permite
+     * Construye un mapa que asocia nombres de comandos con sus respectivos handlers
+     * ({@link CommandHandler}). Este mapa permite
      * acceder rapidamente al handler correspondiente para cada nombre de comando.
      * <p>
-     * En caso de nombres duplicados entre los comandos registrados, se lanza una excepcion para evitar conflictos en la
+     * En caso de nombres duplicados entre los comandos registrados, se lanza una
+     * excepcion para evitar conflictos en la
      * asociacion.
      *
-     * @return un {@code Map<String, CommandHandler>} donde la clave es el nombre del comando y el valor es la instancia del
-     * {@link CommandHandler} correspondiente
-     * @throws IllegalStateException si se encuentran comandos con nombres duplicados
+     * @return un {@code Map<String, CommandHandler>} donde la clave es el nombre
+     *         del comando y el valor es la instancia del
+     *         {@link CommandHandler} correspondiente
+     * @throws IllegalStateException si se encuentran comandos con nombres
+     *                               duplicados
      */
     public static Map<String, CommandHandler> buildCommandMap() {
         return commands.stream()
@@ -233,8 +244,7 @@ public final class CommandRegistry {
                         def -> def.factory().get(),
                         (existing, replacement) -> {
                             throw new IllegalStateException("Duplicate command: " + existing);
-                        }
-                ));
+                        }));
     }
 
     /**
