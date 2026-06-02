@@ -18,6 +18,7 @@ import org.tinylog.Logger;
 
 import static org.aoclient.engine.audio.Sound.playMusic;
 import static org.aoclient.engine.scenes.SceneType.INTRO_SCENE;
+import static org.aoclient.engine.scenes.SceneType.MAIN_SCENE;
 import static org.aoclient.engine.utils.GameData.options;
 import static org.aoclient.engine.utils.LaunchOptions.CLIENT_DEBUG;
 import static org.aoclient.engine.utils.Time.deltaTime;
@@ -78,8 +79,13 @@ public final class EngineGL implements IEngine {
         guiSystem.init();
         renderer = new Renderer();
 
-        changeScene(INTRO_SCENE);
-        playMusic("intro.ogg");
+        // Si estamos en modo debug y queremos testiar, quitemos la intro que no nos interesa.
+        if (CLIENT_DEBUG) {
+            changeScene(MAIN_SCENE);
+        } else {
+            changeScene(INTRO_SCENE);
+            playMusic("intro.ogg");
+        }
     }
 
     /**
