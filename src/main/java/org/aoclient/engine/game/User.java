@@ -38,7 +38,6 @@ import static org.aoclient.network.protocol.Protocol.walk;
  */
 
 public enum User {
-
     INSTANCE;
 
     private final UserInventory userInventory;
@@ -125,19 +124,12 @@ public enum User {
      */
     public void moveScreen(Direction nDirection) {
         int x = 0, y = 0;
+
         switch (nDirection) {
-            case UP:
-                y = -1;
-                break;
-            case RIGHT:
-                x = 1;
-                break;
-            case DOWN:
-                y = 1;
-                break;
-            case LEFT:
-                x = -1;
-                break;
+            case UP     -> y = -1;
+            case RIGHT  -> x = 1;
+            case DOWN   -> y = 1;
+            case LEFT   -> x = -1;
         }
 
         final int tX = userPos.getX() + x;
@@ -158,7 +150,7 @@ public enum User {
      * Checkea si estamos bajo techo segun el trigger en donde esta parado el usuario.
      */
     public boolean checkUnderCeiling() {
-        return mapData[userPos.getX()][userPos.getY()].getTrigger() == 1 ||
+        return  mapData[userPos.getX()][userPos.getY()].getTrigger() == 1 ||
                 mapData[userPos.getX()][userPos.getY()].getTrigger() == 2 ||
                 mapData[userPos.getX()][userPos.getY()].getTrigger() == 4;
     }
@@ -170,18 +162,10 @@ public enum User {
     public void moveCharbyHead(short charIndex, Direction nDirection) {
         int addX = 0, addY = 0;
         switch (nDirection) {
-            case UP:
-                addY = -1;
-                break;
-            case RIGHT:
-                addX = 1;
-                break;
-            case DOWN:
-                addY = 1;
-                break;
-            case LEFT:
-                addX = -1;
-                break;
+            case UP -> addY = -1;
+            case RIGHT -> addX = 1;
+            case DOWN -> addY = 1;
+            case LEFT -> addX = -1;
         }
 
         final int x = charList[charIndex].getPos().getX();
@@ -205,10 +189,8 @@ public enum User {
 
         doPasosFx(charIndex);
 
-        // areas viejos
         if ((nY < minLimiteY) || (nY > maxLimiteY) || (nX < minLimiteX) || (nX > maxLimiteX))
             if (charIndex != userCharIndex) eraseChar(charIndex);
-
     }
 
     /**
