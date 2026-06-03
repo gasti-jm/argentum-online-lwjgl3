@@ -215,35 +215,37 @@ public class MultiMessageHandler implements PacketHandler {
 
                 Window.INSTANCE.setCursorCrosshair(true);
 
-                switch (Skill.values()[usingSkill - 1]) {
-                    case MAGIC:
-                        console.addMsgToConsole(Messages.get(MessageKey.TRABAJO_MAGIA), FontStyle.ITALIC, new RGBColor(0.39f, 0.39f, 0.47f));
-                        break;
-
-                    case FISHING:
-                        console.addMsgToConsole(Messages.get(MessageKey.TRABAJO_PESCA), FontStyle.ITALIC, new RGBColor(0.39f, 0.39f, 0.47f));
-                        break;
-
-                    case THEFT:
-                        console.addMsgToConsole(Messages.get(MessageKey.TRABAJO_ROBAR), FontStyle.ITALIC, new RGBColor(0.39f, 0.39f, 0.47f));
-                        break;
-
-                    case WOODCUTTING:
-                        console.addMsgToConsole(Messages.get(MessageKey.TRABAJO_TALAR), FontStyle.ITALIC, new RGBColor(0.39f, 0.39f, 0.47f));
-                        break;
-
-                    case MINING:
-                        console.addMsgToConsole(Messages.get(MessageKey.TRABAJO_MINERIA), FontStyle.ITALIC, new RGBColor(0.39f, 0.39f, 0.47f));
-                        break;
-
-                    case ARCHERY:
-                        console.addMsgToConsole(Messages.get(MessageKey.TRABAJO_PROYECTILES), FontStyle.ITALIC, new RGBColor(0.39f, 0.39f, 0.47f));
-                        break;
-                }
-
                 if (usingSkill == FundirMetal) {
                     console.addMsgToConsole(Messages.get(MessageKey.TRABAJO_FUNDIRMETAL), FontStyle.ITALIC, new RGBColor(0.39f, 0.39f, 0.47f));
+                } else {
+                    switch (Skill.getSkill(usingSkill)) {
+                        case MAGIC:
+                            console.addMsgToConsole(Messages.get(MessageKey.TRABAJO_MAGIA), FontStyle.ITALIC, new RGBColor(0.39f, 0.39f, 0.47f));
+                            break;
+
+                        case FISHING:
+                            console.addMsgToConsole(Messages.get(MessageKey.TRABAJO_PESCA), FontStyle.ITALIC, new RGBColor(0.39f, 0.39f, 0.47f));
+                            break;
+
+                        case THEFT:
+                            console.addMsgToConsole(Messages.get(MessageKey.TRABAJO_ROBAR), FontStyle.ITALIC, new RGBColor(0.39f, 0.39f, 0.47f));
+                            break;
+
+                        case WOODCUTTING:
+                            console.addMsgToConsole(Messages.get(MessageKey.TRABAJO_TALAR), FontStyle.ITALIC, new RGBColor(0.39f, 0.39f, 0.47f));
+                            break;
+
+                        case MINING:
+                            console.addMsgToConsole(Messages.get(MessageKey.TRABAJO_MINERIA), FontStyle.ITALIC, new RGBColor(0.39f, 0.39f, 0.47f));
+                            break;
+
+                        case ARCHERY:
+                            console.addMsgToConsole(Messages.get(MessageKey.TRABAJO_PROYECTILES), FontStyle.ITALIC, new RGBColor(0.39f, 0.39f, 0.47f));
+                            break;
+                    }
                 }
+
+
                 break;
 
             case HAVE_KILLED_USER:

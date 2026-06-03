@@ -44,4 +44,8 @@ public enum Skill {
         return description;
     }
 
+    public static Skill getSkill(int id) {
+        return Skill.values()[id - 1];
+    }
+
 }

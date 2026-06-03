@@ -23,8 +23,8 @@ import static org.aoclient.engine.utils.GameData.grhData;
  */
 
 public final class UserInventory extends Inventory implements Cloneable {
-
     public static final int FLAGORO = MAX_INVENTORY_SLOTS + 1;
+
     // Posicion del picInv del frmMain original de AO
     private static final int MAIN_POS_X = 600;
     private static final int MAIN_POS_Y = 160;
