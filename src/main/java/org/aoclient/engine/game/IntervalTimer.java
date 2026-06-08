@@ -29,7 +29,7 @@ import static org.aoclient.engine.utils.Time.deltaTime;
 public final class IntervalTimer {
 
     // Intervalos de AO.
-    public static final float INT_MACRO_HECHIS = 2.788f;
+    public static final float INT_MACRO_HECHIS = 2.7f;
     public static final float INT_MACRO_TRABAJO = 0.9f;
     public static final float INT_ATTACK = 1.5f;
     public static final float INT_ARROWS = 1.4f;
