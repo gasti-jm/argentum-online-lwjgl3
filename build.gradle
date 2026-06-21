@@ -8,7 +8,7 @@ version = '1.0-SNAPSHOT'
 
 import org.gradle.internal.os.OperatingSystem
 
-project.ext.lwjglVersion = "3.3.3"
+project.ext.lwjglVersion = "3.4.1"
 project.ext.jomlVersion = "1.10.5"
 project.ext.imguiVersion = "1.86.11"
 project.ext.loggerVersion = "2.7.0"
