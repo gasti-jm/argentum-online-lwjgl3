@@ -2,6 +2,7 @@ package org.aoclient.engine.window;
 
 import org.aoclient.engine.listeners.KeyHandler;
 import org.aoclient.engine.listeners.MouseListener;
+import org.aoclient.engine.utils.LaunchOptions;
 import org.aoclient.engine.utils.Platform;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.glfw.GLFWImage;
@@ -74,6 +75,10 @@ public enum Window {
         // Setup an error callback
         GLFWErrorCallback.createPrint(System.err).set();
 
+        // TODO: Por ahora forzamos a x11 porque wayland no esta pulido.
+        if (Platform.isLinux())
+            glfwInitHint(GLFW_PLATFORM, GLFW_PLATFORM_X11);
+
         // Initialize GLFW
         if (!glfwInit()) throw new IllegalStateException("Unable to initialize GLFW.");
 
@@ -91,7 +96,11 @@ public enum Window {
         }
 
         glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
-        glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
+
+        // Para evitar problemas de fullscreen en linux
+        if (!options.isFullscreen())
+            glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
+
         glfwWindowHint(GLFW_MAXIMIZED, GLFW_FALSE);
         glfwWindowHint(GLFW_DECORATED, GLFW_FALSE);
 
@@ -117,11 +126,13 @@ public enum Window {
             GLFWVidMode vidmode = glfwGetVideoMode(glfwGetPrimaryMonitor());
 
             // Center the window
-            glfwSetWindowPos(
-                    window,
-                    (vidmode.width() - pWidth.get(0)) / 2,
-                    (vidmode.height() - pHeight.get(0)) / 2
-            );
+            if (glfwGetPlatform() != GLFW_PLATFORM_WAYLAND) {
+                glfwSetWindowPos(
+                        window,
+                        (vidmode.width() - pWidth.get(0)) / 2,
+                        (vidmode.height() - pHeight.get(0)) / 2
+                );
+            }
         } // the stack frame is popped automatically
 
 
@@ -184,10 +195,7 @@ public enum Window {
         // Make the OpenGL context current
         glfwMakeContextCurrent(window);
 
-        // En macOS, no se puede cargar el icono en glfw.
-        if (!Platform.isMac()) {
-            loadIcon();
-        }
+        loadIcon();
 
         if (options.isVsync()) glfwSwapInterval(1);
         else glfwSwapInterval(0);
@@ -320,6 +328,9 @@ public enum Window {
      * Carga una imagen y la agrega como icono a nuestra ventana GLFW.
      */
     private void loadIcon() {
+        // no disponible en MacOS ni Wayland.
+        if (Platform.isMac() || glfwGetPlatform() == GLFW_PLATFORM_WAYLAND) return;
+
         try (MemoryStack stack = MemoryStack.stackPush()) {
             final IntBuffer ch = stack.mallocInt(1), w = stack.mallocInt(1), h = stack.mallocInt(1);
             final ByteBuffer imgBuff = STBImage.stbi_load("./resources/icon.png", w, h, ch, 4);

@@ -14,7 +14,11 @@ public class Platform {
     }
 
     public static boolean isMac() {
-        return System.getProperty("os.name").toLowerCase().contains("mac");
+        return operationSystem.toLowerCase().contains("mac");
+    }
+
+    public static boolean isLinux() {
+        return operationSystem.toLowerCase().contains("linux");
     }
 
 }
