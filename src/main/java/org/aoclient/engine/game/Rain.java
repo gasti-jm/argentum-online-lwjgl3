@@ -67,6 +67,7 @@ public enum Rain {
         TextureManager.requestTextureFile(RAIN_FILE_NUM_GRAPHIC);
     }
 
+    // TODO: Hay que meter esto en un archivo.
     private void loadData() {
         // Set up te rain rects
         for (int i = 0; i < 8; i++)

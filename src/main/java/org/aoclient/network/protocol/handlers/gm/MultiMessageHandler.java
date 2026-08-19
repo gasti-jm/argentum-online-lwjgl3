@@ -57,23 +57,27 @@ public class MultiMessageHandler implements PacketHandler {
 
             case USER_SWING:
                 console.addMsgToConsole(Messages.get(MessageKey.FALLADO_GOLPE), FontStyle.BOLD, red);
-                charDialogHitSet(User.INSTANCE.getUserCharIndex(), "*Fallas*");
+                charDialogHitSet(User.INSTANCE.getUserCharIndex(), "*Fallas*"); // TODO: FALTA INTERNACIONALIZAR!
                 break;
 
             case SAFE_MODE_ON:
+                User.INSTANCE.getSMSafe().setActive(true);
                 console.addMsgToConsole(Messages.get(MessageKey.SEGURO_ACTIVADO), FontStyle.BOLD, new RGBColor(0f, 1f, 0f));
                 break;
 
             case SAFE_MODE_OFF:
+                User.INSTANCE.getSMSafe().setActive(false);
                 console.addMsgToConsole(Messages.get(MessageKey.SEGURO_DESACTIVADO), FontStyle.BOLD, red);
                 break;
 
             case RESUSCITATION_SAFE_OFF:
-                console.addMsgToConsole(Messages.get(MessageKey.SEGURO_RESU_ON), FontStyle.BOLD, new RGBColor(0f, 1f, 0f));
+                User.INSTANCE.getSMResu().setActive(false);
+                console.addMsgToConsole(Messages.get(MessageKey.SEGURO_RESU_OFF), FontStyle.BOLD, red);
                 break;
 
             case RESUSCITATION_SAFE_ON:
-                console.addMsgToConsole(Messages.get(MessageKey.SEGURO_RESU_OFF), FontStyle.BOLD, red);
+                User.INSTANCE.getSMResu().setActive(true);
+                console.addMsgToConsole(Messages.get(MessageKey.SEGURO_RESU_ON), FontStyle.BOLD, new RGBColor(0f, 1f, 0f));
                 break;
 
             case NOBILITY_LOST:

@@ -153,7 +153,7 @@ public abstract class Form {
         } else System.out.println("La apertura de URL no es compatible en esta plataforma.");
     }
 
-    protected void imageRegion(
+    public static void imageRegion(
             Texture tex,
             int x, int y, int w, int h
     ) {
@@ -165,7 +165,7 @@ public abstract class Form {
         ImGui.image(tex.getId(), w, h, u0, v0, u1, v1);
     }
 
-    protected void imageRegion(Texture tex, GrhInfo grh, boolean animate) {
+    public static void imageRegion(Texture tex, GrhInfo grh, boolean animate) {
         if (grh.getGrhIndex() == 0 || grhData[grh.getGrhIndex()].getNumFrames() == 0) return;
         if (animate && grh.isStarted()) {
             grh.setFrameCounter(grh.getFrameCounter() + (deltaTime * grhData[grh.getGrhIndex()].getNumFrames() / grh.getSpeed()));
@@ -188,6 +188,22 @@ public abstract class Form {
         float v1 = (float) (grhData[currentGrhIndex].getsY() + grhData[currentGrhIndex].getPixelHeight()) / tex.getTex_height();
 
         ImGui.image(tex.getId(), grhData[currentGrhIndex].getPixelWidth(), grhData[currentGrhIndex].getPixelHeight(), u0, v0, u1, v1);
+    }
+
+    public static void imageButtonRegion(
+            Texture tex,
+            int x, int y, int w, int h,
+            Runnable action
+            ) {
+
+        float u0 = (float) x / tex.getTex_width();
+        float v0 = (float) y / tex.getTex_height();
+        float u1 = (float) (x + w) / tex.getTex_width();
+        float v1 = (float) (y + h) / tex.getTex_height();
+
+        if (ImGui.imageButton(tex.getId(), w, h, u0, v0, u1, v1)) {
+            action.run();
+        }
     }
 
 }

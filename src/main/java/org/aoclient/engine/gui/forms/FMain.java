@@ -5,6 +5,9 @@ import imgui.ImGui;
 import imgui.flag.*;
 import imgui.type.ImString;
 import org.aoclient.engine.EngineGL;
+import org.aoclient.engine.game.SMSystem;
+import org.aoclient.engine.game.User;
+import org.aoclient.engine.game.models.SMType;
 import org.aoclient.engine.window.Window;
 import org.aoclient.engine.game.console.Console;
 import org.aoclient.engine.gui.ImGUISystem;
@@ -58,10 +61,13 @@ public final class FMain extends Form {
     private ImageButton3State btnStats;
     private ImageButton3State btnGuild;
 
+
     public FMain() {
         sendCreate = false; // una vez logiado resetiamos esto para que se pueda volver a crear pj.
         this.viewInventory = true;
         USER.getUserInventory().setVisible(true);
+
+
 
         Console.INSTANCE.clearConsole();
 
@@ -148,6 +154,13 @@ public final class FMain extends Form {
         ImGui.popStyleColor();
         ImGui.popStyleColor();
         ImGui.popStyleVar();
+    }
+
+    private void drawSMButtons() {
+        User.INSTANCE.getSMResu().draw();
+        User.INSTANCE.getSMSafe().draw();
+        User.INSTANCE.getSMWork().draw();
+        User.INSTANCE.getSMSpells().draw();
     }
 
     /**
@@ -289,6 +302,8 @@ public final class FMain extends Form {
             ImGui.popStyleColor();
             ImGui.popItemWidth();
         }
+
+        drawSMButtons();
     }
 
     // Inventario y hechizos

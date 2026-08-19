@@ -40,6 +40,19 @@ import static org.aoclient.network.protocol.Protocol.walk;
 public enum User {
     INSTANCE;
 
+    class UserFlags {
+        boolean connected;
+        boolean moving;
+        boolean underCeiling;
+        boolean navegating;
+        boolean shopping;
+    }
+
+    class UserData {
+        short charIndex;
+        short map;
+    }
+
     private final UserInventory userInventory;
     private final InventorySpells inventorySpells;
     private final Position userPos;
@@ -50,7 +63,7 @@ public enum User {
     private boolean userComerciando;
     // mapa
     private short userMap;
-    private short userCharIndex;
+    private short userCharIndex; // nosotros como usuario
 
     // conexion
     private boolean userConected;
@@ -85,7 +98,7 @@ public enum User {
 
     private String userWeaponEqpHit = "0/0";
     private String userArmourEqpDef = "0/0";
-    private String userHelmEqpDef = "0/0";
+    private String userHelmEqpDef   = "0/0";
     private String userShieldEqpDef = "0/0";
 
     private int userWeaponEqpSlot;
@@ -103,6 +116,9 @@ public enum User {
 
     private int privilege;
 
+    private SMSystem SMResu, SMSafe, SMSpells, SMWork;
+
+
     User() {
         this.userPos = new Position();
         this.addToUserPos = new Position();
@@ -111,6 +127,12 @@ public enum User {
         this.talking = false;
         this.userNavegando = false;
         this.userComerciando = false;
+
+        // default.
+        SMResu    = new SMSystem(682, 564, SMType.sResucitation, false);
+        SMSafe    = new SMSystem(707, 564, SMType.sSafemode, true);
+        SMSpells  = new SMSystem(731, 564, SMType.mSpells, false);
+        SMWork    = new SMSystem(755, 564, SMType.mWork, false);
     }
 
     public void resetGameState() {
@@ -235,6 +257,7 @@ public enum User {
     }
 
     public boolean hayAgua(int x, int y) {
+        // TODO: esto esta hardcodeado, hay que modificarlo.
         return ((mapData[x][y].getLayer(1).getGrhIndex() >= 1505 && mapData[x][y].getLayer(1).getGrhIndex() <= 1520) ||
                 (mapData[x][y].getLayer(1).getGrhIndex() >= 5665 && mapData[x][y].getLayer(1).getGrhIndex() <= 5680) ||
                 (mapData[x][y].getLayer(1).getGrhIndex() >= 13547 && mapData[x][y].getLayer(1).getGrhIndex() <= 13562)) &&
@@ -750,5 +773,22 @@ public enum User {
         if (userNavegando != hayAgua(x, y)) return false;
 
         return true;
+    }
+
+
+    public SMSystem getSMResu() {
+        return SMResu;
+    }
+
+    public SMSystem getSMSafe() {
+        return SMSafe;
+    }
+
+    public SMSystem getSMSpells() {
+        return SMSpells;
+    }
+
+    public SMSystem getSMWork() {
+        return SMWork;
     }
 }
