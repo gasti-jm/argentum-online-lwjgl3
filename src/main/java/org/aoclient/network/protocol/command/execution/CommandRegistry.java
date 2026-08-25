@@ -93,6 +93,7 @@ public final class CommandRegistry {
             Command.user(POLL, PollCommand::new),
             Command.user(REPORT, ReportCommand::new),
             Command.user(ROL, RolCommand::new),
+            Command.user(PING, Protocol::ping),
             Command.user(SENTINEL_CODE, SentinelCodeCommand::new), // FIXME Rompe el cliente
 
             // ==================== GM COMMANDS ====================
@@ -118,7 +119,7 @@ public final class CommandRegistry {
             Command.gm(ONLINE_CHAOS, Protocol::onlineChaos),
             Command.gm(ONLINE_GM, Protocol::onlineGM),
             Command.gm(ONLINE_ROYAL, Protocol::onlineRoyal),
-            Command.gm(PING, Protocol::ping),
+            //Command.gm(PING, Protocol::ping),
             Command.gm(RAIN, Protocol::rain),
             Command.gm(RELOAD_NPC, Protocol::reloadNPC),
             Command.gm(RELOAD_OBJ, Protocol::reloadObj),

@@ -2,7 +2,7 @@ package org.aoclient.network.protocol;
 
 import org.aoclient.engine.game.console.Console;
 import org.aoclient.engine.game.Messages;
-import org.aoclient.engine.game.User;
+import org.aoclient.engine.game.player.Player;
 import org.aoclient.engine.game.console.FontStyle;
 import org.aoclient.engine.game.models.Direction;
 import org.aoclient.engine.game.models.Skill;
@@ -15,10 +15,9 @@ import static org.lwjgl.glfw.GLFW.glfwGetTime;
 
 
 public class Protocol {
-
     private static final Console CONSOLE = Console.INSTANCE;
-    private static final User USER = User.INSTANCE;
-    public static int pingTime; // TODO Se podria sacar de aca?
+    private static final Player USER = Player.INSTANCE;
+
     /** Buffer para la salida de bytes (escribe lo que envia el cliente al servidor). */
     public static PacketBuffer outputBuffer = new PacketBuffer();
     /** Buffer para la entrada de bytes (lee lo que recibe el cliente del servidor). */
@@ -737,9 +736,9 @@ public class Protocol {
     }
 
     public static void ping() {
-        if (pingTime != 0) return;
+        if (USER.getPingTime() != 0) return;
         outputBuffer.writeByte(ClientPacket.PING.getId());
-        pingTime = (int) glfwGetTime();
+        USER.setPingTime((int) glfwGetTime());
     }
 
     public static void playerBank(String player) {

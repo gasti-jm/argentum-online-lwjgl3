@@ -1,9 +1,8 @@
 package org.aoclient.network.protocol.handlers;
 
-import org.aoclient.engine.game.User;
+import org.aoclient.engine.game.player.Player;
 import org.aoclient.engine.utils.Log;
 import org.aoclient.network.PacketBuffer;
-import org.tinylog.Logger;
 
 import static org.aoclient.engine.utils.GameData.charList;
 
@@ -14,9 +13,9 @@ public class UpdateHPHandler implements PacketHandler {
         if (buffer.checkBytes(3)) return;
         buffer.readByte();
 
-        User.INSTANCE.setUserMinHP(buffer.readInteger());
+        Player.INSTANCE.setUserMinHP(buffer.readInteger());
 
-        charList[User.INSTANCE.getUserCharIndex()].setDead(User.INSTANCE.getUserMinHP() <= 0);
+        charList[Player.INSTANCE.getUserCharIndex()].setDead(Player.INSTANCE.getUserMinHP() <= 0);
 
         //
         //    'Is the user alive??

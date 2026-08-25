@@ -2,7 +2,7 @@ package org.aoclient.engine.gui.forms;
 
 import imgui.ImGui;
 import imgui.ImVec2;
-import org.aoclient.engine.game.User;
+import org.aoclient.engine.game.player.Player;
 import org.aoclient.engine.gui.ImGUISystem;
 import org.aoclient.engine.renderer.Texture;
 import org.aoclient.engine.utils.inits.GrhInfo;
@@ -44,7 +44,7 @@ import static org.lwjgl.opengl.GL12.GL_CLAMP_TO_EDGE;
 public abstract class Form {
 
     protected int backgroundImage;
-    protected static final User USER = User.INSTANCE;
+    protected static final Player USER = Player.INSTANCE;
     protected static final ImGUISystem IM_GUI_SYSTEM = ImGUISystem.INSTANCE;
 
     public abstract void render();

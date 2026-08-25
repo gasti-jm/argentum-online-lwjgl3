@@ -1,11 +1,9 @@
 package org.aoclient.network.protocol.handlers.gm;
 
-import org.aoclient.engine.game.User;
 import org.aoclient.engine.gui.ImGUISystem;
 import org.aoclient.engine.gui.forms.FSpawnList;
 import org.aoclient.network.PacketBuffer;
 import org.aoclient.network.protocol.handlers.PacketHandler;
-import org.tinylog.Logger;
 
 public class SpawnListHandler implements PacketHandler {
 

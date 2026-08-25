@@ -37,7 +37,6 @@ import static org.lwjgl.glfw.GLFW.*;
 
 
 public enum ImGUISystem {
-
     INSTANCE;
 
     // LWJGL3 rendered itself (SHOULD be initialized)
@@ -120,15 +119,15 @@ public enum ImGUISystem {
     }
 
     private void setMouseMapping() {
-        mouseCursors[ImGuiMouseCursor.Arrow] = glfwCreateStandardCursor(GLFW_ARROW_CURSOR);
-        mouseCursors[ImGuiMouseCursor.TextInput] = glfwCreateStandardCursor(GLFW_IBEAM_CURSOR);
-        mouseCursors[ImGuiMouseCursor.ResizeAll] = glfwCreateStandardCursor(GLFW_ARROW_CURSOR);
-        mouseCursors[ImGuiMouseCursor.ResizeNS] = glfwCreateStandardCursor(GLFW_VRESIZE_CURSOR);
-        mouseCursors[ImGuiMouseCursor.ResizeEW] = glfwCreateStandardCursor(GLFW_HRESIZE_CURSOR);
-        mouseCursors[ImGuiMouseCursor.ResizeNESW] = glfwCreateStandardCursor(GLFW_ARROW_CURSOR);
-        mouseCursors[ImGuiMouseCursor.ResizeNWSE] = glfwCreateStandardCursor(GLFW_ARROW_CURSOR);
-        mouseCursors[ImGuiMouseCursor.Hand] = glfwCreateStandardCursor(GLFW_HAND_CURSOR);
-        mouseCursors[ImGuiMouseCursor.NotAllowed] = glfwCreateStandardCursor(GLFW_ARROW_CURSOR);
+        mouseCursors[ImGuiMouseCursor.Arrow]        = glfwCreateStandardCursor(GLFW_ARROW_CURSOR);
+        mouseCursors[ImGuiMouseCursor.TextInput]    = glfwCreateStandardCursor(GLFW_IBEAM_CURSOR);
+        mouseCursors[ImGuiMouseCursor.ResizeAll]    = glfwCreateStandardCursor(GLFW_ARROW_CURSOR);
+        mouseCursors[ImGuiMouseCursor.ResizeNS]     = glfwCreateStandardCursor(GLFW_VRESIZE_CURSOR);
+        mouseCursors[ImGuiMouseCursor.ResizeEW]     = glfwCreateStandardCursor(GLFW_HRESIZE_CURSOR);
+        mouseCursors[ImGuiMouseCursor.ResizeNESW]   = glfwCreateStandardCursor(GLFW_ARROW_CURSOR);
+        mouseCursors[ImGuiMouseCursor.ResizeNWSE]   = glfwCreateStandardCursor(GLFW_ARROW_CURSOR);
+        mouseCursors[ImGuiMouseCursor.Hand]         = glfwCreateStandardCursor(GLFW_HAND_CURSOR);
+        mouseCursors[ImGuiMouseCursor.NotAllowed]   = glfwCreateStandardCursor(GLFW_ARROW_CURSOR);
     }
 
     private void setCallbacks(ImGuiIO io) {

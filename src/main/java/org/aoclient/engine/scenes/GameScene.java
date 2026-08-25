@@ -1,5 +1,6 @@
 package org.aoclient.engine.scenes;
 
+import org.aoclient.engine.game.player.Player;
 import org.aoclient.engine.window.Window;
 import org.aoclient.engine.game.*;
 import org.aoclient.engine.game.models.Direction;
@@ -47,7 +48,7 @@ import static org.lwjgl.glfw.GLFW.*;
  *
  * @see Scene
  * @see MainScene
- * @see User
+ * @see Player
  * @see Camera
  * @see Rain
  */
@@ -55,7 +56,7 @@ import static org.lwjgl.glfw.GLFW.*;
 public final class GameScene extends Scene {
 
     public static final IntervalTimer intervalToUpdatePos = new IntervalTimer(INT_SENTRPU);
-    private final User user = User.INSTANCE;
+    private final Player user = Player.INSTANCE;
     private Weather weather;// color de ambiente.
     private float offSetCounterX = 0;
     private float offSetCounterY = 0;

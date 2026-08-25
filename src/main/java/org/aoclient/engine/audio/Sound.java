@@ -274,6 +274,11 @@ public final class Sound {
         musics.clear();
     }
 
+    public static void destroy() {
+        clearSounds();
+        clearMusics();
+    }
+
     /**
      * Reproduce un sonido. Primero checkea si se esta reproduciendo el mismo sonido, si es asi crea el mismo sonido y lo
      * reproduce, ya que en el AO cuando se reproduce el mismo sonido, se reproduce varias veces por encima del otro. En caso

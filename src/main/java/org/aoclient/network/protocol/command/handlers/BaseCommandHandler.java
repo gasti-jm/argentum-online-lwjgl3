@@ -1,6 +1,6 @@
 package org.aoclient.network.protocol.command.handlers;
 
-import org.aoclient.engine.game.User;
+import org.aoclient.engine.game.player.Player;
 import org.aoclient.network.protocol.command.core.Command;
 import org.aoclient.network.protocol.command.core.CommandContext;
 import org.aoclient.network.protocol.command.core.CommandException;
@@ -35,7 +35,7 @@ public abstract class BaseCommandHandler implements CommandHandler {
 
     /** Indica un numero ilimitado de argumentos cuando se pasa como parametro a los metodos de validacion de argumentos. */
     protected final int UNLIMITED_ARGUMENTS = -1;
-    protected User user = User.INSTANCE;
+    protected Player user = Player.INSTANCE;
 
     /**
      * Obtiene el uso/sintaxis del comando basado en el GameCommand.

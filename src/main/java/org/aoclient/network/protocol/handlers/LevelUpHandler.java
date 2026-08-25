@@ -1,6 +1,6 @@
 package org.aoclient.network.protocol.handlers;
 
-import org.aoclient.engine.game.User;
+import org.aoclient.engine.game.player.Player;
 import org.aoclient.network.PacketBuffer;
 
 public class LevelUpHandler implements PacketHandler {
@@ -10,8 +10,8 @@ public class LevelUpHandler implements PacketHandler {
         if (buffer.checkBytes(3)) return;
         buffer.readByte();
 
-        short skillPoints = (short) (User.INSTANCE.getFreeSkillPoints() + buffer.readInteger());
-        User.INSTANCE.setFreeSkillPoints(skillPoints);
+        short skillPoints = (short) (Player.INSTANCE.getFreeSkillPoints() + buffer.readInteger());
+        Player.INSTANCE.setFreeSkillPoints(skillPoints);
     }
 
 }

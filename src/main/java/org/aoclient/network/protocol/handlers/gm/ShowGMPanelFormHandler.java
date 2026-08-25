@@ -1,6 +1,5 @@
 package org.aoclient.network.protocol.handlers.gm;
 
-import org.aoclient.engine.game.User;
 import org.aoclient.engine.gui.ImGUISystem;
 import org.aoclient.engine.gui.forms.FPanelGM;
 import org.aoclient.network.PacketBuffer;

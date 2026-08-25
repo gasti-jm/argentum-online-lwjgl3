@@ -72,7 +72,6 @@ public enum MouseListener {
 
                 // Doble click!
                 double currentTime = glfwGetTime();
-
                 MOUSE_BUTTON_DOBLE_CLICK_PRESSED[button] = currentTime - lastTimeClick <= DOUBLE_CLICK_TIME;
 
                 lastTimeClick = currentTime;

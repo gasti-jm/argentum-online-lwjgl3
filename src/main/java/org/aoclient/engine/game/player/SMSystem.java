@@ -1,6 +1,7 @@
-package org.aoclient.engine.game;
+package org.aoclient.engine.game.player;
 
 import imgui.ImGui;
+import org.aoclient.engine.game.Messages;
 import org.aoclient.engine.game.console.Console;
 import org.aoclient.engine.game.console.FontStyle;
 import org.aoclient.engine.game.models.SMType;
@@ -10,14 +11,13 @@ import org.aoclient.engine.renderer.TextureManager;
 
 import static org.aoclient.engine.audio.Sound.SND_CLICK;
 import static org.aoclient.engine.audio.Sound.playSound;
-import static org.aoclient.engine.gui.forms.Form.imageButtonRegion;
 import static org.aoclient.engine.gui.forms.Form.imageRegion;
 import static org.aoclient.engine.utils.GameData.grhData;
 import static org.aoclient.network.protocol.Protocol.resucitationToggle;
 import static org.aoclient.network.protocol.Protocol.safeToggle;
 
 // lo creamos en fMAIN
-public class SMSystem {
+public final class SMSystem {
     private final int x, y, w, h; // posicion y size del boton
     private final SMType type;
     private boolean active;

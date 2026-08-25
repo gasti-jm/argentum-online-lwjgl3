@@ -1,6 +1,6 @@
 package org.aoclient.engine.scenes;
 
-import org.aoclient.engine.game.User;
+import org.aoclient.engine.game.player.Player;
 import org.aoclient.engine.gui.ImGUISystem;
 import org.aoclient.engine.gui.forms.FConnect;
 import org.aoclient.engine.listeners.KeyHandler;
@@ -28,7 +28,7 @@ import static org.aoclient.engine.game.bindkeys.Key.EXIT_GAME;
  * @see Scene
  * @see GameScene
  * @see FConnect
- * @see User
+ * @see Player
  */
 
 public final class MainScene extends Scene {
@@ -63,7 +63,7 @@ public final class MainScene extends Scene {
 
     @Override
     public void render() {
-        if (User.INSTANCE.isUserConected()) {
+        if (Player.INSTANCE.isUserConected()) {
             this.close();
             ImGUISystem.INSTANCE.closeAllFrms();
         }

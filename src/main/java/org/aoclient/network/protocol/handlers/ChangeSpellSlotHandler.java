@@ -1,9 +1,8 @@
 package org.aoclient.network.protocol.handlers;
 
-import org.aoclient.engine.game.User;
+import org.aoclient.engine.game.player.Player;
 import org.aoclient.engine.utils.Log;
 import org.aoclient.network.PacketBuffer;
-import org.tinylog.Logger;
 
 public class ChangeSpellSlotHandler implements PacketHandler {
 
@@ -20,7 +19,7 @@ public class ChangeSpellSlotHandler implements PacketHandler {
         tempBuffer.readInteger();
         String hechizoName = tempBuffer.readCp1252String();
 
-        User.INSTANCE.getInventorySpells().addSpell(slot - 1, hechizoName);
+        Player.INSTANCE.getInventorySpells().addSpell(slot - 1, hechizoName);
 
         buffer.copy(tempBuffer);
         Log.debug("ChangeSpellSlot Cargado! - FALTA TERMINAR!");

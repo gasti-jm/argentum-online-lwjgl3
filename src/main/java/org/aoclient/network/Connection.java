@@ -1,9 +1,10 @@
 package org.aoclient.network;
 
 import org.aoclient.engine.game.Messages;
-import org.aoclient.engine.game.User;
+import org.aoclient.engine.game.player.Player;
 import org.aoclient.engine.gui.ImGUISystem;
 import org.aoclient.engine.gui.forms.FMessage;
+import org.aoclient.engine.utils.Log;
 import org.aoclient.network.protocol.PacketProcessor;
 
 import java.io.DataInputStream;
@@ -23,7 +24,6 @@ import static org.aoclient.network.protocol.Protocol.*;
  */
 
 public enum Connection {
-
     INSTANCE;
 
     /** Socket para la conexion TCP. */
@@ -88,16 +88,16 @@ public enum Connection {
             inputStream.close();
             socket.close();
         } catch (IOException e) {
-            System.err.println("Error closing connection: " + e.getMessage());
+            Log.err("Error closing connection: {}", e.getMessage());
         } finally {
-            User.INSTANCE.resetGameState();
+            Player.INSTANCE.resetGameState();
         }
     }
 
     /**
      * Escribe los bytes del buffer de salida en el flujo de salida del socket.
      */
-    public void write() {
+    private void write() {
         if (!isReadyForWriting()) return;
         // Si hay bytes en el buffer de salida
         if (outputBuffer != null && outputBuffer.getLength() > 0) {
@@ -107,7 +107,7 @@ public enum Connection {
                 // Envia los bytes al servidor a traves del flujo de salida
                 outputStream.write(bytes);
             } catch (IOException e) {
-                System.err.println("Error writing bytes: " + e.getMessage());
+                Log.err("Error writing bytes: {}", e.getMessage());
                 disconnect();
             }
         }
@@ -127,7 +127,7 @@ public enum Connection {
      * cambiar rapidamente. Aunque en la mayoria de los casos ambas verificaciones daran el mismo resultado, mantener ambas
      * protege contra casos extremos y condiciones de carrera, haciendo el codigo mas robusto.
      */
-    public void read() {
+    private void read() {
         if (!isReadyForReading()) return;
         try {
             // Si hay bytes disponibles para leer (sin bloquear el hilo) en el flujo de entrada
@@ -146,6 +146,12 @@ public enum Connection {
         } catch (IOException e) {
             System.err.println(e.getMessage());
         }
+    }
+
+    // enviamos y recibimos
+    public void flushBuffers() {
+        this.write();
+        this.read();
     }
 
     /**

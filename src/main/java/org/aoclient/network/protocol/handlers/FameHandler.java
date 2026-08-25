@@ -1,6 +1,6 @@
 package org.aoclient.network.protocol.handlers;
 
-import org.aoclient.engine.game.User;
+import org.aoclient.engine.game.player.Player;
 import org.aoclient.engine.game.models.Reputation;
 import org.aoclient.network.PacketBuffer;
 
@@ -15,9 +15,9 @@ public class FameHandler implements PacketHandler {
         for (Reputation reputation : Reputation.values())
             reputations[reputation.ordinal()] = buffer.readLong();
 
-        User.INSTANCE.setReputations(reputations);
+        Player.INSTANCE.setReputations(reputations);
         long average = buffer.readLong();
-        User.INSTANCE.setCriminal(average < 0);
+        Player.INSTANCE.setCriminal(average < 0);
     }
 
 }

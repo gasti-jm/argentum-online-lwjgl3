@@ -1,6 +1,6 @@
 package org.aoclient.network.protocol.handlers;
 
-import org.aoclient.engine.game.User;
+import org.aoclient.engine.game.player.Player;
 import org.aoclient.network.PacketBuffer;
 
 public class UpdateStaHandler implements PacketHandler {
@@ -10,7 +10,7 @@ public class UpdateStaHandler implements PacketHandler {
         if (buffer.checkBytes(3)) return;
         buffer.readByte();
 
-        User.INSTANCE.setUserMinSTA(buffer.readInteger());
+        Player.INSTANCE.setUserMinSTA(buffer.readInteger());
     }
 
 }

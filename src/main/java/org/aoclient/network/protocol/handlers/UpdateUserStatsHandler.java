@@ -1,13 +1,13 @@
 package org.aoclient.network.protocol.handlers;
 
-import org.aoclient.engine.game.User;
+import org.aoclient.engine.game.player.Player;
 import org.aoclient.network.PacketBuffer;
 
 import static org.aoclient.engine.utils.GameData.charList;
 
 public class UpdateUserStatsHandler implements PacketHandler {
 
-    private final User user = User.INSTANCE;
+    private final Player user = Player.INSTANCE;
 
     @Override
     public void handle(PacketBuffer buffer) {

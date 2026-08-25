@@ -1,6 +1,6 @@
 package org.aoclient.network.protocol.handlers;
 
-import org.aoclient.engine.game.User;
+import org.aoclient.engine.game.player.Player;
 import org.aoclient.network.PacketBuffer;
 
 import static org.aoclient.engine.utils.GameData.charList;
@@ -13,20 +13,20 @@ public class PosUpdateHandler implements PacketHandler {
         if (buffer.checkBytes(3)) return;
         buffer.readByte();
 
-        int x = User.INSTANCE.getUserPos().getX();
-        int y = User.INSTANCE.getUserPos().getY();
-        int userCharIndex = User.INSTANCE.getUserCharIndex();
+        int x = Player.INSTANCE.getUserPos().getX();
+        int y = Player.INSTANCE.getUserPos().getY();
+        int userCharIndex = Player.INSTANCE.getUserCharIndex();
 
         // Remove char form old position
         if (mapData[x][y].getCharIndex() == userCharIndex) mapData[x][y].setCharIndex(0);
 
         // Set new pos
-        User.INSTANCE.getUserPos().setX(buffer.readByte());
-        User.INSTANCE.getUserPos().setY(buffer.readByte());
+        Player.INSTANCE.getUserPos().setX(buffer.readByte());
+        Player.INSTANCE.getUserPos().setY(buffer.readByte());
 
         // again xd
-        x = User.INSTANCE.getUserPos().getX();
-        y = User.INSTANCE.getUserPos().getY();
+        x = Player.INSTANCE.getUserPos().getX();
+        y = Player.INSTANCE.getUserPos().getY();
 
         mapData[x][y].setCharIndex(userCharIndex);
         charList[userCharIndex].getPos().setX(x);

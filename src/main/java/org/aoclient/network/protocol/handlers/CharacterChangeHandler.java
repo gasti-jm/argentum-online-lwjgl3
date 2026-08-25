@@ -1,15 +1,13 @@
 package org.aoclient.network.protocol.handlers;
 
-import org.aoclient.engine.game.User;
+import org.aoclient.engine.game.player.Player;
 import org.aoclient.engine.game.models.Direction;
-import org.aoclient.engine.renderer.TextureManager;
 import org.aoclient.engine.utils.Log;
 import org.aoclient.engine.utils.inits.BodyData;
 import org.aoclient.engine.utils.inits.HeadData;
 import org.aoclient.engine.utils.inits.ShieldData;
 import org.aoclient.engine.utils.inits.WeaponData;
 import org.aoclient.network.PacketBuffer;
-import org.tinylog.Logger;
 
 import static org.aoclient.engine.game.models.Character.CASPER_HEAD;
 import static org.aoclient.engine.game.models.Character.refreshAllChars;
@@ -57,7 +55,7 @@ public class CharacterChangeHandler implements PacketHandler {
         tempint = buffer.readInteger();
         if (tempint != 0) charList[charIndex].setHelmet(new HeadData(helmetsData[tempint]));
 
-        User.INSTANCE.setCharacterFx(charIndex, buffer.readInteger(), buffer.readInteger());
+        Player.INSTANCE.setCharacterFx(charIndex, buffer.readInteger(), buffer.readInteger());
 
         refreshAllChars();
         Log.debug("handleCharacterChange Cargado! - FALTA TERMINAR!");

@@ -4,7 +4,6 @@ import imgui.ImGui;
 import imgui.flag.ImGuiCond;
 import imgui.flag.ImGuiWindowFlags;
 import imgui.type.ImInt;
-import org.aoclient.engine.game.User;
 import org.aoclient.network.protocol.Protocol;
 
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_ENTER;

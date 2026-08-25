@@ -1,6 +1,6 @@
 package org.aoclient.network.protocol.handlers;
 
-import org.aoclient.engine.game.User;
+import org.aoclient.engine.game.player.Player;
 import org.aoclient.network.PacketBuffer;
 
 public class CreateFXHandler implements PacketHandler {
@@ -14,7 +14,7 @@ public class CreateFXHandler implements PacketHandler {
         short fX = buffer.readInteger();
         short loops = buffer.readInteger();
 
-        User.INSTANCE.setCharacterFx(charIndex, fX, loops);
+        Player.INSTANCE.setCharacterFx(charIndex, fX, loops);
     }
 
 }

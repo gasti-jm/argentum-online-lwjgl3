@@ -3,7 +3,7 @@ package org.aoclient.network.protocol.handlers.gm;
 import org.aoclient.engine.game.Messages;
 import org.aoclient.engine.window.Window;
 import org.aoclient.engine.game.console.Console;
-import org.aoclient.engine.game.User;
+import org.aoclient.engine.game.player.Player;
 import org.aoclient.engine.game.console.FontStyle;
 import org.aoclient.engine.game.models.Skill;
 import org.aoclient.engine.renderer.RGBColor;
@@ -57,26 +57,26 @@ public class MultiMessageHandler implements PacketHandler {
 
             case USER_SWING:
                 console.addMsgToConsole(Messages.get(MessageKey.FALLADO_GOLPE), FontStyle.BOLD, red);
-                charDialogHitSet(User.INSTANCE.getUserCharIndex(), "*Fallas*"); // TODO: FALTA INTERNACIONALIZAR!
+                charDialogHitSet(Player.INSTANCE.getUserCharIndex(), "*Fallas*"); // TODO: FALTA INTERNACIONALIZAR!
                 break;
 
             case SAFE_MODE_ON:
-                User.INSTANCE.getSMSafe().setActive(true);
+                Player.INSTANCE.getSMSafe().setActive(true);
                 console.addMsgToConsole(Messages.get(MessageKey.SEGURO_ACTIVADO), FontStyle.BOLD, new RGBColor(0f, 1f, 0f));
                 break;
 
             case SAFE_MODE_OFF:
-                User.INSTANCE.getSMSafe().setActive(false);
+                Player.INSTANCE.getSMSafe().setActive(false);
                 console.addMsgToConsole(Messages.get(MessageKey.SEGURO_DESACTIVADO), FontStyle.BOLD, red);
                 break;
 
             case RESUSCITATION_SAFE_OFF:
-                User.INSTANCE.getSMResu().setActive(false);
+                Player.INSTANCE.getSMResu().setActive(false);
                 console.addMsgToConsole(Messages.get(MessageKey.SEGURO_RESU_OFF), FontStyle.BOLD, red);
                 break;
 
             case RESUSCITATION_SAFE_ON:
-                User.INSTANCE.getSMResu().setActive(true);
+                Player.INSTANCE.getSMResu().setActive(true);
                 console.addMsgToConsole(Messages.get(MessageKey.SEGURO_RESU_ON), FontStyle.BOLD, new RGBColor(0f, 1f, 0f));
                 break;
 
@@ -119,7 +119,7 @@ public class MultiMessageHandler implements PacketHandler {
             case USER_HIT_NPC:
                 final int d = buffer.readLong();
                 console.addMsgToConsole(Messages.get(MessageKey.GOLPE_CRIATURA), FontStyle.BOLD, red, d);
-                charDialogHitSet(User.INSTANCE.getUserCharIndex(), d);
+                charDialogHitSet(Player.INSTANCE.getUserCharIndex(), d);
                 break;
 
             case USER_ATTACKED_SWING:
@@ -209,13 +209,13 @@ public class MultiMessageHandler implements PacketHandler {
                                 red, victimName, Messages.get(MessageKey.PRODUCE_IMPACTO_TORSO), damage);
                         break;
                 }
-                charDialogHitSet(User.INSTANCE.getUserCharIndex(), damage);
+                charDialogHitSet(Player.INSTANCE.getUserCharIndex(), damage);
 
                 break;
 
             case WORK_REQUEST_TARGET:
                 final int usingSkill = buffer.readByte();
-                User.INSTANCE.setUsingSkill(usingSkill);
+                Player.INSTANCE.setUsingSkill(usingSkill);
 
                 Window.INSTANCE.setCursorCrosshair(true);
 
