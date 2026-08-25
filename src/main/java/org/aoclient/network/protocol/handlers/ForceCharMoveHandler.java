@@ -1,6 +1,6 @@
 package org.aoclient.network.protocol.handlers;
 
-import org.aoclient.engine.game.User;
+import org.aoclient.engine.game.player.Player;
 import org.aoclient.engine.game.models.Direction;
 import org.aoclient.network.PacketBuffer;
 
@@ -14,9 +14,9 @@ public class ForceCharMoveHandler implements PacketHandler {
         buffer.readByte();
 
         Direction direction = Direction.values()[buffer.readByte() - 1];
-        short userCharIndex = User.INSTANCE.getUserCharIndex();
-        User.INSTANCE.moveCharbyHead(userCharIndex, direction);
-        User.INSTANCE.moveScreen(direction);
+        short userCharIndex = Player.INSTANCE.getUserCharIndex();
+        Player.INSTANCE.moveCharbyHead(userCharIndex, direction);
+        Player.INSTANCE.moveScreen(direction);
 
         refreshAllChars();
     }

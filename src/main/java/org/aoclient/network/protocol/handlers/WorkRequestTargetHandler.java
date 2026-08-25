@@ -3,7 +3,7 @@ package org.aoclient.network.protocol.handlers;
 import org.aoclient.engine.game.Messages;
 import org.aoclient.engine.window.Window;
 import org.aoclient.engine.game.console.Console;
-import org.aoclient.engine.game.User;
+import org.aoclient.engine.game.player.Player;
 import org.aoclient.engine.game.console.FontStyle;
 import org.aoclient.engine.game.models.Skill;
 import org.aoclient.engine.renderer.RGBColor;
@@ -23,7 +23,7 @@ public class WorkRequestTargetHandler implements PacketHandler {
         buffer.readByte();
 
         final int usingSkill = buffer.readByte();
-        User.INSTANCE.setUsingSkill(usingSkill);
+        Player.INSTANCE.setUsingSkill(usingSkill);
 
         Window.INSTANCE.setCursorCrosshair(true);
 

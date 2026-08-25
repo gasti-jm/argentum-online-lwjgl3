@@ -1,12 +1,12 @@
 package org.aoclient.network.protocol.handlers;
 
-import org.aoclient.engine.game.User;
+import org.aoclient.engine.game.player.Player;
 import org.aoclient.engine.game.models.ObjectType;
 import org.aoclient.network.PacketBuffer;
 
 public class ChangeInventorySlotHandler implements PacketHandler {
 
-    private final User user = User.INSTANCE;
+    private final Player user = Player.INSTANCE;
 
     @Override
     public void handle(PacketBuffer buffer) {

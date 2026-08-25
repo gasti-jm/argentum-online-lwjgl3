@@ -1,6 +1,6 @@
 package org.aoclient.network.protocol.handlers;
 
-import org.aoclient.engine.game.User;
+import org.aoclient.engine.game.player.Player;
 import org.aoclient.network.PacketBuffer;
 
 public class AreaChangedHandler implements PacketHandler {
@@ -11,7 +11,7 @@ public class AreaChangedHandler implements PacketHandler {
         buffer.readByte();
         int x = buffer.readByte();
         int y = buffer.readByte();
-        User.INSTANCE.areaChange(x, y);
+        Player.INSTANCE.areaChange(x, y);
     }
 
 }

@@ -1,7 +1,7 @@
 package org.aoclient.network.protocol.handlers;
 
 import org.aoclient.engine.game.Rain;
-import org.aoclient.engine.game.User;
+import org.aoclient.engine.game.player.Player;
 import org.aoclient.network.PacketBuffer;
 
 public class RainToggleHandler implements PacketHandler {
@@ -10,11 +10,11 @@ public class RainToggleHandler implements PacketHandler {
     public void handle(PacketBuffer buffer) {
         buffer.readByte();
 
-        int userX = User.INSTANCE.getUserPos().getX();
-        int userY = User.INSTANCE.getUserPos().getY();
-        if (User.INSTANCE.inMapBounds(userX, userY)) return;
+        int userX = Player.INSTANCE.getUserPos().getX();
+        int userY = Player.INSTANCE.getUserPos().getY();
+        if (Player.INSTANCE.inMapBounds(userX, userY)) return;
 
-        User.INSTANCE.setUnderCeiling(User.INSTANCE.checkUnderCeiling());
+        Player.INSTANCE.setUnderCeiling(Player.INSTANCE.checkUnderCeiling());
 
         if (Rain.INSTANCE.isRaining()) {
             Rain.INSTANCE.setRainValue(false);

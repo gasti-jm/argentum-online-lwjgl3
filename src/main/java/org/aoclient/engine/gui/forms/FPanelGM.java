@@ -4,7 +4,6 @@ import imgui.ImGui;
 import imgui.flag.ImGuiCond;
 import imgui.flag.ImGuiWindowFlags;
 import imgui.type.ImString;
-import org.aoclient.engine.game.User;
 import org.aoclient.network.protocol.command.execution.CommandExecutor;
 
 import static org.aoclient.network.protocol.command.metadata.GameCommand.*;

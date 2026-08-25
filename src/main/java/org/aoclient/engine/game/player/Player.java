@@ -1,9 +1,10 @@
-package org.aoclient.engine.game;
+package org.aoclient.engine.game.player;
 
+import org.aoclient.engine.game.Dialogs;
+import org.aoclient.engine.game.Rain;
 import org.aoclient.engine.game.inventory.InventorySpells;
 import org.aoclient.engine.game.inventory.UserInventory;
 import org.aoclient.engine.game.models.*;
-import org.aoclient.engine.renderer.TextureManager;
 
 import static org.aoclient.engine.audio.Sound.*;
 import static org.aoclient.engine.game.models.Character.*;
@@ -37,106 +38,36 @@ import static org.aoclient.network.protocol.Protocol.walk;
  * representacion en el mundo virtual.
  */
 
-public enum User {
+public enum Player {
     INSTANCE;
 
-    class UserFlags {
-        boolean connected;
-        boolean moving;
-        boolean underCeiling;
-        boolean navegating;
-        boolean shopping;
-    }
-
-    class UserData {
-        short charIndex;
-        short map;
-    }
-
-    private final UserInventory userInventory;
-    private final InventorySpells inventorySpells;
-    private final Position userPos;
-    private final Position addToUserPos;
-    private boolean underCeiling;
-    private boolean userMoving;
-    private boolean userNavegando;
-    private boolean userComerciando;
-    // mapa
-    private short userMap;
-    private short userCharIndex; // nosotros como usuario
-
-    // conexion
-    private boolean userConected;
-
-    // areas
-    private int minLimiteX, maxLimiteX;
-    private int minLimiteY, maxLimiteY;
-
-    // stats del usuario
-    private String userName;
-    private short userMaxHP;
-    private short userMinHP;
-    private short userMaxMAN;
-    private short userMinMAN;
-    private short userMaxSTA;
-    private short userMinSTA;
-    private int userPasarNivel;
-    private int userExp;
-    private int userGLD;
-    private int userLvl;
-    private int userDext;
-    private int userStrg;
-    private int userMaxAGU;
-    private int userMinAGU;
-    private int userMaxHAM;
-    private int userMinHAM;
-    private int freeSkillPoints;
-    private int[] skills = new int[Skill.values().length];
-    private int[] attributes = new int[Attribute.values().length];
-    private int[] reputations = new int[Reputation.values().length];
-    private int[] killCounters = new int[KillCounter.values().length];
-
-    private String userWeaponEqpHit = "0/0";
-    private String userArmourEqpDef = "0/0";
-    private String userHelmEqpDef   = "0/0";
-    private String userShieldEqpDef = "0/0";
-
-    private int userWeaponEqpSlot;
-    private int userArmourEqpSlot;
-    private int userHelmEqpSlot;
-    private int userShieldEqpSlot;
-
-    private boolean talking;
-    private boolean criminal;
-
-    private int usingSkill;
-
-    private int role;
-    private int jailTime;
-
-    private int privilege;
-
+    private short userCharIndex;
+    private int pingTime;
+    private UserFlags flags;
+    private UserInfo info;
+    private UserData data;
     private SMSystem SMResu, SMSafe, SMSpells, SMWork;
 
+    Player() {
+        // como corresponde che.
+        this.flags = new UserFlags();
+        this.data = new UserData();
+        this.info = new UserInfo();
 
-    User() {
-        this.userPos = new Position();
-        this.addToUserPos = new Position();
-        this.userInventory = new UserInventory();
-        this.inventorySpells = new InventorySpells();
-        this.talking = false;
-        this.userNavegando = false;
-        this.userComerciando = false;
-
-        // default.
+        // SM system...
         SMResu    = new SMSystem(682, 564, SMType.sResucitation, false);
         SMSafe    = new SMSystem(707, 564, SMType.sSafemode, true);
         SMSpells  = new SMSystem(731, 564, SMType.mSpells, false);
         SMWork    = new SMSystem(755, 564, SMType.mWork, false);
     }
 
+
     public void resetGameState() {
-        resetState();
+        // mas facil crear otro obj que setear todos los datos.
+        this.data = new UserData();
+        this.flags = new UserFlags();
+        this.info = new UserInfo();
+
         Rain.INSTANCE.setRainValue(false);
         Rain.INSTANCE.stopRainingSoundLoop();
     }
@@ -154,16 +85,16 @@ public enum User {
             case LEFT   -> x = -1;
         }
 
-        final int tX = userPos.getX() + x;
-        final int tY = userPos.getY() + y;
+        final int tX = info.userPos.getX() + x;
+        final int tY = info.userPos.getY() + y;
 
         if (!(tX < minXBorder || tX > maxXBorder || tY < minYBorder || tY > maxYBorder)) {
-            addToUserPos.setX(x);
-            userPos.setX(tX);
-            addToUserPos.setY(y);
-            userPos.setY(tY);
-            userMoving = true;
-            underCeiling = checkUnderCeiling();
+            info.addToUserPos.setX(x);
+            info.userPos.setX(tX);
+            info.addToUserPos.setY(y);
+            info.userPos.setY(tY);
+            flags.moving = true;
+            flags.underCeiling = checkUnderCeiling();
         }
 
     }
@@ -172,9 +103,12 @@ public enum User {
      * Checkea si estamos bajo techo segun el trigger en donde esta parado el usuario.
      */
     public boolean checkUnderCeiling() {
-        return  mapData[userPos.getX()][userPos.getY()].getTrigger() == 1 ||
-                mapData[userPos.getX()][userPos.getY()].getTrigger() == 2 ||
-                mapData[userPos.getX()][userPos.getY()].getTrigger() == 4;
+        final int x = info.userPos.getX();
+        final int y = info.userPos.getY();
+
+        return  mapData[x][y].getTrigger() == 1 ||
+                mapData[x][y].getTrigger() == 2 ||
+                mapData[x][y].getTrigger() == 4;
     }
 
     /**
@@ -184,14 +118,14 @@ public enum User {
     public void moveCharbyHead(short charIndex, Direction nDirection) {
         int addX = 0, addY = 0;
         switch (nDirection) {
-            case UP -> addY = -1;
-            case RIGHT -> addX = 1;
-            case DOWN -> addY = 1;
-            case LEFT -> addX = -1;
+            case UP ->     addY = -1;
+            case RIGHT ->  addX =  1;
+            case DOWN ->   addY =  1;
+            case LEFT ->   addX = -1;
         }
 
-        final int x = charList[charIndex].getPos().getX();
-        final int y = charList[charIndex].getPos().getY();
+        final int x  = charList[charIndex].getPos().getX();
+        final int y  = charList[charIndex].getPos().getY();
         final int nX = x + addX;
         final int nY = y + addY;
 
@@ -211,7 +145,7 @@ public enum User {
 
         doPasosFx(charIndex);
 
-        if ((nY < minLimiteY) || (nY > maxLimiteY) || (nX < minLimiteX) || (nX > maxLimiteX))
+        if ((nY < info.minLimiteY) || (nY > info.maxLimiteY) || (nX < info.minLimiteX) || (nX > info.maxLimiteX))
             if (charIndex != userCharIndex) eraseChar(charIndex);
     }
 
@@ -219,14 +153,14 @@ public enum User {
      * Actualiza las areas de vision de objetos y personajes.
      */
     public void areaChange(int x, int y) {
-        minLimiteX = (x / 9 - 1) * 9;
-        maxLimiteX = minLimiteX + 26;
-        minLimiteY = (y / 9 - 1) * 9;
-        maxLimiteY = minLimiteY + 26;
+        info.minLimiteX = (x / 9 - 1) * 9;
+        info.maxLimiteX = info.minLimiteX + 26;
+        info.minLimiteY = (y / 9 - 1) * 9;
+        info.maxLimiteY = info.minLimiteY + 26;
 
         for (int loopX = 1; loopX <= 100; loopX++) {
             for (int loopY = 1; loopY <= 100; loopY++) {
-                if ((loopY < minLimiteY) || (loopY > maxLimiteY) || (loopX < minLimiteX) || (loopX > maxLimiteX)) {
+                if ((loopY < info.minLimiteY) || (loopY > info.maxLimiteY) || (loopX < info.minLimiteX) || (loopX > info.maxLimiteX)) {
                     // Erase NPCs
                     if (mapData[loopX][loopY].getCharIndex() > 0)
                         if (mapData[loopX][loopY].getCharIndex() != userCharIndex)
@@ -250,10 +184,10 @@ public enum User {
     }
 
     public boolean estaPCarea(int charIndex) {
-        return charList[charIndex].getPos().getX() > userPos.getX() - minXBorder &&
-                charList[charIndex].getPos().getX() < userPos.getX() + minXBorder &&
-                charList[charIndex].getPos().getY() > userPos.getY() - minYBorder &&
-                charList[charIndex].getPos().getY() < userPos.getY() + minYBorder;
+        return charList[charIndex].getPos().getX() > info.userPos.getX() - minXBorder &&
+                charList[charIndex].getPos().getX() < info.userPos.getX() + minXBorder &&
+                charList[charIndex].getPos().getY() > info.userPos.getY() - minYBorder &&
+                charList[charIndex].getPos().getY() < info.userPos.getY() + minYBorder;
     }
 
     public boolean hayAgua(int x, int y) {
@@ -310,7 +244,7 @@ public enum User {
 
         if (!estaPCarea(charIndex)) Dialogs.removeDialog(charIndex);
 
-        if ((nY < minLimiteY) || (nY > maxLimiteY) || (nX < minLimiteX) || (nX > maxLimiteX))
+        if ((nY < info.minLimiteY) || (nY > info.maxLimiteY) || (nX < info.minLimiteX) || (nX > info.maxLimiteX))
             if (charIndex != userCharIndex) eraseChar(charIndex);
 
     }
@@ -320,10 +254,10 @@ public enum User {
      */
     public void moveTo(Direction direction) {
         boolean legalOk = switch (direction) {
-            case UP -> moveToLegalPos(userPos.getX(), userPos.getY() - 1);
-            case RIGHT -> moveToLegalPos(userPos.getX() + 1, userPos.getY());
-            case DOWN -> moveToLegalPos(userPos.getX(), userPos.getY() + 1);
-            case LEFT -> moveToLegalPos(userPos.getX() - 1, userPos.getY());
+            case UP    -> moveToLegalPos(info.userPos.getX(), info.userPos.getY() - 1);
+            case RIGHT -> moveToLegalPos(info.userPos.getX() + 1, info.userPos.getY());
+            case DOWN  -> moveToLegalPos(info.userPos.getX(), info.userPos.getY() + 1);
+            case LEFT  -> moveToLegalPos(info.userPos.getX() - 1, info.userPos.getY());
         };
 
         if (legalOk && !charList[userCharIndex].isParalizado()) {
@@ -339,7 +273,7 @@ public enum User {
      *                  EN PROGRESO....
      */
     public void doPasosFx(int charIndex) {
-        if (!userNavegando) {
+        if (!flags.browsing) {
             if (!charList[charIndex].isDead()
                     && estaPCarea(charIndex)
                     && (charList[charIndex].getPriv() == 0 || charList[charIndex].getPriv() > 5)) {
@@ -356,39 +290,39 @@ public enum User {
     }
 
     public boolean isUserMoving() {
-        return userMoving;
+        return flags.moving;
     }
 
     public void setUserMoving(boolean userMoving) {
-        this.userMoving = userMoving;
+        this.flags.moving = userMoving;
     }
 
     public Position getUserPos() {
-        return userPos;
+        return info.userPos;
     }
 
     public Position getAddToUserPos() {
-        return addToUserPos;
+        return info.addToUserPos;
     }
 
     public boolean isUnderCeiling() {
-        return underCeiling;
+        return flags.underCeiling;
     }
 
     public void setUnderCeiling(boolean underCeiling) {
-        this.underCeiling = underCeiling;
+        this.flags.underCeiling = underCeiling;
     }
 
     public boolean isUserConected() {
-        return userConected;
+        return flags.connected;
     }
 
     public void setUserConected(boolean userConected) {
-        this.userConected = userConected;
+        this.flags.connected = userConected;
     }
 
     public boolean isGM() {
-        return PlayerType.isGM(privilege);
+        return PlayerType.isGM(data.privilege);
     }
 
     public short getUserCharIndex() {
@@ -404,334 +338,327 @@ public enum User {
     }
 
     public UserInventory getUserInventory() {
-        return userInventory;
+        return info.userInventory;
     }
 
     public InventorySpells getInventorySpells() {
-        return inventorySpells;
+        return info.inventorySpells;
     }
 
     public String getUserName() {
-        return userName.toUpperCase();
+        return info.name.toUpperCase();
     }
 
     public void setUserName(String userName) {
-        this.userName = userName;
+        this.info.name = userName;
     }
 
     public short getUserMaxHP() {
-        return userMaxHP;
+        return data.maxHP;
     }
 
     public void setUserMaxHP(short userMaxHP) {
-        this.userMaxHP = userMaxHP;
+        this.data.maxHP = userMaxHP;
     }
 
     public short getUserMinHP() {
-        return userMinHP;
+        return data.minHP;
     }
 
     public void setUserMinHP(short userMinHP) {
-        this.userMinHP = userMinHP;
+        this.data.minHP = userMinHP;
     }
 
     public short getUserMaxMAN() {
-        return userMaxMAN;
+        return data.maxMANA;
     }
 
     public void setUserMaxMAN(short userMaxMAN) {
-        this.userMaxMAN = userMaxMAN;
+        this.data.maxMANA = userMaxMAN;
     }
 
     public short getUserMinMAN() {
-        return userMinMAN;
+        return data.minMANA;
     }
 
     public void setUserMinMAN(short userMinMAN) {
-        this.userMinMAN = userMinMAN;
+        this.data.minMANA = userMinMAN;
     }
 
     public short getUserMaxSTA() {
-        return userMaxSTA;
+        return data.maxSTA;
     }
 
     public void setUserMaxSTA(short userMaxSTA) {
-        this.userMaxSTA = userMaxSTA;
+        this.data.maxSTA = userMaxSTA;
     }
 
     public short getUserMinSTA() {
-        return userMinSTA;
+        return data.minSTA;
     }
 
     public void setUserMinSTA(short userMinSTA) {
-        this.userMinSTA = userMinSTA;
+        data.minSTA = userMinSTA;
     }
 
     public int getUserPasarNivel() {
-        return userPasarNivel;
+        return data.nextLevel;
     }
 
     public void setUserPasarNivel(int userPasarNivel) {
-        this.userPasarNivel = userPasarNivel;
+        this.data.nextLevel = userPasarNivel;
     }
 
     public int getUserExp() {
-        return userExp;
+        return data.exp;
     }
 
     public void setUserExp(int userExp) {
-        this.userExp = userExp;
+        this.data.exp = userExp;
     }
 
     public int getUserGLD() {
-        return userGLD;
+        return data.gold;
     }
 
     public void setUserGLD(int userGLD) {
-        this.userGLD = userGLD;
+        this.data.gold = userGLD;
     }
 
     public int getUserLvl() {
-        return userLvl;
+        return data.lvl;
     }
 
     public void setUserLvl(int userLvl) {
-        this.userLvl = userLvl;
+        this.data.lvl = userLvl;
     }
 
     public int getUserDext() {
-        return userDext;
+        return data.dext;
     }
 
     public void setUserDext(int userDext) {
-        this.userDext = userDext;
+        this.data.dext = userDext;
     }
 
     public int getUserStrg() {
-        return userStrg;
+        return data.strg;
     }
 
     public void setUserStrg(int userStrg) {
-        this.userStrg = userStrg;
+        this.data.strg = userStrg;
     }
 
     public int getUserMaxAGU() {
-        return userMaxAGU;
+        return data.maxAGU;
     }
 
     public void setUserMaxAGU(int userMaxAGU) {
-        this.userMaxAGU = userMaxAGU;
+        this.data.maxAGU = userMaxAGU;
     }
 
     public int getUserMinAGU() {
-        return userMinAGU;
+        return data.minAGU;
     }
 
     public void setUserMinAGU(int userMinAGU) {
-        this.userMinAGU = userMinAGU;
+        this.data.minAGU = userMinAGU;
     }
 
     public int getUserMaxHAM() {
-        return userMaxHAM;
+        return data.maxHAM;
     }
 
     public void setUserMaxHAM(int userMaxHAM) {
-        this.userMaxHAM = userMaxHAM;
+        this.data.maxHAM = userMaxHAM;
     }
 
     public int getUserMinHAM() {
-        return userMinHAM;
+        return data.minHAM;
     }
 
     public void setUserMinHAM(int userMinHAM) {
-        this.userMinHAM = userMinHAM;
+        this.data.minHAM = userMinHAM;
     }
 
     public String getUserWeaponEqpHit() {
-        return userWeaponEqpHit;
+        return data.userWeaponEqpHit;
     }
 
     public void setUserWeaponEqpHit(String userWeaponEqpHit) {
-        this.userWeaponEqpHit = userWeaponEqpHit;
+        this.data.userWeaponEqpHit = userWeaponEqpHit;
     }
 
     public String getUserArmourEqpDef() {
-        return userArmourEqpDef;
+        return data.userArmourEqpDef;
     }
 
     public void setUserArmourEqpDef(String userArmourEqpDef) {
-        this.userArmourEqpDef = userArmourEqpDef;
+        this.data.userArmourEqpDef = userArmourEqpDef;
     }
 
     public String getUserHelmEqpDef() {
-        return userHelmEqpDef;
+        return data.userHelmEqpDef;
     }
 
     public void setUserHelmEqpDef(String userHelmEqpDef) {
-        this.userHelmEqpDef = userHelmEqpDef;
+        this.data.userHelmEqpDef = userHelmEqpDef;
     }
 
     public String getUserShieldEqpDef() {
-        return userShieldEqpDef;
+        return data.userShieldEqpDef;
     }
 
     public void setUserShieldEqpDef(String userShieldEqpDef) {
-        this.userShieldEqpDef = userShieldEqpDef;
+        this.data.userShieldEqpDef = userShieldEqpDef;
     }
 
     public int getUserWeaponEqpSlot() {
-        return userWeaponEqpSlot;
+        return data.userWeaponEqpSlot;
     }
 
     public void setUserWeaponEqpSlot(int userWeaponEqpSlot) {
-        this.userWeaponEqpSlot = userWeaponEqpSlot;
+        this.data.userWeaponEqpSlot = userWeaponEqpSlot;
     }
 
     public int getUserArmourEqpSlot() {
-        return userArmourEqpSlot;
+        return data.userArmourEqpSlot;
     }
 
     public void setUserArmourEqpSlot(int userArmourEqpSlot) {
-        this.userArmourEqpSlot = userArmourEqpSlot;
+        this.data.userArmourEqpSlot = userArmourEqpSlot;
     }
 
     public int getUserHelmEqpSlot() {
-        return userHelmEqpSlot;
+        return data.userHelmEqpSlot;
     }
 
     public void setUserHelmEqpSlot(int userHelmEqpSlot) {
-        this.userHelmEqpSlot = userHelmEqpSlot;
+        this.data.userHelmEqpSlot = userHelmEqpSlot;
     }
 
     public int getUserShieldEqpSlot() {
-        return userShieldEqpSlot;
+        return data.userShieldEqpSlot;
     }
 
     public void setUserShieldEqpSlot(int userShieldEqpSlot) {
-        this.userShieldEqpSlot = userShieldEqpSlot;
+        this.data.userShieldEqpSlot = userShieldEqpSlot;
     }
 
     public boolean isTalking() {
-        return talking;
+        return flags.talking;
     }
 
     public void setTalking(boolean talking) {
-        this.talking = talking;
+        this.flags.talking = talking;
     }
 
     public short getUserMap() {
-        return userMap;
+        return info.map;
     }
 
     public void setUserMap(short userMap) {
-        this.userMap = userMap;
+        this.info.map = userMap;
     }
 
     public boolean isUserNavegando() {
-        return userNavegando;
+        return flags.browsing;
     }
 
     public void setUserNavegando(boolean userNavegando) {
-        this.userNavegando = userNavegando;
+        this.flags.browsing = userNavegando;
     }
 
     public int getUsingSkill() {
-        return usingSkill;
+        return flags.usingSkill;
     }
 
     public void setUsingSkill(int usingSkill) {
-        this.usingSkill = usingSkill;
+        this.flags.usingSkill = usingSkill;
     }
 
     public boolean isUserComerciando() {
-        return userComerciando;
+        return flags.trading;
     }
 
     public void setUserComerciando(boolean userComerciando) {
-        this.userComerciando = userComerciando;
+        this.flags.trading = userComerciando;
     }
 
     public int getFreeSkillPoints() {
-        return freeSkillPoints;
+        return data.freeSkillPoints;
     }
 
     public void setFreeSkillPoints(int freeSkillPoints) {
-        this.freeSkillPoints = freeSkillPoints;
+        this.data.freeSkillPoints = freeSkillPoints;
     }
 
     public int getSkill(int skill) {
-        return skills[skill - 1];
+        return data.skills[skill - 1];
     }
 
     public void setSkill(int skill, int value) {
-        skills[skill - 1] = value;
+        data.skills[skill - 1] = value;
     }
 
     public int[] getSkills() {
-        return skills;
+        return data.skills;
     }
 
     public void setSkills(int[] skills) {
-        this.skills = skills;
+        this.data.skills = skills;
     }
 
     public int[] getAttributes() {
-        return attributes;
+        return data.attributes;
     }
 
     public void setAttributes(int[] attributes) {
-        this.attributes = attributes;
+        this.data.attributes = attributes;
     }
 
     public int[] getReputations() {
-        return reputations;
+        return data.reputations;
     }
 
     public void setReputations(int[] reputations) {
-        this.reputations = reputations;
+        this.data.reputations = reputations;
     }
 
     public boolean isCriminal() {
-        return criminal;
+        return flags.criminal;
     }
 
     public void setCriminal(boolean criminal) {
-        this.criminal = criminal;
+        this.flags.criminal = criminal;
     }
 
     public int getKillCounter(int index) {
-        return killCounters[index];
+        return data.killCounters[index];
     }
 
     public void setKillCounter(int index, int value) {
-        killCounters[index] = value;
+        data.killCounters[index] = value;
     }
 
     public int getRole() {
-        return role;
+        return data.role;
     }
 
     public void setRole(int role) {
-        this.role = role;
+        this.data.role = role;
     }
 
     public int getJailTime() {
-        return jailTime;
+        return data.jailTime;
     }
 
     public void setJailTime(int jailTime) {
-        this.jailTime = jailTime;
+        this.data.jailTime = jailTime;
     }
 
     public void setPrivilege(int privilege) {
-        this.privilege = privilege;
-    }
-
-    private void resetState() {
-        this.setUserConected(false);
-        this.setUserNavegando(false);
-        this.setUserComerciando(false);
-        this.setFreeSkillPoints(0);
+        this.data.privilege = privilege;
     }
 
     /**
@@ -750,12 +677,12 @@ public enum User {
 
         // ¿Hay un personaje?
         if (charIndex > 0) {
-            if (mapData[userPos.getX()][userPos.getY()].getBlocked()) return false;
+            if (mapData[info.userPos.getX()][info.userPos.getY()].getBlocked()) return false;
             if (charList[charIndex].getiHead() != CASPER_HEAD && charList[charIndex].getiBody() != FRAGATA_FANTASMAL) {
                 return false;
             } else {
                 // No puedo intercambiar con un casper que este en la orilla (Lado tierra)
-                if (hayAgua(userPos.getX(), userPos.getY())) {
+                if (hayAgua(info.userPos.getX(), info.userPos.getY())) {
                     if (!hayAgua(x, y)) return false;
                 } else {
                     // No puedo intercambiar con un casper que este en la orilla (Lado agua)
@@ -770,7 +697,7 @@ public enum User {
 
         }
 
-        if (userNavegando != hayAgua(x, y)) return false;
+        if (flags.browsing != hayAgua(x, y)) return false;
 
         return true;
     }
@@ -790,5 +717,13 @@ public enum User {
 
     public SMSystem getSMWork() {
         return SMWork;
+    }
+
+    public int getPingTime() {
+        return pingTime;
+    }
+
+    public void setPingTime(int pingTime) {
+        this.pingTime = pingTime;
     }
 }

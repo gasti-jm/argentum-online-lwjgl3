@@ -1,6 +1,7 @@
 package org.aoclient.engine.game;
 
 import org.aoclient.engine.audio.Sound;
+import org.aoclient.engine.game.player.Player;
 import org.aoclient.engine.renderer.RGBColor;
 import org.aoclient.engine.renderer.Texture;
 import org.aoclient.engine.renderer.TextureManager;
@@ -27,7 +28,6 @@ import static org.aoclient.engine.utils.Time.deltaTime;
  */
 
 public enum Rain {
-
     INSTANCE;
 
     // sonidos de la lluvia
@@ -36,6 +36,7 @@ public enum Rain {
     private static final String SND_LLUVIAOUT = "resources/sounds/lluviaout.ogg";
     private static final String SND_LLUVIAINEND = "resources/sounds/lluviainend.ogg";
     private static final String SND_LLUVIAOUTEND = "resources/sounds/lluviaoutend.ogg";
+
     private Texture rainTexture;
     private final RECT[] RLluvia;
     private final int[] LTLluvia;
@@ -44,7 +45,7 @@ public enum Rain {
     private float timeToChangeFrame;
     private int iFrameIndex;
     
-    private final User user = User.INSTANCE;
+    private final Player user = Player.INSTANCE;
 
     Rain() {
         this.bRain = false;
@@ -126,7 +127,6 @@ public enum Rain {
         if (rainTexture == null) {
             this.rainTexture = TextureManager.getTexture(RAIN_FILE_NUM_GRAPHIC);
         }
-
 
         this.renderSound();
 

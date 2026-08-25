@@ -1,7 +1,7 @@
 package org.aoclient.network.protocol.command.execution;
 
 import org.aoclient.engine.game.console.Console;
-import org.aoclient.engine.game.User;
+import org.aoclient.engine.game.player.Player;
 import org.aoclient.engine.game.console.FontStyle;
 import org.aoclient.engine.renderer.RGBColor;
 import org.aoclient.network.protocol.command.core.CommandContext;
@@ -67,7 +67,7 @@ public enum CommandExecutor {
     private boolean isGMCommandWithoutPrivileges(String commandName) {
         return CommandRegistry.getCommandInfo(commandName)
                 .filter(cmd -> cmd.category() == CommandCategory.GM)
-                .map(cmd -> !User.INSTANCE.isGM())
+                .map(cmd -> !Player.INSTANCE.isGM())
                 .orElse(false);
     }
 

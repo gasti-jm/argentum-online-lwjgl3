@@ -6,7 +6,6 @@ import imgui.flag.ImGuiCond;
 import imgui.flag.ImGuiInputTextFlags;
 import imgui.flag.ImGuiWindowFlags;
 import imgui.type.ImString;
-import org.aoclient.engine.game.User;
 import org.aoclient.engine.game.inventory.NPCInventory;
 import org.aoclient.engine.game.inventory.UserInventory;
 

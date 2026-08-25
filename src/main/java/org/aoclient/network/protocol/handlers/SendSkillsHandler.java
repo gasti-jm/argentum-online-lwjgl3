@@ -1,10 +1,9 @@
 package org.aoclient.network.protocol.handlers;
 
-import org.aoclient.engine.game.User;
+import org.aoclient.engine.game.player.Player;
 import org.aoclient.engine.game.models.Skill;
 import org.aoclient.engine.utils.Log;
 import org.aoclient.network.PacketBuffer;
-import org.tinylog.Logger;
 
 public class SendSkillsHandler implements PacketHandler {
 
@@ -24,7 +23,7 @@ public class SendSkillsHandler implements PacketHandler {
         int porcentajeSkills[] = new int[20];
 
         for (Skill skill : Skill.values()) {
-            User.INSTANCE.setSkill(skill.getId(), buffer.readByte());
+            Player.INSTANCE.setSkill(skill.getId(), buffer.readByte());
             porcentajeSkills[skill.getId() - 1] = buffer.readByte();
         }
 

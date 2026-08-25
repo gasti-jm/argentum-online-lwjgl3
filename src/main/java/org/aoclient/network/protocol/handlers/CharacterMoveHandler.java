@@ -1,6 +1,6 @@
 package org.aoclient.network.protocol.handlers;
 
-import org.aoclient.engine.game.User;
+import org.aoclient.engine.game.player.Player;
 import org.aoclient.network.PacketBuffer;
 
 import static org.aoclient.engine.game.models.Character.refreshAllChars;
@@ -22,9 +22,9 @@ public class CharacterMoveHandler implements PacketHandler {
 
         // Play steps sounds if the user is not an admin of any kind
         int priv = charList[charIndex].getPriv();
-        if (priv != 1 && priv != 2 && priv != 3 && priv != 5 && priv != 25) User.INSTANCE.doPasosFx(charIndex);
+        if (priv != 1 && priv != 2 && priv != 3 && priv != 5 && priv != 25) Player.INSTANCE.doPasosFx(charIndex);
 
-        User.INSTANCE.moveCharbyPos(charIndex, x, y);
+        Player.INSTANCE.moveCharbyPos(charIndex, x, y);
         refreshAllChars();
     }
 

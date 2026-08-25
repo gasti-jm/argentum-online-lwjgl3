@@ -1,6 +1,6 @@
 package org.aoclient.engine.game.bindkeys.actions;
 
-import org.aoclient.engine.game.User;
+import org.aoclient.engine.game.player.Player;
 import org.aoclient.engine.game.bindkeys.KeyAction;
 import org.aoclient.engine.game.console.Console;
 import org.aoclient.engine.game.console.FontStyle;
@@ -17,13 +17,13 @@ public class Talk implements KeyAction {
         // TODO: Es para evitar bugs y no se te trabe todo el juego cuando tenes algun frm abierto
         //  y sin querer pulsar para hablar.
         if (ImGUISystem.INSTANCE.isMainLast()) {
-            if (!frmMain.getSendText().isBlank() && User.INSTANCE.isTalking()) {
+            if (!frmMain.getSendText().isBlank() && Player.INSTANCE.isTalking()) {
                 if (!frmMain.getSendText().startsWith("/")) {
-                    Console.INSTANCE.addMsgToConsole("[" + User.INSTANCE.getUserName().toLowerCase() + "] " + frmMain.getSendText(), FontStyle.REGULAR, new RGBColor(1f, 1f, 1f));
+                    Console.INSTANCE.addMsgToConsole("[" + Player.INSTANCE.getUserName().toLowerCase() + "] " + frmMain.getSendText(), FontStyle.REGULAR, new RGBColor(1f, 1f, 1f));
                     Protocol.talk(frmMain.getSendText());
                 } else CommandExecutor.INSTANCE.execute(frmMain.getSendText());
             }
-            User.INSTANCE.setTalking(!User.INSTANCE.isTalking());
+            Player.INSTANCE.setTalking(!Player.INSTANCE.isTalking());
             frmMain.clearSendTxt();
         }
     }

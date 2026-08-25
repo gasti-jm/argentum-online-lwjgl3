@@ -87,6 +87,7 @@ public final class Character {
 
     // ultimo personaje del array
     public static short lastChar = 0;
+
     private boolean active;
     private Direction direction;
     private Position pos;
@@ -169,8 +170,10 @@ public final class Character {
     /**
      * Crea un nuevo personaje segun los parametros establecidos.
      */
-    public static void makeChar(short charIndex, int body, int head, Direction direction, int x, int y, int weapon,
-            int shield, int helmet) {
+    public static void makeChar(
+            short charIndex, int body, int head,
+            Direction direction, int x, int y, int weapon, int shield, int helmet
+    ) {
         // apuntamos al ultimo char
         if (charIndex > lastChar)
             lastChar = charIndex;

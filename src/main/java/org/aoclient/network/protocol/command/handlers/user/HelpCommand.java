@@ -1,7 +1,7 @@
 package org.aoclient.network.protocol.command.handlers.user;
 
 import org.aoclient.engine.game.console.Console;
-import org.aoclient.engine.game.User;
+import org.aoclient.engine.game.player.Player;
 import org.aoclient.engine.game.console.FontStyle;
 import org.aoclient.engine.renderer.RGBColor;
 import org.aoclient.network.protocol.command.core.Command;
@@ -38,7 +38,7 @@ import static org.aoclient.network.protocol.command.metadata.GameCommand.HELP;
 public class HelpCommand extends BaseCommandHandler {
 
     private final Console console = Console.INSTANCE;
-    private final User user = User.INSTANCE;
+    private final Player user = Player.INSTANCE;
 
     @Override
     public void handle(CommandContext commandContext) throws CommandException {

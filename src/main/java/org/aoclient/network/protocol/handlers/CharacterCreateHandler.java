@@ -1,6 +1,6 @@
 package org.aoclient.network.protocol.handlers;
 
-import org.aoclient.engine.game.User;
+import org.aoclient.engine.game.player.Player;
 import org.aoclient.engine.game.models.Character;
 import org.aoclient.engine.game.models.Direction;
 import org.aoclient.network.PacketBuffer;
@@ -32,7 +32,7 @@ public class CharacterCreateHandler implements PacketHandler {
         short helmet = tempBuffer.readInteger();
 
         final Character character = charList[charIndex];
-        User.INSTANCE.setCharacterFx(charIndex, tempBuffer.readInteger(), tempBuffer.readInteger());
+        Player.INSTANCE.setCharacterFx(charIndex, tempBuffer.readInteger(), tempBuffer.readInteger());
 
         String name = tempBuffer.readCp1252String();
         character.setName(name);
@@ -50,7 +50,7 @@ public class CharacterCreateHandler implements PacketHandler {
 
         /* Si el nombre del usuario es igual al nombre del usuario leido desde el servidor, entonces establece el privilegio (que
          * se definio en el servidor dependiendo del nombre) al usuario. */
-        if (User.INSTANCE.getUserName().equalsIgnoreCase(name)) User.INSTANCE.setPrivilege(privileges);
+        if (Player.INSTANCE.getUserName().equalsIgnoreCase(name)) Player.INSTANCE.setPrivilege(privileges);
 
         if (privileges != 0) {
 

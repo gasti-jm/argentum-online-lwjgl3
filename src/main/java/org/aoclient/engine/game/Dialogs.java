@@ -1,6 +1,7 @@
 package org.aoclient.engine.game;
 
 import org.aoclient.engine.game.models.Character;
+import org.aoclient.engine.game.player.Player;
 import org.aoclient.engine.renderer.RGBColor;
 import org.aoclient.engine.scenes.Camera;
 
@@ -30,11 +31,14 @@ import static org.aoclient.engine.utils.Time.deltaTime;
  */
 
 public class Dialogs {
-
     private static final RGBColor HIT_COLOR = new RGBColor(1, 0, 0);
     private static float timerDialogs = 1.0f;
 
+
     public static void removeDialog(final int charIndex) {
+        var c = charList[charIndex].getDialog();
+
+
         if (charList[charIndex].getDialog_life() > 0) {
             charList[charIndex].setDialog("");
             charList[charIndex].setDialog_life(0);
@@ -88,8 +92,8 @@ public class Dialogs {
     }
 
     public static void removeDialogsNPCArea() {
-        for (int x = charList[User.INSTANCE.getUserCharIndex()].getPos().getX() - HALF_WINDOW_TILE_WIDTH; x <= charList[User.INSTANCE.getUserCharIndex()].getPos().getX() + HALF_WINDOW_TILE_WIDTH; x++) {
-            for (int y = charList[User.INSTANCE.getUserCharIndex()].getPos().getY() - HALF_WINDOW_TILE_HEIGHT; y <= charList[User.INSTANCE.getUserCharIndex()].getPos().getY() + HALF_WINDOW_TILE_HEIGHT; y++) {
+        for (int x = charList[Player.INSTANCE.getUserCharIndex()].getPos().getX() - HALF_WINDOW_TILE_WIDTH; x <= charList[Player.INSTANCE.getUserCharIndex()].getPos().getX() + HALF_WINDOW_TILE_WIDTH; x++) {
+            for (int y = charList[Player.INSTANCE.getUserCharIndex()].getPos().getY() - HALF_WINDOW_TILE_HEIGHT; y <= charList[Player.INSTANCE.getUserCharIndex()].getPos().getY() + HALF_WINDOW_TILE_HEIGHT; y++) {
                 if (mapData[x][y].getCharIndex() > 0) {
                     if (charList[mapData[x][y].getCharIndex()].getName().length() <= 1)
                         removeDialog(mapData[x][y].getCharIndex());

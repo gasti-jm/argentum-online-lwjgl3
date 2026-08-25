@@ -1,10 +1,9 @@
 package org.aoclient.network.protocol.handlers;
 
-import org.aoclient.engine.game.User;
+import org.aoclient.engine.game.player.Player;
 import org.aoclient.engine.game.models.Attribute;
 import org.aoclient.engine.utils.Log;
 import org.aoclient.network.PacketBuffer;
-import org.tinylog.Logger;
 
 public class AttributesHandler implements PacketHandler {
 
@@ -17,7 +16,7 @@ public class AttributesHandler implements PacketHandler {
         for (int i = 0; i < 5; i++)
             attributes[i] = buffer.readByte();
 
-        User.INSTANCE.setAttributes(attributes);
+        Player.INSTANCE.setAttributes(attributes);
         //    'Show them in character creation
         //    If EstadoLogin = E_MODO.Dados Then
         //        With frmCrearPersonaje

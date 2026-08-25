@@ -1,5 +1,6 @@
 package org.aoclient.engine.game;
 
+import org.aoclient.engine.game.player.Player;
 import org.aoclient.engine.renderer.RGBColor;
 
 import static org.aoclient.engine.game.Weather.TypeWeather.*;
@@ -107,7 +108,7 @@ public enum Weather {
     public RGBColor getWeatherColor() {
         // No entiendo pq no esta seteado desde el mapInfo...
         // Basicamente en las dungeons siempre (o en este caso, los mapas que no llueve) tendran el color de DIA.
-        if(!bLluvia[User.INSTANCE.getUserMap()]) {
+        if(!bLluvia[Player.INSTANCE.getUserMap()]) {
             renderColor.setRed(1f);
             renderColor.setBlue(1f);
             renderColor.setGreen(1f);

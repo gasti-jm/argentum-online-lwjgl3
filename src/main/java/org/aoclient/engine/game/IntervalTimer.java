@@ -38,6 +38,7 @@ public final class IntervalTimer {
     public static final float INT_WORK = 0.7f;
     public static final float INT_USEITEMDCK = 0.125f;
     public static final float INT_SENTRPU = 2.0f;
+
     private final float interval;
     private float currentTime;
 

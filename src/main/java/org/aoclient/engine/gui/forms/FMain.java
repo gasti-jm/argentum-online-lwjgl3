@@ -5,9 +5,7 @@ import imgui.ImGui;
 import imgui.flag.*;
 import imgui.type.ImString;
 import org.aoclient.engine.EngineGL;
-import org.aoclient.engine.game.SMSystem;
-import org.aoclient.engine.game.User;
-import org.aoclient.engine.game.models.SMType;
+import org.aoclient.engine.game.player.Player;
 import org.aoclient.engine.window.Window;
 import org.aoclient.engine.game.console.Console;
 import org.aoclient.engine.gui.ImGUISystem;
@@ -157,10 +155,10 @@ public final class FMain extends Form {
     }
 
     private void drawSMButtons() {
-        User.INSTANCE.getSMResu().draw();
-        User.INSTANCE.getSMSafe().draw();
-        User.INSTANCE.getSMWork().draw();
-        User.INSTANCE.getSMSpells().draw();
+        Player.INSTANCE.getSMResu().draw();
+        Player.INSTANCE.getSMSafe().draw();
+        Player.INSTANCE.getSMWork().draw();
+        Player.INSTANCE.getSMSpells().draw();
     }
 
     /**
