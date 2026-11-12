@@ -16,6 +16,8 @@ public final class FPanelGM extends Form {
     @Override
     public void render() {
         ImGui.setNextWindowSize(355, 380, ImGuiCond.Always);
+        this.centerScreen();
+
         ImGui.begin(this.getClass().getSimpleName(), ImGuiWindowFlags.NoTitleBar | ImGuiWindowFlags.NoResize);
 
         ImGui.text("GM Panel:");

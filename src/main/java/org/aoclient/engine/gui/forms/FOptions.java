@@ -45,6 +45,8 @@ public final class FOptions extends Form {
     @Override
     public void render() {
         ImGui.setNextWindowSize(355, 480, ImGuiCond.Always);
+        centerScreen();
+
         ImGui.begin(this.getClass().getSimpleName(), ImGuiWindowFlags.NoTitleBar | ImGuiWindowFlags.NoResize);
 
         ImGui.text("Opciones:");

@@ -21,6 +21,7 @@ public final class FTrainer extends Form {
     @Override
     public void render() {
         ImGui.setNextWindowSize(281, 245, ImGuiCond.Always);
+        this.centerScreen();
         ImGui.begin(this.getClass().getSimpleName(), ImGuiWindowFlags.NoTitleBar | ImGuiWindowFlags.NoResize);
 
         ImGui.setCursorPos(5, 0);

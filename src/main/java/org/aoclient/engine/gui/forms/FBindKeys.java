@@ -99,7 +99,7 @@ public class FBindKeys extends Form {
                 case GLFW_KEY_F11 -> "F11";
                 case GLFW_KEY_F12 -> "F12";
 
-                // tecla inreconocible
+                // tecla irreconocible
                 default -> "???";
             };
         }
@@ -111,8 +111,9 @@ public class FBindKeys extends Form {
     @Override
     public void render() {
         ImGui.setNextWindowFocus(); // dale foco solo a este FRM
-
         ImGui.setNextWindowSize(560, 500, ImGuiCond.Always);
+        this.centerScreen();
+
         ImGui.begin(this.getClass().getSimpleName(), ImGuiWindowFlags.NoTitleBar | ImGuiWindowFlags.NoResize | ImGuiWindowFlags.NoDecoration |
                 ImGuiWindowFlags.NoBackground | ImGuiWindowFlags.NoMove);
 

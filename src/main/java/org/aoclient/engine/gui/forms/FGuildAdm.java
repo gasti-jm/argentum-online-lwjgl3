@@ -55,6 +55,7 @@ public class FGuildAdm extends Form {
     public void render() {
         ImGui.setNextWindowFocus(); // le damos foco.
         ImGui.setNextWindowSize(280, 370, ImGuiCond.Always);
+        this.centerScreen();
         ImGui.begin(this.getClass().getSimpleName(), ImGuiWindowFlags.NoTitleBar | ImGuiWindowFlags.NoResize | ImGuiWindowFlags.NoDecoration |
                 ImGuiWindowFlags.NoBackground | ImGuiWindowFlags.NoMove);
 

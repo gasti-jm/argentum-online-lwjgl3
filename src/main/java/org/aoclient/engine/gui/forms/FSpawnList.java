@@ -21,6 +21,7 @@ public final class FSpawnList extends Form {
     @Override
     public void render() {
         ImGui.setNextWindowSize(220, 250, ImGuiCond.Always);
+        this.centerScreen();
         ImGui.begin(this.getClass().getSimpleName(),ImGuiWindowFlags.NoTitleBar | ImGuiWindowFlags.AlwaysAutoResize);
 
         ImGui.setCursorPos(5, 0);

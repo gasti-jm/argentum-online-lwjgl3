@@ -72,7 +72,7 @@ public enum ImGUISystem {
         // Iniciamos la configuracion de ImGuiIO
         final ImGuiIO io = ImGui.getIO();
 
-        io.setIniFilename("resources/gui.ini"); // Guardamos en un archivo .ini
+        io.setIniFilename(null);
         io.setConfigFlags(ImGuiConfigFlags.NavEnableKeyboard); // Navegacion con el teclado
         io.setBackendFlags(ImGuiBackendFlags.HasMouseCursors); // Cursores del mouse para mostrar al cambiar el tamaño de las ventanas, etc.
         io.setBackendPlatformName("imgui_java_impl_glfw");
@@ -225,7 +225,6 @@ public enum ImGUISystem {
     }
 
     private void renderFrms() {
-
         for (int i = 0; i < frms.size(); i++)
             frms.get(i).render();
 
@@ -261,8 +260,6 @@ public enum ImGUISystem {
      */
     public boolean isMainLast() {
         if (frms.size() <= 0) return false;
-
-
         return frms.get(frms.size() - 1).getClass().getSimpleName().equals("FMain");
     }
 

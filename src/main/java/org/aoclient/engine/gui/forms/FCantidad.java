@@ -61,6 +61,8 @@ public final class FCantidad extends Form {
         ImGui.setNextWindowFocus(); // dale foco solo a este FRM
 
         ImGui.setNextWindowSize(225, 100, ImGuiCond.Always);
+        this.centerScreen();
+
         ImGui.begin(this.getClass().getSimpleName(), ImGuiWindowFlags.NoTitleBar | ImGuiWindowFlags.NoResize | ImGuiWindowFlags.NoDecoration |
                 ImGuiWindowFlags.NoBackground | ImGuiWindowFlags.NoMove);
 

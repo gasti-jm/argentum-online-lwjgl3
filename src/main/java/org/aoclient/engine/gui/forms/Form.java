@@ -2,6 +2,7 @@ package org.aoclient.engine.gui.forms;
 
 import imgui.ImGui;
 import imgui.ImVec2;
+import imgui.flag.ImGuiCond;
 import org.aoclient.engine.game.player.Player;
 import org.aoclient.engine.gui.ImGUISystem;
 import org.aoclient.engine.renderer.Texture;
@@ -204,6 +205,19 @@ public abstract class Form {
         if (ImGui.imageButton(tex.getId(), w, h, u0, v0, u1, v1)) {
             action.run();
         }
+    }
+
+    /**
+     * Centramos nuestro formulario al centro de la pantalla.
+     */
+    protected void centerScreen() {
+        ImGui.setNextWindowPos(
+                ImGui.getIO().getDisplaySizeX() / 2,
+                ImGui.getIO().getDisplaySizeY() / 2,
+                ImGuiCond.Appearing,
+                0.5f,
+                0.5f
+        );
     }
 
 }
