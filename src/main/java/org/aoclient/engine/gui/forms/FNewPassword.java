@@ -42,7 +42,9 @@ public final class FNewPassword extends Form {
     public void render() {
 
         ImGui.setNextWindowSize(317, 237, ImGuiCond.Always);
+        this.centerScreen();
         ImGui.begin(this.getClass().getSimpleName(), ImGuiWindowFlags.NoTitleBar | ImGuiWindowFlags.NoResize);
+
 
         //ImGui.getWindowDrawList().addImage(backgroundImage, 0, 0, Window.get().getWidth(), Window.get().getHeight());
 

@@ -68,6 +68,7 @@ public final class FTutorial extends Form {
     public void render() {
         ImGui.setNextWindowFocus();
         ImGui.setNextWindowSize(583, 509, ImGuiCond.Always);
+        this.centerScreen();
         ImGui.begin(this.getClass().getSimpleName(),
                 ImGuiWindowFlags.NoTitleBar | ImGuiWindowFlags.NoResize
                         | ImGuiWindowFlags.NoDecoration | ImGuiWindowFlags.NoBackground | ImGuiWindowFlags.NoMove);

@@ -37,6 +37,7 @@ public final class FMessage extends Form {
     public void render() {
         ImGui.setNextWindowFocus(); // dale foco solo a este FRM
         ImGui.setNextWindowSize(250, 230, ImGuiCond.Always);
+        this.centerScreen();
 
         // Start Custom window
         ImGui.begin(this.getClass().getSimpleName(), ImGuiWindowFlags.NoTitleBar | ImGuiWindowFlags.AlwaysAutoResize);
