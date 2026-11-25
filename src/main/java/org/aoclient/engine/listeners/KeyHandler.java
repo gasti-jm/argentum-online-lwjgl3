@@ -2,6 +2,7 @@ package org.aoclient.engine.listeners;
 
 import imgui.ImGui;
 import imgui.ImGuiIO;
+import imgui.flag.ImGuiKey;
 import org.aoclient.engine.game.bindkeys.Key;
 
 import java.util.Arrays;
@@ -17,7 +18,7 @@ public enum KeyHandler {
 
     INSTANCE;
 
-    private static final ImGuiIO imGuiIo = ImGui.getIO();
+    //private static final ImGuiIO imGuiIo = ImGui.getIO();
     /** Arreglo que almacena el estado de presionado (true) o no presionado (false) para cada tecla hasta el indice 350. */
     private static final boolean[] keyPressed = new boolean[350];
     /** Arreglo que indica cuando una tecla ha sido presionada por primera vez, evitando el efecto de repeticion de teclas. */
@@ -36,11 +37,19 @@ public enum KeyHandler {
     public static void keyCallback(long window, int key, int scancode, int action, int mods) {
         if (action != GLFW_PRESS && action != GLFW_RELEASE) return;
         boolean isPressed = action == GLFW_PRESS;
+
+//        int imGuiKey = glfwKeyToImGuiKey(key);
+//
+//        if (imGuiKey != ImGuiKey.None) {
+//            imGuiIo.addKeyEvent(imGuiKey, isPressed);
+//        }
+
         // Actualiza flags y rastrea ultima tecla
         updateKeyStates(key, isPressed);
         // Manejo optimizado de teclas de movimiento
         if (MOVEMENT_KEYS.contains(key)) handleMovementKey(key, isPressed);
-        updateModifierKeys();
+
+        //updateModifierKeys();
     }
 
     public static int getLastKeyPressed() {
@@ -125,7 +134,7 @@ public enum KeyHandler {
 
         } else if (!isPressed && keyPressed[key]) keyJustReleased[key] = true;
         keyPressed[key] = isPressed;
-        imGuiIo.setKeysDown(key, isPressed);
+        //imGuiIo.addKeyEvent(key, isPressed);
     }
 
     /**
@@ -240,16 +249,16 @@ public enum KeyHandler {
         return (key1 == up && key2 == down) || (key1 == down && key2 == up) || (key1 == left && key2 == right) || (key1 == right && key2 == left);
     }
 
-    private static void updateModifierKeys() {
-        imGuiIo.setKeyCtrl(isModifierPressed(GLFW_KEY_LEFT_CONTROL, GLFW_KEY_RIGHT_CONTROL));
-        imGuiIo.setKeyShift(isModifierPressed(GLFW_KEY_LEFT_SHIFT, GLFW_KEY_RIGHT_SHIFT));
-        imGuiIo.setKeyAlt(isModifierPressed(GLFW_KEY_LEFT_ALT, GLFW_KEY_RIGHT_ALT));
-        imGuiIo.setKeySuper(isModifierPressed(GLFW_KEY_LEFT_SUPER, GLFW_KEY_RIGHT_SUPER));
-    }
-
-    private static boolean isModifierPressed(int leftKey, int rightKey) {
-        return imGuiIo.getKeysDown(leftKey) || imGuiIo.getKeysDown(rightKey);
-    }
+//    private static void updateModifierKeys() {
+//        imGuiIo.setKeyCtrl(isModifierPressed(GLFW_KEY_LEFT_CONTROL, GLFW_KEY_RIGHT_CONTROL));
+//        imGuiIo.setKeyShift(isModifierPressed(GLFW_KEY_LEFT_SHIFT, GLFW_KEY_RIGHT_SHIFT));
+//        imGuiIo.setKeyAlt(isModifierPressed(GLFW_KEY_LEFT_ALT, GLFW_KEY_RIGHT_ALT));
+//        imGuiIo.setKeySuper(isModifierPressed(GLFW_KEY_LEFT_SUPER, GLFW_KEY_RIGHT_SUPER));
+//    }
+//
+//    private static boolean isModifierPressed(int leftKey, int rightKey) {
+//        return ImGui.isKeyDown(leftKey) || ImGui.isKeyDown(rightKey);
+//    }
 
 
 }

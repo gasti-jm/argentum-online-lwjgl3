@@ -286,9 +286,7 @@ public final class GameScene extends Scene {
                     final int drawX = POS_SCREEN_X + (camera.getScreenX() - 1) * TILE_PIXEL_SIZE + pixelOffsetX;
                     final int drawY = POS_SCREEN_Y + (camera.getScreenY() - 1) * TILE_PIXEL_SIZE + pixelOffsetY;
 
-                    if (grh.getGrhIndex() > 1) { // no dibujar texturas con grafico negro xd (MAS FPS).
-                        drawTexture(grh, drawX, drawY, true, true, false, 1.0f, weather.getWeatherColor());
-                    }
+                    drawTexture(grh, drawX, drawY, true, true, false, 1.0f, weather.getWeatherColor());
 
                     camera.incrementScreenX();
                 }

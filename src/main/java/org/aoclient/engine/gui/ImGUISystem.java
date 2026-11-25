@@ -8,10 +8,13 @@ import imgui.flag.ImGuiConfigFlags;
 import imgui.flag.ImGuiKey;
 import imgui.flag.ImGuiMouseCursor;
 import imgui.gl3.ImGuiImplGl3;
+import imgui.glfw.ImGuiImplGlfw;
+import imgui.type.ImInt;
 import org.aoclient.engine.window.Window;
 import org.aoclient.engine.game.console.ImGuiFonts;
 import org.aoclient.engine.gui.forms.Form;
 
+import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,6 +22,8 @@ import static org.aoclient.engine.utils.GameData.options;
 import static org.aoclient.engine.utils.LaunchOptions.CLIENT_DEBUG;
 import static org.aoclient.engine.utils.Time.deltaTime;
 import static org.lwjgl.glfw.GLFW.*;
+import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL11C.glGenTextures;
 
 /**
  * Sistema centralizado para la gestion de interfaces graficas de usuario basado en {@code ImGui}.
@@ -36,11 +41,12 @@ import static org.lwjgl.glfw.GLFW.*;
  */
 
 
-public enum ImGUISystem {
+public enum ImGUISystem implements I_ImGuiSystem {
     INSTANCE;
 
     // LWJGL3 rendered itself (SHOULD be initialized)
     private final ImGuiImplGl3 imGuiGl3 = new ImGuiImplGl3();
+    private final ImGuiImplGlfw imGuiGlfw = new ImGuiImplGlfw();
 
     // Cursores del mouse proporcionados por GLFW
     private final long[] mouseCursors = new long[ImGuiMouseCursor.COUNT];
@@ -60,6 +66,7 @@ public enum ImGUISystem {
 
     private final Window window = Window.INSTANCE;
 
+    @Override
     public void init() {
         ImGui.createContext();
 
@@ -73,116 +80,59 @@ public enum ImGUISystem {
         final ImGuiIO io = ImGui.getIO();
 
         io.setIniFilename(null);
-        io.setConfigFlags(ImGuiConfigFlags.NavEnableKeyboard); // Navegacion con el teclado
+        //io.setConfigFlags(ImGuiConfigFlags.NavEnableKeyboard); // Navegacion con el teclado
+        io.setConfigFlags(0);
+        io.setConfigDebugHighlightIdConflicts(false);
         io.setBackendFlags(ImGuiBackendFlags.HasMouseCursors); // Cursores del mouse para mostrar al cambiar el tamaño de las ventanas, etc.
         io.setBackendPlatformName("imgui_java_impl_glfw");
         io.setBackendRendererName("imgui_java_impl_lwjgl");
 
-        // Teclado y raton.
-        setKeyboardMapping(io);
-        setMouseMapping();
-        setCallbacks(io);
-
         // Configuracion de Fonts
         loadImGUIFonts(io);
 
+        // Iniciamos GLFW (con 'true' instala todos los callbacks de teclado y mouse automáticamente)
+        imGuiGlfw.init(window.getWindow(), true);
         // Iniciamos ImGUI en OpenGL
-        imGuiGl3.init("#version 150");
-    }
-
-    private void setKeyboardMapping(ImGuiIO io) {
-        final int[] keyMap = new int[ImGuiKey.COUNT];
-
-        keyMap[ImGuiKey.Tab] = GLFW_KEY_TAB;
-        keyMap[ImGuiKey.LeftArrow] = GLFW_KEY_LEFT;
-        keyMap[ImGuiKey.RightArrow] = GLFW_KEY_RIGHT;
-        keyMap[ImGuiKey.UpArrow] = GLFW_KEY_UP;
-        keyMap[ImGuiKey.DownArrow] = GLFW_KEY_DOWN;
-        keyMap[ImGuiKey.PageUp] = GLFW_KEY_PAGE_UP;
-        keyMap[ImGuiKey.PageDown] = GLFW_KEY_PAGE_DOWN;
-        keyMap[ImGuiKey.Home] = GLFW_KEY_HOME;
-        keyMap[ImGuiKey.End] = GLFW_KEY_END;
-        keyMap[ImGuiKey.Insert] = GLFW_KEY_INSERT;
-        keyMap[ImGuiKey.Delete] = GLFW_KEY_DELETE;
-        keyMap[ImGuiKey.Backspace] = GLFW_KEY_BACKSPACE;
-        keyMap[ImGuiKey.Space] = GLFW_KEY_SPACE;
-        keyMap[ImGuiKey.Escape] = GLFW_KEY_ESCAPE;
-        keyMap[ImGuiKey.KeyPadEnter] = GLFW_KEY_KP_ENTER;
-        keyMap[ImGuiKey.A] = GLFW_KEY_A;
-        keyMap[ImGuiKey.C] = GLFW_KEY_C;
-        keyMap[ImGuiKey.V] = GLFW_KEY_V;
-        keyMap[ImGuiKey.X] = GLFW_KEY_X;
-        keyMap[ImGuiKey.Y] = GLFW_KEY_Y;
-        keyMap[ImGuiKey.Z] = GLFW_KEY_Z;
-
-        io.setKeyMap(keyMap);
-    }
-
-    private void setMouseMapping() {
-        mouseCursors[ImGuiMouseCursor.Arrow]        = glfwCreateStandardCursor(GLFW_ARROW_CURSOR);
-        mouseCursors[ImGuiMouseCursor.TextInput]    = glfwCreateStandardCursor(GLFW_IBEAM_CURSOR);
-        mouseCursors[ImGuiMouseCursor.ResizeAll]    = glfwCreateStandardCursor(GLFW_ARROW_CURSOR);
-        mouseCursors[ImGuiMouseCursor.ResizeNS]     = glfwCreateStandardCursor(GLFW_VRESIZE_CURSOR);
-        mouseCursors[ImGuiMouseCursor.ResizeEW]     = glfwCreateStandardCursor(GLFW_HRESIZE_CURSOR);
-        mouseCursors[ImGuiMouseCursor.ResizeNESW]   = glfwCreateStandardCursor(GLFW_ARROW_CURSOR);
-        mouseCursors[ImGuiMouseCursor.ResizeNWSE]   = glfwCreateStandardCursor(GLFW_ARROW_CURSOR);
-        mouseCursors[ImGuiMouseCursor.Hand]         = glfwCreateStandardCursor(GLFW_HAND_CURSOR);
-        mouseCursors[ImGuiMouseCursor.NotAllowed]   = glfwCreateStandardCursor(GLFW_ARROW_CURSOR);
-    }
-
-    private void setCallbacks(ImGuiIO io) {
-        glfwSetCharCallback(window.getWindow(), (w, c) -> {
-            if (c != GLFW_KEY_DELETE) io.addInputCharacter(c);
-        });
-
-        io.setSetClipboardTextFn(new ImStrConsumer() {
-            @Override
-            public void accept(final String s) {
-                glfwSetClipboardString(window.getWindow(), s);
-            }
-        });
-
-        io.setGetClipboardTextFn(new ImStrSupplier() {
-            @Override
-            public String get() {
-                return glfwGetClipboardString(window.getWindow());
-            }
-        });
+        imGuiGl3.init(window.getGlslVersion());
     }
 
     private void loadImGUIFonts(ImGuiIO io) {
         final ImFontAtlas fontAtlas = io.getFonts();
-
-        // Agregamos la tipografia por defecto, que es 'ProggyClean.ttf, 13px'
         fontAtlas.addFontDefault();
 
-        // La creación de ImFontConfig asignará memoria nativa...
         final ImFontConfig fontConfig = new ImFontConfig();
-
-        // Todas las fuentes agregadas mientras este modo está activado se fusionarán con la fuente agregada anteriormente
-        fontConfig.setMergeMode(true);
-        fontConfig.setPixelSnapH(true);
-        fontConfig.setGlyphRanges(fontAtlas.getGlyphRangesCyrillic());
-
-
-        fontConfig.setMergeMode(false);
-        fontConfig.setPixelSnapH(false);
-
         fontConfig.setRasterizerMultiply(1.2f);
 
-        ImGuiFonts.fontRegular      = fontAtlas.addFontFromFileTTF("resources/fonts/LiberationSans-Regular.ttf", 13);
-        ImGuiFonts.fontBold         = fontAtlas.addFontFromFileTTF("resources/fonts/LiberationSans-Bold.ttf", 13);
-        ImGuiFonts.fontItalic       = fontAtlas.addFontFromFileTTF("resources/fonts/LiberationSans-Italic.ttf", 13);
-        ImGuiFonts.fontBoldItalic   = fontAtlas.addFontFromFileTTF("resources/fonts/LiberationSans-BoldItalic.ttf", 13);
+        // Nota: Si quieres aplicar fontConfig a tus fuentes, pásalo como 3er parámetro:
+        ImGuiFonts.fontRegular    = fontAtlas.addFontFromFileTTF("resources/fonts/LiberationSans-Regular.ttf", 13, fontConfig);
+        ImGuiFonts.fontBold       = fontAtlas.addFontFromFileTTF("resources/fonts/LiberationSans-Bold.ttf", 13, fontConfig);
+        ImGuiFonts.fontItalic     = fontAtlas.addFontFromFileTTF("resources/fonts/LiberationSans-Italic.ttf", 13, fontConfig);
+        ImGuiFonts.fontBoldItalic = fontAtlas.addFontFromFileTTF("resources/fonts/LiberationSans-BoldItalic.ttf", 13, fontConfig);
 
         fontConfig.destroy();
+
+        // Construir la textura y subirla a OpenGL
+        ImInt width = new ImInt();
+        ImInt height = new ImInt();
+        // Esta línea es la que marca TexIsBuilt = true
+        ByteBuffer pixels = fontAtlas.getTexDataAsRGBA32(width, height);
+
+        int fontTexture = glGenTextures();
+        glBindTexture(GL_TEXTURE_2D, fontTexture);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width.get(), height.get(), 0, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
+
+        fontAtlas.setTexID(fontTexture);
     }
 
     public void destroy() {
-        imGuiGl3.dispose();
+        imGuiGl3.shutdown();
+        imGuiGlfw.shutdown();
         ImGui.destroyContext();
     }
 
+    @Override
     public void renderGUI() {
         final ImGuiIO io = ImGui.getIO();
         if (io.getDeltaTime() <= 0) return;
@@ -213,14 +163,13 @@ public enum ImGUISystem {
             }
         }
 
-        // IMPORTANT!!
-        // Any Dear ImGui code SHOULD go between NewFrame()/Render() methods
+        imGuiGlfw.newFrame();
+        imGuiGl3.newFrame();
+
         ImGui.newFrame();
         renderFrms();
         ImGui.render();
 
-        // After ImGui#render call we provide draw data into LWJGL3 renderer.
-        // At that moment ImGui will be rendered to the current OpenGL context.
         imGuiGl3.renderDrawData(ImGui.getDrawData());
     }
 
@@ -231,6 +180,7 @@ public enum ImGUISystem {
         if (CLIENT_DEBUG)  ImGui.showDemoWindow();
     }
 
+    @Override
     public void show(Form frm) {
         boolean exits = false;
         // esta abierto?

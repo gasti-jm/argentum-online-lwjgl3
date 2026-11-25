@@ -61,6 +61,8 @@ public enum Window {
     private long cursorMainID;
     private long cursorCrosshairID;
 
+    private String glslVersion;
+
     Window() {
         this.title = "Argentum Online Java";
         this.width = SCREEN_WIDTH;
@@ -86,11 +88,13 @@ public enum Window {
         glfwDefaultWindowHints();
 
         if (Platform.isMac()) {
+            glslVersion = "#version 150";
             glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
             glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GLFW_TRUE);
             glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
             glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
         } else {
+            glslVersion = "#version 130";
             glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
             glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
         }
@@ -372,4 +376,7 @@ public enum Window {
         }
     }
 
+    public String getGlslVersion() {
+        return glslVersion;
+    }
 }

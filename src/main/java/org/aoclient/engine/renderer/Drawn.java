@@ -50,7 +50,7 @@ public final class Drawn {
                                    boolean center, boolean animate,
                                    boolean blend, float alpha, RGBColor color) {
 
-        if (grh.getGrhIndex() == 0 || grhData[grh.getGrhIndex()].getNumFrames() == 0) return;
+        if (grh.getGrhIndex() <= 1 || grhData[grh.getGrhIndex()].getNumFrames() == 0) return;
 
         if (animate)
             grh.updateAnim();

@@ -202,7 +202,7 @@ public abstract class Form {
         float u1 = (float) (x + w) / tex.getTex_width();
         float v1 = (float) (y + h) / tex.getTex_height();
 
-        if (ImGui.imageButton(tex.getId(), w, h, u0, v0, u1, v1)) {
+        if (ImGui.imageButton("imgBtnRegion" + tex.getId(),tex.getId(), w, h, u0, v0, u1, v1)) {
             action.run();
         }
     }
