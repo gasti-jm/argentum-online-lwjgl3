@@ -1,6 +1,7 @@
 package org.aoclient.engine.scenes;
 
 import org.aoclient.engine.game.player.Player;
+import org.aoclient.engine.gui.FormManager;
 import org.aoclient.engine.gui.ImGUISystem;
 import org.aoclient.engine.gui.forms.FConnect;
 import org.aoclient.engine.listeners.KeyHandler;
@@ -39,7 +40,7 @@ public final class MainScene extends Scene {
     public void init() {
         super.init();
         canChangeTo = SceneType.GAME_SCENE;
-        ImGUISystem.INSTANCE.addFrm(frmConnect);
+        FormManager.addFrm(frmConnect);
     }
 
     @Override
@@ -65,7 +66,7 @@ public final class MainScene extends Scene {
     public void render() {
         if (Player.INSTANCE.isUserConected()) {
             this.close();
-            ImGUISystem.INSTANCE.closeAllFrms();
+            FormManager.closeAllFrms();
         }
     }
 

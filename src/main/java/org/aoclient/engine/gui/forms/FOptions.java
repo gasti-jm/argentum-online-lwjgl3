@@ -3,6 +3,7 @@ package org.aoclient.engine.gui.forms;
 import imgui.ImGui;
 import imgui.flag.ImGuiCond;
 import imgui.flag.ImGuiWindowFlags;
+import org.aoclient.engine.gui.FormManager;
 import org.aoclient.engine.window.Window;
 import org.aoclient.engine.game.Rain;
 
@@ -95,13 +96,13 @@ public final class FOptions extends Form {
         ImGui.setCursorPos(6, 344);
         if (ImGui.button("Configurar Teclas", 170, 20)) {
             playSound(SND_CLICK);
-            IM_GUI_SYSTEM.show(new FBindKeys());
+            FormManager.show(new FBindKeys());
         }
 
         ImGui.setCursorPos(6, 368);
         if (ImGui.button("Mapa", 170, 20)) {
             playSound(SND_CLICK);
-            IM_GUI_SYSTEM.show(new FMapa());
+            FormManager.show(new FMapa());
         }
 
         ImGui.setCursorPos(6, 392);
@@ -119,7 +120,7 @@ public final class FOptions extends Form {
         ImGui.setCursorPos(180, 368);
         if (ImGui.button(new String("Cambiar Contraseña".getBytes(), StandardCharsets.UTF_8), 170, 20)) {
             playSound(SND_CLICK);
-            IM_GUI_SYSTEM.show(new FNewPassword());
+            FormManager.show(new FNewPassword());
         }
 
         ImGui.setCursorPos(180, 392);
@@ -129,7 +130,7 @@ public final class FOptions extends Form {
         ImGui.setCursorPos(180, 416);
         if (ImGui.button("Tutorial", 170, 20)) {
             playSound(SND_CLICK);
-            IM_GUI_SYSTEM.show(new FTutorial());
+            FormManager.show(new FTutorial());
         }
 
         ImGui.setCursorPos(134, 440);

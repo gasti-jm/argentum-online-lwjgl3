@@ -1,5 +1,6 @@
 package org.aoclient.network.protocol.handlers;
 
+import org.aoclient.engine.gui.FormManager;
 import org.aoclient.engine.gui.ImGUISystem;
 import org.aoclient.engine.gui.forms.FGuildAdm;
 import org.aoclient.engine.utils.Log;
@@ -23,7 +24,7 @@ public class GuildListHandler implements PacketHandler {
         // Create and show the guild admin form with the guild list
         FGuildAdm guildAdm = new FGuildAdm();
         guildAdm.setGuildsList(guildsArray);
-        ImGUISystem.INSTANCE.show(guildAdm);
+        FormManager.show(guildAdm);
 
         buffer.copy(tempBuffer);
         Log.debug("Guild list loaded with " + guildsArray.length + " guilds");

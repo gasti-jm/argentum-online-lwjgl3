@@ -1,5 +1,6 @@
 package org.aoclient.network.protocol.handlers.gm;
 
+import org.aoclient.engine.gui.FormManager;
 import org.aoclient.engine.gui.ImGUISystem;
 import org.aoclient.engine.gui.forms.FMSG;
 import org.aoclient.network.PacketBuffer;
@@ -20,7 +21,7 @@ public class ShowSOSFormHandler implements PacketHandler {
         String[] MSGList = sosList.split("\0");
 
         // Mostramos la lista en el GUI
-        ImGUISystem.INSTANCE.show(new FMSG(MSGList));
+        FormManager.show(new FMSG(MSGList));
 
         buffer.copy(tempBuffer);
     }

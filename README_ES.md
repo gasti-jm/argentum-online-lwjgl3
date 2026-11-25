@@ -5,7 +5,7 @@
     <img src="https://github.com/user-attachments/assets/3f6d8658-ea84-4ff3-b3d2-cb2fb1eeabd2" width="500px"> <br/> <br/>
     <a target="_blank"><img src="https://img.shields.io/badge/Built%20in-Java_17-43ca1f.svg?style=flat-square"></img></a>
     <a target="_blank"><img src="https://img.shields.io/badge/Gráficos-LWJGL3_+_OpenGL_3.3-2196F3.svg?style=flat-square"></img></a>
-    <a target="_blank"><img src="https://img.shields.io/badge/GUI-Dear_ImGui-FF6F00.svg?style=flat-square"></img></a>
+    <a target="_blank"><img src="https://img.shields.io/badge/GUI-Dear_ImGui-732BF5.svg?style=flat-square"></img></a>
     <a target="_blank"><img src="https://img.shields.io/badge/License-GNU%20General%20Public%20License%20-e98227.svg?style=flat-square"></img></a>
 </div>
 <br/>
@@ -14,7 +14,12 @@
 
 <a target="_blank" href="https://es.wikipedia.org/wiki/Argentum_Online">Argentum Online</a> es un videojuego MMORPG del año 1999 creado en Visual Basic 6.0 por Pablo Márquez (Morgolock), este juego es de código abierto.
 
-Este es el **cliente** traducido a Java con LWJGL3. La conexión al servidor está implementada con sockets Java y es **totalmente compatible** con el <a target="_blank" href="https://www.gs-zone.org/temas/cliente-servidor-v0-13-0-completos-y-funcionales.36521/">servidor Argentum Online Alkon v13.0 de Visual Basic 6.0</a>. El servidor en Java también se está desarrollando en un [módulo separado](../server/).
+Este es el **cliente** traducido a Java con LWJGL3. La conexión al servidor está implementada con sockets Java y es **totalmente compatible** con el <a target="_blank" href="https://www.gs-zone.org/temas/cliente-servidor-v0-13-0-completos-y-funcionales.36521/">servidor Argentum Online Alkon v13.0 de Visual Basic 6.0</a>. <br><br> 
+El **servidor Java** está en pleno desarrollo (lo recomendable es utilizar el servidor original de VB6) y actualmente tenemos estos repositorios del servidor en java:
+
+
+- <a href="https://github.com/gasti-jm/argentum-online-java-server" target="_blank">Argentum Online Java Server - gasti.jm</a> (EN DESARROLLO - Disponible para testiar en la rama principal)
+- <a href="https://github.com/rusocode/ao-server" target="_blank">Argentum Online Java Server - rusocode</a> (Disponible para testiar en la rama "network-java")
 
 > [!TIP]
 > Para un análisis técnico profundo del motor, red y renderizado, consulta la [Documentación de Arquitectura del Cliente](../docs/client-architecture.md).
@@ -195,7 +200,6 @@ Todas las acciones son remapeables. Por defecto: WASD movimiento, Enter chat, Es
 
 <p>
   <b>Pablo Márquez (Morgolock) creador de Argentum Online</b> <br/>
-  <a target="_blank" href="https://www.gs-zone.org/temas/argentum-online-en-java-opengl.92672/#post-785702"><b>Lord Fers</b> - Usuario de GS-Zone que liberó un cliente base offline en LWJGL2</a> <br/>
   Y a la gente de GS-Zone <br/>
   <a target="_blank" href="https://www.gs-zone.org/"><img src="https://user-images.githubusercontent.com/82490615/187148671-1d7f92b9-7ea1-45f2-b6f1-f53b07454d93.png"></img></a>
 </p>

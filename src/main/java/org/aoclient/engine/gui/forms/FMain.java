@@ -6,6 +6,7 @@ import imgui.flag.*;
 import imgui.type.ImString;
 import org.aoclient.engine.EngineGL;
 import org.aoclient.engine.game.player.Player;
+import org.aoclient.engine.gui.FormManager;
 import org.aoclient.engine.window.Window;
 import org.aoclient.engine.game.console.Console;
 import org.aoclient.engine.gui.ImGUISystem;
@@ -236,14 +237,14 @@ public final class FMain extends Form {
         -=--=--=--=--=--=--=--=--=--=--=--=--=--=--=--=--=--=--=--=-*/
         if (drawButton(670, 45, 30, 30, "viewSkills")) {
             playSound(SND_CLICK);
-            IM_GUI_SYSTEM.show(new FSkills());
+            FormManager.show(new FSkills());
         }
         /*-=--=--=--=--=--=--=--=--=--=--=--=--=--=--=--=--=--=--=--=-
                                 MENU BUTTONS
         -=--=--=--=--=--=--=--=--=--=--=--=--=--=--=--=--=--=--=--=-*/
         if (btnMap.render()){
             playSound(SND_CLICK);
-            IM_GUI_SYSTEM.show(new FMapa());
+            FormManager.show(new FMapa());
         }
         if (btnParty.render()) {
             playSound(SND_CLICK);
@@ -251,11 +252,11 @@ public final class FMain extends Form {
         }
         if (btnOptions.render()) {
             playSound(SND_CLICK);
-            IM_GUI_SYSTEM.show(new FOptions());
+            FormManager.show(new FOptions());
         }
         if(btnStats.render()) {
             playSound(SND_CLICK);
-            IM_GUI_SYSTEM.show(new FStats());
+            FormManager.show(new FStats());
         }
         if(btnGuild.render()){
             playSound(SND_CLICK);
@@ -277,11 +278,11 @@ public final class FMain extends Form {
             this.viewInventory = false;
         }
 
-        if (ImGUISystem.INSTANCE.isMainLast()) {
+        if (FormManager.isMainLast()) {
             drawButton(710, 417, 17, 17, "Tirar Oro");
             if (ImGui.beginPopupContextItem("Tirar Oro")) {
                 playSound(SND_CLICK);
-                IM_GUI_SYSTEM.show(new FCantidad(true));
+                FormManager.show(new FCantidad(true));
                 ImGui.endPopup();
             }
         }

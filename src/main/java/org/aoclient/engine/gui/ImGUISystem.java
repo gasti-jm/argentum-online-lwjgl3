@@ -61,8 +61,6 @@ public enum ImGUISystem implements I_ImGuiSystem {
     private final double[] mousePosX = new double[1];
     private final double[] mousePosY = new double[1];
 
-    // arreglo de ventanas gui
-    private final List<Form> frms = new ArrayList<>();
 
     private final Window window = Window.INSTANCE;
 
@@ -70,17 +68,13 @@ public enum ImGUISystem implements I_ImGuiSystem {
     public void init() {
         ImGui.createContext();
 
-        /*
-          ImGui proporciona 3 esquemas de color diferentes para diseñar. Usaremos el clásico aquí.
-          Pruebe otros con los métodos ImGui.styleColors().
-         */
+        // default theme
         ImGui.styleColorsClassic();
 
         // Iniciamos la configuracion de ImGuiIO
-        final ImGuiIO io = ImGui.getIO();
+        ImGuiIO io = ImGui.getIO();
 
         io.setIniFilename(null);
-        //io.setConfigFlags(ImGuiConfigFlags.NavEnableKeyboard); // Navegacion con el teclado
         io.setConfigFlags(0);
         io.setConfigDebugHighlightIdConflicts(false);
         io.setBackendFlags(ImGuiBackendFlags.HasMouseCursors); // Cursores del mouse para mostrar al cambiar el tamaño de las ventanas, etc.
@@ -126,6 +120,7 @@ public enum ImGUISystem implements I_ImGuiSystem {
         fontAtlas.setTexID(fontTexture);
     }
 
+    @Override
     public void destroy() {
         imGuiGl3.shutdown();
         imGuiGlfw.shutdown();
@@ -167,69 +162,16 @@ public enum ImGUISystem implements I_ImGuiSystem {
         imGuiGl3.newFrame();
 
         ImGui.newFrame();
-        renderFrms();
+        FormManager.renderFrms();
         ImGui.render();
 
         imGuiGl3.renderDrawData(ImGui.getDrawData());
     }
 
-    private void renderFrms() {
-        for (int i = 0; i < frms.size(); i++)
-            frms.get(i).render();
-
-        if (CLIENT_DEBUG)  ImGui.showDemoWindow();
-    }
-
-    @Override
-    public void show(Form frm) {
-        boolean exits = false;
-        // esta abierto?
-        for (int i = 0; i < frms.size(); i++) {
-            if (frms.get(i).getClass().getSimpleName().equals(frm.getClass().getSimpleName())) {
-                frms.set(i, frm); // bueno remplazamos su contenido (esto si es que tenemos un frmMessage).
-                exits = true;
-                break;
-            }
-        }
-        if (!exits) addFrm(frm);
-    }
-
-    public boolean isFormVisible(String fromClass) {
-        boolean visible = false;
-        for (Form frm : frms) {
-            if (frm.getClass().getSimpleName().equals(fromClass)) {
-                visible = true;
-                break;
-            }
-        }
-        return visible;
-    }
-
-    /**
-     * Checkea si el frm solicitiado es el ultimo de nuestro array de frms.
-     */
-    public boolean isMainLast() {
-        if (frms.size() <= 0) return false;
-        return frms.get(frms.size() - 1).getClass().getSimpleName().equals("FMain");
-    }
 
 
-    public void deleteFrmArray(Form frm) {
-        frms.remove(frm);
-    }
 
-    public void addFrm(Form e) {
-        frms.add(e);
-    }
 
-    public void closeAllFrms() {
-        frms.clear();
-    }
 
-    /**
-     * Devuelve una copia de la lista de formularios activos.
-     */
-    public java.util.List<Form> getActiveForms() {
-        return new java.util.ArrayList<>(frms);
-    }
+
 }

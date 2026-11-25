@@ -1,6 +1,7 @@
 package org.aoclient.engine.scenes;
 
 import org.aoclient.engine.game.player.Player;
+import org.aoclient.engine.gui.FormManager;
 import org.aoclient.engine.window.Window;
 import org.aoclient.engine.game.*;
 import org.aoclient.engine.game.models.Direction;
@@ -72,7 +73,7 @@ public final class GameScene extends Scene {
         weather = Weather.INSTANCE;
         frmMain = new FMain();
 
-        ImGUISystem.INSTANCE.addFrm(frmMain);
+        FormManager.addFrm(frmMain);
     }
 
     @Override
@@ -118,7 +119,7 @@ public final class GameScene extends Scene {
      */
     @Override
     public void mouseEvents() {
-        if (user.isUserComerciando() || !ImGUISystem.INSTANCE.isMainLast()) return;
+        if (user.isUserComerciando() || !FormManager.isMainLast()) return;
 
         // Estamos haciendo click en el render?
         if (inGameArea()) {
@@ -184,7 +185,7 @@ public final class GameScene extends Scene {
      */
     @Override
     public void keyEvents() {
-        if (user.isUserComerciando() || !ImGUISystem.INSTANCE.isMainLast()) return;
+        if (user.isUserComerciando() || !FormManager.isMainLast()) return;
 
         // Usando el metodo estatico de Key para obtener la tecla desde el codigo
         final Key key = Key.getKey(KeyHandler.getLastKeyPressed());

@@ -6,5 +6,4 @@ public interface I_ImGuiSystem {
     void init();
     void destroy();
     void renderGUI();
-    void show(Form frm);
 }

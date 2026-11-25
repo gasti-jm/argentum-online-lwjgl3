@@ -1,6 +1,7 @@
 package org.aoclient.network.protocol.handlers;
 
 import org.aoclient.engine.game.player.Player;
+import org.aoclient.engine.gui.FormManager;
 import org.aoclient.engine.gui.ImGUISystem;
 import org.aoclient.engine.gui.forms.FCreateCharacter;
 import org.aoclient.engine.gui.forms.FMessage;
@@ -17,7 +18,7 @@ public class ErrorMessageHandler implements PacketHandler {
         tempBuffer.readByte();
 
         String errMsg = tempBuffer.readCp1252String();
-        ImGUISystem.INSTANCE.show(new FMessage(errMsg));
+        FormManager.show(new FMessage(errMsg));
 
         Connection.INSTANCE.disconnect();
         Player.INSTANCE.setUserConected(false);

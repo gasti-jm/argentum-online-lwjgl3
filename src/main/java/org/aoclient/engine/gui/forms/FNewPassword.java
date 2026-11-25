@@ -6,6 +6,7 @@ import imgui.flag.ImGuiInputTextFlags;
 import imgui.flag.ImGuiWindowFlags;
 import imgui.type.ImString;
 import org.aoclient.engine.game.Messages;
+import org.aoclient.engine.gui.FormManager;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -102,9 +103,9 @@ public final class FNewPassword extends Form {
         if (ImGui.button("Cambiar", 110, 20)) {
             playSound(SND_CLICK);
             if (this.txtPassword.get().isEmpty() || this.txtNewPassword.get().isEmpty() || this.txtNewrePassword.get().isEmpty()) {
-                IM_GUI_SYSTEM.show(new FMessage(Messages.get(COMPLETE_ALL_FIELDS)));
+                FormManager.show(new FMessage(Messages.get(COMPLETE_ALL_FIELDS)));
             } else if (!this.txtNewPassword.get().equals(this.txtNewrePassword.get())) {
-                IM_GUI_SYSTEM.show(new FMessage(Messages.get(PASS_NOT_MATCH)));
+                FormManager.show(new FMessage(Messages.get(PASS_NOT_MATCH)));
             } else
                 // Si está correcto enviamos paquete para cambiar la contraseña.
                 changePassword(this.txtPassword.get(), this.txtNewPassword.get());

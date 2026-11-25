@@ -19,8 +19,8 @@ public final class Camera {
 
     public static final int SCREEN_SIZE_X = 546;
     public static final int SCREEN_SIZE_Y = 416;
-    public static final int POS_SCREEN_X = 11; // 11
-    public static final int POS_SCREEN_Y = 147; // 147
+    public static final int POS_SCREEN_X = 11;
+    public static final int POS_SCREEN_Y = 147;
 
     public static final int TILE_PIXEL_SIZE = 32;
     public static final int TILE_BUFFER_SIZE = 7;
@@ -32,14 +32,14 @@ public final class Camera {
     public static final int YMinMapSize = 1;
 
     // Tiles visibles segun la pantalla
-    public static final int HALF_WINDOW_TILE_WIDTH = (SCREEN_SIZE_X / TILE_PIXEL_SIZE) / 2;
-    public static final int HALF_WINDOW_TILE_HEIGHT = (SCREEN_SIZE_Y / TILE_PIXEL_SIZE) / 2;
+    public static final int HALF_WINDOW_TILE_WIDTH  = 8; // (SCREEN_SIZE_X / TILE_PIXEL_SIZE) / 2
+    public static final int HALF_WINDOW_TILE_HEIGHT = 6; //(SCREEN_SIZE_Y / TILE_PIXEL_SIZE) / 2
 
     // limites del mapa
-    public static final int minXBorder = XMinMapSize + ((SCREEN_SIZE_X / TILE_PIXEL_SIZE) / 2);
-    public static final int maxXBorder = XMaxMapSize - ((SCREEN_SIZE_X / TILE_PIXEL_SIZE) / 2);
-    public static final int minYBorder = YMinMapSize + ((SCREEN_SIZE_Y / TILE_PIXEL_SIZE) / 2);
-    public static final int maxYBorder = YMaxMapSize - ((SCREEN_SIZE_Y / TILE_PIXEL_SIZE) / 2);
+    public static final int minXBorder = 9;  // XMinMapSize + ((SCREEN_SIZE_X / TILE_PIXEL_SIZE) / 2)
+    public static final int maxXBorder = 92; // XMaxMapSize - ((SCREEN_SIZE_X / TILE_PIXEL_SIZE) / 2)
+    public static final int minYBorder = 7;  // YMinMapSize + ((SCREEN_SIZE_Y / TILE_PIXEL_SIZE) / 2)
+    public static final int maxYBorder = 94; // YMaxMapSize - ((SCREEN_SIZE_Y / TILE_PIXEL_SIZE) / 2);
 
     private int screenminY, screenmaxY;
     private int screenminX, screenmaxX;
@@ -47,10 +47,6 @@ public final class Camera {
     private int minX, maxX;
     private int screenX, screenY;
     private int minXOffset, minYOffset;
-
-    public Camera() {
-
-    }
 
     /**
      * @param tileX: Posicion X donde este parado nuestro usuario.
