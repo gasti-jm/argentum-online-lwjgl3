@@ -209,8 +209,8 @@ public enum Console {
 
 
         for (ConsoleData item : data) {
-
-            ImGui.pushFont(item.font);
+            // TODO: IMGUI
+            ImGui.pushFont(item.font, 13);
 
             ImGui.pushStyleColor(ImGuiCol.Text, item.colorU32);
 

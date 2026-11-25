@@ -1,6 +1,7 @@
 package org.aoclient.engine.gui.forms;
 
 import imgui.ImGui;
+import imgui.ImVec2;
 import imgui.flag.ImGuiCond;
 import imgui.flag.ImGuiWindowFlags;
 import org.aoclient.engine.game.models.Skill;
@@ -54,7 +55,7 @@ public final class FSkills extends Form {
         this.drawSkillsHovers();
 
         ImGui.setCursorPos(50, 330);
-        ImGui.beginChild("SkillDescription", 520, 75);
+        ImGui.beginChild("SkillDescription", new ImVec2(520, 75), 0, 0);
         ImGui.pushTextWrapPos(ImGui.getCursorPosX() + 500);
         ImGui.textWrapped(this.hoverSkillDescription);
         ImGui.popTextWrapPos();

@@ -1,6 +1,7 @@
 package org.aoclient.engine;
 
 import org.aoclient.engine.audio.Sound;
+import org.aoclient.engine.gui.I_ImGuiSystem;
 import org.aoclient.engine.gui.ImGUISystem;
 import org.aoclient.engine.listeners.KeyHandler;
 import org.aoclient.engine.listeners.MouseListener;
@@ -43,7 +44,7 @@ public final class EngineGL implements IEngine {
     /** Ventana principal del motor grafico. */
     private final Window window = Window.INSTANCE;
     /** Sistema de interfaz grafica de usuario. */
-    private final ImGUISystem guiSystem = ImGUISystem.INSTANCE;
+    private final I_ImGuiSystem guiSystem = ImGUISystem.INSTANCE;
     /** Escena actual que esta siendo renderizada y actualizada en el motor. */
     private Scene currentScene;
     public static Renderer renderer;

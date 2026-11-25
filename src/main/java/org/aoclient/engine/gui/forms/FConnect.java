@@ -1,10 +1,7 @@
 package org.aoclient.engine.gui.forms;
 
 import imgui.ImGui;
-import imgui.flag.ImGuiCol;
-import imgui.flag.ImGuiCond;
-import imgui.flag.ImGuiInputTextFlags;
-import imgui.flag.ImGuiWindowFlags;
+import imgui.flag.*;
 import imgui.type.ImString;
 import org.aoclient.engine.EngineGL;
 import org.aoclient.engine.window.Window;
@@ -187,7 +184,7 @@ public final class FConnect extends Form {
         ImGui.popItemWidth();
 
         // Botones gráficos de 3 estados
-        if (btnConnect.render() || ImGui.isKeyPressed(GLFW_KEY_ENTER)) this.buttonConnect();
+        if (btnConnect.render() || ImGui.isKeyPressed(ImGuiKey.Enter)) this.buttonConnect();
         if (btnCreateCharacter.render()) this.buttonCreateCharacter();
         if (btnRecovery.render()) {
             // Acción para recuperar contraseña (a implementar)

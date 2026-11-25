@@ -2,6 +2,7 @@ package org.aoclient.engine.gui.forms;
 
 import imgui.ImGui;
 import imgui.flag.ImGuiCond;
+import imgui.flag.ImGuiKey;
 import imgui.flag.ImGuiWindowFlags;
 import org.aoclient.engine.game.Messages;
 
@@ -48,7 +49,7 @@ public final class FMessage extends Form {
         ImGui.separator();
 
         ImGui.setCursorPos(8, ImGui.getWindowHeight() - 30);
-        if (ImGui.button(Messages.get(ACCEPT), ImGui.getWindowWidth() - 16, 20) || ImGui.isKeyPressed(GLFW_KEY_ENTER))
+        if (ImGui.button(Messages.get(ACCEPT), ImGui.getWindowWidth() - 16, 20) || ImGui.isKeyPressed(ImGuiKey.Enter))
             close();
 
         ImGui.end();
