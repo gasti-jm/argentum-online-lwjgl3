@@ -1,5 +1,6 @@
 package org.aoclient.network;
 
+import org.aoclient.engine.gui.FormManager;
 import org.aoclient.engine.gui.ImGUISystem;
 import org.aoclient.engine.gui.forms.FMessage;
 import org.aoclient.network.protocol.PacketProcessor;
@@ -606,9 +607,10 @@ public class PacketBuffer {
 
     private void disconnect() {
         String msgErr = "Not enough bytes to read from the packet " + PacketProcessor.serverPacket;
-        ImGUISystem.INSTANCE.show(new FMessage(msgErr));
+        FormManager.show(new FMessage(msgErr));
         System.out.println(msgErr);
         Connection.INSTANCE.disconnect();
+
         // Resetea el buffer para que termine la recursividad de lectura de paquetes
         buffer = new byte[DEFAULT_BUFFER_SIZE];
         bufferCapacity = DEFAULT_BUFFER_SIZE;

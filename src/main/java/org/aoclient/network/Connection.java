@@ -2,6 +2,7 @@ package org.aoclient.network;
 
 import org.aoclient.engine.game.Messages;
 import org.aoclient.engine.game.player.Player;
+import org.aoclient.engine.gui.FormManager;
 import org.aoclient.engine.gui.ImGUISystem;
 import org.aoclient.engine.gui.forms.FMessage;
 import org.aoclient.engine.utils.Log;
@@ -48,7 +49,7 @@ public enum Connection {
     public boolean connect() {
         // Comprueba si ya esta intentando conectarse
         if (tryConnect) {
-            ImGUISystem.INSTANCE.show(new FMessage(Messages.get(TRY_CONNECT)));
+            FormManager.show(new FMessage(Messages.get(TRY_CONNECT)));
             return false;
         }
 
@@ -67,7 +68,7 @@ public enum Connection {
                 if (socket.isConnected()) tryConnect = false;
 
             } catch (Exception e) {
-                ImGUISystem.INSTANCE.show(new FMessage(e.getMessage()));
+                FormManager.show(new FMessage(e.getMessage()));
                 tryConnect = false;
                 return false;
             }

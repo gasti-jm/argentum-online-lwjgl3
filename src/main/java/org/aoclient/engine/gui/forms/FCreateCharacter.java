@@ -8,6 +8,7 @@ import imgui.flag.ImGuiInputTextFlags;
 import imgui.flag.ImGuiWindowFlags;
 import imgui.type.ImInt;
 import imgui.type.ImString;
+import org.aoclient.engine.gui.FormManager;
 import org.aoclient.engine.window.Window;
 import org.aoclient.engine.game.Messages;
 import org.aoclient.engine.game.models.City;
@@ -520,7 +521,7 @@ public final class FCreateCharacter extends Form {
     }
 
     private void buttonGoBack() {
-        IM_GUI_SYSTEM.show(new FConnect());
+        FormManager.show(new FConnect());
         playMusic("6.ogg");
 
         btnVolver.delete();
@@ -600,28 +601,28 @@ public final class FCreateCharacter extends Form {
 
     private boolean checkData() {
         if (txtNombre.get().isEmpty() || txtPassword.get().isEmpty() || txtMail.get().isEmpty()) {
-            IM_GUI_SYSTEM.show(new FMessage(Messages.get(COMPLETE_ALL_FIELDS)));
+            FormManager.show(new FMessage(Messages.get(COMPLETE_ALL_FIELDS)));
             return false;
         }
 
         if (txtNombre.get().endsWith(" ")) {
-            IM_GUI_SYSTEM.show(new FMessage(Messages.get(INVALID_NICK)));
+            FormManager.show(new FMessage(Messages.get(INVALID_NICK)));
             txtNombre.set(txtNombre.get().substring(0, txtNombre.get().length() - 1));
             return false;
         }
 
         if (!txtPassword.get().equals(txtConfirmPassword.get())) {
-            IM_GUI_SYSTEM.show(new FMessage(Messages.get(PASS_NOT_MATCH)));
+            FormManager.show(new FMessage(Messages.get(PASS_NOT_MATCH)));
             return false;
         }
 
         if (!checkEmail(txtMail.get())) {
-            IM_GUI_SYSTEM.show(new FMessage(Messages.get(INVALID_EMAIL)));
+            FormManager.show(new FMessage(Messages.get(INVALID_EMAIL)));
             return false;
         }
 
         if (checkSpecialChar(txtPassword.get()) || txtPassword.get().contains(" ")) {
-            IM_GUI_SYSTEM.show(new FMessage(Messages.get(INVALID_PASS)));
+            FormManager.show(new FMessage(Messages.get(INVALID_PASS)));
             return false;
         }
 

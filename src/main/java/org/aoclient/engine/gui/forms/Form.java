@@ -4,6 +4,7 @@ import imgui.ImGui;
 import imgui.ImVec2;
 import imgui.flag.ImGuiCond;
 import org.aoclient.engine.game.player.Player;
+import org.aoclient.engine.gui.FormManager;
 import org.aoclient.engine.gui.ImGUISystem;
 import org.aoclient.engine.renderer.Texture;
 import org.aoclient.engine.utils.inits.GrhInfo;
@@ -46,13 +47,12 @@ public abstract class Form {
 
     protected int backgroundImage;
     protected static final Player USER = Player.INSTANCE;
-    protected static final ImGUISystem IM_GUI_SYSTEM = ImGUISystem.INSTANCE;
 
     public abstract void render();
 
     public void close() {
         glDeleteTextures(backgroundImage);
-        IM_GUI_SYSTEM.deleteFrmArray(this);
+        FormManager.deleteFrmArray(this);
     }
 
     /**

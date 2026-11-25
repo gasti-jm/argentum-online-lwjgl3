@@ -5,7 +5,7 @@
     <img src="https://github.com/user-attachments/assets/3f6d8658-ea84-4ff3-b3d2-cb2fb1eeabd2" width="500px"> <br/> <br/>
     <a target="_blank"><img src="https://img.shields.io/badge/Built%20in-Java_17-43ca1f.svg?style=flat-square"></img></a>
     <a target="_blank"><img src="https://img.shields.io/badge/Graphics-LWJGL3_+_OpenGL_3.3-2196F3.svg?style=flat-square"></img></a>
-    <a target="_blank"><img src="https://img.shields.io/badge/GUI-Dear_ImGui-FF6F00.svg?style=flat-square"></img></a>
+    <a target="_blank"><img src="https://img.shields.io/badge/GUI-Dear_ImGui-732BF5.svg?style=flat-square"></img></a>
     <a target="_blank"><img src="https://img.shields.io/badge/License-GNU%20General%20Public%20License%20-e98227.svg?style=flat-square"></img></a>
 </div>
 <br/>
@@ -14,10 +14,16 @@
 
 <a target="_blank" href="https://es.wikipedia.org/wiki/Argentum_Online">Argentum Online</a> is a MMORPG Video Game of the year 1999 created in Visual Basic 6.0 by Pablo Marquez (Morgolock), this game is open source.
 
-This is the **client** translated to Java with LWJGL3. The connection to the server is implemented with Java sockets and is **fully compatible** with the <a target="_blank" href="https://www.gs-zone.org/temas/cliente-servidor-v0-13-0-completos-y-funcionales.36521/">Argentum Online Alkon v13.0 VB6 server</a>. The Java server is also being developed in a [separate module](../server/).
+This is the **client** translated to Java with LWJGL3. The connection to the server is implemented with Java sockets and is **fully compatible** with the <a target="_blank" href="https://www.gs-zone.org/temas/cliente-servidor-v0-13-0-completos-y-funcionales.36521/">Argentum Online Alkon v13.0 VB6 server</a>.
+<br><br>
+The **Java server** is currently under active development (we recommend using the original VB6 server), and we currently have the following Java server repositories:
+
+
+- <a href="https://github.com/gasti-jm/argentum-online-java-server" target="_blank">Argentum Online Java Server - gasti.jm</a> (IN DEVELOPMENT - Available for testing in the main branch)
+- <a href="https://github.com/rusocode/ao-server" target="_blank">Argentum Online Java Server - rusocode</a> (Available for testing on the “network-java” branch)
 
 > [!TIP]
-> Para un análisis técnico profundo del motor, red y renderizado, consulta la [Documentación de Arquitectura del Cliente](../docs/client-architecture.md).
+> For an in-depth technical analysis of the engine, network, and rendering, see the [Client Architecture Documentation](../docs/client-architecture.md).
 
 
 ## 🎯 Discord
@@ -46,7 +52,7 @@ For those who want to collaborate with the project, they are more than welcome! 
 org.aoclient
 ├── Main.java                  ← Entry point (OpenGL / Vulkan selection)
 ├── engine/
-│   ├── EngineGL.java          ← OpenGL game loop (init → loop → close)
+│   ├── EngineGL.java          ← OpenGL game (init → loop → close)
 │   ├── audio/                 ← OpenAL music and SFX
 │   ├── game/                  ← Game logic (User, Console, Weather, Inventory)
 │   ├── gui/                   ← Dear ImGui integration (20 forms)
@@ -134,10 +140,13 @@ All actions are remappable. Default: WASD movement, Enter chat, Space use, Ctrl 
 
 ## 📸 Screenshots
 
+Windows:
 ![Screenshot 2023-08-21 044542](https://github.com/gasti-jm/argentum-online-lwjgl3/assets/82490615/8f4c7864-feee-4ac6-b957-651a6b03a627)
 
+Linux:
 ![VirtualBox_Linux_09_03_2024_04_13_54](https://github.com/gasti-jm/argentum-online-lwjgl3/assets/82490615/8f54e716-3824-48ac-92ca-f22bfcfe74d5)
 
+macOS:
 <img width="1360" height="768" alt="2R3ZxNl" src="https://github.com/user-attachments/assets/56cb53b9-2070-40b4-ae85-f044209e020c" />
 
 ---
@@ -186,6 +195,7 @@ All actions are remappable. Default: WASD movement, Enter chat, Space use, Ctrl 
 - Supports Windows, Linux and MacOS (x64 & arm64)
 - Make sure your graphics drivers are up to date for optimal OpenGL performance
 
+
 ---
 
 <h1>Thanks to:</h1>
@@ -195,7 +205,6 @@ All actions are remappable. Default: WASD movement, Enter chat, Space use, Ctrl 
 
 <p>
   <b>Pablo Marquez (Morgolock) creator of Argentum Online</b> <br/>
-  <a target="_blank" href="https://www.gs-zone.org/temas/argentum-online-en-java-opengl.92672/#post-785702"><b>Lord Fers</b> - GS-Zone user who released a base client offline in LWJGL2</a> <br/>
   And the GS-Zone people <br/>
   <a target="_blank" href="https://www.gs-zone.org/"><img src="https://user-images.githubusercontent.com/82490615/187148671-1d7f92b9-7ea1-45f2-b6f1-f53b07454d93.png"></img></a>
 </p>

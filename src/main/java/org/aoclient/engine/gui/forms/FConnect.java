@@ -4,6 +4,7 @@ import imgui.ImGui;
 import imgui.flag.*;
 import imgui.type.ImString;
 import org.aoclient.engine.EngineGL;
+import org.aoclient.engine.gui.FormManager;
 import org.aoclient.engine.window.Window;
 import org.aoclient.engine.game.Messages;
 import org.aoclient.engine.gui.ImGUISystem;
@@ -209,11 +210,11 @@ public final class FConnect extends Form {
             }).start();
             options.setNick(nickStr.get());
             USER.setUserName(nickStr.get());
-        } else ImGUISystem.INSTANCE.show(new FMessage(Messages.get(ENTER_USER_PASS)));
+        } else FormManager.show(new FMessage(Messages.get(ENTER_USER_PASS)));
     }
 
     private void buttonCreateCharacter() {
-        ImGUISystem.INSTANCE.show(new FCreateCharacter());
+        FormManager.show(new FCreateCharacter());
         playMusic("7.ogg");
 
         btnConnect.delete();

@@ -1,5 +1,6 @@
 package org.aoclient.network.protocol.handlers;
 
+import org.aoclient.engine.gui.FormManager;
 import org.aoclient.engine.gui.ImGUISystem;
 import org.aoclient.engine.gui.forms.FTrainer;
 import org.aoclient.network.PacketBuffer;
@@ -19,7 +20,7 @@ public class TrainerCreatureListHandler implements PacketHandler {
         String[] creatureList = creatureListString.split("\0");
 
         // Mostramos la lista en el GUI
-        ImGUISystem.INSTANCE.show(new FTrainer(creatureList));
+        FormManager.show(new FTrainer(creatureList));
 
         buffer.copy(tempBuffer);
     }

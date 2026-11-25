@@ -1,5 +1,6 @@
 package org.aoclient.network.protocol.handlers.gm;
 
+import org.aoclient.engine.gui.FormManager;
 import org.aoclient.engine.gui.ImGUISystem;
 import org.aoclient.engine.gui.forms.FSpawnList;
 import org.aoclient.network.PacketBuffer;
@@ -20,7 +21,7 @@ public class SpawnListHandler implements PacketHandler {
         String[] creatureList = creatureListString.split("\0");
 
         // Mostramos la lista en el GUI
-        ImGUISystem.INSTANCE.show(new FSpawnList(creatureList));
+        FormManager.show(new FSpawnList(creatureList));
 
         buffer.copy(tempBuffer);
     }
