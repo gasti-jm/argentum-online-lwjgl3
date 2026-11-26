@@ -11,7 +11,7 @@ import org.aoclient.engine.gui.FormManager;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
-import static org.aoclient.engine.audio.Sound.SND_CLICK;
+import static org.aoclient.engine.audio.E_Sounds.SND_CLICK;
 import static org.aoclient.engine.audio.Sound.playSound;
 import static org.aoclient.engine.game.Messages.MessageKey.*;
 import static org.aoclient.network.protocol.Protocol.changePassword;

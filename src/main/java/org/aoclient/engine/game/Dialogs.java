@@ -36,9 +36,6 @@ public class Dialogs {
 
 
     public static void removeDialog(final int charIndex) {
-        var c = charList[charIndex].getDialog();
-
-
         if (charList[charIndex].getDialog_life() > 0) {
             charList[charIndex].setDialog("");
             charList[charIndex].setDialog_life(0);

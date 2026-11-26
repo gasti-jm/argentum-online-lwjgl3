@@ -15,7 +15,7 @@ import org.aoclient.engine.renderer.RGBColor;
 
 import java.io.IOException;
 
-import static org.aoclient.engine.audio.Sound.SND_CLICK;
+import static org.aoclient.engine.audio.E_Sounds.SND_CLICK;
 import static org.aoclient.engine.audio.Sound.playSound;
 import static org.aoclient.engine.game.Messages.MessageKey.ORO_INSUFICIENTE;
 import static org.aoclient.network.protocol.Protocol.*;

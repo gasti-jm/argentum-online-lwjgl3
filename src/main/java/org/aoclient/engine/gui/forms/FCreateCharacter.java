@@ -24,6 +24,7 @@ import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static org.aoclient.engine.audio.E_Sounds.SND_CLICK;
 import static org.aoclient.engine.audio.Sound.*;
 import static org.aoclient.engine.game.Messages.MessageKey.*;
 import static org.aoclient.engine.game.models.Character.*;

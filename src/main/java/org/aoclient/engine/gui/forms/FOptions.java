@@ -10,6 +10,7 @@ import org.aoclient.engine.game.Rain;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
+import static org.aoclient.engine.audio.E_Sounds.SND_CLICK;
 import static org.aoclient.engine.audio.Sound.*;
 import static org.aoclient.engine.utils.GameData.options;
 

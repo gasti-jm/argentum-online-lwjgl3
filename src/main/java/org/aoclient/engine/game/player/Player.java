@@ -6,6 +6,8 @@ import org.aoclient.engine.game.inventory.InventorySpells;
 import org.aoclient.engine.game.inventory.UserInventory;
 import org.aoclient.engine.game.models.*;
 
+import static org.aoclient.engine.audio.E_Sounds.SND_PASOS1;
+import static org.aoclient.engine.audio.E_Sounds.SND_PASOS2;
 import static org.aoclient.engine.audio.Sound.*;
 import static org.aoclient.engine.game.models.Character.*;
 import static org.aoclient.engine.game.models.Direction.*;

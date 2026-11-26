@@ -7,7 +7,7 @@ import org.aoclient.engine.game.models.*;
 
 import java.io.IOException;
 
-import static org.aoclient.engine.audio.Sound.SND_CLICK;
+import static org.aoclient.engine.audio.E_Sounds.SND_CLICK;
 import static org.aoclient.engine.audio.Sound.playSound;
 import static org.aoclient.network.protocol.Protocol.*;
 

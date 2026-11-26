@@ -9,7 +9,7 @@ import org.aoclient.engine.renderer.RGBColor;
 import org.aoclient.engine.renderer.Texture;
 import org.aoclient.engine.renderer.TextureManager;
 
-import static org.aoclient.engine.audio.Sound.SND_CLICK;
+import static org.aoclient.engine.audio.E_Sounds.SND_CLICK;
 import static org.aoclient.engine.audio.Sound.playSound;
 import static org.aoclient.engine.gui.forms.Form.imageRegion;
 import static org.aoclient.engine.utils.GameData.grhData;

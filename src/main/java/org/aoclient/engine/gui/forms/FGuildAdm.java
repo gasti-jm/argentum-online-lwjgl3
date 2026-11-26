@@ -9,7 +9,7 @@ import org.aoclient.engine.gui.widgets.ImageButton3State;
 
 import java.io.IOException;
 
-import static org.aoclient.engine.audio.Sound.SND_CLICK;
+import static org.aoclient.engine.audio.E_Sounds.SND_CLICK;
 import static org.aoclient.engine.audio.Sound.playSound;
 
 public class FGuildAdm extends Form {

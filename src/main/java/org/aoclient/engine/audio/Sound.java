@@ -32,15 +32,8 @@ import static org.lwjgl.system.libc.LibCStdlib.free;
  */
 
 public final class Sound {
-
-    public static final String SND_CLICK = "click.ogg";
-    public static final String SND_PASOS1 = "23.ogg";
-    public static final String SND_PASOS2 = "24.ogg";
-    public static final String SND_NAVEGANDO = "50.ogg";
-    public static final String SND_OVER = "click2.ogg";
-    public static final String SND_DICE = "cupdice.ogg";
-    public static final int MAX_SOUNDS = 30;
-    public static final int MAX_MUSIC = 2;
+    private static final int MAX_SOUNDS = 30;
+    private static final int MAX_MUSIC = 2;
 
     private static final Map<String, Sound> sounds = new HashMap<>();
     private static final Map<String, Sound> musics = new HashMap<>();
@@ -169,7 +162,7 @@ public final class Sound {
      * sonido. Si el sonido ya esta cargado en memoria, lo reproduce directamente. En caso contrario, lo carga y luego lo
      * reproduce.
      *
-     * @param soundName el nombre del archivo de sonido que se desea reproducir, ubicado en la carpeta de recursos7
+     * @param soundName el nombre del archivo de sonido que se desea reproducir, ubicado en la carpeta de recursos
      *                  {@code resources/sounds/}.
      */
     public static void playSound(String soundName) {
@@ -179,6 +172,28 @@ public final class Sound {
             else addSound("resources/sounds/" + soundName).play();
         }
     }
+
+    /**
+     * Reproduce un sonido especificado por su nombre de archivo.
+     * <p>
+     * Este metodo verifica si el sistema de sonido esta habilitado y si el audio esta disponible antes de intentar reproducir el
+     * sonido. Si el sonido ya esta cargado en memoria, lo reproduce directamente. En caso contrario, lo carga y luego lo
+     * reproduce.
+     *
+     * @param sound enumerador donde tenemos nuestros sonidos y de ahi obtenemos el nombre del archivo de sonido
+     *              que se desea reproducir, ubicado en la carpeta de recursos
+     *
+     *                  {@code resources/sounds/}.
+     */
+    public static void playSound(E_Sounds sound) {
+        final String soundName = sound.getFile();
+        if (options.isSound() && Window.INSTANCE.isAudioAvailable()) {
+            File file = new File("resources/sounds/" + soundName);
+            if (sounds.containsKey(file.getAbsolutePath())) sounds.get(file.getAbsolutePath()).play();
+            else addSound("resources/sounds/" + soundName).play();
+        }
+    }
+
 
     /**
      * Reproduce musica desde un archivo especificado en la ruta de recursos del sistema.
