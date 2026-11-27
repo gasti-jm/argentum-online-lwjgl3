@@ -1,5 +1,6 @@
 package org.aoclient.engine.scenes;
 
+import org.aoclient.engine.game.ScreenArea;
 import org.aoclient.engine.renderer.RGBColor;
 
 /**
@@ -29,7 +30,7 @@ import org.aoclient.engine.renderer.RGBColor;
 public abstract class Scene {
 
     protected RGBColor background;
-    protected Camera camera;
+    protected ScreenArea screenArea;
     protected boolean visible = false;
     protected SceneType canChangeTo; // posible cambio de escena.
 
@@ -39,7 +40,7 @@ public abstract class Scene {
      */
     public void init() {
         this.visible = true;
-        this.camera = new Camera();
+        this.screenArea = new ScreenArea();
         this.background = new RGBColor(0.0f, 0.0f, 0.0f);
     }
 

@@ -1,23 +1,22 @@
 package org.aoclient.engine.scenes;
 
+import org.aoclient.engine.game.intervals.Timers;
 import org.aoclient.engine.game.player.Player;
 import org.aoclient.engine.gui.FormManager;
 import org.aoclient.engine.window.Window;
 import org.aoclient.engine.game.*;
 import org.aoclient.engine.game.models.Direction;
 import org.aoclient.engine.game.bindkeys.Key;
-import org.aoclient.engine.gui.ImGUISystem;
 import org.aoclient.engine.gui.forms.FMain;
 import org.aoclient.engine.listeners.KeyHandler;
 import org.aoclient.engine.listeners.MouseListener;
 import org.aoclient.engine.utils.inits.GrhInfo;
 import org.aoclient.engine.utils.inits.MapData;
 
-import static org.aoclient.engine.game.IntervalTimer.INT_SENTRPU;
 import static org.aoclient.engine.game.models.Character.drawCharacter;
 import static org.aoclient.engine.game.bindkeys.Key.TALK;
 import static org.aoclient.engine.renderer.Drawn.drawTexture;
-import static org.aoclient.engine.scenes.Camera.*;
+import static org.aoclient.engine.game.ScreenArea.*;
 import static org.aoclient.engine.utils.GameData.*;
 import static org.aoclient.engine.utils.Time.deltaTime;
 import static org.aoclient.engine.utils.Time.timerTicksPerFrame;
@@ -50,13 +49,11 @@ import static org.lwjgl.glfw.GLFW.*;
  * @see Scene
  * @see MainScene
  * @see Player
- * @see Camera
+ * @see ScreenArea
  * @see Rain
  */
 
 public final class GameScene extends Scene {
-
-    public static final IntervalTimer intervalToUpdatePos = new IntervalTimer(INT_SENTRPU);
     private final Player user = Player.INSTANCE;
     private Weather weather;// color de ambiente.
     private float offSetCounterX = 0;
@@ -87,7 +84,7 @@ public final class GameScene extends Scene {
         if (!visible) return;
 
         weather.update();
-        intervalToUpdatePos.update();
+        Timers.INT_SENTRPU.getTimer().update();
 
         if (user.isUserMoving()) {
             if (user.getAddToUserPos().getX() != 0) {
@@ -188,7 +185,7 @@ public final class GameScene extends Scene {
         if (user.isUserComerciando() || !FormManager.isMainLast()) return;
 
         // Usando el metodo estatico de Key para obtener la tecla desde el codigo
-        final Key key = Key.getKey(KeyHandler.getLastKeyPressed());
+        final var key = Key.getKey(KeyHandler.getLastKeyPressed());
 
         checkWalkKeys();
 
@@ -200,14 +197,13 @@ public final class GameScene extends Scene {
 
             key.playAction();
 
-            switch (key) {
-
-                case REQUEST_REFRESH:
-                    if (intervalToUpdatePos.check())
-                        requestPositionUpdate();
-                    break;
-
-            }
+//            switch (key) {
+//                case REQUEST_REFRESH:
+//                    if (Timers.INT_SENTRPU.getTimer().check())
+//                        requestPositionUpdate();
+//                    break;
+//
+//            }
         }
     }
 
@@ -248,14 +244,14 @@ public final class GameScene extends Scene {
      * Dibuja cada capa y objeto del mapa, el personaje, la interfaz y demas.
      */
     private void renderScreen(int tileX, int tileY, int pixelOffsetX, int pixelOffsetY) {
-        camera.update(tileX, tileY);
+        screenArea.update(tileX, tileY);
 
         renderLayer(1, pixelOffsetX, pixelOffsetY);
         renderLayer(2, pixelOffsetX, pixelOffsetY);
         renderLayer(3, pixelOffsetX, pixelOffsetY);
 
         // Dialogs
-        Dialogs.renderDialogs(camera, pixelOffsetX, pixelOffsetY);
+        Dialogs.renderDialogs(screenArea, pixelOffsetX, pixelOffsetY);
 
         this.updateEffectCeiling();
 
@@ -279,34 +275,34 @@ public final class GameScene extends Scene {
      */
     private void renderLayer(final int layer, int pixelOffsetX, int pixelOffsetY) {
         if (layer == 1) { //  floor.
-            for (int y = camera.getScreenminY(); y <= camera.getScreenmaxY(); y++) {
+            for (int y = screenArea.getScreenminY(); y <= screenArea.getScreenmaxY(); y++) {
                 int x;
-                for (x = camera.getScreenminX(); x <= camera.getScreenmaxX(); x++) {
+                for (x = screenArea.getScreenminX(); x <= screenArea.getScreenmaxX(); x++) {
                     final GrhInfo grh = mapData[x][y].getLayer(layer);
 
-                    final int drawX = POS_SCREEN_X + (camera.getScreenX() - 1) * TILE_PIXEL_SIZE + pixelOffsetX;
-                    final int drawY = POS_SCREEN_Y + (camera.getScreenY() - 1) * TILE_PIXEL_SIZE + pixelOffsetY;
+                    final int drawX = POS_SCREEN_X + (screenArea.getScreenX() - 1) * TILE_PIXEL_SIZE + pixelOffsetX;
+                    final int drawY = POS_SCREEN_Y + (screenArea.getScreenY() - 1) * TILE_PIXEL_SIZE + pixelOffsetY;
 
                     drawTexture(grh, drawX, drawY, true, true, false, 1.0f, weather.getWeatherColor());
 
-                    camera.incrementScreenX();
+                    screenArea.incrementScreenX();
                 }
-                camera.setScreenX(camera.getScreenX() - x + camera.getScreenminX());
-                camera.incrementScreenY();
+                screenArea.setScreenX(screenArea.getScreenX() - x + screenArea.getScreenminX());
+                screenArea.incrementScreenY();
             }
 
         } else { // another layer
 
-            camera.setScreenY(camera.getMinYOffset() - TILE_BUFFER_SIZE);
-            for (int y = camera.getMinY(); y <= camera.getMaxY(); y++) {
-                camera.setScreenX(camera.getMinXOffset() - TILE_BUFFER_SIZE);
-                for (int x = camera.getMinX(); x <= camera.getMaxX(); x++) {
+            screenArea.setScreenY(screenArea.getMinYOffset() - TILE_BUFFER_SIZE);
+            for (int y = screenArea.getMinY(); y <= screenArea.getMaxY(); y++) {
+                screenArea.setScreenX(screenArea.getMinXOffset() - TILE_BUFFER_SIZE);
+                for (int x = screenArea.getMinX(); x <= screenArea.getMaxX(); x++) {
 
                     final MapData tile = mapData[x][y];
                     GrhInfo grh = tile.getLayer(layer);
 
-                    final int drawX = POS_SCREEN_X + camera.getScreenX() * TILE_PIXEL_SIZE + pixelOffsetX;
-                    final int drawY = POS_SCREEN_Y + camera.getScreenY() * TILE_PIXEL_SIZE + pixelOffsetY;
+                    final int drawX = POS_SCREEN_X + screenArea.getScreenX() * TILE_PIXEL_SIZE + pixelOffsetX;
+                    final int drawY = POS_SCREEN_Y + screenArea.getScreenY() * TILE_PIXEL_SIZE + pixelOffsetY;
 
                     switch (layer) {
                         case 2:
@@ -350,9 +346,9 @@ public final class GameScene extends Scene {
                             break;
                     }
 
-                    camera.incrementScreenX();
+                    screenArea.incrementScreenX();
                 }
-                camera.incrementScreenY();
+                screenArea.incrementScreenY();
             }
 
         }

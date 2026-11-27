@@ -3,11 +3,10 @@ package org.aoclient.engine.game;
 import org.aoclient.engine.game.models.Character;
 import org.aoclient.engine.game.player.Player;
 import org.aoclient.engine.renderer.RGBColor;
-import org.aoclient.engine.scenes.Camera;
 
 import static org.aoclient.engine.game.models.Character.lastChar;
 import static org.aoclient.engine.renderer.FontRenderer.*;
-import static org.aoclient.engine.scenes.Camera.*;
+import static org.aoclient.engine.game.ScreenArea.*;
 import static org.aoclient.engine.utils.GameData.charList;
 import static org.aoclient.engine.utils.GameData.mapData;
 import static org.aoclient.engine.utils.Time.deltaTime;
@@ -99,11 +98,11 @@ public class Dialogs {
         }
     }
 
-    public static void renderDialogs(final Camera camera, final int pixelOffsetX, final int pixelOffsetY) {
-        camera.setScreenY(camera.getMinYOffset() - TILE_BUFFER_SIZE);
-        for (int y = camera.getMinY(); y <= camera.getMaxY(); y++) {
-            camera.setScreenX(camera.getMinXOffset() - TILE_BUFFER_SIZE);
-            for (int x = camera.getMinX(); x <= camera.getMaxX(); x++) {
+    public static void renderDialogs(final ScreenArea screenArea, final int pixelOffsetX, final int pixelOffsetY) {
+        screenArea.setScreenY(screenArea.getMinYOffset() - TILE_BUFFER_SIZE);
+        for (int y = screenArea.getMinY(); y <= screenArea.getMaxY(); y++) {
+            screenArea.setScreenX(screenArea.getMinXOffset() - TILE_BUFFER_SIZE);
+            for (int x = screenArea.getMinX(); x <= screenArea.getMaxX(); x++) {
 
                 if (mapData[x][y].getCharIndex() != 0) {
                     final Character chrActual = charList[mapData[x][y].getCharIndex()];
@@ -112,8 +111,8 @@ public class Dialogs {
                         if (chrActual.getDialog_offset_counter_y() < 10)
                             chrActual.setDialog_offset_counter_y(chrActual.getDialog_offset_counter_y() + 50 * deltaTime);
 
-                        final int dX = (POS_SCREEN_X + camera.getScreenX() * TILE_PIXEL_SIZE) + ((int) (chrActual.getMoveOffsetX()) + pixelOffsetX);
-                        final int dY = (POS_SCREEN_Y + camera.getScreenY() * TILE_PIXEL_SIZE) + ((int) (chrActual.getMoveOffsetY()) + pixelOffsetY);
+                        final int dX = (POS_SCREEN_X + screenArea.getScreenX() * TILE_PIXEL_SIZE) + ((int) (chrActual.getMoveOffsetX()) + pixelOffsetX);
+                        final int dY = (POS_SCREEN_Y + screenArea.getScreenY() * TILE_PIXEL_SIZE) + ((int) (chrActual.getMoveOffsetY()) + pixelOffsetY);
 
                         // Render dialog
                         drawText(chrActual.getDialog(),
@@ -123,9 +122,9 @@ public class Dialogs {
                                 chrActual.getDialog_font_index(), true);
                     }
                 }
-                camera.incrementScreenX();
+                screenArea.incrementScreenX();
             }
-            camera.incrementScreenY();
+            screenArea.incrementScreenY();
         }
     }
 

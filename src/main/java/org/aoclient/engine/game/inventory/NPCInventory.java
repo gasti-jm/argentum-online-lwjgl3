@@ -3,7 +3,7 @@ package org.aoclient.engine.game.inventory;
 import imgui.ImGui;
 import org.aoclient.engine.renderer.TextureManager;
 
-import static org.aoclient.engine.scenes.Camera.TILE_PIXEL_SIZE;
+import static org.aoclient.engine.game.ScreenArea.TILE_PIXEL_SIZE;
 import static org.aoclient.engine.utils.GameData.grhData;
 
 /**

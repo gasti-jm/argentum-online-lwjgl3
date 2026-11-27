@@ -1,4 +1,4 @@
-package org.aoclient.engine.scenes;
+package org.aoclient.engine.game;
 
 /**
  * La clase Camera gestiona la visualizacion del juego y el campo de vision del usuario.
@@ -15,13 +15,15 @@ package org.aoclient.engine.scenes;
  * sectores del mapa se deben dibujar en cada momento.
  */
 
-public final class Camera {
+public final class ScreenArea {
 
+    // RENDER FMain.
     public static final int SCREEN_SIZE_X = 546;
     public static final int SCREEN_SIZE_Y = 416;
     public static final int POS_SCREEN_X = 11;
     public static final int POS_SCREEN_Y = 147;
 
+    // TILE DIMENSIONS
     public static final int TILE_PIXEL_SIZE = 32;
     public static final int TILE_BUFFER_SIZE = 7;
 

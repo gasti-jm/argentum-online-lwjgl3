@@ -7,7 +7,7 @@ import org.aoclient.engine.renderer.RGBColor;
 import org.aoclient.engine.renderer.Texture;
 import org.aoclient.engine.renderer.TextureManager;
 
-import static org.aoclient.engine.scenes.Camera.TILE_PIXEL_SIZE;
+import static org.aoclient.engine.game.ScreenArea.TILE_PIXEL_SIZE;
 import static org.aoclient.engine.utils.GameData.grhData;
 
 /**

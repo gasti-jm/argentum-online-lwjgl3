@@ -11,7 +11,7 @@ import static org.aoclient.engine.audio.E_Sounds.SND_PASOS2;
 import static org.aoclient.engine.audio.Sound.*;
 import static org.aoclient.engine.game.models.Character.*;
 import static org.aoclient.engine.game.models.Direction.*;
-import static org.aoclient.engine.scenes.Camera.*;
+import static org.aoclient.engine.game.ScreenArea.*;
 import static org.aoclient.engine.utils.GameData.*;
 import static org.aoclient.engine.utils.inits.GrhInfo.initGrh;
 import static org.aoclient.network.protocol.Protocol.changeHeading;

@@ -4,10 +4,8 @@ import org.aoclient.engine.utils.inits.GrhData;
 import org.aoclient.engine.utils.inits.GrhInfo;
 
 import static org.aoclient.engine.EngineGL.renderer;
-import static org.aoclient.engine.scenes.Camera.TILE_PIXEL_SIZE;
+import static org.aoclient.engine.game.ScreenArea.TILE_PIXEL_SIZE;
 import static org.aoclient.engine.utils.GameData.grhData;
-import static org.aoclient.engine.utils.Time.deltaTime;
-
 
 
 public final class Drawn {

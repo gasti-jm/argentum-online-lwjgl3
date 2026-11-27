@@ -1,12 +1,13 @@
 package org.aoclient.engine.game.inventory;
 
 import imgui.ImGui;
-import org.aoclient.engine.game.IntervalTimer;
+import org.aoclient.engine.game.intervals.IntervalTimer;
+import org.aoclient.engine.game.intervals.Timers;
 import org.aoclient.engine.listeners.MouseListener;
 import org.aoclient.engine.renderer.TextureManager;
 import org.aoclient.network.protocol.Protocol;
 
-import static org.aoclient.engine.scenes.Camera.TILE_PIXEL_SIZE;
+import static org.aoclient.engine.game.ScreenArea.TILE_PIXEL_SIZE;
 import static org.aoclient.engine.utils.GameData.grhData;
 
 /**
@@ -40,11 +41,8 @@ public final class UserInventory extends Inventory implements Cloneable {
     private static final int MAIN_SIZE_WIDTH = 160;
     private static final int MAIN_SIZE_HEIGHT = 128;
 
-    // Intervalos del inventario.
-    private static final float INT_USE_ITEM = 0.240f;
-    private static final float INT_EQUIP_ITEM = 0.15f;
-    private final IntervalTimer intervalUseItem = new IntervalTimer(INT_USE_ITEM);
-    private final IntervalTimer intervalEquipItem = new IntervalTimer(INT_EQUIP_ITEM);
+    private final IntervalTimer intervalUseItem = Timers.INT_USE_ITEM.getTimer();
+    private final IntervalTimer intervalEquipItem = Timers.INT_EQUIP_ITEM.getTimer();
 
     private boolean visible;
     private boolean invComerce;
